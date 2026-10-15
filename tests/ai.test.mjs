@@ -39,15 +39,16 @@ function reactionFixture() {
   return applyKick(state, 4, -1);
 }
 
-function restartFixture(type, phase = 'attackMove') {
-  const takerId = type === 'goalKick' ? 'white-K' : 'white-R1';
-  const spot = type === 'goalKick' ? { x: 5, y: 14 }
-    : type === 'corner' ? { x: 0, y: 0 }
-      : type === 'throwIn' ? { x: 0, y: 7 }
-        : { x: 5, y: 7 };
-  const state = fixture({ phase: type === 'goalKick' ? 'keeperRelease' : phase, carrier: takerId, positions: { [takerId]: [spot.x, spot.y] } });
-  state.restart = { type, team: 'white', takerId, spot, indirect: type === 'offside' };
-  if (type === 'goalKick') state.releaseReason = 'goalKick';
+function restartFixture(type, phase = 'attackMove', team = 'white') {
+  const transform = ([x, y]) => team === 'white' ? [x, y] : [BOARD_WIDTH - 1 - x, BOARD_HEIGHT - 1 - y];
+  const takerId = `${team}-${type === 'goalKick' ? 'K' : 'R1'}`;
+  const origin = type === 'goalKick' ? [5, 14]
+    : type === 'corner' ? [0, 0]
+      : type === 'throwIn' ? [0, 7]
+        : [5, 7];
+  const [x, y] = transform(origin), spot = { x, y };
+  const state = fixture({ phase, attack: team, carrier: takerId, positions: { [takerId]: [x, y] } });
+  state.restart = { type, team, takerId, spot, indirect: type === 'offside' };
   return state;
 }
 
@@ -72,9 +73,8 @@ function scenarios() {
     ['knight tackle', fixture({ phase: 'defendMove', carrier: 'white-N1', positions: { 'white-N1': [5, 7], 'black-R1': [5, 3] } })],
     ['keeper reaction', reaction],
     ['back-pass immediate release', backPass],
-    ['wide shot immediate goal kick', goalKick],
-    ['explicit immediate goal kick', restartFixture('goalKick')],
-    ...['corner', 'throwIn', 'offside'].flatMap(type =>
+    ['wide shot goal kick positioning', goalKick],
+    ...['goalKick', 'corner', 'throwIn', 'offside'].flatMap(type =>
       ['attackMove', 'defendMove', 'kick'].map(phase => [`${type} restart ${phase}`, restartFixture(type, phase)])),
   ];
 }
@@ -106,11 +106,11 @@ function assertIntegrity(state) {
   }
   if (state.phase === 'keeperReact') assert.ok(state.pendingShot);
   if (state.phase === 'keeperRelease') {
-    assert.ok(['backPass', 'goalKick'].includes(state.releaseReason));
+    assert.equal(state.releaseReason, 'backPass');
     assert.equal(state.pieces.find(piece => piece.id === state.ball.carrierId)?.type, 'K');
   } else assert.equal(state.releaseReason, null);
   if (state.restart) {
-    assert.ok(state.restart.type === 'goalKick' ? state.phase === 'keeperRelease' : ['attackMove', 'defendMove', 'kick'].includes(state.phase), 'goal kicks release immediately; other restarts retain their positioning round');
+    assert.ok(['attackMove', 'defendMove', 'kick'].includes(state.phase), 'all dead-ball restarts retain their positioning round');
     assert.equal(state.restart.team, state.attack);
     assert.equal(state.restart.takerId, state.ball.carrierId);
     assert.deepEqual({ x: state.ball.x, y: state.ball.y }, state.restart.spot);
@@ -127,7 +127,7 @@ function assertIntegrity(state) {
     if (state.restart.indirect) assert.equal(legalKicks(state).some(kick => kick.goal), false, 'offside restart cannot score directly');
     if (state.restart.type === 'goalKick') {
       assert.equal(state.ball.carrierId, `${state.attack}-K`);
-      assert.equal(legalKicks(state).some(kick => kick.goal), false, 'an immediate goal kick requires distribution');
+      assert.equal(legalKicks(state).some(kick => kick.goal), false, 'a goal kick requires distribution after repositioning');
     }
   }
 }
@@ -195,8 +195,37 @@ for (const difficulty of DIFFICULTIES) {
     t.diagnostic(`${timings.length} representative decisions: median ${sorted[Math.floor(sorted.length / 2)].toFixed(1)} ms; maximum ${Math.max(...timings).toFixed(1)} ms`);
   });
 
+  test(`${difficulty}: both sides complete protected goal-kick, corner and throw positioning before restarting`, () => {
+    for (const team of ['white', 'black']) for (const type of ['goalKick', 'corner', 'throwIn']) {
+      let state = restartFixture(type, 'attackMove', team);
+      const phases = [], restart = clone(state.restart), ball = clone(state.ball);
+      for (let index = 0; state.restart && index < 7; index++) {
+        phases.push(state.phase);
+        assertIntegrity(state);
+        const action = assertPureChoice(state, difficulty);
+        if (state.phase === 'kick') assert.equal(action.type, 'kick', 'the restart must be taken after resettling');
+        else {
+          assert.notEqual(action.type, 'kick', 'no early restart bypasses either team positioning');
+          assert.notEqual(action.pieceId, restart.takerId, 'the dead-ball taker remains locked');
+          assert.equal(selectedMove(state, action)?.type === 'tackle', false);
+        }
+        const next = applyAction(state, action, { roll: 0 });
+        if (action.type !== 'kick') {
+          assert.deepEqual(next.restart, restart);
+          assert.deepEqual(next.ball, ball);
+          assert.equal(next.randomState, state.randomState, 'resettling draws no random outcomes');
+        }
+        state = next;
+      }
+      assert.ok(phases.includes('attackMove') && phases.includes('defendMove') && phases.includes('kick'), 'both protected positioning turns occur before the kick');
+      assert.equal(state.restart, null, 'the AI finishes the restart without a loop');
+      assert.equal(state.releaseReason, null);
+      assertIntegrity(state);
+    }
+  });
+
   test(`${difficulty}: hidden outcome seeds never change a visible-board decision`, () => {
-    for (const [name, state] of scenarios().filter(([name]) => ['white kick-off', 'attack with both moves', 'defence with only normal move remaining', 'long pass decision', 'knight tackle', 'keeper reaction', 'back-pass immediate release', 'wide shot immediate goal kick'].includes(name))) {
+    for (const [name, state] of scenarios().filter(([name]) => ['white kick-off', 'attack with both moves', 'defence with only normal move remaining', 'long pass decision', 'knight tackle', 'keeper reaction', 'back-pass immediate release', 'wide shot goal kick positioning'].includes(name))) {
       const baseline = assertPureChoice(state, difficulty);
       for (const randomState of [0, 0xffffffff, 123456789]) {
         const differentFuture = { ...state, randomState };

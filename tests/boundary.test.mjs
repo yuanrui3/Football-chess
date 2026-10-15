@@ -148,15 +148,17 @@ test('opposing end-line last touches yield goal kicks, while own end-line last t
         assert.equal(taker.id, `${opposing}-K`);
         assert.ok(isBox(taker.x,taker.y));
         assert.equal(taker.y <= 1, opposing === 'black');
-        assert.equal(result.phase,'keeperRelease');
-        assert.equal(result.releaseReason,'goalKick');
-        assert.ok(legalKicks(result).length, 'the goal kick is available immediately');
-        assert.equal(legalKicks(result).some(kick=>kick.goal),false,'the king must distribute');
+        assert.equal(result.phase,'attackMove');
+        assert.equal(result.releaseReason,null);
+        assert.deepEqual(legalKicks(result), [], 'both teams reposition before the goal kick');
+        const ready = skipMove(skipMove(result));
+        assert.ok(legalKicks(ready).length, 'the king distributes after both positioning turns');
+        assert.equal(legalKicks(ready).some(kick=>kick.goal),false,'the king must distribute');
       } else {
         assert.equal(taker.y, opposing === 'black' ? 14 : 0);
         assert.ok([0,11].includes(taker.x), 'corner taker is at the nearest pitch corner');
       }
-      if (ownEnd) assert.equal(result.phase,'attackMove');
+      assert.equal(result.phase,'attackMove');
       assert.deepEqual(result.score,state.score);
       assertIntegrity(result);
     }
@@ -191,8 +193,8 @@ test('goal kicks always select the king even when a knight is closer to the rest
     const {state,result}=forceLongExit({attack,side:'end',positions:{[`${defending}-N1`]:transform([3,2])}});
     assert.equal(result.restart.type,'goalKick');
     assert.equal(result.restart.takerId,`${defending}-K`);
-    assert.equal(result.phase,'keeperRelease');
-    assert.equal(result.releaseReason,'goalKick');
+    assert.equal(result.phase,'attackMove');
+    assert.equal(result.releaseReason,null);
     assert.deepEqual(result.pieces.find(piece=>piece.id===`${defending}-N1`),state.pieces.find(piece=>piece.id===`${defending}-N1`),'the nearer knight stays in place');
     for (const piece of state.pieces.filter(piece=>piece.id!==`${defending}-K`)) assert.deepEqual(result.pieces.find(candidate=>candidate.id===piece.id),piece,'only the king can be relocated');
     assertIntegrity(result);
@@ -354,7 +356,6 @@ test('direct receipts from throws, corners, and goal kicks are exempt from offsi
       const clear=raySquares(from);
       const state=fixture({attack,carrier,positions:{...defenders,[carrier]:from,[recipient]:to},clear,focus:from});
       state.restart={type,team:attack,takerId:carrier,spot:{x:from[0],y:from[1]},indirect:false};
-      if (type === 'goalKick') { state.phase='keeperRelease'; state.releaseReason='goalKick'; }
       const kick=legalKicks(state).find(kick=>kick.x===to[0]&&kick.y===to[1]);
       assert.ok(kick,`${type} offers direct receiver`);
       const result=applyKick(state,...to,{roll:0});
@@ -391,30 +392,40 @@ test('restart previews preserve inputs and seeded long-pass scatter can reproduc
   assert.ok(seen.has('goalKick'),'the same near-end-line aim can scatter over the line');
 });
 
-test('both restart teams can use their normal and bonus pawn actions before the protected kick', () => {
-  let {result:state}=forceLongExit({positions:{'black-B1':[1,7],'white-R2':[0,8]}});
-  const restart=clone(state.restart), ball=clone(state.ball);
-  for(const expectedPhase of ['attackMove','defendMove']) {
-    assert.equal(state.phase,expectedPhase);
+test('both teams can use normal and free-pawn positioning before goal kicks, corners and throws', () => {
+  for (const attack of ['white', 'black']) for (const type of ['goalKick', 'corner', 'throwIn']) {
+    const opposing=attack==='white'?'black':'white', transform=pair=>attack==='white'?pair:mirror(pair);
+    const positions={'white-P1':[8,8],'black-P1':[8,6],[`${opposing}-B1`]:transform(type==='corner'?[1,13]:type==='goalKick'?[1,1]:[1,7])};
+    let {result:state}=forceLongExit({attack,side:type==='throwIn'?'left':'end',ownEnd:type==='corner',positions});
+    assert.equal(state.restart.type,type);
+    const restart=clone(state.restart), ball=clone(state.ball), randomState=state.randomState;
+    for(const expectedPhase of ['attackMove','defendMove']) {
+      assert.equal(state.phase,expectedPhase);
+      assert.deepEqual(state.positionBudget,freshBudget());
+      assert.deepEqual(legalKicks(state),[],'a kick waits for both positioning phases');
+      assert.deepEqual(legalMoves(state,restart.takerId),[],'the taker cannot carry the dead ball');
+      for(const piece of state.pieces) assert.equal(legalMoves(state,piece.id).some(move=>move.type==='tackle'),false,'the restart is protected from every tackle');
+      const pawn=state.pieces.find(piece=>piece.type==='P'&&legalMoves(state,piece.id,{freePawn:true}).length);
+      assert.ok(pawn,'a free pawn reposition is available');
+      const bonus=legalMoves(state,pawn.id,{freePawn:true})[0];
+      state=applyMove(state,pawn.id,bonus.x,bonus.y,{freePawn:true});
+      assert.equal(state.phase,expectedPhase,'using the bonus leaves the normal positioning action');
+      assert.deepEqual(state.positionBudget,{ normalUsed: false, pawnUsed: true, dribbleUsed: false });
+      const mover=state.pieces.find(piece=>piece.id!==restart.takerId&&legalMoves(state,piece.id).length);
+      assert.ok(mover,'a normal reposition is available');
+      const move=legalMoves(state,mover.id)[0];
+      assert.notEqual(move.type,'tackle');
+      state=applyMove(state,mover.id,move.x,move.y);
+      assert.deepEqual(state.restart,restart);
+      assert.deepEqual(state.ball,ball,'repositions cannot disturb the dead ball');
+      assert.equal(state.randomState,randomState,'repositioning draws no random outcomes');
+      assertIntegrity(state);
+    }
+    assert.equal(state.phase,'kick');
     assert.deepEqual(state.positionBudget,freshBudget());
-    const pawn=state.pieces.find(piece=>piece.type==='P'&&legalMoves(state,piece.id,{freePawn:true}).length);
-    assert.ok(pawn,'a free pawn reposition is available');
-    const bonus=legalMoves(state,pawn.id,{freePawn:true})[0];
-    state=applyMove(state,pawn.id,bonus.x,bonus.y,{freePawn:true});
-    assert.equal(state.phase,expectedPhase,'using the bonus leaves the normal positioning action');
-    assert.deepEqual(state.positionBudget,{ normalUsed: false, pawnUsed: true, dribbleUsed: false });
-    const mover=state.pieces.find(piece=>piece.id!==restart.takerId&&legalMoves(state,piece.id).length);
-    assert.ok(mover,'a normal reposition is available');
-    const move=legalMoves(state,mover.id)[0];
-    assert.notEqual(move.type,'tackle');
-    state=applyMove(state,mover.id,move.x,move.y);
-    assert.deepEqual(state.restart,restart);
-    assert.deepEqual(state.ball,ball,'repositions cannot disturb the dead ball');
-    assertIntegrity(state);
+    assert.ok(legalKicks(state).length);
+    if(type==='goalKick'||type==='throwIn') assert.equal(legalKicks(state).some(kick=>kick.goal),false,'goal kicks and throws must distribute');
   }
-  assert.equal(state.phase,'kick');
-  assert.deepEqual(state.positionBudget,freshBudget());
-  assert.ok(legalKicks(state).length);
 });
 
 test('seeded long-shot misses naturally produce both goal kicks and touchline throws', () => {

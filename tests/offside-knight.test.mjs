@@ -320,9 +320,8 @@ test('direct goal kicks, corner kicks, and throw-ins exempt the first recipient 
   // Metadata fixtures isolate each exemption from the geometry of its boundary.
   for (const team of ['white', 'black']) for (const type of ['goalKick', 'corner', 'throwIn']) {
     const state = type === 'goalKick'
-      ? fixture({team, phase: 'keeperRelease', carrier: 'white-K', positions: {'white-K': [4,14], 'white-R1': [4,4]}})
+      ? fixture({team, phase: 'kick', carrier: 'white-K', positions: {'white-K': [4,14], 'white-R1': [4,4]}})
       : fixture({team});
-    if (type === 'goalKick') state.releaseReason = 'goalKick';
     state.restart = {type, team, takerId: state.ball.carrierId, spot: {x: state.ball.x, y: state.ball.y}, indirect: false};
     const next = kickAt(state, type === 'goalKick' ? [4, 4] : [3, 4], team, {roll: 0});
     assert.equal(next.restart, null);

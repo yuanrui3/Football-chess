@@ -266,12 +266,12 @@ function longGoalKick(team = 'white') {
   return result;
 }
 
-function assertImmediateGoalKick(state, team) {
+function assertGoalKick(state, team, phase = 'attackMove') {
   integrity(state);
-  assert.equal(state.phase, 'keeperRelease');
-  assert.equal(state.releaseReason, 'goalKick');
+  assert.equal(state.phase, phase);
+  assert.equal(state.releaseReason, null);
   assert.equal(state.attack, team);
-  assert.equal(currentTeam(state), team);
+  assert.equal(currentTeam(state), phase === 'defendMove' ? other(team) : team);
   assert.equal(state.ball.carrierId, `${team}-K`, 'only the king takes a goal kick');
   assert.equal(state.restart.type, 'goalKick');
   assert.equal(state.restart.takerId, `${team}-K`);
@@ -279,23 +279,31 @@ function assertImmediateGoalKick(state, team) {
   assert.deepEqual(state.restart.spot, { x: state.ball.x, y: state.ball.y });
   assert.ok(isBox(state.ball.x, state.ball.y));
   assert.equal(team === 'black' ? state.ball.y <= 1 : state.ball.y >= 13, true);
-  for (const piece of state.pieces) for (const freePawn of [false, true]) assert.deepEqual(legalMoves(state, piece.id, { freePawn }), [], 'nobody can delay the goal kick by moving');
-  assert.throws(() => skipMove(state), 'goal kick cannot be skipped');
+  assert.deepEqual(legalMoves(state, state.ball.carrierId), [], 'the king is locked during resettling');
+  assert.equal(engine.positionActions(state).dribbleAvailable, false);
+  for (const piece of state.pieces) for (const freePawn of [false, true]) {
+    assert.equal(legalMoves(state, piece.id, { freePawn }).some(move => move.type === 'tackle'), false, 'the restart ball is protected');
+  }
   const kicks = legalKicks(state);
-  assert.ok(kicks.length, 'the king has an immediate legal release');
-  assert.equal(kicks.some(kick => kick.goal), false, 'this goal kick must be a pass rather than a direct shot');
+  if (phase === 'kick') {
+    assert.ok(kicks.length, 'the king has a legal pass after both teams reposition');
+    assert.equal(kicks.some(kick => kick.goal), false, 'a goal kick must be a pass rather than a direct shot');
+  } else assert.deepEqual(kicks, [], 'neither team may skip the other positioning turn by kicking early');
   assert.throws(() => applyKick(state, 5, team === 'black' ? -1 : 15));
 }
 
-test('long-pass end-line exits give the king an immediate pass even when a knight is nearer', () => {
+test('long-pass end-line exits give both teams resettling before the king passes, even when a knight is nearer', () => {
   for (const shootingTeam of ['white', 'black']) {
     const result = longGoalKick(shootingTeam);
-    assertImmediateGoalKick(result, other(shootingTeam));
+    assertGoalKick(result, other(shootingTeam));
+    assert.deepEqual(result.positionBudget, budget());
     assert.equal(result.restart.reason ?? null, null);
+    assertGoalKick(skipMove(result), other(shootingTeam), 'defendMove');
+    assertGoalKick(skipMove(skipMove(result)), other(shootingTeam), 'kick');
   }
 });
 
-test('wide shots also demand an immediate king pass and preserve the wide-shot record', () => {
+test('wide shots also allow resettling before the king passes and preserve the wide-shot record', () => {
   for (const team of ['white', 'black']) {
     const transform = pair => team === 'white' ? pair : mirror(pair);
     const state = fixture({ team, phase: 'kick', positions: { [`${team}-R1`]: transform([4, 7]), [`${other(team)}-K`]: transform([7, 0]), [`${other(team)}-N1`]: transform([5, 0]) }, clear: Array.from({ length: 8 }, (_, y) => transform([4, y])) });
@@ -305,12 +313,12 @@ test('wide shots also demand an immediate king pass and preserve the wide-shot r
     const result = skipMove(declared, { roll: .999999 });
     assert.equal(result.lastAction.type, 'shotMiss');
     assert.equal(result.lastAction.outcome, 'wide');
-    assertImmediateGoalKick(result, other(team));
+    assertGoalKick(result, other(team));
   }
 });
 
-test('taking the goal kick clears the restart and opens ordinary actions with no direct-offside penalty', () => {
-  const initial = longGoalKick();
+test('taking the goal kick after positioning clears the restart and opens ordinary actions with no direct-offside penalty', () => {
+  const initial = skipMove(skipMove(longGoalKick()));
   const kick = legalKicks(initial).find(candidate => !candidate.goal && candidate.accuracy === 1);
   const before = clone(initial);
   const next = applyKick(initial, kick.x, kick.y, { roll: 0 });
@@ -324,8 +332,7 @@ test('taking the goal kick clears the restart and opens ordinary actions with no
   integrity(next);
 });
 
-test('normalization migrates old pending goal kicks to the king without changing source or future random outcomes', () => {
-  assert.equal(typeof engine.normalizeGame, 'function');
+test('normalization migrates older knight goal-kick takers without losing resettling progress or randomness', () => {
   for (const team of ['white', 'black']) for (const phase of ['attackMove', 'defendMove', 'kick']) {
     const transform = pair => team === 'white' ? pair : mirror(pair);
     const knightId = `${team}-N1`, spot = transform([4, 14]);
@@ -335,12 +342,70 @@ test('normalization migrates old pending goal kicks to the king without changing
     const normalized = engine.normalizeGame(state);
     assert.deepEqual(state, before, 'save migration is pure');
     assert.equal(normalized.randomState, state.randomState, 'migration never consumes a roll');
-    assert.equal(normalized.score.white, state.score.white);
-    assert.equal(normalized.score.black, state.score.black);
+    assert.deepEqual(normalized.score, state.score);
+    assert.deepEqual(normalized.positionBudget, budget(true, false, true), 'spent old positioning actions stay spent');
     assert.deepEqual(normalized.pieces.find(piece => piece.id === knightId), state.pieces.find(piece => piece.id === knightId), 'the previous knight taker is not displaced');
     assert.deepEqual(normalized.restart.exit, state.restart.exit);
-    assertImmediateGoalKick(normalized, team);
+    assertGoalKick(normalized, team, phase);
     assert.deepEqual(engine.normalizeGame(normalized), normalized, 'repeated save loading is stable');
+  }
+});
+
+test('version-five immediate goal kicks migrate to a fresh protected round, including metadata-less saves', () => {
+  for (const team of ['white', 'black']) for (const hasMetadata of [true, false]) {
+    const state = longGoalKick(other(team));
+    state.rulesVersion = 5;
+    state.phase = 'keeperRelease';
+    state.releaseReason = 'goalKick';
+    state.positionBudget = budget(true, true, true);
+    if (!hasMetadata) { delete state.restart; delete state.offside; }
+    const before = clone(state), normalized = engine.normalizeGame(state);
+    assert.deepEqual(state, before, 'loading must not mutate the saved match or undo snapshot');
+    assert.equal(normalized.rulesVersion, 6);
+    assert.equal(normalized.randomState, state.randomState);
+    assert.deepEqual(normalized.score, state.score);
+    assert.deepEqual(normalized.positionBudget, budget(), 'both teams receive a fresh round after an old immediate restart');
+    assertGoalKick(normalized, team);
+    if (hasMetadata) {
+      assert.deepEqual(normalized.pieces, state.pieces, 'a valid goalkeeper already at the spot stays there');
+      assert.deepEqual(normalized.restart, state.restart);
+    }
+    assert.deepEqual(engine.normalizeGame(normalized), normalized);
+  }
+});
+
+test('normalizing existing resettling saves preserves phase, spent budget and every position at all restart stages', () => {
+  for (const team of ['white', 'black']) for (const phase of ['attackMove', 'defendMove', 'kick']) {
+    for (const [normalUsed, pawnUsed] of [[false, false], [true, false], [false, true]]) {
+      const state = longGoalKick(other(team));
+      state.phase = phase;
+      state.positionBudget = budget(normalUsed, pawnUsed, false);
+      state.rulesVersion = 5;
+      const before = clone(state), normalized = engine.normalizeGame(state);
+      assert.deepEqual(state, before);
+      assert.deepEqual(normalized, { ...state, rulesVersion: 6 }, 'valid protected restart is preserved exactly except the version');
+      assert.deepEqual(engine.normalizeGame(normalized), normalized);
+      assertGoalKick(normalized, team, phase);
+    }
+  }
+});
+
+test('a teammate back-pass still forces the king to release immediately and is not migrated into a restart', () => {
+  for (const team of ['white', 'black']) {
+    const transform = pair => team === 'white' ? pair : mirror(pair);
+    const state = fixture({ team, phase: 'kick', positions: { [`${team}-R1`]: transform([5, 10]), [`${team}-K`]: transform([5, 14]) }, clear: [[5, 11], [5, 12], [5, 13]].map(transform) });
+    const target = transform([5, 14]);
+    const released = applyKick(state, ...target, { roll: 0 });
+    assert.equal(released.phase, 'keeperRelease');
+    assert.equal(released.releaseReason, 'backPass');
+    assert.equal(released.restart, null);
+    const before = clone(released), normalized = engine.normalizeGame(released);
+    assert.deepEqual(released, before);
+    assert.deepEqual(normalized, released);
+    for (const piece of normalized.pieces) for (const freePawn of [false, true]) assert.deepEqual(legalMoves(normalized, piece.id, { freePawn }), []);
+    assert.throws(() => skipMove(normalized));
+    assert.ok(legalKicks(normalized).length);
+    assert.deepEqual(engine.normalizeGame(normalized), normalized);
   }
 });
 
@@ -384,7 +449,7 @@ function applyAI(state, action) {
   return skipMove(state);
 }
 
-for (const difficulty of ['casual', 'tactical']) test(`${difficulty} AI respects all new action-budget combinations and forced goal kicks`, () => {
+for (const difficulty of ['casual', 'tactical']) test(`${difficulty} AI respects all new action-budget combinations and protected goal kicks`, () => {
   const states = [];
   for (const normalUsed of [false, true]) for (const pawnUsed of [false, true]) for (const dribbleUsed of [false, true]) {
     if (normalUsed && pawnUsed && dribbleUsed) continue;

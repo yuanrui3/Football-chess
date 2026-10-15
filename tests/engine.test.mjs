@@ -63,12 +63,12 @@ function assertIntegrity(state) {
   }
   if (state.phase === 'keeperReact') assert.ok(state.pendingShot, 'reaction must retain the declared shot');
   if (state.phase === 'keeperRelease') {
-    assert.ok(['backPass', 'goalKick'].includes(state.releaseReason));
+    assert.equal(state.releaseReason, 'backPass');
     assert.equal(state.pieces.find(p => p.id === state.ball.carrierId)?.type, 'K');
     assert.deepEqual(legalMoves(state, state.ball.carrierId), []);
   } else assert.equal(state.releaseReason, null, 'release reasons are cleared after the forced kick');
   if (state.restart) {
-    assert.ok(state.restart.type === 'goalKick' ? state.phase === 'keeperRelease' : ['attackMove', 'defendMove', 'kick'].includes(state.phase), 'goal kicks release immediately; other restarts retain their positioning round');
+    assert.ok(['attackMove', 'defendMove', 'kick'].includes(state.phase), 'all dead-ball restarts retain their positioning round');
     assert.equal(state.restart.team, state.attack);
     assert.equal(state.restart.takerId, state.ball.carrierId);
     assert.deepEqual({ x: state.ball.x, y: state.ball.y }, state.restart.spot);
@@ -209,6 +209,58 @@ test('pawns move one square forward, backward, left and right for both teams', (
     }
     assert.equal(hasMove(state, id, 9, 6), false);
     assert.equal(hasMove(state, id, 8, 5), false);
+  }
+});
+
+test('pawns tackle one diagonal square forward or backward for both teams', () => {
+  for (const defendingTeam of ['white', 'black']) for (const dx of [-1, 1]) for (const dy of [-1, 1]) {
+    const attack = defendingTeam === 'white' ? 'black' : 'white';
+    const defenderId = `${defendingTeam}-P1`, carrierId = `${attack}-R1`;
+    const state = fixture({ phase: 'defendMove', attack, carrier: carrierId, positions: { [defenderId]: [6, 7], [carrierId]: [6 + dx, 7 + dy] } });
+    const before = clone(state), tackles = legalMoves(state, defenderId).filter(move => move.type === 'tackle');
+    assert.ok(tackles.length, `${defendingTeam} pawn reaches diagonal ${dx},${dy}`);
+    assert.ok(tackles.every(move => move.targetId === carrierId && move.tackleProbability === 1));
+    const bonus = legalMoves(state, defenderId, { freePawn: true });
+    assert.equal(bonus.some(move => move.type === 'tackle'), false, 'the free-pawn allowance still cannot tackle');
+    assert.ok(bonus.every(move => Math.abs(move.x - 6) + Math.abs(move.y - 7) === 1), 'free movement remains one cardinal step');
+    const next = applyMove(state, defenderId, tackles[0].x, tackles[0].y, { roll: .999999 });
+    assert.deepEqual(state, before, 'tackle previews and resolution preserve the undo state');
+    assert.equal(next.attack, defendingTeam);
+    assert.equal(next.ball.carrierId, defenderId);
+    assert.equal(next.pieces.length, 22);
+    assert.equal(next.randomState, state.randomState, 'ordinary pawn tackles remain certain');
+    assert.deepEqual(next.positionBudget, freshBudget());
+    assertIntegrity(next);
+  }
+});
+
+test('backward pawn tackles on knights retain the 50 percent success rule', () => {
+  for (const defendingTeam of ['white', 'black']) for (const dx of [-1, 1]) {
+    const attack = defendingTeam === 'white' ? 'black' : 'white';
+    const defenderId = `${defendingTeam}-P1`, carrierId = `${attack}-N1`;
+    const dy = defendingTeam === 'white' ? 1 : -1;
+    const state = fixture({ phase: 'defendMove', attack, carrier: carrierId, positions: { [defenderId]: [6, 7], [carrierId]: [6 + dx, 7 + dy] } });
+    const tackle = legalMoves(state, defenderId).find(move => move.type === 'tackle');
+    assert.ok(tackle);
+    assert.equal(tackle.tackleProbability, .5);
+    const success = applyMove(state, defenderId, tackle.x, tackle.y, { roll: .499999 });
+    const miss = applyMove(state, defenderId, tackle.x, tackle.y, { roll: .5 });
+    assert.equal(success.ball.carrierId, defenderId);
+    assert.equal(miss.ball.carrierId, carrierId);
+    assert.equal(miss.phase, 'defendMove');
+    assert.deepEqual(miss.positionBudget, { normalUsed: true, pawnUsed: false, dribbleUsed: false });
+    assert.equal(success.randomState, miss.randomState, 'both outcomes consume the same seeded draw');
+    assertIntegrity(success);
+    assertIntegrity(miss);
+  }
+});
+
+test('pawn tackling gains backward diagonals without gaining cardinal or longer reach', () => {
+  for (const defendingTeam of ['white', 'black']) for (const [dx, dy] of [[0, 1], [0, -1], [1, 0], [-1, 0], [2, 2], [-2, -2]]) {
+    const attack = defendingTeam === 'white' ? 'black' : 'white';
+    const defenderId = `${defendingTeam}-P1`, carrierId = `${attack}-R1`;
+    const state = fixture({ phase: 'defendMove', attack, carrier: carrierId, positions: { [defenderId]: [6, 7], [carrierId]: [6 + dx, 7 + dy] } });
+    assert.equal(legalMoves(state, defenderId).some(move => move.type === 'tackle'), false);
   }
 });
 
@@ -542,7 +594,7 @@ test('goal declarations wait for the defending goalkeeper before resolving the s
   assert.equal(reaction.phase, 'keeperReact');
   assert.equal(currentTeam(reaction), 'black');
   assert.ok(reaction.pendingShot);
-  assert.equal(reaction.rulesVersion, 5);
+  assert.equal(reaction.rulesVersion, 6);
   assert.deepEqual(reaction.pendingShot.from, { x: 4, y: 4 });
   assert.equal(reaction.lastAction.shotModel.modelVersion, 6);
   assert.deepEqual(reaction.lastAction.shotModel, shotModel(state, 4, -1));
@@ -875,10 +927,10 @@ test('one seeded shot roll partitions exact goal, parried corner, caught save an
       assert.deepEqual(result.positionBudget, freshBudget());
     } else {
       assert.equal(result.attack, 'black');
-      assert.equal(result.phase, outcome === 'saved' ? 'attackMove' : 'keeperRelease', 'caught saves permit positioning; goal kicks demand immediate release');
+      assert.equal(result.phase, 'attackMove', 'caught saves and goal kicks permit positioning');
       assert.equal(result.ball.carrierId, 'black-K');
       assert.equal(result.lastAction.type, outcome === 'saved' ? 'save' : 'shotMiss');
-      assert.equal(result.releaseReason, outcome === 'saved' ? null : 'goalKick');
+      assert.equal(result.releaseReason, null);
       if (outcome === 'saved') {
         assert.equal(result.restart, null);
         assert.deepEqual(result.pieces, reaction.pieces, 'a caught save preserves all piece positions');
@@ -900,14 +952,14 @@ test('one seeded shot roll partitions exact goal, parried corner, caught save an
   assert.notEqual([...randomStates][0], reaction.randomState);
 });
 
-test('a wide shot requires the defending king to pass immediately for a goal kick', () => {
+test('a wide shot gives both teams protected positioning before the defending king passes', () => {
   for (const attack of ['white', 'black']) {
     const white = attack === 'white', defending = white ? 'black' : 'white', keeperId = `${defending}-K`;
     const reaction = declaredShot({ x: 4, keeper: [8, 7], attack });
     const result = skipMove(reaction, { roll: .999999 });
     const keeper = result.pieces.find(p => p.id === keeperId);
-    assert.equal(result.phase, 'keeperRelease');
-    assert.equal(result.releaseReason, 'goalKick');
+    assert.equal(result.phase, 'attackMove');
+    assert.equal(result.releaseReason, null);
     assert.equal(result.restart.type, 'goalKick');
     assert.equal(result.restart.team, defending);
     assert.equal(result.restart.takerId, keeperId, 'only the king takes a goal kick');
@@ -921,13 +973,17 @@ test('a wide shot requires the defending king to pass immediately for a goal kic
     assert.equal(currentTeam(result), defending);
     assert.deepEqual(legalMoves(result, keeperId), [], 'the taker cannot dribble before taking the restart');
     assert.throws(() => applyMove(result, keeperId, keeper.x - 1, keeper.y));
-    for (const piece of result.pieces) assert.deepEqual(legalMoves(result, piece.id), [], 'nobody repositions before the immediate goal kick');
-    assert.throws(() => skipMove(result), 'the required pass cannot be skipped');
-    const kicks = legalKicks(result);
+    assert.deepEqual(legalKicks(result), [], 'the king cannot kick before positioning finishes');
+    const opponentPositioning = skipMove(result);
+    assert.equal(opponentPositioning.phase, 'defendMove');
+    assert.equal(currentTeam(opponentPositioning), attack);
+    const ready = skipMove(opponentPositioning);
+    assert.equal(ready.phase, 'kick');
+    const kicks = legalKicks(ready);
     assert.equal(kicks.some(k => k.goal), false, 'a goal kick must be distributed rather than shot directly');
     const kick = kicks.find(k => !k.goal && k.accuracy === 1 && !k.receiverId);
     assert.ok(kick);
-    const released = applyKick(result, kick.x, kick.y, { roll: 0 });
+    const released = applyKick(ready, kick.x, kick.y, { roll: 0 });
     assert.equal(released.releaseReason, null);
     assert.equal(released.restart, null, 'the restart ends when its kick is taken');
     assertIntegrity(result);
@@ -1102,11 +1158,12 @@ test('AI returns legal actions in keeper reaction and forced release phases', ()
   assertIntegrity(applyAction(release, action));
   const goalKick = skipMove(declaredShot({ keeper: [8, 7] }), { roll: .999999 });
   assert.equal(goalKick.restart.type, 'goalKick');
-  assert.equal(goalKick.releaseReason, 'goalKick');
+  assert.equal(goalKick.releaseReason, null);
   assert.equal(goalKick.lastAction.type, 'shotMiss');
-  const goalKickAction = chooseAIAction(goalKick);
-  assert.equal(goalKickAction.type, 'kick', 'the AI releases the goal kick as its very next action');
-  const goalKickReleased = applyAction(goalKick, goalKickAction);
+  const ready = skipMove(skipMove(goalKick));
+  const goalKickAction = chooseAIAction(ready);
+  assert.equal(goalKickAction.type, 'kick', 'the AI distributes once both teams have repositioned');
+  const goalKickReleased = applyAction(ready, goalKickAction);
   assertIntegrity(goalKickReleased);
   assert.equal(goalKickReleased.restart, null, 'taking the required pass completes the restart');
   assert.equal(goalKickReleased.releaseReason, null);

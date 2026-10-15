@@ -75,7 +75,7 @@ export function createGame({mode = 'solo', minutes = 10, kickoff = 'white', seed
     score: {white: 0, black: 0}, turn: 1, randomState: normalizeSeed(seed),
     log: [`${title(kickoff)} has kick-off. Kick the ball to begin.`], lastAction: null,
     mode, minutes: Number.isFinite(Number(minutes)) && Number(minutes) > 0 ? Number(minutes) : 10,
-    rulesVersion: 5, restart: null, offside: null
+    rulesVersion: 6, restart: null, offside: null
   };
 }
 
@@ -100,7 +100,7 @@ function canTackle(state, piece, carrier) {
   const reach = Math.max(Math.abs(dx), Math.abs(dy));
   if (!reach || reach > 10) return false;
   if (piece.type === 'N') return KNIGHT.some(([x, y]) => x === dx && y === dy);
-  if (piece.type === 'P') return Math.abs(dx) === 1 && dy === (piece.team === 'white' ? -1 : 1);
+  if (piece.type === 'P') return Math.abs(dx) === 1 && Math.abs(dy) === 1;
   if (piece.type === 'K') return reach === 1;
   if (reach > LONG_TACKLE_RANGE) return false;
   const straight = dx === 0 || dy === 0, diagonal = Math.abs(dx) === Math.abs(dy);
@@ -225,13 +225,12 @@ function awardRestart(state, type, team, requestedSpot, {exit, reason} = {}) {
   state.ball = {...spot, carrierId: taker?.id || null}; state.attack = team;
   beginPosition(state); state.offside = null;
   state.restart = {type, team, takerId: taker?.id || null, spot: {...spot}, indirect: type === 'offside', ...(exit ? {exit} : {}), ...(reason ? {reason} : {})};
-  if (type === 'goalKick') { state.phase = 'keeperRelease'; state.releaseReason = 'goalKick'; }
   return state.restart;
 }
 
 // Restore both the live match and individual undo snapshots through this pure
-// migration. Pending older goal kicks used to choose K/N and give two complete
-// positioning turns; they now belong to the king and must be passed at once.
+// migration. Goal kicks belong to the king and give both teams a protected
+// positioning turn. Keep any positioning already spent in older snapshots.
 export function normalizeGame(state) {
   if (!state || typeof state !== 'object') return state;
   const next = copy(state);
@@ -245,15 +244,23 @@ export function normalizeGame(state) {
   }
   if (next.restart?.type === 'goalKick' && ['attackMove', 'defendMove', 'kick', 'keeperRelease'].includes(next.phase)) {
     const restart = next.restart;
+    const team = restart.team || next.attack;
     const taker = next.pieces.find(piece => piece.id === restart.takerId);
-    const alreadyReady = next.phase === 'keeperRelease' && next.releaseReason === 'goalKick' && taker?.type === 'K' && taker.team === restart.team && next.ball.carrierId === taker.id && next.ball.x === taker.x && next.ball.y === taker.y && inOwnBox(taker.team, taker.x, taker.y);
-    if (!alreadyReady) awardRestart(next, 'goalKick', restart.team || next.attack, restart.spot || next.ball, {exit: restart.exit, reason: restart.reason});
+    const validTaker = taker?.type === 'K' && taker.team === team && next.ball.carrierId === taker.id && next.ball.x === taker.x && next.ball.y === taker.y && inOwnBox(taker.team, taker.x, taker.y);
+    const phase = next.phase, budget = next.positionBudget;
+    if (!validTaker) {
+      awardRestart(next, 'goalKick', team, restart.spot || next.ball, {exit: restart.exit, reason: restart.reason});
+      if (phase !== 'keeperRelease') { next.phase = phase; next.positionBudget = budget; }
+    } else if (phase === 'keeperRelease') {
+      beginPosition(next);
+    }
+    next.releaseReason = null;
   }
-  next.rulesVersion = 5;
+  next.rulesVersion = 6;
   return next;
 }
 
-const restartTurnMessage = restart => restart.type === 'goalKick' ? 'The goalkeeper must immediately pass the ball into the pitch.' : 'A full positioning round begins before the restart.';
+const restartTurnMessage = restart => restart.type === 'goalKick' ? 'Both teams may reposition before the goalkeeper passes the ball into the pitch.' : 'Both teams may reposition before the restart.';
 
 function restartForExit(state, from, landing, lastTouchTeam) {
   const exit = boundaryExit(from, landing);
