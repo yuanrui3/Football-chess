@@ -264,7 +264,7 @@ function savedShotWithFlaggedRunner(team) {
   assert.ok(pending.offside.flaggedIds.includes(idFor('white-N1', team)));
   const model = shotModel(pending);
   assert.ok(model.saveProbability > 0);
-  const saved = skipMove(pending, {roll: model.goalProbability + model.saveProbability / 2});
+  const saved = skipMove(pending, {roll: model.goalProbability + model.cornerProbability + model.caughtSaveProbability / 2});
   assert.equal(saved.lastAction.type, 'save');
   assert.equal(saved.restart, null);
   assert.equal(saved.ball.carrierId, idFor('black-K', team));

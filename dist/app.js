@@ -1,4 +1,4 @@
-import {createGame, legalMoves, legalKicks, applyMove, applyKick, skipMove, chooseAIAction, currentTeam, BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, isBox, shotChance, shotModel, offsideInfo} from './engine.js?v=669e752e5b48';
+import {createGame, legalMoves, legalKicks, applyMove, applyKick, skipMove, chooseAIAction, currentTeam, BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, isBox, shotChance, shotModel, offsideInfo} from './engine.js?v=11c82d4f8cf0';
 
 const $ = id => document.getElementById(id);
 const NAMES = {K:'Goalkeeper',Q:'Queen',R:'Rook',B:'Bishop',N:'Knight',P:'Pawn'};
@@ -173,11 +173,11 @@ function outcomeBreakdown(model){
   const goal=Math.round(model.goalProbability*1000),saved=Math.round(model.saveProbability*1000),wide=1000-goal-saved;
   return `Goal ${(goal/10).toFixed(1)}% · Save ${(saved/10).toFixed(1)}% · Wide ${(wide/10).toFixed(1)}%`;
 }
-function shotGeometry(model){return `Shot ${model.distance.toFixed(1)} squares · Keeper ${model.keeperPathDistance.toFixed(1)} squares off path · ${model.keeperInBox?'Full box reach':'Reduced outside-box reach'}${model.scoringMultiplier>1?` · Knight chip ×${model.scoringMultiplier} (100% cap)`:''}`;}
+function shotGeometry(model){return `Shot ${model.distance.toFixed(1)} squares · Keeper ${model.keeperPathDistance.toFixed(1)} squares off path · ${model.keeperInBox?'Full box reach':'Reduced outside-box reach'}${model.saveProbability>0?` · Parry if stopped: ${percent(model.parryGivenSave)}`:''}${model.scoringMultiplier>1?` · Knight chip ×${model.scoringMultiplier} (100% cap)`:''}`;}
 function showShotModel(model,caption='chance to score with the keeper here'){
   $('shotOdds').textContent=`${shotPercent(model.probability)} ${caption}`;
   $('shotBreakdown').textContent=outcomeBreakdown(model);
-  $('shotGeometry').textContent=shotGeometry(model)+`. Keeper saves ${shotPercent(model.saveGivenOnTarget)} of on-target shots.`;
+  $('shotGeometry').textContent=shotGeometry(model)+`. Keeper stops ${shotPercent(model.saveGivenOnTarget)} of on-target shots.`;
   drawKeeperOverlay(model);
 }
 function renderBoard(){
@@ -329,7 +329,7 @@ function scheduleAI(){
     aiTimer=null;if(!stillCurrent())return;
     if(aiDifficulty==='tactical'&&typeof window.Worker==='function'){
       try{
-        aiWorker=new window.Worker(new URL('./ai-worker.js?v=4440058e607c',import.meta.url),{type:'module',name:'football-chess-tactical'});
+        aiWorker=new window.Worker(new URL('./ai-worker.js?v=c5d3cccec881',import.meta.url),{type:'module',name:'football-chess-tactical'});
         aiWorker.onmessage=event=>{if(!stillCurrent()||event.data?.requestId!==requestId)return;if(event.data.error)fallback();else receive(event.data.action);};
         aiWorker.onerror=event=>{event.preventDefault?.();fallback();};
         aiWatchdog=setTimeout(()=>fallback('casual'),4000);

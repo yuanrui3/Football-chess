@@ -297,16 +297,20 @@ test('long shots going wide may cross a touchline first, while short wide shots 
   assertIntegrity(result);
 });
 
-test('long-shot save interval distinguishes caught saves and keeper last-touch corners without extra outcome draws', () => {
-  for(const attack of ['white','black']) {
-    const {reaction}=longShot(attack);
+test('short and long stopped shots distinguish catches from keeper last-touch corners without extra outcome draws', () => {
+  for(const attack of ['white','black']) for(const range of ['short','long']) {
+    const defending=attack==='white'?'black':'white';
+    const transform=pair=>attack==='white'?pair:mirror(pair);
+    const shooter=`${attack}-R1`, source=transform([4,range==='short'?3:12]);
+    const state=fixture({attack,carrier:shooter,positions:{[shooter]:source,[`${defending}-K`]:transform([5,0])},clear:Array.from({length:15},(_,y)=>transform([4,y])),focus:transform([0,7])});
+    const reaction=applyKick(state,...transform([4,-1]));
     const model=reaction.lastAction.shotModel;
-    assert.ok(model.saveProbability>0&&model.cornerProbability>0);
-    for(const [fraction,outcome] of [[.1,'corner'],[.5,'saved']]) {
-      const roll=model.goalProbability+model.saveProbability*fraction;
+    assert.ok(model.saveProbability>0&&model.cornerProbability>0&&model.caughtSaveProbability>0);
+    const caughtRoll=model.goalProbability+model.cornerProbability+model.caughtSaveProbability/2;
+    for(const [roll,outcome] of [[model.goalProbability+model.cornerProbability/2,'corner'],[caughtRoll,'saved']]) {
       const before=clone(reaction);
       const result=skipMove(reaction,{roll});
-      assert.equal(result.lastAction.outcome,outcome);
+      assert.equal(result.lastAction.outcome,outcome,`${attack} ${range}`);
       assert.deepEqual(reaction,before);
       assert.deepEqual(result.score,reaction.score);
       if(outcome==='corner') {
@@ -316,10 +320,10 @@ test('long-shot save interval distinguishes caught saves and keeper last-touch c
         assert.equal(result.phase,'attackMove');
       } else {
         assert.equal(result.restart,null);
-        assert.equal(result.ball.carrierId,`${attack==='white'?'black':'white'}-K`);
+        assert.equal(result.ball.carrierId,`${defending}-K`);
       }
-      const alternate=skipMove(reaction,{roll:model.goalProbability+model.saveProbability*.9});
-      assert.equal(result.randomState,alternate.randomState,'save or tip uses the same single seeded outcome draw');
+      const alternate=skipMove(reaction,{roll:caughtRoll});
+      assert.equal(result.randomState,alternate.randomState,'catch or parry uses the same single seeded outcome draw');
       assertIntegrity(result);
     }
   }

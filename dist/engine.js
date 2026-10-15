@@ -6,12 +6,13 @@ export const GOAL_FILES = Object.freeze([4, 5, 6, 7]);
 // Tunable board-game parameters, not fitted football statistics. Distance is in
 // board squares and time is in abstract units set by ballSpeed.
 export const SHOT_MODEL = Object.freeze({
-  version: 5, ballSpeed: 6,
+  version: 6, ballSpeed: 6,
   targetBase: 0.98, distanceDecay: 0.018, distancePenaltyStart: 3, longShotDecay: 0.06, minOnTarget: 0.01, maxOnTarget: 0.98,
   angleFloor: 0.65, angleWeight: 0.35,
   boxRadius: 0.4, boxDiveSpeed: 1.3, boxReactionDelay: 0.15, boxMaxSave: 0.94,
   outsideRadius: 0.25, outsideDiveSpeed: 0.65, outsideReactionDelay: 0.2, outsideMaxSave: 0.55,
-  readinessBase: 0.35, readinessTime: 0.45
+  readinessBase: 0.35, readinessTime: 0.45,
+  impactSpeedDecay: 0.08, parryMin: 0.05, parrySpeedWeight: 0.60, parryStretchWeight: 0.25, parryMax: 0.90
 });
 
 const TEAMS = ['white', 'black'];
@@ -244,7 +245,7 @@ export function shotModel(state, x = state?.pendingShot?.x, y = state?.pendingSh
   const target = scoringTeam ? {x, y: scoringTeam === 'white' ? -0.5 : BOARD_HEIGHT - 0.5} : {x: 0, y: 0};
   const invalid = {
     probability: 0, goalProbability: 0, baseGoalProbability: 0, scoringMultiplier: 1, saveProbability: 0, missProbability: 1,
-    onTargetProbability: 0, baseOnTargetProbability: 0, saveGivenOnTarget: 0, cornerProbability: 0, caughtSaveProbability: 0, distance: 0, shotAngleDegrees: 0,
+    onTargetProbability: 0, baseOnTargetProbability: 0, saveGivenOnTarget: 0, cornerProbability: 0, caughtSaveProbability: 0, arrivalSpeed: 0, keeperStretch: 0, parryGivenSave: 0, distance: 0, shotAngleDegrees: 0,
     keeperPathDistance: 0, timeToKeeper: 0, reach: 0, keeperInBox: false,
     closestPoint: {...origin}, keeperPosition: null, origin, target, modelVersion: SHOT_MODEL.version
   };
@@ -279,10 +280,16 @@ export function shotModel(state, x = state?.pendingShot?.x, y = state?.pendingSh
   const goalProbability = Math.min(1, baseGoalProbability * scoringMultiplier);
   const remainingScale = baseGoalProbability < 1 ? (1 - goalProbability) / (1 - baseGoalProbability) : 0;
   const saveProbability = onTarget * saveGivenOnTarget * remainingScale, missProbability = (1 - onTarget) * remainingScale;
-  const cornerProbability = distance(origin, {x, y: scoringTeam === 'white' ? -1 : BOARD_HEIGHT}) > 10 ? saveProbability * 0.2 : 0;
+  // All shots currently share launch power. Travel to the keeper reduces the
+  // arrival pace; a fast arrival or a stretched block is harder to hold.
+  // This splits already-stopped shots without changing goal or wide odds.
+  const arrivalSpeed = keeper ? SHOT_MODEL.ballSpeed * Math.exp(-SHOT_MODEL.impactSpeedDecay * projection) : 0;
+  const keeperStretch = keeper && reach > 0 ? clamp(clearance / reach, 0, 1) : 0;
+  const parryGivenSave = saveProbability > 0 ? clamp(SHOT_MODEL.parryMin + SHOT_MODEL.parrySpeedWeight * (arrivalSpeed / SHOT_MODEL.ballSpeed) ** 2 + SHOT_MODEL.parryStretchWeight * keeperStretch, SHOT_MODEL.parryMin, SHOT_MODEL.parryMax) : 0;
+  const cornerProbability = saveProbability * parryGivenSave;
   return {
     probability: goalProbability, goalProbability, baseGoalProbability, scoringMultiplier, saveProbability,
-    missProbability, baseOnTargetProbability: onTarget, cornerProbability, caughtSaveProbability: saveProbability - cornerProbability, onTargetProbability: goalProbability + saveProbability, saveGivenOnTarget: goalProbability + saveProbability > 0 ? saveProbability / (goalProbability + saveProbability) : 0,
+    missProbability, baseOnTargetProbability: onTarget, cornerProbability, caughtSaveProbability: saveProbability - cornerProbability, arrivalSpeed, keeperStretch, parryGivenSave, onTargetProbability: goalProbability + saveProbability, saveGivenOnTarget: goalProbability + saveProbability > 0 ? saveProbability / (goalProbability + saveProbability) : 0,
     distance: length, shotAngleDegrees: Math.acos(angleCos) * 180 / Math.PI,
     keeperPathDistance: clearance, timeToKeeper, reach, keeperInBox,
     closestPoint, keeperPosition: keeper, origin, target, modelVersion: SHOT_MODEL.version
@@ -395,13 +402,13 @@ function resolveShot(next, {roll, keeperMove, landing} = {}) {
     next.lastAction = {...common, type: 'goal', team: shot.scoringTeam, to: {x: shot.x, y: shot.y}, path: shot.path, outcome: 'goal', ownGoal: shot.scoringTeam !== shot.shootingTeam};
     addLog(next, `${title(shot.scoringTeam)} scores (${Math.round(probability * 100)}% chance)${shot.scoringTeam !== shot.shootingTeam ? ' — an own goal!' : '!'} ${next.score.white}–${next.score.black}. ${title(conceded)} kicks off.`);
   } else if (outcome === 'saved') {
-    const tippedOut = shot.distance > 10 && (outcomeRoll - probability) / details.saveProbability < 0.2;
+    const tippedOut = outcomeRoll < probability + details.cornerProbability;
     if (tippedOut) {
       const endY = shot.scoringTeam === 'white' ? -1 : BOARD_HEIGHT;
       const restart = restartForExit(next, shot.from, {x: shot.x, y: endY}, shot.defendingTeam);
       next.turn++;
       next.lastAction = {...common, type: 'save', team: shot.defendingTeam, keeperId: keeper?.id, to: {...next.ball}, path: shot.path, outcome: 'corner', tippedOut: true, restart: copy(restart)};
-      addLog(next, `${title(shot.defendingTeam)} goalkeeper tips the long shot out. ${title(shot.scoringTeam)} has a corner and a full positioning round.`);
+      addLog(next, `${title(shot.defendingTeam)} goalkeeper parries the shot out (${Math.round(details.parryGivenSave * 100)}% parry chance if stopped). ${title(shot.scoringTeam)} has a corner and a full positioning round.`);
       return next;
     }
     const destination = keeper ? {x: keeper.x, y: keeper.y} : {x: shot.x, y: shot.y < 0 ? 0 : BOARD_HEIGHT - 1};
@@ -861,9 +868,9 @@ function tacticalSuccessors(state, action) {
   };
   if (state.phase === 'keeperReact') {
     const model = shotModel(state, state.pendingShot.x, state.pendingShot.y, action.type === 'move' ? action : undefined);
-    const shot = state.pendingShot, tipFraction = shot.distance > 10 ? 0.2 : 0;
+    const shot = state.pendingShot;
     let start = 0;
-    return [model.goalProbability, model.saveProbability * tipFraction, model.saveProbability * (1 - tipFraction), model.missProbability].flatMap((probability, index) => {
+    return [model.goalProbability, model.cornerProbability, model.caughtSaveProbability, model.missProbability].flatMap((probability, index) => {
       const roll = Math.min(1 - Number.EPSILON, start + probability / 2); start += probability;
       if (probability <= 0) return [];
       if (index !== 3 || shot.distance <= 10) return [{probability, state: apply(roll)}];
