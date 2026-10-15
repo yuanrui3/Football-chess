@@ -21,3 +21,12 @@
 .move-modes[hidden],.move-budget[hidden]{display:none!important}.goal-targets{display:flex}.goal-cell{flex:1;min-width:0}.accuracy-badge{position:absolute;left:2px;bottom:1px;z-index:7;font-size:8px;font-weight:700;line-height:1.3;padding:1px 2px;color:#183d2a;background:#e5ed9f;border-radius:2px;pointer-events:none}.keeper-chance{background:#f0d39e}.trajectory{stroke:#f0ed9b;stroke-width:5;stroke-dasharray:12 9;fill:none}.shot-path{stroke:#f2ba72;stroke-width:7;stroke-dasharray:16 8;fill:none}.pitch-area.flipped .accuracy-badge{transform:rotate(180deg)}@media(max-width:600px){.accuracy-badge{font-size:6px;left:1px;bottom:0;padding:1px}}
 
 .tackle-chance{background:#f4c59c;color:#533921}
+
+/* Preview the keeper's reach against the actual shot path. */
+.shot-panel .shot-breakdown,.shot-panel .shot-geometry{font-size:11px;line-height:1.6;margin:6px 0 0;font-variant-numeric:tabular-nums}
+.shot-panel .shot-breakdown{color:#285348;font-weight:600}.shot-panel .shot-geometry{color:#665b44}.shot-panel .shot-legend{font-size:9px;line-height:1.6;margin:9px 0 0;color:#7b7059}
+.shot-panel .shot-breakdown:empty,.shot-panel .shot-geometry:empty{display:none}
+.keeper-reach{fill:#8ed1d020;stroke:#a2dddb;stroke-width:2.5;stroke-dasharray:10 7;pointer-events:none}
+.keeper-coverage{fill:none;stroke:#a2dddb;stroke-width:3;stroke-dasharray:8 7;stroke-linecap:round;pointer-events:none}
+.intercept-point{fill:#b8f0e6;stroke:#235b58;stroke-width:2;pointer-events:none}
+.model-sources a{text-underline-offset:3px}

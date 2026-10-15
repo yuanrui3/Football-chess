@@ -3,6 +3,16 @@ export const TYPES = Object.freeze(['K', 'Q', 'R', 'B', 'N', 'P']);
 export const BOARD_WIDTH = 12;
 export const BOARD_HEIGHT = 15;
 export const GOAL_FILES = Object.freeze([4, 5, 6, 7]);
+// Tunable board-game parameters, not fitted football statistics. Distance is in
+// board squares and time is in abstract units set by ballSpeed.
+export const SHOT_MODEL = Object.freeze({
+  version: 3, ballSpeed: 6,
+  targetBase: 0.98, distanceDecay: 0.018, minOnTarget: 0.15, maxOnTarget: 0.98,
+  angleFloor: 0.65, angleWeight: 0.35,
+  boxRadius: 0.4, boxDiveSpeed: 1.3, boxReactionDelay: 0.15, boxMaxSave: 0.94,
+  outsideRadius: 0.25, outsideDiveSpeed: 0.65, outsideReactionDelay: 0.2, outsideMaxSave: 0.55,
+  readinessBase: 0.35, readinessTime: 0.45
+});
 
 const TEAMS = ['white', 'black'];
 const DIAGONALS = [[1, 1], [1, -1], [-1, 1], [-1, -1]];
@@ -25,6 +35,8 @@ const distance = (a, b) => Math.max(Math.abs(a.x - b.x), Math.abs(a.y - b.y));
 const freshBudget = () => ({normalUsed: false, pawnUsed: false});
 const positionalTurn = state => state.phase === 'attackMove' || state.phase === 'defendMove';
 const budgetFor = state => state.positionBudget || freshBudget();
+const clamp = (number, minimum, maximum) => Math.max(minimum, Math.min(maximum, number));
+const inOwnBox = (team, x, y) => inside(x, y) && GOAL_FILES.includes(x) && (team === 'black' ? y <= 1 : team === 'white' ? y >= BOARD_HEIGHT - 2 : false);
 
 function formation(kickoff) {
   const white = {K: [5, 14], Q: [5, 10], R1: [1, 11], R2: [10, 11], B1: [3, 11], B2: [8, 11], N1: [2, 12], N2: [9, 12], P1: [4, 9], P2: [6, 9], P3: [8, 9]};
@@ -54,11 +66,11 @@ export function createGame({mode = 'solo', minutes = 10, kickoff = 'white', seed
   const carrier = pieces.find(p => p.id === `${kickoff}-Q`);
   return {
     pieces, ball: {x: carrier.x, y: carrier.y, carrierId: carrier.id},
-    attack: kickoff, phase: 'kickoff', positionBudget: freshBudget(), pendingShot: null,
+    attack: kickoff, phase: 'kickoff', positionBudget: freshBudget(), pendingShot: null, releaseReason: null,
     score: {white: 0, black: 0}, turn: 1, randomState: normalizeSeed(seed),
     log: [`${title(kickoff)} has kick-off. Kick the ball to begin.`], lastAction: null,
     mode, minutes: Number.isFinite(Number(minutes)) && Number(minutes) > 0 ? Number(minutes) : 10,
-    rulesVersion: 2
+    rulesVersion: 3
   };
 }
 
@@ -131,22 +143,64 @@ export function passAccuracy(kickDistance) {
   return Math.max(0.25, Math.round((1 - Math.max(0, length - 10) * 0.1) * 100) / 100);
 }
 
-export function shotChance(state, x = state.pendingShot?.x, y = state.pendingShot?.y, keeperPosition) {
+export function shotModel(state, x = state?.pendingShot?.x, y = state?.pendingShot?.y, keeperPosition) {
   const scoringTeam = goalAt(x, y) || (GOAL_FILES.includes(x) && y === 0 ? 'white' : GOAL_FILES.includes(x) && y === BOARD_HEIGHT - 1 ? 'black' : null);
-  const defendingTeam = scoringTeam ? other(scoringTeam) : state.pendingShot?.defendingTeam;
-  if (!defendingTeam) return 0;
-  const keeper = keeperPosition || state.pieces.find(p => p.team === defendingTeam && p.type === 'K');
-  if (!keeper) return 1;
-  const impact = {x, y: scoringTeam === 'white' ? 0 : scoringTeam === 'black' ? BOARD_HEIGHT - 1 : Math.max(0, Math.min(BOARD_HEIGHT - 1, y))};
-  const separation = distance(keeper, impact);
-  return separation === 0 ? 0 : separation === 1 ? 0.25 : separation === 2 ? 0.5 : 1;
+  const pieces = Array.isArray(state?.pieces) ? state.pieces : [];
+  const carrier = pieces.find(p => p.id === state?.ball?.carrierId);
+  // A reaction moves only the keeper; the declared shot's origin stays fixed.
+  const source = state?.pendingShot?.from || carrier || state?.ball;
+  const validOrigin = source && inside(source.x, source.y);
+  const origin = validOrigin ? {x: source.x, y: source.y} : {x: 0, y: 0};
+  const target = scoringTeam ? {x, y: scoringTeam === 'white' ? -0.5 : BOARD_HEIGHT - 0.5} : {x: 0, y: 0};
+  const invalid = {
+    probability: 0, goalProbability: 0, saveProbability: 0, missProbability: 1,
+    onTargetProbability: 0, saveGivenOnTarget: 0, distance: 0, shotAngleDegrees: 0,
+    keeperPathDistance: 0, timeToKeeper: 0, reach: 0, keeperInBox: false,
+    closestPoint: {...origin}, keeperPosition: null, origin, target, modelVersion: SHOT_MODEL.version
+  };
+  if (!scoringTeam || !validOrigin) return invalid;
+  const defendingTeam = other(scoringTeam);
+  const candidate = keeperPosition || pieces.find(p => p.team === defendingTeam && p.type === 'K');
+  const keeper = candidate && inside(candidate.x, candidate.y) ? {x: candidate.x, y: candidate.y} : null;
+  const dx = target.x - origin.x, dy = target.y - origin.y;
+  const length = Math.hypot(dx, dy);
+  if (!Number.isFinite(length) || length <= 0) return invalid;
+  const ux = dx / length, uy = dy / length;
+  const angleCos = clamp(Math.abs(dy) / length, 0, 1);
+  const onTarget = clamp(SHOT_MODEL.targetBase * Math.exp(-SHOT_MODEL.distanceDecay * length) * (SHOT_MODEL.angleFloor + SHOT_MODEL.angleWeight * angleCos), SHOT_MODEL.minOnTarget, SHOT_MODEL.maxOnTarget);
+  const rawProjection = keeper ? (keeper.x - origin.x) * ux + (keeper.y - origin.y) * uy : 0;
+  const projection = clamp(rawProjection, 0, length);
+  const closestPoint = {x: origin.x + projection * ux, y: origin.y + projection * uy};
+  const clearance = keeper ? Math.hypot(keeper.x - closestPoint.x, keeper.y - closestPoint.y) : 0;
+  const timeToKeeper = projection / SHOT_MODEL.ballSpeed;
+  const keeperInBox = !!keeper && inOwnBox(defendingTeam, keeper.x, keeper.y);
+  const radius = keeperInBox ? SHOT_MODEL.boxRadius : SHOT_MODEL.outsideRadius;
+  const diveSpeed = keeperInBox ? SHOT_MODEL.boxDiveSpeed : SHOT_MODEL.outsideDiveSpeed;
+  const delay = keeperInBox ? SHOT_MODEL.boxReactionDelay : SHOT_MODEL.outsideReactionDelay;
+  const maxSave = keeperInBox ? SHOT_MODEL.boxMaxSave : SHOT_MODEL.outsideMaxSave;
+  const reach = keeper ? radius + diveSpeed * Math.max(0, timeToKeeper - delay) : 0;
+  const readiness = maxSave * (1 - Math.exp(-(SHOT_MODEL.readinessBase + timeToKeeper) / SHOT_MODEL.readinessTime));
+  const saveGivenOnTarget = keeper && rawProjection >= 0 ? clamp(readiness * Math.exp(-((clearance / reach) ** 2)), 0, 1) : 0;
+  const goalProbability = onTarget * (1 - saveGivenOnTarget);
+  return {
+    probability: goalProbability, goalProbability, saveProbability: onTarget * saveGivenOnTarget,
+    missProbability: 1 - onTarget, onTargetProbability: onTarget, saveGivenOnTarget,
+    distance: length, shotAngleDegrees: Math.acos(angleCos) * 180 / Math.PI,
+    keeperPathDistance: clearance, timeToKeeper, reach, keeperInBox,
+    closestPoint, keeperPosition: keeper, origin, target, modelVersion: SHOT_MODEL.version
+  };
+}
+
+export function shotChance(state, x = state?.pendingShot?.x, y = state?.pendingShot?.y, keeperPosition) {
+  return shotModel(state, x, y, keeperPosition).probability;
 }
 
 function kickRecord(state, carrier, x, y, path, receiver, goal) {
   const length = distance(carrier, {x, y});
+  const details = goal ? shotModel(state, x, y) : null;
   return {
     x, y, path, distance: length, accuracy: goal ? 1 : passAccuracy(length),
-    ...(receiver ? {receiverId: receiver.id} : {}), ...(goal ? {goal, probability: shotChance(state, x, y)} : {}),
+    ...(receiver ? {receiverId: receiver.id} : {}), ...(goal ? {goal, probability: details.probability, shotModel: details} : {}),
     label: goal ? 'Shoot at goal' : receiver ? `Pass to ${NAMES[receiver.type]}` : `Kick to ${square(x, y)}`
   };
 }
@@ -203,6 +257,7 @@ function beginPosition(state, phase = 'attackMove') {
   state.phase = phase;
   state.positionBudget = freshBudget();
   state.pendingShot = null;
+  state.releaseReason = null;
 }
 
 function advancePosition(state, previousPhase) {
@@ -221,11 +276,11 @@ function resolveShot(next, {roll, keeperMove} = {}) {
   const shot = next.pendingShot;
   if (!shot || next.phase !== 'keeperReact') throw new Error('There is no shot awaiting a goalkeeper reaction.');
   const keeper = next.pieces.find(p => p.type === 'K' && p.team === shot.defendingTeam);
-  const probability = shotChance(next, shot.x, shot.y);
+  const details = shotModel(next, shot.x, shot.y), probability = details.probability;
   const outcomeRoll = nextRoll(next, roll);
-  const scored = probability === 1 || (probability > 0 && outcomeRoll < probability);
-  const common = {pieceId: shot.shooterId, shooterId: shot.shooterId, shootingTeam: shot.shootingTeam, from: shot.from, goalTarget: {x: shot.x, y: shot.y}, probability, accuracy: probability, roll: outcomeRoll, shotPath: shot.path, ...(keeperMove ? {keeperMove} : {})};
-  if (scored) {
+  const outcome = outcomeRoll < probability ? 'goal' : outcomeRoll < probability + details.saveProbability ? 'saved' : 'wide';
+  const common = {pieceId: shot.shooterId, shooterId: shot.shooterId, shootingTeam: shot.shootingTeam, from: shot.from, goalTarget: {x: shot.x, y: shot.y}, probability, accuracy: probability, roll: outcomeRoll, shotModel: details, shotPath: shot.path, ...(keeperMove ? {keeperMove} : {})};
+  if (outcome === 'goal') {
     const conceded = shot.defendingTeam;
     next.score[shot.scoringTeam]++;
     next.pieces = formation(conceded);
@@ -235,10 +290,11 @@ function resolveShot(next, {roll, keeperMove} = {}) {
     next.phase = 'kickoff';
     next.positionBudget = freshBudget();
     next.pendingShot = null;
+    next.releaseReason = null;
     next.turn++;
     next.lastAction = {...common, type: 'goal', team: shot.scoringTeam, to: {x: shot.x, y: shot.y}, path: shot.path, outcome: 'goal', ownGoal: shot.scoringTeam !== shot.shootingTeam};
     addLog(next, `${title(shot.scoringTeam)} scores (${Math.round(probability * 100)}% chance)${shot.scoringTeam !== shot.shootingTeam ? ' — an own goal!' : '!'} ${next.score.white}–${next.score.black}. ${title(conceded)} kicks off.`);
-  } else {
+  } else if (outcome === 'saved') {
     // Normal games always have a keeper; this fallback also makes imported
     // scenario fixtures resolve without leaving an unplayable pending shot.
     const destination = keeper ? {x: keeper.x, y: keeper.y} : {x: shot.x, y: shot.y < 0 ? 0 : BOARD_HEIGHT - 1};
@@ -248,6 +304,31 @@ function resolveShot(next, {roll, keeperMove} = {}) {
     next.turn++;
     next.lastAction = {...common, type: 'save', team: shot.defendingTeam, keeperId: keeper?.id, to: destination, path: [...shot.path.slice(0, -1), destination], outcome: 'saved'};
     addLog(next, `${title(shot.defendingTeam)} goalkeeper saves (${Math.round(probability * 100)}% scoring chance). ${title(shot.defendingTeam)} takes possession.`);
+  } else {
+    // The miss is a dead-ball restart. A keeper who had come off their line is
+    // placed at the nearest vacant square in their own box, without moving any
+    // other player or spending a positional action.
+    if (keeper && !inOwnBox(keeper.team, keeper.x, keeper.y)) {
+      const boxRows = keeper.team === 'black' ? [0, 1] : [BOARD_HEIGHT - 2, BOARD_HEIGHT - 1];
+      const restartSquares = boxRows.flatMap(row => GOAL_FILES.map(file => ({x: file, y: row})))
+        .filter(position => !pieceAt(next, position.x, position.y))
+        .sort((a, b) => Math.hypot(a.x - keeper.x, a.y - keeper.y) - Math.hypot(b.x - keeper.x, b.y - keeper.y) || a.y - b.y || a.x - b.x);
+      const restart = restartSquares[0];
+      if (restart) { keeper.x = restart.x; keeper.y = restart.y; }
+    }
+    // Full matches always have both keepers. Keep incomplete imported scenarios
+    // playable by putting the loose ball on a vacant defending end-row square.
+    const endRow = shot.defendingTeam === 'black' ? 0 : BOARD_HEIGHT - 1;
+    const fallback = [...GOAL_FILES, ...Array.from({length: BOARD_WIDTH}, (_, file) => file)]
+      .map(file => ({x: file, y: endRow})).find(position => !pieceAt(next, position.x, position.y));
+    const destination = keeper ? {x: keeper.x, y: keeper.y} : fallback || {x: shot.x, y: endRow};
+    next.ball = {...destination, carrierId: keeper?.id || null};
+    next.attack = shot.defendingTeam;
+    beginPosition(next);
+    if (keeper) { next.phase = 'keeperRelease'; next.releaseReason = 'goalKick'; }
+    next.turn++;
+    next.lastAction = {...common, type: 'shotMiss', team: shot.defendingTeam, keeperId: keeper?.id, to: destination, path: shot.path, outcome: 'wide'};
+    addLog(next, `${title(shot.shootingTeam)} shoots wide (${Math.round(details.missProbability * 100)}% miss chance). ${title(shot.defendingTeam)} has a goal kick${keeper ? '; the goalkeeper must release the ball' : ''}.`);
   }
   return next;
 }
@@ -336,7 +417,9 @@ export function applyKick(state, x, y, {roll} = {}) {
   if (kick.goal) {
     next.pendingShot = {x, y, shooterId: carrier.id, shootingTeam: carrier.team, scoringTeam: kick.goal, defendingTeam: other(kick.goal), from, path: kick.path, distance: kick.distance};
     next.phase = 'keeperReact';
-    next.lastAction = {type: 'shotAttempt', team: carrier.team, pieceId: carrier.id, from, to: {x, y}, path: kick.path, goalTarget: {x, y}, probability: shotChance(state, x, y), outcome: 'pending'};
+    next.releaseReason = null;
+    const details = shotModel(next, x, y);
+    next.lastAction = {type: 'shotAttempt', team: carrier.team, pieceId: carrier.id, from, to: {x, y}, path: kick.path, goalTarget: {x, y}, probability: details.probability, shotModel: details, outcome: 'pending'};
     addLog(next, `${title(carrier.team)} ${NAMES[carrier.type]} shoots toward ${'abcdefghijkl'[x]}! ${title(other(kick.goal))} may move its goalkeeper or hold before the shot resolves.`);
     return next;
   }
@@ -356,7 +439,7 @@ export function applyKick(state, x, y, {roll} = {}) {
   next.attack = receiver?.team || carrier.team;
   beginPosition(next);
   const backPass = receiver && receiver.type === 'K' && receiver.team === carrier.team && receiver.id !== carrier.id;
-  if (backPass) next.phase = 'keeperRelease';
+  if (backPass) { next.phase = 'keeperRelease'; next.releaseReason = 'backPass'; }
   next.lastAction = {type: interception ? 'interception' : 'kick', team: carrier.team, pieceId: carrier.id, from, to: {x, y}, path: kick.path, distance: kick.distance, accuracy, probability: accuracy, roll: outcomeRoll, outcome: interception ? 'interception' : 'complete', ...(receiver ? {receiverId: receiver.id} : {}), ...(backPass ? {backPass: true} : {})};
   addLog(next, receiver
     ? interception ? `${title(receiver.team)} ${NAMES[receiver.type]} intercepts at ${square(x, y)}.`
