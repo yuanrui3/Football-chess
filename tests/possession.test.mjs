@@ -1,0 +1,407 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import * as engine from '../dist/engine.js';
+
+const {
+  BOARD_WIDTH, BOARD_HEIGHT, isBox, createGame, currentTeam,
+  legalMoves, legalKicks, applyMove, applyKick, skipMove, chooseAIAction,
+} = engine;
+const clone = value => JSON.parse(JSON.stringify(value));
+const other = team => team === 'white' ? 'black' : 'white';
+const budget = (normalUsed = false, pawnUsed = false, dribbleUsed = false) => ({ normalUsed, pawnUsed, dribbleUsed });
+const mirror = ([x, y]) => [BOARD_WIDTH - 1 - x, BOARD_HEIGHT - 1 - y];
+
+// Preserve both complete teams. Reserve the central action squares and passing
+// rays, then park uninvolved players on the touchlines away from those actions.
+function fixture({ team = 'white', phase = 'attackMove', carrier = `${team}-R1`, positions = {}, ball, positionBudget = budget(), clear = [], seed = 73 } = {}) {
+  const state = createGame({ mode: 'local', kickoff: team, seed });
+  const assigned = { 'white-K': [5, 14], 'black-K': [6, 0], [carrier]: [2, 8], ...positions };
+  const occupied = new Set(Object.values(assigned).map(pair => pair.join(',')));
+  assert.equal(occupied.size, Object.keys(assigned).length, 'fixture assignments cannot overlap');
+  for (const pair of clear) occupied.add(pair.join(','));
+  const parking = Array.from({ length: BOARD_HEIGHT }, (_, y) => [[0, y], [11, y]]).flat();
+  for (const piece of state.pieces) {
+    const spot = assigned[piece.id] || parking.find(pair => !occupied.has(pair.join(',')));
+    assert.ok(spot, `parking exists for ${piece.id}`);
+    [piece.x, piece.y] = spot;
+    occupied.add(spot.join(','));
+  }
+  const owner = state.pieces.find(piece => piece.id === carrier);
+  state.ball = ball || { x: owner.x, y: owner.y, carrierId: carrier };
+  state.attack = team;
+  state.phase = phase;
+  state.positionBudget = clone(positionBudget);
+  state.restart = null;
+  state.releaseReason = null;
+  state.pendingShot = null;
+  state.offside = null;
+  return state;
+}
+
+function integrity(state) {
+  assert.equal(state.pieces.length, 22, 'the complete roster survives every action');
+  assert.equal(new Set(state.pieces.map(piece => piece.id)).size, 22);
+  assert.equal(new Set(state.pieces.map(piece => `${piece.x},${piece.y}`)).size, 22, 'no players overlap');
+  for (const piece of state.pieces) {
+    assert.ok(piece.x >= 0 && piece.x < BOARD_WIDTH && piece.y >= 0 && piece.y < BOARD_HEIGHT);
+    if (isBox(piece.x, piece.y)) assert.ok(['K', 'N'].includes(piece.type));
+  }
+  if (state.ball.carrierId) {
+    const carrier = state.pieces.find(piece => piece.id === state.ball.carrierId);
+    assert.ok(carrier);
+    assert.deepEqual({ x: state.ball.x, y: state.ball.y }, { x: carrier.x, y: carrier.y });
+    assert.equal(carrier.team, state.attack);
+  }
+}
+
+function move(state, id, x, y, options = {}) {
+  const before = clone(state);
+  assert.ok(legalMoves(state, id, options).some(candidate => candidate.x === x && candidate.y === y), `${id} can move to ${x},${y}`);
+  const next = applyMove(state, id, x, y, options);
+  assert.deepEqual(state, before, 'legal previews and transition preserve the undo snapshot');
+  integrity(next);
+  return next;
+}
+
+const permutations = values => values.length ? values.flatMap((value, i) => permutations(values.filter((_, j) => j !== i)).map(rest => [value, ...rest])) : [[]];
+function attackFixture(team = 'white', carrierSuffix = 'R1') {
+  const transform = pair => team === 'white' ? pair : mirror(pair);
+  const carrierId = `${team}-${carrierSuffix}`;
+  return fixture({ team, carrier: carrierId, positions: {
+    [carrierId]: transform([2, 8]), [`${team}-R2`]: transform([8, 10]), [`${team}-P1`]: transform([9, 7]),
+  }, clear: [[3, 8], [8, 9], [10, 7]].map(transform) });
+}
+
+test('attacking dribble, off-ball move and free pawn move work in all six orders for either side', () => {
+  for (const team of ['white', 'black']) for (const order of permutations(['dribble', 'normal', 'pawn'])) {
+    const transform = pair => team === 'white' ? pair : mirror(pair);
+    const actions = {
+      dribble: [`${team}-R1`, ...transform([3, 8]), {}],
+      normal: [`${team}-R2`, ...transform([8, 9]), {}],
+      pawn: [`${team}-P1`, ...transform([10, 7]), { freePawn: true }],
+    };
+    let state = attackFixture(team);
+    const seed = state.randomState;
+    const spent = new Set();
+    for (const [i, kind] of order.entries()) {
+      const oldBall = clone(state.ball);
+      state = move(state, ...actions[kind]);
+      spent.add(kind);
+      assert.equal(state.randomState, seed, 'repositioning never draws a random outcome');
+      if (kind !== 'dribble') assert.deepEqual(state.ball, oldBall, 'off-ball actions leave the ball alone');
+      assert.equal(state.ball.carrierId, `${team}-R1`);
+      if (i < 2) {
+        assert.equal(state.phase, 'attackMove', `${team}: ${order.join(' → ')} retains unused actions`);
+        assert.deepEqual(state.positionBudget, budget(spent.has('normal'), spent.has('pawn'), spent.has('dribble')));
+        assert.equal(legalKicks(state).length, 0, 'the kicker must wait until positioning finishes');
+      } else {
+        assert.equal(state.phase, 'defendMove', 'all three spent actions advance automatically');
+        assert.equal(currentTeam(state), other(team));
+        assert.deepEqual(state.positionBudget, budget(), 'defending receives a clean budget');
+      }
+    }
+    assert.deepEqual({ x: state.ball.x, y: state.ball.y }, { x: transform([3, 8])[0], y: transform([3, 8])[1] });
+  }
+});
+
+test('a spent dribble cannot reuse an unused normal action and a spent normal action does not block the carrier', () => {
+  let state = attackFixture();
+  state = move(state, 'white-R1', 3, 8);
+  assert.equal(state.positionBudget.normalUsed, false);
+  assert.equal(state.positionBudget.dribbleUsed, true);
+  assert.deepEqual(legalMoves(state, 'white-R1'), [], 'the ball carrier cannot spend the off-ball allowance');
+  const before = clone(state);
+  assert.throws(() => applyMove(state, 'white-R1', 4, 8));
+  assert.deepEqual(state, before);
+  assert.ok(legalMoves(state, 'white-R2').length, 'another player can still move');
+  state = attackFixture();
+  state = move(state, 'white-R2', 8, 9);
+  assert.equal(state.positionBudget.normalUsed, true);
+  assert.deepEqual(legalMoves(state, 'white-R2'), [], 'off-ball movement cannot repeat');
+  assert.ok(legalMoves(state, 'white-R1').length, 'carrier still has its separate dribble');
+  assert.ok(legalMoves(state, 'white-P1', { freePawn: true }).length);
+});
+
+test('a carrying pawn can use its separate dribble and free pawn action in either order', () => {
+  for (const freeFirst of [false, true]) {
+    let state = fixture({ carrier: 'white-P1', positions: { 'white-P1': [8, 8], 'white-R2': [3, 9] }, clear: [[8, 7], [8, 6], [3, 8]] });
+    state = move(state, 'white-P1', 8, 7, { freePawn: freeFirst });
+    assert.deepEqual(state.positionBudget, budget(false, freeFirst, !freeFirst));
+    assert.deepEqual(legalMoves(state, 'white-P1', { freePawn: freeFirst }), [], 'the same pawn allowance cannot repeat');
+    state = move(state, 'white-P1', 8, 6, { freePawn: !freeFirst });
+    assert.equal(state.phase, 'attackMove');
+    assert.deepEqual(state.positionBudget, budget(false, true, true));
+    assert.deepEqual(state.ball, { x: 8, y: 6, carrierId: 'white-P1' });
+    state = move(state, 'white-R2', 3, 8);
+    assert.equal(state.phase, 'defendMove');
+  }
+});
+
+test('an off-ball pawn may still use its normal and free actions while the carrier retains its dribble', () => {
+  let state = attackFixture();
+  state = move(state, 'white-P1', 10, 7, { freePawn: true });
+  state = move(state, 'white-P1', 10, 6);
+  assert.equal(state.phase, 'attackMove');
+  assert.deepEqual(state.positionBudget, budget(true, true, false));
+  assert.ok(legalMoves(state, 'white-R1').length);
+  state = move(state, 'white-R1', 3, 8);
+  assert.equal(state.phase, 'defendMove');
+});
+
+test('collecting a loose ball with a normal move spends that move and then permits one dribble', () => {
+  let state = fixture({ positions: { 'white-R1': [2, 8], 'white-P1': [9, 7] }, ball: { x: 3, y: 8, carrierId: null }, clear: [[3, 8], [4, 8], [10, 7]] });
+  assert.equal(engine.positionActions(state).dribbleAvailable, false, 'a loose ball cannot be dribbled before collection');
+  state = move(state, 'white-R1', 3, 8);
+  assert.deepEqual(state.positionBudget, budget(true, false, false));
+  assert.equal(engine.positionActions(state).dribbleAvailable, true);
+  state = move(state, 'white-R1', 4, 8);
+  assert.deepEqual(state.positionBudget, budget(true, false, true));
+  state = move(state, 'white-P1', 10, 7, { freePawn: true });
+  assert.equal(state.phase, 'defendMove');
+});
+
+test('free-pawn collection keeps both a carrier dribble and another off-ball move available', () => {
+  let state = fixture({ carrier: 'white-P1', positions: { 'white-P1': [8, 8], 'white-R2': [3, 9] }, ball: { x: 8, y: 7, carrierId: null }, clear: [[8, 7], [8, 6], [3, 8]] });
+  state = move(state, 'white-P1', 8, 7, { freePawn: true });
+  assert.deepEqual(state.positionBudget, budget(false, true, false));
+  state = move(state, 'white-R2', 3, 8);
+  assert.equal(state.phase, 'attackMove');
+  state = move(state, 'white-P1', 8, 6);
+  assert.equal(state.phase, 'defendMove');
+});
+
+test('collection as the last ordinary allowance opens a dribble instead of prematurely advancing', () => {
+  for (const collectWithPawnBonus of [false, true]) {
+    let state = fixture({ carrier: 'white-P1', positions: { 'white-P1': [8, 8], 'white-P2': [9, 9], 'white-R2': [3, 9] }, ball: { x: 8, y: 7, carrierId: null }, clear: [[8, 7], [8, 6], [10, 9], [3, 8]] });
+    if (collectWithPawnBonus) state = move(state, 'white-R2', 3, 8);
+    else state = move(state, 'white-P2', 10, 9, { freePawn: true });
+    state = move(state, 'white-P1', 8, 7, { freePawn: collectWithPawnBonus });
+    assert.equal(state.phase, 'attackMove', 'newly collected possession retains its carrier action');
+    assert.deepEqual(state.positionBudget, budget(true, true, false));
+    assert.ok(engine.positionActions(state).dribbleAvailable);
+    state = move(state, 'white-P1', 8, 6);
+    assert.equal(state.phase, 'defendMove');
+  }
+});
+
+test('a defending loose-ball collection refreshes every allowance, including when the collector used the free pawn action', () => {
+  for (const freePawn of [false, true]) {
+    const initial = fixture({ phase: 'defendMove', carrier: 'black-P1', positions: { 'black-P1': [8, 8], 'black-R2': [3, 9] }, ball: { x: 8, y: 7, carrierId: null }, positionBudget: budget(freePawn, !freePawn, false), clear: [[8, 7], [8, 6], [3, 8]] });
+    const state = move(initial, 'black-P1', 8, 7, { freePawn });
+    assert.equal(state.attack, 'black');
+    assert.equal(state.phase, 'attackMove');
+    assert.deepEqual(state.positionBudget, budget());
+    const actions = engine.positionActions(state);
+    assert.ok(actions.normalAvailable && actions.pawnAvailable && actions.dribbleAvailable);
+    assert.equal(state.randomState, initial.randomState, 'collection uses no random roll');
+  }
+});
+
+test('a loose-ball round and a defending round still finish after normal plus free-pawn actions', () => {
+  for (const phase of ['attackMove', 'defendMove']) {
+    const team = phase === 'attackMove' ? 'white' : 'black';
+    let state = fixture({ phase, positions: { [`${team}-R2`]: [8, 10], [`${team}-P1`]: [9, 7] }, ball: phase === 'attackMove' ? { x: 5, y: 5, carrierId: null } : undefined, clear: [[8, 9], [10, 7]] });
+    assert.equal(engine.positionActions(state).dribbleAvailable, false);
+    state = move(state, `${team}-R2`, 8, 9);
+    state = move(state, `${team}-P1`, 10, 7, { freePawn: true });
+    assert.equal(state.phase, phase === 'attackMove' ? 'defendMove' : 'kick');
+  }
+});
+
+test('ending positioning can forfeit any remaining combination of the three allowances', () => {
+  for (const first of ['none', 'dribble', 'normal', 'pawn']) {
+    let state = attackFixture();
+    if (first === 'dribble') state = move(state, 'white-R1', 3, 8);
+    if (first === 'normal') state = move(state, 'white-R2', 8, 9);
+    if (first === 'pawn') state = move(state, 'white-P1', 10, 7, { freePawn: true });
+    const before = clone(state);
+    const next = skipMove(state);
+    assert.deepEqual(state, before);
+    assert.equal(next.phase, 'defendMove');
+    assert.deepEqual(next.positionBudget, budget());
+    assert.equal(skipMove(next).phase, 'kick');
+  }
+});
+
+test('winning possession opens fresh dribble, off-ball and pawn actions while failed knight tackles do not', () => {
+  const initial = fixture({ phase: 'defendMove', carrier: 'white-N1', positions: { 'white-N1': [2, 7], 'black-R1': [2, 4], 'black-P1': [9, 7] }, clear: [[1, 7], [1, 6]] });
+  const tackle = legalMoves(initial, 'black-R1').find(candidate => candidate.x === 1 && candidate.y === 7 && candidate.type === 'tackle');
+  assert.ok(tackle);
+  for (const [roll, success] of [[.499999, true], [.5, false]]) {
+    const before = clone(initial);
+    const next = applyMove(initial, 'black-R1', 1, 7, { roll });
+    assert.deepEqual(initial, before);
+    integrity(next);
+    if (success) {
+      assert.equal(next.attack, 'black');
+      assert.equal(next.phase, 'attackMove');
+      assert.deepEqual(next.positionBudget, budget());
+      const actions = engine.positionActions(next);
+      assert.ok(actions.dribbleAvailable && actions.normalAvailable && actions.pawnAvailable);
+      assert.ok(legalMoves(next, 'black-R1').length);
+    } else {
+      assert.equal(next.phase, 'defendMove');
+      assert.equal(next.ball.carrierId, 'white-N1');
+      assert.deepEqual(next.positionBudget, budget(true, false, false));
+      assert.equal(engine.positionActions(next).dribbleAvailable, false);
+      assert.deepEqual(legalMoves(next, 'black-R1'), []);
+    }
+  }
+});
+
+function longGoalKick(team = 'white') {
+  const transform = pair => team === 'white' ? pair : mirror(pair);
+  const defending = other(team);
+  const source = transform([2, 13]), target = transform([2, 1]), landing = transform([2, -3]);
+  const state = fixture({ team, phase: 'kick', positions: {
+    [`${team}-R1`]: source,
+    [`${defending}-K`]: transform([7, 0]),
+    [`${defending}-N1`]: transform([4, 0]),
+  }, clear: Array.from({ length: BOARD_HEIGHT }, (_, y) => transform([2, y])) });
+  const kick = legalKicks(state).find(candidate => candidate.x === target[0] && candidate.y === target[1]);
+  assert.ok(kick && kick.distance > 10 && kick.accuracy < 1);
+  const before = clone(state);
+  const result = applyKick(state, ...target, { roll: .999999, landing: { x: landing[0], y: landing[1] } });
+  assert.deepEqual(state, before);
+  return result;
+}
+
+function assertImmediateGoalKick(state, team) {
+  integrity(state);
+  assert.equal(state.phase, 'keeperRelease');
+  assert.equal(state.releaseReason, 'goalKick');
+  assert.equal(state.attack, team);
+  assert.equal(currentTeam(state), team);
+  assert.equal(state.ball.carrierId, `${team}-K`, 'only the king takes a goal kick');
+  assert.equal(state.restart.type, 'goalKick');
+  assert.equal(state.restart.takerId, `${team}-K`);
+  assert.equal(state.restart.team, team);
+  assert.deepEqual(state.restart.spot, { x: state.ball.x, y: state.ball.y });
+  assert.ok(isBox(state.ball.x, state.ball.y));
+  assert.equal(team === 'black' ? state.ball.y <= 1 : state.ball.y >= 13, true);
+  for (const piece of state.pieces) for (const freePawn of [false, true]) assert.deepEqual(legalMoves(state, piece.id, { freePawn }), [], 'nobody can delay the goal kick by moving');
+  assert.throws(() => skipMove(state), 'goal kick cannot be skipped');
+  const kicks = legalKicks(state);
+  assert.ok(kicks.length, 'the king has an immediate legal release');
+  assert.equal(kicks.some(kick => kick.goal), false, 'this goal kick must be a pass rather than a direct shot');
+  assert.throws(() => applyKick(state, 5, team === 'black' ? -1 : 15));
+}
+
+test('long-pass end-line exits give the king an immediate pass even when a knight is nearer', () => {
+  for (const shootingTeam of ['white', 'black']) {
+    const result = longGoalKick(shootingTeam);
+    assertImmediateGoalKick(result, other(shootingTeam));
+    assert.equal(result.restart.reason ?? null, null);
+  }
+});
+
+test('wide shots also demand an immediate king pass and preserve the wide-shot record', () => {
+  for (const team of ['white', 'black']) {
+    const transform = pair => team === 'white' ? pair : mirror(pair);
+    const state = fixture({ team, phase: 'kick', positions: { [`${team}-R1`]: transform([4, 7]), [`${other(team)}-K`]: transform([7, 0]), [`${other(team)}-N1`]: transform([5, 0]) }, clear: Array.from({ length: 8 }, (_, y) => transform([4, y])) });
+    const target = team === 'white' ? [4, -1] : [7, 15];
+    const declared = applyKick(state, ...target);
+    assert.equal(declared.phase, 'keeperReact');
+    const result = skipMove(declared, { roll: .999999 });
+    assert.equal(result.lastAction.type, 'shotMiss');
+    assert.equal(result.lastAction.outcome, 'wide');
+    assertImmediateGoalKick(result, other(team));
+  }
+});
+
+test('taking the goal kick clears the restart and opens ordinary actions with no direct-offside penalty', () => {
+  const initial = longGoalKick();
+  const kick = legalKicks(initial).find(candidate => !candidate.goal && candidate.accuracy === 1);
+  const before = clone(initial);
+  const next = applyKick(initial, kick.x, kick.y, { roll: 0 });
+  assert.deepEqual(initial, before);
+  assert.equal(next.restart, null);
+  assert.equal(next.releaseReason, null);
+  assert.equal(next.phase, 'attackMove');
+  assert.equal(next.offside, null, 'direct goal-kick receipt is exempt from offside');
+  assert.deepEqual(next.positionBudget, budget());
+  assert.equal(next.lastAction.restartType, 'goalKick');
+  integrity(next);
+});
+
+test('normalization migrates old pending goal kicks to the king without changing source or future random outcomes', () => {
+  assert.equal(typeof engine.normalizeGame, 'function');
+  for (const team of ['white', 'black']) for (const phase of ['attackMove', 'defendMove', 'kick']) {
+    const transform = pair => team === 'white' ? pair : mirror(pair);
+    const knightId = `${team}-N1`, spot = transform([4, 14]);
+    const state = fixture({ team, carrier: knightId, phase, positions: { [knightId]: spot, [`${team}-K`]: transform([7, 12]) }, positionBudget: { normalUsed: true, pawnUsed: false } });
+    state.restart = { type: 'goalKick', team, takerId: knightId, spot: { x: spot[0], y: spot[1] }, indirect: false, exit: { x: spot[0], y: team === 'white' ? 14.5 : -.5, line: team === 'white' ? 'bottom' : 'top' } };
+    const before = clone(state);
+    const normalized = engine.normalizeGame(state);
+    assert.deepEqual(state, before, 'save migration is pure');
+    assert.equal(normalized.randomState, state.randomState, 'migration never consumes a roll');
+    assert.equal(normalized.score.white, state.score.white);
+    assert.equal(normalized.score.black, state.score.black);
+    assert.deepEqual(normalized.pieces.find(piece => piece.id === knightId), state.pieces.find(piece => piece.id === knightId), 'the previous knight taker is not displaced');
+    assert.deepEqual(normalized.restart.exit, state.restart.exit);
+    assertImmediateGoalKick(normalized, team);
+    assert.deepEqual(engine.normalizeGame(normalized), normalized, 'repeated save loading is stable');
+  }
+});
+
+test('old normal-used saves cannot gain a second dribble while untouched saves receive the new allowance', () => {
+  for (const normalUsed of [false, true]) {
+    const state = attackFixture();
+    state.positionBudget = { normalUsed, pawnUsed: false };
+    const before = clone(state);
+    const normalized = engine.normalizeGame(state);
+    assert.deepEqual(state, before);
+    assert.deepEqual(normalized.positionBudget, budget(normalUsed, false, normalUsed));
+    assert.equal(engine.positionActions(normalized).dribbleAvailable, !normalUsed);
+    assert.equal(legalMoves(normalized, 'white-R1').length > 0, !normalUsed);
+  }
+});
+
+test('other boundary restarts retain their positioning round and cannot gain a carrier dribble', () => {
+  for (const type of ['corner', 'throwIn', 'offside']) {
+    let state = attackFixture();
+    state.restart = { type, team: 'white', takerId: state.ball.carrierId, spot: { x: state.ball.x, y: state.ball.y }, indirect: type === 'offside' };
+    assert.equal(engine.positionActions(state).dribbleAvailable, false);
+    assert.deepEqual(legalMoves(state, state.ball.carrierId), []);
+    assert.deepEqual(legalKicks(state), []);
+    state = move(state, 'white-R2', 8, 9);
+    state = move(state, 'white-P1', 10, 7, { freePawn: true });
+    assert.equal(state.phase, 'defendMove', `${type} requires no extra locked-carrier action`);
+    state = skipMove(state);
+    assert.equal(state.phase, 'kick');
+    assert.equal(state.restart.type, type);
+    assert.ok(legalKicks(state).length);
+  }
+});
+
+function applyAI(state, action) {
+  if (action.type === 'move') return move(state, action.pieceId, action.x, action.y, { freePawn: !!action.freePawn });
+  if (action.type === 'kick') {
+    assert.ok(legalKicks(state).some(kick => kick.x === action.x && kick.y === action.y));
+    return applyKick(state, action.x, action.y, { roll: .8 });
+  }
+  assert.equal(action.type, 'skip');
+  return skipMove(state);
+}
+
+for (const difficulty of ['casual', 'tactical']) test(`${difficulty} AI respects all new action-budget combinations and forced goal kicks`, () => {
+  const states = [];
+  for (const normalUsed of [false, true]) for (const pawnUsed of [false, true]) for (const dribbleUsed of [false, true]) {
+    if (normalUsed && pawnUsed && dribbleUsed) continue;
+    const state = attackFixture();
+    state.positionBudget = budget(normalUsed, pawnUsed, dribbleUsed);
+    states.push(state);
+  }
+  states.push(longGoalKick('white'), longGoalKick('black'));
+  for (const state of states) {
+    const before = clone(state);
+    const action = chooseAIAction(state, { difficulty });
+    assert.deepEqual(state, before, 'planning leaves the board, allowances and future roll untouched');
+    if (state.phase === 'keeperRelease') assert.equal(action.type, 'kick', 'the AI must release immediately');
+    const next = applyAI(state, action);
+    integrity(next);
+    if (action.type === 'move' && !action.freePawn && action.pieceId === state.ball.carrierId) assert.equal(state.positionBudget.dribbleUsed, false);
+    if (action.type === 'move' && !action.freePawn && action.pieceId !== state.ball.carrierId) assert.equal(state.positionBudget.normalUsed, false);
+    for (const randomState of [0, 0xffffffff]) assert.deepEqual(chooseAIAction({ ...state, randomState }, { difficulty }), action, 'AI never uses the hidden future roll to choose');
+  }
+});

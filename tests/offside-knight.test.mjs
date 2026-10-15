@@ -25,7 +25,7 @@ function fixture({team = 'white', phase = 'kick', carrier = 'white-Q', positions
     occupied.add(location.join(','));
   }
   state.phase = phase;
-  state.positionBudget = {normalUsed: false, pawnUsed: false};
+  state.positionBudget = { normalUsed: false, pawnUsed: false, dribbleUsed: false };
   const owner = state.pieces.find(p => p.id === carrier);
   state.ball = {x: owner.x, y: owner.y, carrierId: carrier};
   if (team === 'black') {
@@ -53,7 +53,7 @@ function assertRestart(state, type, team) {
   assert.equal(state.restart.team, team);
   assert.equal(state.attack, team);
   assert.equal(state.phase, 'attackMove', 'the awarded side receives a full positioning round');
-  assert.deepEqual(state.positionBudget, {normalUsed: false, pawnUsed: false});
+  assert.deepEqual(state.positionBudget, { normalUsed: false, pawnUsed: false, dribbleUsed: false });
   const taker = state.pieces.find(piece => piece.id === state.restart.takerId);
   assert.ok(taker);
   assert.equal(taker.team, team);
@@ -319,9 +319,12 @@ test('an opponent deliberately collecting the loose ball resets an active offsid
 test('direct goal kicks, corner kicks, and throw-ins exempt the first recipient from offside', () => {
   // Metadata fixtures isolate each exemption from the geometry of its boundary.
   for (const team of ['white', 'black']) for (const type of ['goalKick', 'corner', 'throwIn']) {
-    const state = fixture({team});
+    const state = type === 'goalKick'
+      ? fixture({team, phase: 'keeperRelease', carrier: 'white-K', positions: {'white-K': [4,14], 'white-R1': [4,4]}})
+      : fixture({team});
+    if (type === 'goalKick') state.releaseReason = 'goalKick';
     state.restart = {type, team, takerId: state.ball.carrierId, spot: {x: state.ball.x, y: state.ball.y}, indirect: false};
-    const next = kickAt(state, [3, 4], team, {roll: 0});
+    const next = kickAt(state, type === 'goalKick' ? [4, 4] : [3, 4], team, {roll: 0});
     assert.equal(next.restart, null);
     assert.equal(next.ball.carrierId, idFor('white-R1', team));
     assert.equal(next.attack, team);
@@ -379,7 +382,7 @@ test('offside restart locks its taker, disables tackles, and preserves both team
   const restart = clone(state.restart);
   state = skipMove(state);
   assert.equal(state.phase, 'defendMove');
-  assert.deepEqual(state.positionBudget, {normalUsed: false, pawnUsed: false});
+  assert.deepEqual(state.positionBudget, { normalUsed: false, pawnUsed: false, dribbleUsed: false });
   for (const piece of state.pieces) assert.equal(legalMoves(state, piece.id).some(move => move.type === 'tackle'), false);
   assert.deepEqual(state.restart, restart);
   state = skipMove(state);

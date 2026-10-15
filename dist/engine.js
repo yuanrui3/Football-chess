@@ -34,9 +34,12 @@ const copy = state => JSON.parse(JSON.stringify(state));
 const addLog = (state, line) => { state.log = [...(state.log || []), line].slice(-80); };
 const goalAt = (x, y) => GOAL_FILES.includes(x) ? (y === -1 ? 'white' : y === BOARD_HEIGHT ? 'black' : null) : null;
 const distance = (a, b) => Math.max(Math.abs(a.x - b.x), Math.abs(a.y - b.y));
-const freshBudget = () => ({normalUsed: false, pawnUsed: false});
+const freshBudget = () => ({normalUsed: false, pawnUsed: false, dribbleUsed: false});
 const positionalTurn = state => state.phase === 'attackMove' || state.phase === 'defendMove';
-const budgetFor = state => state.positionBudget || freshBudget();
+// An older save spent a shared move on either the carrier or a teammate. When
+// that move is already used, do not grant an extra carrier move on reload.
+const budgetFor = state => ({normalUsed: !!state.positionBudget?.normalUsed, pawnUsed: !!state.positionBudget?.pawnUsed, dribbleUsed: state.positionBudget?.dribbleUsed === undefined ? !!state.positionBudget?.normalUsed : !!state.positionBudget.dribbleUsed});
+const attackingCarrier = (state, piece) => state.phase === 'attackMove' && !state.restart && piece?.id === state.ball.carrierId && piece.team === state.attack;
 const clamp = (number, minimum, maximum) => Math.max(minimum, Math.min(maximum, number));
 const inOwnBox = (team, x, y) => inside(x, y) && GOAL_FILES.includes(x) && (team === 'black' ? y <= 1 : team === 'white' ? y >= BOARD_HEIGHT - 2 : false);
 
@@ -72,7 +75,7 @@ export function createGame({mode = 'solo', minutes = 10, kickoff = 'white', seed
     score: {white: 0, black: 0}, turn: 1, randomState: normalizeSeed(seed),
     log: [`${title(kickoff)} has kick-off. Kick the ball to begin.`], lastAction: null,
     mode, minutes: Number.isFinite(Number(minutes)) && Number(minutes) > 0 ? Number(minutes) : 10,
-    rulesVersion: 4, restart: null, offside: null
+    rulesVersion: 5, restart: null, offside: null
   };
 }
 
@@ -118,7 +121,7 @@ export function legalMoves(state, pieceId, {freePawn = false} = {}) {
   if (state.phase === 'keeperReact') return freePawn ? [] : keeperReactionMoves(state, piece);
   if (!positionalTurn(state) || !piece || piece.team !== currentTeam(state) || state.restart?.takerId === piece.id) return [];
   const budget = budgetFor(state);
-  if (freePawn ? budget.pawnUsed || piece.type !== 'P' : budget.normalUsed) return [];
+  if (freePawn ? budget.pawnUsed || piece.type !== 'P' : attackingCarrier(state, piece) ? budget.dribbleUsed : budget.normalUsed) return [];
   const moves = new Map(), shape = movementShape(piece);
   for (const [dx, dy] of shape.vectors) {
     for (let step = 1; step <= shape.range; step++) {
@@ -139,6 +142,17 @@ export function legalMoves(state, pieceId, {freePawn = false} = {}) {
     }
   }
   return [...moves.values()];
+}
+
+// The three budgets are independent: an attacker may dribble, move a player
+// without the ball, and reposition one pawn, in any order. Protected restarts
+// retain only their two positioning actions because their taker cannot move.
+export function positionActions(state) {
+  const budget = budgetFor(state);
+  if (!positionalTurn(state)) return {normalAvailable: false, pawnAvailable: false, dribbleAvailable: false, budget};
+  const carrier = state.pieces.find(piece => piece.id === state.ball.carrierId);
+  const dribbleAvailable = !budget.dribbleUsed && attackingCarrier(state, carrier) && legalMoves(state, carrier.id).length > 0;
+  return {normalAvailable: !budget.normalUsed, pawnAvailable: !budget.pawnUsed, dribbleAvailable: !!dribbleAvailable, budget};
 }
 
 export function passAccuracy(kickDistance) {
@@ -190,30 +204,56 @@ export function boundaryExit(from, landing) {
 
 function awardRestart(state, type, team, requestedSpot, {exit, reason} = {}) {
   const origin = {x: clamp(Math.round(requestedSpot.x), 0, BOARD_WIDTH - 1), y: clamp(Math.round(requestedSpot.y), 0, BOARD_HEIGHT - 1)};
-  let candidates = state.pieces.filter(p => p.team === team && (type !== 'goalKick' || p.type === 'K' || p.type === 'N'));
-  if (!candidates.length) candidates = state.pieces.filter(p => p.team === team);
+  const candidates = state.pieces.filter(p => p.team === team && (type !== 'goalKick' || p.type === 'K'));
   candidates.sort((a, b) => Math.hypot(a.x - origin.x, a.y - origin.y) - Math.hypot(b.x - origin.x, b.y - origin.y) || a.id.localeCompare(b.id));
   let taker, spot;
   for (const candidate of candidates) {
     const squares = [];
     for (let y = 0; y < BOARD_HEIGHT; y++) for (let x = 0; x < BOARD_WIDTH; x++) {
       const occupant = pieceAt(state, x, y);
-      if (!allowedSquare(candidate, x, y) || (occupant && occupant.id !== candidate.id) || (type === 'goalKick' && (candidate.type === 'K' || candidate.type === 'N') && !inOwnBox(team, x, y))) continue;
+      if (!allowedSquare(candidate, x, y) || (occupant && occupant.id !== candidate.id) || (type === 'goalKick' && !inOwnBox(team, x, y))) continue;
       squares.push({x, y});
     }
     squares.sort((a, b) => Math.hypot(a.x - origin.x, a.y - origin.y) - Math.hypot(b.x - origin.x, b.y - origin.y) || a.y - b.y || a.x - b.x);
     if (squares.length) { taker = candidate; spot = squares[0]; break; }
   }
-  // Full squads always have a legal taker. In an incomplete imported scenario
-  // without a K/N, a goal kick falls back to the nearest legal square outside
-  // the box; an entirely absent awarded team receives a loose-ball round.
+  // A legal full squad always has a goalkeeper and room in its box. In an
+  // incomplete imported scenario, never appoint a knight or outfield player
+  // to take a goal kick in the missing goalkeeper's place.
   if (taker) { taker.x = spot.x; taker.y = spot.y; }
   else spot = origin;
   state.ball = {...spot, carrierId: taker?.id || null}; state.attack = team;
   beginPosition(state); state.offside = null;
   state.restart = {type, team, takerId: taker?.id || null, spot: {...spot}, indirect: type === 'offside', ...(exit ? {exit} : {}), ...(reason ? {reason} : {})};
+  if (type === 'goalKick') { state.phase = 'keeperRelease'; state.releaseReason = 'goalKick'; }
   return state.restart;
 }
+
+// Restore both the live match and individual undo snapshots through this pure
+// migration. Pending older goal kicks used to choose K/N and give two complete
+// positioning turns; they now belong to the king and must be passed at once.
+export function normalizeGame(state) {
+  if (!state || typeof state !== 'object') return state;
+  const next = copy(state);
+  next.positionBudget = budgetFor(state);
+  next.restart ??= null;
+  next.offside ??= null;
+  if (!next.restart && next.phase === 'keeperRelease' && next.releaseReason === 'goalKick') {
+    const carrier = next.pieces.find(piece => piece.id === next.ball.carrierId);
+    const team = carrier?.team || next.attack;
+    awardRestart(next, 'goalKick', team, next.ball);
+  }
+  if (next.restart?.type === 'goalKick' && ['attackMove', 'defendMove', 'kick', 'keeperRelease'].includes(next.phase)) {
+    const restart = next.restart;
+    const taker = next.pieces.find(piece => piece.id === restart.takerId);
+    const alreadyReady = next.phase === 'keeperRelease' && next.releaseReason === 'goalKick' && taker?.type === 'K' && taker.team === restart.team && next.ball.carrierId === taker.id && next.ball.x === taker.x && next.ball.y === taker.y && inOwnBox(taker.team, taker.x, taker.y);
+    if (!alreadyReady) awardRestart(next, 'goalKick', restart.team || next.attack, restart.spot || next.ball, {exit: restart.exit, reason: restart.reason});
+  }
+  next.rulesVersion = 5;
+  return next;
+}
+
+const restartTurnMessage = restart => restart.type === 'goalKick' ? 'The goalkeeper must immediately pass the ball into the pitch.' : 'A full positioning round begins before the restart.';
 
 function restartForExit(state, from, landing, lastTouchTeam) {
   const exit = boundaryExit(from, landing);
@@ -321,7 +361,7 @@ function rawKicks(state) {
   if (carrier.type === 'N' && state.restart?.type !== 'throwIn') {
     for (const [dx, dy] of KNIGHT) {
       const x = carrier.x + dx, y = carrier.y + dy, goal = goalAt(x, y);
-      if (!inside(x, y) && !goal || (goal && (state.restart?.type === 'throwIn' || state.restart?.indirect))) continue;
+      if (!inside(x, y) && !goal || (goal && (['throwIn', 'goalKick'].includes(state.restart?.type) || state.restart?.indirect))) continue;
       kicks.push(kickRecord(state, carrier, x, y, [{x: carrier.x, y: carrier.y}, {x, y}], pieceAt(state, x, y), goal));
     }
     return kicks;
@@ -338,7 +378,7 @@ function rawKicks(state) {
       kicks.push(kickRecord(state, carrier, x, y, [...path], receiver));
       if (receiver) break;
     }
-    if (!dy || state.restart?.type === 'throwIn' || state.restart?.indirect) continue;
+    if (!dy || ['throwIn', 'goalKick'].includes(state.restart?.type) || state.restart?.indirect) continue;
     // A shot has its own ray: the opposing keeper gets a reaction rather than
     // erasing a shot target simply by standing on that ray.
     const shotPath = [{x: carrier.x, y: carrier.y}];
@@ -432,7 +472,7 @@ function resolveShot(next, {roll, keeperMove, landing} = {}) {
       || awardRestart(next, 'goalKick', shot.defendingTeam, {x: shot.x, y: shot.y < 0 ? 0 : BOARD_HEIGHT - 1});
     next.turn++;
     next.lastAction = {...common, type: 'shotMiss', team: restart.team, keeperId: keeper?.id, to: {...next.ball}, landing: missedLanding, exit: restart.exit, path: [...shot.path.slice(0, -1), missedLanding], outcome: 'wide', restart: copy(restart)};
-    addLog(next, `${title(shot.shootingTeam)} shoots wide (${Math.round(details.missProbability * 100)}% miss chance). ${title(restart.team)} has a ${restart.type === 'throwIn' ? 'throw-in' : restart.type === 'corner' ? 'corner' : 'goal kick'} and a full positioning round.`);
+    addLog(next, `${title(shot.shootingTeam)} shoots wide (${Math.round(details.missProbability * 100)}% miss chance). ${title(restart.team)} has a ${restart.type === 'throwIn' ? 'throw-in' : restart.type === 'corner' ? 'corner' : 'goal kick'}. ${restartTurnMessage(restart)}`);
   }
   return next;
 }
@@ -463,8 +503,9 @@ export function applyMove(state, pieceId, x, y, {freePawn = false, roll, landing
     beginPosition(next);
     next.turn++;
   } else {
-    next.positionBudget = {...budgetFor(state), [freePawn ? 'pawnUsed' : 'normalUsed']: true};
-    if (next.positionBudget.normalUsed && next.positionBudget.pawnUsed) advancePosition(next, state.phase);
+    const usedBudget = freePawn ? 'pawnUsed' : wasCarrier && attackingCarrier(state, piece) ? 'dribbleUsed' : 'normalUsed';
+    next.positionBudget = {...budgetFor(state), [usedBudget]: true};
+    if (next.positionBudget.normalUsed && next.positionBudget.pawnUsed && !positionActions(next).dribbleAvailable) advancePosition(next, state.phase);
   }
   const target = state.pieces.find(p => p.id === move.targetId);
   next.lastAction = {
@@ -540,7 +581,7 @@ export function applyKick(state, x, y, {roll, landing} = {}) {
     if (boundaryRestart) {
       next.turn++;
       next.lastAction = {...common, type: 'out', to: {...next.ball}, landing: destination, exit: boundaryRestart.exit, path: [...kick.path.slice(0, -1), destination], outcome: 'out', restart: copy(boundaryRestart)};
-      addLog(next, `${title(carrier.team)} ${restart?.type === 'throwIn' ? 'throw' : 'long pass'} goes out. ${title(boundaryRestart.team)} has a ${boundaryRestart.type === 'throwIn' ? 'throw-in' : boundaryRestart.type === 'corner' ? 'corner' : 'goal kick'} and a full positioning round.`);
+      addLog(next, `${title(carrier.team)} ${restart?.type === 'throwIn' ? 'throw' : 'long pass'} goes out. ${title(boundaryRestart.team)} has a ${boundaryRestart.type === 'throwIn' ? 'throw-in' : boundaryRestart.type === 'corner' ? 'corner' : 'goal kick'}. ${restartTurnMessage(boundaryRestart)}`);
       return next;
     }
   }
@@ -686,7 +727,7 @@ const AI_SEARCH = Object.freeze({depth: 6, roots: 9, budgetPerRoot: 90});
 // (and its complete animation path) here would dominate the search cost.
 function tacticalShots(state, team, react = false) {
   const carrier = state.pieces.find(piece => piece.id === state.ball.carrierId);
-  if (!carrier || carrier.team !== team || state.restart?.type === 'throwIn' || state.restart?.indirect) return 0;
+  if (!carrier || carrier.team !== team || ['throwIn', 'goalKick'].includes(state.restart?.type) || state.restart?.indirect) return 0;
   const vectors = carrier.type === 'N' ? KNIGHT : carrier.type === 'P' || carrier.type === 'R' ? STRAIGHTS : carrier.type === 'B' ? DIAGONALS : DIRECTIONS;
   let best = 0;
   for (const [dx, dy] of vectors) {
@@ -919,7 +960,7 @@ function tacticalSearch(state, team, depth, budget) {
     }
     return tacticalPositionValue(state, team);
   }
-  const pawnOnly = positionalTurn(state) && budgetFor(state).normalUsed;
+  const pawnOnly = positionalTurn(state) && budgetFor(state).normalUsed && !positionActions(state).dribbleAvailable;
   // Keep a principal continuation when the remaining budget is small, so the
   // tree still reaches replies, forced keeper releases, and shot resolution.
   const width = state.phase === 'keeperReact' || pawnOnly || budget < depth * 3 ? 1 : ['kick', 'kickoff', 'keeperRelease'].includes(state.phase) ? 2 : 3;

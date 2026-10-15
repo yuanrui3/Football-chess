@@ -7,7 +7,7 @@ Original handbook: https://pdfhost.io/v/bWV1pmicf_Football_Chess_Handbook.pdf
 
 Choose a computer opponent or two players on one device. Each team has one king, one queen, two rooks, two bishops, two knights, and three pawns on a 12×15 pitch. Goals occupy files e–h. Arrange your starting half if desired; move a teammate onto the kickoff carrier to change the taker. Click Kick off, then select a highlighted kick destination.
 
-Each attack or defense positioning turn provides one regular move plus an optional one-square pawn reposition, in either order. The controls show which actions remain; End positioning turn forfeits the unused actions. Then the attacker kicks. Knights jump while dribbling. Tackles against a knight succeed 50% of the time; other legal tackles remain certain. The challenger moves to the selected adjacent square on either outcome. A failed attempt leaves the knight in possession and uses the challenger’s regular move while preserving any unused free pawn action. Pieces are never captured.
+An ordinary attacking positioning turn provides one carrier dribble, one separate move by a player without the ball, and an optional one-square pawn action, in any order. The defender then has one regular move or tackle plus a free pawn action, before the attacker kicks. The controls show each allowance independently; End positioning forfeits unused actions. Knights jump while dribbling. Tackles against a knight succeed 50% of the time; other legal tackles remain certain. The challenger moves to the selected adjacent square on either outcome. A failed attempt leaves the knight in possession and uses the challenger’s regular move while preserving any unused free pawn action. Pieces are never captured.
 
 A shot commits a specific goal cell and gives the defending king one extra one-square reaction move or a hold. Continuous goal odds then use shooting distance and angle, the keeper's shortest distance to the finite shot path, and the flight time available for reaching that path. A longer shot allows a larger saving reach. A keeper in their own box has full saving reach and readiness; outside their own box, blocking reach and readiness are reduced.
 
@@ -46,8 +46,8 @@ These are distinct actions. Moving a piece does not automatically pass the ball,
 
 | Action | What moves | When available | Cost |
 | --- | --- | --- | --- |
-| Move without the ball | The selected piece; the ball stays where it is. Landing on a loose ball collects it. | Your team's positioning turn | One regular move, or the free pawn action for a pawn |
-| Dribble | The ball carrier and ball move together. | Your team's positioning turn | One regular move, or the free pawn action if the carrier is a pawn |
+| Move without the ball | The selected piece; the ball stays where it is. Landing on a loose ball collects it. | Your team's positioning turn | The off-ball/regular allowance, or the free pawn action for a pawn |
+| Dribble | The ball carrier and ball move together. | Ordinary attacking positioning with possession | One independent dribble allowance, or the free pawn action if the carrier is a pawn |
 | Pass or shoot | The ball travels; the kicker stays in place. | Kickoff, the attacking kick phase, or a required goalkeeper release | The kick action |
 | Tackle | A challenger moves to a highlighted square beside the opposing carrier and attempts to take possession. | Your team's positioning turn | One regular move; never the free pawn action |
 
@@ -74,11 +74,11 @@ Queen, rook, and bishop tackle reach is capped at five squares to the opposing c
 
 ### Turn order and exceptions
 
-After kickoff, an ordinary round is **attacking positioning → defending positioning → attacking kick**. Each positioning turn has one regular move and an optional free one-square pawn action, in either order. Dribbling uses a positioning action; it is not a pass or an extra action. End positioning turn forfeits any actions remaining for that team. A turnover starts a fresh attacking positioning turn for the new team; if the ball is still loose after both positioning turns, a new positioning round begins without a kick.
+After kickoff, an ordinary round is **attacking positioning → defending positioning → attacking kick**. The attack has three independent allowances: one dribble by the carrier, one move by another player without the ball, and one optional free one-square pawn action. They may be taken in any order, and each may be used once. A carrier cannot use the off-ball allowance for a second dribble. A carrying pawn may use both its dribble and its separate free pawn action. If an attacking player collects a loose ball, the unused dribble becomes available when there is a legal destination. The defence has one regular move or tackle plus one free pawn action. End positioning forfeits any actions remaining for that team. Automatic advance waits until all available allowances are spent; a blocked or absent carrier does not prevent advancement. A turnover starts a fresh attacking positioning turn with all allowances reset; if the ball is still loose after both positioning turns, a new positioning round begins without a kick.
 
 - The free pawn action can move a pawn without the ball, dribble with it, or collect a loose ball. It cannot tackle. It is available in each ordinary positioning turn, not during the special keeper reaction.
 - A teammate's back-pass to the king requires an immediate kick with no positioning or dribbling first. A king receiving an opponent's pass or saving a shot may hold normally.
-- A shot pauses play for the defending king's one-square reaction or hold; it does not grant a regular positioning turn or free pawn action. A boundary award then starts a protected restart round as described below.
+- A shot pauses play for the defending king's one-square reaction or hold; it does not grant a regular positioning turn or free pawn action. A goal kick then requires an immediate king pass; other boundary awards start a protected restart round.
 - Ordinary passes through ten squares have 100% accuracy. Each extra square costs ten percentage points, with a floor of 25%. Distances use the maximum coordinate gap. Inaccurate passes sample a landing near the intended target; that landing may be occupied or outside. An occupied landing receives or intercepts the ball, subject to offside. Shots use the continuous model above; the long-pass curve applies to ordinary passes.
 - Shots, long passes, and 50% knight tackles use serializable seeded randomness; previews and AI planning do not consume random draws. Undo restores the prior random state.
 
@@ -98,13 +98,17 @@ An inaccurate ordinary pass longer than ten squares samples one of eight compass
 - End line after an attacking last touch: goal kick to the defending team.
 - End line after a defending last touch, including a keeper tip: corner to the attacking team.
 
-The nearest eligible teammate, using Euclidean distance and stable ID tie-breaking, becomes the taker and is placed at the nearest vacant legal square to the restart location. No players are displaced. A goal kick starts inside the defending box and uses a king or knight; a corner starts by the nearest corner; a throw-in starts at the touchline exit; an offside restart uses the offence location. The taker receives the ball and a full attacking positioning round, then the defender positions, then the taker restarts play. The taker is locked in place and tackles are disabled until the ball is played. These protected positioning rounds and nearest-player selection are custom turn-based adaptations; the boundary award follows [IFAB Laws 15–17](https://www.theifab.com/laws/latest/the-throw-in/).
+A goal kick always belongs to the defending king, which is placed at a free square in its own goal box. It immediately enters `keeperRelease` with `releaseReason: 'goalKick'` and retains restart metadata for the direct-receipt offside exemption. The king must pass into the pitch immediately: no holding, positioning, dribbling, free pawn action, or direct goal target is allowed. A nearer knight cannot take it.
+
+For corners, throws, and offside free kicks, the nearest eligible teammate, using Euclidean distance and stable ID tie-breaking, becomes the taker and is placed at the nearest vacant legal square to the restart location. No players are displaced. A corner starts by the nearest corner; a throw-in starts at the touchline exit; an offside restart uses the offence location. The taker receives the ball and a protected attacking positioning round, then the defender positions, then the taker restarts play. Each team has its regular move and free pawn action; the taker is locked in place, there is no extra dribble, and tackles are disabled until the ball is played. These positioning rounds and nearest-player selection are custom turn-based adaptations; the boundary award follows [IFAB Laws 15–17](https://www.theifab.com/laws/latest/the-throw-in/).
 
 Every piece throws along the same eight straight/diagonal rays, stopping at the first player. Throws are certain through five squares; accuracy is 85%, 70%, 55%, 40%, and 25% at six through ten squares. No target beyond ten squares and no direct goal is offered. The range curve is a custom game rule, independent of ordinary passing accuracy.
 
 ## Features
 
 Timed or untimed matches, pause, undo, rotation, local saving, and adjustable opponent pace (3 seconds by default). Computer actions have move animations, retained paths, and descriptions. Reduced-motion preferences are respected. The shot-model update retains the version 2 save key and active matches. The earlier board expansion used a new save key because the roster and geometry changed; version 1 saves remain untouched and opponent pace is retained when starting the new rules.
+
+Rules version 5 keeps saved matches and undo snapshots through pure `normalizeGame()` migration. Old pending goal kicks, including those assigned to a knight, become immediate king passes without consuming randomness. A legacy shared normal move that was already spent conservatively marks the new dribble allowance spent as well; fresh rounds use three explicit fields. `positionActions()` exposes current availability for the controller and AI. The interface has separate Off-ball move, Dribble, and Free pawn controls, and selecting the carrier switches to an available dribble automatically.
 
 ### Computer difficulty
 
@@ -126,6 +130,7 @@ Both levels use the same legal moves, scoring odds, and optimal immediate keeper
 - `tests/ai.test.mjs`: both policies, legal play, fair randomness, and tactical scenarios
 - `tests/offside-knight.test.mjs`: knight upgrades and offside timing, involvement, and exemptions
 - `tests/boundary.test.mjs`: boundary geometry, restart awards, throw ranges, and seeded scatter
+- `tests/possession.test.mjs`: independent action budgets, all action orders, immediate king goal kicks, and migration
 
 No build or runtime dependencies. Serve `dist/` using a static HTTP server. Run `npm test` with Node.js. Before each deployment, run `node scripts/version-assets.mjs` so the HTML, controller, engine, worker, and stylesheet use matching content versions instead of stale browser caches.
 

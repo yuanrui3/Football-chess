@@ -4,12 +4,12 @@ import { performance } from 'node:perf_hooks';
 import {
   BOARD_WIDTH, BOARD_HEIGHT, isBox, AI_DIFFICULTIES,
   createGame, currentTeam, chooseAIAction, legalMoves, legalKicks,
-  applyMove, applyKick, skipMove, shotChance,
+  applyMove, applyKick, skipMove, shotChance, positionActions,
 } from '../dist/engine.js';
 
 const DIFFICULTIES = ['casual', 'tactical'];
 const clone = value => JSON.parse(JSON.stringify(value));
-const freshBudget = () => ({ normalUsed: false, pawnUsed: false });
+const freshBudget = () => ({ normalUsed: false, pawnUsed: false, dribbleUsed: false });
 
 // Use complete teams even in focused scenarios. Parking at either touchline
 // avoids accidental occupants in the central combinations being examined.
@@ -45,8 +45,9 @@ function restartFixture(type, phase = 'attackMove') {
     : type === 'corner' ? { x: 0, y: 0 }
       : type === 'throwIn' ? { x: 0, y: 7 }
         : { x: 5, y: 7 };
-  const state = fixture({ phase, carrier: takerId, positions: { [takerId]: [spot.x, spot.y] } });
+  const state = fixture({ phase: type === 'goalKick' ? 'keeperRelease' : phase, carrier: takerId, positions: { [takerId]: [spot.x, spot.y] } });
   state.restart = { type, team: 'white', takerId, spot, indirect: type === 'offside' };
+  if (type === 'goalKick') state.releaseReason = 'goalKick';
   return state;
 }
 
@@ -59,10 +60,11 @@ function scenarios() {
     ['black kick-off', createGame({ kickoff: 'black', seed: 17 })],
     ['attack with both moves', fixture({ positions: { 'white-P1': [8, 8], 'black-P1': [8, 5] } })],
     ['defence with both moves', fixture({ phase: 'defendMove', positions: { 'white-R1': [4, 7], 'black-N1': [6, 8], 'black-P1': [8, 5] } })],
-    ['attack with only bonus pawn remaining', fixture({ budget: { normalUsed: true, pawnUsed: false }, positions: { 'white-P1': [8, 8] } })],
-    ['defence with only bonus pawn remaining', fixture({ phase: 'defendMove', budget: { normalUsed: true, pawnUsed: false }, positions: { 'black-P1': [8, 8] } })],
-    ['attack with only normal move remaining', fixture({ budget: { normalUsed: false, pawnUsed: true }, positions: { 'white-P1': [8, 8] } })],
-    ['defence with only normal move remaining', fixture({ phase: 'defendMove', budget: { normalUsed: false, pawnUsed: true }, positions: { 'black-P1': [8, 8] } })],
+    ['attack with only bonus pawn remaining', fixture({ budget: { normalUsed: true, pawnUsed: false, dribbleUsed: true }, positions: { 'white-P1': [8, 8] } })],
+    ['defence with only bonus pawn remaining', fixture({ phase: 'defendMove', budget: { normalUsed: true, pawnUsed: false, dribbleUsed: false }, positions: { 'black-P1': [8, 8] } })],
+    ['attack with only normal move remaining', fixture({ budget: { normalUsed: false, pawnUsed: true, dribbleUsed: true }, positions: { 'white-P1': [8, 8] } })],
+    ['attack with only dribble remaining', fixture({ budget: { normalUsed: true, pawnUsed: true, dribbleUsed: false }, positions: { 'white-P1': [8, 8] } })],
+    ['defence with only normal move remaining', fixture({ phase: 'defendMove', budget: { normalUsed: false, pawnUsed: true, dribbleUsed: false }, positions: { 'black-P1': [8, 8] } })],
     ['ordinary kick', fixture({ phase: 'kick', positions: { 'white-R1': [4, 6], 'black-K': [6, 0] } })],
     ['long pass decision', fixture({ phase: 'kick', positions: { 'white-R1': [2, 13], 'white-P1': [2, 0] } })],
     ['loose ball attack', fixture({ ball: { x: 6, y: 5, carrierId: null }, positions: { 'white-N1': [5, 7] } })],
@@ -70,8 +72,9 @@ function scenarios() {
     ['knight tackle', fixture({ phase: 'defendMove', carrier: 'white-N1', positions: { 'white-N1': [5, 7], 'black-R1': [5, 3] } })],
     ['keeper reaction', reaction],
     ['back-pass immediate release', backPass],
-    ['wide shot goal-kick round', goalKick],
-    ...['goalKick', 'corner', 'throwIn', 'offside'].flatMap(type =>
+    ['wide shot immediate goal kick', goalKick],
+    ['explicit immediate goal kick', restartFixture('goalKick')],
+    ...['corner', 'throwIn', 'offside'].flatMap(type =>
       ['attackMove', 'defendMove', 'kick'].map(phase => [`${type} restart ${phase}`, restartFixture(type, phase)])),
   ];
 }
@@ -97,15 +100,17 @@ function assertIntegrity(state) {
   if (['attackMove', 'defendMove'].includes(state.phase)) {
     assert.equal(typeof state.positionBudget.normalUsed, 'boolean');
     assert.equal(typeof state.positionBudget.pawnUsed, 'boolean');
-    assert.equal(state.positionBudget.normalUsed && state.positionBudget.pawnUsed, false);
+    assert.equal(typeof state.positionBudget.dribbleUsed, 'boolean');
+    const actions = positionActions(state);
+    assert.ok(actions.normalAvailable || actions.pawnAvailable || actions.dribbleAvailable, 'a positioning phase retains an available action');
   }
   if (state.phase === 'keeperReact') assert.ok(state.pendingShot);
   if (state.phase === 'keeperRelease') {
-    assert.equal(state.releaseReason, 'backPass');
+    assert.ok(['backPass', 'goalKick'].includes(state.releaseReason));
     assert.equal(state.pieces.find(piece => piece.id === state.ball.carrierId)?.type, 'K');
   } else assert.equal(state.releaseReason, null);
   if (state.restart) {
-    assert.ok(['attackMove', 'defendMove', 'kick'].includes(state.phase), 'restart proceeds through a full round before its kick');
+    assert.ok(state.restart.type === 'goalKick' ? state.phase === 'keeperRelease' : ['attackMove', 'defendMove', 'kick'].includes(state.phase), 'goal kicks release immediately; other restarts retain their positioning round');
     assert.equal(state.restart.team, state.attack);
     assert.equal(state.restart.takerId, state.ball.carrierId);
     assert.deepEqual({ x: state.ball.x, y: state.ball.y }, state.restart.spot);
@@ -120,6 +125,10 @@ function assertIntegrity(state) {
       }
     }
     if (state.restart.indirect) assert.equal(legalKicks(state).some(kick => kick.goal), false, 'offside restart cannot score directly');
+    if (state.restart.type === 'goalKick') {
+      assert.equal(state.ball.carrierId, `${state.attack}-K`);
+      assert.equal(legalKicks(state).some(kick => kick.goal), false, 'an immediate goal kick requires distribution');
+    }
   }
 }
 
@@ -174,11 +183,12 @@ for (const difficulty of DIFFICULTIES) {
       assertIntegrity(next);
       if (state.phase === 'keeperRelease') assert.equal(action.type, 'kick', `${name}: release cannot be delayed`);
       if (['attackMove', 'defendMove'].includes(state.phase) && action.type === 'move') {
-        if (state.positionBudget.normalUsed) {
-          assert.equal(action.freePawn, true, `${name}: spent normal move cannot be reused`);
+        if (action.freePawn) {
+          assert.equal(state.positionBudget.pawnUsed, false, `${name}: spent bonus move cannot be reused`);
           assert.equal(state.pieces.find(piece => piece.id === action.pieceId).type, 'P');
-        }
-        if (state.positionBudget.pawnUsed) assert.equal(!!action.freePawn, false, `${name}: spent bonus move cannot be reused`);
+        } else if (state.phase === 'attackMove' && action.pieceId === state.ball.carrierId) {
+          assert.equal(state.positionBudget.dribbleUsed, false, `${name}: spent dribble cannot be reused`);
+        } else assert.equal(state.positionBudget.normalUsed, false, `${name}: spent no-ball action cannot be reused`);
       }
     }
     const sorted = [...timings].sort((a, b) => a - b);
@@ -186,7 +196,7 @@ for (const difficulty of DIFFICULTIES) {
   });
 
   test(`${difficulty}: hidden outcome seeds never change a visible-board decision`, () => {
-    for (const [name, state] of scenarios().filter(([name]) => ['white kick-off', 'attack with both moves', 'defence with only normal move remaining', 'long pass decision', 'knight tackle', 'keeper reaction', 'back-pass immediate release', 'wide shot goal-kick round'].includes(name))) {
+    for (const [name, state] of scenarios().filter(([name]) => ['white kick-off', 'attack with both moves', 'defence with only normal move remaining', 'long pass decision', 'knight tackle', 'keeper reaction', 'back-pass immediate release', 'wide shot immediate goal kick'].includes(name))) {
       const baseline = assertPureChoice(state, difficulty);
       for (const randomState of [0, 0xffffffff, 123456789]) {
         const differentFuture = { ...state, randomState };
@@ -204,7 +214,7 @@ for (const difficulty of DIFFICULTIES) {
   });
 
   test(`${difficulty}: a chosen knight tackle has both fair 50% outcomes`, () => {
-    const state = fixture({ phase: 'defendMove', carrier: 'white-N1', positions: { 'white-N1': [5, 7], 'black-R1': [5, 3] }, budget: { normalUsed: false, pawnUsed: true } });
+    const state = fixture({ phase: 'defendMove', carrier: 'white-N1', positions: { 'white-N1': [5, 7], 'black-R1': [5, 3] }, budget: { normalUsed: false, pawnUsed: true, dribbleUsed: false } });
     const action = assertPureChoice(state, difficulty);
     const move = selectedMove(state, action);
     assert.equal(move?.type, 'tackle', 'take the available possession-winning tackle');
@@ -283,7 +293,7 @@ test('Tactical avoids an attacking dribble exposed to an immediate short-range q
   const original = fixture({
     carrier: 'white-B1',
     positions: { 'white-B1': [9, 7], 'white-R1': [9, 10], 'black-R1': [8, 2] },
-    budget: { normalUsed: false, pawnUsed: true },
+    budget: { normalUsed: true, pawnUsed: true, dribbleUsed: false },
   });
   for (const state of [original, mirroredState(original)]) {
     const casualAction = assertPureChoice(state, 'casual');
