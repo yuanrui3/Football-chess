@@ -8,7 +8,7 @@ Original handbook: https://pdfhost.io/v/bWV1pmicf_Football_Chess_Handbook.pdf
 
 Choose the computer opponent or two players on the same device. Arrange pieces on your own half if desired. Select a teammate, then the kickoff carrier's centre square, to change the kickoff taker. Start the match and choose a highlighted pass destination.
 
-Normal play follows attack positioning, defense positioning, and the attacker's kick. Highlighted red destinations are tackle landing squares. Only a ball carrier can be tackled; pieces are never removed. Lit goal buttons shoot beyond the end line through the goal mouth. Matches support timed or untimed play, pause, undo, rotation, and local saving. Saved active games reopen paused.
+Normal play follows attack positioning, defense positioning, and the attacker's kick. Highlighted red destinations are tackle landing squares. Only a ball carrier can be tackled; pieces are never removed. Lit goal buttons shoot beyond the end line through the goal mouth. Matches support timed or untimed play, pause, undo, rotation, and local saving. Saved active games reopen paused. Computer turns default to a relaxed 3-second pace, adjustable during play. Origin/destination highlights, a retained action path and a recent-action strip keep the opponent’s move visible; piece movement is animated unless reduced motion is preferred.
 
 ## Source
 

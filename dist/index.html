@@ -37,6 +37,7 @@
         <p class="action-help" id="actionHelp" aria-live="polite"></p>
         <button class="primary wide" id="skipBtn">Hold position <span>→</span></button>
       </section>
+      <section class="opponent-controls" id="opponentControls"><label class="field-label" for="aiPace">OPPONENT PACE</label><div class="select-wrap"><select id="aiPace"><option value="3000" selected>Relaxed · 3 seconds</option><option value="1800">Standard · 1.8 seconds</option><option value="600">Quick · 0.6 seconds</option></select></div></section>
       <section class="selected-panel"><p class="eyebrow">ON THE TACTICS BOARD</p><div class="selection-info" id="selectionInfo"><span class="selection-icon">♞</span><div><b>Select a footballer</b><small>Legal moves light up on the pitch.</small></div></div><div class="legend"><span><i class="legal-dot"></i> Move / pass</span><span><i class="tackle-dot"></i> Tackle</span></div></section>
       <div class="small-note"><span>01 / THE IDEA</span><p>Find the space.<br>Make the pass.<br>Think a move ahead.</p></div>
     </aside>
@@ -45,6 +46,7 @@
       <div class="board-surround"><div class="rank-labels" id="ranks"></div><div class="pitch" id="pitch"><div class="squares" id="board" role="grid" aria-label="8 by 11 football chess pitch"></div><svg class="pitch-markings" viewBox="0 0 800 1100" aria-hidden="true"><rect x="3" y="3" width="794" height="1094" rx="1"/><path d="M0 550H800M300 0V200H500V0M300 1100V900H500V1100"/><circle cx="400" cy="550" r="99"/><circle class="centre-point" cx="400" cy="550" r="6"/><path d="M10 40A30 30 0 0 0 40 10M760 10A30 30 0 0 0 790 40M10 1060A30 30 0 0 1 40 1090M760 1090A30 30 0 0 1 790 1060"/></svg></div></div>
       <div class="file-labels" aria-hidden="true"> <span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span><span>g</span><span>h</span></div>
       <div class="goal-wrap goal-bottom"><div class="goal-net"></div><button id="goalBottom" class="goal-button" aria-label="Shoot into Ivory goal" disabled>IVORY GOAL</button></div>
+      <div class="computer-recap" id="computerRecap" role="status" aria-live="polite" hidden><span>COMPUTER’S LAST ACTION</span><p id="computerActionText"></p></div>
       <div class="pitch-caption"><span><i></i> <span id="boardStatus">Arrange your team or kick off.</span></span><button class="text-button compact" id="flipBtn" title="Rotate the board">↻ Rotate</button></div>
     </section>
     <aside class="right-panel">

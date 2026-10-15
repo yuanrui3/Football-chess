@@ -5,6 +5,7 @@ const NAMES = {K:'Goalkeeper',Q:'Queen',R:'Rook',B:'Bishop',N:'Knight',P:'Pawn'}
 const SYMBOLS = {K:'♚',Q:'♛',R:'♜',B:'♝',N:'♞',P:'♟'};
 const TEAM = {white:'Ivory FC',black:'Obsidian FC'};
 const STORE = 'football-chess-match-v1';
+const AI_PACES = [3000,1800,600];
 const coord = (x,y) => `${'abcdefgh'[x]}${11-y}`;
 const isBox = (x,y) => (x===3||x===4)&&(y<2||y>8);
 const ballSVG = '<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18" fill="#fff9e9" stroke="#23372f" stroke-width="1"/><path d="M20 11l9 6-3 10H14l-3-10zM3 17l8 0M29 17l8 0M20 11V2M14 27l-5 8M26 27l5 8" fill="#25392e" stroke="#25392e" stroke-width="1.5"/></svg>';
@@ -12,12 +13,15 @@ let game = createGame();
 let stage = 'setup', paused = false, remaining = 600, duration = 10, flipped = false;
 let selectedId = null, history = [], aiTimer = null, toastTimer = null, lastTick = Date.now();
 let storageOK = true;
+let aiPace = 3000, lastComputerAction = null;
 try {
   const saved = JSON.parse(localStorage.getItem(STORE)||'null');
   if (saved && saved.version===1 && saved.game?.pieces?.length===12 && ['setup','playing','finished'].includes(saved.stage)) {
     game = saved.game; stage = saved.stage; remaining = saved.remaining;
     duration = saved.duration; flipped = !!saved.flipped;
     paused = stage==='playing'; history = Array.isArray(saved.history)?saved.history.slice(-80):[];
+    aiPace = AI_PACES.includes(saved.aiPace)?saved.aiPace:3000;
+    lastComputerAction = saved.lastComputerAction||null;
   }
 } catch { storageOK = false; }
 
@@ -31,9 +35,10 @@ $('ranks').innerHTML=Array.from({length:11},(_,i)=>`<span>${11-i}</span>`).join(
 $('mode').value=game.mode==='local'?'local':'solo';
 $('duration').value=String(duration);
 $('kickoff').value=game.attack;
+$('aiPace').value=String(aiPace);
 
 function save() {
-  try {localStorage.setItem(STORE,JSON.stringify({version:1,game,stage,paused,remaining,duration,flipped,history:history.slice(-80)}));}
+  try {localStorage.setItem(STORE,JSON.stringify({version:1,game,stage,paused,remaining,duration,flipped,aiPace,lastComputerAction,history:history.slice(-80)}));}
   catch {storageOK=false;$('saveNote').textContent='Match saving is unavailable in this browser.';}
 }
 function toast(text) {
@@ -70,14 +75,17 @@ function getTargets() {
 
 function renderBoard() {
   document.querySelector('.trajectory')?.remove();
+  document.querySelector('.computer-action-path')?.remove();
   const targets=getTargets();
+  const action=lastComputerAction?.action;
+  const showTrace=action&&action.type!=='goal';
   for(const el of squares) {
     const x=Number(el.dataset.x),y=Number(el.dataset.y);
     const piece=game.pieces.find(p=>p.x===x&&p.y===y);
     const target=targets.find(t=>t.x===x&&t.y===y);
     const last=game.lastAction?.to;
     const isSelected=piece?.id===selectedId;
-    el.className=['square',(x+y)%2?'checker':'',isBox(x,y)?'box':'',y===5&&(x===3||x===4)?'kickoff':'',isSelected?'selected':'',last?.x===x&&last?.y===y?'last-move':'',target?'legal':'',target?.type==='tackle'?'tackle':''].filter(Boolean).join(' ');
+    el.className=['square',(x+y)%2?'checker':'',isBox(x,y)?'box':'',y===5&&(x===3||x===4)?'kickoff':'',isSelected?'selected':'',last?.x===x&&last?.y===y?'last-move':'',target?'legal':'',target?.type==='tackle'?'tackle':'',showTrace&&action.from?.x===x&&action.from?.y===y?'computer-from':'',showTrace&&action.to?.x===x&&action.to?.y===y?'computer-to':''].filter(Boolean).join(' ');
     el.setAttribute('aria-selected',String(isSelected));
     let label=coord(x,y)+(piece?`, ${TEAM[piece.team]} ${NAMES[piece.type]}`:', empty');
     const hasBall=game.ball.x===x&&game.ball.y===y;
@@ -94,6 +102,12 @@ function renderBoard() {
     el.setAttribute('aria-label',kick?`Shoot into ${y===-1?'Obsidian':'Ivory'} goal`:`${y===-1?'Obsidian':'Ivory'} goal`);
   }
   document.querySelector('.pitch-area').classList.toggle('flipped',flipped);
+  if(showTrace&&action.from&&action.to&&(action.from.x!==action.to.x||action.from.y!==action.to.y)) {
+    const line=document.createElementNS('http://www.w3.org/2000/svg','polyline');
+    line.classList.add('computer-action-path');
+    line.setAttribute('points',(action.path||[action.from,action.to]).map(p=>`${p.x*100+50},${p.y*100+50}`).join(' '));
+    document.querySelector('.pitch-markings').append(line);
+  }
 }
 
 function render() {
@@ -101,6 +115,9 @@ function render() {
   const acting=currentTeam(game),kickPhase=['kick','kickoff'].includes(game.phase);
   if(stage==='playing'&&kickPhase)selectedId=game.ball.carrierId;
   $('setupPanel').hidden=stage!=='setup';$('turnPanel').hidden=stage==='setup';
+  $('opponentControls').hidden=game.mode!=='solo';
+  $('computerRecap').hidden=!lastComputerAction||game.mode!=='solo';
+  $('computerActionText').textContent=lastComputerAction?.summary||'';
   $('whiteScore').textContent=game.score.white;$('blackScore').textContent=game.score.black;
   $('whiteSub').textContent=(game.mode==='solo'?'YOU':'PLAYER 1')+' · ATTACKING '+(flipped?'↓':'↑');
   $('blackSub').textContent=(game.mode==='solo'?'COMPUTER':'PLAYER 2')+' · ATTACKING '+(flipped?'↑':'↓');
@@ -143,8 +160,24 @@ function commit(next) {
   history.push({game:structuredClone(game),actor});if(history.length>80)history.shift();
   const oldScore=game.score.white+game.score.black;
   game=next;selectedId=null;
+  lastComputerAction=actor==='black'&&game.mode==='solo'?{action:game.lastAction,summary:game.log.at(-1).replaceAll('White','Ivory').replaceAll('Black','Obsidian')}:null;
   if(game.score.white+game.score.black>oldScore)toast(`${TEAM[game.lastAction.team]} scores! ${game.score.white} : ${game.score.black}${game.lastAction.ownGoal?' · Own goal':''}`);
   render();save();
+  if(lastComputerAction)animateComputerMove(lastComputerAction.action);
+}
+function animateComputerMove(action) {
+  if(!['move','tackle'].includes(action?.type)||window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)return;
+  const destination=squares[action.to.y*8+action.to.x];
+  const piece=destination?.querySelector('.piece');
+  if(!piece?.animate)return;
+  const size=destination.getBoundingClientRect().width;
+  const rotation=flipped?' rotate(180deg)':'';
+  destination.classList.add('computer-animating');
+  const animation=piece.animate([
+    {transform:`translate(${(action.from.x-action.to.x)*size}px,${(action.from.y-action.to.y)*size}px)${rotation}`},
+    {transform:`translate(0,0)${rotation}`}
+  ],{duration:550,easing:'cubic-bezier(.22,.61,.36,1)'});
+  animation.finished.then(()=>destination.classList.remove('computer-animating')).catch(()=>destination.classList.remove('computer-animating'));
 }
 function scheduleAI() {
   if(stage!=='playing'||paused||anyDialog()||!isComputer())return;
@@ -158,7 +191,7 @@ function scheduleAI() {
       else if(action.type==='kick')commit(applyKick(game,action.x,action.y));
       else commit(skipMove(game));
     }catch(err){paused=true;render();toast('Play paused: '+err.message);}
-  },600);
+  },aiPace);
 }
 function drawPath(x,y) {
   document.querySelector('.trajectory')?.remove();
@@ -212,7 +245,8 @@ for(const id of ['goalTop','goalBottom'])$(id).addEventListener('click',()=>{
   const kick=legalKicks(game).find(k=>k.goal&&k.y===Number($(id).dataset.y));
   if(kick)commit(applyKick(game,kick.x,kick.y));
 });
-function refreshSetup(){cancelAI();game=createGame({mode:$('mode').value,minutes:Number($('duration').value)||10,kickoff:$('kickoff').value});duration=Number($('duration').value);remaining=duration*60;selectedId=null;history=[];render();save();}
+function refreshSetup(){cancelAI();game=createGame({mode:$('mode').value,minutes:Number($('duration').value)||10,kickoff:$('kickoff').value});duration=Number($('duration').value);remaining=duration*60;selectedId=null;lastComputerAction=null;history=[];render();save();}
+$('aiPace').addEventListener('change',()=>{const value=Number($('aiPace').value);aiPace=AI_PACES.includes(value)?value:3000;render();save();});
 for(const id of ['mode','kickoff'])$(id).addEventListener('change',refreshSetup);
 $('duration').addEventListener('change',()=>{duration=Number($('duration').value);remaining=duration*60;game.minutes=duration||10;render();save();});
 $('startBtn').addEventListener('click',()=>{stage='playing';paused=false;selectedId=null;lastTick=Date.now();render();save();});
@@ -222,7 +256,7 @@ $('undoBtn').addEventListener('click',()=>{
   if(!history.length||stage!=='playing')return;cancelAI();
   let entry=history.pop();
   if(game.mode==='solo')while(entry.actor!=='white'&&history.length)entry=history.pop();
-  game=entry.game;selectedId=null;render();save();toast('Last move undone.');
+  game=entry.game;selectedId=null;lastComputerAction=null;render();save();toast('Last move undone.');
 });
 $('flipBtn').addEventListener('click',()=>{flipped=!flipped;render();save();});
 function finishMatch() {
@@ -240,7 +274,7 @@ function showResult() {
 $('finishBtn').addEventListener('click',finishMatch);
 function newMatch() {
   cancelAI();for(const dialog of document.querySelectorAll('dialog[open]'))dialog.close();
-  stage='setup';paused=false;remaining=duration*60;selectedId=null;history=[];
+  stage='setup';paused=false;remaining=duration*60;selectedId=null;lastComputerAction=null;history=[];
   game=createGame({mode:game.mode,minutes:duration||10,kickoff:$('kickoff').value});
   lastTick=Date.now();render();save();
 }
