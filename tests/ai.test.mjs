@@ -186,6 +186,7 @@ for (const difficulty of DIFFICULTIES) {
         if (action.freePawn) {
           assert.equal(state.positionBudget.pawnUsed, false, `${name}: spent bonus move cannot be reused`);
           assert.equal(state.pieces.find(piece => piece.id === action.pieceId).type, 'P');
+          assert.notEqual(action.pieceId, state.ball.carrierId, `${name}: the free pawn action is reserved for an off-ball player`);
         } else if (state.phase === 'attackMove' && action.pieceId === state.ball.carrierId) {
           assert.equal(state.positionBudget.dribbleUsed, false, `${name}: spent dribble cannot be reused`);
         } else assert.equal(state.positionBudget.normalUsed, false, `${name}: spent no-ball action cannot be reused`);

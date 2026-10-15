@@ -75,7 +75,7 @@ export function createGame({mode = 'solo', minutes = 10, kickoff = 'white', seed
     score: {white: 0, black: 0}, turn: 1, randomState: normalizeSeed(seed),
     log: [`${title(kickoff)} has kick-off. Kick the ball to begin.`], lastAction: null,
     mode, minutes: Number.isFinite(Number(minutes)) && Number(minutes) > 0 ? Number(minutes) : 10,
-    rulesVersion: 6, restart: null, offside: null
+    rulesVersion: 7, restart: null, offside: null
   };
 }
 
@@ -121,6 +121,7 @@ export function legalMoves(state, pieceId, {freePawn = false} = {}) {
   if (state.phase === 'keeperReact') return freePawn ? [] : keeperReactionMoves(state, piece);
   if (!positionalTurn(state) || !piece || piece.team !== currentTeam(state) || state.restart?.takerId === piece.id) return [];
   const budget = budgetFor(state);
+  if (freePawn && piece.id === state.ball.carrierId) return [];
   if (freePawn ? budget.pawnUsed || piece.type !== 'P' : attackingCarrier(state, piece) ? budget.dribbleUsed : budget.normalUsed) return [];
   const moves = new Map(), shape = movementShape(piece);
   for (const [dx, dy] of shape.vectors) {
@@ -145,7 +146,9 @@ export function legalMoves(state, pieceId, {freePawn = false} = {}) {
 }
 
 // The three budgets are independent: an attacker may dribble, move a player
-// without the ball, and reposition one pawn, in any order. Protected restarts
+// without the ball, and reposition one pawn without the ball, in any order. A
+// bonus pawn may collect a loose ball, but cannot use that bonus to carry it.
+// Protected restarts
 // retain only their two positioning actions because their taker cannot move.
 export function positionActions(state) {
   const budget = budgetFor(state);
@@ -235,6 +238,15 @@ export function normalizeGame(state) {
   if (!state || typeof state !== 'object') return state;
   const next = copy(state);
   next.positionBudget = budgetFor(state);
+  // Older rules allowed a carrying pawn to spend its bonus separately from
+  // its dribble. Spend the dribble only when the latest action proves that
+  // carry happened in this round; pawnUsed alone may mean an off-ball move.
+  const previousAction = next.lastAction;
+  if ((Number(state.rulesVersion) || 0) < 7 && next.phase === 'attackMove'
+      && previousAction?.type === 'move' && previousAction.freePawn
+      && previousAction.pieceId === next.ball.carrierId && !previousAction.collection) {
+    next.positionBudget.dribbleUsed = true;
+  }
   next.restart ??= null;
   next.offside ??= null;
   if (!next.restart && next.phase === 'keeperRelease' && next.releaseReason === 'goalKick') {
@@ -256,7 +268,7 @@ export function normalizeGame(state) {
     }
     next.releaseReason = null;
   }
-  next.rulesVersion = 6;
+  next.rulesVersion = 7;
   return next;
 }
 

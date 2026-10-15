@@ -122,18 +122,37 @@ test('a spent dribble cannot reuse an unused normal action and a spent normal ac
   assert.ok(legalMoves(state, 'white-P1', { freePawn: true }).length);
 });
 
-test('a carrying pawn can use its separate dribble and free pawn action in either order', () => {
-  for (const freeFirst of [false, true]) {
-    let state = fixture({ carrier: 'white-P1', positions: { 'white-P1': [8, 8], 'white-R2': [3, 9] }, clear: [[8, 7], [8, 6], [3, 8]] });
-    state = move(state, 'white-P1', 8, 7, { freePawn: freeFirst });
-    assert.deepEqual(state.positionBudget, budget(false, freeFirst, !freeFirst));
-    assert.deepEqual(legalMoves(state, 'white-P1', { freePawn: freeFirst }), [], 'the same pawn allowance cannot repeat');
-    state = move(state, 'white-P1', 8, 6, { freePawn: !freeFirst });
-    assert.equal(state.phase, 'attackMove');
-    assert.deepEqual(state.positionBudget, budget(false, true, true));
-    assert.deepEqual(state.ball, { x: 8, y: 6, carrierId: 'white-P1' });
-    state = move(state, 'white-R2', 3, 8);
-    assert.equal(state.phase, 'defendMove');
+test('every carrier gets exactly one dribble in every allowance order, with the bonus reserved for an off-ball pawn', () => {
+  const dribbleTargets = { K: [5, 8], Q: [5, 8], R1: [5, 8], B1: [5, 7], N1: [6, 7], P1: [5, 8] };
+  for (const team of ['white', 'black']) for (const [suffix, dribbleTarget] of Object.entries(dribbleTargets)) {
+    for (const order of permutations(['dribble', 'normal', 'pawn'])) {
+      const transform = pair => team === 'white' ? pair : mirror(pair);
+      const carrierId = `${team}-${suffix}`, bonusId = `${team}-P2`;
+      let state = fixture({ team, carrier: carrierId, positions: {
+        [carrierId]: transform([4, 8]), [`${team}-R2`]: transform([8, 10]), [bonusId]: transform([9, 7]),
+      }, clear: [[8, 9], [10, 7], dribbleTarget].map(transform) });
+      const initial = clone(state), spent = new Set();
+      const actions = {
+        dribble: [carrierId, ...transform(dribbleTarget), {}],
+        normal: [`${team}-R2`, ...transform([8, 9]), {}],
+        pawn: [bonusId, ...transform([10, 7]), { freePawn: true }],
+      };
+      for (const kind of order) {
+        const before = clone(state);
+        assert.deepEqual(legalMoves(state, carrierId, { freePawn: true }), [], 'a bonus pawn move cannot carry the ball, even before its dribble');
+        assert.throws(() => applyMove(state, carrierId, ...transform(dribbleTarget), { freePawn: true }));
+        assert.deepEqual(state, before, 'rejected carrier bonus preserves the saved/undo state');
+        if (spent.has('dribble')) assert.deepEqual(legalMoves(state, carrierId), [], 'unused off-ball or pawn allowances cannot grant a second dribble');
+        else assert.ok(legalMoves(state, carrierId).length, 'the sole dribble stays available until used');
+        state = move(state, ...actions[kind]);
+        spent.add(kind);
+      }
+      assert.equal(state.phase, 'defendMove', `${team} ${suffix} completes ${order.join(' → ')}`);
+      const [x, y] = transform(dribbleTarget);
+      assert.deepEqual(state.ball, { x, y, carrierId }, 'the ball travels only once in the complete attacking round');
+      assert.equal(state.randomState, initial.randomState);
+      assert.notDeepEqual(state.pieces.find(piece => piece.id === bonusId), initial.pieces.find(piece => piece.id === bonusId), 'another pawn still gets its free off-ball move');
+    }
   }
 });
 
@@ -160,14 +179,30 @@ test('collecting a loose ball with a normal move spends that move and then permi
   assert.equal(state.phase, 'defendMove');
 });
 
-test('free-pawn collection keeps both a carrier dribble and another off-ball move available', () => {
-  let state = fixture({ carrier: 'white-P1', positions: { 'white-P1': [8, 8], 'white-R2': [3, 9] }, ball: { x: 8, y: 7, carrierId: null }, clear: [[8, 7], [8, 6], [3, 8]] });
-  state = move(state, 'white-P1', 8, 7, { freePawn: true });
-  assert.deepEqual(state.positionBudget, budget(false, true, false));
-  state = move(state, 'white-R2', 3, 8);
-  assert.equal(state.phase, 'attackMove');
-  state = move(state, 'white-P1', 8, 6);
-  assert.equal(state.phase, 'defendMove');
+test('free-pawn collection permits one subsequent dribble and a separate off-ball move in either order for either color', () => {
+  for (const team of ['white', 'black']) for (const dribbleFirst of [false, true]) {
+    const transform = pair => team === 'white' ? pair : mirror(pair);
+    const [ballX, ballY] = transform([8, 7]);
+    const carrierId = `${team}-P1`;
+    let state = fixture({ team, carrier: carrierId, positions: { [carrierId]: transform([8, 8]), [`${team}-R2`]: transform([3, 9]) }, ball: { x: ballX, y: ballY, carrierId: null }, clear: [[8, 7], [8, 6], [3, 8]].map(transform) });
+    state = move(state, carrierId, ...transform([8, 7]), { freePawn: true });
+    assert.deepEqual(state.positionBudget, budget(false, true, false));
+    assert.equal(state.lastAction.collection, true, 'collection is an off-ball move, not a carry');
+    assert.deepEqual(legalMoves(state, carrierId, { freePawn: true }), []);
+    const actions = {
+      dribble: [carrierId, ...transform([8, 6])],
+      normal: [`${team}-R2`, ...transform([3, 8])],
+    };
+    for (const kind of dribbleFirst ? ['dribble', 'normal'] : ['normal', 'dribble']) {
+      state = move(state, ...actions[kind]);
+      if (kind === 'dribble' && state.phase === 'attackMove') {
+        assert.deepEqual(legalMoves(state, carrierId), [], 'collection cannot open a second carry after the sole dribble');
+      }
+    }
+    assert.equal(state.phase, 'defendMove');
+    const [x, y] = transform([8, 6]);
+    assert.deepEqual(state.ball, { x, y, carrierId });
+  }
 });
 
 test('collection as the last ordinary allowance opens a dribble instead of prematurely advancing', () => {
@@ -361,7 +396,7 @@ test('version-five immediate goal kicks migrate to a fresh protected round, incl
     if (!hasMetadata) { delete state.restart; delete state.offside; }
     const before = clone(state), normalized = engine.normalizeGame(state);
     assert.deepEqual(state, before, 'loading must not mutate the saved match or undo snapshot');
-    assert.equal(normalized.rulesVersion, 6);
+    assert.equal(normalized.rulesVersion, 7);
     assert.equal(normalized.randomState, state.randomState);
     assert.deepEqual(normalized.score, state.score);
     assert.deepEqual(normalized.positionBudget, budget(), 'both teams receive a fresh round after an old immediate restart');
@@ -383,7 +418,7 @@ test('normalizing existing resettling saves preserves phase, spent budget and ev
       state.rulesVersion = 5;
       const before = clone(state), normalized = engine.normalizeGame(state);
       assert.deepEqual(state, before);
-      assert.deepEqual(normalized, { ...state, rulesVersion: 6 }, 'valid protected restart is preserved exactly except the version');
+      assert.deepEqual(normalized, { ...state, rulesVersion: 7 }, 'valid protected restart is preserved exactly except the version');
       assert.deepEqual(engine.normalizeGame(normalized), normalized);
       assertGoalKick(normalized, team, phase);
     }
@@ -420,6 +455,59 @@ test('old normal-used saves cannot gain a second dribble while untouched saves r
     assert.equal(engine.positionActions(normalized).dribbleAvailable, !normalUsed);
     assert.equal(legalMoves(normalized, 'white-R1').length > 0, !normalUsed);
   }
+});
+
+function legacyBonusCarry(team = 'white', rulesVersion = 6) {
+  const transform = pair => team === 'white' ? pair : mirror(pair);
+  const carrierId = `${team}-P1`;
+  const initial = fixture({ team, carrier: carrierId, positions: { [carrierId]: transform([8, 8]), [`${team}-R2`]: transform([3, 9]) }, clear: [[8, 7], [8, 6], [3, 8]].map(transform) });
+  const moved = move(initial, carrierId, ...transform([8, 7]));
+  // The old engine recorded this same carry against the bonus, leaving the
+  // ordinary dribble unused. This is a real saved-match/undo shape from v6.
+  moved.positionBudget = budget(false, true, false);
+  moved.lastAction.freePawn = true;
+  moved.rulesVersion = rulesVersion;
+  return moved;
+}
+
+test('loading or undoing a legacy bonus carry cannot grant another dribble and preserves every other part of the match', () => {
+  for (const team of ['white', 'black']) for (const version of [undefined, 5, 6]) {
+    const state = legacyBonusCarry(team, version);
+    if (version === undefined) delete state.rulesVersion;
+    const snapshot = JSON.parse(JSON.stringify(state)), before = clone(snapshot);
+    const normalized = engine.normalizeGame(snapshot);
+    assert.deepEqual(snapshot, before, 'a cached match or undo snapshot remains unmodified');
+    assert.deepEqual(normalized, { ...before, rulesVersion: 7, positionBudget: budget(false, true, true) }, 'only the rules version and already-used carry allowance change');
+    assert.equal(normalized.randomState, before.randomState, 'loading consumes no future random outcome');
+    assert.deepEqual(legalMoves(normalized, `${team}-P1`), [], 'the past bonus carry counts as the one permitted dribble');
+    assert.deepEqual(legalMoves(normalized, `${team}-P1`, { freePawn: true }), []);
+    assert.ok(legalMoves(normalized, `${team}-R2`).length, 'the separate off-ball allowance remains available');
+    assert.deepEqual(engine.normalizeGame(normalized), normalized, 'loading and then undoing the migrated state is idempotent');
+  }
+});
+
+test('legacy migration distinguishes bonus collection, off-ball moves and unrelated phases from an extra carry', () => {
+  const collection = fixture({ carrier: 'white-P1', positions: { 'white-P1': [8, 8] }, ball: { x: 8, y: 7, carrierId: null }, clear: [[8, 7], [8, 6]] });
+  const collected = move(collection, 'white-P1', 8, 7, { freePawn: true });
+  collected.rulesVersion = 6;
+  const offBall = move(attackFixture(), 'white-P1', 10, 7, { freePawn: true });
+  offBall.rulesVersion = 6;
+  const currentVersion = legacyBonusCarry('white', 7);
+  const defending = legacyBonusCarry();
+  defending.phase = 'defendMove';
+  const noAction = legacyBonusCarry();
+  noAction.lastAction = null;
+  const unrelatedAction = legacyBonusCarry();
+  unrelatedAction.lastAction.type = 'kick';
+  for (const [name, state] of [['collection', collected], ['off-ball bonus', offBall], ['current version', currentVersion], ['defending phase', defending], ['no previous action', noAction], ['non-move action', unrelatedAction]]) {
+    const before = clone(state), normalized = engine.normalizeGame(state);
+    assert.deepEqual(state, before, `${name}: normalization is pure`);
+    assert.deepEqual(normalized, { ...before, rulesVersion: 7 }, `${name}: the dribble allowance must not be consumed without evidence of a carry`);
+    assert.equal(normalized.randomState, before.randomState);
+    assert.deepEqual(engine.normalizeGame(normalized), normalized);
+  }
+  const restoredCollection = engine.normalizeGame(collected);
+  assert.ok(legalMoves(restoredCollection, 'white-P1').length, 'a pawn that just collected can still make its one dribble after loading');
 });
 
 test('other boundary restarts retain their positioning round and cannot gain a carrier dribble', () => {
@@ -468,5 +556,30 @@ for (const difficulty of ['casual', 'tactical']) test(`${difficulty} AI respects
     if (action.type === 'move' && !action.freePawn && action.pieceId === state.ball.carrierId) assert.equal(state.positionBudget.dribbleUsed, false);
     if (action.type === 'move' && !action.freePawn && action.pieceId !== state.ball.carrierId) assert.equal(state.positionBudget.normalUsed, false);
     for (const randomState of [0, 0xffffffff]) assert.deepEqual(chooseAIAction({ ...state, randomState }, { difficulty }), action, 'AI never uses the hidden future roll to choose');
+  }
+});
+
+for (const difficulty of ['casual', 'tactical']) test(`${difficulty} AI never double-dribbles the pawn in the seed-one opening regression for either color`, () => {
+  for (const team of ['white', 'black']) {
+    let state = createGame({ mode: 'solo', seed: 1, kickoff: team });
+    const carrierId = `${team}-P1`, carrier = state.pieces.find(piece => piece.id === carrierId);
+    state.phase = 'attackMove';
+    state.ball = { x: carrier.x, y: carrier.y, carrierId };
+    let carries = 0, freePawnMoves = 0;
+    for (let step = 0; step < 4 && state.phase === 'attackMove'; step++) {
+      const before = clone(state), action = chooseAIAction(state, { difficulty });
+      assert.deepEqual(state, before, 'planning preserves the match and future random outcome');
+      if (action.type === 'move' && action.pieceId === state.ball.carrierId) {
+        carries++;
+        assert.equal(!!action.freePawn, false, 'neither AI policy may turn the bonus into another carry');
+        assert.ok(carries <= 1, 'a single attacking round permits only one dribble');
+      }
+      if (action.freePawn) freePawnMoves++;
+      state = applyAI(state, action);
+    }
+    assert.equal(state.phase, 'defendMove', 'the three independent allowances complete the attacking round');
+    assert.equal(carries, 1, 'the regression actually exercises the carrier action');
+    assert.equal(freePawnMoves, 1, 'the off-ball pawn bonus is still used');
+    assert.equal(state.ball.carrierId, carrierId);
   }
 });

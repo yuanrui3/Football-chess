@@ -594,7 +594,7 @@ test('goal declarations wait for the defending goalkeeper before resolving the s
   assert.equal(reaction.phase, 'keeperReact');
   assert.equal(currentTeam(reaction), 'black');
   assert.ok(reaction.pendingShot);
-  assert.equal(reaction.rulesVersion, 6);
+  assert.equal(reaction.rulesVersion, 7);
   assert.deepEqual(reaction.pendingShot.from, { x: 4, y: 4 });
   assert.equal(reaction.lastAction.shotModel.modelVersion, 6);
   assert.deepEqual(reaction.lastAction.shotModel, shotModel(state, 4, -1));
