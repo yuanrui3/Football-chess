@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#173e35">
+  <meta name="description" content="Football tactics meet chess. Play a tactical match against the computer or a friend, based on the Football Chess handbook.">
+  <title>Football Chess · The beautiful game, one move at a time</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23214f3b'/%3E%3Ctext x='32' y='48' font-size='47' text-anchor='middle' fill='%23dbef84'%3E♞%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="masthead">
+  <a class="brand" href="./" aria-label="Football Chess home"><span class="brand-mark">F<span>♞</span>C</span><span>FOOTBALL<br>CHESS</span></a>
+  <div class="masthead-tag">THE BEAUTIFUL GAME.<br><b>A DIFFERENT KIND OF BOARD.</b></div>
+  <button class="text-button" id="rulesBtn"><span>?</span> How to play</button>
+</header>
+<main>
+  <div class="page-intro"><div><p class="eyebrow">THE TACTICS TABLE</p><h1>Every move changes the game.</h1></div><span class="edition">8 × 11 PITCH <i>·</i> 12 FOOTBALLERS <i>·</i> ONE BALL</span></div>
+  <section class="scoreboard" aria-label="Match score">
+    <div class="team-name white-team"><span class="team-dot"></span><div>IVORY FC<small id="whiteSub">YOU · ATTACKING ↑</small></div></div>
+    <div class="score-core"><div class="score"><span id="whiteScore">0</span><span class="score-divider">:</span><span id="blackScore">0</span></div><div class="clock"><span class="live-dot" id="liveDot"></span><span id="clock">10:00</span><span id="matchState">PRE-MATCH</span></div></div>
+    <div class="team-name black-team"><div>OBSIDIAN FC<small id="blackSub">COMPUTER · ATTACKING ↓</small></div><span class="team-dot dark"></span></div>
+  </section>
+  <div class="game-layout">
+    <aside class="left-panel">
+      <section class="panel" id="setupPanel">
+        <p class="eyebrow">BEFORE THE WHISTLE</p><h2>Set your match.</h2>
+        <label class="field-label" for="mode">PLAY MODE</label><div class="select-wrap"><select id="mode"><option value="solo">You vs computer</option><option value="local">Two players · same device</option></select></div>
+        <label class="field-label" for="duration">MATCH LENGTH</label><div class="select-wrap"><select id="duration"><option value="5">5 minutes · quick match</option><option value="10" selected>10 minutes · standard</option><option value="15">15 minutes · extended</option><option value="0">Untimed · finish manually</option></select></div>
+        <label class="field-label" for="kickoff">KICKOFF</label><div class="select-wrap"><select id="kickoff"><option value="white">Ivory FC</option><option value="black">Obsidian FC</option></select></div>
+        <p class="setup-hint">Use the starting formation, or select a piece and a square to arrange your half.</p>
+        <button class="primary wide" id="startBtn">Kick off <span>↗</span></button>
+      </section>
+      <section class="panel" id="turnPanel" hidden>
+        <p class="eyebrow" id="turnNumber">POSSESSION 01</p><h2 id="turnTitle">Your move.</h2>
+        <div class="phases" aria-label="Turn sequence"><div data-phase="attackMove"><span>1</span><div>Attack positions<small>Move one footballer</small></div></div><div data-phase="defendMove"><span>2</span><div>Defence responds<small>Move one footballer</small></div></div><div data-phase="kick"><span>3</span><div>Play the ball<small>Pass, shoot, or find space</small></div></div></div>
+        <p class="action-help" id="actionHelp" aria-live="polite"></p>
+        <button class="primary wide" id="skipBtn">Hold position <span>→</span></button>
+      </section>
+      <section class="selected-panel"><p class="eyebrow">ON THE TACTICS BOARD</p><div class="selection-info" id="selectionInfo"><span class="selection-icon">♞</span><div><b>Select a footballer</b><small>Legal moves light up on the pitch.</small></div></div><div class="legend"><span><i class="legal-dot"></i> Move / pass</span><span><i class="tackle-dot"></i> Tackle</span></div></section>
+      <div class="small-note"><span>01 / THE IDEA</span><p>Find the space.<br>Make the pass.<br>Think a move ahead.</p></div>
+    </aside>
+    <section class="pitch-area" aria-label="Football Chess playing board">
+      <div class="goal-wrap goal-top"><div class="goal-net"></div><button id="goalTop" class="goal-button" aria-label="Shoot into Obsidian goal" disabled>OBSIDIAN GOAL</button></div>
+      <div class="board-surround"><div class="rank-labels" id="ranks"></div><div class="pitch" id="pitch"><div class="squares" id="board" role="grid" aria-label="8 by 11 football chess pitch"></div><svg class="pitch-markings" viewBox="0 0 800 1100" aria-hidden="true"><rect x="3" y="3" width="794" height="1094" rx="1"/><path d="M0 550H800M300 0V200H500V0M300 1100V900H500V1100"/><circle cx="400" cy="550" r="99"/><circle class="centre-point" cx="400" cy="550" r="6"/><path d="M10 40A30 30 0 0 0 40 10M760 10A30 30 0 0 0 790 40M10 1060A30 30 0 0 1 40 1090M760 1090A30 30 0 0 1 790 1060"/></svg></div></div>
+      <div class="file-labels" aria-hidden="true"> <span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span><span>g</span><span>h</span></div>
+      <div class="goal-wrap goal-bottom"><div class="goal-net"></div><button id="goalBottom" class="goal-button" aria-label="Shoot into Ivory goal" disabled>IVORY GOAL</button></div>
+      <div class="pitch-caption"><span><i></i> <span id="boardStatus">Arrange your team or kick off.</span></span><button class="text-button compact" id="flipBtn" title="Rotate the board">↻ Rotate</button></div>
+    </section>
+    <aside class="right-panel">
+      <section class="possession-card"><div class="ball-emblem">⚽</div><p class="eyebrow">IN POSSESSION</p><h3 id="possessionTeam">Ivory FC</h3><p id="possessionDetail">Queen · e6</p></section>
+      <section class="panel match-feed"><div class="section-heading"><h3>Match journal</h3><span id="feedCount">00</span></div><ol id="journal"><li class="empty-feed">A fresh pitch.<br>A game waiting to happen.</li></ol></section>
+      <section class="quick-rule"><span class="quote-mark">“</span><p>No captures.<br>Just clever football.</p><small>Tackle the ball carrier, pass between your pieces, and find a route to the net.</small><button class="text-button compact" id="detailsBtn">Explore the rules ↗</button></section>
+    </aside>
+  </div>
+  <div class="match-toolbar"><div><button class="utility-button" id="undoBtn" disabled>↶ Undo</button><button class="utility-button" id="pauseBtn" disabled>Ⅱ Pause</button><button class="utility-button" id="finishBtn" disabled>Finish match</button></div><button class="utility-button" id="newBtn">↻ New match</button><span class="saved-note" id="saveNote">Your match saves on this device.</span></div>
+</main>
+<footer><span>FOOTBALL × CHESS</span><p>Digital adaptation of the game by Serrano Saunders · <a href="https://pdfhost.io/v/bWV1pmicf_Football_Chess_Handbook.pdf" target="_blank" rel="noopener">Original handbook ↗</a></p><span>PLAY WITH YOUR HEAD.</span></footer>
+<div id="toast" class="toast" role="status"></div>
+<dialog id="rulesDialog"><div class="dialog-heading"><p class="eyebrow">THE PLAYER’S HANDBOOK</p><button class="icon-button" data-close="rulesDialog" aria-label="Close rules">×</button></div><h2>The beautiful game,<br>one move at a time.</h2><div class="rule-grid"><section><b>01 · Build the attack</b><p>The attacking team moves one piece, the defending team responds, then the attacker kicks. You may hold position during either movement step.</p></section><section><b>02 · Think like chess</b><p>Footballers move using their chess patterns. Pieces block movement; knights jump. The ball moves with its carrier. Pieces are never captured.</p></section><section><b>03 · Play the pass</b><p>Pick a highlighted destination. A pass stops at the first piece in its path, even an opponent. Empty destinations leave a loose ball to collect.</p></section><section><b>04 · Find the net</b><p>Send the ball beyond the pitch through either two-square goal mouth. Only kings may enter the four-square boxes. The conceding team kicks off with a fresh formation.</p></section></div><h3>Tackling</h3><p>A piece that can reach the opposing carrier using its chess capture pattern may tackle. Choose a highlighted red landing square beside the carrier. Both pieces remain; the tackler takes the ball.</p><h3>Digital rule clarifications</h3><p>The handbook leaves a few details open. Here, knight kicks are single L-shaped jumps. Other kicks travel any chosen distance along movement directions; pawns kick straight forward and tackle diagonally. Pawns do not promote. There is no check, castling, or en passant. Tackles and interceptions restart the sequence for the new attacker. A loose ball keeps the last attacking team until collected. Holding position and undo are convenience controls.</p><p>The match clock runs while play is active; pause stops it. Most goals at full time wins. Board box and centre markings are a digital interpretation of the handbook’s description.</p><a class="source-link" href="https://pdfhost.io/v/bWV1pmicf_Football_Chess_Handbook.pdf" target="_blank" rel="noopener">Read the original handbook ↗</a></dialog>
+<dialog id="resultDialog"><div class="dialog-heading"><p class="eyebrow">THE FINAL WHISTLE</p><button class="icon-button" data-close="resultDialog" aria-label="Close result">×</button></div><div class="result-ball">⚽</div><h2 id="resultTitle">Honours even.</h2><p id="resultScore" class="result-score">0 : 0</p><p id="resultText"></p><button class="primary wide" id="rematchBtn">Play another match <span>↗</span></button></dialog>
+<dialog id="confirmDialog"><div class="dialog-heading"><p class="eyebrow">START FRESH</p><button class="icon-button" data-close="confirmDialog" aria-label="Cancel">×</button></div><h2>A new game?</h2><p>Your current match will be replaced.</p><div class="dialog-actions"><button class="utility-button" data-close="confirmDialog">Keep playing</button><button class="primary" id="confirmNewBtn">New match ↗</button></div></dialog>
+<script type="module" src="app.js"></script>
+</body>
+</html>
