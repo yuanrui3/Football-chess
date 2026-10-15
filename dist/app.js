@@ -1,4 +1,4 @@
-import {createGame, legalMoves, legalKicks, applyMove, applyKick, skipMove, chooseAIAction, currentTeam, BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, isBox, shotChance, shotModel} from './engine.js?v=512f2566c606';
+import {createGame, legalMoves, legalKicks, applyMove, applyKick, skipMove, chooseAIAction, currentTeam, BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, isBox, shotChance, shotModel} from './engine.js?v=92ba0d67fc4f';
 
 const $ = id => document.getElementById(id);
 const NAMES = {K:'Goalkeeper',Q:'Queen',R:'Rook',B:'Bishop',N:'Knight',P:'Pawn'};
@@ -109,7 +109,7 @@ function renderActionContext(selected){
     kind='setup';title=selected?'Arrange the formation':'Three ways to play';
     rule=selected?`${MOVE_PATTERNS[selected.type]}. With the ball: the same movement is a dribble. ${KICK_PATTERNS[selected.type]}. Setup placement follows the starting-formation rules.`:'Move without the ball to find space. Dribble to carry it. Pass or shoot to send the ball while the player stays.';
   }else if(reacting){kind='keeper';title='Keeper reaction';rule='The shot is already in flight. Move only the defending king one square, or hold. This extra reaction is separate from ordinary positioning.';}
-  else if(kicking&&selected){kind='pass';title='Pass / shoot';rule=`${pieceLabel(selected)} stays at ${coord(selected.x,selected.y)}; only the ball travels. ${KICK_PATTERNS[selected.type]}.${selected.type==='N'?'':' Kicks can travel beyond 10 squares with reduced pass accuracy.'}`;}
+  else if(kicking&&selected){kind='pass';title='Pass / shoot';rule=`${pieceLabel(selected)} stays at ${coord(selected.x,selected.y)}; only the ball travels. ${KICK_PATTERNS[selected.type]}.${selected.type==='N'?' A goal cell must be one L-shaped jump away to shoot.':' Kicks can travel beyond 10 squares with reduced pass accuracy.'}`;}
   else if(selected){
     kind=carrying?'dribble':'offball';title=carrying?'Dribble with the ball':'Move without the ball';
     rule=`${carrying?'Player and ball move together.':'The ball stays in place unless this move collects it or wins a tackle.'} ${MOVE_PATTERNS[selected.type]}. ${freePawnMode?'Uses the free pawn action; no tackling.':'Uses your regular positioning action.'}`;
@@ -148,6 +148,7 @@ function renderBoard(){
   const targets=getTargets(),action=lastComputerAction?.action;
   const showTrace=action&&!['goal','shotAttempt'].includes(action.type);
   const shot=game.phase==='keeperReact'?game.pendingShot:null;
+  const previewShots=shot?[]:legalKicks({...game,phase:'kick'}).filter(kick=>kick.goal);
   for(const el of squares){
     const x=Number(el.dataset.x),y=Number(el.dataset.y),piece=game.pieces.find(p=>p.x===x&&p.y===y),target=targets.find(t=>t.x===x&&t.y===y);
     const last=game.lastAction?.to,isSelected=piece?.id===selectedId,hasBall=game.ball.x===x&&game.ball.y===y;
@@ -171,11 +172,11 @@ function renderBoard(){
     $(id).setAttribute('aria-label',`${y===-1?'Obsidian':'Ivory'} goal: choose a target`);
     for(const el of $(id).querySelectorAll('[data-goal-x]')){
       const x=Number(el.dataset.goalX),kick=targets.find(t=>t.x===x&&t.y===y&&t.goal),chance=shotChance(game,x,y);
-      const aimed=shot?.x===x&&shot?.y===y;
+      const aimed=shot?.x===x&&shot?.y===y,canPreview=shot?aimed:previewShots.some(candidate=>candidate.x===x&&candidate.y===y);
       el.disabled=!kick;el.classList.toggle('available',!!kick);el.classList.toggle('shot-selected',aimed);el.classList.toggle('own-goal',!!kick&&kick.goal!==currentTeam(game));el.dataset.goalY=y;
-      el.innerHTML=`<span class="goal-file">${FILES[x].toUpperCase()}</span><span class="goal-odds">${percent(chance)}</span>`;
+      el.innerHTML=`<span class="goal-file">${FILES[x].toUpperCase()}</span><span class="goal-odds">${canPreview?percent(chance):'—'}</span>`;
       el.dataset.action='shot';
-      const detail=`Shoot at ${y===-1?'Obsidian':'Ivory'} goal, column ${FILES[x]}, ${percent(chance)} scoring chance before keeper reaction${kick&&kick.goal!==currentTeam(game)?', warning: own goal':''}`;
+      const detail=canPreview?`Shoot at ${y===-1?'Obsidian':'Ivory'} goal, column ${FILES[x]}, ${percent(chance)} scoring chance ${shot?'with the keeper here':'before keeper reaction'}${kick&&kick.goal!==currentTeam(game)?', warning: own goal':''}`:`${y===-1?'Obsidian':'Ivory'} goal, column ${FILES[x]}, no legal shot from this position`;
       el.setAttribute('aria-label',detail+(aimed?', shot committed':'')+(!kick?', unavailable shot':''));el.title=detail;
     }
   }
@@ -267,7 +268,7 @@ function scheduleAI(){
     aiTimer=null;if(!stillCurrent())return;
     if(aiDifficulty==='tactical'&&typeof window.Worker==='function'){
       try{
-        aiWorker=new window.Worker(new URL('./ai-worker.js?v=baddb14c3040',import.meta.url),{type:'module',name:'football-chess-tactical'});
+        aiWorker=new window.Worker(new URL('./ai-worker.js?v=667d4bfb42a5',import.meta.url),{type:'module',name:'football-chess-tactical'});
         aiWorker.onmessage=event=>{if(!stillCurrent()||event.data?.requestId!==requestId)return;if(event.data.error)fallback();else receive(event.data.action);};
         aiWorker.onerror=event=>{event.preventDefault?.();fallback();};
         aiWatchdog=setTimeout(()=>fallback('casual'),4000);

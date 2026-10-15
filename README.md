@@ -19,7 +19,7 @@ This is a tunable game model, not an xG model fitted to real match data. Distanc
 
 For origin S and target T on the physical goal plane (y=-0.5 or 14.5), let L be their Euclidean distance and u the normalized shot direction. Project the keeper K onto the finite segment: q=clamp(dot(K-S,u),0,L). Clearance c is the distance from K to that closest point, and available flight time t=q/6. A keeper behind the shooter has zero saving probability.
 
-- On-target chance: clamp(0.98 × exp(-0.018L) × (0.65 + 0.35 × abs(u.y)), 0.15, 0.98).
+- On-target chance: clamp(0.98 × exp(-0.018L - 0.06 × max(0, L - 3)²) × (0.65 + 0.35 × abs(u.y)), 0.01, 0.98).
 - Reach: bodyRadius + diveSpeed × max(0, t - reactionDelay).
 - Readiness: maxSave × (1 - exp(-(0.35 + t) / 0.45)).
 - Save chance conditional on an on-target shot: readiness × exp(-(c / reach)²).
@@ -31,6 +31,8 @@ For origin S and target T on the physical goal plane (y=-0.5 or 14.5), let L be 
 | Outside own box | 0.25 | 0.65 | 0.20 | 0.55 |
 
 One seeded uniform draw resolves the mutually exclusive outcomes, with goal first, then save, then wide. AI planning and previews do not consume randomness. The pending shot retains its original shooter position while the keeper reacts.
+
+Shot model version 4 preserves the previous accuracy for shots within three Euclidean squares of the goal plane. Beyond that, a quadratic distance term increasingly reduces accuracy, down to a 1% on-target floor. Keeper reach, angle effects, and passing accuracy retain their existing formulas. For a straight shot from e8 to the upper E goal with the keeper at g15, scoring is approximately 19.4% before reaction and 8.9% after the best keeper step to f15. Goal-line odds appear only for shots the carrier's kicking pattern and clear path can reach; other cells show an em dash. Positioning previews remain disabled until the kicking phase, and only the committed target shows odds during a keeper reaction.
 
 The choice of distance, angle and keeper alignment as factors is informed by [goalkeeper positioning research](https://pmc.ncbi.nlm.nih.gov/articles/PMC5800537/) and [Hudl's explanation of expected goals](https://support.hudl.com/s/article/expected-goals?language=en_US&topic=Statsbomb_Global_Football_Data_Glossary); the formula and coefficients above are custom balancing choices.
 
@@ -59,6 +61,8 @@ Off-ball movement and dribbling currently use the same pattern for a given piece
 | Pawn | One square forward, backward, left, or right | Any distance forward, backward, left, or right |
 
 Ordinary movement requires a clear path and an empty destination. Knights jump over intervening pieces, including while dribbling. Ordinary kicks stop at the first piece: a teammate receives the ball, an opponent intercepts it, and an empty destination leaves a loose ball. Knight kicks jump over intervening pieces. A shot uses the piece's kick pattern to reach one of the four goal targets; other pieces block its path, while the opposing goalkeeper instead gets a reaction before the shot resolves.
+
+A knight scores only when its one L-shaped kick ends in a goal cell. For the upper goal, valid origins are c15→E, d15→F, i15→G, j15→H, d14→E, and i14→H. The lower goal mirrors these at c1, d1, i1, j1, d2, and i2. The central goal-box squares cannot be occupied by knights. Knight shots jump over blockers, then use the same keeper reaction and goal/save/wide model as other shots.
 
 Only kings may occupy the four-column, two-row goal areas. Pawns tackle on their forward diagonals; their sideways and backward movement does not add new tackle directions. Tackles against a knight succeed 50% of the time; other legal tackles succeed automatically. No piece is captured.
 

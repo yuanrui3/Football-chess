@@ -6,8 +6,8 @@ export const GOAL_FILES = Object.freeze([4, 5, 6, 7]);
 // Tunable board-game parameters, not fitted football statistics. Distance is in
 // board squares and time is in abstract units set by ballSpeed.
 export const SHOT_MODEL = Object.freeze({
-  version: 3, ballSpeed: 6,
-  targetBase: 0.98, distanceDecay: 0.018, minOnTarget: 0.15, maxOnTarget: 0.98,
+  version: 4, ballSpeed: 6,
+  targetBase: 0.98, distanceDecay: 0.018, distancePenaltyStart: 3, longShotDecay: 0.06, minOnTarget: 0.01, maxOnTarget: 0.98,
   angleFloor: 0.65, angleWeight: 0.35,
   boxRadius: 0.4, boxDiveSpeed: 1.3, boxReactionDelay: 0.15, boxMaxSave: 0.94,
   outsideRadius: 0.25, outsideDiveSpeed: 0.65, outsideReactionDelay: 0.2, outsideMaxSave: 0.55,
@@ -167,7 +167,9 @@ export function shotModel(state, x = state?.pendingShot?.x, y = state?.pendingSh
   if (!Number.isFinite(length) || length <= 0) return invalid;
   const ux = dx / length, uy = dy / length;
   const angleCos = clamp(Math.abs(dy) / length, 0, 1);
-  const onTarget = clamp(SHOT_MODEL.targetBase * Math.exp(-SHOT_MODEL.distanceDecay * length) * (SHOT_MODEL.angleFloor + SHOT_MODEL.angleWeight * angleCos), SHOT_MODEL.minOnTarget, SHOT_MODEL.maxOnTarget);
+  // Preserve close finishes, then penalize longer shots increasingly strongly.
+  const excessDistance = Math.max(0, length - SHOT_MODEL.distancePenaltyStart);
+  const onTarget = clamp(SHOT_MODEL.targetBase * Math.exp(-SHOT_MODEL.distanceDecay * length - SHOT_MODEL.longShotDecay * excessDistance ** 2) * (SHOT_MODEL.angleFloor + SHOT_MODEL.angleWeight * angleCos), SHOT_MODEL.minOnTarget, SHOT_MODEL.maxOnTarget);
   const rawProjection = keeper ? (keeper.x - origin.x) * ux + (keeper.y - origin.y) * uy : 0;
   const projection = clamp(rawProjection, 0, length);
   const closestPoint = {x: origin.x + projection * ux, y: origin.y + projection * uy};
