@@ -53,16 +53,16 @@ These are distinct actions. Moving a piece does not automatically pass the ball,
 
 ### Piece reference
 
-Off-ball movement and dribbling currently use the same pattern for a given piece. Passing and shooting use the separate kick pattern and range below.
+Off-ball movement and dribbling use each piece's directions, with a separate eight-square dribble cap. Queen, rook, and bishop off-ball moves still reach ten squares. Kings, pawns, and knights retain their shorter patterns. Passing and shooting use the separate kick pattern and range below.
 
-| Piece | Move without ball / dribble | Pass / shoot |
-| --- | --- | --- |
-| King (goalkeeper) | One square horizontally, vertically, or diagonally | Any distance horizontally, vertically, or diagonally |
-| Queen | Up to 10 squares horizontally, vertically, or diagonally | Any distance horizontally, vertically, or diagonally |
-| Rook | Up to 10 squares horizontally or vertically | Any distance horizontally or vertically |
-| Bishop | Up to 10 squares diagonally | Any distance diagonally |
-| Knight | One L-shaped jump: two squares on one axis and one on the other | One L-shaped jump |
-| Pawn | One square forward, backward, left, or right | Any distance forward, backward, left, or right |
+| Piece | Move without ball | Dribble | Pass / shoot |
+| --- | --- | --- | --- |
+| King (goalkeeper) | One square horizontally, vertically, or diagonally | One square horizontally, vertically, or diagonally | Any distance horizontally, vertically, or diagonally |
+| Queen | Up to 10 squares horizontally, vertically, or diagonally | Up to 8 squares horizontally, vertically, or diagonally | Any distance horizontally, vertically, or diagonally |
+| Rook | Up to 10 squares horizontally or vertically | Up to 8 squares horizontally or vertically | Any distance horizontally or vertically |
+| Bishop | Up to 10 squares diagonally | Up to 8 squares diagonally | Any distance diagonally |
+| Knight | One L-shaped jump: two squares on one axis and one on the other | One L-shaped jump | One L-shaped jump |
+| Pawn | One square forward, backward, left, or right | One square forward, backward, left, or right | Any distance forward, backward, left, or right |
 
 Ordinary movement requires a clear path and an empty destination. Knights jump over intervening pieces, including while dribbling. Ordinary kicks stop at the first piece: a teammate receives the ball, an opponent intercepts it, and an empty destination leaves a loose ball. Knight kicks jump over intervening pieces. A shot uses the piece's kick pattern to reach one of the four goal targets; other pieces block its path, while the opposing goalkeeper instead gets a reaction before the shot resolves.
 
@@ -70,7 +70,7 @@ A knight scores when its one L-shaped kick ends in a goal cell. It may now occup
 
 Only kings and knights may occupy either four-column, two-row goal area. Pawns tackle one square on any of the four diagonals, forward or backward. Their ordinary movement and dribbling remain one cardinal square. Tackles against a knight succeed 50% of the time, including inside a box; other legal tackles succeed automatically. No piece is captured.
 
-Queen, rook, and bishop tackle reach is capped at five squares to the opposing carrier, along their normal capture directions and a clear path. King reach is one adjacent square, pawn reach is one square diagonally forward or backward, and knight reach is one L-shaped jump. After the challenge, choose an allowed adjacent landing square; the overall ten-square start-to-landing limit remains. A carrier five squares away can therefore have an adjacent landing six squares from the defender. Ordinary movement/dribbling keep their ten-square cap, and passing uses its separate distance/accuracy rules. Both AI policies use this shared tackle rule.
+Queen, rook, and bishop tackle reach is capped at five squares to the opposing carrier, along their normal capture directions and a clear path. King reach is one adjacent square, pawn reach is one square diagonally forward or backward, and knight reach is one L-shaped jump. After the challenge, choose an allowed adjacent landing square; the overall ten-square start-to-landing limit remains. A carrier five squares away can therefore have an adjacent landing six squares from the defender. Off-ball moves have a ten-square cap, dribbles an eight-square cap, and passing uses its separate distance/accuracy rules. Both AI policies use this shared tackle rule.
 
 ### Turn order and exceptions
 
@@ -131,6 +131,7 @@ Both levels use the same legal moves, scoring odds, and optimal immediate keeper
 - `tests/offside-knight.test.mjs`: knight upgrades and offside timing, involvement, and exemptions
 - `tests/boundary.test.mjs`: boundary geometry, restart awards, throw ranges, and seeded scatter
 - `tests/possession.test.mjs`: independent action budgets, all action orders, protected restart positioning, king goal kicks, and saved-match migration
+- `tests/dribble-range.test.mjs`: eight-square carrying limit, ten-square off-ball movement, passing ranges, and shorter piece patterns
 
 No build or runtime dependencies. Serve `dist/` using a static HTTP server. Run `npm test` with Node.js. Before each deployment, run `node scripts/version-assets.mjs` so the HTML, controller, engine, worker, and stylesheet use matching content versions instead of stale browser caches.
 

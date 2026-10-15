@@ -292,11 +292,11 @@ test('rook, bishop and queen retain ten-square movement and uncapped passing aft
     ['Q', [3, 13], [3, 3], [3, 2]],
   ]) {
     const id = `white-${type}`;
-    const state = fixture({ positions: { 'white-R1': [9, 7], [id]: from }, clear: [ten, eleven] });
+    const state = fixture({ carrier: 'white-P3', positions: { 'white-R1': [9, 7], [id]: from }, clear: [ten, eleven] });
     assert.equal(hasMove(state, id, ...ten), true, `${type} can move ten squares`);
     assert.equal(hasMove(state, id, ...eleven), false, `${type} cannot move eleven squares`);
     const dribble = { ...clone(state), ball: { x: from[0], y: from[1], carrierId: id } };
-    assert.equal(hasMove(dribble, id, ...ten), true, `${type} can still dribble ten squares`);
+    assert.equal(hasMove(dribble, id, ...ten), false, `${type} cannot carry the ball beyond the eight-square dribble limit`);
     const kicks = legalKicks({ ...dribble, phase: 'kick' });
     assert.equal(kicks.find(kick => kick.x === ten[0] && kick.y === ten[1])?.accuracy, 1, `${type} passes ten squares with full accuracy`);
     assert.equal(kicks.find(kick => kick.x === eleven[0] && kick.y === eleven[1])?.accuracy, .9, `${type} can still attempt an eleven-square pass`);

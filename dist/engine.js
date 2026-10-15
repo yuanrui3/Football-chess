@@ -4,6 +4,7 @@ export const BOARD_WIDTH = 12;
 export const BOARD_HEIGHT = 15;
 export const GOAL_FILES = Object.freeze([4, 5, 6, 7]);
 export const LONG_TACKLE_RANGE = 5;
+export const DRIBBLE_RANGE = 8;
 // Tunable board-game parameters, not fitted football statistics. Distance is in
 // board squares and time is in abstract units set by ballSpeed.
 export const SHOT_MODEL = Object.freeze({
@@ -124,8 +125,9 @@ export function legalMoves(state, pieceId, {freePawn = false} = {}) {
   if (freePawn && piece.id === state.ball.carrierId) return [];
   if (freePawn ? budget.pawnUsed || piece.type !== 'P' : attackingCarrier(state, piece) ? budget.dribbleUsed : budget.normalUsed) return [];
   const moves = new Map(), shape = movementShape(piece);
+  const range = piece.id === state.ball.carrierId ? Math.min(shape.range, DRIBBLE_RANGE) : shape.range;
   for (const [dx, dy] of shape.vectors) {
-    for (let step = 1; step <= shape.range; step++) {
+    for (let step = 1; step <= range; step++) {
       const x = piece.x + dx * step, y = piece.y + dy * step;
       if (!inside(x, y) || pieceAt(state, x, y)) break;
       if (allowedSquare(piece, x, y)) moves.set(`${x},${y}`, {x, y, type: 'move', ...(freePawn ? {freePawn: true} : {})});
