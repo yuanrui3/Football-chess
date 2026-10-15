@@ -6,6 +6,8 @@ const SYMBOLS = {K:'♚',Q:'♛',R:'♜',B:'♝',N:'♞',P:'♟'};
 const TEAM = {white:'Ivory FC',black:'Obsidian FC'};
 const STORE = 'football-chess-match-v2';
 const AI_PACES = [3000,1800,600];
+const MOVE_PATTERNS={K:'One square in any direction',Q:'Up to 10 squares straight or diagonally',R:'Up to 10 squares horizontally or vertically',B:'Up to 10 squares diagonally',N:'One L-shaped jump over other pieces',P:'One square forward, back, left, or right'};
+const KICK_PATTERNS={K:'Straight or diagonal kicks, like a queen',Q:'Straight or diagonal kicks',R:'Horizontal or vertical kicks',B:'Diagonal kicks',N:'One L-shaped kick over other pieces',P:'Forward, backward, left, or right kicks'};
 const FILES = 'abcdefghijkl';
 const coord = (x,y) => `${FILES[x]}${H-y}`;
 const percent = chance => `${Math.round(chance*100)}%`;
@@ -68,6 +70,55 @@ function getTargets(){
   if(kickPhase())return legalKicks(game);
   return selectedId?legalMoves(game,selectedId,{freePawn:positionPhase()&&freePawnMode}):[];
 }
+function targetKind(target){
+  if(stage==='setup')return 'setup';
+  if(game.phase==='keeperReact')return 'keeper';
+  if(target.type==='tackle')return 'tackle';
+  if(kickPhase()){
+    if(target.goal)return 'shot';
+    const receiver=game.pieces.find(piece=>piece.id===target.receiverId);
+    return receiver?(receiver.team===currentTeam(game)?'pass':'interception'):'kick';
+  }
+  if(selectedId===game.ball.carrierId)return 'dribble';
+  if(!game.ball.carrierId&&target.x===game.ball.x&&target.y===game.ball.y)return 'collect';
+  return 'offball';
+}
+function targetDescription(target){
+  const kind=targetKind(target),destination=coord(target.x,target.y);
+  const receiver=game.pieces.find(piece=>piece.id===target.receiverId);
+  if(kind==='setup')return `Starting formation square ${destination}`;
+  if(kind==='keeper')return `Keeper reaction to ${destination}`;
+  if(kind==='tackle')return `Tackle landing at ${destination}, ${percent(target.tackleProbability??1)} tackle success`;
+  if(kind==='dribble')return `Dribble to ${destination}, player and ball move together`;
+  if(kind==='collect')return `Move to ${destination} and collect the loose ball`;
+  if(kind==='offball')return `Move without ball to ${destination}, ball stays in place`;
+  if(kind==='shot')return `Shoot at ${FILES[target.x].toUpperCase()}${target.goal!==currentTeam(game)?' into your own goal':''}`;
+  if(kind==='pass')return `Pass to ${pieceLabel(receiver)} at ${destination}, kicker stays in place`;
+  if(kind==='interception')return `Kick to ${destination}, opposing ${pieceLabel(receiver)} will intercept`;
+  return `Kick into space at ${destination}, ball will be loose`;
+}
+function renderActionContext(selected){
+  const carrying=selected?.id===game.ball.carrierId,kicking=kickPhase(),reacting=game.phase==='keeperReact';
+  const ownCarrier=game.pieces.some(piece=>piece.id===game.ball.carrierId&&piece.team===currentTeam(game));
+  for(const [id,active]of [['offBallAction',positionPhase()&&(!selected||!carrying)],['dribbleAction',positionPhase()&&ownCarrier&&(!selected||carrying)],['kickAction',kicking]]){
+    $(id).classList.toggle('active',stage==='playing'&&active);$(id).setAttribute('aria-current',stage==='playing'&&active?'true':'false');
+  }
+  let kind='offball',title='Move · dribble · pass / shoot',rule='Select a footballer to see its movement and kicking patterns. Moving a player and kicking the ball are separate actions.';
+  if(stage==='finished'){title='Match complete';rule='Start a new match to choose your next action.';}
+  else if(stage==='setup'){
+    kind='setup';title=selected?'Arrange the formation':'Three ways to play';
+    rule=selected?`${MOVE_PATTERNS[selected.type]}. With the ball: the same movement is a dribble. ${KICK_PATTERNS[selected.type]}. Setup placement follows the starting-formation rules.`:'Move without the ball to find space. Dribble to carry it. Pass or shoot to send the ball while the player stays.';
+  }else if(reacting){kind='keeper';title='Keeper reaction';rule='The shot is already in flight. Move only the defending king one square, or hold. This extra reaction is separate from ordinary positioning.';}
+  else if(kicking&&selected){kind='pass';title='Pass / shoot';rule=`${pieceLabel(selected)} stays at ${coord(selected.x,selected.y)}; only the ball travels. ${KICK_PATTERNS[selected.type]}.${selected.type==='N'?'':' Kicks can travel beyond 10 squares with reduced pass accuracy.'}`;}
+  else if(selected){
+    kind=carrying?'dribble':'offball';title=carrying?'Dribble with the ball':'Move without the ball';
+    rule=`${carrying?'Player and ball move together.':'The ball stays in place unless this move collects it or wins a tackle.'} ${MOVE_PATTERNS[selected.type]}. ${freePawnMode?'Uses the free pawn action; no tackling.':'Uses your regular positioning action.'}`;
+  }else if(positionPhase()){
+    title=ownCarrier?'Move without ball / dribble':'Move without the ball';
+    rule=ownCarrier?'Select a teammate to move off the ball, or the carrier to dribble. Use one regular action plus an optional free pawn action.':'Move a teammate off the ball, collect a loose ball, or try a highlighted tackle against an opposing carrier. You can dribble after winning possession.';
+  }
+  $('actionContext').dataset.action=kind;$('actionType').textContent=title;$('actionRule').textContent=rule;
+}
 function addLine(points,className){
   const line=document.createElementNS('http://www.w3.org/2000/svg','polyline');line.classList.add(className);
   line.setAttribute('points',points.map(p=>`${p.x*100+50},${p.y*100+50}`).join(' '));
@@ -100,10 +151,12 @@ function renderBoard(){
   for(const el of squares){
     const x=Number(el.dataset.x),y=Number(el.dataset.y),piece=game.pieces.find(p=>p.x===x&&p.y===y),target=targets.find(t=>t.x===x&&t.y===y);
     const last=game.lastAction?.to,isSelected=piece?.id===selectedId,hasBall=game.ball.x===x&&game.ball.y===y;
-    el.className=['square',(x+y)%2?'checker':'',isBox(x,y)?'box':'',y===7&&(x===5||x===6)?'kickoff':'',isSelected?'selected':'',last?.x===x&&last?.y===y?'last-move':'',target?'legal':'',target?.type==='tackle'?'tackle':'',showTrace&&action.from?.x===x&&action.from?.y===y?'computer-from':'',showTrace&&action.to?.x===x&&action.to?.y===y?'computer-to':''].filter(Boolean).join(' ');
+    const kind=target?targetKind(target):null;
+    el.className=['square',(x+y)%2?'checker':'',isBox(x,y)?'box':'',y===7&&(x===5||x===6)?'kickoff':'',isSelected?'selected':'',last?.x===x&&last?.y===y?'last-move':'',target?'legal':'',kind?`action-${kind}`:'',target?.type==='tackle'?'tackle':'',showTrace&&action.from?.x===x&&action.from?.y===y?'computer-from':'',showTrace&&action.to?.x===x&&action.to?.y===y?'computer-to':''].filter(Boolean).join(' ');
+    if(kind)el.dataset.action=kind;else delete el.dataset.action;
     el.setAttribute('aria-selected',String(isSelected));
     let label=coord(x,y)+(piece?`, ${TEAM[piece.team]} ${pieceLabel(piece)}`:', empty');
-    if(hasBall)label+=', ball';if(target)label+=target.type==='tackle'?`, tackle landing, ${percent(target.tackleProbability ?? 1)} tackle success`:target.label?`, ${target.label}`:', legal move';
+    if(hasBall)label+=', ball';if(target)label+=`, ${targetDescription(target)}`;
     if(target?.accuracy!==undefined)label+=`, ${percent(target.accuracy)} pass accuracy`;
     if(shot&&target)label+=`, opponent scoring chance ${percent(shotChance(game,shot.x,shot.y,{x,y}))} after this keeper move`;
     el.setAttribute('aria-label',label);el.title=label;
@@ -119,9 +172,10 @@ function renderBoard(){
     for(const el of $(id).querySelectorAll('[data-goal-x]')){
       const x=Number(el.dataset.goalX),kick=targets.find(t=>t.x===x&&t.y===y&&t.goal),chance=shotChance(game,x,y);
       const aimed=shot?.x===x&&shot?.y===y;
-      el.disabled=!kick;el.classList.toggle('available',!!kick);el.classList.toggle('shot-selected',aimed);el.dataset.goalY=y;
+      el.disabled=!kick;el.classList.toggle('available',!!kick);el.classList.toggle('shot-selected',aimed);el.classList.toggle('own-goal',!!kick&&kick.goal!==currentTeam(game));el.dataset.goalY=y;
       el.innerHTML=`<span class="goal-file">${FILES[x].toUpperCase()}</span><span class="goal-odds">${percent(chance)}</span>`;
-      const detail=`${y===-1?'Obsidian':'Ivory'} goal, column ${FILES[x]}, ${percent(chance)} scoring chance before keeper reaction`;
+      el.dataset.action='shot';
+      const detail=`Shoot at ${y===-1?'Obsidian':'Ivory'} goal, column ${FILES[x]}, ${percent(chance)} scoring chance before keeper reaction${kick&&kick.goal!==currentTeam(game)?', warning: own goal':''}`;
       el.setAttribute('aria-label',detail+(aimed?', shot committed':'')+(!kick?', unavailable shot':''));el.title=detail;
     }
   }
@@ -133,7 +187,7 @@ function resetKickDetails(){
   if(game.phase==='keeperReact'&&game.pendingShot){
     const shot=game.pendingShot;showShotModel(shotModel(game,shot.x,shot.y));
     $('kickDetails').textContent='Select a lit square to move the keeper, or hold position to resolve the shot.';
-  }else{clearKeeperOverlay();$('kickDetails').textContent=kickPhase()&&stage==='playing'?'Hover or focus a goal target to inspect distance, keeper coverage, and goal/save/wide odds. The keeper may react before resolution.':'Each positioning turn: one normal move + one optional free pawn move.';}
+  }else{clearKeeperOverlay();$('kickDetails').textContent=stage==='setup'?'Move a player to find space · Dribble to carry the ball · Pass / shoot to send it.':kickPhase()&&stage==='playing'?'Pass / shoot: the player stays. Blue targets send the ball; gold goal cells commit a shot. Hover or focus to preview odds.':'Positioning: move without the ball or dribble with it, plus one optional free pawn action. Kicking comes later.';}
 }
 function render(){
   cancelAI();
@@ -154,15 +208,15 @@ function render(){
   else if(reacting){heading='Position your keeper.';help='The shot is committed. Move your king one square, or hold position. The displayed scoring chance is then rolled.';status=`${TEAM[acting]} · keeper reaction`;}
   else if(game.phase==='keeperRelease'){const goalKick=game.releaseReason==='goalKick';heading=goalKick?'Goal kick.':'King must release.';help=goalKick?'The shot went wide. The keeper restarts from the goal box with an immediate kick.':'A teammate passed to the king. Choose an immediate kick; the king cannot move or hold this back-pass.';status=`${TEAM[acting]} · ${goalKick?'goal kick':'immediate keeper kick'}`;}
   else if(game.phase==='kickoff'){heading=game.mode==='solo'?'Your kickoff.':TEAM[acting]+' kicks off.';help='Choose a pass destination, or a lit goal cell to commit a shot.';status='Choose a pass to start play.';}
-  else if(kicking){heading=teamLabel(acting)+' kick.';help='Choose a lit square to pass, or one of the four goal cells to shoot. The defending king gets one reaction move.';status=`${TEAM[acting]} · play the ball`;}
-  else if(freePawnMode){heading=teamLabel(acting)+' free pawn.';help='Reposition one pawn by one square forward, back, left, or right. The bonus cannot tackle. You may skip it.';status=`${TEAM[acting]} · free pawn reposition`;}
-  else {heading=teamLabel(acting)+(game.phase==='defendMove'?' response.':' move.');help=game.ball.carrierId?'Move one footballer up to 10 squares. You also have a free one-square pawn reposition. Knights jump with the ball; tackles against them succeed 50% of the time.':'Collect the loose ball. You have one normal move and one free pawn reposition.';status=`${TEAM[acting]} · ${game.phase==='defendMove'?'defence responds':'build the attack'}`;}
+  else if(kicking){heading='Pass or shoot.';help='Only the carrier kicks; the player stays in place. Choose a blue pass / kick target or a gold goal cell. Shooting gives the defending king one reaction.';status=`${TEAM[acting]} · pass / shoot`;}
+  else if(freePawnMode){heading=teamLabel(acting)+' free pawn.';help='Move one pawn without the ball, dribble if it carries it, or collect a loose ball. One cardinal square; no tackle or kick. You may skip it.';status=`${TEAM[acting]} · free pawn action`;}
+  else {const ownCarrier=game.pieces.some(piece=>piece.id===game.ball.carrierId&&piece.team===acting);heading=teamLabel(acting)+(game.phase==='defendMove'?' response.':' positioning.');help=ownCarrier?'Select a teammate to move without the ball, or the carrier to dribble. Both use the regular positioning action; passing and shooting happen in the kicking phase.':game.ball.carrierId?'Move without the ball to defend, or attempt a highlighted tackle. Win possession before you can dribble; the opponent is carrying the ball.':'Move to collect the loose ball. You have one regular positioning action and one free pawn action.';status=`${TEAM[acting]} · ${ownCarrier?'move / dribble':'off-ball positioning'}`;}
   if(stage==='setup')status='Arrange 11 footballers or kick off.';
   $('turnTitle').textContent=heading;$('actionHelp').textContent=help;$('boardStatus').textContent=status;
   const activePhase=kicking?'kick':reacting?'defendMove':game.phase;
   for(const el of document.querySelectorAll('[data-phase]'))el.classList.toggle('active',el.dataset.phase===activePhase);
   document.querySelector('.move-modes').hidden=!positioning||stage!=='playing';
-  $('moveBudget').hidden=!positioning||stage!=='playing';$('moveBudget').textContent=`Normal move: ${budget.normalUsed?'used':'ready'} · Free pawn: ${budget.pawnUsed?'used':'ready'}`;
+  $('moveBudget').hidden=!positioning||stage!=='playing';$('moveBudget').textContent=`Regular action: ${budget.normalUsed?'used':'ready'} · Free pawn: ${budget.pawnUsed?'used':'ready'}`;
   $('normalMoveBtn').disabled=blocked()||budget.normalUsed;$('pawnMoveBtn').disabled=blocked()||budget.pawnUsed;
   $('normalMoveBtn').setAttribute('aria-pressed',String(!freePawnMode));$('pawnMoveBtn').setAttribute('aria-pressed',String(freePawnMode));
   $('shotPanel').hidden=!reacting||stage!=='playing';
@@ -174,7 +228,8 @@ function render(){
   $('possessionTeam').textContent=reacting?'Shot in flight':carrier?TEAM[carrier.team]:'Loose ball';
   $('possessionDetail').textContent=reacting?`${TEAM[game.pendingShot.shootingTeam]} · keeper may respond`:carrier?`${pieceLabel(carrier)} · ${coord(carrier.x,carrier.y)}`:`Available to collect · ${coord(game.ball.x,game.ball.y)}`;
   const selected=game.pieces.find(p=>p.id===selectedId);
-  $('selectionInfo').innerHTML=selected?`<span class="selection-icon">${SYMBOLS[selected.type]}</span><div><b>${pieceLabel(selected)} · ${coord(selected.x,selected.y)}</b><small>${stage==='setup'?'Choose a starting square.':kicking?'Choose a pass or a shot.':`${legalMoves(game,selected.id,{freePawn:positioning&&freePawnMode}).length} legal destinations`}</small></div>`:'<span class="selection-icon">♞</span><div><b>Select a footballer</b><small>Legal moves light up on the pitch.</small></div>';
+  $('selectionInfo').innerHTML=selected?`<span class="selection-icon">${SYMBOLS[selected.type]}</span><div><b>${pieceLabel(selected)} · ${coord(selected.x,selected.y)}</b><small>${stage==='setup'?'Choose a starting square.':reacting?'Keeper reaction':kicking?'Pass / shoot · player stays':`${selected.id===game.ball.carrierId?'Dribble':'Move without ball'} · ${legalMoves(game,selected.id,{freePawn:positioning&&freePawnMode}).length} destinations`}</small></div>`:'<span class="selection-icon">♞</span><div><b>Select a footballer</b><small>Move off the ball, or select the carrier to dribble.</small></div>';
+  renderActionContext(selected);
   $('journal').replaceChildren(...game.log.slice(-12).reverse().map(line=>{const li=document.createElement('li');li.textContent=line.replaceAll('White','Ivory').replaceAll('Black','Obsidian');return li;}));$('feedCount').textContent=String(game.log.length).padStart(2,'0');
   if(!storageOK)$('saveNote').textContent='Match saving is unavailable in this browser.';
   renderBoard();resetKickDetails();updateClock();scheduleAI();
@@ -227,9 +282,9 @@ function drawPreview(x,y){
   if(target.type==='tackle'){$('kickDetails').textContent=`Tackle success: ${percent(target.tackleProbability ?? 1)}. The defender moves to ${coord(x,y)}; a failed attempt uses the regular move and leaves the carrier with the ball.`;return;}
   if(game.phase==='keeperReact'&&game.pendingShot){const model=shotModel(game,game.pendingShot.x,game.pendingShot.y,{x,y});showShotModel(model,`scoring chance if keeper moves to ${coord(x,y)}`);$('kickDetails').textContent=`Keeper preview: ${coord(x,y)} · ${outcomeBreakdown(model)}`;return;}
   if(kickPhase()){
-    if(target.goal){const model=shotModel(game,x,y);addLine([model.origin,model.target],'trajectory');drawKeeperOverlay(model);$('kickDetails').textContent=`Aim at ${FILES[x].toUpperCase()} · ${shotGeometry(model)}. ${outcomeBreakdown(model)} before the keeper’s reaction.`;}
-    else{clearKeeperOverlay();if(target.path)addLine(target.path,'trajectory');$('kickDetails').textContent=`Pass to ${coord(x,y)} · ${target.distance} squares · ${percent(target.accuracy)} accuracy.`;}
-  }
+    if(target.goal){const model=shotModel(game,x,y);addLine([model.origin,model.target],'trajectory');drawKeeperOverlay(model);$('kickDetails').textContent=`${targetDescription(target)} · ${shotGeometry(model)}. ${outcomeBreakdown(model)} before the keeper’s reaction.`;}
+    else{clearKeeperOverlay();if(target.path)addLine(target.path,'trajectory');$('kickDetails').textContent=`${targetDescription(target)} · ${target.distance} squares · ${percent(target.accuracy)} pass accuracy. The player stays in place.`;}
+  }else $('kickDetails').textContent=`${targetDescription(target)}. ${stage==='setup'?'Formation only; no turn used.':freePawnMode?'Uses the free pawn action.':'Uses the regular positioning action; passing and shooting happen later.'}`;
 }
 $('board').addEventListener('pointerover',event=>{const el=event.target.closest('.square');if(el)drawPreview(Number(el.dataset.x),Number(el.dataset.y));});
 $('board').addEventListener('focusin',event=>{const el=event.target.closest('.square');if(el)drawPreview(Number(el.dataset.x),Number(el.dataset.y));});
@@ -245,7 +300,7 @@ $('board').addEventListener('click',event=>{
     if(target){if(kickPhase())commit(applyKick(game,x,y));else commit(applyMove(game,selectedId,x,y,{freePawn:positionPhase()&&freePawnMode}));return;}
     if(kickPhase()){toast('Choose a highlighted pass destination or a lit goal cell.');return;}
     if(game.phase==='keeperReact'){toast('Only the king may react to this shot. Choose a lit square or hold the keeper.');return;}
-    if(piece&&piece.team===currentTeam(game)){if(freePawnMode&&piece.type!=='P'){toast('Choose a pawn for the free reposition, or switch to Regular move.');return;}selectedId=piece.id;render();}
+    if(piece&&piece.team===currentTeam(game)){if(freePawnMode&&piece.type!=='P'){toast('Choose a pawn for the free action, or switch to Move / dribble.');return;}selectedId=piece.id;render();}
     else if(piece)toast(`It is ${TEAM[currentTeam(game)]}’s move. Tackles against knights have a 50% success rate.`);
   }catch(err){toast(err.message);}
 });

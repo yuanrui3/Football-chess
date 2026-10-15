@@ -6,7 +6,7 @@
   <meta name="description" content="Football tactics meet chess. Play an eleven-a-side tactical match on a 12 by 15 pitch, with goalkeeper reactions, shot odds, and chess-inspired football.">
   <title>Football Chess · The beautiful game, one move at a time</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23214f3b'/%3E%3Ctext x='32' y='48' font-size='47' text-anchor='middle' fill='%23dbef84'%3E♞%3C/text%3E%3C/svg%3E">
-  <link rel="stylesheet" href="style.css?v=3426c412d51e">
+  <link rel="stylesheet" href="style.css?v=c7012792dfe2">
 </head>
 <body>
 <header class="masthead">
@@ -33,15 +33,16 @@
       </section>
       <section class="panel" id="turnPanel" hidden>
         <p class="eyebrow" id="turnNumber">POSSESSION 01</p><h2 id="turnTitle">Your move.</h2>
-        <div class="phases" aria-label="Turn sequence"><div data-phase="attackMove"><span>1</span><div>Attack positions<small>One move + a free pawn</small></div></div><div data-phase="defendMove"><span>2</span><div>Defence responds<small>One move + a free pawn</small></div></div><div data-phase="kick"><span>3</span><div>Play the ball<small>Pass, shoot, or find space</small></div></div></div>
-        <div class="move-modes" role="group" aria-label="Positioning action"><button type="button" id="normalMoveBtn" aria-pressed="true">Regular move</button><button type="button" id="pawnMoveBtn" aria-pressed="false">Free pawn move</button></div>
+        <div class="phases" aria-label="Turn sequence"><div data-phase="attackMove"><span>1</span><div>Attack: move / dribble<small>One action + a free pawn</small></div></div><div data-phase="defendMove"><span>2</span><div>Defence responds<small>One action + a free pawn</small></div></div><div data-phase="kick"><span>3</span><div>Pass / shoot<small>Player stays; ball travels</small></div></div></div>
+        <div class="action-kinds" aria-label="Actions available in this phase"><span id="offBallAction">Off ball</span><span id="dribbleAction">Dribble</span><span id="kickAction">Pass / shoot</span></div>
+        <div class="move-modes" role="group" aria-label="Positioning action"><button type="button" id="normalMoveBtn" aria-pressed="true">Move / dribble</button><button type="button" id="pawnMoveBtn" aria-pressed="false">Free pawn</button></div>
         <p class="move-budget" id="moveBudget" aria-live="polite">Regular move available · Free pawn available</p>
         <section class="shot-panel" id="shotPanel" aria-label="Goalkeeper reaction" hidden><p class="eyebrow">A SHOT IS COMING</p><p id="shotSummary">Move your goalkeeper one square, or hold position.</p><p class="shot-odds" id="shotOdds"></p><p id="shotBreakdown" class="shot-breakdown"></p><p id="shotGeometry" class="shot-geometry"></p><p class="shot-legend">Goal / Save / Wide show the three possible outcomes. The blue reach area shows the keeper’s coverage.</p></section>
         <p class="action-help" id="actionHelp" aria-live="polite"></p>
         <button class="primary wide" id="skipBtn">End positioning turn <span>→</span></button>
       </section>
 
-      <section class="selected-panel"><p class="eyebrow">ON THE TACTICS BOARD</p><div class="selection-info" id="selectionInfo"><span class="selection-icon">♞</span><div><b>Select a footballer</b><small>Legal moves light up on the pitch.</small></div></div><div class="legend"><span><i class="legal-dot"></i> Move / pass</span><span><i class="tackle-dot"></i> Tackle</span></div></section>
+      <section class="selected-panel"><p class="eyebrow">ON THE TACTICS BOARD</p><div class="selection-info" id="selectionInfo"><span class="selection-icon">♞</span><div><b>Select a footballer</b><small>Choose how to shape the play.</small></div></div><div class="action-context" id="actionContext" data-action="offball" aria-live="polite"><b id="actionType">Three ways to play</b><p id="actionRule">Move without the ball, dribble with it, or pass / shoot.</p></div><div class="legend" aria-label="Target markers"><span><i class="move-dot"></i> Move off ball</span><span><i class="dribble-dot"></i> Dribble</span><span><i class="pass-dot"></i> Pass / kick</span><span><i class="shot-dot"></i> Shoot at goal</span><span><i class="tackle-dot"></i> Tackle</span></div></section>
       <div class="small-note"><span>01 / THE IDEA</span><p>Find the space.<br>Make the pass.<br>Think a move ahead.</p></div>
     </aside>
     <section class="pitch-area" aria-label="Football Chess playing board">
@@ -75,6 +76,12 @@
     <section><b>03 · Keep the ball moving</b><p>Kicks follow the carrier’s kicking directions. A short pass stops at the first piece in its path; an empty target leaves a loose ball. A friendly back-pass to the king requires an immediate kick: the king cannot hold or dribble it.</p></section>
     <section><b>04 · Pick your finish</b><p>Aim at any legal goal target in files e–h. The shooter commits the target, then the defending king may move one legal square or hold before the shot resolves. Only kings can enter the four-by-two goal boxes.</p></section>
   </div>
+  <h3>Move, dribble, or send the ball</h3>
+  <div class="rule-table-wrap"><table class="rule-table action-reference"><thead><tr><th>Action</th><th>What moves?</th><th>When?</th></tr></thead><tbody><tr><td>Move without ball</td><td>The selected player moves. The ball stays unless the move collects it or wins a tackle.</td><td>Attack or defence positioning</td></tr><tr><td>Dribble</td><td>The carrier and ball move together, using that piece’s movement pattern.</td><td>Attack positioning; uses the same regular action as an off-ball move</td></tr><tr><td>Pass / shoot</td><td>The carrier stays in place and kicks the ball. A teammate receives a pass; an empty square leaves it loose; a goal cell declares a shot.</td><td>Kicking phase, kickoff, or mandatory keeper release</td></tr></tbody></table></div>
+  <p>During positioning, choose an off-ball move or a dribble for your regular action. You also have a free one-square pawn action, which can move without the ball, dribble, or collect a loose ball, but cannot tackle. The defender then positions before the attacker kicks. A turnover restarts positioning for the new attacker.</p>
+  <h3>Each piece has movement and kicking patterns</h3>
+  <div class="rule-table-wrap"><table class="rule-table action-reference"><thead><tr><th>Piece</th><th>Off-ball move / dribble</th><th>Pass / shoot</th></tr></thead><tbody><tr><td>King</td><td>One square in any direction</td><td>Straight or diagonal rays, like a queen</td></tr><tr><td>Queen</td><td>Straight or diagonal, up to 10 squares</td><td>Straight or diagonal rays</td></tr><tr><td>Rook</td><td>Horizontal or vertical, up to 10 squares</td><td>Horizontal or vertical rays</td></tr><tr><td>Bishop</td><td>Diagonal, up to 10 squares</td><td>Diagonal rays</td></tr><tr><td>Knight</td><td>One L-shaped jump</td><td>One L-shaped kick</td></tr><tr><td>Pawn</td><td>One square forward, back, left, or right</td><td>Forward, backward, left, or right rays</td></tr></tbody></table></div>
+  <p>Movement and dribbling share the same piece pattern. Passing and shooting have their own range: ray kicks have no ten-square cap, while a knight kicks one L-shaped jump. Long passes lose accuracy. Ordinary passes stop at the first player; knight kicks jump over intervening players. Shots can pass the defending keeper’s square because the keeper gets a reaction; other players block the shot. Only kings may occupy goal areas.</p>
   <h3>A finish depends on the whole shot</h3>
   <p>Closer shots give the keeper less time to react. A tighter shooting angle makes the target harder to hit. The keeper’s position matters along the actual shot path, from the shooter to the chosen goal target: a shot travelling farther from the keeper is harder to save.</p>
   <p>The model combines the chance of hitting the target with the chance of beating the keeper. A longer flight lets the keeper cover more ground. Kings have their full saving reach inside their own four-by-two box; outside it, they can only make a weaker block. The blue reach area and dashed coverage line show this geometry during a shot preview.</p>
@@ -95,6 +102,6 @@
 </dialog>
 <dialog id="resultDialog"><div class="dialog-heading"><p class="eyebrow">THE FINAL WHISTLE</p><button class="icon-button" data-close="resultDialog" aria-label="Close result">×</button></div><div class="result-ball">⚽</div><h2 id="resultTitle">Honours even.</h2><p id="resultScore" class="result-score">0 : 0</p><p id="resultText"></p><button class="primary wide" id="rematchBtn">Play another match <span>↗</span></button></dialog>
 <dialog id="confirmDialog"><div class="dialog-heading"><p class="eyebrow">START FRESH</p><button class="icon-button" data-close="confirmDialog" aria-label="Cancel">×</button></div><h2>A new game?</h2><p>Your current match will be replaced.</p><div class="dialog-actions"><button class="utility-button" data-close="confirmDialog">Keep playing</button><button class="primary" id="confirmNewBtn">New match ↗</button></div></dialog>
-<script type="module" src="app.js?v=7e5a963ea272"></script>
+<script type="module" src="app.js?v=e257d9a55666"></script>
 </body>
 </html>

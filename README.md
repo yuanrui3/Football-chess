@@ -34,13 +34,41 @@ One seeded uniform draw resolves the mutually exclusive outcomes, with goal firs
 
 The choice of distance, angle and keeper alignment as factors is informed by [goalkeeper positioning research](https://pmc.ncbi.nlm.nih.gov/articles/PMC5800537/) and [Hudl's explanation of expected goals](https://support.hudl.com/s/article/expected-goals?language=en_US&topic=Statsbomb_Global_Football_Data_Glossary); the formula and coefficients above are custom balancing choices.
 
-## Movement and passing
+## Moving, dribbling, and kicking
 
-- Regular movement uses chess patterns, capped at ten squares per move. Kings move one square; pawns move one square in any cardinal direction. Pawns still tackle on forward diagonals.
-- The free pawn action is a cardinal reposition, optionally with the ball or to collect a loose ball. It cannot tackle. It is available in each ordinary positioning turn, not during the special keeper reaction.
-- Only kings enter the four-column, two-row goal areas.
-- Non-knight pieces kick along their movement directions; kings can kick farther than they move. Knights kick one L-shaped jump. Ordinary passes stop at the first piece.
+These are distinct actions. Moving a piece does not automatically pass the ball, and a kick does not move the kicker.
+
+| Action | What moves | When available | Cost |
+| --- | --- | --- | --- |
+| Move without the ball | The selected piece; the ball stays where it is. Landing on a loose ball collects it. | Your team's positioning turn | One regular move, or the free pawn action for a pawn |
+| Dribble | The ball carrier and ball move together. | Your team's positioning turn | One regular move, or the free pawn action if the carrier is a pawn |
+| Pass or shoot | The ball travels; the kicker stays in place. | Kickoff, the attacking kick phase, or a required goalkeeper release | The kick action |
+| Tackle | A challenger moves to a highlighted square beside the opposing carrier and attempts to take possession. | Your team's positioning turn | One regular move; never the free pawn action |
+
+### Piece reference
+
+Off-ball movement and dribbling currently use the same pattern for a given piece. Passing and shooting use the separate kick pattern and range below.
+
+| Piece | Move without ball / dribble | Pass / shoot |
+| --- | --- | --- |
+| King (goalkeeper) | One square horizontally, vertically, or diagonally | Any distance horizontally, vertically, or diagonally |
+| Queen | Up to 10 squares horizontally, vertically, or diagonally | Any distance horizontally, vertically, or diagonally |
+| Rook | Up to 10 squares horizontally or vertically | Any distance horizontally or vertically |
+| Bishop | Up to 10 squares diagonally | Any distance diagonally |
+| Knight | One L-shaped jump: two squares on one axis and one on the other | One L-shaped jump |
+| Pawn | One square forward, backward, left, or right | Any distance forward, backward, left, or right |
+
+Ordinary movement requires a clear path and an empty destination. Knights jump over intervening pieces, including while dribbling. Ordinary kicks stop at the first piece: a teammate receives the ball, an opponent intercepts it, and an empty destination leaves a loose ball. Knight kicks jump over intervening pieces. A shot uses the piece's kick pattern to reach one of the four goal targets; other pieces block its path, while the opposing goalkeeper instead gets a reaction before the shot resolves.
+
+Only kings may occupy the four-column, two-row goal areas. Pawns tackle on their forward diagonals; their sideways and backward movement does not add new tackle directions. Tackles against a knight succeed 50% of the time; other legal tackles succeed automatically. No piece is captured.
+
+### Turn order and exceptions
+
+After kickoff, an ordinary round is **attacking positioning → defending positioning → attacking kick**. Each positioning turn has one regular move and an optional free one-square pawn action, in either order. Dribbling uses a positioning action; it is not a pass or an extra action. End positioning turn forfeits any actions remaining for that team. A turnover starts a fresh attacking positioning turn for the new team; if the ball is still loose after both positioning turns, a new positioning round begins without a kick.
+
+- The free pawn action can move a pawn without the ball, dribble with it, or collect a loose ball. It cannot tackle. It is available in each ordinary positioning turn, not during the special keeper reaction.
 - A teammate's back-pass to the king requires an immediate kick with no positioning or dribbling first. A king receiving an opponent's pass or saving a shot may hold normally.
+- A shot pauses play for the defending king's one-square reaction or hold; it does not grant a regular positioning turn or free pawn action. A wide shot gives the defending keeper an immediate goal kick.
 - Passes through ten squares have 100% accuracy. Each extra square costs ten percentage points, with a floor of 25%. Distances use the maximum coordinate gap. Inaccurate passes scatter to an empty square near the intended target. Shots use the continuous model above; the long-pass curve applies to passes.
 - Shots, long passes, and 50% knight tackles use serializable seeded randomness; previews and AI planning do not consume random draws. Undo restores the prior random state.
 
