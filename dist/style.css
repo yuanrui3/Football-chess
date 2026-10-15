@@ -30,3 +30,15 @@
 .keeper-coverage{fill:none;stroke:#a2dddb;stroke-width:3;stroke-dasharray:8 7;stroke-linecap:round;pointer-events:none}
 .intercept-point{fill:#b8f0e6;stroke:#235b58;stroke-width:2;pointer-events:none}
 .model-sources a{text-underline-offset:3px}
+
+/* Keep both squads visible in a desktop viewport. */
+.masthead{padding:12px 32px}.brand{font-size:12px}.brand-mark{width:42px;height:42px}.brand-mark span{font-size:24px}
+.page-intro{padding:12px 0 14px}.page-intro .eyebrow{font-size:8px;margin-bottom:6px}.page-intro h1{font-size:23px;line-height:1.2}
+.scoreboard{height:80px;margin-bottom:16px}.score{font-size:34px}.team-name{font-size:14px}.team-name small{font-size:8px}
+.game-layout{grid-template-columns:210px minmax(0,1fr) 200px;gap:26px}.left-panel,.right-panel{padding-top:0}.game-layout .panel{padding:18px}
+.pitch-area{width:min(100%,600px,max(280px,calc(80dvh - 260.8px)));max-width:600px}.pitch{container-type:inline-size}.piece{font-size:clamp(12px,5cqw,32px)}
+.goal-wrap{height:32px}.goal-file{font-size:7px}.goal-odds{font-size:10px}.goal-cell{padding:2px 0;gap:1px}.pitch-caption{margin-top:8px}.kick-details{font-size:9px}.kick-details:not(:empty){margin-top:5px;padding:6px 9px}
+@media(max-width:1100px) and (min-width:851px){.game-layout{grid-template-columns:190px minmax(0,1fr) 170px;gap:22px}.game-layout .panel{padding:15px}.team-name{min-width:155px}}
+@media(max-width:850px){.game-layout{display:flex;flex-direction:column;align-items:center;gap:20px}.pitch-area{order:0}.left-panel{order:1;width:100%}.right-panel{order:2;width:100%}.left-panel{display:grid;grid-template-columns:1fr 1fr;gap:18px}.selected-panel{margin-top:0}.opponent-controls{margin-top:0}.small-note{display:none}.right-panel{display:grid;grid-template-columns:160px 1fr;gap:18px}.quick-rule{display:none}}
+@media(max-width:600px){.masthead{padding:12px 20px}.page-intro h1{font-size:20px;letter-spacing:-.7px}.team-name{font-size:10px}.team-name small{font-size:6px}.left-panel{grid-template-columns:1fr;gap:12px}.right-panel{grid-template-columns:120px 1fr;gap:14px}.pitch-area{padding:0 5px}.game-layout .panel{padding:18px}}
+@media(max-height:600px){.pitch-area{width:min(100%,440px)}}

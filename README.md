@@ -58,6 +58,6 @@ Timed or untimed matches, pause, undo, rotation, local saving, and adjustable op
 - `dist/engine.js`: immutable rules, seeded outcomes, computer decisions
 - `tests/engine.test.mjs`: deterministic rule scenarios and extended AI play
 
-No build or runtime dependencies. Serve `dist/` using a static HTTP server. Run `npm test` with Node.js.
+No build or runtime dependencies. Serve `dist/` using a static HTTP server. Run `npm test` with Node.js. Before each deployment, run `node scripts/version-assets.mjs` so the HTML, controller, engine and stylesheet use matching content versions instead of stale browser caches.
 
 Validation includes 57 engine tests, continuous geometry and deterministic outcome boundaries, movement and possession invariants, and DOM interaction checks. Actual browser rendering and animation could not be visually verified in this environment.
