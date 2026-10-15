@@ -6,7 +6,7 @@
   <meta name="description" content="Football tactics meet chess. Play an eleven-a-side tactical match on a 12 by 15 pitch, with goalkeeper reactions, shot odds, and chess-inspired football.">
   <title>Football Chess · The beautiful game, one move at a time</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23214f3b'/%3E%3Ctext x='32' y='48' font-size='47' text-anchor='middle' fill='%23dbef84'%3E♞%3C/text%3E%3C/svg%3E">
-  <link rel="stylesheet" href="style.css?v=4b68179cf237">
+  <link rel="stylesheet" href="style.css?v=3426c412d51e">
 </head>
 <body>
 <header class="masthead">
@@ -40,7 +40,7 @@
         <p class="action-help" id="actionHelp" aria-live="polite"></p>
         <button class="primary wide" id="skipBtn">End positioning turn <span>→</span></button>
       </section>
-      <section class="opponent-controls" id="opponentControls"><label class="field-label" for="aiPace">OPPONENT PACE</label><div class="select-wrap"><select id="aiPace"><option value="3000" selected>Relaxed · 3 seconds</option><option value="1800">Standard · 1.8 seconds</option><option value="600">Quick · 0.6 seconds</option></select></div></section>
+
       <section class="selected-panel"><p class="eyebrow">ON THE TACTICS BOARD</p><div class="selection-info" id="selectionInfo"><span class="selection-icon">♞</span><div><b>Select a footballer</b><small>Legal moves light up on the pitch.</small></div></div><div class="legend"><span><i class="legal-dot"></i> Move / pass</span><span><i class="tackle-dot"></i> Tackle</span></div></section>
       <div class="small-note"><span>01 / THE IDEA</span><p>Find the space.<br>Make the pass.<br>Think a move ahead.</p></div>
     </aside>
@@ -55,6 +55,8 @@
     </section>
     <aside class="right-panel">
       <section class="possession-card"><div class="ball-emblem">⚽</div><p class="eyebrow">IN POSSESSION</p><h3 id="possessionTeam">Ivory FC</h3><p id="possessionDetail">Queen · f8</p></section>
+
+      <section class="opponent-controls" id="opponentControls"><label class="field-label" for="aiDifficulty">COMPUTER DIFFICULTY</label><div class="select-wrap"><select id="aiDifficulty"><option value="casual" selected>Casual · reactive</option><option value="tactical">Tactical · plans ahead</option></select></div><p class="difficulty-help" id="difficultyHelp">Reacts to the current position with straightforward tactics.</p><label class="field-label" for="aiPace">OPPONENT PACE</label><div class="select-wrap"><select id="aiPace"><option value="3000" selected>Relaxed · 3 seconds</option><option value="1800">Standard · 1.8 seconds</option><option value="600">Quick · 0.6 seconds</option></select></div></section>
       <section class="panel match-feed"><div class="section-heading"><h3>Match journal</h3><span id="feedCount">00</span></div><ol id="journal"><li class="empty-feed">A fresh pitch.<br>A game waiting to happen.</li></ol></section>
       <section class="quick-rule"><span class="quote-mark">“</span><p>No captures.<br>Just clever football.</p><small>Tackle the ball carrier, pass between your pieces, and find a route to the net.</small><button class="text-button compact" id="detailsBtn">Explore the rules ↗</button></section>
     </aside>
@@ -81,6 +83,8 @@
   <p>Passes up to ten squares have 100% accuracy. Beyond ten squares, accuracy falls by ten percentage points per additional square, to a minimum of 25%. Target previews show the current odds before you kick.</p>
   <h3>Tackles, pawns, and knights</h3>
   <p>A piece that can reach the opposing carrier using its capture pattern may tackle: choose a highlighted landing square beside the carrier. Both footballers stay on the pitch. Tackles against a knight succeed 50% of the time; other legal tackles succeed 100%. The defender moves to the chosen adjacent square either way. A failed tackle leaves the knight with the ball and consumes the defender’s regular move. Pawn tackles remain forward-diagonal. A free pawn move only repositions the pawn and cannot tackle. Knights can still jump over defenders while dribbling.</p>
+  <h3>Computer difficulty</h3>
+  <p>Casual chooses actions using immediate positional and scoring heuristics. Tactical looks ahead at your replies and weighs the expected outcomes of shots, passes, and risky tackles. Both levels use the same rules and scoring odds. Opponent pace controls the pause between actions independently of difficulty. You can change either setting during a match.</p>
   <h3>Match conventions</h3>
   <p>Pieces are never captured. There is no check, castling, en passant, or pawn promotion. Knights kick with one L-shaped jump; other kicks follow their movement directions. Turnovers restart the sequence for the new attacking team. A goal resets the formation and gives kickoff to the conceding side. Most goals at full time wins; the clock stops when paused.</p>
   <h3>Model notes</h3>
@@ -91,6 +95,6 @@
 </dialog>
 <dialog id="resultDialog"><div class="dialog-heading"><p class="eyebrow">THE FINAL WHISTLE</p><button class="icon-button" data-close="resultDialog" aria-label="Close result">×</button></div><div class="result-ball">⚽</div><h2 id="resultTitle">Honours even.</h2><p id="resultScore" class="result-score">0 : 0</p><p id="resultText"></p><button class="primary wide" id="rematchBtn">Play another match <span>↗</span></button></dialog>
 <dialog id="confirmDialog"><div class="dialog-heading"><p class="eyebrow">START FRESH</p><button class="icon-button" data-close="confirmDialog" aria-label="Cancel">×</button></div><h2>A new game?</h2><p>Your current match will be replaced.</p><div class="dialog-actions"><button class="utility-button" data-close="confirmDialog">Keep playing</button><button class="primary" id="confirmNewBtn">New match ↗</button></div></dialog>
-<script type="module" src="app.js?v=077f12bfebfe"></script>
+<script type="module" src="app.js?v=7e5a963ea272"></script>
 </body>
 </html>

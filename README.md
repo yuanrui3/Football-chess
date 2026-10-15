@@ -50,14 +50,25 @@ The shot coefficients, accuracy curve, pawn-kick expansion and goal-box dimensio
 
 Timed or untimed matches, pause, undo, rotation, local saving, and adjustable opponent pace (3 seconds by default). Computer actions have move animations, retained paths, and descriptions. Reduced-motion preferences are respected. The shot-model update retains the version 2 save key and active matches. The earlier board expansion used a new save key because the roster and geometry changed; version 1 saves remain untouched and opponent pace is retained when starting the new rules.
 
+### Computer difficulty
+
+Choose either level in the Computer difficulty control beside the pitch, before or during a match. The selection is saved without resetting the match. Existing saves default to Casual. Opponent pace remains a separate setting.
+
+- **Casual** preserves the original reactive AI. It ranks legal actions using possession, tackles, attacking progress, shooting opportunities, pass accuracy, and keeper positioning. It does not search a sequence of opponent replies.
+- **Tactical** searches up to six actions through the actual phase and movement-budget rules, considering both teams' replies. It shortlists candidates and uses a fixed search budget, so it cannot examine every continuation. Shots, inaccurate passes, and knight tackles are weighted by their possible outcomes. A missed pass uses a reproducible representative landing square, rather than every possible scatter square.
+
+Both levels use the same legal moves, scoring odds, and optimal immediate keeper reaction. Neither reads future match randomness or changes it while planning. Tactical runs in a module Web Worker to keep the controls responsive; cancelling or changing the match discards stale results. Unsupported workers fall back to the same bounded policy on the main thread, and a worker timeout falls back to Casual for that action. Search limits depend on actions and node budgets, not processor speed.
+
 ## Source and validation
 
 - `dist/index.html`: interface and custom rules
 - `dist/style.css`: responsive pitch and interface
 - `dist/app.js`: input, phase controls, clock, AI scheduling, browser persistence
 - `dist/engine.js`: immutable rules, seeded outcomes, computer decisions
+- `dist/ai-worker.js`: background Tactical planning
 - `tests/engine.test.mjs`: deterministic rule scenarios and extended AI play
+- `tests/ai.test.mjs`: both policies, legal play, fair randomness, and tactical scenarios
 
-No build or runtime dependencies. Serve `dist/` using a static HTTP server. Run `npm test` with Node.js. Before each deployment, run `node scripts/version-assets.mjs` so the HTML, controller, engine and stylesheet use matching content versions instead of stale browser caches.
+No build or runtime dependencies. Serve `dist/` using a static HTTP server. Run `npm test` with Node.js. Before each deployment, run `node scripts/version-assets.mjs` so the HTML, controller, engine, worker, and stylesheet use matching content versions instead of stale browser caches.
 
-Validation includes 57 engine tests, continuous geometry and deterministic outcome boundaries, movement and possession invariants, and DOM interaction checks. Actual browser rendering and animation could not be visually verified in this environment.
+Validation covers continuous shot geometry and deterministic outcome boundaries, movement and possession invariants, both AI levels across every phase and move budget, seed-independent planning, and extended legal play. DOM interaction checks cover saved preferences, independent pace, worker failures, and stale-result cancellation. Short deterministic match benchmarks are smoke checks rather than evidence of a general win rate.

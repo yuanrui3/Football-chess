@@ -42,3 +42,7 @@
 @media(max-width:850px){.game-layout{display:flex;flex-direction:column;align-items:center;gap:20px}.pitch-area{order:0}.left-panel{order:1;width:100%}.right-panel{order:2;width:100%}.left-panel{display:grid;grid-template-columns:1fr 1fr;gap:18px}.selected-panel{margin-top:0}.opponent-controls{margin-top:0}.small-note{display:none}.right-panel{display:grid;grid-template-columns:160px 1fr;gap:18px}.quick-rule{display:none}}
 @media(max-width:600px){.masthead{padding:12px 20px}.page-intro h1{font-size:20px;letter-spacing:-.7px}.team-name{font-size:10px}.team-name small{font-size:6px}.left-panel{grid-template-columns:1fr;gap:12px}.right-panel{grid-template-columns:120px 1fr;gap:14px}.pitch-area{padding:0 5px}.game-layout .panel{padding:18px}}
 @media(max-height:600px){.pitch-area{width:min(100%,440px)}}
+
+/* Difficulty and pace remain visible beside the pitch. */
+.right-panel .opponent-controls{margin-top:16px;padding:15px;border:1px solid var(--line);border-radius:4px;background:#f9f8f1}.opponent-controls .field-label{margin:0 0 7px}.opponent-controls .field-label:not(:first-child){margin-top:12px}.difficulty-help{font-size:10px;line-height:1.55;color:var(--muted);margin:8px 0 0}.right-panel .opponent-controls .select-wrap select{font-size:11px;padding:9px 7px}
+@media(max-width:850px){.right-panel .possession-card{grid-column:1;grid-row:1}.right-panel .opponent-controls{grid-column:2;grid-row:1;margin:0;display:block}.right-panel .match-feed{grid-column:1/-1}.right-panel .difficulty-help{font-size:10px}.opponent-controls .select-wrap{width:100%}}

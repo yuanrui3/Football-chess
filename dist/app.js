@@ -1,4 +1,4 @@
-import {createGame, legalMoves, legalKicks, applyMove, applyKick, skipMove, chooseAIAction, currentTeam, BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, isBox, shotChance, shotModel} from './engine.js?v=e22ffad41c35';
+import {createGame, legalMoves, legalKicks, applyMove, applyKick, skipMove, chooseAIAction, currentTeam, BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, isBox, shotChance, shotModel} from './engine.js?v=512f2566c606';
 
 const $ = id => document.getElementById(id);
 const NAMES = {K:'Goalkeeper',Q:'Queen',R:'Rook',B:'Bishop',N:'Knight',P:'Pawn'};
@@ -16,13 +16,15 @@ const ballSVG = '<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy=
 let game = createGame();
 let stage='setup',paused=false,remaining=600,duration=10,flipped=false;
 let selectedId=null,history=[],aiTimer=null,toastTimer=null,lastTick=Date.now();
-let storageOK=true,aiPace=3000,lastComputerAction=null,freePawnMode=false,legacyMatch=false;
+let storageOK=true,aiPace=3000,aiDifficulty='casual',lastComputerAction=null,freePawnMode=false,legacyMatch=false;
+let aiWorker=null,aiWatchdog=null,aiGeneration=0;
 try {
   const saved=JSON.parse(localStorage.getItem(STORE)||'null');
   if(saved?.version===2&&saved.game?.pieces?.length===22&&['setup','playing','finished'].includes(saved.stage)) {
     game=saved.game;stage=saved.stage;remaining=saved.remaining;duration=saved.duration;flipped=!!saved.flipped;
     paused=stage==='playing';history=Array.isArray(saved.history)?saved.history.slice(-80):[];
     aiPace=AI_PACES.includes(saved.aiPace)?saved.aiPace:3000;lastComputerAction=saved.lastComputerAction||null;
+    aiDifficulty=saved.aiDifficulty==='tactical'?'tactical':'casual';
   } else {
     const old=JSON.parse(localStorage.getItem('football-chess-match-v1')||'null');
     if(old?.game){legacyMatch=true;aiPace=AI_PACES.includes(old.aiPace)?old.aiPace:3000;duration=[0,5,10,15].includes(old.duration)?old.duration:10;remaining=duration*60;flipped=!!old.flipped;game=createGame({mode:old.game.mode,minutes:duration||10});}
@@ -36,13 +38,15 @@ for(let y=0;y<H;y++)for(let x=0;x<W;x++) {
 }
 $('ranks').innerHTML=Array.from({length:H},(_,i)=>`<span>${H-i}</span>`).join('');
 $('mode').value=game.mode==='local'?'local':'solo';$('duration').value=String(duration);$('kickoff').value=game.attack;$('aiPace').value=String(aiPace);
+$('aiDifficulty').value=aiDifficulty;
 
-function save(){try{localStorage.setItem(STORE,JSON.stringify({version:2,game,stage,paused,remaining,duration,flipped,aiPace,lastComputerAction,history:history.slice(-80)}));}catch{storageOK=false;$('saveNote').textContent='Match saving is unavailable in this browser.';}}
+function save(){try{localStorage.setItem(STORE,JSON.stringify({version:2,game,stage,paused,remaining,duration,flipped,aiPace,aiDifficulty,lastComputerAction,history:history.slice(-80)}));}catch{storageOK=false;$('saveNote').textContent='Match saving is unavailable in this browser.';}}
 function toast(text){clearTimeout(toastTimer);$('toast').textContent=text;$('toast').classList.add('visible');toastTimer=setTimeout(()=>$('toast').classList.remove('visible'),3800);}
 function isComputer(){return game.mode==='solo'&&currentTeam(game)==='black';}
 function anyDialog(){return !!document.querySelector('dialog[open]');}
 function blocked(){return stage!=='playing'||paused||anyDialog()||isComputer();}
-function cancelAI(){clearTimeout(aiTimer);aiTimer=null;}
+function stopAIWorker(){clearTimeout(aiWatchdog);aiWatchdog=null;if(aiWorker){aiWorker.terminate();aiWorker=null;}}
+function cancelAI(){clearTimeout(aiTimer);aiTimer=null;stopAIWorker();aiGeneration++;}
 function teamLabel(team){return game.mode==='solo'?(team==='white'?'Your':'Computer’s'):TEAM[team]+'’s';}
 function pieceLabel(piece){return `${NAMES[piece.type]}${/\d$/.test(piece.id)?' '+piece.id.at(-1):''}`;}
 function setupMoves(piece){
@@ -139,13 +143,14 @@ function render(){
   if(positioning){if(budget.normalUsed&&!budget.pawnUsed)freePawnMode=true;else if(budget.pawnUsed&&!budget.normalUsed)freePawnMode=false;}
   $('setupPanel').hidden=stage!=='setup';$('turnPanel').hidden=stage==='setup';
   $('opponentControls').hidden=game.mode!=='solo';$('computerRecap').hidden=!lastComputerAction||game.mode!=='solo';$('computerActionText').textContent=lastComputerAction?.summary||'';
+  $('difficultyHelp').textContent=aiDifficulty==='tactical'?'Plans ahead against your replies and weighs risky outcomes.':'Reacts to the current position with straightforward tactics.';
   $('whiteScore').textContent=game.score.white;$('blackScore').textContent=game.score.black;
   $('whiteSub').textContent=(game.mode==='solo'?'YOU':'PLAYER 1')+' · ATTACKING '+(flipped?'↓':'↑');$('blackSub').textContent=(game.mode==='solo'?'COMPUTER':'PLAYER 2')+' · ATTACKING '+(flipped?'↑':'↓');
   $('turnNumber').textContent=`POSSESSION ${String(game.turn).padStart(2,'0')}`;
   let heading,help,status;
   if(stage==='finished'){heading='Full time.';help='The final whistle has sounded. Start a new match to play again.';status='Full time. Thanks for playing.';}
   else if(paused){heading='Take a breath.';help='The match is paused. Resume when you’re ready.';status='Match paused.';}
-  else if(isComputer()&&stage==='playing'){heading=reacting?'Computer’s keeper.':'Computer’s turn.';help=reacting?'Obsidian can move its keeper once before the shot is resolved.':kicking?'Obsidian is choosing a pass or shot.':'Obsidian is using its normal move and free pawn move.';status='Obsidian is thinking…';}
+  else if(isComputer()&&stage==='playing'){heading=reacting?'Computer’s keeper.':'Computer’s turn.';help=reacting?'Obsidian can move its keeper once before the shot is resolved.':aiDifficulty==='tactical'?'Obsidian is planning ahead and considering your replies.':kicking?'Obsidian is choosing a pass or shot.':'Obsidian is using its normal move and free pawn move.';status=`Obsidian · ${aiDifficulty==='tactical'?'Tactical':'Casual'} · thinking…`;}
   else if(reacting){heading='Position your keeper.';help='The shot is committed. Move your king one square, or hold position. The displayed scoring chance is then rolled.';status=`${TEAM[acting]} · keeper reaction`;}
   else if(game.phase==='keeperRelease'){const goalKick=game.releaseReason==='goalKick';heading=goalKick?'Goal kick.':'King must release.';help=goalKick?'The shot went wide. The keeper restarts from the goal box with an immediate kick.':'A teammate passed to the king. Choose an immediate kick; the king cannot move or hold this back-pass.';status=`${TEAM[acting]} · ${goalKick?'goal kick':'immediate keeper kick'}`;}
   else if(game.phase==='kickoff'){heading=game.mode==='solo'?'Your kickoff.':TEAM[acting]+' kicks off.';help='Choose a pass destination, or a lit goal cell to commit a shot.';status='Choose a pass to start play.';}
@@ -195,9 +200,25 @@ function animateComputerMove(action){
 }
 function scheduleAI(){
   if(stage!=='playing'||paused||anyDialog()||!isComputer())return;
-  aiTimer=setTimeout(()=>{aiTimer=null;if(stage!=='playing'||paused||anyDialog()||!isComputer())return;
-    try{const action=chooseAIAction(game);if(!action)throw new Error('No legal action found.');if(action.type==='move')commit(applyMove(game,action.pieceId,action.x,action.y,{freePawn:!!action.freePawn}));else if(action.type==='kick')commit(applyKick(game,action.x,action.y));else commit(skipMove(game));}
-    catch(err){paused=true;render();toast('Play paused: '+err.message);}
+  const requestId=aiGeneration;
+  const stillCurrent=()=>requestId===aiGeneration&&stage==='playing'&&!paused&&!anyDialog()&&isComputer();
+  const fail=err=>{if(!stillCurrent())return;stopAIWorker();paused=true;render();toast('Play paused: '+err.message);};
+  const receive=action=>{
+    if(!stillCurrent())return;stopAIWorker();
+    try{if(!action)throw new Error('No legal action found.');if(action.type==='move')commit(applyMove(game,action.pieceId,action.x,action.y,{freePawn:!!action.freePawn}));else if(action.type==='kick')commit(applyKick(game,action.x,action.y));else commit(skipMove(game));}catch(err){fail(err);}
+  };
+  const fallback=(difficulty=aiDifficulty)=>{if(!stillCurrent())return;stopAIWorker();try{receive(chooseAIAction(game,{difficulty}));}catch(err){fail(err);}};
+  aiTimer=setTimeout(()=>{
+    aiTimer=null;if(!stillCurrent())return;
+    if(aiDifficulty==='tactical'&&typeof window.Worker==='function'){
+      try{
+        aiWorker=new window.Worker(new URL('./ai-worker.js?v=baddb14c3040',import.meta.url),{type:'module',name:'football-chess-tactical'});
+        aiWorker.onmessage=event=>{if(!stillCurrent()||event.data?.requestId!==requestId)return;if(event.data.error)fallback();else receive(event.data.action);};
+        aiWorker.onerror=event=>{event.preventDefault?.();fallback();};
+        aiWatchdog=setTimeout(()=>fallback('casual'),4000);
+        aiWorker.postMessage({requestId,state:game,difficulty:aiDifficulty});
+      }catch{fallback();}
+    }else fallback();
   },aiPace);
 }
 function drawPreview(x,y){
@@ -241,6 +262,7 @@ for(const id of ['goalTop','goalBottom']){
 }
 function refreshSetup(){cancelAI();game=createGame({mode:$('mode').value,minutes:Number($('duration').value)||10,kickoff:$('kickoff').value});duration=Number($('duration').value);remaining=duration*60;selectedId=null;lastComputerAction=null;freePawnMode=false;history=[];render();save();}
 $('aiPace').addEventListener('change',()=>{const value=Number($('aiPace').value);aiPace=AI_PACES.includes(value)?value:3000;render();save();});
+$('aiDifficulty').addEventListener('change',()=>{aiDifficulty=$('aiDifficulty').value==='tactical'?'tactical':'casual';$('aiDifficulty').value=aiDifficulty;render();save();});
 for(const id of ['mode','kickoff'])$(id).addEventListener('change',refreshSetup);
 $('duration').addEventListener('change',()=>{duration=Number($('duration').value);remaining=duration*60;game.minutes=duration||10;render();save();});
 $('normalMoveBtn').addEventListener('click',()=>{if(blocked()||game.positionBudget?.normalUsed)return;freePawnMode=false;selectedId=null;render();});
