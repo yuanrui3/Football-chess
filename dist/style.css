@@ -19,3 +19,5 @@
 
 /* Expanded controller states and previews. */
 .move-modes[hidden],.move-budget[hidden]{display:none!important}.goal-targets{display:flex}.goal-cell{flex:1;min-width:0}.accuracy-badge{position:absolute;left:2px;bottom:1px;z-index:7;font-size:8px;font-weight:700;line-height:1.3;padding:1px 2px;color:#183d2a;background:#e5ed9f;border-radius:2px;pointer-events:none}.keeper-chance{background:#f0d39e}.trajectory{stroke:#f0ed9b;stroke-width:5;stroke-dasharray:12 9;fill:none}.shot-path{stroke:#f2ba72;stroke-width:7;stroke-dasharray:16 8;fill:none}.pitch-area.flipped .accuracy-badge{transform:rotate(180deg)}@media(max-width:600px){.accuracy-badge{font-size:6px;left:1px;bottom:0;padding:1px}}
+
+.tackle-chance{background:#f4c59c;color:#533921}

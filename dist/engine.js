@@ -78,7 +78,7 @@ function movementShape(piece) {
 }
 
 function canTackle(state, piece, carrier) {
-  if (!carrier || carrier.team === piece.team || carrier.type === 'N') return false;
+  if (!carrier || carrier.team === piece.team) return false;
   const dx = carrier.x - piece.x, dy = carrier.y - piece.y;
   const reach = Math.max(Math.abs(dx), Math.abs(dy));
   if (!reach || reach > 10) return false;
@@ -118,7 +118,7 @@ export function legalMoves(state, pieceId, {freePawn = false} = {}) {
       for (const [dx, dy] of DIRECTIONS) {
         const x = carrier.x + dx, y = carrier.y + dy, occupant = pieceAt(state, x, y);
         if (distance(piece, {x, y}) <= 10 && allowedSquare(piece, x, y) && (!occupant || occupant.id === piece.id)) {
-          moves.set(`${x},${y}`, {x, y, type: 'tackle', targetId: carrier.id});
+          moves.set(`${x},${y}`, {x, y, type: 'tackle', targetId: carrier.id, tackleProbability: carrier.type === 'N' ? 0.5 : 1});
         }
       }
     }
@@ -262,9 +262,12 @@ export function applyMove(state, pieceId, x, y, {freePawn = false, roll} = {}) {
     return resolveShot(next, {roll, keeperMove: {pieceId, from, to: {x, y}}});
   }
   const previousAttack = state.attack, wasCarrier = next.ball.carrierId === piece.id;
+  const tackling = move.type === 'tackle', probability = move.tackleProbability ?? 1;
+  const outcomeRoll = tackling && probability < 1 ? nextRoll(next, roll) : undefined;
+  const tackleSuccess = tackling && (probability === 1 || outcomeRoll < probability);
   const collection = !next.ball.carrierId && next.ball.x === x && next.ball.y === y;
-  if (move.type === 'tackle' || collection || wasCarrier) next.ball = {x, y, carrierId: piece.id};
-  const turnover = (move.type === 'tackle' || collection) && piece.team !== previousAttack;
+  if (tackleSuccess || collection || wasCarrier) next.ball = {x, y, carrierId: piece.id};
+  const turnover = (tackleSuccess || collection) && piece.team !== previousAttack;
   if (turnover) {
     next.attack = piece.team;
     beginPosition(next);
@@ -275,12 +278,15 @@ export function applyMove(state, pieceId, x, y, {freePawn = false, roll} = {}) {
   }
   const target = state.pieces.find(p => p.id === move.targetId);
   next.lastAction = {
-    type: move.type === 'tackle' ? 'tackle' : 'move', team: piece.team, pieceId, from, to: {x, y},
+    type: tackling ? tackleSuccess ? 'tackle' : 'tackleMiss' : 'move', team: piece.team, pieceId, from, to: {x, y},
     path: target ? [from, {x: target.x, y: target.y}, {x, y}] : [from, {x, y}], freePawn,
-    ...(move.targetId ? {targetId: move.targetId} : {}), ...(collection ? {collection: true} : {})
+    ...(move.targetId ? {targetId: move.targetId} : {}), ...(collection ? {collection: true} : {}),
+    ...(tackling ? {probability, tackleSuccess, outcome: tackleSuccess ? 'won' : 'evaded', ...(outcomeRoll !== undefined ? {roll: outcomeRoll} : {})} : {})
   };
-  addLog(next, move.type === 'tackle'
-    ? `${title(piece.team)} ${NAMES[piece.type]} tackles and takes possession at ${square(x, y)}.`
+  addLog(next, tackling
+    ? tackleSuccess
+      ? `${title(piece.team)} ${NAMES[piece.type]} wins the tackle (${Math.round(probability * 100)}% chance) and takes possession at ${square(x, y)}.`
+      : `${title(piece.team)} ${NAMES[piece.type]} moves to ${square(x, y)}, but the knight evades the tackle (50% chance). The knight keeps the ball; the regular move is used.`
     : `${title(piece.team)} ${NAMES[piece.type]} ${wasCarrier ? 'dribbles' : 'moves'} to ${square(x, y)}${collection ? ' and collects the ball' : ''}${freePawn ? ' (free pawn move)' : ''}.`);
   return next;
 }
@@ -387,7 +393,7 @@ function kickValue(state, kick, team) {
     if (receiver.team !== team) return -700 - progress;
     const projected = {...state, ball: {x: receiver.x, y: receiver.y, carrierId: receiver.id}};
     value += 55 + bestShot(projected, team) * 350 + ({Q: 14, R: 11, B: 9, N: 30, P: 4, K: -20})[receiver.type];
-    if (state.pieces.some(p => p.team !== team && canTackle(projected, p, receiver))) value -= 65;
+    if (state.pieces.some(p => p.team !== team && canTackle(projected, p, receiver))) value -= 65 * (receiver.type === 'N' ? 0.5 : 1);
   } else {
     const target = {x: kick.x, y: kick.y};
     const ownDistance = Math.min(...state.pieces.filter(p => p.team === team && allowedSquare(p, kick.x, kick.y)).map(p => distance(p, target)));
@@ -408,7 +414,7 @@ function projectedMove(state, piece, move) {
 }
 
 function moveValue(state, projected, piece, move, team, beforeThreat) {
-  if (move.type === 'tackle') return 12000;
+  if (move.type === 'tackle') return 12000 * (move.tackleProbability ?? 1);
   const afterPiece = projected.pieces.find(p => p.id === piece.id), carrier = projected.pieces.find(p => p.id === projected.ball.carrierId);
   const forward = goalDistance(team, piece.y) - goalDistance(team, move.y);
   let value = 0;
@@ -418,7 +424,7 @@ function moveValue(state, projected, piece, move, team, beforeThreat) {
   } else if (carrier?.team === team) {
     if (carrier.id === piece.id) {
       value += forward * 12 + bestShot(projected, team) * 600;
-      if (projected.pieces.some(p => p.team !== team && canTackle(projected, p, carrier))) value -= 180;
+      if (projected.pieces.some(p => p.team !== team && canTackle(projected, p, carrier))) value -= 180 * (carrier.type === 'N' ? 0.5 : 1);
     } else {
       value += forward * 1.8 + (distance(piece, carrier) - distance(afterPiece, carrier)) * 2;
       if (piece.type === 'K') value -= Math.abs(move.y - (team === 'white' ? BOARD_HEIGHT - 1 : 0)) * 5;

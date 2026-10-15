@@ -7,7 +7,7 @@ Original handbook: https://pdfhost.io/v/bWV1pmicf_Football_Chess_Handbook.pdf
 
 Choose a computer opponent or two players on one device. Each team has one king, one queen, two rooks, two bishops, two knights, and three pawns on a 12×15 pitch. Goals occupy files e–h. Arrange your starting half if desired; move a teammate onto the kickoff carrier to change the taker. Click Kick off, then select a highlighted kick destination.
 
-Each attack or defense positioning turn provides one regular move plus an optional one-square pawn reposition, in either order. The controls show which actions remain; End positioning turn forfeits the unused actions. Then the attacker kicks. Knights jump while dribbling and cannot be tackled. Pieces are never captured.
+Each attack or defense positioning turn provides one regular move plus an optional one-square pawn reposition, in either order. The controls show which actions remain; End positioning turn forfeits the unused actions. Then the attacker kicks. Knights jump while dribbling. Tackles against a knight succeed 50% of the time; other legal tackles remain certain. The challenger moves to the selected adjacent square on either outcome. A failed attempt leaves the knight in possession and uses the challenger’s regular move while preserving any unused free pawn action. Pieces are never captured.
 
 A shot commits a specific goal cell and gives the defending king one extra one-square reaction move or a hold. After that reaction, scoring uses the maximum horizontal/vertical gap between the king and the impact square on the inner goal line:
 
@@ -28,7 +28,7 @@ A failed shot is saved into the keeper's possession. A successful shot resets fo
 - Non-knight pieces kick along their movement directions; kings can kick farther than they move. Knights kick one L-shaped jump. Ordinary passes stop at the first piece.
 - A teammate's back-pass to the king requires an immediate kick with no positioning or dribbling first. A king receiving an opponent's pass or saving a shot may hold normally.
 - Passes through ten squares have 100% accuracy. Each extra square costs ten percentage points, with a floor of 25%. Distances use the maximum coordinate gap. Inaccurate passes scatter to an empty square near the intended target. Shots use only the keeper odds above.
-- Actual outcomes use serializable seeded randomness; previews and AI planning do not consume random draws. Undo restores the prior random state.
+- Shots, long passes, and 50% knight tackles use serializable seeded randomness; previews and AI planning do not consume random draws. Undo restores the prior random state.
 
 The distance bands, accuracy curve, pawn-kick expansion and goal-box dimensions are explicit playable defaults documented in the in-game rules. The computer considers keeper reactions when choosing shots.
 
@@ -46,4 +46,4 @@ Timed or untimed matches, pause, undo, rotation, local saving, and adjustable op
 
 No build or runtime dependencies. Serve `dist/` using a static HTTP server. Run `npm test` with Node.js.
 
-Validation includes 46 engine tests, deterministic shooting boundaries, movement and possession invariants, and DOM interaction checks. Actual browser rendering and animation could not be visually verified in this environment.
+Validation includes 51 engine tests, deterministic shooting boundaries, movement and possession invariants, and DOM interaction checks. Actual browser rendering and animation could not be visually verified in this environment.

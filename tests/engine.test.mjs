@@ -233,11 +233,13 @@ test('tackling transfers possession without capturing and resets both budgets', 
   const state = fixture({ phase: 'defendMove', budget: { normalUsed: false, pawnUsed: true }, positions: { 'white-R1': [6, 7], 'black-R1': [2, 7] } });
   const tackle = legalMoves(state, 'black-R1').find(m => m.type === 'tackle');
   assert.ok(tackle);
-  const next = applyMove(state, 'black-R1', tackle.x, tackle.y);
+  assert.equal(tackle.tackleProbability, 1, 'ordinary carriers remain certain to tackle');
+  const next = applyMove(state, 'black-R1', tackle.x, tackle.y, { roll: .999999 });
   assert.equal(next.ball.carrierId, 'black-R1');
   assert.equal(next.attack, 'black');
   assert.equal(next.phase, 'attackMove');
   assert.deepEqual(next.positionBudget, freshBudget());
+  assert.equal(next.randomState, state.randomState, 'certain tackles consume no randomness');
   assert.deepEqual(next.pieces.find(p => p.id === 'white-R1'), state.pieces.find(p => p.id === 'white-R1'));
   assertIntegrity(next);
 });
@@ -257,12 +259,102 @@ test('knights dribble over intervening defenders and carry the ball to an empty 
   assertIntegrity(next);
 });
 
-test('a knight carrying the ball cannot be tackled by any opposing piece type', () => {
+test('every opposing piece type can attempt a reachable knight tackle at 50%', () => {
   const cases = [['R1', [2, 7]], ['B1', [3, 5]], ['Q', [3, 7]], ['N1', [4, 5]], ['P1', [4, 6]], ['K', [4, 7]]];
   for (const [suffix, location] of cases) {
     const id = `black-${suffix}`;
     const state = fixture({ phase: 'defendMove', carrier: 'white-N1', positions: { 'white-N1': [5, 7], [id]: location } });
-    assert.equal(legalMoves(state, id).some(m => m.type === 'tackle'), false, `${suffix} cannot tackle a knight`);
+    const before = clone(state);
+    const tackles = legalMoves(state, id).filter(m => m.type === 'tackle');
+    assert.ok(tackles.length, `${suffix} can challenge a reachable knight`);
+    for (const tackle of tackles) {
+      assert.equal(tackle.targetId, 'white-N1');
+      assert.equal(tackle.tackleProbability, .5);
+    }
+    assert.equal(legalMoves(state, id, { freePawn: true }).some(m => m.type === 'tackle'), false, 'bonus pawn actions cannot challenge');
+    assert.deepEqual(state, before, 'tackle previews preserve state and randomness');
+  }
+});
+
+test('knight tackle probability boundaries resolve possession without capturing either player', () => {
+  for (const [roll, success] of [[0, true], [.499999, true], [.5, false], [.999999, false]]) {
+    const state = fixture({ phase: 'defendMove', carrier: 'white-N1', positions: { 'white-N1': [5, 7], 'black-R1': [2, 7] } });
+    const before = clone(state);
+    const next = applyMove(state, 'black-R1', 6, 7, { roll });
+    assert.deepEqual(state, before, 'undo snapshot is preserved');
+    assert.equal(next.attack, success ? 'black' : 'white', `roll ${roll}`);
+    assert.equal(next.ball.carrierId, success ? 'black-R1' : 'white-N1');
+    assert.deepEqual(next.ball, success ? { x: 6, y: 7, carrierId: 'black-R1' } : state.ball);
+    assert.equal(next.phase, success ? 'attackMove' : 'defendMove');
+    assert.deepEqual(next.positionBudget, success ? freshBudget() : { normalUsed: true, pawnUsed: false });
+    assert.equal(next.turn, state.turn + (success ? 1 : 0));
+    assert.deepEqual(next.pieces.find(p => p.id === 'white-N1'), state.pieces.find(p => p.id === 'white-N1'), 'target knight stays on its square');
+    assert.deepEqual(next.pieces.find(p => p.id === 'black-R1'), { ...state.pieces.find(p => p.id === 'black-R1'), x: 6, y: 7 }, 'challenger reaches the selected landing on either outcome');
+    assert.equal(next.lastAction.type, success ? 'tackle' : 'tackleMiss');
+    assert.equal(next.lastAction.probability, .5);
+    assert.equal(next.lastAction.tackleSuccess, success);
+    assert.equal(next.lastAction.targetId, 'white-N1');
+    assert.deepEqual(next.lastAction.path, [{ x: 2, y: 7 }, { x: 5, y: 7 }, { x: 6, y: 7 }]);
+    assert.notEqual(next.randomState, state.randomState, 'attempt consumes one random outcome');
+    assertIntegrity(next);
+  }
+});
+
+test('a failed knight tackle spends the normal action and retains the available free pawn action', () => {
+  const state = fixture({ phase: 'defendMove', carrier: 'white-N1', positions: { 'white-N1': [5, 7], 'black-R1': [2, 7], 'black-P1': [8, 8] } });
+  const miss = applyMove(state, 'black-R1', 6, 7, { roll: .5 });
+  assert.deepEqual(legalMoves(miss, 'black-R1'), [], 'another normal challenge is unavailable');
+  assert.equal(hasMove(miss, 'black-P1', 8, 7, { freePawn: true }), true);
+  const afterPawn = applyMove(miss, 'black-P1', 8, 7, { freePawn: true });
+  assert.equal(afterPawn.phase, 'kick');
+  assert.equal(afterPawn.attack, 'white');
+  assert.deepEqual(afterPawn.ball, state.ball);
+  assert.equal(afterPawn.randomState, miss.randomState, 'ordinary pawn movement consumes no randomness');
+  assertIntegrity(afterPawn);
+});
+
+test('a knight tackle after the bonus pawn action starts a new attack on success or ends defense on failure', () => {
+  const state = fixture({ phase: 'defendMove', carrier: 'white-N1', budget: { normalUsed: false, pawnUsed: true }, positions: { 'white-N1': [5, 7], 'black-R1': [2, 7] } });
+  for (const [roll, success] of [[0, true], [.5, false]]) {
+    const next = applyMove(state, 'black-R1', 6, 7, { roll });
+    assert.equal(next.phase, success ? 'attackMove' : 'kick');
+    assert.equal(next.attack, success ? 'black' : 'white');
+    assert.equal(next.ball.carrierId, success ? 'black-R1' : 'white-N1');
+    assert.deepEqual(next.positionBudget, freshBudget());
+    assertIntegrity(next);
+  }
+});
+
+test('knight tackle seeds reproduce either outcome and previews and AI planning consume no randomness', () => {
+  const outcomes = new Set();
+  for (const seed of [0, 1000, 2000, 3000]) {
+    const state = fixture({ phase: 'defendMove', carrier: 'white-N1', seed, positions: { 'white-N1': [5, 7], 'black-R1': [2, 7] } });
+    const before = clone(state);
+    for (let index = 0; index < 3; index++) {
+      for (const piece of state.pieces) legalMoves(state, piece.id);
+      legalKicks(state);
+      assert.deepEqual(chooseAIAction(state), chooseAIAction(state));
+    }
+    assert.deepEqual(state, before);
+    const next = applyMove(state, 'black-R1', 6, 7);
+    assert.deepEqual(applyMove(state, 'black-R1', 6, 7), next, 'replaying the same snapshot reproduces the random outcome');
+    assert.deepEqual(state, before);
+    outcomes.add(next.lastAction.tackleSuccess);
+    assertIntegrity(next);
+  }
+  assert.deepEqual([...outcomes].sort(), [false, true]);
+});
+
+test('blocked and unreachable knight challenges are rejected before consuming randomness', () => {
+  for (const positions of [
+    { 'white-N1': [5, 7], 'black-R1': [2, 6] },
+    { 'white-N1': [5, 7], 'black-R1': [2, 7], 'black-P1': [3, 7] },
+  ]) {
+    const state = fixture({ phase: 'defendMove', carrier: 'white-N1', positions });
+    const before = clone(state);
+    assert.equal(legalMoves(state, 'black-R1').some(m => m.type === 'tackle'), false);
+    assert.throws(() => applyMove(state, 'black-R1', 6, 7, { roll: 0 }));
+    assert.deepEqual(state, before);
   }
 });
 
