@@ -3,6 +3,7 @@ export const TYPES = Object.freeze(['K', 'Q', 'R', 'B', 'N', 'P']);
 export const BOARD_WIDTH = 12;
 export const BOARD_HEIGHT = 15;
 export const GOAL_FILES = Object.freeze([4, 5, 6, 7]);
+export const LONG_TACKLE_RANGE = 5;
 // Tunable board-game parameters, not fitted football statistics. Distance is in
 // board squares and time is in abstract units set by ballSpeed.
 export const SHOT_MODEL = Object.freeze({
@@ -98,6 +99,7 @@ function canTackle(state, piece, carrier) {
   if (piece.type === 'N') return KNIGHT.some(([x, y]) => x === dx && y === dy);
   if (piece.type === 'P') return Math.abs(dx) === 1 && dy === (piece.team === 'white' ? -1 : 1);
   if (piece.type === 'K') return reach === 1;
+  if (reach > LONG_TACKLE_RANGE) return false;
   const straight = dx === 0 || dy === 0, diagonal = Math.abs(dx) === Math.abs(dy);
   if (!(piece.type === 'Q' ? straight || diagonal : piece.type === 'R' ? straight : diagonal)) return false;
   const sx = Math.sign(dx), sy = Math.sign(dy);

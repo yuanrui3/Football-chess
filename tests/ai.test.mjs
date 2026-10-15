@@ -279,9 +279,10 @@ function guaranteedTackles(state) {
       .map(move => ({ type: 'move', pieceId: piece.id, x: move.x, y: move.y, freePawn: false })));
 }
 
-test('Tactical avoids a forward dribble that loses possession to an immediate rook reply, at either end', () => {
+test('Tactical avoids an attacking dribble exposed to an immediate short-range queen reply, at either end', () => {
   const original = fixture({
-    positions: { 'white-R1': [4, 8], 'black-R1': [4, 12] },
+    carrier: 'white-B1',
+    positions: { 'white-B1': [9, 7], 'white-R1': [9, 10], 'black-R1': [8, 2] },
     budget: { normalUsed: false, pawnUsed: true },
   });
   for (const state of [original, mirroredState(original)]) {
@@ -290,6 +291,10 @@ test('Tactical avoids a forward dribble that loses possession to an immediate ro
     assert.equal(casualNext.phase, 'defendMove');
     const replies = guaranteedTackles(casualNext);
     assert.ok(replies.length, 'the greedy attack has a concrete legal possession-losing reply');
+    assert.ok(replies.some(reply => {
+      const defender = casualNext.pieces.find(piece => piece.id === reply.pieceId);
+      return defender.type === 'Q' && Math.max(Math.abs(defender.x - casualNext.ball.x), Math.abs(defender.y - casualNext.ball.y)) <= 5;
+    }), 'the refutation uses the new five-square tackle reach');
     const refutation = applyAction(casualNext, replies[0]);
     assert.notEqual(refutation.attack, state.attack);
     assert.equal(refutation.ball.carrierId, replies[0].pieceId, 'the opponent wins the ball without relying on randomness');

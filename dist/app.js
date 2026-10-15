@@ -1,4 +1,4 @@
-import {createGame, legalMoves, legalKicks, applyMove, applyKick, skipMove, chooseAIAction, currentTeam, BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, isBox, shotChance, shotModel, offsideInfo} from './engine.js?v=11c82d4f8cf0';
+import {createGame, legalMoves, legalKicks, applyMove, applyKick, skipMove, chooseAIAction, currentTeam, BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, isBox, shotChance, shotModel, offsideInfo, LONG_TACKLE_RANGE} from './engine.js?v=60073124dacd';
 
 const $ = id => document.getElementById(id);
 const NAMES = {K:'Goalkeeper',Q:'Queen',R:'Rook',B:'Bishop',N:'Knight',P:'Pawn'};
@@ -8,6 +8,7 @@ const STORE = 'football-chess-match-v2';
 const AI_PACES = [3000,1800,600];
 const MOVE_PATTERNS={K:'One square in any direction',Q:'Up to 10 squares straight or diagonally',R:'Up to 10 squares horizontally or vertically',B:'Up to 10 squares diagonally',N:'One L-shaped jump over other pieces',P:'One square forward, back, left, or right'};
 const KICK_PATTERNS={K:'Straight or diagonal kicks, like a queen',Q:'Straight or diagonal kicks',R:'Horizontal or vertical kicks',B:'Diagonal kicks',N:'One L-shaped kick over other pieces',P:'Forward, backward, left, or right kicks'};
+const TACKLE_PATTERNS={K:'1 square in any direction',Q:`up to ${LONG_TACKLE_RANGE} squares straight or diagonally`,R:`up to ${LONG_TACKLE_RANGE} squares horizontally or vertically`,B:`up to ${LONG_TACKLE_RANGE} squares diagonally`,N:'one L-shaped jump',P:'1 square diagonally forward'};
 const RESTART_NAMES={throwIn:'Throw-in',corner:'Corner kick',goalKick:'Goal kick',offside:'Indirect free kick'};
 const FILES = 'abcdefghijkl';
 const coord = (x,y) => `${FILES[x]}${H-y}`;
@@ -145,7 +146,7 @@ function renderActionContext(selected){
   else if(kicking&&selected){kind='pass';title='Pass / shoot';rule=`${pieceLabel(selected)} stays at ${coord(selected.x,selected.y)}; only the ball travels. ${KICK_PATTERNS[selected.type]}.${selected.type==='N'?' A goal cell must be one L-shaped jump away to shoot. Knights enter both boxes and double their scoring chance, capped at 100%.':' Kicks can travel beyond 10 squares with reduced pass accuracy.'}`;}
   else if(selected){
     kind=carrying?'dribble':'offball';title=carrying?'Dribble with the ball':'Move without the ball';
-    rule=`${carrying?'Player and ball move together.':'The ball stays in place unless this move collects it or wins a tackle.'} ${MOVE_PATTERNS[selected.type]}. ${selected.type==='N'?'Knights may enter both goal boxes. ':''}${freePawnMode?'Uses the free pawn action; no tackling.':'Uses your regular positioning action.'}`;
+    rule=`${carrying?'Player and ball move together.':'The ball stays in place unless this move collects it or wins a tackle.'} ${MOVE_PATTERNS[selected.type]}. ${!carrying&&!freePawnMode?`Tackle reach: ${TACKLE_PATTERNS[selected.type]}. `:''}${selected.type==='N'?'Knights may enter both goal boxes. ':''}${freePawnMode?'Uses the free pawn action; no tackling.':'Uses your regular positioning action.'}`;
   }else if(positionPhase()){
     title=ownCarrier?'Move without ball / dribble':'Move without the ball';
     rule=ownCarrier?'Select a teammate to move off the ball, or the carrier to dribble. Use one regular action plus an optional free pawn action.':'Move a teammate off the ball, collect a loose ball, or try a highlighted tackle against an opposing carrier. You can dribble after winning possession.';
@@ -329,7 +330,7 @@ function scheduleAI(){
     aiTimer=null;if(!stillCurrent())return;
     if(aiDifficulty==='tactical'&&typeof window.Worker==='function'){
       try{
-        aiWorker=new window.Worker(new URL('./ai-worker.js?v=c5d3cccec881',import.meta.url),{type:'module',name:'football-chess-tactical'});
+        aiWorker=new window.Worker(new URL('./ai-worker.js?v=2fd73cd74ab5',import.meta.url),{type:'module',name:'football-chess-tactical'});
         aiWorker.onmessage=event=>{if(!stillCurrent()||event.data?.requestId!==requestId)return;if(event.data.error)fallback();else receive(event.data.action);};
         aiWorker.onerror=event=>{event.preventDefault?.();fallback();};
         aiWatchdog=setTimeout(()=>fallback('casual'),4000);
@@ -341,7 +342,7 @@ function scheduleAI(){
 function drawPreview(x,y){
   document.querySelector('.trajectory')?.remove();if(blocked())return;
   const target=getTargets().find(t=>t.x===x&&t.y===y);if(!target){resetKickDetails();return;}
-  if(target.type==='tackle'){$('kickDetails').textContent=`Tackle success: ${percent(target.tackleProbability ?? 1)}. The defender moves to ${coord(x,y)}; a failed attempt uses the regular move and leaves the carrier with the ball.`;return;}
+  if(target.type==='tackle'){const defender=game.pieces.find(piece=>piece.id===selectedId);$('kickDetails').textContent=`Tackle success: ${percent(target.tackleProbability ?? 1)}. ${defender?`${pieceLabel(defender)} reach: ${TACKLE_PATTERNS[defender.type]}. `:''}The defender moves to ${coord(x,y)}; a failed attempt uses the regular move and leaves the carrier with the ball.`;return;}
   if(game.phase==='keeperReact'&&game.pendingShot){const model=shotModel(game,game.pendingShot.x,game.pendingShot.y,{x,y});showShotModel(model,`scoring chance if keeper moves to ${coord(x,y)}`);$('kickDetails').textContent=`Keeper preview: ${coord(x,y)} · ${outcomeBreakdown(model)}`;return;}
   if(kickPhase()){
     if(target.goal){const model=shotModel(game,x,y);addLine([model.origin,model.target],'trajectory');drawKeeperOverlay(model);$('kickDetails').textContent=`${targetDescription(target)} · ${shotGeometry(model)}. ${outcomeBreakdown(model)} before the keeper’s reaction.`;}

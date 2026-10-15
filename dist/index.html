@@ -101,6 +101,7 @@
   <h3>Passing accuracy</h3>
   <p>Passes up to ten squares have 100% accuracy. Beyond ten squares, accuracy falls by ten percentage points per additional square, to a minimum of 25%. Target previews show the current odds before you kick.</p>
   <h3>Tackles, pawns, and knights</h3>
+  <p>Queen, rook, and bishop tackles can reach the opposing ball carrier up to five squares away along their usual straight or diagonal capture directions. Their ordinary movement and dribbling still reach up to ten squares. Kings challenge one adjacent square, knights one L-shaped jump, and pawns one forward diagonal. After reaching the carrier, choose an allowed landing beside it; the overall start-to-landing limit remains ten squares.</p>
   <p>A piece that can reach the opposing carrier using its capture pattern may tackle: choose a highlighted landing square beside the carrier. Both footballers stay on the pitch. Tackles against a knight succeed 50% of the time; other legal tackles succeed 100%. The defender moves to the chosen adjacent square either way. A failed tackle leaves the knight with the ball and consumes the defender’s regular move. Pawn tackles remain forward-diagonal. A free pawn move only repositions the pawn and cannot tackle. Knights can still jump over defenders while dribbling.</p>
   <h3>Computer difficulty</h3>
   <p>Casual chooses actions using immediate positional and scoring heuristics. Tactical looks ahead at your replies and weighs the expected outcomes of shots, passes, and risky tackles. Both levels use the same rules and scoring odds. Opponent pace controls the pause between actions independently of difficulty. You can change either setting during a match.</p>
@@ -115,6 +116,6 @@
 </dialog>
 <dialog id="resultDialog"><div class="dialog-heading"><p class="eyebrow">THE FINAL WHISTLE</p><button class="icon-button" data-close="resultDialog" aria-label="Close result">×</button></div><div class="result-ball">⚽</div><h2 id="resultTitle">Honours even.</h2><p id="resultScore" class="result-score">0 : 0</p><p id="resultText"></p><button class="primary wide" id="rematchBtn">Play another match <span>↗</span></button></dialog>
 <dialog id="confirmDialog"><div class="dialog-heading"><p class="eyebrow">START FRESH</p><button class="icon-button" data-close="confirmDialog" aria-label="Cancel">×</button></div><h2>A new game?</h2><p>Your current match will be replaced.</p><div class="dialog-actions"><button class="utility-button" data-close="confirmDialog">Keep playing</button><button class="primary" id="confirmNewBtn">New match ↗</button></div></dialog>
-<script type="module" src="app.js?v=60848420ce60"></script>
+<script type="module" src="app.js?v=bdea0898879c"></script>
 </body>
 </html>

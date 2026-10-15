@@ -70,6 +70,8 @@ A knight scores when its one L-shaped kick ends in a goal cell. It may now occup
 
 Only kings and knights may occupy either four-column, two-row goal area. Pawns tackle on their forward diagonals; their sideways and backward movement does not add new tackle directions. Tackles against a knight succeed 50% of the time, including inside a box; other legal tackles succeed automatically. No piece is captured.
 
+Queen, rook, and bishop tackle reach is capped at five squares to the opposing carrier, along their normal capture directions and a clear path. King reach is one adjacent square, pawn reach is one forward diagonal, and knight reach is one L-shaped jump. After the challenge, choose an allowed adjacent landing square; the overall ten-square start-to-landing limit remains. A carrier five squares away can therefore have an adjacent landing six squares from the defender. Ordinary movement/dribbling keep their ten-square cap, and passing uses its separate distance/accuracy rules. Both AI policies use this shared tackle rule.
+
 ### Turn order and exceptions
 
 After kickoff, an ordinary round is **attacking positioning → defending positioning → attacking kick**. Each positioning turn has one regular move and an optional free one-square pawn action, in either order. Dribbling uses a positioning action; it is not a pass or an extra action. End positioning turn forfeits any actions remaining for that team. A turnover starts a fresh attacking positioning turn for the new team; if the ball is still loose after both positioning turns, a new positioning round begins without a kick.

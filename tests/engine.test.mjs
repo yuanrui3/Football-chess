@@ -225,7 +225,7 @@ test('wrong-team, blocked, and invalid bonus actions reject without mutating inp
   assert.deepEqual(state, before);
 });
 
-test('rook, bishop and queen normal movement is capped at ten squares', () => {
+test('rook, bishop and queen retain ten-square movement and uncapped passing after shorter tackle reach', () => {
   for (const [type, from, ten, eleven] of [
     ['R1', [2, 13], [2, 3], [2, 2]],
     ['B1', [0, 12], [10, 2], [11, 1]],
@@ -235,15 +235,58 @@ test('rook, bishop and queen normal movement is capped at ten squares', () => {
     const state = fixture({ positions: { 'white-R1': [9, 7], [id]: from }, clear: [ten, eleven] });
     assert.equal(hasMove(state, id, ...ten), true, `${type} can move ten squares`);
     assert.equal(hasMove(state, id, ...eleven), false, `${type} cannot move eleven squares`);
+    const dribble = { ...clone(state), ball: { x: from[0], y: from[1], carrierId: id } };
+    assert.equal(hasMove(dribble, id, ...ten), true, `${type} can still dribble ten squares`);
+    const kicks = legalKicks({ ...dribble, phase: 'kick' });
+    assert.equal(kicks.find(kick => kick.x === ten[0] && kick.y === ten[1])?.accuracy, 1, `${type} passes ten squares with full accuracy`);
+    assert.equal(kicks.find(kick => kick.x === eleven[0] && kick.y === eleven[1])?.accuracy, .9, `${type} can still attempt an eleven-square pass`);
   }
 });
 
-test('tackles cannot land more than ten squares from their starting square', () => {
-  const state = fixture({ phase: 'defendMove', positions: { 'white-R1': [2, 12], 'black-R1': [2, 2] } });
-  const moves = legalMoves(state, 'black-R1');
-  assert.ok(moves.some(m => m.type === 'tackle' && m.x === 2 && m.y === 11));
-  assert.equal(moves.some(m => m.type === 'tackle' && m.y === 13), false);
-  for (const move of moves) assert.ok(Math.max(Math.abs(move.x - 2), Math.abs(move.y - 2)) <= 10);
+test('queen, rook and bishop tackle reach is five squares to the carrier for both teams', () => {
+  for (const defendingTeam of ['white', 'black']) {
+    const attack = defendingTeam === 'white' ? 'black' : 'white';
+    for (const [type, five, six, blocker] of [
+      ['Q', [2, 5], [2, 4], [2, 8]],
+      ['Q', [7, 5], [8, 4], [4, 8]],
+      ['R1', [2, 5], [2, 4], [2, 8]],
+      ['B1', [7, 5], [8, 4], [4, 8]],
+    ]) {
+      const defenderId = `${defendingTeam}-${type}`, carrierId = `${attack}-Q`;
+      const positions = { 'white-R1': [9, 10], [defenderId]: [2, 10] };
+      const atFive = fixture({ phase: 'defendMove', attack, carrier: carrierId, positions: { ...positions, [carrierId]: five } });
+      const tackles = legalMoves(atFive, defenderId).filter(move => move.type === 'tackle');
+      assert.ok(tackles.length, `${defenderId} can reach a clear carrier five squares away`);
+      assert.ok(tackles.every(move => move.tackleProbability === 1 && move.targetId === carrierId));
+      assert.ok(tackles.some(move => Math.max(Math.abs(move.x - 2), Math.abs(move.y - 10)) === 6), 'an adjacent landing can be six squares away: reach is measured to the carrier');
+      for (const move of tackles) assert.ok(Math.max(Math.abs(move.x - 2), Math.abs(move.y - 10)) <= 10, 'the existing global landing limit remains in force');
+
+      const atSix = fixture({ phase: 'defendMove', attack, carrier: carrierId, positions: { ...positions, [carrierId]: six } });
+      assert.equal(legalMoves(atSix, defenderId).some(move => move.type === 'tackle'), false, `${defenderId} cannot reach a carrier six squares away`);
+      const attemptedLanding = tackles.find(move => Math.max(Math.abs(move.x - 2), Math.abs(move.y - 10)) === 6);
+      const before = clone(atSix);
+      assert.throws(() => applyMove(atSix, defenderId, attemptedLanding.x, attemptedLanding.y), 'rejected tackle destinations cannot bypass the range check');
+      assert.deepEqual(atSix, before);
+
+      const blocked = fixture({ phase: 'defendMove', attack, carrier: carrierId, positions: { ...positions, [carrierId]: five, [`${defendingTeam}-P1`]: blocker } });
+      assert.equal(legalMoves(blocked, defenderId).some(move => move.type === 'tackle'), false, 'shorter tackle reach still requires a clear path');
+    }
+  }
+});
+
+test('five-square tackles against knights retain their 50% success rate', () => {
+  for (const defendingTeam of ['white', 'black']) {
+    const attack = defendingTeam === 'white' ? 'black' : 'white';
+    for (const [type, target] of [['Q', [2, 5]], ['R1', [2, 5]], ['B1', [7, 5]]]) {
+      const defenderId = `${defendingTeam}-${type}`, carrierId = `${attack}-N1`;
+      const state = fixture({ phase: 'defendMove', attack, carrier: carrierId, positions: { 'white-R1': [9, 10], [defenderId]: [2, 10], [carrierId]: target } });
+      const tackle = legalMoves(state, defenderId).find(move => move.type === 'tackle');
+      assert.ok(tackle, `${defenderId} reaches a knight at five squares`);
+      assert.equal(tackle.tackleProbability, .5);
+      assert.equal(applyMove(state, defenderId, tackle.x, tackle.y, { roll: .499999 }).ball.carrierId, defenderId);
+      assert.equal(applyMove(state, defenderId, tackle.x, tackle.y, { roll: .5 }).ball.carrierId, carrierId);
+    }
+  }
 });
 
 test('tackling transfers possession without capturing and resets both budgets', () => {
