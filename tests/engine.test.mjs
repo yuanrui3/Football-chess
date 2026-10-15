@@ -45,7 +45,7 @@ function assertIntegrity(state) {
   assert.equal(new Set(state.pieces.map(p => `${p.x},${p.y}`)).size, 22, 'players cannot share squares');
   for (const p of state.pieces) {
     assert.ok(p.x >= 0 && p.x < BOARD_WIDTH && p.y >= 0 && p.y < BOARD_HEIGHT, `${p.id} stays on pitch`);
-    if (isBox(p.x, p.y)) assert.equal(p.type, 'K', `${p.id} cannot enter a goal area`);
+    if (isBox(p.x, p.y)) assert.ok(['K', 'N'].includes(p.type), `${p.id} needs king or knight access to a goal area`);
   }
   if (state.ball.carrierId) {
     const carrier = state.pieces.find(p => p.id === state.ball.carrierId);
@@ -61,10 +61,18 @@ function assertIntegrity(state) {
   }
   if (state.phase === 'keeperReact') assert.ok(state.pendingShot, 'reaction must retain the declared shot');
   if (state.phase === 'keeperRelease') {
-    assert.ok(['backPass', 'goalKick'].includes(state.releaseReason));
+    assert.equal(state.releaseReason, 'backPass');
     assert.equal(state.pieces.find(p => p.id === state.ball.carrierId)?.type, 'K');
     assert.deepEqual(legalMoves(state, state.ball.carrierId), []);
   } else assert.equal(state.releaseReason, null, 'release reasons are cleared after the forced kick');
+  if (state.restart) {
+    assert.ok(['attackMove', 'defendMove', 'kick'].includes(state.phase), 'a restart progresses through a full positioning round');
+    assert.equal(state.restart.team, state.attack);
+    assert.equal(state.restart.takerId, state.ball.carrierId);
+    assert.deepEqual({ x: state.ball.x, y: state.ball.y }, state.restart.spot);
+    assert.deepEqual(legalMoves(state, state.restart.takerId), [], 'the restart taker stays at the spot until kicking');
+    for (const player of state.pieces) assert.equal(legalMoves(state, player.id).some(move => move.type === 'tackle'), false, 'dead-ball restarts prohibit tackling');
+  }
 }
 function applyAction(state, action) {
   assert.ok(action);
@@ -367,16 +375,26 @@ test('blocked and unreachable knight challenges are rejected before consuming ra
   }
 });
 
-test('only kings can enter either expanded goal area', () => {
+test('only kings and knights can enter either expanded goal area', () => {
   for (const [id, from, to] of [
     ['white-B1', [3, 2], [4, 1]], ['white-R1', [6, 2], [6, 1]],
-    ['white-N1', [3, 3], [4, 1]], ['white-P1', [7, 12], [7, 13]],
+    ['white-P1', [7, 12], [7, 13]],
   ]) {
     const state = fixture({ positions: { [id]: from } });
     assert.equal(hasMove(state, id, ...to), false);
   }
   const state = fixture({ positions: { 'white-K': [3, 2] } });
   assert.equal(hasMove(state, 'white-K', 4, 1), true);
+  for (const [attack, carrier, from, to] of [
+    ['white', 'white-N1', [3, 3], [4, 1]],
+    ['white', 'white-N1', [3, 11], [4, 13]],
+    ['black', 'black-N1', [8, 3], [7, 1]],
+    ['black', 'black-N1', [8, 11], [7, 13]],
+  ]) {
+    const knight = fixture({ attack, carrier, positions: { [carrier]: from } });
+    assert.equal(hasMove(knight, carrier, ...to), true, `${carrier} can enter either box while dribbling`);
+    assertIntegrity(applyMove(knight, carrier, ...to));
+  }
 });
 
 test('ordinary passes stop at the first teammate or opposing interceptor', () => {
@@ -413,8 +431,9 @@ test('pass accuracy is certain through ten squares then falls by ten points to a
   }
 });
 
-test('an accurate long pass arrives below its probability threshold and fails at that threshold', () => {
-  const state = fixture({ phase: 'kick', positions: { 'white-R1': [2, 13], 'white-P1': [2, 2] } });
+test('an accurate onside long pass arrives below its probability threshold and fails at that threshold', () => {
+  const state = fixture({ phase: 'kick', positions: { 'white-R1': [2, 13], 'white-P1': [2, 2], 'black-R1': [9, 1] } });
+  assert.equal(legalKicks(state).find(kick => kick.x === 2 && kick.y === 2).offside, false, 'a second defender keeps the receiver onside so the test isolates accuracy');
   const hit = applyKick(state, 2, 2, { roll: .899999 });
   assert.equal(hit.ball.carrierId, 'white-P1');
   const miss = applyKick(state, 2, 2, { roll: .9 });
@@ -472,9 +491,9 @@ test('goal declarations wait for the defending goalkeeper before resolving the s
   assert.equal(reaction.phase, 'keeperReact');
   assert.equal(currentTeam(reaction), 'black');
   assert.ok(reaction.pendingShot);
-  assert.equal(reaction.rulesVersion, 3);
+  assert.equal(reaction.rulesVersion, 4);
   assert.deepEqual(reaction.pendingShot.from, { x: 4, y: 4 });
-  assert.equal(reaction.lastAction.shotModel.modelVersion, 4);
+  assert.equal(reaction.lastAction.shotModel.modelVersion, 5);
   assert.deepEqual(reaction.lastAction.shotModel, shotModel(state, 4, -1));
   assert.deepEqual(reaction.score, { white: 0, black: 0 });
   assert.deepEqual(legalKicks(reaction), []);
@@ -521,7 +540,7 @@ test('outfield players still intercept a shot before the net', () => {
 test('the shot preview exposes Euclidean distance, goal-plane geometry and complete probabilities', () => {
   const state = fixture({ phase: 'kick', positions: { 'white-R1': [4, 6], 'black-K': [5, 0] } });
   const model = shotModel(state, 4, -1);
-  assert.equal(model.modelVersion, 4);
+  assert.equal(model.modelVersion, 5);
   assert.deepEqual(model.origin, { x: 4, y: 6 });
   assert.deepEqual(model.target, { x: 4, y: -.5 });
   assert.equal(model.distance, 6.5);
@@ -557,7 +576,7 @@ test('close shots are more dangerous while longer flight gives a fixed keeper mo
 });
 
 test('extra distance pressure starts beyond three squares and preserves close-shot accuracy', () => {
-  assert.equal(SHOT_MODEL.version, 4);
+  assert.equal(SHOT_MODEL.version, 5);
   assert.equal(SHOT_MODEL.distancePenaltyStart, 3);
   assert.equal(SHOT_MODEL.longShotDecay, .06);
   assert.equal(SHOT_MODEL.minOnTarget, .01);
@@ -569,7 +588,7 @@ test('extra distance pressure starts beyond three squares and preserves close-sh
     assert.ok(model.distance <= 3, 'short-range fixture stays inside the protected range');
     const angleCos = Math.cos(model.shotAngleDegrees * Math.PI / 180);
     const previousAccuracy = .98 * Math.exp(-.018 * model.distance) * (.65 + .35 * angleCos);
-    almostEqual(model.onTargetProbability, previousAccuracy, 'close-shot accuracy is unchanged');
+    almostEqual(model.baseOnTargetProbability, previousAccuracy, 'close-shot distance and angle accuracy is unchanged before the knight chip multiplier');
   }
 });
 
@@ -699,11 +718,23 @@ test('one seeded shot roll partitions exact goal, save and wide boundaries', () 
       assert.equal(result.ball.carrierId, 'black-Q');
       assert.equal(result.lastAction.type, 'goal');
     } else {
-      assert.equal(result.phase, outcome === 'saved' ? 'attackMove' : 'keeperRelease');
+      assert.equal(result.phase, 'attackMove', 'both saves and wide-shot restarts open a positioning round');
       assert.equal(result.ball.carrierId, 'black-K');
       assert.equal(result.lastAction.type, outcome === 'saved' ? 'save' : 'shotMiss');
-      assert.equal(result.releaseReason, outcome === 'saved' ? null : 'goalKick');
-      assert.deepEqual(result.pieces, reaction.pieces, 'in-box saves and goal kicks preserve all piece positions');
+      assert.equal(result.releaseReason, null);
+      if (outcome === 'saved') {
+        assert.equal(result.restart, null);
+        assert.deepEqual(result.pieces, reaction.pieces, 'a save preserves all piece positions');
+      } else {
+        assert.equal(result.restart.type, 'goalKick');
+        assert.equal(result.restart.team, 'black');
+        assert.equal(result.restart.takerId, 'black-K');
+        assert.equal(result.restart.indirect, false);
+        assert.deepEqual(result.ball, { ...result.restart.spot, carrierId: result.restart.takerId });
+        for (const player of result.pieces.filter(p => p.id !== result.restart.takerId)) {
+          assert.deepEqual(player, reaction.pieces.find(p => p.id === player.id), 'a restart relocates only its taker');
+        }
+      }
       assert.deepEqual(result.positionBudget, freshBudget());
     }
     assertIntegrity(result);
@@ -712,27 +743,42 @@ test('one seeded shot roll partitions exact goal, save and wide boundaries', () 
   assert.notEqual([...randomStates][0], reaction.randomState);
 });
 
-test('a wide shot gives the defending keeper an immediate goal kick and relocates only an outside keeper', () => {
+test('a wide shot gives the nearest eligible defender a protected full round before a goal kick', () => {
   for (const attack of ['white', 'black']) {
     const white = attack === 'white', defending = white ? 'black' : 'white', keeperId = `${defending}-K`;
     const reaction = declaredShot({ x: 4, keeper: [8, 7], attack });
     const result = skipMove(reaction, { roll: .999999 });
     const keeper = result.pieces.find(p => p.id === keeperId);
-    assert.equal(result.phase, 'keeperRelease');
-    assert.equal(result.releaseReason, 'goalKick');
+    assert.equal(result.phase, 'attackMove');
+    assert.equal(result.releaseReason, null);
+    assert.equal(result.restart.type, 'goalKick');
+    assert.equal(result.restart.team, defending);
+    assert.equal(result.restart.takerId, keeperId, 'the fixture keeper is the nearest player eligible for the restart spot');
     assert.equal(result.lastAction.type, 'shotMiss');
     assert.equal(result.lastAction.outcome, 'wide');
     assert.deepEqual(result.score, reaction.score);
-    assert.deepEqual({ x: keeper.x, y: keeper.y }, { x: 7, y: white ? 1 : 13 }, 'goal kick uses nearest empty own-box square');
+    assert.equal(isBox(keeper.x, keeper.y), true, 'goal-kick taker is inside its own goal box');
+    assert.ok(white ? keeper.y <= 1 : keeper.y >= 13, 'the restart is at the defending end');
     for (const p of result.pieces.filter(p => p.id !== keeperId)) assert.deepEqual(p, reaction.pieces.find(q => q.id === p.id));
     assert.deepEqual(result.ball, { x: keeper.x, y: keeper.y, carrierId: keeperId });
     assert.equal(currentTeam(result), defending);
-    assert.throws(() => skipMove(result));
+    assert.deepEqual(legalMoves(result, keeperId), [], 'the taker cannot dribble before taking the restart');
     assert.throws(() => applyMove(result, keeperId, keeper.x - 1, keeper.y));
-    const kick = legalKicks(result).find(k => !k.goal && k.accuracy === 1 && !k.receiverId);
+    assert.deepEqual(legalKicks(result), [], 'positioning precedes the restart kick');
+    const defense = skipMove(result);
+    assert.equal(defense.phase, 'defendMove');
+    assert.deepEqual(defense.restart, result.restart);
+    for (const piece of defense.pieces) {
+      assert.equal(legalMoves(defense, piece.id).some(move => move.type === 'tackle'), false, 'the dead ball cannot be tackled');
+    }
+    const kickState = skipMove(defense);
+    assert.equal(kickState.phase, 'kick');
+    assert.deepEqual(kickState.restart, result.restart);
+    const kick = legalKicks(kickState).find(k => !k.goal && k.accuracy === 1 && !k.receiverId);
     assert.ok(kick);
-    const released = applyKick(result, kick.x, kick.y, { roll: 0 });
+    const released = applyKick(kickState, kick.x, kick.y, { roll: 0 });
     assert.equal(released.releaseReason, null);
+    assert.equal(released.restart, null, 'the restart ends when its kick is taken');
     assertIntegrity(result);
     assertIntegrity(released);
   }
@@ -820,7 +866,7 @@ test('knights score only when a single L-shaped kick lands on a goal square', ()
       assert.ok(move, 'defending keeper has a reaction move');
       const expected = shotModel(reaction, x, y, move);
       const result = applyMove(reaction, keeper, move.x, move.y, { roll: 0 });
-      assert.deepEqual(result.lastAction.shotModel, expected, 'same goalkeeper and distance odds resolve knight shots');
+      assert.deepEqual(result.lastAction.shotModel, expected, 'the knight chip modifier and keeper reaction are retained during resolution');
       assert.equal(result.lastAction.outcome, 'goal');
       assert.equal(result.score[attack], 1);
       assertIntegrity(result);
@@ -900,13 +946,18 @@ test('AI returns legal actions in keeper reaction and forced release phases', ()
   assert.equal(action.type, 'kick');
   assertIntegrity(applyAction(release, action));
   const goalKick = skipMove(declaredShot({ keeper: [8, 7] }), { roll: .999999 });
-  assert.equal(goalKick.releaseReason, 'goalKick');
+  assert.equal(goalKick.restart.type, 'goalKick');
+  assert.equal(goalKick.releaseReason, null);
   assert.equal(goalKick.lastAction.type, 'shotMiss');
   const goalKickAction = chooseAIAction(goalKick);
-  assert.equal(goalKickAction.type, 'kick');
-  const goalKickReleased = applyAction(goalKick, goalKickAction);
+  assert.ok(['move', 'skip'].includes(goalKickAction.type), 'the AI first positions for the restart');
+  let goalKickReleased = goalKick;
+  for (let turn = 0; goalKickReleased.restart && turn < 8; turn++) {
+    goalKickReleased = applyAction(goalKickReleased, chooseAIAction(goalKickReleased));
+    assertIntegrity(goalKickReleased);
+  }
+  assert.equal(goalKickReleased.restart, null, 'the AI completes both positioning turns and then releases');
   assert.equal(goalKickReleased.releaseReason, null);
-  assertIntegrity(goalKickReleased);
 });
 
 test('AI remains legal across extended play, every new phase and both positioning budgets', () => {
