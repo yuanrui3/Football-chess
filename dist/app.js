@@ -1,4 +1,4 @@
-import {createGame, legalMoves, legalKicks, applyMove, applyKick, skipMove, chooseAIAction, currentTeam, BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, isBox, shotChance, shotModel, offsideInfo, LONG_TACKLE_RANGE, DRIBBLE_RANGE, STALLING_RULE, ACTION_SECONDS, actionTimeout, progressInfo, positionActions, normalizeGame} from './engine.js?v=6a80c4905886';
+import {createGame, legalMoves, legalKicks, applyMove, applyKick, skipMove, chooseAIAction, currentTeam, BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, isBox, shotChance, shotModel, offsideInfo, LONG_TACKLE_RANGE, DRIBBLE_RANGE, STALLING_RULE, ACTION_SECONDS, actionTimeout, progressInfo, positionActions, normalizeGame} from './engine.js?v=f033f20e8129';
 import {createMatchClock, restoreMatchClock, tickMatchClock, settleMatchClock, rewindMatchClock} from './match-clock.js?v=73476bff5019';
 
 const $ = id => document.getElementById(id);
@@ -130,6 +130,10 @@ function targetKind(target){
 function targetDescription(target){
   const kind=targetKind(target),destination=coord(target.x,target.y);
   const receiver=game.pieces.find(piece=>piece.id===target.receiverId);
+  if(target.offsideReason==='boxKnight'){
+    const knight=game.pieces.find(piece=>piece.id===target.offsidePieceId);
+    return `OFFSIDE: attacking knight${knight?` at ${coord(knight.x,knight.y)}`:''} in the opponent’s box is involved in play; this kick awards the opponents an indirect free kick`;
+  }
   if(isOffsideTarget(target))return `OFFSIDE warning at ${destination}: touching this ball awards the opponents an indirect free kick`;
   if(kind==='setup')return `Starting formation square ${destination}`;
   if(kind==='keeper')return `Keeper reaction to ${destination}`;
@@ -232,11 +236,12 @@ function renderBoard(){
     $(id).setAttribute('aria-label',`${y===-1?'Obsidian':'Ivory'} goal: choose a target`);
     for(const el of $(id).querySelectorAll('[data-goal-x]')){
       const x=Number(el.dataset.goalX),kick=targets.find(t=>t.x===x&&t.y===y&&t.goal),chance=shotChance(game,x,y);
-      const aimed=shot?.x===x&&shot?.y===y,canPreview=shot?aimed:previewShots.some(candidate=>candidate.x===x&&candidate.y===y);
+      const preview=previewShots.find(candidate=>candidate.x===x&&candidate.y===y),aimed=shot?.x===x&&shot?.y===y,canPreview=shot?aimed:!!preview,offsideShot=!shot&&preview?.offsideReason==='boxKnight';
       el.disabled=!kick;el.classList.toggle('available',!!kick);el.classList.toggle('shot-selected',aimed);el.classList.toggle('own-goal',!!kick&&kick.goal!==currentTeam(game));el.dataset.goalY=y;
-      el.innerHTML=`<span class="goal-file">${FILES[x].toUpperCase()}</span><span class="goal-odds">${canPreview?percent(chance):'—'}</span>`;
+      el.classList.toggle('offside-target',offsideShot);
+      el.innerHTML=`<span class="goal-file">${FILES[x].toUpperCase()}</span><span class="goal-odds">${offsideShot?'OFF':canPreview?percent(chance):'—'}</span>`;
       el.dataset.action='shot';
-      const detail=canPreview?`Shoot at ${y===-1?'Obsidian':'Ivory'} goal, column ${FILES[x]}, ${percent(chance)} scoring chance ${shot?'with the keeper here':'before keeper reaction'}${kick&&kick.goal!==currentTeam(game)?', warning: own goal':''}`:`${y===-1?'Obsidian':'Ivory'} goal, column ${FILES[x]}, no legal shot from this position`;
+      const detail=offsideShot?targetDescription(preview):canPreview?`Shoot at ${y===-1?'Obsidian':'Ivory'} goal, column ${FILES[x]}, ${percent(chance)} scoring chance ${shot?'with the keeper here':'before keeper reaction'}${kick&&kick.goal!==currentTeam(game)?', warning: own goal':''}`:`${y===-1?'Obsidian':'Ivory'} goal, column ${FILES[x]}, no legal shot from this position`;
       el.setAttribute('aria-label',detail+(aimed?', shot committed':'')+(!kick?', unavailable shot':''));el.title=detail;
     }
   }
@@ -244,6 +249,7 @@ function renderBoard(){
   const showOffside=stage==='playing'&&!shot&&game.ball.carrierId&&!exempt;
   $('offsideStatus').hidden=stage!=='playing';
   if(exempt)$('offsideStatus').textContent='No offside directly from this restart.';
+  else if(offside.boxKnightIds?.length)$('offsideStatus').textContent=`Offside knight${offside.boxKnightIds.length===1?'':'s'} in the opponent’s box: any teammate kick immediately awards an indirect free kick. Move onside or leave the box before kicking.`;
   else if(activeFlags.size)$('offsideStatus').textContent=`${activeFlags.size} player${activeFlags.size===1?' was':'s were'} offside at the previous kick. Returning onside does not clear that snapshot.`;
   else $('offsideStatus').textContent=`${positionFlags.size} player${positionFlags.size===1?' is':'s are'} beyond the current offside line. Level or behind the ball is onside.`;
   if(showOffside&&Number.isFinite(offside.secondLastY)){
@@ -390,7 +396,7 @@ function scheduleAI(){
     aiTimer=null;if(!stillCurrent())return;
     if(aiDifficulty==='tactical'&&typeof window.Worker==='function'){
       try{
-        aiWorker=new window.Worker(new URL('./ai-worker.js?v=b3c43fc4556a',import.meta.url),{type:'module',name:'football-chess-tactical'});
+        aiWorker=new window.Worker(new URL('./ai-worker.js?v=dfc742ca4d5c',import.meta.url),{type:'module',name:'football-chess-tactical'});
         aiWorker.onmessage=event=>{if(!stillCurrent()||event.data?.requestId!==requestId)return;if(event.data.error)fallback();else receive(event.data.action);};
         aiWorker.onerror=event=>{event.preventDefault?.();fallback();};
         aiWatchdog=setTimeout(()=>fallback('casual'),4000);
@@ -405,7 +411,8 @@ function drawPreview(x,y){
   if(target.type==='tackle'){const defender=game.pieces.find(piece=>piece.id===selectedId);$('kickDetails').textContent=`Tackle success: ${percent(target.tackleProbability ?? 1)}. ${defender?`${pieceLabel(defender)} reach: ${TACKLE_PATTERNS[defender.type]}. `:''}The defender moves to ${coord(x,y)}; a failed attempt uses the regular move and leaves the carrier with the ball.`;return;}
   if(game.phase==='keeperReact'&&game.pendingShot){const model=shotModel(game,game.pendingShot.x,game.pendingShot.y,{x,y});showShotModel(model,`scoring chance if keeper moves to ${coord(x,y)}`);$('kickDetails').textContent=`Keeper preview: ${coord(x,y)} · ${outcomeBreakdown(model)}`;return;}
   if(kickPhase()){
-    if(target.goal){const model=shotModel(game,x,y);addLine([model.origin,model.target],'trajectory');drawKeeperOverlay(model);$('kickDetails').textContent=`${targetDescription(target)} · ${shotGeometry(model)}. ${outcomeBreakdown(model)} before the keeper’s reaction.`;}
+    if(target.offsideReason==='boxKnight'){clearKeeperOverlay();$('kickDetails').textContent=targetDescription(target);}
+    else if(target.goal){const model=shotModel(game,x,y);addLine([model.origin,model.target],'trajectory');drawKeeperOverlay(model);$('kickDetails').textContent=`${targetDescription(target)} · ${shotGeometry(model)}. ${outcomeBreakdown(model)} before the keeper’s reaction.`;}
     else{clearKeeperOverlay();if(target.path)addLine(target.path,'trajectory');$('kickDetails').textContent=`${targetDescription(target)} · ${target.distance} squares · ${percent(target.accuracy)} ${accuracyLabel()} accuracy. ${target.distance>10?'An inaccurate landing can cross a boundary. ':''}The player stays in place.`;}
   }else $('kickDetails').textContent=`${targetDescription(target)}. ${stage==='setup'?'Formation only; no turn used.':freePawnMode?'Uses the free pawn action.':targetKind(target)==='dribble'?'Uses the separate dribble action; the off-ball allowance is independent.':'Uses the off-ball positioning action; passing and shooting happen later.'}`;
 }

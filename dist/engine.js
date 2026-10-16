@@ -146,7 +146,7 @@ export function createGame({mode = 'solo', minutes = 10, kickoff = 'white', seed
     score: {white: 0, black: 0}, turn: 1, randomState: normalizeSeed(seed),
     log: [`${title(kickoff)} has kick-off. Kick the ball to begin.`], lastAction: null,
     mode, minutes: Number.isFinite(Number(minutes)) && Number(minutes) > 0 ? Number(minutes) : 10,
-    rulesVersion: 9, restart: null, offside: null, looseBallKickOrigin: null,
+    rulesVersion: 10, restart: null, offside: null, looseBallKickOrigin: null,
     ballProgress: {team: kickoff, anchorY: carrier.y, rounds: 0, pendingRelease: false, excludeRelease: false}
   };
 }
@@ -253,11 +253,31 @@ export function offsideInfo(state, team = state?.pieces?.find(p => p.id === stat
     const beyondDefenders = team === 'white' ? p.y < secondLastY : p.y > secondLastY;
     return {id: p.id, x: p.x, y: p.y, inOpposingHalf, beyondBall, beyondDefenders, offside: inOpposingHalf && beyondBall && beyondDefenders};
   });
-  return {team, ball: {x: ball.x, y: ball.y}, secondLastY, players, flaggedIds: players.filter(p => p.offside).map(p => p.id), activeFlaggedIds: state?.offside?.team === team ? [...(state.offside.flaggedIds || [])] : []};
+  const flaggedIds = players.filter(p => p.offside).map(p => p.id);
+  const boxKnightIds = pieces.filter(p => p.team === team && p.type === 'N' && flaggedIds.includes(p.id) && inOwnBox(other(team), p.x, p.y)).map(p => p.id).sort();
+  return {team, ball: {x: ball.x, y: ball.y}, secondLastY, players, flaggedIds, boxKnightIds, activeFlaggedIds: state?.offside?.team === team ? [...(state.offside.flaggedIds || [])] : []};
+}
+
+const offsideExempt = restart => ['goalKick', 'corner', 'throwIn'].includes(restart?.type);
+function boxKnightOffenders(state, snapshot) {
+  if (!snapshot) return [];
+  return state.pieces.filter(piece => piece.team === snapshot.team && piece.type === 'N'
+    && piece.id !== snapshot.kickerId && (snapshot.flaggedIds || []).includes(piece.id)
+    && inOwnBox(other(piece.team), piece.x, piece.y)).sort((a, b) => a.id.localeCompare(b.id));
+}
+function currentBoxKnights(state, carrier = state.pieces.find(piece => piece.id === state.ball.carrierId)) {
+  if (!carrier || offsideExempt(state.restart)) return [];
+  // Most candidate positions have no attacking knight in this tiny area.
+  // Avoid sorting the whole defensive line in that common AI search case.
+  const candidates = state.pieces.filter(piece => piece.team === carrier.team && piece.type === 'N'
+    && piece.id !== carrier.id && inOwnBox(other(carrier.team), piece.x, piece.y));
+  if (!candidates.length) return [];
+  const flags = offsideInfo(state, carrier.team).flaggedIds;
+  return candidates.filter(piece => flags.includes(piece.id)).sort((a, b) => a.id.localeCompare(b.id));
 }
 
 function offsideSnapshot(state, kicker, restart) {
-  if (restart && ['goalKick', 'corner', 'throwIn'].includes(restart.type)) return null;
+  if (offsideExempt(restart)) return null;
   const info = offsideInfo(state, kicker.team);
   return {team: kicker.team, kickerId: kicker.id, ball: info.ball, secondLastY: info.secondLastY, flaggedIds: info.flaggedIds.filter(id => id !== kicker.id)};
 }
@@ -345,13 +365,22 @@ export function normalizeGame(state) {
   }
   next.ballProgress = progressFor(next);
   next.looseBallKickOrigin = looseKickOrigin(next);
+  // Old pending shots already have their kick-time snapshot. Knights cannot
+  // move during keeper reaction, so their saved box squares are still exact.
+  // Never reconstruct missing flags from a later defensive line or spend RNG.
+  if ((Number(state.rulesVersion) || 0) < 10 && next.phase === 'keeperReact' && next.pendingShot
+      && next.offside?.team === next.pendingShot.shootingTeam) {
+    const shot = next.pendingShot;
+    const offender = boxKnightOffenders(next, {...next.offside, kickerId: shot.shooterId})[0];
+    if (offender) callOffside(next, offender, {pieceId: shot.shooterId, from: shot.from, intendedTo: {x: shot.x, y: shot.y}, path: shot.path, distance: shot.distance, offsideReason: 'boxKnight', offsidePieceId: offender.id});
+  }
   // A shot already declared under older rules keeps its origin and random
   // seed, but its displayed and eventual odds use the current shared model.
   if (next.phase === 'keeperReact' && next.pendingShot && next.lastAction?.type === 'shotAttempt') {
     const details = shotModel(next);
     next.lastAction = {...next.lastAction, probability: details.probability, shotModel: details};
   }
-  next.rulesVersion = 9;
+  next.rulesVersion = 10;
   return next;
 }
 
@@ -374,7 +403,8 @@ function callOffside(state, offender, common = {}) {
   const restart = awardRestart(state, 'offside', other(offender.team), offence, {reason: 'offside'});
   state.turn++;
   state.lastAction = {...common, type: 'offside', team: offender.team, offenderId: offender.id, offence, restart: copy(restart), to: {...state.ball}, outcome: 'offside'};
-  addLog(state, `${title(offender.team)} ${NAMES[offender.type]} is offside on involvement at ${square(offence.x, offence.y)}. ${title(other(offender.team))} has an indirect free kick.`);
+  const involvement = common.offsideReason === 'boxKnight' ? 'is involved in play inside the opponent’s box and is offside' : 'is offside on involvement';
+  addLog(state, `${title(offender.team)} ${NAMES[offender.type]} ${involvement} at ${square(offence.x, offence.y)}. ${title(other(offender.team))} has an indirect free kick.`);
   return state;
 }
 
@@ -445,13 +475,14 @@ export function shotChance(state, x = state?.pendingShot?.x, y = state?.pendingS
   return shotModel(state, x, y, keeperPosition).probability;
 }
 
-function kickRecord(state, carrier, x, y, path, receiver, goal) {
+function kickRecord(state, carrier, x, y, path, receiver, goal, boxWarning) {
   const length = distance(carrier, {x, y});
   const details = goal ? shotModel(state, x, y) : null;
   return {
     x, y, path, distance: length, accuracy: goal ? 1 : state.restart?.type === 'throwIn' ? throwAccuracy(length) : passAccuracy(length),
     ...(state.restart ? {restartType: state.restart.type} : {}),
     ...(receiver?.team === carrier.team ? {offside: !['goalKick', 'corner', 'throwIn'].includes(state.restart?.type) && offsideInfo(state, carrier.team).flaggedIds.includes(receiver.id)} : {}),
+    ...boxWarning,
     ...(receiver ? {receiverId: receiver.id} : {}), ...(goal ? {goal, probability: details.probability, shotModel: details} : {}),
     label: goal ? 'Shoot at goal' : receiver ? `Pass to ${NAMES[receiver.type]}` : `Kick to ${square(x, y)}`
   };
@@ -460,12 +491,13 @@ function kickRecord(state, carrier, x, y, path, receiver, goal) {
 function rawKicks(state) {
   const carrier = state.pieces.find(p => p.id === state.ball.carrierId);
   if (!carrier) return [];
-  const kicks = [];
+  const kicks = [], boxOffender = currentBoxKnights(state, carrier)[0];
+  const boxWarning = boxOffender ? {offside: true, offsideReason: 'boxKnight', offsidePieceId: boxOffender.id} : {};
   if (carrier.type === 'N' && state.restart?.type !== 'throwIn') {
     for (const [dx, dy] of KNIGHT) {
       const x = carrier.x + dx, y = carrier.y + dy, goal = goalAt(x, y);
       if (!inside(x, y) && !goal || (goal && (['throwIn', 'goalKick'].includes(state.restart?.type) || state.restart?.indirect))) continue;
-      kicks.push(kickRecord(state, carrier, x, y, [{x: carrier.x, y: carrier.y}, {x, y}], pieceAt(state, x, y), goal));
+      kicks.push(kickRecord(state, carrier, x, y, [{x: carrier.x, y: carrier.y}, {x, y}], pieceAt(state, x, y), goal, boxWarning));
     }
     return kicks;
   }
@@ -478,7 +510,7 @@ function rawKicks(state) {
       if (!inside(x, y)) break;
       path.push({x, y});
       const receiver = pieceAt(state, x, y);
-      kicks.push(kickRecord(state, carrier, x, y, [...path], receiver));
+      kicks.push(kickRecord(state, carrier, x, y, [...path], receiver, undefined, boxWarning));
       if (receiver) break;
     }
     if (!dy || ['throwIn', 'goalKick'].includes(state.restart?.type) || state.restart?.indirect) continue;
@@ -491,7 +523,7 @@ function rawKicks(state) {
       shotPath.push({x, y});
       if (!inside(x, y)) {
         const goal = goalAt(x, y);
-        if (goal) kicks.push(kickRecord(state, carrier, x, y, [...shotPath], null, goal));
+        if (goal) kicks.push(kickRecord(state, carrier, x, y, [...shotPath], null, goal, boxWarning));
         break;
       }
       const obstacle = pieceAt(state, x, y);
@@ -713,6 +745,8 @@ export function applyKick(state, x, y, {roll, landing} = {}) {
   const restart = state.restart;
   next.offside = offsideSnapshot(state, carrier, restart); next.restart = null;
   next.looseBallKickOrigin = null;
+  const boxOffender = boxKnightOffenders(next, next.offside)[0];
+  if (boxOffender) return callOffside(next, boxOffender, {pieceId: carrier.id, from, intendedTo: {x, y}, path: kick.path, distance: kick.distance, accuracy: kick.accuracy, offsideReason: 'boxKnight', offsidePieceId: boxOffender.id});
   if (kick.goal) {
     next.pendingShot = {x, y, shooterId: carrier.id, shooterType: carrier.type, shootingTeam: carrier.team, scoringTeam: kick.goal, defendingTeam: other(kick.goal), from, path: kick.path, distance: kick.distance};
     next.phase = 'keeperReact'; next.releaseReason = null;
@@ -925,6 +959,7 @@ function moveValue(state, projected, piece, move, team, beforeThreat) {
   if (move.type === 'tackle') return 12000 * (move.tackleProbability ?? 1) + tacticalShots(projected, team, true) * 500 - tacticalTackleRisk(projected, carrier) * 80;
   const forward = goalDistance(team, piece.y) - goalDistance(team, move.y);
   let value = 0;
+  if (carrier?.team === team) value += (currentBoxKnights(state).length - currentBoxKnights(projected).length) * 16000;
   if (!state.ball.carrierId) {
     if (carrier?.id === piece.id) {
       const origin = looseKickOrigin(state);
@@ -1007,7 +1042,7 @@ const AI_SEARCH = Object.freeze({depth: 6, roots: 9, budgetPerRoot: 90});
 // (and its complete animation path) here would dominate the search cost.
 function tacticalShots(state, team, react = false) {
   const carrier = state.pieces.find(piece => piece.id === state.ball.carrierId);
-  if (!carrier || carrier.team !== team || ['throwIn', 'goalKick'].includes(state.restart?.type) || state.restart?.indirect) return 0;
+  if (!carrier || carrier.team !== team || ['throwIn', 'goalKick'].includes(state.restart?.type) || state.restart?.indirect || currentBoxKnights(state, carrier).length) return 0;
   const vectors = carrier.type === 'N' ? KNIGHT : carrier.type === 'P' || carrier.type === 'R' ? STRAIGHTS : carrier.type === 'B' ? DIAGONALS : DIRECTIONS;
   let best = 0;
   for (const [dx, dy] of vectors) {
@@ -1190,6 +1225,7 @@ function tacticalSuccessors(state, action) {
   let probability = 1, kick;
   if (action.type === 'kick') {
     kick = legalKicks(state).find(candidate => candidate.x === action.x && candidate.y === action.y);
+    if (kick.offsideReason === 'boxKnight') return [{probability: 1, state: apply(0)}];
     if (!kick.goal) probability = kick.accuracy;
   } else if (action.type === 'move') {
     const move = legalMoves(state, action.pieceId, {freePawn: !!action.freePawn}).find(candidate => candidate.x === action.x && candidate.y === action.y);
