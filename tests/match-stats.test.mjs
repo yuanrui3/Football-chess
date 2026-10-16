@@ -700,3 +700,22 @@ test('historical cross-team own goal remains an own goal even if its redundant f
  assert.equal(restored.goals[0].team,'black');assert.equal(restored.goals[0].scorerId,'white-R1');assert.equal(restored.goals[0].ownGoal,true);assert.equal(restored.goals[0].assistId,null);assert.deepEqual(matchStatsSummary(restored).scorers,[]);assert.equal(restored.teams.black.shots,0);assert.equal(restored.teams.white.shots,0);assert.equal(restored.teams.black.onTarget,0);
  saved.goals[0].assistId='black-Q';assert.equal(restoreMatchStats(saved,run.state).partial,true,'an impossible own-goal assist still rejects the ledger');
 });
+
+for(const team of ['white','black'])for(const suffix of ['Q','N1'])test(`${team} ${suffix} disguised goal counts one attempt and maps the actual second target after reload`,()=>{
+ const transform=pair=>team==='white'?pair:mirror(pair),carrier=`${team}-${suffix}`;
+ const state=fixture({team,carrier,positions:{[carrier]:transform([6,1]),[`${other(team)}-K`]:transform([5,0])}}),run=tracked(state);
+ const targets=legalKicks(state).filter(kick=>kick.goal===team).sort((a,b)=>a.x-b.x);assert.equal(targets.length,2);
+ run.kick(targets[0].x,targets[0].y,{disguise:true});assert.equal(run.state.pendingShot.disguised,true);
+ assert.equal(run.stats.teams[team].shots,1);assert.equal(run.stats.teams[team].onTarget,0);
+ assert.equal(run.stats.pendingShot.target,null);assert.equal(run.stats.pendingShot.distance,null,'unresolved aim is not recorded as a committed endpoint');
+ run.stats=restoreMatchStats(clone(run.stats),normalizeGame(clone(run.state)));
+ assert.equal(run.stats.teams[team].shots,1);assert.equal(run.stats.pendingShot.target,null);assert.equal(run.stats.pendingShot.distance,null);
+ run.step(skipMove(run.state,{roll:0,targetRoll:.99}),{matchSeconds:123});
+ assert.equal(run.state.lastAction.type,'goal');assert.equal(run.state.lastAction.chosenTargetIndex,1);
+ assert.equal(run.stats.teams[team].shots,1);assert.equal(run.stats.teams[team].onTarget,1);assert.equal(run.stats.goals.length,1);
+ const goal=run.stats.goals[0];assert.deepEqual(goal.origin,{x:state.ball.x,y:state.ball.y});
+ assert.deepEqual(goal.target,{x:targets[1].x,y:targets[1].y});assert.notDeepEqual(goal.target,{x:targets[0].x,y:targets[0].y});
+ assert.equal(goal.distance,Math.hypot(goal.target.x-goal.origin.x,(goal.target.y<0?-.5:BOARD_HEIGHT-.5)-goal.origin.y));
+ assert.equal(goal.scorerId,carrier);assert.equal(goal.ownGoal,false);assert.equal(goal.assistId,null);
+ assert.deepEqual(restoreMatchStats(clone(run.stats),run.state),run.stats);
+});

@@ -495,3 +495,62 @@ test('replay shows and clears yellow-card badges while penalty frames use their 
     player.stop();
   }finally{if(previousDocument===undefined)delete globalThis.document;else globalThis.document=previousDocument;}
 });
+
+function recordedDisguisedGoal({team='white',knight=false}={}){
+  const shooterId=`${team}-${knight?'N1':'Q'}`,spot=team==='white'?[6,1]:[7,H-2];
+  const {state}=fixture({team,knight,extraPositions:{[shooterId]:spot,'black-K':[5,0]}});
+  state.ball={x:spot[0],y:spot[1],carrierId:shooterId};
+  const target=legalKicks(state).filter(kick=>kick.goal===team).sort((a,b)=>a.x-b.x)[0];assert.ok(target);
+  const before=applyKick(state,target.x,target.y,{disguise:true});
+  assert.equal(before.pendingShot.disguised,true);assert.equal(before.pendingShot.targetOptions.length,2);
+  const after=skipMove(before,{roll:0,targetRoll:.99});assert.equal(after.lastAction.type,'goal');
+  const replay=buildGoalReplay([{game:state},{game:before}],before,after);assert.ok(replay);
+  return {state,before,after,replay};
+}
+
+for(const team of ['white','black'])for(const knight of [false,true])test(`${team} ${knight?'knight':'queen'} replay declares two possibilities and records only the actual goal trajectory`,()=>{
+  const {before,after,replay}=recordedDisguisedGoal({team,knight}),declaration=replay.frames.at(-2),final=replay.frames.at(-1);
+  assert.equal(declaration.action.disguised,true);assert.equal(declaration.action.targetOptions.length,2);
+  assert.equal(declaration.action.to,undefined);assert.equal(declaration.action.path,undefined);assert.equal(declaration.action.chosenTargetIndex,undefined);
+  assert.match(declaration.caption,/50\/50.*after the keeper reacts/);
+  assert.deepEqual(declaration.action.targetOptions.map(({x,y})=>({x,y})),before.pendingShot.targetOptions.map(({x,y})=>({x,y})));
+  assert.equal(final.action.chosenTargetIndex,1);assert.deepEqual(final.ball,{...after.lastAction.goalTarget,carrierId:null});
+  assert.deepEqual(final.action.path,after.lastAction.path);assert.equal(final.action.probability,after.lastAction.probability);
+  assert.equal(final.action.combinedProbability,after.lastAction.combinedProbability);assert.equal(final.action.targetProbability,.5);
+  assert.match(final.caption,/actual target is revealed after the keeper reacts/);
+  assert.deepEqual(restoreGoalReplay(JSON.parse(JSON.stringify(replay))),replay);
+});
+
+test('disguised replay scrub shows both declared paths, then only the actual resolved path',()=>{
+  const {replay}=recordedDisguisedGoal(),dom=replayDOM(),previousDocument=globalThis.document;globalThis.document=dom.document;
+  try{
+    const player=createReplayPlayer();assert.equal(player.load(replay,{autoplay:false}),true);
+    const seek=index=>{dom.nodes.replayScrub.value=String(index);dom.nodes.replayScrub.fire('input');};
+    seek(replay.frames.length-2);
+    assert.equal(dom.nodes.replayOverlay.querySelectorAll('.replay-action-line').length,2);
+    assert.equal(dom.nodes.replayMoment.textContent,'SHOT DECLARED');assert.match(dom.nodes.replayCaption.textContent,/50\/50/);
+    assert.match(dom.nodes.replayDetails.textContent,/combined chance.*at the chosen target/);
+    seek(replay.frames.length-1);assert.equal(dom.nodes.replayOverlay.querySelectorAll('.replay-action-line').length,1);
+    assert.equal(dom.nodes.replayMoment.textContent,'GOAL');
+    seek(0);assert.equal(dom.nodes.replayOverlay.querySelectorAll('.replay-action-line').length,0);
+    player.stop();
+  }finally{if(previousDocument===undefined)delete globalThis.document;else globalThis.document=previousDocument;}
+});
+
+test('stored disguised replay rejects revealed declarations, invalid target pairs and forged chosen indices',()=>{
+  const {replay}=recordedDisguisedGoal(),declaration=value=>value.frames.at(-2).action,final=value=>value.frames.at(-1).action;
+  const mutations=[
+    value=>declaration(value).chosenTargetIndex=0,
+    value=>declaration(value).to={...declaration(value).targetOptions[0]},
+    value=>declaration(value).path=[declaration(value).from,declaration(value).targetOptions[0]],
+    value=>declaration(value).targetOptions.pop(),
+    value=>declaration(value).targetOptions[1]={...declaration(value).targetOptions[0]},
+    value=>declaration(value).targetOptions[0].path[0].x++,
+    value=>declaration(value).targetOptions[0].y=H,
+    value=>final(value).chosenTargetIndex=0,
+    value=>final(value).targetProbability=.7,
+    value=>final(value).combinedProbability=1.1,
+    value=>delete final(value).disguised,
+  ];
+  for(const mutate of mutations){const invalid=clone(replay);mutate(invalid);assert.equal(restoreGoalReplay(invalid),null);}
+});

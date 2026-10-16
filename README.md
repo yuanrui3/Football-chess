@@ -62,6 +62,10 @@ For shooter S and target T on y=-0.5 or 16.5, L is Euclidean length and u the un
 
 The outcome draw partitions goal, keeper parry, keeper catch, wide, defender deflection out, and defender possession. Keeper save probability excludes body blocks. Total corner probability combines keeper parries and actual block corners; it is not subtracted from keeper saves when calculating catches. Long wide-shot scatter uses additional seeded draws for landing. Pending shots retain shooter identity and original position while the keeper moves.
 
+Queens and Knights can optionally declare a **disguised shot** when their native kicking pattern reaches exactly two legal opponent-goal endpoints. Both endpoints are public, but neither is selected before the keeper reacts. Resolution draws the target with equal 50/50 odds, then samples that target's usual shot outcomes. Keeper previews and both AI policies use the mean of the two target models, including the same keeper reply for both; Tactical search enumerates target and outcome branches. This gives uncertainty a practical finishing benefit without changing the underlying shot coefficients, range, friendly-body restrictions or penalties. A normal single-target shot remains available. The resolved action, statistics and replay use the actual selected endpoint; one declaration counts as one attempt.
+
+For a shot parried or blocked out, the aimed goal file selects the corner: f/g gives x=0, h/i gives x=13 on the unrotated pitch. A disguised shot uses the endpoint sampled after the keeper's reaction. Ordinary pass exits and long wide-shot scatter retain the first-boundary-crossing rule.
+
 ## Offside
 
 At each teammate kick, flag attackers in the opponents' half strictly nearer the goal line than **both the ball and the second-last opponent**. All opponents count; the King need not be last. Level with the ball/defender or on the halfway row (y=8) is onside. A player behind the dribbler is not flagged merely for being beyond the defenders.

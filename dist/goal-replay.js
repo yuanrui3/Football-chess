@@ -1,5 +1,5 @@
 // A replay is a bounded recording of the match, never another engine run.
-import {BOARD_WIDTH as W,BOARD_HEIGHT as H,GOAL_FILES,BOX_FILES,BOX_DEPTH,FILE_LABELS as FILES,RULES_VERSION,canOccupySquare} from './engine.js?v=2b5df6d6cd8a';
+import {BOARD_WIDTH as W,BOARD_HEIGHT as H,GOAL_FILES,BOX_FILES,BOX_DEPTH,FILE_LABELS as FILES,RULES_VERSION,canOccupySquare} from './engine.js?v=03b47b43265e';
 const TEAMS=['white','black'];
 const REPLAY_VERSION=2;
 const geometry=()=>({width:W,height:H,goalFiles:[...GOAL_FILES],boxFiles:[...BOX_FILES],boxDepth:BOX_DEPTH});
@@ -17,6 +17,8 @@ const clone=value=>structuredClone(value);
 const integer=(value,min,max)=>Number.isInteger(value)&&value>=min&&value<=max;
 const point=value=>value&&integer(value.x,-24,W+23)&&integer(value.y,-24,H+23);
 const pitchPoint=value=>point(value)&&integer(value.x,0,W-1)&&integer(value.y,0,H-1);
+const goalPoint=value=>point(value)&&GOAL_FILES.includes(value.x)&&(value.y===-1||value.y===H);
+const samePoint=(a,b)=>a?.x===b?.x&&a?.y===b?.y;
 const score=value=>value&&integer(value.white,0,9999)&&integer(value.black,0,9999);
 const sameScore=(a,b)=>a?.white===b?.white&&a?.black===b?.black;
 const coordinate=p=>GOAL_FILES.includes(p.x)&&(p.y===-1||p.y===H)?`${FILES[p.x].toUpperCase()} goal`:pitchPoint(p)?`${FILES[p.x]}${H-p.y}`:'outside the pitch';
@@ -66,8 +68,17 @@ function recordAction(action){
   if(!action||!ACTIONS.has(action.type))return null;
   const result={type:action.type};
   for(const key of ['team','shootingTeam','pieceId','shooterId'])if(action[key]!==undefined)result[key]=action[key];
-  for(const key of ['from','to'])if(point(action[key]))result[key]={x:action[key].x,y:action[key].y};
-  if(Array.isArray(action.path))result.path=action.path.slice(0,32).map(p=>({x:p.x,y:p.y}));
+  for(const key of ['from','to','goalTarget'])if(point(action[key]))result[key]={x:action[key].x,y:action[key].y};
+  const declaredDisguise=action.disguised===true&&action.type==='shotAttempt';
+  if(Array.isArray(action.path)&&!declaredDisguise)result.path=action.path.slice(0,32).map(p=>({x:p.x,y:p.y}));
+  if(action.disguised===true){
+    result.disguised=true;
+    if(Array.isArray(action.targetOptions))result.targetOptions=action.targetOptions.slice(0,2).map(target=>({x:target.x,y:target.y,...(Array.isArray(target.path)?{path:target.path.slice(0,32).map(p=>({x:p.x,y:p.y}))}:{})}));
+    if(!declaredDisguise&&action.chosenTargetIndex!==undefined)result.chosenTargetIndex=action.chosenTargetIndex;
+    for(const key of ['combinedProbability','targetProbability'])if(Number.isFinite(action[key]))result[key]=action[key];
+    // The declaration records possibilities, never a committed single aim.
+    if(declaredDisguise){delete result.to;delete result.goalTarget;}
+  }
   if(action.keeperMove)result.keeperMove={pieceId:action.keeperMove.pieceId,from:{...action.keeperMove.from},to:{...action.keeperMove.to}};
   if(Number.isFinite(action.probability))result.probability=action.probability;
   if(action.ownGoal!==undefined)result.ownGoal=!!action.ownGoal;
@@ -87,11 +98,23 @@ function validAction(action){
   if(!action||!ACTIONS.has(action.type))return false;
   for(const key of ['team','shootingTeam'])if(action[key]!==undefined&&!TEAMS.includes(action[key]))return false;
   for(const key of ['pieceId','shooterId','offenderId','targetId','sentOffId'])if(action[key]!==undefined&&!IDS.has(action[key]))return false;
-  for(const key of ['from','to'])if(action[key]!==undefined&&!point(action[key]))return false;
+  for(const key of ['from','to','goalTarget'])if(action[key]!==undefined&&!point(action[key]))return false;
   if(action.path!==undefined&&(!Array.isArray(action.path)||action.path.length<1||action.path.length>32||!action.path.every(point)))return false;
   if(action.probability!==undefined&&(!Number.isFinite(action.probability)||action.probability<0||action.probability>1))return false;
   if(action.ownGoal!==undefined&&typeof action.ownGoal!=='boolean')return false;
   if(action.penalty!==undefined&&(action.penalty!==true||!['shotAttempt','goal','save','shotMiss'].includes(action.type)||action.keeperMove))return false;
+  if(action.disguised!==undefined){
+    const options=action.targetOptions;
+    if(action.disguised!==true||action.penalty||!['shotAttempt','goal','save','shotMiss','blockedShot'].includes(action.type)||!pitchPoint(action.from)||!Array.isArray(options)||options.length!==2||!options.every(goalPoint)||options[0].y!==options[1].y||options[0].x===options[1].x)return false;
+    const shootingTeam=action.shootingTeam||action.pieceId?.split('-')[0];
+    if(!TEAMS.includes(shootingTeam)||options[0].y!==(shootingTeam==='white'?-1:H))return false;
+    if(options.some(target=>target.path!==undefined&&(!Array.isArray(target.path)||target.path.length<2||target.path.length>32||!target.path.every(point)||!samePoint(target.path[0],action.from)||!samePoint(target.path.at(-1),target))))return false;
+    for(const key of ['combinedProbability','targetProbability'])if(action[key]!==undefined&&(!Number.isFinite(action[key])||action[key]<0||action[key]>1))return false;
+    if(action.targetProbability!==undefined&&action.targetProbability!==.5)return false;
+    if(action.type==='shotAttempt'){
+      if(action.chosenTargetIndex!==undefined||action.to!==undefined||action.path!==undefined||action.goalTarget!==undefined)return false;
+    }else if(!integer(action.chosenTargetIndex,0,1)||!samePoint(action.goalTarget||action.to,options[action.chosenTargetIndex]))return false;
+  }else if(action.targetOptions!==undefined||action.chosenTargetIndex!==undefined||action.combinedProbability!==undefined||action.targetProbability!==undefined)return false;
   if(action.type==='foul'){
     if(!IDS.has(action.offenderId)||!IDS.has(action.targetId)||action.pieceId!==action.offenderId||!action.offenderId.startsWith(`${action.team}-`)||action.targetId.startsWith(`${action.team}-`)||action.card!==null&&!['yellow','red'].includes(action.card)||typeof action.secondYellow!=='boolean'||action.secondYellow&&action.card!=='red'||!['freeKick','penalty','forfeit'].includes(action.outcome)||!pitchPoint(action.from)||!pitchPoint(action.contactSpot)||!pitchPoint(action.intendedTo))return false;
     if(action.sentOffId!==undefined&&(action.card!=='red'||action.sentOffId!==action.offenderId))return false;
@@ -110,7 +133,7 @@ function frameCaption(state){
   const action=state.lastAction,piece=state.pieces.find(p=>p.id===action?.pieceId),name=piece?NAMES[piece.type]:'Player';
   if(!action)return 'The build-up begins.';
   const side=TEAM[action.team]||'';
-  if(action.type==='shotAttempt')return action.shotModel?.penalty||action.penalty?`${side} takes a penalty from ${coordinate(action.from)} toward the ${coordinate(action.to)}.`:`${side} ${name.toLowerCase()} shoots from ${coordinate(action.from)} toward the ${coordinate(action.to)}.`;
+  if(action.type==='shotAttempt')return action.disguised?`${side} ${name.toLowerCase()} disguises a shot from ${coordinate(action.from)}: the ${action.targetOptions.map(coordinate).join(' or ')} (50/50), chosen after the keeper reacts.`:action.shotModel?.penalty||action.penalty?`${side} takes a penalty from ${coordinate(action.from)} toward the ${coordinate(action.to)}.`:`${side} ${name.toLowerCase()} shoots from ${coordinate(action.from)} toward the ${coordinate(action.to)}.`;
   if(action.type==='foul'){
     const offender=piece||state.sentOff?.find(p=>p.id===action.offenderId),role=offender?NAMES[offender.type].toLowerCase():'player';
     const card=action.card==='red'?(action.secondYellow?' A second yellow means a red card.':' Red card.'):action.card==='yellow'?' Yellow card.':'';
@@ -141,6 +164,7 @@ function recordFrame(state){
 function validFrame(frame,isGoal){
   if(!frame||!validPieces(frame.pieces,frame.sentOff)||!score(frame.score)||!validAction(frame.action)||typeof frame.caption!=='string'||frame.caption.length>280)return false;
   if(frame.action?.keeperMove&&frame.pieces.find(piece=>piece.id===frame.action.keeperMove.pieceId)?.type!=='K')return false;
+  if(frame.action?.disguised&&!['Q','N'].includes(frame.pieces.find(piece=>piece.id===(frame.action.shooterId||frame.action.pieceId))?.type))return false;
   if(frame.action?.type==='foul'){
     const action=frame.action,offender=frame.pieces.find(piece=>piece.id===action.offenderId),dismissed=frame.sentOff?.find(piece=>piece.id===action.offenderId),replacement=action.keeperReplacement;
     if(!frame.pieces.some(piece=>piece.id===action.targetId))return false;
@@ -192,6 +216,9 @@ export function restoreGoalReplay(value){
     if(frames.slice(1).some((frame,index)=>!validRosterTransition(frames[index],frame)))return null;
     const final=frames.at(-1),previous=frames.at(-2),other=value.team==='white'?'black':'white';
     if(!sameScore(value.score,final.score)||final.score[value.team]!==previous.score[value.team]+1||final.score[other]!==previous.score[other]||!frames.slice(0,-1).every(frame=>sameScore(frame.score,previous.score))||final.action.team!==value.team||final.action.shootingTeam!==value.shootingTeam||final.action.pieceId!==value.shooterId||final.action.ownGoal!==value.ownGoal||!Number.isFinite(final.action.probability)||!pitchPoint(final.action.from)||!point(final.action.to)||final.action.to.x!==final.ball.x||final.action.to.y!==final.ball.y||final.ball.y!==(value.team==='white'?-1:H))return null;
+    if(final.action.disguised||previous.action?.disguised){
+      if(!final.action.disguised||!previous.action?.disguised||previous.action.type!=='shotAttempt'||JSON.stringify(final.action.targetOptions)!==JSON.stringify(previous.action.targetOptions)||!samePoint(final.action.from,previous.action.from))return null;
+    }
     for(const piece of previous.pieces){
       const recorded=final.pieces.find(p=>p.id===piece.id),move=final.action.keeperMove;
       if(move?.pieceId===piece.id){if(piece.x!==move.from.x||piece.y!==move.from.y||recorded.x!==move.to.x||recorded.y!==move.to.y)return null;}
@@ -228,7 +255,7 @@ export function buildGoalReplay(history,before,after){
     const shooter=before.pieces.find(piece=>piece.id===action.pieceId);
     const penalty=action.shotModel?.penalty||action.penalty;
     const held=penalty?' Keeper holds for the penalty.':action.shotModel?.keeperInBox?' Keeper holds position.':' The king is outside its box; no keeper reaction.';
-    final.caption=`${TEAM[action.team]} ${action.ownGoal?'benefits from an own goal':penalty?'scores a penalty':'scores'}! ${shooter?NAMES[shooter.type]: 'Shot'} from ${coordinate(action.from)} to the ${coordinate(action.to)}.${move?` Keeper reacts from ${coordinate(move.from)} to ${coordinate(move.to)}.`:held}`;
+    final.caption=`${TEAM[action.team]} ${action.ownGoal?'benefits from an own goal':penalty?'scores a penalty':'scores'}! ${shooter?NAMES[shooter.type]: 'Shot'} from ${coordinate(action.from)} to the ${coordinate(action.to)}.${action.disguised?' The actual target is revealed after the keeper reacts.':''}${move?` Keeper reacts from ${coordinate(move.from)} to ${coordinate(move.to)}.`:held}`;
     return restoreGoalReplay({version:REPLAY_VERSION,board:geometry(),score:{...after.score},team:action.team,shootingTeam:action.shootingTeam,ownGoal:!!action.ownGoal,shooterId:action.pieceId,goalTurn:after.turn,frames:[...states,final]});
   }catch{return null;}
 }
@@ -288,7 +315,9 @@ export function createReplayPlayer({onComplete=()=>{},onInteract=()=>{}}={}){
     overlay.querySelectorAll('.replay-action-line,.replay-keeper-line').forEach(el=>el.remove());
     const action=frame.action;
     function line(points,className){const el=document.createElementNS('http://www.w3.org/2000/svg','polyline');el.setAttribute('class',className);el.setAttribute('points',points.map(p=>`${p.x*100+50},${p.y*100+150}`).join(' '));overlay.append(el);}
-    if(action?.path?.length>1)line(action.path,'replay-action-line');
+    if(action?.type==='shotAttempt'&&action.disguised){
+      for(const target of action.targetOptions)line(target.path?.length>1?target.path:[action.from,target],'replay-action-line');
+    }else if(action?.path?.length>1)line(action.path,'replay-action-line');
     if(action?.keeperMove)line([action.keeperMove.from,action.keeperMove.to],'replay-keeper-line');
     $('replayMoment').textContent=goal?'GOAL':action?.type==='foul'?action.card==='red'?'RED CARD':action.card==='yellow'?'YELLOW CARD':'FOUL':action?.penalty?'PENALTY':action?.type==='shotAttempt'?'SHOT DECLARED':action?.lofted?'LOFTED PASS':'BUILD-UP';
     controls();
@@ -313,7 +342,8 @@ export function createReplayPlayer({onComplete=()=>{},onInteract=()=>{}}={}){
       const shooter=replay.frames.at(-1).pieces.find(piece=>piece.id===replay.shooterId);
       $('replayTitle').textContent=`${TEAM[replay.team]} ${replay.ownGoal?'· Own goal':'· Goal'}`;
       const goalAction=replay.frames.at(-1).action;
-      $('replayDetails').textContent=`${TEAM[replay.shootingTeam]} ${shooter?NAMES[shooter.type].toLowerCase():'player'} · ${Math.round(goalAction.probability*100)}% ${goalAction.penalty?'penalty scoring chance':'finishing chance after the keeper’s decision'}`;
+      const chance=goalAction.disguised&&Number.isFinite(goalAction.combinedProbability)?`${Math.round(goalAction.combinedProbability*100)}% combined chance · ${Math.round(goalAction.probability*100)}% at the chosen target`:`${Math.round(goalAction.probability*100)}% ${goalAction.penalty?'penalty scoring chance':'finishing chance after the keeper’s decision'}`;
+      $('replayDetails').textContent=`${TEAM[replay.shootingTeam]} ${shooter?NAMES[shooter.type].toLowerCase():'player'} · ${chance}`;
       $('replayScrub').max=String(replay.frames.length-1);playing=!!autoplay;renderFrame();schedule();return true;
     },
     stop(){clearTimer();clearAnimations();playing=false;controls();}

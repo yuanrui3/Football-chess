@@ -9,7 +9,7 @@ export const CENTRAL_GOAL_FILES = Object.freeze([6, 7]);
 export const MIDFIELD_RANK = Math.floor(BOARD_HEIGHT / 2);
 export const BOARD_CENTER_X = (BOARD_WIDTH - 1) / 2;
 export const FILE_LABELS = 'abcdefghijklmn';
-export const RULES_VERSION = 16;
+export const RULES_VERSION = 17;
 export const ALLOW_OUTFIELD_BOXES = true;
 export const LONG_TACKLE_RANGE = 5;
 export const MOVE_RANGE = 10;
@@ -253,6 +253,15 @@ function canonicalizePendingShot(state) {
   const shootingTeam = shotShootingTeam(state, shot), scoringTeam = shotScoringTeam(shot.x, shot.y);
   if (shootingTeam) shot.shootingTeam = shootingTeam;
   if (scoringTeam) { shot.scoringTeam = scoringTeam; shot.defendingTeam = other(scoringTeam); }
+  const options = validatedDisguisedOptions(state, shot);
+  if (options.length === 2) {
+    Object.assign(shot, options[0], {disguised: true, targetOptions: options});
+    shot.shooterType = state.pieces.find(piece => piece.id === shot.shooterId).type;
+    shot.scoringTeam = shootingTeam; shot.defendingTeam = other(shootingTeam);
+    delete shot.chosenTargetIndex; delete shot.actualTarget; delete shot.targetRoll;
+  } else {
+    delete shot.disguised; delete shot.targetOptions;
+  }
 }
 
 // Every actual random outcome advances a small, serializable PRNG. Planning and
@@ -647,6 +656,14 @@ export function normalizeGame(state) {
   if (next.phase === 'keeperReact' && next.pendingShot && next.lastAction?.type === 'shotAttempt') {
     const details = shotModel(next);
     next.lastAction = {...next.lastAction, team: next.pendingShot.shootingTeam, probability: details.probability, shotModel: details};
+    if (next.pendingShot.disguised) {
+      const shot = next.pendingShot;
+      Object.assign(next.lastAction, {disguised: true, targetOptions: copy(shot.targetOptions), targetProbability: 0.5,
+        to: {x: shot.x, y: shot.y}, goalTarget: {x: shot.x, y: shot.y}, path: copy(shot.path)});
+      delete next.lastAction.chosenTargetIndex; delete next.lastAction.actualTarget; delete next.lastAction.targetRoll;
+    } else {
+      delete next.lastAction.disguised; delete next.lastAction.targetOptions; delete next.lastAction.targetProbability;
+    }
   }
   next.rulesVersion = RULES_VERSION;
   return next;
@@ -654,14 +671,15 @@ export function normalizeGame(state) {
 
 const restartTurnMessage = restart => restart.type === 'goalKick' ? 'Both teams may reposition before the goalkeeper passes the ball into the pitch.' : 'Both teams may reposition before the restart.';
 
-function restartForExit(state, from, landing, lastTouchTeam) {
+function restartForExit(state, from, landing, lastTouchTeam, {cornerTargetX} = {}) {
   const exit = boundaryExit(from, landing);
   if (!exit) return null;
   if (exit.line === 'left' || exit.line === 'right') return awardRestart(state, 'throwIn', other(lastTouchTeam), {x: exit.line === 'left' ? 0 : BOARD_WIDTH - 1, y: exit.y}, {exit});
   const defendingTeam = exit.line === 'top' ? 'black' : 'white';
   const type = lastTouchTeam === defendingTeam ? 'corner' : 'goalKick';
   const team = type === 'corner' ? other(defendingTeam) : defendingTeam;
-  const spot = type === 'corner' ? {x: exit.x < (BOARD_WIDTH - 1) / 2 ? 0 : BOARD_WIDTH - 1, y: exit.line === 'top' ? 0 : BOARD_HEIGHT - 1}
+  const cornerX = Number.isFinite(cornerTargetX) ? cornerTargetX : exit.x;
+  const spot = type === 'corner' ? {x: cornerX < (BOARD_WIDTH - 1) / 2 ? 0 : BOARD_WIDTH - 1, y: exit.line === 'top' ? 0 : BOARD_HEIGHT - 1}
     : {x: clamp(Math.round(exit.x), BOX_FILES[0], BOX_FILES.at(-1)), y: exit.line === 'top' ? 0 : BOARD_HEIGHT - 1};
   return awardRestart(state, type, team, spot, {exit});
 }
@@ -701,7 +719,7 @@ function friendlyStopsShot(state, carrier, x, y) {
   return shotBodies(state.pieces, carrier, target, carrier.id).some(piece => piece.team === carrier.team);
 }
 
-export function shotModel(state, x = state?.pendingShot?.x, y = state?.pendingShot?.y, keeperPosition) {
+function singleShotModel(state, x = state?.pendingShot?.x, y = state?.pendingShot?.y, keeperPosition) {
   const scoringTeam = shotScoringTeam(x, y);
   const pieces = Array.isArray(state?.pieces) ? state.pieces : [];
   const carrier = pieces.find(p => p.id === state?.ball?.carrierId);
@@ -808,6 +826,21 @@ export function shotModel(state, x = state?.pendingShot?.x, y = state?.pendingSh
     cornerProbability: 0, keeperCornerProbability: 0, parryGivenSave: 0, blockerIds: [], blockerPositions: [], blockProbability: 0, blockOutProbability: 0, blockCornerProbability: 0, blockPossessionProbability: 0};
 }
 
+// A disguised declaration contains two public possibilities, never a selected
+// endpoint. Every keeper preview evaluates the same fair 50/50 mixture.
+export function shotModel(state, x = state?.pendingShot?.x, y = state?.pendingShot?.y, keeperPosition) {
+  const options = validatedDisguisedOptions(state, state?.pendingShot);
+  if (options.length !== 2) return singleShotModel(state, x, y, keeperPosition);
+  const targetModels = options.map(option => singleShotModel({...state, pendingShot: {...state.pendingShot, ...option}}, option.x, option.y, keeperPosition));
+  const result = {...targetModels[0]};
+  for (const key of Object.keys(result)) if (typeof result[key] === 'number') result[key] = (targetModels[0][key] + targetModels[1][key]) / 2;
+  result.saveGivenOnTarget = result.onTargetProbability > 0 ? result.saveProbability / result.onTargetProbability : 0;
+  result.parryGivenSave = result.saveProbability > 0 ? result.keeperCornerProbability / result.saveProbability : 0;
+  result.blockerIds = [...new Set(targetModels.flatMap(model => model.blockerIds))];
+  result.blockerPositions = result.blockerIds.map(id => targetModels.flatMap(model => model.blockerPositions).find(piece => piece.id === id));
+  return {...result, disguised: true, targetOptions: options, targetModels};
+}
+
 export function shotChance(state, x = state?.pendingShot?.x, y = state?.pendingShot?.y, keeperPosition) {
   return shotModel(state, x, y, keeperPosition).probability;
 }
@@ -883,6 +916,61 @@ export function legalKicks(state) {
   return ['kick', 'kickoff', 'keeperRelease'].includes(state.phase) ? rawKicks(state) : [];
 }
 
+// Goal-only geometry is shared by threat evaluation and saved declarations.
+// It does not generate passes, consume randomness, or introduce new kick rays.
+function goalShotTargets(state, carrier) {
+  if (!carrier) return [];
+  const vectors = carrier.type === 'N' ? KNIGHT : carrier.type === 'P' || carrier.type === 'R' ? STRAIGHTS : carrier.type === 'B' ? DIAGONALS : DIRECTIONS;
+  const targets = [];
+  for (const [dx, dy] of vectors) {
+    if (!dy) continue;
+    const path = [{x: carrier.x, y: carrier.y}];
+    for (let step = 1; step <= (carrier.type === 'N' ? 1 : BOARD_HEIGHT + 1); step++) {
+      const x = carrier.x + dx * step, y = carrier.y + dy * step;
+      path.push({x, y});
+      if (!inside(x, y)) {
+        if (goalAt(x, y) === carrier.team && !friendlyStopsShot(state, carrier, x, y)) targets.push({x, y, goal: carrier.team, path, distance: distance(carrier, {x, y})});
+        break;
+      }
+      if (carrier.type === 'N') break;
+      if (pieceAt(state, x, y)?.team === carrier.team) break;
+    }
+  }
+  return targets.sort((a, b) => a.x - b.x);
+}
+
+function eligibleDisguisedPair(state, targets) {
+  const carrier = state.pieces?.find(piece => piece.id === state.ball?.carrierId);
+  if (!carrier || !['Q', 'N'].includes(carrier.type) || ['penalty', 'throwIn', 'goalKick'].includes(state.restart?.type)
+      || state.restart?.indirect || currentBoxKnights(state, carrier).length) return [];
+  const options = targets.filter(target => target.goal === carrier.team && !target.offside).sort((a, b) => a.x - b.x);
+  return options.length === 2 ? options : [];
+}
+
+export function disguisedShotTargets(state) {
+  if (!state || !['kick', 'kickoff', 'keeperRelease'].includes(state.phase)) return [];
+  return eligibleDisguisedPair(state, legalKicks(state));
+}
+
+function validatedDisguisedOptions(state, shot) {
+  if (!shot?.disguised || shot.penalty || !Array.isArray(shot.targetOptions) || shot.targetOptions.length !== 2 || !inside(shot.from?.x, shot.from?.y)) return [];
+  const declared = state.pieces?.find(piece => piece.id === shot.shooterId);
+  if (!declared || !['Q', 'N'].includes(declared.type)) return [];
+  const carrier = {...declared, ...shot.from};
+  const snapshot = {...state, pieces: state.pieces.map(piece => piece.id === carrier.id ? carrier : piece)};
+  const legal = goalShotTargets(snapshot, carrier);
+  const options = shot.targetOptions.map(option => legal.find(target => target.x === option?.x && target.y === option?.y));
+  if (options.some(option => !option) || options[0].x === options[1].x && options[0].y === options[1].y) return [];
+  if (!options.some(option => option.x === shot.x && option.y === shot.y)) return [];
+  // Rebuild paths and distance from the immutable origin, never saved labels.
+  return options.sort((a, b) => a.x - b.x).map(({x, y, path, distance}) => ({x, y, path, distance}));
+}
+
+function kickingChoices(state) {
+  const kicks = legalKicks(state), pair = eligibleDisguisedPair(state, kicks);
+  return pair.length === 2 ? [...kicks, {...pair[0], disguise: true, targetOptions: pair}] : kicks;
+}
+
 function beginPosition(state, phase = 'attackMove') {
   state.phase = phase;
   state.passRun = null;
@@ -905,13 +993,19 @@ function advancePosition(state, previousPhase) {
   return false;
 }
 
-function resolveShot(next, {roll, keeperMove, landing} = {}) {
+function resolveShot(next, {roll, targetRoll, keeperMove, landing} = {}) {
   canonicalizePendingShot(next);
-  const shot = next.pendingShot;
-  if (!shot || next.phase !== 'keeperReact') throw new Error('There is no shot awaiting a goalkeeper reaction.');
+  const declaration = next.pendingShot;
+  if (!declaration || next.phase !== 'keeperReact') throw new Error('There is no shot awaiting a goalkeeper reaction.');
+  const targetOptions = validatedDisguisedOptions(next, declaration);
+  const combinedProbability = targetOptions.length === 2 ? shotChance(next) : null;
+  // Delaying the target draw until this point means no stored secret, seed
+  // inspection, preview or keeper policy can reveal the eventual destination.
+  const chosenTargetIndex = targetOptions.length === 2 ? (nextRoll(next, targetRoll) < 0.5 ? 0 : 1) : null;
+  const shot = chosenTargetIndex === null ? declaration : {...declaration, ...targetOptions[chosenTargetIndex]};
   next.looseBallKickOrigin = null;
   const keeper = next.pieces.find(p => p.type === 'K' && p.team === shot.defendingTeam);
-  const details = shotModel(next, shot.x, shot.y), probability = details.probability;
+  const details = singleShotModel({...next, pendingShot: shot}, shot.x, shot.y), probability = details.probability;
   const outcomeRoll = nextRoll(next, roll);
   const keeperCornerEnd = probability + details.keeperCornerProbability;
   const caughtEnd = probability + details.saveProbability;
@@ -919,7 +1013,8 @@ function resolveShot(next, {roll, keeperMove, landing} = {}) {
   const blockOutEnd = 1 - details.blockPossessionProbability;
   const outcome = outcomeRoll < probability ? 'goal' : outcomeRoll < keeperCornerEnd ? 'keeperCorner'
     : outcomeRoll < caughtEnd ? 'saved' : outcomeRoll < wideEnd ? 'wide' : outcomeRoll < blockOutEnd ? 'blockOut' : 'blocked';
-  const common = {pieceId: shot.shooterId, shooterId: shot.shooterId, shootingTeam: shot.shootingTeam, from: shot.from, goalTarget: {x: shot.x, y: shot.y}, probability, accuracy: probability, roll: outcomeRoll, shotModel: details, shotPath: shot.path, ...(keeperMove ? {keeperMove} : {})};
+  const common = {pieceId: shot.shooterId, shooterId: shot.shooterId, shootingTeam: shot.shootingTeam, from: shot.from, goalTarget: {x: shot.x, y: shot.y}, probability, accuracy: probability, roll: outcomeRoll, shotModel: details, shotPath: shot.path,
+    ...(chosenTargetIndex === null ? {} : {disguised: true, targetOptions, chosenTargetIndex, targetProbability: 0.5, combinedProbability}), ...(keeperMove ? {keeperMove} : {})};
   if (outcome === 'goal') {
     const conceded = shot.defendingTeam;
     next.score[shot.scoringTeam]++;
@@ -937,7 +1032,7 @@ function resolveShot(next, {roll, keeperMove, landing} = {}) {
   } else if (outcome === 'keeperCorner' || outcome === 'saved') {
     if (outcome === 'keeperCorner') {
       const endY = shot.scoringTeam === 'white' ? -1 : BOARD_HEIGHT;
-      const restart = restartForExit(next, shot.from, {x: shot.x, y: endY}, shot.defendingTeam);
+      const restart = restartForExit(next, shot.from, {x: shot.x, y: endY}, shot.defendingTeam, {cornerTargetX: shot.x});
       next.turn++;
       next.lastAction = {...common, type: 'save', team: shot.defendingTeam, keeperId: keeper?.id, to: {...next.ball}, path: shot.path, outcome: 'corner', tippedOut: true, restart: copy(restart)};
       addLog(next, `${title(shot.defendingTeam)} goalkeeper parries the shot out (${Math.round(details.parryGivenSave * 100)}% parry chance if stopped). ${title(shot.scoringTeam)} has a corner and a full positioning round.`);
@@ -979,7 +1074,7 @@ function resolveShot(next, {roll, keeperMove, landing} = {}) {
     const blockedAt = {x: blocker.x, y: blocker.y};
     next.offside = null;
     if (outcome === 'blockOut') {
-      const restart = restartForExit(next, shot.from, {x: shot.x, y: shot.y}, blocker.team);
+      const restart = restartForExit(next, shot.from, {x: shot.x, y: shot.y}, blocker.team, {cornerTargetX: shot.x});
       next.turn++;
       next.lastAction = {...common, type: 'blockedShot', team: blocker.team, blockerId: blocker.id, blockedAt, to: {...next.ball}, path: shot.path, outcome: restart.type === 'corner' ? 'corner' : 'out', restart: copy(restart)};
       addLog(next, `${title(blocker.team)} ${NAMES[blocker.type]} blocks the shot out. ${title(restart.team)} has a ${restart.type === 'corner' ? 'corner' : 'goal kick'}. ${restartTurnMessage(restart)}`);
@@ -1019,7 +1114,7 @@ function tackleFoul(next, source, piece, carrier, from, intendedTo, outcomeRoll)
   return next;
 }
 
-export function applyMove(state, pieceId, x, y, {freePawn = false, roll, landing} = {}) {
+export function applyMove(state, pieceId, x, y, {freePawn = false, roll, targetRoll, landing} = {}) {
   const move = legalMoves(state, pieceId, {freePawn}).find(candidate => candidate.x === x && candidate.y === y);
   if (!move) throw new Error('That is not a legal move.');
   const next = copy(state), piece = next.pieces.find(p => p.id === pieceId), from = {x: piece.x, y: piece.y};
@@ -1038,7 +1133,7 @@ export function applyMove(state, pieceId, x, y, {freePawn = false, roll, landing
   }
   if (state.phase === 'keeperReact') {
     addLog(next, `${title(piece.team)} goalkeeper reacts to ${square(x, y)}.`);
-    return resolveShot(next, {roll, landing, keeperMove: {pieceId, from, to: {x, y}}});
+    return resolveShot(next, {roll, targetRoll, landing, keeperMove: {pieceId, from, to: {x, y}}});
   }
   const previousAttack = state.attack, wasCarrier = next.ball.carrierId === piece.id;
   const tackling = move.type === 'tackle', probability = move.tackleProbability ?? 1;
@@ -1089,7 +1184,7 @@ export function applyMove(state, pieceId, x, y, {freePawn = false, roll, landing
   return next;
 }
 
-export function skipMove(state, {roll, landing} = {}) {
+export function skipMove(state, {roll, targetRoll, landing} = {}) {
   if (state.phase === 'passRun') {
     const next = copy(state);
     beginPosition(next);
@@ -1103,7 +1198,7 @@ export function skipMove(state, {roll, landing} = {}) {
     addLog(next, keeper && inOwnBox(keeper.team, keeper.x, keeper.y)
       ? `${title(currentTeam(state))} goalkeeper holds position.`
       : `${title(currentTeam(state))} king is outside its own box and has no goalkeeper reaction. The shot resolves.`);
-    return resolveShot(next, {roll, landing});
+    return resolveShot(next, {roll, targetRoll, landing});
   }
   if (!positionalTurn(state)) {
     if (['kick', 'keeperRelease'].includes(state.phase) && !state.ball.carrierId) {
@@ -1174,9 +1269,11 @@ function scatterSquare(state, target, kickDistance, isThrow, override) {
   return landingOverride(override) || {x: target.x + dx * spread, y: target.y + dy * spread};
 }
 
-export function applyKick(state, x, y, {roll, landing, passRun = false} = {}) {
+export function applyKick(state, x, y, {roll, landing, passRun = false, disguise = false} = {}) {
   const kick = legalKicks(state).find(candidate => candidate.x === x && candidate.y === y);
   if (!kick) throw new Error('That is not a legal kick.');
+  const options = disguise ? disguisedShotTargets(state) : [];
+  if (disguise && (options.length !== 2 || !options.some(option => option.x === x && option.y === y))) throw new Error('A disguised shot needs two legal opponent-goal targets for the queen or knight.');
   const next = copy(state), carrier = state.pieces.find(p => p.id === state.ball.carrierId), from = {x: carrier.x, y: carrier.y};
   next.ballProgress = progressFor(state);
   const restart = state.restart;
@@ -1186,17 +1283,21 @@ export function applyKick(state, x, y, {roll, landing, passRun = false} = {}) {
   const boxOffender = boxKnightOffenders(next, next.offside)[0];
   if (boxOffender) return callOffside(next, boxOffender, {pieceId: carrier.id, from, intendedTo: {x, y}, path: kick.path, distance: kick.distance, accuracy: kick.accuracy, ...loft, offsideReason: 'boxKnight', offsidePieceId: boxOffender.id});
   if (kick.goal) {
-    next.pendingShot = {x, y, shooterId: carrier.id, shooterType: carrier.type, shootingTeam: carrier.team, scoringTeam: kick.goal, defendingTeam: other(kick.goal), from, path: kick.path, distance: kick.distance, ...(restart?.type === 'penalty' ? {penalty: true} : {})};
+    const declaration = disguise ? options[0] : kick;
+    const targetOptions = options.map(({x, y, path, distance}) => ({x, y, path, distance}));
+    next.pendingShot = {x: declaration.x, y: declaration.y, shooterId: carrier.id, shooterType: carrier.type, shootingTeam: carrier.team, scoringTeam: kick.goal, defendingTeam: other(kick.goal), from, path: declaration.path, distance: declaration.distance,
+      ...(disguise ? {disguised: true, targetOptions} : {}), ...(restart?.type === 'penalty' ? {penalty: true} : {})};
     next.phase = 'keeperReact'; next.releaseReason = null;
     if (kick.goal === carrier.team) resetProgress(next);
     else if (restart || state.phase === 'kickoff' || progressFor(state).excludeRelease) next.ballProgress = {...freshProgress(next), excludeRelease: true};
     const details = shotModel(next, x, y);
-    next.lastAction = {type: 'shotAttempt', team: carrier.team, pieceId: carrier.id, from, to: {x, y}, path: kick.path, goalTarget: {x, y}, probability: details.probability, shotModel: details, outcome: 'pending'};
+    next.lastAction = {type: 'shotAttempt', team: carrier.team, pieceId: carrier.id, from, to: {x: declaration.x, y: declaration.y}, path: declaration.path, goalTarget: {x: declaration.x, y: declaration.y},
+      ...(disguise ? {disguised: true, targetOptions, targetProbability: 0.5} : {}), probability: details.probability, shotModel: details, outcome: 'pending'};
     const keeper = state.pieces.find(piece => piece.type === 'K' && piece.team === other(kick.goal));
     const reaction = keeper && inOwnBox(keeper.team, keeper.x, keeper.y)
       ? `${title(other(kick.goal))} may move its goalkeeper or hold before the shot resolves.`
       : `${title(other(kick.goal))} has no goalkeeper reaction while its king is outside its own box. Resolve the shot.`;
-    addLog(next, `${title(carrier.team)} ${NAMES[carrier.type]} shoots toward ${FILE_LABELS[x]}! ${reaction}`);
+    addLog(next, `${title(carrier.team)} ${NAMES[carrier.type]} ${disguise ? `disguises a shot toward ${targetOptions.map(option => FILE_LABELS[option.x]).join(' or ')} (50/50; the target is chosen after the goalkeeper reacts)` : `shoots toward ${FILE_LABELS[x]}`}! ${reaction}`);
     return next;
   }
   const accuracy = kick.accuracy, outcomeRoll = nextRoll(next, roll), successful = accuracy === 1 || outcomeRoll < accuracy;
@@ -1239,11 +1340,15 @@ export function applyKick(state, x, y, {roll, landing, passRun = false} = {}) {
 const goalDistance = (team, y) => team === 'white' ? y + 1 : BOARD_HEIGHT - y;
 function reactedShotChance(state, kick) {
   const keeper = state.pieces.find(p => p.type === 'K' && p.team === other(kick.goal));
-  let probability = shotChance(state, kick.x, kick.y);
+  const carrier = state.pieces.find(piece => piece.id === state.ball.carrierId);
+  const preview = kick.disguise && carrier ? {...state, pendingShot: {x: kick.x, y: kick.y, from: {x: carrier.x, y: carrier.y},
+    shooterId: carrier.id, shooterType: carrier.type, shootingTeam: carrier.team, scoringTeam: kick.goal,
+    defendingTeam: other(kick.goal), disguised: true, targetOptions: kick.targetOptions}} : state;
+  let probability = shotChance(preview, kick.x, kick.y);
   if (!keeper || !inOwnBox(keeper.team, keeper.x, keeper.y)) return probability;
   for (const [dx, dy] of DIRECTIONS) {
     const position = {x: keeper.x + dx, y: keeper.y + dy};
-    if (allowedSquare(keeper, position.x, position.y) && !pieceAt(state, position.x, position.y)) probability = Math.min(probability, shotChance(state, kick.x, kick.y, position));
+    if (allowedSquare(keeper, position.x, position.y) && !pieceAt(state, position.x, position.y)) probability = Math.min(probability, shotChance(preview, kick.x, kick.y, position));
   }
   return probability;
 }
@@ -1475,7 +1580,7 @@ function chooseCasualAction(state) {
   }
   if (['kick', 'kickoff', 'keeperRelease'].includes(state.phase)) {
     let best = null, value = -Infinity, finish = null, finishChance = 0.45;
-    for (const kick of legalKicks(state)) {
+    for (const kick of kickingChoices(state)) {
       if (kick.goal && kick.goal !== team) continue;
       const candidateValue = kickValue(state, kick, team);
       if (candidateValue > value) { best = kick; value = candidateValue; }
@@ -1488,7 +1593,7 @@ function chooseCasualAction(state) {
     }
     if (finish) best = finish;
     const receiver = state.pieces.find(piece => piece.id === best?.receiverId);
-    return best ? {type: 'kick', x: best.x, y: best.y, ...(receiver?.team === team && receiver.type !== 'K' ? {passRun: true} : {})} : {type: 'skip'};
+    return best ? {type: 'kick', x: best.x, y: best.y, ...(best.disguise ? {disguise: true} : {}), ...(receiver?.team === team && receiver.type !== 'K' ? {passRun: true} : {})} : {type: 'skip'};
   }
   if (!positionalTurn(state) && state.phase !== 'passRun') return {type: 'skip'};
   const carrier = state.pieces.find(p => p.id === state.ball.carrierId);
@@ -1520,20 +1625,13 @@ function tacticalShots(state, team, react = false) {
   const carrier = state.pieces.find(piece => piece.id === state.ball.carrierId);
   if (!carrier || carrier.team !== team || ['throwIn', 'goalKick'].includes(state.restart?.type) || state.restart?.indirect || currentBoxKnights(state, carrier).length) return 0;
   if (state.restart?.type === 'penalty') return FOUL_RULE.penaltyGoal;
-  const vectors = carrier.type === 'N' ? KNIGHT : carrier.type === 'P' || carrier.type === 'R' ? STRAIGHTS : carrier.type === 'B' ? DIAGONALS : DIRECTIONS;
-  let best = 0;
-  for (const [dx, dy] of vectors) {
-    if (!dy) continue;
-    for (let step = 1; step <= (carrier.type === 'N' ? 1 : BOARD_HEIGHT + 1); step++) {
-      const x = carrier.x + dx * step, y = carrier.y + dy * step;
-      if (!inside(x, y)) {
-        if (goalAt(x, y) === team && !friendlyStopsShot(state, carrier, x, y)) best = Math.max(best, react ? reactedShotChance(state, {x, y, goal: team}) : shotChance(state, x, y));
-        break;
-      }
-      if (carrier.type === 'N') break;
-      const obstacle = pieceAt(state, x, y);
-      if (obstacle?.team === carrier.team) break;
-    }
+  const shots = goalShotTargets(state, carrier), pair = eligibleDisguisedPair(state, shots);
+  let best = shots.reduce((value, shot) => Math.max(value, react ? reactedShotChance(state, shot) : shotChance(state, shot.x, shot.y)), 0);
+  if (pair.length === 2) {
+    const choice = {...pair[0], disguise: true, targetOptions: pair};
+    // Without a keeper reaction, a fair mixture cannot exceed its best single
+    // target. The reaction-aware value captures the actual information gain.
+    if (react) best = Math.max(best, reactedShotChance(state, choice));
   }
   return best;
 }
@@ -1727,11 +1825,11 @@ function rankedTacticalActions(state, width, root = false) {
   if (state.phase === 'cornerSelect') {
     candidates = cornerTakers(state).map(piece => ({action: {type: 'cornerTaker', pieceId: piece.id}, rank: cornerTakerRank(state, piece), category: 'cornerTaker'}));
   } else if (['kick', 'kickoff', 'keeperRelease'].includes(state.phase)) {
-    candidates = legalKicks(state).filter(kick => !kick.goal || kick.goal === team).map(kick => {
+    candidates = kickingChoices(state).filter(kick => !kick.goal || kick.goal === team).map(kick => {
       // The ordinary attacking phase already permits the original passer's
       // off-ball run, with the same shared movement budget. Avoid inserting an
       // optional pass-run/decline phase that spends a search ply on no new right.
-      return {action: {type: 'kick', x: kick.x, y: kick.y}, rank: tacticalKickRank(state, kick, team), category: kick.goal ? 'shot' : kick.receiverId ? 'pass' : 'space'};
+      return {action: {type: 'kick', x: kick.x, y: kick.y, ...(kick.disguise ? {disguise: true} : {})}, rank: tacticalKickRank(state, kick, team), category: kick.goal ? 'shot' : kick.receiverId ? 'pass' : 'space'};
     });
   } else if (positionalTurn(state) || state.phase === 'passRun') {
     const carrier = state.pieces.find(piece => piece.id === state.ball.carrierId);
@@ -1784,31 +1882,35 @@ function planningState(state) {
 
 function tacticalSuccessors(state, action) {
   const source = planningState(state);
-  const apply = (roll, landing) => {
+  const apply = (roll, landing, targetRoll) => {
     const next = action.type === 'cornerTaker' ? selectCornerTaker(source, action.pieceId)
-      : action.type === 'kick' ? applyKick(source, action.x, action.y, {roll, landing, passRun: !!action.passRun})
-      : action.type === 'move' ? applyMove(source, action.pieceId, action.x, action.y, {freePawn: !!action.freePawn, roll, landing})
-        : skipMove(source, {roll, landing});
+      : action.type === 'kick' ? applyKick(source, action.x, action.y, {roll, landing, passRun: !!action.passRun, disguise: !!action.disguise})
+      : action.type === 'move' ? applyMove(source, action.pieceId, action.x, action.y, {freePawn: !!action.freePawn, roll, targetRoll, landing})
+        : skipMove(source, {roll, targetRoll, landing});
     return planningState(next);
   };
   if (state.phase === 'keeperReact') {
-    const model = shotModel(state, state.pendingShot.x, state.pendingShot.y, action.type === 'move' ? action : undefined);
-    const shot = state.pendingShot;
-    let start = 0;
-    return [model.goalProbability, model.keeperCornerProbability, model.caughtSaveProbability, model.missProbability, model.blockOutProbability, model.blockPossessionProbability].flatMap((probability, index) => {
-      const roll = Math.min(1 - Number.EPSILON, start + probability / 2); start += probability;
-      if (probability <= 0) return [];
-      if (index !== 3 || shot.distance <= 10) return [{probability, state: apply(roll)}];
-      // A bounded, symmetric quadrature covers side-line and end-line risk.
-      // Actual play samples every integer offset; this planning approximation
-      // uses five equally weighted lateral samples and the mean overshoot.
-      const radius = Math.max(1, Math.ceil((shot.distance - 10) / 2) + 1);
-      const meanOvershoot = (radius + 1) / 2;
-      const depths = [...new Set([Math.floor(meanOvershoot), Math.ceil(meanOvershoot)])];
-      return [-2 * radius, -radius, 0, radius, 2 * radius].flatMap(offset => depths.map(depth => ({
-        probability: probability / (5 * depths.length),
-        state: apply(roll, {x: shot.x + offset, y: shot.y < 0 ? -depth : BOARD_HEIGHT - 1 + depth})
-      })));
+    const declaration = state.pendingShot, options = validatedDisguisedOptions(state, declaration);
+    const shots = options.length === 2 ? options.map(option => ({...declaration, ...option})) : [declaration];
+    return shots.flatMap((shot, targetIndex) => {
+      const model = singleShotModel({...state, pendingShot: shot}, shot.x, shot.y, action.type === 'move' ? action : undefined);
+      const targetRoll = options.length === 2 ? (targetIndex + 0.5) / 2 : undefined;
+      let start = 0;
+      return [model.goalProbability, model.keeperCornerProbability, model.caughtSaveProbability, model.missProbability, model.blockOutProbability, model.blockPossessionProbability].flatMap((conditionalProbability, index) => {
+        const roll = Math.min(1 - Number.EPSILON, start + conditionalProbability / 2); start += conditionalProbability;
+        const probability = conditionalProbability / shots.length;
+        if (probability <= 0) return [];
+        if (index !== 3 || shot.distance <= 10 || shot.penalty) return [{probability, state: apply(roll, undefined, targetRoll)}];
+        // A bounded, symmetric quadrature covers side-line and end-line risk.
+        // Each disguised target retains its own physical scatter distribution.
+        const radius = Math.max(1, Math.ceil((shot.distance - 10) / 2) + 1);
+        const meanOvershoot = (radius + 1) / 2;
+        const depths = [...new Set([Math.floor(meanOvershoot), Math.ceil(meanOvershoot)])];
+        return [-2 * radius, -radius, 0, radius, 2 * radius].flatMap(offset => depths.map(depth => ({
+          probability: probability / (5 * depths.length),
+          state: apply(roll, {x: shot.x + offset, y: shot.y < 0 ? -depth : BOARD_HEIGHT - 1 + depth}, targetRoll)
+        })));
+      });
     });
   }
   let probability = 1, kick;
@@ -1850,7 +1952,7 @@ function tacticalStateKey(state) {
     budgetFor(state), state.score, state.restart, state.offside, state.pendingShot, state.ballProgress,
     state.looseBallKickOrigin, state.releaseReason, state.passRun, state.rulesVersion, state.turn, state.foulsEnabled, state.discipline, state.sentOff, state.winner, state.finishReason]);
 }
-const tacticalActionKey = action => JSON.stringify([action.type, action.pieceId, action.x, action.y, !!action.freePawn, !!action.passRun]);
+const tacticalActionKey = action => JSON.stringify([action.type, action.pieceId, action.x, action.y, !!action.freePawn, !!action.passRun, !!action.disguise]);
 const SEARCH_ABORT = Symbol('Tactical search allowance exhausted');
 
 function tacticalUnsettled(state) {

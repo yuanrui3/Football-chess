@@ -1,5 +1,5 @@
 /** Match records are independent of engine decisions and replay playback. */
-import {BOARD_WIDTH, BOARD_HEIGHT, GOAL_FILES, BOX_FILES, BOX_DEPTH} from './engine.js?v=2b5df6d6cd8a';
+import {BOARD_WIDTH, BOARD_HEIGHT, GOAL_FILES, BOX_FILES, BOX_DEPTH} from './engine.js?v=03b47b43265e';
 const TEAMS = ['white', 'black'];
 const SHOT_RESULTS = ['goal', 'save', 'shotMiss', 'blockedShot'];
 const IDS = /^(white|black)-(K|Q|[RBN][12]|P[123])$/;
@@ -16,10 +16,10 @@ const goalPoint = point => point && GOAL_FILES.includes(point.x) && [-1, BOARD_H
 const maxShotDistance = Math.hypot(Math.max(GOAL_FILES.at(-1), BOARD_WIDTH - 1 - GOAL_FILES[0]), BOARD_HEIGHT - 0.5);
 function locationFields(record = {}, shot = null) {
   const origin = pitchPoint(shot?.from) || pitchPoint(record.origin);
-  const target = goalPoint(shot ? {x: shot.x, y: shot.y} : null) || goalPoint(record.target);
+  const target = shot?.disguised ? null : goalPoint(shot ? {x: shot.x, y: shot.y} : null) || goalPoint(record.target);
   // Engine shooting distance ends on the goal plane between the pitch and goal
   // square, rather than at the centre of the decorative goal square.
-  const distance = origin && target ? Math.hypot(target.x - origin.x, (target.y < 0 ? -0.5 : BOARD_HEIGHT - 0.5) - origin.y)
+  const distance = shot?.disguised ? null : origin && target ? Math.hypot(target.x - origin.x, (target.y < 0 ? -0.5 : BOARD_HEIGHT - 0.5) - origin.y)
     : finite(record.distance) && record.distance > 0 && record.distance <= maxShotDistance ? record.distance : null;
   return {origin, target, distance};
 }
@@ -123,8 +123,12 @@ export function recordMatchTransition(stats, before, after, {matchSeconds = null
     if (isId(scorerId)) {
       const ownGoal = teamOf(scorerId) !== action.team;
       const assistId = !ownGoal && next.pendingShot?.shooterId === scorerId && next.pendingShot?.team === action.team ? next.pendingShot.assistId : null;
+      // A disguised attempt has no committed target until after keeper reaction.
+      // Record the actual goal endpoint, not the first public target option.
+      const target=goalPoint(action.goalTarget)||goalPoint(action.to);
+      const resolvedShot=target?{...before.pendingShot,disguised:false,from:before.pendingShot?.from||action.from,x:target.x,y:target.y}:before.pendingShot;
       next.goals.push({team: action.team, scorerId, assistId, ownGoal, turn: count(after.turn) ? after.turn : 0,
-        matchSeconds: finite(matchSeconds) ? matchSeconds : null, ...locationFields(next.pendingShot || {}, before.pendingShot)});
+        matchSeconds: finite(matchSeconds) ? matchSeconds : null, ...locationFields(next.pendingShot || {}, resolvedShot)});
     }
   }
   if (resolution) {next.lastPass = null; next.pendingShot = null; return next;}

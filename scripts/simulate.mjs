@@ -13,7 +13,7 @@ function entryZone(team,y,height=baseline.BOARD_HEIGHT){const depth=Math.floor(h
 function positional(phase){return ['attackMove','defendMove'].includes(phase);}
 export function applyAction(rules,state,action){
   if(action.type==='cornerTaker') return rules.selectCornerTaker(state,action.pieceId);
-  if(action.type==='kick') return rules.applyKick(state,action.x,action.y,{passRun:!!action.passRun});
+  if(action.type==='kick') return rules.applyKick(state,action.x,action.y,{passRun:!!action.passRun,disguise:!!action.disguise});
   if(action.type==='move') return rules.applyMove(state,action.pieceId,action.x,action.y,{freePawn:!!action.freePawn});
   return rules.skipMove(state);
 }
