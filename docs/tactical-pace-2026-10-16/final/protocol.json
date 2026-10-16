@@ -1,0 +1,19 @@
+{
+  "label": "Final combined pace rules and keeper save ceiling",
+  "engineSha256": "e8ae15d0bbd799513cd1c4a4a6de5286e4709270364145097483e034a4cd90ec",
+  "rulesVersion": 18,
+  "shotModelVersion": 14,
+  "changes": ["Four-round same-player dribble allowance", "Three-occurrence ball route repetition", "Keeper maximum save probability 0.94 to 0.90"],
+  "serializationCorrection": "Normalize white y=0 negative zero to positive zero before simulations; no gameplay change",
+  "matches": [{"seed": 202610161, "kickoff": "white"}, {"seed": 202610162, "kickoff": "black"}],
+  "whiteDifficulty": "tactical",
+  "blackDifficulty": "tactical",
+  "nodesPerDecision": 1400,
+  "actionLimit": 480,
+  "foulsEnabled": true,
+  "record": true,
+  "validate": true,
+  "budgetPolicy": "Stop at exactly 480 atomic actions; report pending shots without adding unmatched resolution actions",
+  "checkpoints": [120, 240, 480],
+  "comparison": "Matched frozen v31 baseline seeds and kickoffs; fixed action experiments are not timed matches"
+}

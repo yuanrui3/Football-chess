@@ -1,0 +1,16 @@
+{
+  "results": [
+    {
+      "seed": 202610161,
+      "kickoff": "white",
+      "exactReplayedTransitions": 480,
+      "mismatches": 0
+    },
+    {
+      "seed": 202610162,
+      "kickoff": "black",
+      "exactReplayedTransitions": 480,
+      "mismatches": 0
+    }
+  ]
+}

@@ -35,28 +35,28 @@ for(const end of ['top','bottom'])test(`${end}: four goal-mouth cells admit only
  assert.equal(E.isGoalMouth(-1,y),false);assert.equal(E.isGoalMouth(E.GOAL_FILES[0],-1),false);
 });
 
-for(const team of ['white','black'])for(const end of ['top','bottom'])test(`${team}, ${end}: all outfield carriers cannot enter a box, but off-ball players may`,()=>{
+for(const team of ['white','black'])for(const end of ['top','bottom'])test(`${team}, ${end}: all outfield carriers and ordinary off-ball players may enter a box`,()=>{
  for(const [actor,origin,destination]of [['white-Q',[3,1],[4,1]],['white-R1',[3,1],[4,1]],['white-B1',[3,3],[4,2]],['white-N1',[3,3],[4,1]],['white-P1',[3,1],[4,1]]]){
   const target=point(destination,team,end),pieceId=id(actor,team),carrying=fixture({team,end,actor,origin}),before=clone(carrying);
-  assert.equal(offered(carrying,pieceId,target),undefined,'carrier entry prohibited');assert.throws(()=>E.applyMove(carrying,pieceId,target.x,target.y),/not a legal move/);assert.deepEqual(carrying,before,'rejected entry is pure');
+  assert.ok(offered(carrying,pieceId,target),'ordinary carrier entry allowed');const entered=E.applyMove(carrying,pieceId,target.x,target.y);assert.deepEqual(entered.ball,{...target,carrierId:pieceId});assert.deepEqual(carrying,before,'entry preserves the prior snapshot');
   const offball=fixture({team,end,actor,origin,carrying:false});assert.ok(offered(offball,pieceId,target),'off-ball entry remains available');
  }
 });
 
-for(const team of ['white','black'])for(const end of ['top','bottom'])test(`${team}, ${end}: dribble cannot cross a box corner and emerge outside`,()=>{
+for(const team of ['white','black'])for(const end of ['top','bottom'])test(`${team}, ${end}: an ordinary dribble can cross a box corner within its weighted budget`,()=>{
  for(const actor of ['white-Q','white-B1']){
   const state=fixture({team,end,actor,origin:[3,1]}),target=point([5,3],team,end),pieceId=id(actor,team);
   assert.equal(E.isBox(target.x,target.y),false);assert.ok(E.movementCost(state.pieces.find(p=>p.id===pieceId),target.x,target.y)<=E.DRIBBLE_RANGE);
-  assert.equal(offered(state,pieceId,target),undefined,'crossed box square prohibits entire carry path');
+  assert.ok(offered(state,pieceId,target),'crossed box square uses double movement cost');
   const offball=fixture({team,end,actor,origin:[3,1],carrying:false});assert.ok(offered(offball,pieceId,target),'same ordinary off-ball ray stays legal');
  }
 });
 
-for(const team of ['white','black'])for(const end of ['top','bottom'])test(`${team}, ${end}: existing box carrier may dribble within and exit, then cannot re-enter`,()=>{
+for(const team of ['white','black'])for(const end of ['top','bottom'])test(`${team}, ${end}: a box carrier may exit, but a later self-pass collection cannot grant another carry in that round`,()=>{
  const state=fixture({team,end,origin:[4,1]}),pieceId=id('white-R1',team),inside=point([5,1],team,end),outside=point([3,1],team,end);
  assert.ok(offered(state,pieceId,inside));assert.ok(offered(state,pieceId,outside));
  let exited=E.applyMove(state,pieceId,outside.x,outside.y);exited=E.skipMove(exited);exited=E.skipMove(exited);const collect=point([3,2],team,end);exited=E.applyKick(exited,collect.x,collect.y,{roll:0});exited=E.applyMove(exited,pieceId,collect.x,collect.y);
- assert.equal(exited.phase,'attackMove');assert.equal(offered(exited,pieceId,point([4,2],team,end)),undefined,'later possession does not preserve permission after exiting');
+ assert.equal(exited.phase,'attackMove');assert.equal(offered(exited,pieceId,point([4,2],team,end)),undefined,'collecting its own pass already spends the round\'s dribble');
 });
 
 for(const team of ['white','black'])test(`${team}: legacy goal-mouth occupant repairs deterministically with carrier and restart spot`,()=>{
@@ -80,7 +80,7 @@ for(const team of ['white','black'])test(`${team}: declining run preserves the o
  assert.deepEqual(E.skipMove(restored),skipped,'reloaded option resolves identically');assert.deepEqual(requestRun(clone(state),team),run,'undo to pass snapshot can choose same run without duplicate randomness');
 });
 
-for(const team of ['white','black'])test(`${team}: post-pass run obeys ten weighted points and the same no-box-entry path rule`,()=>{
+for(const team of ['white','black'])test(`${team}: the optional post-pass run keeps its ten-point budget and its box-entry ban`,()=>{
  const state=passFixture({team,origin:[3,1],receiver:[3,4]}),run=requestRun(state,team),passer=id('white-R1',team);
  for(const p of [[4,1],[5,3]])assert.equal(offered(run,passer,point(p,team)),undefined,'run cannot enter or traverse box');
  const rangeRun=requestRun(passFixture({team,origin:[3,1],receiver:[1,1]}),team);assert.ok(offered(rangeRun,passer,point([3,11],team)),'ten ordinary squares available');assert.equal(offered(rangeRun,passer,point([3,12],team)),undefined,'eleven squares forbidden');
@@ -104,7 +104,7 @@ for(const team of ['white','black'])test(`${team}: action timeout declines the o
  const run=requestRun(passFixture({team}),team),next=E.actionTimeout(run);assert.equal(next.phase,'attackMove');assert.equal(next.passRun,null);assert.equal(next.positionBudget.normalUsed,false);assert.equal(next.restart,null);assert.equal(next.lastAction.passRun,true);assert.equal(next.lastAction.timedOutTeam,team);assert.deepEqual(next.score,run.score);
 });
 
-for(const team of ['white','black'])test(`${team}: a loose self-pass cannot bypass the no-box-entry rule, while a teammate can collect`,()=>{
+for(const team of ['white','black'])test(`${team}: an outside kicker cannot collect its own box pass, while a teammate can collect`,()=>{
  const state=fixture({team,phase:'kick',actor:'white-Q',origin:[3,1],positions:{'white-R2':[4,4]}}),target=point([4,2],team),passer=id('white-Q',team),receiver=id('white-R2',team);
  const loose=E.applyKick(state,target.x,target.y,{roll:0});assert.equal(loose.ball.carrierId,null);assert.deepEqual(loose.looseBallKickOrigin.from,point([3,1],team));assert.equal(offered(loose,passer,target),undefined,'original outside passer cannot collect its own box pass');assert.ok(offered(loose,receiver,target),'teammate may collect a legitimate box pass');
  const teammate=E.applyMove(loose,receiver,target.x,target.y);assert.equal(teammate.ball.carrierId,receiver);

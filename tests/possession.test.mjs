@@ -477,7 +477,7 @@ test('loading or undoing a legacy bonus carry keeps its dribble spent while refr
     const snapshot = JSON.parse(JSON.stringify(state)), before = clone(snapshot);
     const normalized = engine.normalizeGame(snapshot);
     assert.deepEqual(snapshot, before, 'a cached match or undo snapshot remains unmodified');
-    assert.deepEqual(normalized, { ...before, rulesVersion: RULES_VERSION, positionBudget: budget(false, true, true), ballProgress: {...before.ballProgress, anchorY: before.ball.y, rounds: 0} }, 'only the rules version, progress checkpoint and already-used carry allowance change');
+    assert.deepEqual(normalized, { ...before, rulesVersion: RULES_VERSION, positionBudget: budget(false, true, true), ballProgress: {...before.ballProgress, anchorY: before.ball.y, rounds: 0}, paceControl:null }, 'only the rules version, fresh progress and pace checkpoints, and already-used carry allowance change');
     assert.equal(normalized.randomState, before.randomState, 'loading consumes no future random outcome');
     assert.deepEqual(legalMoves(normalized, `${team}-P1`), [], 'the past bonus carry counts as the one permitted dribble');
     assert.deepEqual(legalMoves(normalized, `${team}-P1`, { freePawn: true }), []);
@@ -502,7 +502,7 @@ test('legacy migration distinguishes bonus collection, off-ball moves and unrela
   for (const [name, state] of [['collection', collected], ['off-ball bonus', offBall], ['current version', currentVersion], ['defending phase', defending], ['no previous action', noAction], ['non-move action', unrelatedAction]]) {
     const before = clone(state), normalized = engine.normalizeGame(state);
     assert.deepEqual(state, before, `${name}: normalization is pure`);
-    assert.deepEqual(normalized, { ...before, rulesVersion: RULES_VERSION, ballProgress: {...before.ballProgress, anchorY: before.ball.y, rounds: 0} }, `${name}: the dribble allowance must not be consumed without evidence of a carry`);
+    assert.deepEqual(normalized, { ...before, rulesVersion: RULES_VERSION, ballProgress: {...before.ballProgress, anchorY: before.ball.y, rounds: 0}, paceControl:null }, `${name}: the dribble allowance must not be consumed without evidence of a carry`);
     assert.equal(normalized.randomState, before.randomState);
     assert.deepEqual(engine.normalizeGame(normalized), normalized);
   }

@@ -1,0 +1,578 @@
+[
+  {
+    "type": "R",
+    "distance": 3.5,
+    "variant": "baseline",
+    "goal": 0.19812206662688478,
+    "saveGivenOnTarget": 0.7978346258909339,
+    "keeperPosition": {
+      "x": 6,
+      "y": 0
+    },
+    "reach": 0.855
+  },
+  {
+    "type": "R",
+    "distance": 3.5,
+    "variant": "keeper-reach",
+    "goal": 0.19812206662688478,
+    "saveGivenOnTarget": 0.7978346258909339,
+    "keeperPosition": {
+      "x": 6,
+      "y": 0
+    },
+    "reach": 0.785
+  },
+  {
+    "type": "R",
+    "distance": 3.5,
+    "variant": "range-decay",
+    "goal": 0.19812206662688478,
+    "saveGivenOnTarget": 0.7978346258909339,
+    "keeperPosition": {
+      "x": 6,
+      "y": 0
+    },
+    "reach": 0.855
+  },
+  {
+    "type": "R",
+    "distance": 3.5,
+    "variant": "combined-c",
+    "goal": 0.23139346804701721,
+    "saveGivenOnTarget": 0.7638842162785539,
+    "keeperPosition": {
+      "x": 6,
+      "y": 0
+    },
+    "reach": 0.855
+  },
+  {
+    "type": "R",
+    "distance": 4.5,
+    "variant": "baseline",
+    "goal": 0.15499889861400662,
+    "saveGivenOnTarget": 0.8418378585571361,
+    "keeperPosition": {
+      "x": 6,
+      "y": 0
+    },
+    "reach": 1.0716666666666668
+  },
+  {
+    "type": "R",
+    "distance": 4.5,
+    "variant": "keeper-reach",
+    "goal": 0.15499889861400662,
+    "saveGivenOnTarget": 0.8418378585571361,
+    "keeperPosition": {
+      "x": 6,
+      "y": 0
+    },
+    "reach": 0.9683333333333334
+  },
+  {
+    "type": "R",
+    "distance": 4.5,
+    "variant": "range-decay",
+    "goal": 0.15499889861400662,
+    "saveGivenOnTarget": 0.8418378585571361,
+    "keeperPosition": {
+      "x": 6,
+      "y": 0
+    },
+    "reach": 1.0716666666666668
+  },
+  {
+    "type": "R",
+    "distance": 4.5,
+    "variant": "combined-c",
+    "goal": 0.19010532846021908,
+    "saveGivenOnTarget": 0.8060149709589601,
+    "keeperPosition": {
+      "x": 6,
+      "y": 0
+    },
+    "reach": 1.0716666666666668
+  },
+  {
+    "type": "R",
+    "distance": 5.5,
+    "variant": "baseline",
+    "goal": 0.12323251403499912,
+    "saveGivenOnTarget": 0.8722211468648023,
+    "keeperPosition": {
+      "x": 6,
+      "y": 0
+    },
+    "reach": 1.2883333333333336
+  },
+  {
+    "type": "R",
+    "distance": 5.5,
+    "variant": "keeper-reach",
+    "goal": 0.12323251403499912,
+    "saveGivenOnTarget": 0.8722211468648023,
+    "keeperPosition": {
+      "x": 6,
+      "y": 0
+    },
+    "reach": 1.1516666666666668
+  },
+  {
+    "type": "R",
+    "distance": 5.5,
+    "variant": "range-decay",
+    "goal": 0.1252232760724937,
+    "saveGivenOnTarget": 0.8722211468648023,
+    "keeperPosition": {
+      "x": 6,
+      "y": 0
+    },
+    "reach": 1.2883333333333336
+  },
+  {
+    "type": "R",
+    "distance": 5.5,
+    "variant": "combined-c",
+    "goal": 0.15902773702506212,
+    "saveGivenOnTarget": 0.8351053533811938,
+    "keeperPosition": {
+      "x": 6,
+      "y": 0
+    },
+    "reach": 1.2883333333333336
+  },
+  {
+    "type": "R",
+    "distance": 6.5,
+    "variant": "baseline",
+    "goal": 0.08468360235873018,
+    "saveGivenOnTarget": 0.8932001557342079,
+    "keeperPosition": {
+      "x": 6,
+      "y": 0
+    },
+    "reach": 1.505
+  },
+  {
+    "type": "R",
+    "distance": 6.5,
+    "variant": "keeper-reach",
+    "goal": 0.08468360235873018,
+    "saveGivenOnTarget": 0.8932001557342079,
+    "keeperPosition": {
+      "x": 6,
+      "y": 0
+    },
+    "reach": 1.335
+  },
+  {
+    "type": "R",
+    "distance": 6.5,
+    "variant": "range-decay",
+    "goal": 0.09003261433685397,
+    "saveGivenOnTarget": 0.8932001557342079,
+    "keeperPosition": {
+      "x": 6,
+      "y": 0
+    },
+    "reach": 1.505
+  },
+  {
+    "type": "R",
+    "distance": 6.5,
+    "variant": "combined-c",
+    "goal": 0.11482126954790703,
+    "saveGivenOnTarget": 0.8551916384689224,
+    "keeperPosition": {
+      "x": 6,
+      "y": 0
+    },
+    "reach": 1.505
+  },
+  {
+    "type": "R",
+    "distance": 7.5,
+    "variant": "baseline",
+    "goal": 0.05663792848573491,
+    "saveGivenOnTarget": 0.9076857113688014,
+    "keeperPosition": {
+      "x": 6,
+      "y": 0
+    },
+    "reach": 1.7216666666666671
+  },
+  {
+    "type": "R",
+    "distance": 7.5,
+    "variant": "keeper-reach",
+    "goal": 0.05663792848573491,
+    "saveGivenOnTarget": 0.9076857113688014,
+    "keeperPosition": {
+      "x": 6,
+      "y": 0
+    },
+    "reach": 1.5183333333333335
+  },
+  {
+    "type": "R",
+    "distance": 7.5,
+    "variant": "range-decay",
+    "goal": 0.06267288358416738,
+    "saveGivenOnTarget": 0.9076857113688015,
+    "keeperPosition": {
+      "x": 6,
+      "y": 0
+    },
+    "reach": 1.7216666666666671
+  },
+  {
+    "type": "R",
+    "distance": 7.5,
+    "variant": "combined-c",
+    "goal": 0.08033562154468453,
+    "saveGivenOnTarget": 0.8690607874807673,
+    "keeperPosition": {
+      "x": 6,
+      "y": 0
+    },
+    "reach": 1.7216666666666671
+  },
+  {
+    "type": "R",
+    "distance": 8.5,
+    "variant": "baseline",
+    "goal": 0.03678457017145334,
+    "saveGivenOnTarget": 0.917687676826231,
+    "keeperPosition": {
+      "x": 6,
+      "y": 0
+    },
+    "reach": 1.9383333333333335
+  },
+  {
+    "type": "R",
+    "distance": 8.5,
+    "variant": "keeper-reach",
+    "goal": 0.03678457017145334,
+    "saveGivenOnTarget": 0.917687676826231,
+    "keeperPosition": {
+      "x": 6,
+      "y": 0
+    },
+    "reach": 1.7016666666666667
+  },
+  {
+    "type": "R",
+    "distance": 8.5,
+    "variant": "range-decay",
+    "goal": 0.04279102859841782,
+    "saveGivenOnTarget": 0.917687676826231,
+    "keeperPosition": {
+      "x": 6,
+      "y": 0
+    },
+    "reach": 1.9383333333333335
+  },
+  {
+    "type": "R",
+    "distance": 8.5,
+    "variant": "combined-c",
+    "goal": 0.05423587336465489,
+    "saveGivenOnTarget": 0.8786371373868169,
+    "keeperPosition": {
+      "x": 6,
+      "y": 0
+    },
+    "reach": 1.9383333333333335
+  },
+  {
+    "type": "Q",
+    "distance": 3.5,
+    "variant": "baseline",
+    "goal": 0.19812206662688478,
+    "saveGivenOnTarget": 0.7978346258909339,
+    "keeperPosition": {
+      "x": 6,
+      "y": 0
+    },
+    "reach": 0.855
+  },
+  {
+    "type": "Q",
+    "distance": 3.5,
+    "variant": "keeper-reach",
+    "goal": 0.19812206662688478,
+    "saveGivenOnTarget": 0.7978346258909339,
+    "keeperPosition": {
+      "x": 6,
+      "y": 0
+    },
+    "reach": 0.785
+  },
+  {
+    "type": "Q",
+    "distance": 3.5,
+    "variant": "range-decay",
+    "goal": 0.19812206662688478,
+    "saveGivenOnTarget": 0.7978346258909339,
+    "keeperPosition": {
+      "x": 6,
+      "y": 0
+    },
+    "reach": 0.855
+  },
+  {
+    "type": "Q",
+    "distance": 3.5,
+    "variant": "combined-c",
+    "goal": 0.23139346804701721,
+    "saveGivenOnTarget": 0.7638842162785539,
+    "keeperPosition": {
+      "x": 6,
+      "y": 0
+    },
+    "reach": 0.855
+  },
+  {
+    "type": "Q",
+    "distance": 4.5,
+    "variant": "baseline",
+    "goal": 0.15499889861400662,
+    "saveGivenOnTarget": 0.8418378585571361,
+    "keeperPosition": {
+      "x": 6,
+      "y": 0
+    },
+    "reach": 1.0716666666666668
+  },
+  {
+    "type": "Q",
+    "distance": 4.5,
+    "variant": "keeper-reach",
+    "goal": 0.15499889861400662,
+    "saveGivenOnTarget": 0.8418378585571361,
+    "keeperPosition": {
+      "x": 6,
+      "y": 0
+    },
+    "reach": 0.9683333333333334
+  },
+  {
+    "type": "Q",
+    "distance": 4.5,
+    "variant": "range-decay",
+    "goal": 0.15499889861400662,
+    "saveGivenOnTarget": 0.8418378585571361,
+    "keeperPosition": {
+      "x": 6,
+      "y": 0
+    },
+    "reach": 1.0716666666666668
+  },
+  {
+    "type": "Q",
+    "distance": 4.5,
+    "variant": "combined-c",
+    "goal": 0.19010532846021908,
+    "saveGivenOnTarget": 0.8060149709589601,
+    "keeperPosition": {
+      "x": 6,
+      "y": 0
+    },
+    "reach": 1.0716666666666668
+  },
+  {
+    "type": "Q",
+    "distance": 5.5,
+    "variant": "baseline",
+    "goal": 0.10216334244158913,
+    "saveGivenOnTarget": 0.8722211468648023,
+    "keeperPosition": {
+      "x": 6,
+      "y": 0
+    },
+    "reach": 1.2883333333333336
+  },
+  {
+    "type": "Q",
+    "distance": 5.5,
+    "variant": "keeper-reach",
+    "goal": 0.10216334244158913,
+    "saveGivenOnTarget": 0.8722211468648023,
+    "keeperPosition": {
+      "x": 6,
+      "y": 0
+    },
+    "reach": 1.1516666666666668
+  },
+  {
+    "type": "Q",
+    "distance": 5.5,
+    "variant": "range-decay",
+    "goal": 0.10875231193359941,
+    "saveGivenOnTarget": 0.8722211468648022,
+    "keeperPosition": {
+      "x": 6,
+      "y": 0
+    },
+    "reach": 1.2883333333333336
+  },
+  {
+    "type": "Q",
+    "distance": 5.5,
+    "variant": "combined-c",
+    "goal": 0.13183862459211185,
+    "saveGivenOnTarget": 0.8351053533811938,
+    "keeperPosition": {
+      "x": 6,
+      "y": 0
+    },
+    "reach": 1.2883333333333336
+  },
+  {
+    "type": "Q",
+    "distance": 6.5,
+    "variant": "baseline",
+    "goal": 0.058640289015466585,
+    "saveGivenOnTarget": 0.8932001557342079,
+    "keeperPosition": {
+      "x": 6,
+      "y": 0
+    },
+    "reach": 1.505
+  },
+  {
+    "type": "Q",
+    "distance": 6.5,
+    "variant": "keeper-reach",
+    "goal": 0.058640289015466585,
+    "saveGivenOnTarget": 0.8932001557342079,
+    "keeperPosition": {
+      "x": 6,
+      "y": 0
+    },
+    "reach": 1.335
+  },
+  {
+    "type": "Q",
+    "distance": 6.5,
+    "variant": "range-decay",
+    "goal": 0.06628223988084789,
+    "saveGivenOnTarget": 0.8932001557342079,
+    "keeperPosition": {
+      "x": 6,
+      "y": 0
+    },
+    "reach": 1.505
+  },
+  {
+    "type": "Q",
+    "distance": 6.5,
+    "variant": "combined-c",
+    "goal": 0.07950951829953569,
+    "saveGivenOnTarget": 0.8551916384689224,
+    "keeperPosition": {
+      "x": 6,
+      "y": 0
+    },
+    "reach": 1.505
+  },
+  {
+    "type": "Q",
+    "distance": 7.5,
+    "variant": "baseline",
+    "goal": 0.03085129958424458,
+    "saveGivenOnTarget": 0.9076857113688014,
+    "keeperPosition": {
+      "x": 6,
+      "y": 0
+    },
+    "reach": 1.7216666666666671
+  },
+  {
+    "type": "Q",
+    "distance": 7.5,
+    "variant": "keeper-reach",
+    "goal": 0.03085129958424458,
+    "saveGivenOnTarget": 0.9076857113688014,
+    "keeperPosition": {
+      "x": 6,
+      "y": 0
+    },
+    "reach": 1.5183333333333335
+  },
+  {
+    "type": "Q",
+    "distance": 7.5,
+    "variant": "range-decay",
+    "goal": 0.0377761849150458,
+    "saveGivenOnTarget": 0.9076857113688014,
+    "keeperPosition": {
+      "x": 6,
+      "y": 0
+    },
+    "reach": 1.7216666666666671
+  },
+  {
+    "type": "Q",
+    "distance": 7.5,
+    "variant": "combined-c",
+    "goal": 0.043759692379741456,
+    "saveGivenOnTarget": 0.8690607874807673,
+    "keeperPosition": {
+      "x": 6,
+      "y": 0
+    },
+    "reach": 1.7216666666666671
+  },
+  {
+    "type": "Q",
+    "distance": 8.5,
+    "variant": "baseline",
+    "goal": 0.014843743575546714,
+    "saveGivenOnTarget": 0.917687676826231,
+    "keeperPosition": {
+      "x": 6,
+      "y": 0
+    },
+    "reach": 1.9383333333333335
+  },
+  {
+    "type": "Q",
+    "distance": 8.5,
+    "variant": "keeper-reach",
+    "goal": 0.014843743575546714,
+    "saveGivenOnTarget": 0.917687676826231,
+    "keeperPosition": {
+      "x": 6,
+      "y": 0
+    },
+    "reach": 1.7016666666666667
+  },
+  {
+    "type": "Q",
+    "distance": 8.5,
+    "variant": "range-decay",
+    "goal": 0.020087113065564533,
+    "saveGivenOnTarget": 0.917687676826231,
+    "keeperPosition": {
+      "x": 6,
+      "y": 0
+    },
+    "reach": 1.9383333333333335
+  },
+  {
+    "type": "Q",
+    "distance": 8.5,
+    "variant": "combined-c",
+    "goal": 0.021885899252549385,
+    "saveGivenOnTarget": 0.8786371373868169,
+    "keeperPosition": {
+      "x": 6,
+      "y": 0
+    },
+    "reach": 1.9383333333333335
+  }
+]

@@ -11,7 +11,7 @@ function fixture({phase='attackMove',attack='white',carrier='white-Q',positions=
  s.phase=phase;s.attack=attack;s.positionBudget=budget();s.restart=null;s.offside=null;s.pendingShot=null;s.releaseReason=null;s.looseBallKickOrigin=origin;
  const p=s.pieces.find(p=>p.id===carrier);s.ball=ball||{x:p.x,y:p.y,carrierId:p.id};s.ballProgress={team:attack,anchorY:s.ball.y,rounds:0,pendingRelease:false,excludeRelease:false};return s;
 }
-function act(s,a,o={}){return a.type==='kick'?e.applyKick(s,a.x,a.y,o):a.type==='move'?e.applyMove(s,a.pieceId,a.x,a.y,{freePawn:a.freePawn,...o}):e.skipMove(s,o);}
+function act(s,a,o={}){return a.type==='cornerTaker'?e.selectCornerTaker(s,a.pieceId):a.type==='kick'?e.applyKick(s,a.x,a.y,o):a.type==='move'?e.applyMove(s,a.pieceId,a.x,a.y,{freePawn:a.freePawn,...o}):e.skipMove(s,o);}
 function tackles(s){return s.pieces.filter(p=>p.team===e.currentTeam(s)).flatMap(p=>e.legalMoves(s,p.id).filter(m=>m.type==='tackle').map(m=>({...m,pieceId:p.id})));}
 
 const clone=structuredClone;
@@ -31,7 +31,8 @@ function selfPassState(){return fixture({positions:{'white-Q':[5,10],'white-R1':
 function offsideState(){const s=fixture({phase:'kick',carrier:'white-B2',positions:{'white-Q':[5,5],'white-R1':[1,6],'white-B2':[1,10],'black-Q':[0,6],'black-R1':[7,6],'black-R2':[11,6],'black-B1':[0,7],'black-B2':[11,7],'black-N1':[0,8],'black-N2':[11,8],'black-P1':[0,9],'black-P2':[11,9],'black-P3':[0,10]}});return e.applyKick(s,5,6);}
 function kingState(){const s=fixture({phase:'defendMove',attack:'black',carrier:'black-Q',positions:{"white-K":[5,15],"white-Q":[5,7],"white-R1":[10,11],"white-R2":[6,8],"white-B1":[4,8],"white-B2":[9,10],"white-N1":[7,8],"white-N2":[7,6],"white-P1":[5,9],"white-P2":[6,9],"white-P3":[8,13],"black-K":[6,1],"black-Q":[10,13],"black-R1":[10,12],"black-R2":[1,3],"black-B1":[5,8],"black-B2":[2,4],"black-N1":[7,9],"black-N2":[5,6],"black-P1":[7,5],"black-P2":[5,5],"black-P3":[3,4]}});s.turn=10;s.ballProgress={team:'black',anchorY:12,rounds:1,pendingRelease:false,excludeRelease:false};return s;}
 function legalChoice(s,a){
- if(a.type==='move')assert.ok(e.legalMoves(s,a.pieceId,{freePawn:!!a.freePawn}).some(m=>m.x===a.x&&m.y===a.y));
+ if(a.type==='cornerTaker'){assert.equal(s.phase,'cornerSelect');assert.ok(e.cornerTakers(s).some(p=>p.id===a.pieceId));}
+ else if(a.type==='move')assert.ok(e.legalMoves(s,a.pieceId,{freePawn:!!a.freePawn}).some(m=>m.x===a.x&&m.y===a.y));
  else if(a.type==='kick')assert.ok(e.legalKicks(s).some(k=>k.x===a.x&&k.y===a.y));
  else{assert.equal(a.type,'skip');assert.ok(['attackMove','defendMove','keeperReact'].includes(s.phase));}
 }

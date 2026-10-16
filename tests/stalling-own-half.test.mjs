@@ -103,10 +103,11 @@ for(const team of ['white','black']){
     assert.equal(penalty.restart.type,'stalling');assert.equal(penalty.lastAction.progress,3);assert.equal(penalty.lastAction.rounds,3);
   });
 
-  test(`${team}: repeated sideways possession and loose-ball cycles outside the own half have no stalling deadline`,()=>{
+  test(`${team}: outside the own half the progress deadline stays off while global ball-route repetition remains enforceable`,()=>{
     for(const row of [5,E.MIDFIELD_RANK]){
       let s=fixture({team,origin:[2,row],positions:{'white-R2':[8,row]}});
-      for(let n=0;n<6;n++){s=kick(s,n%2?[2,row]:[8,row],team);assertFresh(s);s=ready(s);}
+      for(let n=0;n<4;n++){s=kick(s,n%2?[2,row]:[8,row],team);assertFresh(s);s=ready(s);}
+      s=kick(s,[8,row],team);assert.equal(s.restart.type,'stalling');assert.equal(s.restart.reason,'repetition');assert.equal(s.lastAction.reason,'repetition');assert.equal(s.ballProgress.rounds,0);
       let loose=fixture({team,phase:'attackMove',origin:[2,row],loose:true});
       for(let n=0;n<6;n++){loose=ready(loose);assert.equal(loose.phase,'attackMove');assertFresh(loose);assert.equal(E.progressInfo(loose).active,false);}
     }

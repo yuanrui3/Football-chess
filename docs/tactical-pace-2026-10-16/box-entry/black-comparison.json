@@ -1,0 +1,354 @@
+{
+  "seed": 202610162,
+  "kickoff": "black",
+  "actionLimit": 240,
+  "trial": {
+    "actions": 240,
+    "score": {
+      "white": 1,
+      "black": 0
+    },
+    "shots": 5,
+    "resolvedShots": 5,
+    "xG": 0.828694357350655,
+    "entries": [
+      {
+        "step": 37,
+        "team": "white",
+        "pieceId": "white-B1",
+        "type": "B",
+        "from": {
+          "x": 9,
+          "y": 5
+        },
+        "to": {
+          "x": 4,
+          "y": 0
+        },
+        "opponentEntry": true,
+        "shot": null
+      },
+      {
+        "step": 43,
+        "team": "white",
+        "pieceId": "white-Q",
+        "type": "Q",
+        "from": {
+          "x": 9,
+          "y": 5
+        },
+        "to": {
+          "x": 9,
+          "y": 0
+        },
+        "opponentEntry": true,
+        "shot": {
+          "step": 47,
+          "actionsAfterEntry": 4,
+          "disguised": false,
+          "resolved": true,
+          "outcome": "goal",
+          "xG": 0.15882290322546946
+        }
+      },
+      {
+        "step": 123,
+        "team": "white",
+        "pieceId": "white-B2",
+        "type": "B",
+        "from": {
+          "x": 5,
+          "y": 6
+        },
+        "to": {
+          "x": 10,
+          "y": 1
+        },
+        "opponentEntry": true,
+        "shot": {
+          "step": 126,
+          "actionsAfterEntry": 3,
+          "disguised": false,
+          "resolved": true,
+          "outcome": "wide",
+          "xG": 0.10633163403390551
+        }
+      },
+      {
+        "step": 192,
+        "team": "white",
+        "pieceId": "white-Q",
+        "type": "Q",
+        "from": {
+          "x": 8,
+          "y": 6
+        },
+        "to": {
+          "x": 4,
+          "y": 2
+        },
+        "opponentEntry": true,
+        "shot": {
+          "step": 201,
+          "actionsAfterEntry": 9,
+          "disguised": false,
+          "resolved": true,
+          "outcome": "saved",
+          "xG": 0.286612073481424
+        }
+      },
+      {
+        "step": 229,
+        "team": "white",
+        "pieceId": "white-B2",
+        "type": "B",
+        "from": {
+          "x": 8,
+          "y": 5
+        },
+        "to": {
+          "x": 4,
+          "y": 1
+        },
+        "opponentEntry": true,
+        "shot": {
+          "step": 232,
+          "actionsAfterEntry": 3,
+          "disguised": false,
+          "resolved": true,
+          "outcome": "wide",
+          "xG": 0.17414820791058727
+        }
+      }
+    ],
+    "opponentDribbleEntries": 5,
+    "roles": {
+      "Q": {
+        "shots": 2,
+        "goals": 1,
+        "xG": 0.44543497670689347
+      },
+      "B": {
+        "shots": 3,
+        "goals": 0,
+        "xG": 0.3832593806437615
+      }
+    },
+    "resolutions": [
+      {
+        "step": 48,
+        "pieceId": "white-Q",
+        "team": "white",
+        "type": "Q",
+        "origin": {
+          "x": 9,
+          "y": 0
+        },
+        "distance": 1.118033988749895,
+        "xG": 0.15882290322546946,
+        "outcome": "goal",
+        "goal": true,
+        "blockers": 0,
+        "disguised": false
+      },
+      {
+        "step": 127,
+        "pieceId": "white-B2",
+        "team": "white",
+        "type": "B",
+        "origin": {
+          "x": 10,
+          "y": 1
+        },
+        "distance": 2.5,
+        "xG": 0.10633163403390551,
+        "outcome": "wide",
+        "goal": false,
+        "blockers": 0,
+        "disguised": false
+      },
+      {
+        "step": 202,
+        "pieceId": "white-Q",
+        "team": "white",
+        "type": "Q",
+        "origin": {
+          "x": 8,
+          "y": 2
+        },
+        "distance": 2.5,
+        "xG": 0.286612073481424,
+        "outcome": "saved",
+        "goal": false,
+        "blockers": 0,
+        "disguised": false
+      },
+      {
+        "step": 220,
+        "pieceId": "black-B1",
+        "team": "black",
+        "type": "B",
+        "origin": {
+          "x": 4,
+          "y": 13
+        },
+        "distance": 5.315072906367325,
+        "xG": 0.10277953869926872,
+        "outcome": "saved",
+        "goal": false,
+        "blockers": 0,
+        "disguised": false
+      },
+      {
+        "step": 233,
+        "pieceId": "white-B2",
+        "team": "white",
+        "type": "B",
+        "origin": {
+          "x": 4,
+          "y": 1
+        },
+        "distance": 2.5,
+        "xG": 0.17414820791058727,
+        "outcome": "wide",
+        "goal": false,
+        "blockers": 0,
+        "disguised": false
+      }
+    ],
+    "paceAwards": []
+  },
+  "reference": {
+    "actions": 240,
+    "score": {
+      "white": 0,
+      "black": 0
+    },
+    "shots": 6,
+    "resolvedShots": 6,
+    "xG": 0.9306423322420011,
+    "entries": [],
+    "opponentDribbleEntries": 0,
+    "roles": {
+      "Q": {
+        "shots": 3,
+        "goals": 0,
+        "xG": 0.2937071882373794
+      },
+      "B": {
+        "shots": 1,
+        "goals": 0,
+        "xG": 0.17414820791058727
+      },
+      "R": {
+        "shots": 2,
+        "goals": 0,
+        "xG": 0.46278693609403443
+      }
+    },
+    "resolutions": [
+      {
+        "step": 30,
+        "pieceId": "white-Q",
+        "team": "white",
+        "type": "Q",
+        "origin": {
+          "x": 8,
+          "y": 4
+        },
+        "distance": 4.5,
+        "xG": 0.08695703828268034,
+        "outcome": "wide",
+        "goal": false,
+        "blockers": 1,
+        "disguised": false
+      },
+      {
+        "step": 116,
+        "pieceId": "black-Q",
+        "team": "black",
+        "type": "Q",
+        "origin": {
+          "x": 3,
+          "y": 14
+        },
+        "distance": 3.905124837953328,
+        "xG": 0.10219221930157861,
+        "outcome": "wide",
+        "goal": false,
+        "blockers": 0,
+        "disguised": false
+      },
+      {
+        "step": 155,
+        "pieceId": "white-Q",
+        "team": "white",
+        "type": "Q",
+        "origin": {
+          "x": 6,
+          "y": 4
+        },
+        "distance": 4.5,
+        "xG": 0.1045579306531205,
+        "outcome": "corner",
+        "goal": false,
+        "blockers": 1,
+        "disguised": false
+      },
+      {
+        "step": 174,
+        "pieceId": "white-B2",
+        "team": "white",
+        "type": "B",
+        "origin": {
+          "x": 4,
+          "y": 1
+        },
+        "distance": 2.5,
+        "xG": 0.17414820791058727,
+        "outcome": "wide",
+        "goal": false,
+        "blockers": 0,
+        "disguised": false
+      },
+      {
+        "step": 192,
+        "pieceId": "black-R2",
+        "team": "black",
+        "type": "R",
+        "origin": {
+          "x": 7,
+          "y": 13
+        },
+        "distance": 3.5,
+        "xG": 0.23139346804701721,
+        "outcome": "saved",
+        "goal": false,
+        "blockers": 0,
+        "disguised": false
+      },
+      {
+        "step": 217,
+        "pieceId": "black-R2",
+        "team": "black",
+        "type": "R",
+        "origin": {
+          "x": 6,
+          "y": 13
+        },
+        "distance": 3.5,
+        "xG": 0.23139346804701721,
+        "outcome": "saved",
+        "goal": false,
+        "blockers": 0,
+        "disguised": false
+      }
+    ],
+    "paceAwards": []
+  },
+  "audit": {
+    "exactReplayedTransitions": 240,
+    "mismatches": 0
+  },
+  "note": "Fixed atomic-action comparison, not a timed match. Shot xG is read after the actual keeper reaction and target choice."
+}

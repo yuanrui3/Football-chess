@@ -1,0 +1,48 @@
+{
+  "productionEngineSha256": "db24debe7605f7c12f0734a4e4024553da2cd5acdeadcc420541a436789570d4",
+  "frozenTrialEngineSha256": "cf82976a68525fed680e85f60c483b022086f871c60ab39125d550974f940fc2",
+  "exactTransitionsReplayed": 1440,
+  "mismatches": 0,
+  "matches": [
+    {
+      "label": "box-entry-202610161-white",
+      "transitions": 240,
+      "mismatches": 0,
+      "score": {
+        "white": 1,
+        "black": 0
+      }
+    },
+    {
+      "label": "box-entry-202610162-black",
+      "transitions": 240,
+      "mismatches": 0,
+      "score": {
+        "white": 1,
+        "black": 0
+      }
+    },
+    {
+      "label": "final-202610161-white",
+      "transitions": 480,
+      "mismatches": 0,
+      "score": {
+        "white": 2,
+        "black": 1
+      }
+    },
+    {
+      "label": "final-202610162-black",
+      "transitions": 480,
+      "mismatches": 0,
+      "score": {
+        "white": 0,
+        "black": 0
+      }
+    }
+  ],
+  "notes": [
+    "Production differs from the frozen box-entry trial engine only by an explanatory comment.",
+    "The two prior C records are replayed under the expanded legal move set with their recorded actions, preserving every result; this does not assert identical AI choices under the new rule."
+  ]
+}

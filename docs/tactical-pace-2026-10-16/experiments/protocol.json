@@ -1,0 +1,32 @@
+{
+  "createdBeforeOutcomes": true,
+  "baselineSha256": "03b47b43265e471d912a522f2f46f58f57bf7a1706b566e5a3c38d7613ccd4b5",
+  "protocol": {
+    "seeds": [
+      {
+        "seed": 202610161,
+        "kickoff": "white"
+      },
+      {
+        "seed": 202610162,
+        "kickoff": "black"
+      }
+    ],
+    "screenActions": 240,
+    "continuationActions": 480,
+    "difficulty": "tactical",
+    "nodeBudget": 1400,
+    "foulsEnabled": true,
+    "note": "Fixed atomic actions, not timed ten-minute matches."
+  },
+  "variants": {
+    "keeper-reach": {
+      "sha256": "4cacb4cc99ceb8122bed877893907e90e17d42c21ccf2a6e3d97f81c3e056bcc",
+      "changes": "boxDiveSpeed1.3\u21921.1"
+    },
+    "range-decay": {
+      "sha256": "c06760e2d548246d06f65d454ce6a96d5ea5ffa53c207ad4618f1922fc5ffea7",
+      "changes": "longShotDecay.06\u2192.05;rookLongShotDecay.03\u2192.025"
+    }
+  }
+}

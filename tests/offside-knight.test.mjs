@@ -67,26 +67,22 @@ function assertRestart(state, type, team) {
   assert.equal(state.offside, null);
 }
 
-test('knights may enter both boxes off the ball but cannot dribble into either', () => {
+test('knights may enter both boxes off the ball or while dribbling', () => {
   for (const team of ['white', 'black']) for (const ballCarrier of [false, true]) {
     for (const [origin, target] of [[[3, 3], [4, 1]], [[3, 13], [4, 15]]]) {
       const state = fixture({team, phase: 'attackMove', carrier: ballCarrier ? 'white-N1' : 'white-Q', positions: {'white-K': [8, 14], 'white-N1': origin}});
       const id = idFor('white-N1', team), destination = pointFor(target, team);
       assert.equal(isBox(destination.x, destination.y), true);
-      if(ballCarrier){
-        assert.equal(hasMove(state,id,destination.x,destination.y),false);
-        assert.throws(()=>applyMove(state,id,destination.x,destination.y),/not a legal move/);continue;
-      }
       assert.ok(hasMove(state, id, destination.x, destination.y));
       const next = applyMove(state, id, destination.x, destination.y);
       assert.deepEqual(next.pieces.find(piece => piece.id === id), {...state.pieces.find(piece => piece.id === id), ...destination});
-      assert.deepEqual(next.ball, state.ball);
+      assert.deepEqual(next.ball, ballCarrier?{...destination,carrierId:id}:state.ball);
       assert.equal(next.pieces.length, 22);
     }
   }
 });
 
-test('queen, rook, bishop and pawn enter a box off the ball while their carrying entry is denied', () => {
+test('queen, rook, bishop and pawn enter a box off the ball or while carrying', () => {
   for (const team of ['white', 'black']) {
     for (const [id, origin] of [['white-Q', [4, 3]], ['white-R1', [5, 3]], ['white-B1', [4, 3]], ['white-P1', [5, 3]]]) {
       const state = fixture({team, phase: 'attackMove', carrier:'white-N2',positions: {[id]: origin}});
@@ -94,7 +90,7 @@ test('queen, rook, bishop and pawn enter a box off the ball while their carrying
       assert.equal(hasMove(state, idFor(id, team), target.x, target.y), true);
       const carrying=clone(state),carrier=carrying.pieces.find(piece=>piece.id===idFor(id,team));
       carrying.ball={x:carrier.x,y:carrier.y,carrierId:carrier.id};
-      assert.equal(hasMove(carrying,carrier.id,target.x,target.y),false);
+      assert.equal(hasMove(carrying,carrier.id,target.x,target.y),true);
     }
   }
 });

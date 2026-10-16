@@ -1,0 +1,221 @@
+{
+  "reference": {
+    "seed": 202610161,
+    "kickoff": "white",
+    "actions": 240,
+    "shots": 3,
+    "resolvedShots": 3,
+    "postReactionXG": 0.5010390229953052,
+    "queenShots": 2,
+    "queenGoals": 1,
+    "queenXG": 0.37377261556944574,
+    "boxEntries": [],
+    "shotsInsideOpponentBox": 1,
+    "penaltiesAwarded": 0,
+    "cards": {
+      "yellow": 0,
+      "red": 0
+    },
+    "paceAwards": {
+      "repetition": 1
+    },
+    "shotOutcomes": [
+      {
+        "step": 77,
+        "shooterId": "white-Q",
+        "from": {
+          "x": 5,
+          "y": 3
+        },
+        "probability": 0.21613597515466254,
+        "outcome": "corner"
+      },
+      {
+        "step": 105,
+        "shooterId": "white-R1",
+        "from": {
+          "x": 7,
+          "y": 3
+        },
+        "probability": 0.12726640742585948,
+        "outcome": "corner"
+      },
+      {
+        "step": 129,
+        "shooterId": "white-Q",
+        "from": {
+          "x": 8,
+          "y": 2
+        },
+        "probability": 0.1576366404147832,
+        "outcome": "goal"
+      }
+    ],
+    "score": {
+      "white": 1,
+      "black": 0
+    },
+    "phase": "attackMove",
+    "pendingShots": 0,
+    "queenShotShare": 0.6666666666666666,
+    "queenGoalShare": 1,
+    "boxEntriesByType": {},
+    "pendingShot": null
+  },
+  "trial": {
+    "seed": 202610161,
+    "kickoff": "white",
+    "actions": 240,
+    "shots": 6,
+    "resolvedShots": 6,
+    "postReactionXG": 1.3067532339242796,
+    "queenShots": 3,
+    "queenGoals": 1,
+    "queenXG": 0.8530621550561831,
+    "boxEntries": [
+      {
+        "step": 49,
+        "pieceId": "black-N2",
+        "type": "N",
+        "team": "black",
+        "from": {
+          "x": 6,
+          "y": 13
+        },
+        "to": {
+          "x": 7,
+          "y": 15
+        },
+        "entrySquare": {
+          "x": 7,
+          "y": 15
+        },
+        "crossedThrough": false,
+        "opponentBox": true
+      },
+      {
+        "step": 147,
+        "pieceId": "black-B2",
+        "type": "B",
+        "team": "black",
+        "from": {
+          "x": 6,
+          "y": 12
+        },
+        "to": {
+          "x": 9,
+          "y": 15
+        },
+        "entrySquare": {
+          "x": 8,
+          "y": 14
+        },
+        "crossedThrough": false,
+        "opponentBox": true
+      },
+      {
+        "step": 161,
+        "pieceId": "black-B2",
+        "type": "B",
+        "team": "black",
+        "from": {
+          "x": 10,
+          "y": 16
+        },
+        "to": {
+          "x": 7,
+          "y": 13
+        },
+        "entrySquare": {
+          "x": 9,
+          "y": 15
+        },
+        "crossedThrough": true,
+        "opponentBox": true
+      }
+    ],
+    "shotsInsideOpponentBox": 2,
+    "penaltiesAwarded": 0,
+    "cards": {
+      "yellow": 0,
+      "red": 0
+    },
+    "paceAwards": {},
+    "shotOutcomes": [
+      {
+        "step": 70,
+        "shooterId": "white-Q",
+        "from": {
+          "x": 5,
+          "y": 3
+        },
+        "probability": 0.21613597515466254,
+        "outcome": "corner"
+      },
+      {
+        "step": 83,
+        "shooterId": "white-R1",
+        "from": {
+          "x": 5,
+          "y": 3
+        },
+        "probability": 0.11976969896002196,
+        "outcome": "saved"
+      },
+      {
+        "step": 108,
+        "shooterId": "black-N2",
+        "from": {
+          "x": 4,
+          "y": 15
+        },
+        "probability": 0.22682889824296865,
+        "outcome": "wide"
+      },
+      {
+        "step": 152,
+        "shooterId": "black-B2",
+        "from": {
+          "x": 9,
+          "y": 15
+        },
+        "probability": 0.10709248166510602,
+        "outcome": "corner"
+      },
+      {
+        "step": 193,
+        "shooterId": "white-Q",
+        "from": {
+          "x": 8,
+          "y": 3
+        },
+        "probability": 0.4055327118545034,
+        "outcome": "blocked"
+      },
+      {
+        "step": 238,
+        "shooterId": "white-Q",
+        "from": {
+          "x": 6,
+          "y": 3
+        },
+        "probability": 0.23139346804701721,
+        "outcome": "goal"
+      }
+    ],
+    "score": {
+      "white": 1,
+      "black": 0
+    },
+    "phase": "attackMove",
+    "pendingShots": 0,
+    "queenShotShare": 0.5,
+    "queenGoalShare": 1,
+    "boxEntriesByType": {
+      "N": 1,
+      "B": 2
+    },
+    "pendingShot": null
+  },
+  "note": "Matched first240 atomic actions; exact transition replay for both; pending attempts are excluded from resolved post-reaction xG. Trial only, production unchanged."
+}

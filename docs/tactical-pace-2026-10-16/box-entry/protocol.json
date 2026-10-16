@@ -1,0 +1,26 @@
+{
+ "purpose":"Optional normal carrier entry into either box, one-line isolated rule screen",
+ "engineSha256":"cf82976a68525fed680e85f60c483b022086f871c60ab39125d550974f940fc2",
+ "productionBaseSha256":"dc29df534e1cf7e98020b40f1b254b4ab9282024ff69f5941a9968ed587d85d2",
+ "change":"legalMoves entry guard retains passRun restriction but allows ordinary carrier movement into or across boxes",
+ "unchanged":["8-point dribble budget", "2-point cost for every entered box square", "Keeper-only four goal-front squares", "King cannot enter opponent box", "Self-pass collection cannot enter a box from outside", "Pass-run cannot enter a box", "Four-round carrying allowance", "Repetition rule", "Shot model14 and keeper maxsave0.90"],
+ "matches":[{"seed":202610161,"kickoff":"white"},{"seed":202610162,"kickoff":"black"}],
+ "whiteDifficulty":"tactical",
+ "blackDifficulty":"tactical",
+ "nodesPerDecision":1400,
+ "actionLimit":240,
+ "foulsEnabled":true,
+ "record":true,
+ "validate":true,
+ "comparison":"First240 actions of matched final combined rule selfplays",
+ "budgetPolicy":"Exactly240 atomic actions; pending attempts reported without unmatched extra resolution",
+ "status":"240-action screen completed; variant selected for final update after review",
+ "continuation":{
+  "selectedAfterPrefixScreen":true,
+  "newParameterChanges":false,
+  "additionalActionsPerMatch":240,
+  "totalActionsPerMatch":480,
+  "method":"Resume exact240-action saved state, then stitch original and continued actions using a shared recorded policy; recompute all480-action statistics and assert every state",
+  "noUnmatchedPendingResolution":true
+ }
+}

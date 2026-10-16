@@ -488,7 +488,7 @@ test('blocked and unreachable knight challenges are rejected before consuming ra
   }
 });
 
-test('outfield players can enter either box off the ball; kings enter only their own and carriers cannot dribble into either', () => {
+test('outfield players can enter either box off the ball or carrying; kings enter only their own', () => {
   for (const [id, from, to] of [
     ['white-B1',[3,BOX_DEPTH],[4,BOX_DEPTH-1]],['white-R1',[6,BOX_DEPTH],[6,BOX_DEPTH-1]],
     ['white-P1',[7,BOARD_HEIGHT-BOX_DEPTH-1],[7,BOARD_HEIGHT-BOX_DEPTH]],
@@ -511,7 +511,7 @@ test('outfield players can enter either box off the ball; kings enter only their
     assertIntegrity(applyMove(knight, carrier, ...to));
     const carrying=clone(knight),piece=carrying.pieces.find(piece=>piece.id===carrier);
     carrying.ball={x:piece.x,y:piece.y,carrierId:carrier};
-    assert.equal(hasMove(carrying,carrier,...to),false,`${carrier} cannot jump into either box while carrying the ball`);
+    assert.equal(hasMove(carrying,carrier,...to),true,`${carrier} can jump into either box while carrying the ball`);
   }
 });
 
@@ -609,9 +609,9 @@ test('goal declarations wait for the defending goalkeeper before resolving the s
   assert.equal(reaction.phase, 'keeperReact');
   assert.equal(currentTeam(reaction), 'black');
   assert.ok(reaction.pendingShot);
-  assert.equal(reaction.rulesVersion,17);
+  assert.equal(reaction.rulesVersion,18);
   assert.deepEqual(reaction.pendingShot.from, { x: 5, y: 4 });
-  assert.equal(reaction.lastAction.shotModel.modelVersion,13);
+  assert.equal(reaction.lastAction.shotModel.modelVersion,14);
   assert.deepEqual(reaction.lastAction.shotModel, shotModel(state, 5, -1));
   assert.deepEqual(reaction.score, { white: 0, black: 0 });
   assert.deepEqual(legalKicks(reaction), []);
@@ -670,7 +670,7 @@ test('outfield players intercept ordinary passes and give shots a probabilistic 
 test('the shot preview exposes Euclidean distance, goal-plane geometry and complete probabilities', () => {
   const state = fixture({ phase: 'kick', positions: { 'white-R1': [5, 6], 'black-K': [6, 0] } });
   const model = shotModel(state, 5, -1);
-  assert.equal(model.modelVersion,13);
+  assert.equal(model.modelVersion,14);
   assert.equal(SHOT_MODEL.finishingAccuracyMultiplier,1.15);
   assert.equal(model.finishingAccuracyMultiplier,1.15);
   assert.deepEqual(model.origin, { x: 5, y: 6 });
@@ -709,7 +709,7 @@ test('close shots are more dangerous while longer flight gives a fixed keeper mo
 });
 
 test('extra distance pressure starts beyond three squares with a shared close-shot distance curve', () => {
-  assert.equal(SHOT_MODEL.version,13);
+  assert.equal(SHOT_MODEL.version,14);
   assert.equal(SHOT_MODEL.distancePenaltyStart, 3);
   assert.equal(SHOT_MODEL.longShotDecay, .06);
   assert.equal(SHOT_MODEL.minOnTarget, .01);
@@ -749,7 +749,7 @@ test('an ordinary midfield shot retains strong range pressure before and after k
   const previousAccuracy = Math.max(.01,Math.min(.98,.98*1.15*Math.exp(-.018*held.distance)*held.postAngleFactor*held.wideAngleFactor*held.centralLaneFactor));
   const previousHoldChance = previousAccuracy * (1 - held.saveGivenOnTarget);
   almostEqual(held.distance,8.5);
-  assert.ok(previousHoldChance>.63&&previousHoldChance<.64,'removing range pressure while retaining the finishing and angle adjustments would make this midfield attempt excessively strong');
+  assert.ok(previousHoldChance>.64&&previousHoldChance<.65,'removing range pressure while retaining the finishing and angle adjustments would make this midfield attempt excessively strong');
   assert.ok(held.goalProbability>.10&&held.goalProbability<.11,'the higher finishing baseline still limits the holding-keeper chance to about 10%');
   assert.ok(bestReaction>.04&&bestReaction<.05,'best keeper reaction reduces this midfield attempt below 5%');
   assert.ok(held.goalProbability < previousHoldChance / 3, 'range penalty cuts midfield scoring chance by more than two thirds');
@@ -794,7 +794,7 @@ test('parry splitting preserves the established goal, total-save and miss probab
     const onTarget=Math.max(.01,Math.min(.98,.98*1.15*Math.exp(-.018*model.distance-.03*Math.max(0,model.distance-3)**2)*model.postAngleFactor*model.wideAngleFactor*model.centralLaneFactor));
     const time = (origin[1] - keeper[1]) / 6;
     const reach = .4 + 1.3 * Math.max(0, time - .15);
-    const saveGivenTarget = .94 * (1 - Math.exp(-(.35 + time) / .45)) * Math.exp(-((Math.abs(keeper[0] - origin[0]) / reach) ** 2));
+    const saveGivenTarget = .90 * (1 - Math.exp(-(.35 + time) / .45)) * Math.exp(-((Math.abs(keeper[0] - origin[0]) / reach) ** 2));
     almostEqual(model.goalProbability, onTarget * (1 - saveGivenTarget));
     almostEqual(model.saveProbability, onTarget * saveGivenTarget);
     almostEqual(model.missProbability, 1 - onTarget);
@@ -921,7 +921,7 @@ test('shot model probabilities stay finite and total one across all goals and ke
       const state=fixture({phase:'kick',attack,carrier:shooter,positions:{[shooter]:origin,[keeper]:[6,attack==='white'?0:BOARD_HEIGHT-1]}});
       for(const x of GOAL_FILES)for(const position of [{x:4,y:0},{x:9,y:1},{x:10,y:8},{x:4,y:BOARD_HEIGHT-1}]){
         const model=shotModel(state,x,attack==='white'?-1:BOARD_HEIGHT,position);
-        assert.equal(model.modelVersion,13);assert.ok(model.distance>0,'each sampled goal is the current external goal plane');
+        assert.equal(model.modelVersion,14);assert.ok(model.distance>0,'each sampled goal is the current external goal plane');
         for (const key of ['probability', 'saveProbability', 'missProbability', 'onTargetProbability', 'saveGivenOnTarget', 'keeperStretch', 'parryGivenSave', 'cornerProbability', 'caughtSaveProbability']) assert.ok(Number.isFinite(model[key]) && model[key] >= 0 && model[key] <= 1, key);
         for (const key of ['distance', 'keeperPathDistance', 'timeToKeeper', 'reach', 'shotAngleDegrees']) assert.ok(Number.isFinite(model[key]) && model[key] >= 0, key);
         almostEqual(model.goalProbability + model.saveProbability + model.missProbability + model.blockProbability, 1);

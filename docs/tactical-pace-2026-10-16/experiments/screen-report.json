@@ -1,0 +1,340 @@
+{
+  "protocol": {
+    "createdBeforeOutcomes": true,
+    "baselineSha256": "03b47b43265e471d912a522f2f46f58f57bf7a1706b566e5a3c38d7613ccd4b5",
+    "protocol": {
+      "seeds": [
+        {
+          "seed": 202610161,
+          "kickoff": "white"
+        },
+        {
+          "seed": 202610162,
+          "kickoff": "black"
+        }
+      ],
+      "screenActions": 240,
+      "continuationActions": 480,
+      "difficulty": "tactical",
+      "nodeBudget": 1400,
+      "foulsEnabled": true,
+      "note": "Fixed atomic actions, not timed ten-minute matches."
+    },
+    "variants": {
+      "keeper-reach": {
+        "sha256": "4cacb4cc99ceb8122bed877893907e90e17d42c21ccf2a6e3d97f81c3e056bcc",
+        "changes": "boxDiveSpeed1.3→1.1"
+      },
+      "range-decay": {
+        "sha256": "c06760e2d548246d06f65d454ce6a96d5ea5ffa53c207ad4618f1922fc5ffea7",
+        "changes": "longShotDecay.06→.05;rookLongShotDecay.03→.025"
+      }
+    }
+  },
+  "pairedBaseline240": [
+    {
+      "seed": 202610161,
+      "kickoff": "white",
+      "step": 240,
+      "score": {
+        "white": 0,
+        "black": 0
+      },
+      "shots": 1,
+      "xG": 0.19812206662688478,
+      "stalls": 0,
+      "msPerAction": 634.9095732375,
+      "elapsedMs": 152378.297577
+    },
+    {
+      "seed": 202610162,
+      "kickoff": "black",
+      "step": 240,
+      "score": {
+        "white": 0,
+        "black": 0
+      },
+      "shots": 2,
+      "xG": 0.2774436046769506,
+      "stalls": 0,
+      "msPerAction": 1118.6681400749999,
+      "elapsedMs": 268480.353618
+    }
+  ],
+  "variants": {
+    "keeper-reach": {
+      "matches": [
+        {
+          "seed": 202610161,
+          "kickoff": "white",
+          "actions": 240,
+          "score": {
+            "white": 1,
+            "black": 0
+          },
+          "shots": 5,
+          "resolvedShots": 5,
+          "xG": 0.7163830900175794,
+          "goals": 1,
+          "stalls": 0,
+          "corners": 2,
+          "blockedShots": 2,
+          "longPasses": 0,
+          "ordinaryRounds": 33,
+          "meanShotDistance": 2.547213595499958,
+          "error": null,
+          "elapsedMs": 147012.566953,
+          "exactReplayTransitions": 240
+        },
+        {
+          "seed": 202610162,
+          "kickoff": "black",
+          "actions": 240,
+          "score": {
+            "white": 0,
+            "black": 0
+          },
+          "shots": 5,
+          "resolvedShots": 5,
+          "xG": 0.44373228736639886,
+          "goals": 0,
+          "stalls": 1,
+          "corners": 1,
+          "blockedShots": 1,
+          "longPasses": 0,
+          "ordinaryRounds": 31,
+          "meanShotDistance": 3.1,
+          "error": null,
+          "elapsedMs": 244345.16832099998,
+          "exactReplayTransitions": 240
+        }
+      ],
+      "totals": {
+        "actions": 480,
+        "shots": 10,
+        "resolvedShots": 10,
+        "xG": 1.1601153773839783,
+        "goals": 1,
+        "stalls": 1,
+        "corners": 3,
+        "blockedShots": 3,
+        "longPasses": 0,
+        "ordinaryRounds": 64,
+        "exactReplayTransitions": 480
+      },
+      "sourceSha256": "4cacb4cc99ceb8122bed877893907e90e17d42c21ccf2a6e3d97f81c3e056bcc"
+    },
+    "range-decay": {
+      "matches": [
+        {
+          "seed": 202610161,
+          "kickoff": "white",
+          "actions": 240,
+          "score": {
+            "white": 0,
+            "black": 1
+          },
+          "shots": 3,
+          "resolvedShots": 3,
+          "xG": 0.406700302149998,
+          "goals": 1,
+          "stalls": 0,
+          "corners": 0,
+          "blockedShots": 0,
+          "longPasses": 0,
+          "ordinaryRounds": 39,
+          "meanShotDistance": 2.8410529422344077,
+          "error": null,
+          "elapsedMs": 237253.95522600002,
+          "exactReplayTransitions": 240
+        },
+        {
+          "seed": 202610162,
+          "kickoff": "black",
+          "actions": 240,
+          "score": {
+            "white": 0,
+            "black": 0
+          },
+          "shots": 0,
+          "resolvedShots": 0,
+          "xG": 0,
+          "goals": 0,
+          "stalls": 0,
+          "corners": 0,
+          "blockedShots": 0,
+          "longPasses": 0,
+          "ordinaryRounds": 41,
+          "meanShotDistance": null,
+          "error": null,
+          "elapsedMs": 183012.181946,
+          "exactReplayTransitions": 240
+        }
+      ],
+      "totals": {
+        "actions": 480,
+        "shots": 3,
+        "resolvedShots": 3,
+        "xG": 0.406700302149998,
+        "goals": 1,
+        "stalls": 0,
+        "corners": 0,
+        "blockedShots": 0,
+        "longPasses": 0,
+        "ordinaryRounds": 80,
+        "exactReplayTransitions": 480
+      },
+      "sourceSha256": "c06760e2d548246d06f65d454ce6a96d5ea5ffa53c207ad4618f1922fc5ffea7"
+    }
+  },
+  "geometry": {
+    "note": "Synthetic open-lane geometry grid, not match samples. R/Q origins files e–j, y3–8; keeper files f–i at y0, allowed one reaction. Ordinary targets only, no blockers or disguised shots.",
+    "overall": {
+      "positions": 200,
+      "baseline": {
+        "meanBestChance": 0.21875298833023493,
+        "positionsAbove10pct": 120,
+        "positionsAbove20pct": 54,
+        "improvedVersusBase": 0
+      },
+      "keeper-reach": {
+        "meanBestChance": 0.23083535686459564,
+        "positionsAbove10pct": 122,
+        "positionsAbove20pct": 58,
+        "improvedVersusBase": 80
+      },
+      "range-decay": {
+        "meanBestChance": 0.22818899583188565,
+        "positionsAbove10pct": 126,
+        "positionsAbove20pct": 56,
+        "improvedVersusBase": 168
+      },
+      "combined-c": {
+        "meanBestChance": 0.23738970832459982,
+        "positionsAbove10pct": 142,
+        "positionsAbove20pct": 76,
+        "improvedVersusBase": 200
+      }
+    },
+    "central": {
+      "positions": 96,
+      "baseline": {
+        "meanBestChance": 0.1767931375162641,
+        "positionsAbove10pct": 58,
+        "positionsAbove20pct": 18,
+        "improvedVersusBase": 0
+      },
+      "keeper-reach": {
+        "meanBestChance": 0.18736956646804384,
+        "positionsAbove10pct": 58,
+        "positionsAbove20pct": 18,
+        "improvedVersusBase": 24
+      },
+      "range-decay": {
+        "meanBestChance": 0.18333903282018973,
+        "positionsAbove10pct": 58,
+        "positionsAbove20pct": 18,
+        "improvedVersusBase": 64
+      },
+      "combined-c": {
+        "meanBestChance": 0.19976965481565023,
+        "positionsAbove10pct": 64,
+        "positionsAbove20pct": 30,
+        "improvedVersusBase": 96
+      }
+    },
+    "wide": {
+      "positions": 104,
+      "baseline": {
+        "meanBestChance": 0.2574851583123626,
+        "positionsAbove10pct": 62,
+        "positionsAbove20pct": 36,
+        "improvedVersusBase": 0
+      },
+      "keeper-reach": {
+        "meanBestChance": 0.27095762492295156,
+        "positionsAbove10pct": 64,
+        "positionsAbove20pct": 40,
+        "improvedVersusBase": 56
+      },
+      "range-decay": {
+        "meanBestChance": 0.2695889616888361,
+        "positionsAbove10pct": 68,
+        "positionsAbove20pct": 38,
+        "improvedVersusBase": 104
+      },
+      "combined-c": {
+        "meanBestChance": 0.2721159115636296,
+        "positionsAbove10pct": 78,
+        "positionsAbove20pct": 46,
+        "improvedVersusBase": 104
+      }
+    },
+    "byType": {
+      "R": {
+        "positions": 96,
+        "baseline": {
+          "meanBestChance": 0.24336140841288068,
+          "positionsAbove10pct": 62,
+          "positionsAbove20pct": 30,
+          "improvedVersusBase": 0
+        },
+        "keeper-reach": {
+          "meanBestChance": 0.2574371845130913,
+          "positionsAbove10pct": 62,
+          "positionsAbove20pct": 32,
+          "improvedVersusBase": 36
+        },
+        "range-decay": {
+          "meanBestChance": 0.25166631771369985,
+          "positionsAbove10pct": 66,
+          "positionsAbove20pct": 30,
+          "improvedVersusBase": 80
+        },
+        "combined-c": {
+          "meanBestChance": 0.2645452008277525,
+          "positionsAbove10pct": 72,
+          "positionsAbove20pct": 40,
+          "improvedVersusBase": 96
+        }
+      },
+      "Q": {
+        "positions": 104,
+        "baseline": {
+          "meanBestChance": 0.1960375236385626,
+          "positionsAbove10pct": 58,
+          "positionsAbove20pct": 24,
+          "improvedVersusBase": 0
+        },
+        "keeper-reach": {
+          "meanBestChance": 0.20627982365060002,
+          "positionsAbove10pct": 60,
+          "positionsAbove20pct": 26,
+          "improvedVersusBase": 44
+        },
+        "range-decay": {
+          "meanBestChance": 0.2065176217871344,
+          "positionsAbove10pct": 60,
+          "positionsAbove20pct": 26,
+          "improvedVersusBase": 88
+        },
+        "combined-c": {
+          "meanBestChance": 0.21232309986015027,
+          "positionsAbove10pct": 70,
+          "positionsAbove20pct": 36,
+          "improvedVersusBase": 104
+        }
+      }
+    }
+  },
+  "audit": {
+    "exactReplayedTransitions": 960,
+    "mismatches": 0
+  },
+  "interpretation": [
+    "The screen uses exactly two predeclared seeds,240 atomic actions per case,unchanged1400-node Tactical on both sides,fouls ON. It is not a timed ten-minute match evaluation.",
+    "A keeper reach improves 80/200 synthetic open-lane best-shot cases but leaves perfectly aligned saves unchanged. Its match screen produces more shots, predominantly short queen attempts; one goal is not proof of a stable scoreline increase.",
+    "B distance decay improves long-shot geometry but produces only3 total attempts in the screen,including one zero-shot case; it does not address the main lack of legal chances.",
+    "Combined C was separately frozen before its outcomes, retaining original reach/distance coefficients and changing keeper save cap .94→.90 alongside the new anti-repetition and four-round carrier rules. Its match results are tracked separately by the parent task."
+  ]
+}

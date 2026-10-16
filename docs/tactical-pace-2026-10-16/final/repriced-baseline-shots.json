@@ -1,0 +1,242 @@
+{
+  "rows": [
+    {
+      "match": "baseline-202610161-white",
+      "step": 217,
+      "shooterId": "white-R1",
+      "from": {
+        "x": 6,
+        "y": 3
+      },
+      "target": {
+        "x": 6,
+        "y": -1
+      },
+      "oldProbability": 0.19812206662688478,
+      "newProbability": 0.23139346804701721,
+      "increase": 0.033271401420132435,
+      "oldSaveGivenOnTarget": 0.7978346258909339,
+      "newSaveGivenOnTarget": 0.7638842162785539
+    },
+    {
+      "match": "baseline-202610161-white",
+      "step": 276,
+      "shooterId": "black-Q",
+      "from": {
+        "x": 5,
+        "y": 14
+      },
+      "target": {
+        "x": 5,
+        "y": 17
+      },
+      "oldProbability": 0.2564795706936638,
+      "newProbability": 0.286612073481424,
+      "increase": 0.030132502787760196,
+      "oldSaveGivenOnTarget": 0.7341060239875198,
+      "newSaveGivenOnTarget": 0.702867469775285
+    },
+    {
+      "match": "baseline-202610161-white",
+      "step": 295,
+      "shooterId": "black-N2",
+      "from": {
+        "x": 5,
+        "y": 15
+      },
+      "target": {
+        "x": 6,
+        "y": 17
+      },
+      "oldProbability": 0.4719723812975713,
+      "newProbability": 0.49241303041594997,
+      "increase": 0.020440649118378673,
+      "oldSaveGivenOnTarget": 0.5044012547106376,
+      "newSaveGivenOnTarget": 0.48293737153146155
+    },
+    {
+      "match": "baseline-202610161-white",
+      "step": 353,
+      "shooterId": "white-R1",
+      "from": {
+        "x": 7,
+        "y": 4
+      },
+      "target": {
+        "x": 7,
+        "y": -1
+      },
+      "oldProbability": 0.08524939423770364,
+      "newProbability": 0.1045579306531205,
+      "increase": 0.019308536415416855,
+      "oldSaveGivenOnTarget": 0.8418378585571361,
+      "newSaveGivenOnTarget": 0.8060149709589601
+    },
+    {
+      "match": "baseline-202610162-black",
+      "step": 105,
+      "shooterId": "black-Q",
+      "from": {
+        "x": 10,
+        "y": 14
+      },
+      "target": {
+        "x": 7,
+        "y": 17
+      },
+      "oldProbability": 0.09238519991092747,
+      "newProbability": 0.10219221930157861,
+      "increase": 0.009807019390651137,
+      "oldSaveGivenOnTarget": 0.7138449577583624,
+      "newSaveGivenOnTarget": 0.6834685765771555
+    },
+    {
+      "match": "baseline-202610162-black",
+      "step": 161,
+      "shooterId": "white-Q",
+      "from": {
+        "x": 5,
+        "y": 3
+      },
+      "target": {
+        "x": 5,
+        "y": -1
+      },
+      "oldProbability": 0.18505840476602317,
+      "newProbability": 0.21613597515466254,
+      "increase": 0.03107757038863937,
+      "oldSaveGivenOnTarget": 0.7978346258909339,
+      "newSaveGivenOnTarget": 0.7638842162785539
+    },
+    {
+      "match": "baseline-202610162-black",
+      "step": 260,
+      "shooterId": "black-Q",
+      "from": {
+        "x": 6,
+        "y": 13
+      },
+      "target": {
+        "x": 6,
+        "y": 17
+      },
+      "oldProbability": 0.19812206662688478,
+      "newProbability": 0.23139346804701721,
+      "increase": 0.033271401420132435,
+      "oldSaveGivenOnTarget": 0.7978346258909339,
+      "newSaveGivenOnTarget": 0.7638842162785539
+    },
+    {
+      "match": "baseline-202610162-black",
+      "step": 273,
+      "shooterId": "black-R2",
+      "from": {
+        "x": 8,
+        "y": 12
+      },
+      "target": {
+        "x": 8,
+        "y": 17
+      },
+      "oldProbability": 0.46716774697247926,
+      "newProbability": 0.4676954740047133,
+      "increase": 0.0005277270322340266,
+      "oldSaveGivenOnTarget": 0.025859838033914884,
+      "newSaveGivenOnTarget": 0.024759419394173827
+    },
+    {
+      "match": "baseline-202610162-black",
+      "step": 331,
+      "shooterId": "white-R1",
+      "from": {
+        "x": 7,
+        "y": 4
+      },
+      "target": {
+        "x": 7,
+        "y": -1
+      },
+      "oldProbability": 0.08524939423770364,
+      "newProbability": 0.1045579306531205,
+      "increase": 0.019308536415416855,
+      "oldSaveGivenOnTarget": 0.8418378585571361,
+      "newSaveGivenOnTarget": 0.8060149709589601
+    },
+    {
+      "match": "baseline-202610162-black",
+      "step": 379,
+      "shooterId": "white-R1",
+      "from": {
+        "x": 8,
+        "y": 3
+      },
+      "target": {
+        "x": 8,
+        "y": -1
+      },
+      "oldProbability": 0.1025483583331655,
+      "newProbability": 0.11976969896002196,
+      "increase": 0.017221340626856457,
+      "oldSaveGivenOnTarget": 0.7978346258909339,
+      "newSaveGivenOnTarget": 0.7638842162785539
+    },
+    {
+      "match": "baseline-202610162-black",
+      "step": 392,
+      "shooterId": "black-Q",
+      "from": {
+        "x": 5,
+        "y": 13
+      },
+      "target": {
+        "x": 5,
+        "y": 17
+      },
+      "oldProbability": 0.18505840476602317,
+      "newProbability": 0.21613597515466254,
+      "increase": 0.03107757038863937,
+      "oldSaveGivenOnTarget": 0.7978346258909339,
+      "newSaveGivenOnTarget": 0.7638842162785539
+    },
+    {
+      "match": "baseline-202610162-black",
+      "step": 405,
+      "shooterId": "white-Q",
+      "from": {
+        "x": 8,
+        "y": 3
+      },
+      "target": {
+        "x": 8,
+        "y": -1
+      },
+      "oldProbability": 0.055980167441722004,
+      "newProbability": 0.06538113248428541,
+      "increase": 0.009400965042563408,
+      "oldSaveGivenOnTarget": 0.7978346258909339,
+      "newSaveGivenOnTarget": 0.7638842162785539
+    },
+    {
+      "match": "baseline-202610162-black",
+      "step": 440,
+      "shooterId": "black-Q",
+      "from": {
+        "x": 5,
+        "y": 13
+      },
+      "target": {
+        "x": 5,
+        "y": 17
+      },
+      "oldProbability": 0.18505840476602317,
+      "newProbability": 0.21613597515466254,
+      "increase": 0.03107757038863937,
+      "oldSaveGivenOnTarget": 0.7978346258909339,
+      "newSaveGivenOnTarget": 0.7638842162785539
+    }
+  ],
+  "count": 13,
+  "oldXG": 2.5684515606767757,
+  "newXG": 2.854374351512236,
+  "note": "Same recorded shot origins, actual goal targets and final keeper reaction squares. This isolates the model change; actual selfplay may select different actions."
+}

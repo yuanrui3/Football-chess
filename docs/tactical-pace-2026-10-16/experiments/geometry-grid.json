@@ -1,0 +1,8144 @@
+{
+  "summary": {
+    "note": "Synthetic open-lane geometry grid, not match samples. R/Q origins files e–j, y3–8; keeper files f–i at y0, allowed one reaction. Ordinary targets only, no blockers or disguised shots.",
+    "overall": {
+      "positions": 200,
+      "baseline": {
+        "meanBestChance": 0.21875298833023493,
+        "positionsAbove10pct": 120,
+        "positionsAbove20pct": 54,
+        "improvedVersusBase": 0
+      },
+      "keeper-reach": {
+        "meanBestChance": 0.23083535686459564,
+        "positionsAbove10pct": 122,
+        "positionsAbove20pct": 58,
+        "improvedVersusBase": 80
+      },
+      "range-decay": {
+        "meanBestChance": 0.22818899583188565,
+        "positionsAbove10pct": 126,
+        "positionsAbove20pct": 56,
+        "improvedVersusBase": 168
+      },
+      "combined-c": {
+        "meanBestChance": 0.23738970832459982,
+        "positionsAbove10pct": 142,
+        "positionsAbove20pct": 76,
+        "improvedVersusBase": 200
+      }
+    },
+    "central": {
+      "positions": 96,
+      "baseline": {
+        "meanBestChance": 0.1767931375162641,
+        "positionsAbove10pct": 58,
+        "positionsAbove20pct": 18,
+        "improvedVersusBase": 0
+      },
+      "keeper-reach": {
+        "meanBestChance": 0.18736956646804384,
+        "positionsAbove10pct": 58,
+        "positionsAbove20pct": 18,
+        "improvedVersusBase": 24
+      },
+      "range-decay": {
+        "meanBestChance": 0.18333903282018973,
+        "positionsAbove10pct": 58,
+        "positionsAbove20pct": 18,
+        "improvedVersusBase": 64
+      },
+      "combined-c": {
+        "meanBestChance": 0.19976965481565023,
+        "positionsAbove10pct": 64,
+        "positionsAbove20pct": 30,
+        "improvedVersusBase": 96
+      }
+    },
+    "wide": {
+      "positions": 104,
+      "baseline": {
+        "meanBestChance": 0.2574851583123626,
+        "positionsAbove10pct": 62,
+        "positionsAbove20pct": 36,
+        "improvedVersusBase": 0
+      },
+      "keeper-reach": {
+        "meanBestChance": 0.27095762492295156,
+        "positionsAbove10pct": 64,
+        "positionsAbove20pct": 40,
+        "improvedVersusBase": 56
+      },
+      "range-decay": {
+        "meanBestChance": 0.2695889616888361,
+        "positionsAbove10pct": 68,
+        "positionsAbove20pct": 38,
+        "improvedVersusBase": 104
+      },
+      "combined-c": {
+        "meanBestChance": 0.2721159115636296,
+        "positionsAbove10pct": 78,
+        "positionsAbove20pct": 46,
+        "improvedVersusBase": 104
+      }
+    },
+    "byType": {
+      "R": {
+        "positions": 96,
+        "baseline": {
+          "meanBestChance": 0.24336140841288068,
+          "positionsAbove10pct": 62,
+          "positionsAbove20pct": 30,
+          "improvedVersusBase": 0
+        },
+        "keeper-reach": {
+          "meanBestChance": 0.2574371845130913,
+          "positionsAbove10pct": 62,
+          "positionsAbove20pct": 32,
+          "improvedVersusBase": 36
+        },
+        "range-decay": {
+          "meanBestChance": 0.25166631771369985,
+          "positionsAbove10pct": 66,
+          "positionsAbove20pct": 30,
+          "improvedVersusBase": 80
+        },
+        "combined-c": {
+          "meanBestChance": 0.2645452008277525,
+          "positionsAbove10pct": 72,
+          "positionsAbove20pct": 40,
+          "improvedVersusBase": 96
+        }
+      },
+      "Q": {
+        "positions": 104,
+        "baseline": {
+          "meanBestChance": 0.1960375236385626,
+          "positionsAbove10pct": 58,
+          "positionsAbove20pct": 24,
+          "improvedVersusBase": 0
+        },
+        "keeper-reach": {
+          "meanBestChance": 0.20627982365060002,
+          "positionsAbove10pct": 60,
+          "positionsAbove20pct": 26,
+          "improvedVersusBase": 44
+        },
+        "range-decay": {
+          "meanBestChance": 0.2065176217871344,
+          "positionsAbove10pct": 60,
+          "positionsAbove20pct": 26,
+          "improvedVersusBase": 88
+        },
+        "combined-c": {
+          "meanBestChance": 0.21232309986015027,
+          "positionsAbove10pct": 70,
+          "positionsAbove20pct": 36,
+          "improvedVersusBase": 104
+        }
+      }
+    }
+  },
+  "rows": [
+    {
+      "type": "R",
+      "x": 5,
+      "y": 3,
+      "keeperX": 5,
+      "variants": {
+        "baseline": {
+          "best": 0.18645156060575546,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "keeper-reach": {
+          "best": 0.18645156060575546,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "range-decay": {
+          "best": 0.18668477078250723,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "combined-c": {
+          "best": 0.21776308901822175,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 5,
+      "y": 3,
+      "keeperX": 6,
+      "variants": {
+        "baseline": {
+          "best": 0.18645156060575546,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "keeper-reach": {
+          "best": 0.18645156060575546,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "range-decay": {
+          "best": 0.18668477078250723,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "combined-c": {
+          "best": 0.21776308901822175,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 5,
+      "y": 3,
+      "keeperX": 7,
+      "variants": {
+        "baseline": {
+          "best": 0.7349101179066957,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "keeper-reach": {
+          "best": 0.7770592960634342,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "range-decay": {
+          "best": 0.735829329941912,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "combined-c": {
+          "best": 0.7428829843063561,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 5,
+      "y": 3,
+      "keeperX": 8,
+      "variants": {
+        "baseline": {
+          "best": 0.9191792426472984,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "keeper-reach": {
+          "best": 0.9211563662871087,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "range-decay": {
+          "best": 0.9203289351086964,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "combined-c": {
+          "best": 0.9193108696962948,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 6,
+      "y": 3,
+      "keeperX": 5,
+      "variants": {
+        "baseline": {
+          "best": 0.19812206662688478,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "keeper-reach": {
+          "best": 0.19812206662688478,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "range-decay": {
+          "best": 0.19812206662688478,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "combined-c": {
+          "best": 0.23139346804701721,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 6,
+      "y": 3,
+      "keeperX": 6,
+      "variants": {
+        "baseline": {
+          "best": 0.19812206662688478,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "keeper-reach": {
+          "best": 0.19812206662688478,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "range-decay": {
+          "best": 0.19812206662688478,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "combined-c": {
+          "best": 0.23139346804701721,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 6,
+      "y": 3,
+      "keeperX": 7,
+      "variants": {
+        "baseline": {
+          "best": 0.19812206662688478,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "keeper-reach": {
+          "best": 0.19812206662688478,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "range-decay": {
+          "best": 0.19812206662688478,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "combined-c": {
+          "best": 0.23139346804701721,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 6,
+      "y": 3,
+      "keeperX": 8,
+      "variants": {
+        "baseline": {
+          "best": 0.7809101241718843,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "keeper-reach": {
+          "best": 0.8256975330619336,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "range-decay": {
+          "best": 0.7809101241718843,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "combined-c": {
+          "best": 0.7893820337815914,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 7,
+      "y": 3,
+      "keeperX": 5,
+      "variants": {
+        "baseline": {
+          "best": 0.7809101241718843,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "keeper-reach": {
+          "best": 0.8256975330619336,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "range-decay": {
+          "best": 0.7809101241718843,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "combined-c": {
+          "best": 0.7893820337815914,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 7,
+      "y": 3,
+      "keeperX": 6,
+      "variants": {
+        "baseline": {
+          "best": 0.19812206662688478,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "keeper-reach": {
+          "best": 0.19812206662688478,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "range-decay": {
+          "best": 0.19812206662688478,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "combined-c": {
+          "best": 0.23139346804701721,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 7,
+      "y": 3,
+      "keeperX": 7,
+      "variants": {
+        "baseline": {
+          "best": 0.19812206662688478,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "keeper-reach": {
+          "best": 0.19812206662688478,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "range-decay": {
+          "best": 0.19812206662688478,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "combined-c": {
+          "best": 0.23139346804701721,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 7,
+      "y": 3,
+      "keeperX": 8,
+      "variants": {
+        "baseline": {
+          "best": 0.19812206662688478,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "keeper-reach": {
+          "best": 0.19812206662688478,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "range-decay": {
+          "best": 0.19812206662688478,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "combined-c": {
+          "best": 0.23139346804701721,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 8,
+      "y": 3,
+      "keeperX": 5,
+      "variants": {
+        "baseline": {
+          "best": 0.9191792426472984,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "keeper-reach": {
+          "best": 0.9211563662871087,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "range-decay": {
+          "best": 0.9203289351086964,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "combined-c": {
+          "best": 0.9193108696962948,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 8,
+      "y": 3,
+      "keeperX": 6,
+      "variants": {
+        "baseline": {
+          "best": 0.7349101179066957,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "keeper-reach": {
+          "best": 0.7770592960634342,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "range-decay": {
+          "best": 0.735829329941912,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "combined-c": {
+          "best": 0.7428829843063561,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 8,
+      "y": 3,
+      "keeperX": 7,
+      "variants": {
+        "baseline": {
+          "best": 0.18645156060575546,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "keeper-reach": {
+          "best": 0.18645156060575546,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "range-decay": {
+          "best": 0.18668477078250723,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "combined-c": {
+          "best": 0.21776308901822175,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 8,
+      "y": 3,
+      "keeperX": 8,
+      "variants": {
+        "baseline": {
+          "best": 0.18645156060575546,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "keeper-reach": {
+          "best": 0.18645156060575546,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "range-decay": {
+          "best": 0.18668477078250723,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "combined-c": {
+          "best": 0.21776308901822175,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 5,
+      "y": 4,
+      "keeperX": 5,
+      "variants": {
+        "baseline": {
+          "best": 0.137908568283305,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "keeper-reach": {
+          "best": 0.137908568283305,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "range-decay": {
+          "best": 0.1394687995216789,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "combined-c": {
+          "best": 0.1691441287996811,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 5,
+      "y": 4,
+      "keeperX": 6,
+      "variants": {
+        "baseline": {
+          "best": 0.137908568283305,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "keeper-reach": {
+          "best": 0.137908568283305,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "range-decay": {
+          "best": 0.1394687995216789,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "combined-c": {
+          "best": 0.1691441287996811,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 5,
+      "y": 4,
+      "keeperX": 7,
+      "variants": {
+        "baseline": {
+          "best": 0.5646414506428633,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "keeper-reach": {
+          "best": 0.6192743854024184,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "range-decay": {
+          "best": 0.5710295325491592,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "combined-c": {
+          "best": 0.577718165101386,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 5,
+      "y": 4,
+      "keeperX": 8,
+      "variants": {
+        "baseline": {
+          "best": 0.8493959035863259,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "keeper-reach": {
+          "best": 0.8616389027465937,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "range-decay": {
+          "best": 0.8590055604700065,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "combined-c": {
+          "best": 0.8503554072812969,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 6,
+      "y": 4,
+      "keeperX": 5,
+      "variants": {
+        "baseline": {
+          "best": 0.15499889861400662,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "keeper-reach": {
+          "best": 0.15499889861400662,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "range-decay": {
+          "best": 0.15499889861400662,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "combined-c": {
+          "best": 0.19010532846021908,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 6,
+      "y": 4,
+      "keeperX": 6,
+      "variants": {
+        "baseline": {
+          "best": 0.15499889861400662,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "keeper-reach": {
+          "best": 0.15499889861400662,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "range-decay": {
+          "best": 0.15499889861400662,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "combined-c": {
+          "best": 0.19010532846021908,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 6,
+      "y": 4,
+      "keeperX": 7,
+      "variants": {
+        "baseline": {
+          "best": 0.15499889861400662,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "keeper-reach": {
+          "best": 0.15499889861400662,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "range-decay": {
+          "best": 0.15499889861400662,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "combined-c": {
+          "best": 0.19010532846021908,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 6,
+      "y": 4,
+      "keeperX": 8,
+      "variants": {
+        "baseline": {
+          "best": 0.6346146874766277,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "keeper-reach": {
+          "best": 0.6960180130364004,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "range-decay": {
+          "best": 0.6346146874766277,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "combined-c": {
+          "best": 0.6493119348180479,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 7,
+      "y": 4,
+      "keeperX": 5,
+      "variants": {
+        "baseline": {
+          "best": 0.6346146874766277,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "keeper-reach": {
+          "best": 0.6960180130364004,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "range-decay": {
+          "best": 0.6346146874766277,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "combined-c": {
+          "best": 0.6493119348180479,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 7,
+      "y": 4,
+      "keeperX": 6,
+      "variants": {
+        "baseline": {
+          "best": 0.15499889861400662,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "keeper-reach": {
+          "best": 0.15499889861400662,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "range-decay": {
+          "best": 0.15499889861400662,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "combined-c": {
+          "best": 0.19010532846021908,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 7,
+      "y": 4,
+      "keeperX": 7,
+      "variants": {
+        "baseline": {
+          "best": 0.15499889861400662,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "keeper-reach": {
+          "best": 0.15499889861400662,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "range-decay": {
+          "best": 0.15499889861400662,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "combined-c": {
+          "best": 0.19010532846021908,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 7,
+      "y": 4,
+      "keeperX": 8,
+      "variants": {
+        "baseline": {
+          "best": 0.15499889861400662,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "keeper-reach": {
+          "best": 0.15499889861400662,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "range-decay": {
+          "best": 0.15499889861400662,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "combined-c": {
+          "best": 0.19010532846021908,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 8,
+      "y": 4,
+      "keeperX": 5,
+      "variants": {
+        "baseline": {
+          "best": 0.8493959035863259,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "keeper-reach": {
+          "best": 0.8616389027465937,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "range-decay": {
+          "best": 0.8590055604700065,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "combined-c": {
+          "best": 0.8503554072812969,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 8,
+      "y": 4,
+      "keeperX": 6,
+      "variants": {
+        "baseline": {
+          "best": 0.5646414506428633,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "keeper-reach": {
+          "best": 0.6192743854024184,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "range-decay": {
+          "best": 0.5710295325491592,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "combined-c": {
+          "best": 0.577718165101386,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 8,
+      "y": 4,
+      "keeperX": 7,
+      "variants": {
+        "baseline": {
+          "best": 0.137908568283305,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "keeper-reach": {
+          "best": 0.137908568283305,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "range-decay": {
+          "best": 0.1394687995216789,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "combined-c": {
+          "best": 0.1691441287996811,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 8,
+      "y": 4,
+      "keeperX": 8,
+      "variants": {
+        "baseline": {
+          "best": 0.137908568283305,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "keeper-reach": {
+          "best": 0.137908568283305,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "range-decay": {
+          "best": 0.1394687995216789,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "combined-c": {
+          "best": 0.1691441287996811,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 5,
+      "y": 5,
+      "keeperX": 5,
+      "variants": {
+        "baseline": {
+          "best": 0.09985186620352336,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "keeper-reach": {
+          "best": 0.09985186620352336,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "range-decay": {
+          "best": 0.10302150468196768,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "combined-c": {
+          "best": 0.12885573620258825,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 5,
+      "y": 5,
+      "keeperX": 6,
+      "variants": {
+        "baseline": {
+          "best": 0.09985186620352336,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "keeper-reach": {
+          "best": 0.09985186620352336,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "range-decay": {
+          "best": 0.10302150468196768,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "combined-c": {
+          "best": 0.12885573620258825,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 5,
+      "y": 5,
+      "keeperX": 7,
+      "variants": {
+        "baseline": {
+          "best": 0.40830475611345607,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "keeper-reach": {
+          "best": 0.4607534320009995,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "range-decay": {
+          "best": 0.4212657403705872,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "combined-c": {
+          "best": 0.42418297122273657,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 5,
+      "y": 5,
+      "keeperX": 8,
+      "variants": {
+        "baseline": {
+          "best": 0.7202209204938503,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "keeper-reach": {
+          "best": 0.7480412419216431,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "range-decay": {
+          "best": 0.7430831866624654,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "combined-c": {
+          "best": 0.7228261073316248,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 6,
+      "y": 5,
+      "keeperX": 5,
+      "variants": {
+        "baseline": {
+          "best": 0.12323251403499912,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "keeper-reach": {
+          "best": 0.12323251403499912,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "range-decay": {
+          "best": 0.1252232760724937,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "combined-c": {
+          "best": 0.15902773702506212,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 6,
+      "y": 5,
+      "keeperX": 6,
+      "variants": {
+        "baseline": {
+          "best": 0.12323251403499912,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "keeper-reach": {
+          "best": 0.12323251403499912,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "range-decay": {
+          "best": 0.1252232760724937,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "combined-c": {
+          "best": 0.15902773702506212,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 6,
+      "y": 5,
+      "keeperX": 7,
+      "variants": {
+        "baseline": {
+          "best": 0.12323251403499912,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "keeper-reach": {
+          "best": 0.12323251403499912,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "range-decay": {
+          "best": 0.1252232760724937,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "combined-c": {
+          "best": 0.15902773702506212,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 6,
+      "y": 5,
+      "keeperX": 8,
+      "variants": {
+        "baseline": {
+          "best": 0.5039106779011098,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "keeper-reach": {
+          "best": 0.5686403863499715,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "range-decay": {
+          "best": 0.5120511127182455,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "combined-c": {
+          "best": 0.5235068300883595,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 7,
+      "y": 5,
+      "keeperX": 5,
+      "variants": {
+        "baseline": {
+          "best": 0.5039106779011098,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "keeper-reach": {
+          "best": 0.5686403863499715,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "range-decay": {
+          "best": 0.5120511127182455,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "combined-c": {
+          "best": 0.5235068300883595,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 7,
+      "y": 5,
+      "keeperX": 6,
+      "variants": {
+        "baseline": {
+          "best": 0.12323251403499912,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "keeper-reach": {
+          "best": 0.12323251403499912,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "range-decay": {
+          "best": 0.1252232760724937,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "combined-c": {
+          "best": 0.15902773702506212,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 7,
+      "y": 5,
+      "keeperX": 7,
+      "variants": {
+        "baseline": {
+          "best": 0.12323251403499912,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "keeper-reach": {
+          "best": 0.12323251403499912,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "range-decay": {
+          "best": 0.1252232760724937,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "combined-c": {
+          "best": 0.15902773702506212,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 7,
+      "y": 5,
+      "keeperX": 8,
+      "variants": {
+        "baseline": {
+          "best": 0.12323251403499912,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "keeper-reach": {
+          "best": 0.12323251403499912,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "range-decay": {
+          "best": 0.1252232760724937,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "combined-c": {
+          "best": 0.15902773702506212,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 8,
+      "y": 5,
+      "keeperX": 5,
+      "variants": {
+        "baseline": {
+          "best": 0.7202209204938503,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "keeper-reach": {
+          "best": 0.7480412419216431,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "range-decay": {
+          "best": 0.7430831866624654,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "combined-c": {
+          "best": 0.7228261073316248,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 8,
+      "y": 5,
+      "keeperX": 6,
+      "variants": {
+        "baseline": {
+          "best": 0.40830475611345607,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "keeper-reach": {
+          "best": 0.4607534320009995,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "range-decay": {
+          "best": 0.4212657403705872,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "combined-c": {
+          "best": 0.42418297122273657,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 8,
+      "y": 5,
+      "keeperX": 7,
+      "variants": {
+        "baseline": {
+          "best": 0.09985186620352336,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "keeper-reach": {
+          "best": 0.09985186620352336,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "range-decay": {
+          "best": 0.10302150468196768,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "combined-c": {
+          "best": 0.12885573620258825,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 8,
+      "y": 5,
+      "keeperX": 8,
+      "variants": {
+        "baseline": {
+          "best": 0.09985186620352336,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "keeper-reach": {
+          "best": 0.09985186620352336,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "range-decay": {
+          "best": 0.10302150468196768,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "combined-c": {
+          "best": 0.12885573620258825,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 5,
+      "y": 6,
+      "keeperX": 5,
+      "variants": {
+        "baseline": {
+          "best": 0.06978637364365288,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "keeper-reach": {
+          "best": 0.06978637364365288,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "range-decay": {
+          "best": 0.0741944070542821,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "combined-c": {
+          "best": 0.09462233296317434,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 5,
+      "y": 6,
+      "keeperX": 6,
+      "variants": {
+        "baseline": {
+          "best": 0.06978637364365288,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "keeper-reach": {
+          "best": 0.06978637364365288,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "range-decay": {
+          "best": 0.0741944070542821,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "combined-c": {
+          "best": 0.09462233296317434,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 5,
+      "y": 6,
+      "keeperX": 7,
+      "variants": {
+        "baseline": {
+          "best": 0.2781047479542781,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "keeper-reach": {
+          "best": 0.320413393747533,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "range-decay": {
+          "best": 0.2956711431777469,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "combined-c": {
+          "best": 0.29407609560100695,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 5,
+      "y": 6,
+      "keeperX": 8,
+      "variants": {
+        "baseline": {
+          "best": 0.5536174556073356,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "keeper-reach": {
+          "best": 0.5915693329287222,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "range-decay": {
+          "best": 0.5885865206784882,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "combined-c": {
+          "best": 0.5578648582475514,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 6,
+      "y": 6,
+      "keeperX": 5,
+      "variants": {
+        "baseline": {
+          "best": 0.08468360235873018,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "keeper-reach": {
+          "best": 0.08468360235873018,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "range-decay": {
+          "best": 0.09003261433685397,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "combined-c": {
+          "best": 0.11482126954790703,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 6,
+      "y": 6,
+      "keeperX": 6,
+      "variants": {
+        "baseline": {
+          "best": 0.08468360235873018,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "keeper-reach": {
+          "best": 0.08468360235873018,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "range-decay": {
+          "best": 0.09003261433685397,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "combined-c": {
+          "best": 0.11482126954790703,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 6,
+      "y": 6,
+      "keeperX": 7,
+      "variants": {
+        "baseline": {
+          "best": 0.08468360235873018,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "keeper-reach": {
+          "best": 0.08468360235873018,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "range-decay": {
+          "best": 0.09003261433685397,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "combined-c": {
+          "best": 0.11482126954790703,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 6,
+      "y": 6,
+      "keeperX": 8,
+      "variants": {
+        "baseline": {
+          "best": 0.3374714956546096,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "keeper-reach": {
+          "best": 0.38881172655680984,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "range-decay": {
+          "best": 0.3587877720322378,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "combined-c": {
+          "best": 0.35685223121417453,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 7,
+      "y": 6,
+      "keeperX": 5,
+      "variants": {
+        "baseline": {
+          "best": 0.3374714956546096,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "keeper-reach": {
+          "best": 0.38881172655680984,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "range-decay": {
+          "best": 0.3587877720322378,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "combined-c": {
+          "best": 0.35685223121417453,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 7,
+      "y": 6,
+      "keeperX": 6,
+      "variants": {
+        "baseline": {
+          "best": 0.08468360235873018,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "keeper-reach": {
+          "best": 0.08468360235873018,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "range-decay": {
+          "best": 0.09003261433685397,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "combined-c": {
+          "best": 0.11482126954790703,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 7,
+      "y": 6,
+      "keeperX": 7,
+      "variants": {
+        "baseline": {
+          "best": 0.08468360235873018,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "keeper-reach": {
+          "best": 0.08468360235873018,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "range-decay": {
+          "best": 0.09003261433685397,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "combined-c": {
+          "best": 0.11482126954790703,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 7,
+      "y": 6,
+      "keeperX": 8,
+      "variants": {
+        "baseline": {
+          "best": 0.08468360235873018,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "keeper-reach": {
+          "best": 0.08468360235873018,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "range-decay": {
+          "best": 0.09003261433685397,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "combined-c": {
+          "best": 0.11482126954790703,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 8,
+      "y": 6,
+      "keeperX": 5,
+      "variants": {
+        "baseline": {
+          "best": 0.5536174556073356,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "keeper-reach": {
+          "best": 0.5915693329287222,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "range-decay": {
+          "best": 0.5885865206784882,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "combined-c": {
+          "best": 0.5578648582475514,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 8,
+      "y": 6,
+      "keeperX": 6,
+      "variants": {
+        "baseline": {
+          "best": 0.2781047479542781,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "keeper-reach": {
+          "best": 0.320413393747533,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "range-decay": {
+          "best": 0.2956711431777469,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "combined-c": {
+          "best": 0.29407609560100695,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 8,
+      "y": 6,
+      "keeperX": 7,
+      "variants": {
+        "baseline": {
+          "best": 0.06978637364365288,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "keeper-reach": {
+          "best": 0.06978637364365288,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "range-decay": {
+          "best": 0.0741944070542821,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "combined-c": {
+          "best": 0.09462233296317434,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 8,
+      "y": 6,
+      "keeperX": 8,
+      "variants": {
+        "baseline": {
+          "best": 0.06978637364365288,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "keeper-reach": {
+          "best": 0.06978637364365288,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "range-decay": {
+          "best": 0.0741944070542821,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "combined-c": {
+          "best": 0.09462233296317434,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 5,
+      "y": 7,
+      "keeperX": 5,
+      "variants": {
+        "baseline": {
+          "best": 0.04722450450531475,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "keeper-reach": {
+          "best": 0.04722450450531475,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "range-decay": {
+          "best": 0.05225642872738579,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "combined-c": {
+          "best": 0.06698355718517746,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 5,
+      "y": 7,
+      "keeperX": 6,
+      "variants": {
+        "baseline": {
+          "best": 0.04722450450531475,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "keeper-reach": {
+          "best": 0.04722450450531475,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "range-decay": {
+          "best": 0.05225642872738579,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "combined-c": {
+          "best": 0.06698355718517746,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 5,
+      "y": 7,
+      "keeperX": 7,
+      "variants": {
+        "baseline": {
+          "best": 0.1801888720386937,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "keeper-reach": {
+          "best": 0.2106448016657444,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "range-decay": {
+          "best": 0.1993885811570206,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "combined-c": {
+          "best": 0.19428986652564667,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 5,
+      "y": 7,
+      "keeperX": 8,
+      "variants": {
+        "baseline": {
+          "best": 0.3911228722035636,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "keeper-reach": {
+          "best": 0.429661564954693,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "range-decay": {
+          "best": 0.43279828362531,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "combined-c": {
+          "best": 0.39624795178988387,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 6,
+      "y": 7,
+      "keeperX": 5,
+      "variants": {
+        "baseline": {
+          "best": 0.05663792848573491,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "keeper-reach": {
+          "best": 0.05663792848573491,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "range-decay": {
+          "best": 0.06267288358416738,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "combined-c": {
+          "best": 0.08033562154468453,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 6,
+      "y": 7,
+      "keeperX": 6,
+      "variants": {
+        "baseline": {
+          "best": 0.05663792848573491,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "keeper-reach": {
+          "best": 0.05663792848573491,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "range-decay": {
+          "best": 0.06267288358416738,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "combined-c": {
+          "best": 0.08033562154468453,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 6,
+      "y": 7,
+      "keeperX": 7,
+      "variants": {
+        "baseline": {
+          "best": 0.05663792848573491,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "keeper-reach": {
+          "best": 0.05663792848573491,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "range-decay": {
+          "best": 0.06267288358416738,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "combined-c": {
+          "best": 0.08033562154468453,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 6,
+      "y": 7,
+      "keeperX": 8,
+      "variants": {
+        "baseline": {
+          "best": 0.21610654373947363,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "keeper-reach": {
+          "best": 0.2526333592614733,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "range-decay": {
+          "best": 0.23913339734824637,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "combined-c": {
+          "best": 0.2330183382769876,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 7,
+      "y": 7,
+      "keeperX": 5,
+      "variants": {
+        "baseline": {
+          "best": 0.21610654373947363,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "keeper-reach": {
+          "best": 0.2526333592614733,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "range-decay": {
+          "best": 0.23913339734824637,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "combined-c": {
+          "best": 0.2330183382769876,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 7,
+      "y": 7,
+      "keeperX": 6,
+      "variants": {
+        "baseline": {
+          "best": 0.05663792848573491,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "keeper-reach": {
+          "best": 0.05663792848573491,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "range-decay": {
+          "best": 0.06267288358416738,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "combined-c": {
+          "best": 0.08033562154468453,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 7,
+      "y": 7,
+      "keeperX": 7,
+      "variants": {
+        "baseline": {
+          "best": 0.05663792848573491,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "keeper-reach": {
+          "best": 0.05663792848573491,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "range-decay": {
+          "best": 0.06267288358416738,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "combined-c": {
+          "best": 0.08033562154468453,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 7,
+      "y": 7,
+      "keeperX": 8,
+      "variants": {
+        "baseline": {
+          "best": 0.05663792848573491,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "keeper-reach": {
+          "best": 0.05663792848573491,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "range-decay": {
+          "best": 0.06267288358416738,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "combined-c": {
+          "best": 0.08033562154468453,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 8,
+      "y": 7,
+      "keeperX": 5,
+      "variants": {
+        "baseline": {
+          "best": 0.3911228722035636,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "keeper-reach": {
+          "best": 0.429661564954693,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "range-decay": {
+          "best": 0.43279828362531,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "combined-c": {
+          "best": 0.39624795178988387,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 8,
+      "y": 7,
+      "keeperX": 6,
+      "variants": {
+        "baseline": {
+          "best": 0.1801888720386937,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "keeper-reach": {
+          "best": 0.2106448016657444,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "range-decay": {
+          "best": 0.1993885811570206,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "combined-c": {
+          "best": 0.19428986652564667,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 8,
+      "y": 7,
+      "keeperX": 7,
+      "variants": {
+        "baseline": {
+          "best": 0.04722450450531475,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "keeper-reach": {
+          "best": 0.04722450450531475,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "range-decay": {
+          "best": 0.05225642872738579,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "combined-c": {
+          "best": 0.06698355718517746,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 8,
+      "y": 7,
+      "keeperX": 8,
+      "variants": {
+        "baseline": {
+          "best": 0.04722450450531475,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "keeper-reach": {
+          "best": 0.04722450450531475,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "range-decay": {
+          "best": 0.05225642872738579,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "combined-c": {
+          "best": 0.06698355718517746,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 5,
+      "y": 8,
+      "keeperX": 5,
+      "variants": {
+        "baseline": {
+          "best": 0.030928874012650792,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "keeper-reach": {
+          "best": 0.030928874012650792,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "range-decay": {
+          "best": 0.03597917078338697,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "combined-c": {
+          "best": 0.04560212302176857,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 5,
+      "y": 8,
+      "keeperX": 6,
+      "variants": {
+        "baseline": {
+          "best": 0.030928874012650792,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "keeper-reach": {
+          "best": 0.030928874012650792,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "range-decay": {
+          "best": 0.03597917078338697,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "combined-c": {
+          "best": 0.04560212302176857,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 5,
+      "y": 8,
+      "keeperX": 7,
+      "variants": {
+        "baseline": {
+          "best": 0.11150797782735163,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "keeper-reach": {
+          "best": 0.131624545353113,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "range-decay": {
+          "best": 0.12971583046700644,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "combined-c": {
+          "best": 0.12275232880180129,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 5,
+      "y": 8,
+      "keeperX": 8,
+      "variants": {
+        "baseline": {
+          "best": 0.25683798276676284,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "keeper-reach": {
+          "best": 0.2891196068889542,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "range-decay": {
+          "best": 0.2987764003903343,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "combined-c": {
+          "best": 0.26189807821187583,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 6,
+      "y": 8,
+      "keeperX": 5,
+      "variants": {
+        "baseline": {
+          "best": 0.03678457017145334,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "keeper-reach": {
+          "best": 0.03678457017145334,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "range-decay": {
+          "best": 0.04279102859841782,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "combined-c": {
+          "best": 0.05423587336465489,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 6,
+      "y": 8,
+      "keeperX": 6,
+      "variants": {
+        "baseline": {
+          "best": 0.03678457017145334,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "keeper-reach": {
+          "best": 0.03678457017145334,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "range-decay": {
+          "best": 0.04279102859841782,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "combined-c": {
+          "best": 0.05423587336465489,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 6,
+      "y": 8,
+      "keeperX": 7,
+      "variants": {
+        "baseline": {
+          "best": 0.03678457017145334,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "keeper-reach": {
+          "best": 0.03678457017145334,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "range-decay": {
+          "best": 0.04279102859841782,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "combined-c": {
+          "best": 0.05423587336465489,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 6,
+      "y": 8,
+      "keeperX": 8,
+      "variants": {
+        "baseline": {
+          "best": 0.13261953970226453,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "keeper-reach": {
+          "best": 0.1565447330170123,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "range-decay": {
+          "best": 0.15427464531072962,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "combined-c": {
+          "best": 0.14599275908564432,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 7,
+      "y": 8,
+      "keeperX": 5,
+      "variants": {
+        "baseline": {
+          "best": 0.13261953970226453,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "keeper-reach": {
+          "best": 0.1565447330170123,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "range-decay": {
+          "best": 0.15427464531072962,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "combined-c": {
+          "best": 0.14599275908564432,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 7,
+      "y": 8,
+      "keeperX": 6,
+      "variants": {
+        "baseline": {
+          "best": 0.03678457017145334,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "keeper-reach": {
+          "best": 0.03678457017145334,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "range-decay": {
+          "best": 0.04279102859841782,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "combined-c": {
+          "best": 0.05423587336465489,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 7,
+      "y": 8,
+      "keeperX": 7,
+      "variants": {
+        "baseline": {
+          "best": 0.03678457017145334,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "keeper-reach": {
+          "best": 0.03678457017145334,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "range-decay": {
+          "best": 0.04279102859841782,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "combined-c": {
+          "best": 0.05423587336465489,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 7,
+      "y": 8,
+      "keeperX": 8,
+      "variants": {
+        "baseline": {
+          "best": 0.03678457017145334,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "keeper-reach": {
+          "best": 0.03678457017145334,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "range-decay": {
+          "best": 0.04279102859841782,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "combined-c": {
+          "best": 0.05423587336465489,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 8,
+      "y": 8,
+      "keeperX": 5,
+      "variants": {
+        "baseline": {
+          "best": 0.25683798276676284,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "keeper-reach": {
+          "best": 0.2891196068889542,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "range-decay": {
+          "best": 0.2987764003903343,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "combined-c": {
+          "best": 0.26189807821187583,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 8,
+      "y": 8,
+      "keeperX": 6,
+      "variants": {
+        "baseline": {
+          "best": 0.11150797782735163,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "keeper-reach": {
+          "best": 0.131624545353113,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "range-decay": {
+          "best": 0.12971583046700644,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "combined-c": {
+          "best": 0.12275232880180129,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 8,
+      "y": 8,
+      "keeperX": 7,
+      "variants": {
+        "baseline": {
+          "best": 0.030928874012650792,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "keeper-reach": {
+          "best": 0.030928874012650792,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "range-decay": {
+          "best": 0.03597917078338697,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "combined-c": {
+          "best": 0.04560212302176857,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        }
+      }
+    },
+    {
+      "type": "R",
+      "x": 8,
+      "y": 8,
+      "keeperX": 8,
+      "variants": {
+        "baseline": {
+          "best": 0.030928874012650792,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "keeper-reach": {
+          "best": 0.030928874012650792,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "range-decay": {
+          "best": 0.03597917078338697,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "combined-c": {
+          "best": 0.04560212302176857,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 4,
+      "y": 3,
+      "keeperX": 5,
+      "variants": {
+        "baseline": {
+          "best": 0.11104245739614645,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 5.315072906367325
+        },
+        "keeper-reach": {
+          "best": 0.1141257597369588,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 5.315072906367325
+        },
+        "range-decay": {
+          "best": 0.11715621941336259,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 5.315072906367325
+        },
+        "combined-c": {
+          "best": 0.12502321010192466,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 5.315072906367325
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 4,
+      "y": 3,
+      "keeperX": 6,
+      "variants": {
+        "baseline": {
+          "best": 0.08885385011733272,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 5.315072906367325
+        },
+        "keeper-reach": {
+          "best": 0.09395931639290568,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 5.315072906367325
+        },
+        "range-decay": {
+          "best": 0.0937459545129764,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 5.315072906367325
+        },
+        "combined-c": {
+          "best": 0.10377879887752856,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 5.315072906367325
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 4,
+      "y": 3,
+      "keeperX": 7,
+      "variants": {
+        "baseline": {
+          "best": 0.08781017837559452,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 5.315072906367325
+        },
+        "keeper-reach": {
+          "best": 0.09395931639290568,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 5.315072906367325
+        },
+        "range-decay": {
+          "best": 0.09264482042032572,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 5.315072906367325
+        },
+        "combined-c": {
+          "best": 0.10277953869926862,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 5.315072906367325
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 4,
+      "y": 3,
+      "keeperX": 8,
+      "variants": {
+        "baseline": {
+          "best": 0.08781017837559452,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 5.315072906367325
+        },
+        "keeper-reach": {
+          "best": 0.09395931639290568,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 5.315072906367325
+        },
+        "range-decay": {
+          "best": 0.09264482042032572,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 5.315072906367325
+        },
+        "combined-c": {
+          "best": 0.10277953869926862,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 5.315072906367325
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 5,
+      "y": 3,
+      "keeperX": 5,
+      "variants": {
+        "baseline": {
+          "best": 0.18505840476602317,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "keeper-reach": {
+          "best": 0.18505840476602317,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "range-decay": {
+          "best": 0.1855216295676774,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "combined-c": {
+          "best": 0.21613597515466254,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 5,
+      "y": 3,
+      "keeperX": 6,
+      "variants": {
+        "baseline": {
+          "best": 0.18505840476602317,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "keeper-reach": {
+          "best": 0.18505840476602317,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "range-decay": {
+          "best": 0.1855216295676774,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "combined-c": {
+          "best": 0.21613597515466254,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 5,
+      "y": 3,
+      "keeperX": 7,
+      "variants": {
+        "baseline": {
+          "best": 0.7294189097928364,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "keeper-reach": {
+          "best": 0.7712531516009694,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "range-decay": {
+          "best": 0.7312447384021278,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "combined-c": {
+          "best": 0.7373322033718243,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 5,
+      "y": 3,
+      "keeperX": 8,
+      "variants": {
+        "baseline": {
+          "best": 0.912311185734852,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "keeper-reach": {
+          "best": 0.9142735364152099,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "range-decay": {
+          "best": 0.9145948170489405,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "combined-c": {
+          "best": 0.9124418292737541,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 6,
+      "y": 3,
+      "keeperX": 5,
+      "variants": {
+        "baseline": {
+          "best": 0.19812206662688478,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "keeper-reach": {
+          "best": 0.19812206662688478,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "range-decay": {
+          "best": 0.19812206662688478,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "combined-c": {
+          "best": 0.23139346804701721,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 6,
+      "y": 3,
+      "keeperX": 6,
+      "variants": {
+        "baseline": {
+          "best": 0.19812206662688478,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "keeper-reach": {
+          "best": 0.19812206662688478,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "range-decay": {
+          "best": 0.19812206662688478,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "combined-c": {
+          "best": 0.23139346804701721,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 6,
+      "y": 3,
+      "keeperX": 7,
+      "variants": {
+        "baseline": {
+          "best": 0.19812206662688478,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "keeper-reach": {
+          "best": 0.19812206662688478,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "range-decay": {
+          "best": 0.19812206662688478,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "combined-c": {
+          "best": 0.23139346804701721,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 6,
+      "y": 3,
+      "keeperX": 8,
+      "variants": {
+        "baseline": {
+          "best": 0.7809101241718843,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "keeper-reach": {
+          "best": 0.8256975330619336,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "range-decay": {
+          "best": 0.7809101241718843,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "combined-c": {
+          "best": 0.7893820337815914,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 7,
+      "y": 3,
+      "keeperX": 5,
+      "variants": {
+        "baseline": {
+          "best": 0.7809101241718843,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "keeper-reach": {
+          "best": 0.8256975330619336,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "range-decay": {
+          "best": 0.7809101241718843,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "combined-c": {
+          "best": 0.7893820337815914,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 7,
+      "y": 3,
+      "keeperX": 6,
+      "variants": {
+        "baseline": {
+          "best": 0.19812206662688478,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "keeper-reach": {
+          "best": 0.19812206662688478,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "range-decay": {
+          "best": 0.19812206662688478,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "combined-c": {
+          "best": 0.23139346804701721,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 7,
+      "y": 3,
+      "keeperX": 7,
+      "variants": {
+        "baseline": {
+          "best": 0.19812206662688478,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "keeper-reach": {
+          "best": 0.19812206662688478,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "range-decay": {
+          "best": 0.19812206662688478,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "combined-c": {
+          "best": 0.23139346804701721,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 7,
+      "y": 3,
+      "keeperX": 8,
+      "variants": {
+        "baseline": {
+          "best": 0.19812206662688478,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "keeper-reach": {
+          "best": 0.19812206662688478,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "range-decay": {
+          "best": 0.19812206662688478,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "combined-c": {
+          "best": 0.23139346804701721,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 8,
+      "y": 3,
+      "keeperX": 5,
+      "variants": {
+        "baseline": {
+          "best": 0.912311185734852,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "keeper-reach": {
+          "best": 0.9142735364152099,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "range-decay": {
+          "best": 0.9145948170489405,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "combined-c": {
+          "best": 0.9124418292737541,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 8,
+      "y": 3,
+      "keeperX": 6,
+      "variants": {
+        "baseline": {
+          "best": 0.7294189097928364,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "keeper-reach": {
+          "best": 0.7712531516009694,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "range-decay": {
+          "best": 0.7312447384021278,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "combined-c": {
+          "best": 0.7373322033718243,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 8,
+      "y": 3,
+      "keeperX": 7,
+      "variants": {
+        "baseline": {
+          "best": 0.18505840476602317,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "keeper-reach": {
+          "best": 0.18505840476602317,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "range-decay": {
+          "best": 0.1855216295676774,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "combined-c": {
+          "best": 0.21613597515466254,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 8,
+      "y": 3,
+      "keeperX": 8,
+      "variants": {
+        "baseline": {
+          "best": 0.18505840476602317,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "keeper-reach": {
+          "best": 0.18505840476602317,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "range-decay": {
+          "best": 0.1855216295676774,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        },
+        "combined-c": {
+          "best": 0.21613597515466254,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 3.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 9,
+      "y": 3,
+      "keeperX": 5,
+      "variants": {
+        "baseline": {
+          "best": 0.08781017837559452,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 5.315072906367325
+        },
+        "keeper-reach": {
+          "best": 0.09395931639290568,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 5.315072906367325
+        },
+        "range-decay": {
+          "best": 0.09264482042032572,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 5.315072906367325
+        },
+        "combined-c": {
+          "best": 0.10277953869926862,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 5.315072906367325
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 9,
+      "y": 3,
+      "keeperX": 6,
+      "variants": {
+        "baseline": {
+          "best": 0.08781017837559452,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 5.315072906367325
+        },
+        "keeper-reach": {
+          "best": 0.09395931639290568,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 5.315072906367325
+        },
+        "range-decay": {
+          "best": 0.09264482042032572,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 5.315072906367325
+        },
+        "combined-c": {
+          "best": 0.10277953869926862,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 5.315072906367325
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 9,
+      "y": 3,
+      "keeperX": 7,
+      "variants": {
+        "baseline": {
+          "best": 0.08885385011733272,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 5.315072906367325
+        },
+        "keeper-reach": {
+          "best": 0.09395931639290568,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 5.315072906367325
+        },
+        "range-decay": {
+          "best": 0.0937459545129764,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 5.315072906367325
+        },
+        "combined-c": {
+          "best": 0.10377879887752856,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 5.315072906367325
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 9,
+      "y": 3,
+      "keeperX": 8,
+      "variants": {
+        "baseline": {
+          "best": 0.11104245739614645,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 5.315072906367325
+        },
+        "keeper-reach": {
+          "best": 0.1141257597369588,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 5.315072906367325
+        },
+        "range-decay": {
+          "best": 0.11715621941336259,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 5.315072906367325
+        },
+        "combined-c": {
+          "best": 0.12502321010192466,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 5.315072906367325
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 5,
+      "y": 4,
+      "keeperX": 5,
+      "variants": {
+        "baseline": {
+          "best": 0.12890696168487348,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "keeper-reach": {
+          "best": 0.12890696168487348,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "range-decay": {
+          "best": 0.13184024400204772,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "combined-c": {
+          "best": 0.1581037059685097,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 5,
+      "y": 4,
+      "keeperX": 6,
+      "variants": {
+        "baseline": {
+          "best": 0.12890696168487348,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "keeper-reach": {
+          "best": 0.12890696168487348,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "range-decay": {
+          "best": 0.13184024400204772,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "combined-c": {
+          "best": 0.1581037059685097,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 5,
+      "y": 4,
+      "keeperX": 7,
+      "variants": {
+        "baseline": {
+          "best": 0.5277860161247309,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "keeper-reach": {
+          "best": 0.5788529347030938,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "range-decay": {
+          "best": 0.5397958049531659,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "combined-c": {
+          "best": 0.5400091836236923,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 5,
+      "y": 4,
+      "keeperX": 8,
+      "variants": {
+        "baseline": {
+          "best": 0.7939538968598374,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "keeper-reach": {
+          "best": 0.8053977675584185,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "range-decay": {
+          "best": 0.8120203449078781,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "combined-c": {
+          "best": 0.7948507715615604,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 6,
+      "y": 4,
+      "keeperX": 5,
+      "variants": {
+        "baseline": {
+          "best": 0.15499889861400662,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "keeper-reach": {
+          "best": 0.15499889861400662,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "range-decay": {
+          "best": 0.15499889861400662,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "combined-c": {
+          "best": 0.19010532846021908,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 6,
+      "y": 4,
+      "keeperX": 6,
+      "variants": {
+        "baseline": {
+          "best": 0.15499889861400662,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "keeper-reach": {
+          "best": 0.15499889861400662,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "range-decay": {
+          "best": 0.15499889861400662,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "combined-c": {
+          "best": 0.19010532846021908,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 6,
+      "y": 4,
+      "keeperX": 7,
+      "variants": {
+        "baseline": {
+          "best": 0.15499889861400662,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "keeper-reach": {
+          "best": 0.15499889861400662,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "range-decay": {
+          "best": 0.15499889861400662,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "combined-c": {
+          "best": 0.19010532846021908,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 6,
+      "y": 4,
+      "keeperX": 8,
+      "variants": {
+        "baseline": {
+          "best": 0.6346146874766277,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "keeper-reach": {
+          "best": 0.6960180130364004,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "range-decay": {
+          "best": 0.6346146874766277,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "combined-c": {
+          "best": 0.6493119348180479,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 7,
+      "y": 4,
+      "keeperX": 5,
+      "variants": {
+        "baseline": {
+          "best": 0.6346146874766277,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "keeper-reach": {
+          "best": 0.6960180130364004,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "range-decay": {
+          "best": 0.6346146874766277,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "combined-c": {
+          "best": 0.6493119348180479,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 7,
+      "y": 4,
+      "keeperX": 6,
+      "variants": {
+        "baseline": {
+          "best": 0.15499889861400662,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "keeper-reach": {
+          "best": 0.15499889861400662,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "range-decay": {
+          "best": 0.15499889861400662,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "combined-c": {
+          "best": 0.19010532846021908,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 7,
+      "y": 4,
+      "keeperX": 7,
+      "variants": {
+        "baseline": {
+          "best": 0.15499889861400662,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "keeper-reach": {
+          "best": 0.15499889861400662,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "range-decay": {
+          "best": 0.15499889861400662,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "combined-c": {
+          "best": 0.19010532846021908,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 7,
+      "y": 4,
+      "keeperX": 8,
+      "variants": {
+        "baseline": {
+          "best": 0.15499889861400662,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "keeper-reach": {
+          "best": 0.15499889861400662,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "range-decay": {
+          "best": 0.15499889861400662,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "combined-c": {
+          "best": 0.19010532846021908,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 8,
+      "y": 4,
+      "keeperX": 5,
+      "variants": {
+        "baseline": {
+          "best": 0.7939538968598374,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "keeper-reach": {
+          "best": 0.8053977675584185,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "range-decay": {
+          "best": 0.8120203449078781,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "combined-c": {
+          "best": 0.7948507715615604,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 8,
+      "y": 4,
+      "keeperX": 6,
+      "variants": {
+        "baseline": {
+          "best": 0.5277860161247309,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "keeper-reach": {
+          "best": 0.5788529347030938,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "range-decay": {
+          "best": 0.5397958049531659,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "combined-c": {
+          "best": 0.5400091836236923,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 8,
+      "y": 4,
+      "keeperX": 7,
+      "variants": {
+        "baseline": {
+          "best": 0.12890696168487348,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "keeper-reach": {
+          "best": 0.12890696168487348,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "range-decay": {
+          "best": 0.13184024400204772,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "combined-c": {
+          "best": 0.1581037059685097,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 8,
+      "y": 4,
+      "keeperX": 8,
+      "variants": {
+        "baseline": {
+          "best": 0.12890696168487348,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "keeper-reach": {
+          "best": 0.12890696168487348,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "range-decay": {
+          "best": 0.13184024400204772,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        },
+        "combined-c": {
+          "best": 0.1581037059685097,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 4.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 5,
+      "y": 5,
+      "keeperX": 5,
+      "variants": {
+        "baseline": {
+          "best": 0.0827801045873743,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "keeper-reach": {
+          "best": 0.0827801045873743,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "range-decay": {
+          "best": 0.08811896264190082,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "combined-c": {
+          "best": 0.10682515735651803,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 5,
+      "y": 5,
+      "keeperX": 6,
+      "variants": {
+        "baseline": {
+          "best": 0.0827801045873743,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "keeper-reach": {
+          "best": 0.0827801045873743,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "range-decay": {
+          "best": 0.08811896264190082,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "combined-c": {
+          "best": 0.10682515735651803,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 5,
+      "y": 5,
+      "keeperX": 7,
+      "variants": {
+        "baseline": {
+          "best": 0.3384965319096019,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "keeper-reach": {
+          "best": 0.3819780114303816,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "range-decay": {
+          "best": 0.36032768258068365,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "combined-c": {
+          "best": 0.35166003457992745,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 5,
+      "y": 5,
+      "keeperX": 8,
+      "variants": {
+        "baseline": {
+          "best": 0.597084114612093,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "keeper-reach": {
+          "best": 0.6201479711528713,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "range-decay": {
+          "best": 0.6355927315124491,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "combined-c": {
+          "best": 0.5992438903589082,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 6,
+      "y": 5,
+      "keeperX": 5,
+      "variants": {
+        "baseline": {
+          "best": 0.10216334244158913,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "keeper-reach": {
+          "best": 0.10216334244158913,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "range-decay": {
+          "best": 0.10875231193359941,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "combined-c": {
+          "best": 0.13183862459211185,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 6,
+      "y": 5,
+      "keeperX": 6,
+      "variants": {
+        "baseline": {
+          "best": 0.10216334244158913,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "keeper-reach": {
+          "best": 0.10216334244158913,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "range-decay": {
+          "best": 0.10875231193359941,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "combined-c": {
+          "best": 0.13183862459211185,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 6,
+      "y": 5,
+      "keeperX": 7,
+      "variants": {
+        "baseline": {
+          "best": 0.10216334244158913,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "keeper-reach": {
+          "best": 0.10216334244158913,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "range-decay": {
+          "best": 0.10875231193359941,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "combined-c": {
+          "best": 0.13183862459211185,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 6,
+      "y": 5,
+      "keeperX": 8,
+      "variants": {
+        "baseline": {
+          "best": 0.41775662494204474,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "keeper-reach": {
+          "best": 0.471419438057479,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "range-decay": {
+          "best": 0.4446996124270331,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "combined-c": {
+          "best": 0.4340024057095694,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 7,
+      "y": 5,
+      "keeperX": 5,
+      "variants": {
+        "baseline": {
+          "best": 0.41775662494204474,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "keeper-reach": {
+          "best": 0.471419438057479,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "range-decay": {
+          "best": 0.4446996124270331,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "combined-c": {
+          "best": 0.4340024057095694,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 7,
+      "y": 5,
+      "keeperX": 6,
+      "variants": {
+        "baseline": {
+          "best": 0.10216334244158913,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "keeper-reach": {
+          "best": 0.10216334244158913,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "range-decay": {
+          "best": 0.10875231193359941,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "combined-c": {
+          "best": 0.13183862459211185,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 7,
+      "y": 5,
+      "keeperX": 7,
+      "variants": {
+        "baseline": {
+          "best": 0.10216334244158913,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "keeper-reach": {
+          "best": 0.10216334244158913,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "range-decay": {
+          "best": 0.10875231193359941,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "combined-c": {
+          "best": 0.13183862459211185,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 7,
+      "y": 5,
+      "keeperX": 8,
+      "variants": {
+        "baseline": {
+          "best": 0.10216334244158913,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "keeper-reach": {
+          "best": 0.10216334244158913,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "range-decay": {
+          "best": 0.10875231193359941,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "combined-c": {
+          "best": 0.13183862459211185,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 8,
+      "y": 5,
+      "keeperX": 5,
+      "variants": {
+        "baseline": {
+          "best": 0.597084114612093,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "keeper-reach": {
+          "best": 0.6201479711528713,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "range-decay": {
+          "best": 0.6355927315124491,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "combined-c": {
+          "best": 0.5992438903589082,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 8,
+      "y": 5,
+      "keeperX": 6,
+      "variants": {
+        "baseline": {
+          "best": 0.3384965319096019,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "keeper-reach": {
+          "best": 0.3819780114303816,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "range-decay": {
+          "best": 0.36032768258068365,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "combined-c": {
+          "best": 0.35166003457992745,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 8,
+      "y": 5,
+      "keeperX": 7,
+      "variants": {
+        "baseline": {
+          "best": 0.0827801045873743,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "keeper-reach": {
+          "best": 0.0827801045873743,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "range-decay": {
+          "best": 0.08811896264190082,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "combined-c": {
+          "best": 0.10682515735651803,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 8,
+      "y": 5,
+      "keeperX": 8,
+      "variants": {
+        "baseline": {
+          "best": 0.0827801045873743,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "keeper-reach": {
+          "best": 0.0827801045873743,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "range-decay": {
+          "best": 0.08811896264190082,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        },
+        "combined-c": {
+          "best": 0.10682515735651803,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 5.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 5,
+      "y": 6,
+      "keeperX": 5,
+      "variants": {
+        "baseline": {
+          "best": 0.0483245044591949,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "keeper-reach": {
+          "best": 0.0483245044591949,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "range-decay": {
+          "best": 0.054622111358329804,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "combined-c": {
+          "best": 0.06552249547407486,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 5,
+      "y": 6,
+      "keeperX": 6,
+      "variants": {
+        "baseline": {
+          "best": 0.0483245044591949,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "keeper-reach": {
+          "best": 0.0483245044591949,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "range-decay": {
+          "best": 0.054622111358329804,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "combined-c": {
+          "best": 0.06552249547407486,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 5,
+      "y": 6,
+      "keeperX": 7,
+      "variants": {
+        "baseline": {
+          "best": 0.19257733896969864,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "keeper-reach": {
+          "best": 0.22187452458846446,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "range-decay": {
+          "best": 0.21767384833042436,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "combined-c": {
+          "best": 0.2036369114947699,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 5,
+      "y": 6,
+      "keeperX": 8,
+      "variants": {
+        "baseline": {
+          "best": 0.383359785089192,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "keeper-reach": {
+          "best": 0.40964006831779287,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "range-decay": {
+          "best": 0.4333188949537775,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "combined-c": {
+          "best": 0.3863009556517316,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 6,
+      "y": 6,
+      "keeperX": 5,
+      "variants": {
+        "baseline": {
+          "best": 0.058640289015466585,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "keeper-reach": {
+          "best": 0.058640289015466585,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "range-decay": {
+          "best": 0.06628223988084789,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "combined-c": {
+          "best": 0.07950951829953569,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 6,
+      "y": 6,
+      "keeperX": 6,
+      "variants": {
+        "baseline": {
+          "best": 0.058640289015466585,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "keeper-reach": {
+          "best": 0.058640289015466585,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "range-decay": {
+          "best": 0.06628223988084789,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "combined-c": {
+          "best": 0.07950951829953569,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 6,
+      "y": 6,
+      "keeperX": 7,
+      "variants": {
+        "baseline": {
+          "best": 0.058640289015466585,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "keeper-reach": {
+          "best": 0.058640289015466585,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "range-decay": {
+          "best": 0.06628223988084789,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "combined-c": {
+          "best": 0.07950951829953569,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 6,
+      "y": 6,
+      "keeperX": 8,
+      "variants": {
+        "baseline": {
+          "best": 0.23368663458407962,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "keeper-reach": {
+          "best": 0.26923786167374114,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "range-decay": {
+          "best": 0.2641404711761338,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "combined-c": {
+          "best": 0.2471070832056545,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 7,
+      "y": 6,
+      "keeperX": 5,
+      "variants": {
+        "baseline": {
+          "best": 0.23368663458407962,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "keeper-reach": {
+          "best": 0.26923786167374114,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "range-decay": {
+          "best": 0.2641404711761338,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "combined-c": {
+          "best": 0.2471070832056545,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 7,
+      "y": 6,
+      "keeperX": 6,
+      "variants": {
+        "baseline": {
+          "best": 0.058640289015466585,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "keeper-reach": {
+          "best": 0.058640289015466585,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "range-decay": {
+          "best": 0.06628223988084789,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "combined-c": {
+          "best": 0.07950951829953569,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 7,
+      "y": 6,
+      "keeperX": 7,
+      "variants": {
+        "baseline": {
+          "best": 0.058640289015466585,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "keeper-reach": {
+          "best": 0.058640289015466585,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "range-decay": {
+          "best": 0.06628223988084789,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "combined-c": {
+          "best": 0.07950951829953569,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 7,
+      "y": 6,
+      "keeperX": 8,
+      "variants": {
+        "baseline": {
+          "best": 0.058640289015466585,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "keeper-reach": {
+          "best": 0.058640289015466585,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "range-decay": {
+          "best": 0.06628223988084789,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "combined-c": {
+          "best": 0.07950951829953569,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 8,
+      "y": 6,
+      "keeperX": 5,
+      "variants": {
+        "baseline": {
+          "best": 0.383359785089192,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "keeper-reach": {
+          "best": 0.40964006831779287,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "range-decay": {
+          "best": 0.4333188949537775,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "combined-c": {
+          "best": 0.3863009556517316,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 8,
+      "y": 6,
+      "keeperX": 6,
+      "variants": {
+        "baseline": {
+          "best": 0.19257733896969864,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "keeper-reach": {
+          "best": 0.22187452458846446,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "range-decay": {
+          "best": 0.21767384833042436,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "combined-c": {
+          "best": 0.2036369114947699,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 8,
+      "y": 6,
+      "keeperX": 7,
+      "variants": {
+        "baseline": {
+          "best": 0.0483245044591949,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "keeper-reach": {
+          "best": 0.0483245044591949,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "range-decay": {
+          "best": 0.054622111358329804,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "combined-c": {
+          "best": 0.06552249547407486,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 8,
+      "y": 6,
+      "keeperX": 8,
+      "variants": {
+        "baseline": {
+          "best": 0.0483245044591949,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "keeper-reach": {
+          "best": 0.0483245044591949,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "range-decay": {
+          "best": 0.054622111358329804,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        },
+        "combined-c": {
+          "best": 0.06552249547407486,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 6.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 5,
+      "y": 7,
+      "keeperX": 5,
+      "variants": {
+        "baseline": {
+          "best": 0.02572370450621132,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "keeper-reach": {
+          "best": 0.02572370450621132,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "range-decay": {
+          "best": 0.031497649409326485,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "combined-c": {
+          "best": 0.03648667677630149,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 5,
+      "y": 7,
+      "keeperX": 6,
+      "variants": {
+        "baseline": {
+          "best": 0.02572370450621132,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "keeper-reach": {
+          "best": 0.02572370450621132,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "range-decay": {
+          "best": 0.031497649409326485,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "combined-c": {
+          "best": 0.03648667677630149,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 5,
+      "y": 7,
+      "keeperX": 7,
+      "variants": {
+        "baseline": {
+          "best": 0.09815085088101311,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "keeper-reach": {
+          "best": 0.11474052910834208,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "range-decay": {
+          "best": 0.12018179922455363,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "combined-c": {
+          "best": 0.10583181692238833,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 5,
+      "y": 7,
+      "keeperX": 8,
+      "variants": {
+        "baseline": {
+          "best": 0.21304890957728995,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "keeper-reach": {
+          "best": 0.23404135734927559,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "range-decay": {
+          "best": 0.2608698859561395,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "combined-c": {
+          "best": 0.21584059652520657,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 6,
+      "y": 7,
+      "keeperX": 5,
+      "variants": {
+        "baseline": {
+          "best": 0.03085129958424458,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "keeper-reach": {
+          "best": 0.03085129958424458,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "range-decay": {
+          "best": 0.0377761849150458,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "combined-c": {
+          "best": 0.043759692379741456,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 6,
+      "y": 7,
+      "keeperX": 6,
+      "variants": {
+        "baseline": {
+          "best": 0.03085129958424458,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "keeper-reach": {
+          "best": 0.03085129958424458,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "range-decay": {
+          "best": 0.0377761849150458,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "combined-c": {
+          "best": 0.043759692379741456,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 6,
+      "y": 7,
+      "keeperX": 7,
+      "variants": {
+        "baseline": {
+          "best": 0.03085129958424458,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "keeper-reach": {
+          "best": 0.03085129958424458,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "range-decay": {
+          "best": 0.0377761849150458,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "combined-c": {
+          "best": 0.043759692379741456,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 6,
+      "y": 7,
+      "keeperX": 8,
+      "variants": {
+        "baseline": {
+          "best": 0.11771559979813491,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "keeper-reach": {
+          "best": 0.13761215602214075,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "range-decay": {
+          "best": 0.14413805334900148,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "combined-c": {
+          "best": 0.12692763939304072,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 7,
+      "y": 7,
+      "keeperX": 5,
+      "variants": {
+        "baseline": {
+          "best": 0.11771559979813491,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "keeper-reach": {
+          "best": 0.13761215602214075,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "range-decay": {
+          "best": 0.14413805334900148,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "combined-c": {
+          "best": 0.12692763939304072,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 7,
+      "y": 7,
+      "keeperX": 6,
+      "variants": {
+        "baseline": {
+          "best": 0.03085129958424458,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "keeper-reach": {
+          "best": 0.03085129958424458,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "range-decay": {
+          "best": 0.0377761849150458,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "combined-c": {
+          "best": 0.043759692379741456,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 7,
+      "y": 7,
+      "keeperX": 7,
+      "variants": {
+        "baseline": {
+          "best": 0.03085129958424458,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "keeper-reach": {
+          "best": 0.03085129958424458,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "range-decay": {
+          "best": 0.0377761849150458,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "combined-c": {
+          "best": 0.043759692379741456,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 7,
+      "y": 7,
+      "keeperX": 8,
+      "variants": {
+        "baseline": {
+          "best": 0.03085129958424458,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "keeper-reach": {
+          "best": 0.03085129958424458,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "range-decay": {
+          "best": 0.0377761849150458,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "combined-c": {
+          "best": 0.043759692379741456,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 8,
+      "y": 7,
+      "keeperX": 5,
+      "variants": {
+        "baseline": {
+          "best": 0.21304890957728995,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "keeper-reach": {
+          "best": 0.23404135734927559,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "range-decay": {
+          "best": 0.2608698859561395,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "combined-c": {
+          "best": 0.21584059652520657,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 8,
+      "y": 7,
+      "keeperX": 6,
+      "variants": {
+        "baseline": {
+          "best": 0.09815085088101311,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "keeper-reach": {
+          "best": 0.11474052910834208,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "range-decay": {
+          "best": 0.12018179922455363,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "combined-c": {
+          "best": 0.10583181692238833,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 8,
+      "y": 7,
+      "keeperX": 7,
+      "variants": {
+        "baseline": {
+          "best": 0.02572370450621132,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "keeper-reach": {
+          "best": 0.02572370450621132,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "range-decay": {
+          "best": 0.031497649409326485,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "combined-c": {
+          "best": 0.03648667677630149,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 8,
+      "y": 7,
+      "keeperX": 8,
+      "variants": {
+        "baseline": {
+          "best": 0.02572370450621132,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "keeper-reach": {
+          "best": 0.02572370450621132,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "range-decay": {
+          "best": 0.031497649409326485,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        },
+        "combined-c": {
+          "best": 0.03648667677630149,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 7.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 5,
+      "y": 8,
+      "keeperX": 5,
+      "variants": {
+        "baseline": {
+          "best": 0.012480784002213613,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "keeper-reach": {
+          "best": 0.012480784002213613,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "range-decay": {
+          "best": 0.016889467143070085,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "combined-c": {
+          "best": 0.018401906491787173,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 5,
+      "y": 8,
+      "keeperX": 6,
+      "variants": {
+        "baseline": {
+          "best": 0.012480784002213613,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "keeper-reach": {
+          "best": 0.012480784002213613,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "range-decay": {
+          "best": 0.016889467143070085,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "combined-c": {
+          "best": 0.018401906491787173,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 5,
+      "y": 8,
+      "keeperX": 7,
+      "variants": {
+        "baseline": {
+          "best": 0.04499701428566564,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "keeper-reach": {
+          "best": 0.05311468885901989,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "range-decay": {
+          "best": 0.060891655057824456,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "combined-c": {
+          "best": 0.04953446740147528,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 5,
+      "y": 8,
+      "keeperX": 8,
+      "variants": {
+        "baseline": {
+          "best": 0.10364229183270855,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "keeper-reach": {
+          "best": 0.11666895351282408,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "range-decay": {
+          "best": 0.14025265417865954,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "combined-c": {
+          "best": 0.10568420122311212,
+          "bestTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 6,
+      "y": 8,
+      "keeperX": 5,
+      "variants": {
+        "baseline": {
+          "best": 0.014843743575546714,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "keeper-reach": {
+          "best": 0.014843743575546714,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "range-decay": {
+          "best": 0.020087113065564533,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "combined-c": {
+          "best": 0.021885899252549385,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 6,
+      "y": 8,
+      "keeperX": 6,
+      "variants": {
+        "baseline": {
+          "best": 0.014843743575546714,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "keeper-reach": {
+          "best": 0.014843743575546714,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "range-decay": {
+          "best": 0.020087113065564533,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "combined-c": {
+          "best": 0.021885899252549385,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 6,
+      "y": 8,
+      "keeperX": 7,
+      "variants": {
+        "baseline": {
+          "best": 0.014843743575546714,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "keeper-reach": {
+          "best": 0.014843743575546714,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "range-decay": {
+          "best": 0.020087113065564533,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "combined-c": {
+          "best": 0.021885899252549385,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 6,
+      "y": 8,
+      "keeperX": 8,
+      "variants": {
+        "baseline": {
+          "best": 0.05351620071328603,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "keeper-reach": {
+          "best": 0.06317077688215768,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "range-decay": {
+          "best": 0.07242013910413625,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "combined-c": {
+          "best": 0.058912719916342345,
+          "bestTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 7,
+      "y": 8,
+      "keeperX": 5,
+      "variants": {
+        "baseline": {
+          "best": 0.05351620071328603,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "keeper-reach": {
+          "best": 0.06317077688215768,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "range-decay": {
+          "best": 0.07242013910413625,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "combined-c": {
+          "best": 0.058912719916342345,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 7,
+      "y": 8,
+      "keeperX": 6,
+      "variants": {
+        "baseline": {
+          "best": 0.014843743575546714,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "keeper-reach": {
+          "best": 0.014843743575546714,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "range-decay": {
+          "best": 0.020087113065564533,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "combined-c": {
+          "best": 0.021885899252549385,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 7,
+      "y": 8,
+      "keeperX": 7,
+      "variants": {
+        "baseline": {
+          "best": 0.014843743575546714,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "keeper-reach": {
+          "best": 0.014843743575546714,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "range-decay": {
+          "best": 0.020087113065564533,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "combined-c": {
+          "best": 0.021885899252549385,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 7,
+      "y": 8,
+      "keeperX": 8,
+      "variants": {
+        "baseline": {
+          "best": 0.014843743575546714,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "keeper-reach": {
+          "best": 0.014843743575546714,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "range-decay": {
+          "best": 0.020087113065564533,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "combined-c": {
+          "best": 0.021885899252549385,
+          "bestTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 8,
+      "y": 8,
+      "keeperX": 5,
+      "variants": {
+        "baseline": {
+          "best": 0.10364229183270855,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "keeper-reach": {
+          "best": 0.11666895351282408,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "range-decay": {
+          "best": 0.14025265417865954,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "combined-c": {
+          "best": 0.10568420122311212,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 8,
+      "y": 8,
+      "keeperX": 6,
+      "variants": {
+        "baseline": {
+          "best": 0.04499701428566564,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "keeper-reach": {
+          "best": 0.05311468885901989,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "range-decay": {
+          "best": 0.060891655057824456,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "combined-c": {
+          "best": 0.04953446740147528,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 8,
+      "y": 8,
+      "keeperX": 7,
+      "variants": {
+        "baseline": {
+          "best": 0.012480784002213613,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "keeper-reach": {
+          "best": 0.012480784002213613,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "range-decay": {
+          "best": 0.016889467143070085,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "combined-c": {
+          "best": 0.018401906491787173,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        }
+      }
+    },
+    {
+      "type": "Q",
+      "x": 8,
+      "y": 8,
+      "keeperX": 8,
+      "variants": {
+        "baseline": {
+          "best": 0.012480784002213613,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "keeper-reach": {
+          "best": 0.012480784002213613,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "range-decay": {
+          "best": 0.016889467143070085,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        },
+        "combined-c": {
+          "best": 0.018401906491787173,
+          "bestTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "bestDistance": 8.5
+        }
+      }
+    }
+  ]
+}

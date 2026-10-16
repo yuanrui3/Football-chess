@@ -1,7 +1,8 @@
-import {createGame, legalMoves, legalKicks, disguisedShotTargets, applyMove, applyKick, skipMove, chooseAIAction, currentTeam, cornerTakers, selectCornerTaker, BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, BOX_FILES, BOX_DEPTH, CENTRAL_GOAL_FILES, MIDFIELD_RANK, inOwnBox, canOccupySquare, isBox, isGoalMouth, shotChance, shotModel, offsideInfo, LONG_TACKLE_RANGE, DRIBBLE_RANGE, FOUL_RULE, STALLING_RULE, ACTION_SECONDS, actionTimeout, progressInfo, positionActions, normalizeGame} from './engine.js?v=03b47b43265e';
-import {createMatchClock, restoreMatchClock, tickMatchClock, settleMatchClock, rewindMatchClock} from './match-clock.js?v=d59a4e6476c8';
-import {buildGoalReplay, restoreGoalReplay, createReplayPlayer} from './goal-replay.js?v=f896b364f828';
-import {createMatchStats, restoreMatchStats, recordMatchTransition, addPossessionTime, matchStatsSummary, shortPieceId} from './match-stats.js?v=31bd997a0663';
+import {createGame, legalMoves, legalKicks, disguisedShotTargets, applyMove, applyKick, skipMove, chooseAIAction, currentTeam, cornerTakers, selectCornerTaker, BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, BOX_FILES, BOX_DEPTH, CENTRAL_GOAL_FILES, MIDFIELD_RANK, inOwnBox, canOccupySquare, isBox, isGoalMouth, shotChance, shotModel, offsideInfo, LONG_TACKLE_RANGE, DRIBBLE_RANGE, FOUL_RULE, STALLING_RULE, PACE_RULE, ACTION_SECONDS, actionTimeout, progressInfo, paceInfo, positionActions, normalizeGame} from './engine.js?v=db24debe7605';
+import {createMatchClock, restoreMatchClock, tickMatchClock, settleMatchClock, rewindMatchClock} from './match-clock.js?v=1fa32f5eed6c';
+import {buildGoalReplay, restoreGoalReplay, createReplayPlayer} from './goal-replay.js?v=79837985ace2';
+import {createMatchStats, restoreMatchStats, recordMatchTransition, addPossessionTime, matchStatsSummary, shortPieceId} from './match-stats.js?v=ed082e4db7ee';
+import {createCommentary} from './commentary.js?v=38c470880433';
 
 const $ = id => document.getElementById(id);
 const normalShotLegend = document.querySelector('.shot-legend').textContent;
@@ -9,6 +10,7 @@ const NAMES = {K:'Goalkeeper',Q:'Queen',R:'Rook',B:'Bishop',N:'Knight',P:'Pawn'}
 const SYMBOLS = {K:'♚',Q:'♛',R:'♜',B:'♝',N:'♞',P:'♟'};
 const TEAM = {white:'Ivory FC',black:'Obsidian FC'};
 const STORE = 'football-chess-match-v4';
+const VOICE_STORE = 'football-chess-voiceover-v1';
 const SAVE_GEOMETRY = {width:W,height:H,boxWidth:BOX_FILES.length,boxDepth:BOX_DEPTH};
 const AI_PACES = [3000,1800,600];
 const MOVE_PATTERNS={K:'One square in any direction',Q:'Up to 10 movement points straight or diagonally',R:'Up to 10 movement points horizontally or vertically',B:'Up to 10 movement points diagonally',N:'One L-shaped jump over other pieces',P:'One square forward, back, left, or right'};
@@ -16,6 +18,8 @@ const DRIBBLE_PATTERNS={...MOVE_PATTERNS,Q:`Up to ${DRIBBLE_RANGE} movement poin
 const KICK_PATTERNS={K:'Straight or diagonal kicks, like a queen',Q:'Straight or diagonal kicks',R:'Horizontal or vertical kicks',B:'Diagonal kicks',N:'One L-shaped kick over other pieces',P:'Forward, backward, left, or right kicks'};
 const TACKLE_PATTERNS={K:'1 square in any direction',Q:`up to ${LONG_TACKLE_RANGE} squares straight or diagonally`,R:`up to ${LONG_TACKLE_RANGE} squares horizontally or vertically`,B:`up to ${LONG_TACKLE_RANGE} squares diagonally`,N:'one L-shaped jump',P:'1 square diagonally, forward or backward'};
 const RESTART_NAMES={freeKick:'Free kick',penalty:'Penalty',throwIn:'Throw-in',corner:'Corner kick',goalKick:'Goal kick',offside:'Indirect free kick',stalling:'Stalling free kick',timeout:'Time-wasting free kick'};
+const PACE_REASONS={repetition:{name:'Repetition free kick',label:'Repeated play',explanation:'Awarded against the possessing side for returning to the same ball square and controlling player for a third time in a repeated route without new forward progress.'},dribbleLimit:{name:'Carrying-limit free kick',label:'Carrying limit',explanation:'Awarded for carrying with the same player in a fifth round without a teammate taking control or a shot.'}};
+const restartName=restart=>PACE_REASONS[restart?.reason]?.name||RESTART_NAMES[restart?.type]||'Restart';
 const FILES = 'abcdefghijklmnopqrstuvwxyz'.slice(0,W);
 const coord = (x,y) => `${FILES[x]}${H-y}`;
 const percent = chance => `${Math.round(chance*100)}%`;
@@ -39,6 +43,8 @@ let aiWorker=null,aiWatchdog=null,aiGeneration=0;
 let lastGoalReplay=null,replayAutoContinue=false,replayPendingResult=false;
 let matchStats=createMatchStats();
 let shotFlight=null,shotFlightGeneration=0;
+let voiceEnabled=false,voiceActivated=false,voiceLastCaption='',voiceCaptionDemo=false,voiceLifecycle=null,voicePreferredId='',voiceOptionsKey='',commentary=null;
+try{const preference=JSON.parse(localStorage.getItem(VOICE_STORE)||'null');voiceEnabled=preference?.enabled===true;voicePreferredId=typeof preference?.voiceId==='string'?preference.voiceId:'';}catch{}
 try {
   const saved=JSON.parse(localStorage.getItem(STORE)||'null');
   const geometryMatches=saved?.version===4&&Object.entries(SAVE_GEOMETRY).every(([key,value])=>saved.geometry?.[key]===value)
@@ -88,8 +94,42 @@ $('aiDifficulty').value=aiDifficulty;
 $('whiteDifficulty').value=whiteDifficulty;$('foulsEnabled').checked=foulsEnabled;
 const replayPlayer=createReplayPlayer({
   onComplete(){if(replayAutoContinue&&$('replayDialog').hasAttribute('open'))$('replayDialog').close();},
-  onInteract(){replayAutoContinue=false;}
+  onInteract(){replayAutoContinue=false;commentary?.suspend();renderVoiceover();}
 });
+commentary=createCommentary({speechSynthesis:window.speechSynthesis,Utterance:window.SpeechSynthesisUtterance,
+  onCaption(text,event){voiceLastCaption=text||'';voiceCaptionDemo=!!event?.demo;renderVoiceover();},
+  onVoicesChanged(){if(commentary){applyVoicePreference();renderVoiceover();}}});
+applyVoicePreference();
+
+function applyVoicePreference(){const state=commentary.getState();if(voicePreferredId&&state.voices.some(voice=>voice.id===voicePreferredId)&&state.voiceId!==voicePreferredId)commentary.setVoice(voicePreferredId);}
+
+function renderVoiceover(){
+  const state=commentary?.getState()||{supported:!!window.speechSynthesis,speaking:false,demo:false,voices:[]},allowed=aiPace===3000,voices=state.voices||[];
+  $('voiceToggle').textContent=voiceEnabled?'On':'Off';$('voiceToggle').setAttribute('aria-pressed',String(voiceEnabled));
+  $('voiceToggle').disabled=!allowed;$('voiceToggle').setAttribute('aria-label',allowed?`Turn match voiceover ${voiceEnabled?'off':'on'}`:'Match voiceover is available at Relaxed, three-second pace');
+  $('voicePanel').dataset.speaking=String(voiceEnabled&&state.speaking);
+  $('voiceCaption').hidden=!voiceEnabled||!voiceLastCaption;$('voiceCaption').textContent=voiceCaptionDemo&&voiceLastCaption?`DEMO · ${voiceLastCaption}`:voiceLastCaption;
+  const optionsKey=JSON.stringify(voices.map(voice=>[voice.id,voice.name,voice.lang,voice.preferred]));
+  if(optionsKey!==voiceOptionsKey){voiceOptionsKey=optionsKey;const options=[];const auto=document.createElement('option');auto.value='';auto.textContent=voices.length?'Auto · best available English voice':'No English speech voices available';options.push(auto);for(const voice of voices){const option=document.createElement('option');option.value=voice.id;option.textContent=`${voice.name} · ${voice.lang}${voice.preferred?' · Suggested':''}`;options.push(option);}$('voiceSelect').replaceChildren(...options);}
+  $('voiceSelect').value=voices.some(voice=>voice.id===voicePreferredId)?voicePreferredId:'';$('voiceSelect').disabled=!allowed||!voices.length;
+  $('voiceNote').textContent=state.voiceName?`Selected: ${state.voiceName}.`:'English speech voices load from your browser or device. Captions are available while no voice is ready.';
+  const demoAvailable=allowed&&voices.length>0&&(stage==='setup'||stage==='playing'&&paused)&&!anyDialog()&&!shotFlight;
+  $('voiceDemo').disabled=!demoAvailable;$('voiceDemo').title=!allowed?'Available at Relaxed · 3 seconds.':!voices.length?'An English speech voice must be available to hear a sample.':demoAvailable?'Hear example commentary in the selected voice without changing your match.':'Pause the match to sample the selected voice.';
+  $('voiceStatus').textContent=!allowed?'Available at Relaxed · 3 seconds.':!voiceEnabled?'Off · Brief match analysis at Relaxed pace.':!voiceActivated?'On · Start or resume the match to activate sound.':voiceCaptionDemo&&state.demo?'Demo · Selected voice sample; your match is unchanged.':!state.supported||!voices.length?'On · Captions only; no English speech voice is ready.':paused?'On · Paused. Resume for fresh commentary.':anyDialog()?(replayAutoContinue?'On · Goal replay.':'On · Commentary paused while this panel is open.'):stage==='setup'?'On · Ready for kickoff.':stage==='finished'?'On · Full time.':'On · Relaxed · 3 seconds.';
+}
+function syncVoiceover(){
+  if(aiPace!==3000&&voiceEnabled){voiceEnabled=false;voiceActivated=false;saveVoicePreference();}
+  commentary.setPace(aiPace);commentary.setEnabled(voiceEnabled&&voiceActivated&&!document.hidden);
+  const lifecycle=paused?'paused':anyDialog()?(replayAutoContinue?'autoReplay':'dialog'):stage;
+  if(lifecycle!==voiceLifecycle){
+    voiceLifecycle=lifecycle;
+    if(lifecycle!=='playing')commentary.suspend({preserveGoal:lifecycle==='autoReplay'||stage==='finished'&&$('resultDialog').hasAttribute('open')&&game.lastAction?.type==='goal'});
+  }
+  renderVoiceover();
+}
+function activateVoiceover(){if(voiceEnabled&&aiPace===3000){voiceActivated=true;commentary.setEnabled(!document.hidden);}}
+function resetVoiceover(){commentary.reset();voiceLastCaption='';voiceCaptionDemo=false;voiceLifecycle=null;renderVoiceover();}
+function saveVoicePreference(){try{localStorage.setItem(VOICE_STORE,JSON.stringify({enabled:voiceEnabled,voiceId:voicePreferredId}));}catch{}}
 
 function clockSnapshot(){return {remaining,actionRemaining,fullTimePending,finalChance:finalChance?{...finalChance}:null};}
 function restoreClock(clock){({remaining,actionRemaining,fullTimePending,finalChance}=clock);}
@@ -162,7 +202,7 @@ function restartGuide(){
   if(restart.type==='freeKick'&&kickPhase())return 'Take the free kick using the taker’s kicking pattern. Passes may loft over one intervening player; legal direct shots are allowed.';
   if(restart.type==='goalKick'&&kickPhase())return 'Both teams have resettled. The king must now pass from the goal box and may loft over one intervening player; a direct shot is not allowed.';
   if(kickPhase())return restart.type==='throwIn'?'Throw along any straight or diagonal direction. Accurate through 5 squares, unpredictable beyond 5, maximum 10. No direct goal.':restart.indirect?'Take an indirect free kick. A pass may loft over one intervening player; a direct shot is not allowed.':'The positioning round is complete. Take the corner using the taker’s kicking pattern. A pass may loft over one intervening player. Teammates obstruct ordinary shots; defenders may block them.';
-  return `${restart.type==='stalling'?'Awarded for insufficient forward progress in the possessing team’s own half. ':''}Both teams resettle before the restart: attacking side first, then defence. Each has one off-ball move and one shared pawn-or-king bonus. ${restart.type==='goalKick'?'The king':'The taker'} stays at the restart spot; no dribbling or tackling until the ball is played.`;
+  return `${restart.type==='stalling'?`${PACE_REASONS[restart.reason]?.explanation||'Awarded for insufficient forward progress in the possessing team’s own half.'} `:''}Both teams resettle before the restart: attacking side first, then defence. Each has one off-ball move and one shared pawn-or-king bonus. ${restart.type==='goalKick'?'The king':'The taker'} stays at the restart spot; no dribbling or tackling until the ball is played.`;
 }
 function renderRestart(){
   const restart=game.restart,taker=game.pieces.find(piece=>piece.id===restart?.takerId);
@@ -176,20 +216,25 @@ function renderRestart(){
     button.append(symbol,label);button.setAttribute('aria-label',`Choose ${TEAM[piece.team]} ${pieceLabel(piece)} at ${coord(piece.x,piece.y)} as corner taker`);return button;
   }));
   if(!restart)return;
-  $('restartTitle').textContent=`${RESTART_NAMES[restart.type]||'Restart'} · ${TEAM[restart.team]}`;
+  $('restartTitle').textContent=`${restartName(restart)} · ${TEAM[restart.team]}`;
   $('restartInfo').textContent=choosing?restartGuide():`${taker?pieceLabel(taker):'Nearest eligible player'} at ${coord(restart.spot.x,restart.spot.y)}. ${restart.cornerFallback?'No teammate was in the attacking half, so the nearest eligible player takes the corner. ':''}${restartGuide()}`;
   $('throwGuide').hidden=restart.type!=='throwIn';
   $('throwGuide').textContent='1–5 squares: 100% · 6: 85% · 7: 70% · 8: 55% · 9: 40% · 10: 25%';
 }
 function passRunGuide(){const passer=game.pieces.find(piece=>piece.id===game.passRun?.pieceId);return `${passer?pieceLabel(passer):'The passer'} may move once without the ball, using its normal movement pattern and ten-point budget. The run cannot enter either box, tackle or collect the ball. It spends the next off-ball move; the receiver’s dribble and shared pawn-or-king bonus remain. Skip to keep that off-ball move available.`;}
 function renderProgress(){
-  const info=progressInfo(game),panel=$('progressPanel');
-  panel.hidden=stage!=='playing'||!info.active;
-  panel.dataset.warning=String(info.warning);
+  const info=progressInfo(game),pace=paceInfo(game),panel=$('progressPanel');
+  const showPace=pace.active&&(pace.dribbleRounds>0||pace.dribbledThisRound||pace.repetitionWarning),warning=info.warning||showPace&&(pace.warning||pace.repetitionWarning);
+  panel.hidden=stage!=='playing'||!info.active&&!showPace;
+  panel.dataset.warning=String(warning);
   if(panel.hidden)return;
-  $('progressTitle').textContent=`${TEAM[info.team]} · ${info.warning?'Last round to progress':'Keep the attack moving'}`;
+  $('progressTitle').textContent=`${TEAM[info.team]} · ${pace.repetitionWarning?'Break the repeated route':showPace&&pace.dribbleRoundsRemaining===0?'Pass or shoot before carrying again':info.warning?'Last round to progress':showPace&&pace.warning?'Share possession soon':'Keep the attack moving'}`;
   const net=info.progress>=0?`${info.progress} forward`:`${Math.abs(info.progress)} backward`;
-  $('progressInfo').textContent=`Own half · ${info.rounds}/${STALLING_RULE.rounds} rounds used · ${net} squares. ${info.needed>0?`Advance ${info.needed} more, finish the round at midfield or beyond, or shoot within ${info.roundsRemaining} ${info.roundsRemaining===1?'round':'rounds'} to avoid an indirect free kick.`:'Keep this forward gain through your kick to reset the count.'}`;
+  const messages=[];
+  if(info.active)messages.push(`Own half · ${info.rounds}/${STALLING_RULE.rounds} rounds used · ${net} squares. ${info.needed>0?`Advance ${info.needed} more, finish the round at midfield or beyond, or shoot within ${info.roundsRemaining} ${info.roundsRemaining===1?'round':'rounds'} to avoid an indirect free kick.`:'Keep this forward gain through your kick to reset the count.'}`);
+  if(showPace){const carrier=game.pieces.find(piece=>piece.id===pace.carrierId);messages.push(`${carrier?pieceLabel(carrier):'Same player'} · ${pace.dribbleRounds}/${PACE_RULE.maxDribbleRounds} completed dribbling rounds${pace.dribbledThisRound?' · carrying this round':''}. A fifth carry gives the nearest opponent an indirect free kick. Pass to a teammate or shoot to reset.`);}
+  if(pace.repetitionWarning)messages.push('Repeating this route with the ball again without new forward progress can give the opponent an indirect free kick; defending moves are not penalised.');
+  $('progressInfo').textContent=messages.join(' ');
 }
 function targetKind(target){
   if(stage==='setup')return 'setup';
@@ -251,12 +296,12 @@ function renderActionContext(selected){
   else if(game.mode==='watch'){kind=reacting?'keeper':kicking?'pass':'offball';title=penaltyPending()?'Penalty · fixed 80%':'Computer vs computer';rule=penaltyPending()?'The computer resolves the fixed 80% penalty; the keeper holds position.':'Both teams play automatically. Pause to study the position, or change either team’s difficulty and the pace beside the pitch.';}
   else if(reacting&&penaltyPending()){kind='keeper';title='Penalty · fixed 80%';rule='The penalty target is committed. The keeper holds position; resolve the fixed 80% conversion attempt. There is no extra keeper move.';}
   else if(reacting){kind='keeper';title=keeperCanReact()?'Keeper reaction':'Resolve shot';rule=game.pendingShot?.disguised?`The shooter can aim at ${goalChoiceNames(game.pendingShot.targetOptions)}, each 50%. The target is chosen only after your keeper decision. ${keeperCanReact()?'Move only the king one square, or hold.':'The king is outside its own box and has no saving reach or extra reaction.'} Displayed odds average both targets.`:keeperCanReact()?'The shot is already in flight. Move only the defending king one square, or hold. This extra reaction is separate from ordinary positioning.':'The king is outside its own box and has no saving reach or extra reaction. Resolve the committed shot; ordinary re-entry into the box restores goalkeeper abilities.';}
-  else if(game.restart){kind='pass';title=selected?.id===game.restart.takerId&&!kicking?'Restart taker · locked':RESTART_NAMES[game.restart.type];rule=restartGuide();}
-  else if(kicking&&selected){kind='pass';title='Pass / shoot';rule=`${pieceLabel(selected)} stays at ${coord(selected.x,selected.y)}; only the ball travels. ${KICK_PATTERNS[selected.type]}.${selected.type==='N'?' A goal cell must be one L-shaped jump away to shoot. Outfield players enter boxes off the ball or receive passes there. Knights use the standard distance, angle and keeper scoring model.':' Kicks can travel beyond 10 squares with reduced pass accuracy.'}`;}
+  else if(game.restart){kind='pass';title=selected?.id===game.restart.takerId&&!kicking?'Restart taker · locked':restartName(game.restart);rule=restartGuide();}
+  else if(kicking&&selected){kind='pass';title='Pass / shoot';rule=`${pieceLabel(selected)} stays at ${coord(selected.x,selected.y)}; only the ball travels. ${KICK_PATTERNS[selected.type]}.${selected.type==='N'?' A goal cell must be one L-shaped jump away to shoot. Knights can enter either box with an ordinary dribble or an off-ball jump, or receive a pass there. Knights use the standard distance, angle and keeper scoring model.':' Kicks can travel beyond 10 squares with reduced pass accuracy.'}`;}
   else if(positionPhase()&&freePawnMode){kind='offball';title='Pawn or King · bonus';rule='Use one shared bonus to reposition a pawn or king without the ball. Pawns move one cardinal square; kings one square in any direction. It may collect a loose ball, but cannot dribble or tackle. The keeper’s shot reaction is separate.';}
   else if(selected){
     kind=carrying?'dribble':'offball';title=carrying?'Dribble with the ball':'Move without the ball';
-    rule=`${carrying?'Player and ball move together.':'The ball stays in place unless this move collects it or wins a tackle.'} ${(carrying?DRIBBLE_PATTERNS:MOVE_PATTERNS)[selected.type]}. ${['Q','R','B'].includes(selected.type)?'Each entered box square costs 2 points; an ordinary square costs 1. ':''}${!carrying&&!freePawnMode?`Tackle reach: ${TACKLE_PATTERNS[selected.type]}. `:''}${carrying?'Dribbling cannot cross into either box. Enter off the ball and receive a pass instead. ':selected.type==='K'?'The king may leave its own box but cannot enter the opponent’s box. ':'Outfield players may enter either box without the ball. ' }The four goal-mouth squares are reserved for that goal’s own keeper. ${freePawnMode?'Uses the shared pawn-or-king bonus; no tackling or dribbling.':carrying?'Uses the dribble action; your separate off-ball move remains available until used.':'Uses the off-ball positioning action; the attacker’s dribble is separate.'}`;
+    rule=`${carrying?'Player and ball move together.':'The ball stays in place unless this move collects it or wins a tackle.'} ${(carrying?DRIBBLE_PATTERNS:MOVE_PATTERNS)[selected.type]}. ${['Q','R','B'].includes(selected.type)?`Each entered box square costs 2 points; an ordinary square costs 1.${carrying?' The eight-point budget allows at most four entered squares on a route entirely inside a box.':''} `:''}${!carrying&&!freePawnMode?`Tackle reach: ${TACKLE_PATTERNS[selected.type]}. `:''}${selected.type==='K'?'The king may leave its own box but cannot enter the opponent’s box. ':carrying?'Ordinary dribbling may enter or cross either box. ':'Outfield players may enter either box without the ball. ' }The four goal-mouth squares are reserved for that goal’s own keeper. ${freePawnMode?'Uses the shared pawn-or-king bonus; no tackling or dribbling.':carrying?'Uses the dribble action; your separate off-ball move remains available until used.':'Uses the off-ball positioning action; the attacker’s dribble is separate.'}`;
   }else if(positionPhase()){
     title=ownCarrier?'Move without ball / dribble':'Move without the ball';
     rule=ownCarrier?'You may dribble once, move another player without the ball once, and use one pawn-or-king bonus without the ball, in any order. End positioning to leave unused actions.':'Move a teammate off the ball, collect a loose ball, or try a highlighted tackle against an opposing carrier. You can dribble after winning possession.';
@@ -373,6 +418,7 @@ function resetKickDetails(){
   }else{clearKeeperOverlay();$('kickDetails').textContent=passRunPhase()&&stage==='playing'?passRunGuide():game.mode==='watch'&&stage==='playing'?'Watching both computer teams. Each action plays at the selected pace; Pause holds the position.':game.restart&&stage==='playing'?restartGuide():stage==='setup'?'Move a player to find space · Dribble to carry the ball · Pass / shoot to send it.':kickPhase()&&stage==='playing'?'Pass / shoot: the player stays. OFF marks offside involvement. Long inaccurate balls may cross a boundary. Hover or focus to preview odds.':game.phase==='attackMove'?'Attack: one dribble + one off-ball move + one optional pawn-or-king bonus, in any order. The dashed line previews offside.':'Defence: one regular move or tackle + one optional pawn-or-king bonus. The dashed line previews offside.';}
 }
 function render(){
+  syncVoiceover();
   if(shotFlight||stage!=='playing'||paused||anyDialog()||!isComputer())cancelAI();
   const acting=currentTeam(game),kicking=kickPhase(),positioning=positionPhase(),reacting=game.phase==='keeperReact',running=passRunPhase(),choosingCorner=cornerSelectPhase(),actions=positionActions(game),budget=actions.budget,watching=game.mode==='watch';
   if(stage==='playing'&&choosingCorner){selectedId=null;freePawnMode=false;dribbleMode=false;}
@@ -408,7 +454,7 @@ function render(){
   else if(isComputer()&&stage==='playing'){const name=watching?TEAM[acting]:'Obsidian',difficulty=computerDifficulty(acting);heading=watching?`${name} · ${reacting?'keeper reaction':'computer turn'}.`:reacting?'Computer’s keeper.':'Computer’s turn.';help=reacting?(penaltyPending()?`${name} resolves the penalty at a fixed 80% conversion chance; the keeper holds position.`:keeperCanReact()?`${name} can move its keeper once before the shot is resolved.`:`${name}’s king is outside its own box. The shot resolves without a goalkeeper reaction.`):game.restart?restartGuide():difficulty==='tactical'?`${name} is planning ahead and considering ${watching?'its opponent’s':'your'} replies.`:kicking?`${name} is choosing a pass or shot.`:`${name} is choosing its remaining positioning actions.`;status=`${name} · ${difficulty==='tactical'?'Tactical':'Casual'} · thinking…`;}
   else if(reacting&&penaltyPending()){heading='Resolve the penalty.';help='The target is committed. Penalties have a fixed 80% conversion chance; the keeper holds position. Resolve to see the shot.';status=`${TEAM[acting]} · penalty resolution`;}
   else if(reacting){heading=keeperCanReact()?'Position your keeper.':'Resolve the shot.';help=game.pendingShot?.disguised?`The shooter can aim at ${goalChoiceNames(game.pendingShot.targetOptions)}, each 50%. ${keeperCanReact()?'Move your king one square, or hold.':'Your king is outside its own box and has no saving reach.'} The target is chosen after your decision; displayed scoring odds average both targets.`:keeperCanReact()?'The shot is committed. Move your king one square, or hold position. The displayed scoring chance is then rolled.':'Your king is outside its own box, so it has no extra reaction or saving reach. Resolve the shot using the displayed chance.';status=`${TEAM[acting]} · ${keeperCanReact()?'keeper reaction':'shot resolution'}`;}
-  else if(game.restart){heading=RESTART_NAMES[game.restart.type]+'.';help=restartGuide();status=`${TEAM[acting]} · ${RESTART_NAMES[game.restart.type]} · ${kicking?'take the restart':'positioning'}`;}
+  else if(game.restart){heading=restartName(game.restart)+'.';help=restartGuide();status=`${TEAM[acting]} · ${restartName(game.restart)} · ${kicking?'take the restart':'positioning'}`;}
   else if(game.phase==='keeperRelease'){heading='King must release.';help='A teammate passed to the king. Choose an immediate kick; the king cannot move or hold this back-pass.';status=`${TEAM[acting]} · immediate keeper kick`;}
   else if(game.phase==='kickoff'){heading=game.mode==='solo'?'Your kickoff.':TEAM[acting]+' kicks off.';help='Choose a pass destination, or a lit goal cell to commit a shot.';status='Choose a pass to start play.';}
   else if(kicking){heading='Pass or shoot.';help='Only the carrier kicks; the player stays in place. Choose a blue pass / kick target or a gold goal cell. Shooting gives the defending king one reaction.';status=`${TEAM[acting]} · pass / shoot`;}
@@ -490,7 +536,7 @@ function commit(next,{timedOut=false,clockAdvanced=false}={}){
   const toastOutcome=()=>{
   if(game.score.white+game.score.black>oldScore)toast(`${TEAM[game.lastAction.team]} scores! ${game.score.white} : ${game.score.black}${game.lastAction.ownGoal?' · Own goal':''}`);
   else if(game.lastAction?.type==='foul')toast(foulDescription(game.lastAction));
-  else if(game.lastAction?.type==='stalling')toast(`Stalling: ${TEAM[game.restart.team]} wins an indirect free kick near the ball.`);
+  else if(game.lastAction?.type==='stalling')toast(`${PACE_REASONS[game.lastAction.reason]?.label||'Stalling'}: ${TEAM[game.restart.team]} wins an indirect free kick near the ball.`);
   else if(game.lastAction?.type==='timeout')toast(`Time wasting: ${TEAM[game.restart.team]} wins an indirect free kick near the ball.`);
   else if(game.lastAction?.type==='blockedShot'){const blocker=game.pieces.find(piece=>piece.id===game.lastAction.blockerId);toast(`Shot blocked${blocker?` by ${TEAM[blocker.team]} ${pieceLabel(blocker)}`:''}. ${game.restart?`${RESTART_NAMES[game.restart.type]||'Restart'} for ${TEAM[game.restart.team]}.`:`${TEAM[game.attack]} takes possession.`}`);}
   else if(game.restart)toast(`${RESTART_NAMES[game.restart.type]} for ${TEAM[game.restart.team]}. Position the teams, then restart.`);
@@ -501,9 +547,12 @@ function commit(next,{timedOut=false,clockAdvanced=false}={}){
   };
   const finished=settled.finish||game.phase==='finished';
   if(finished){stage='finished';paused=false;game.phase='finished';selectedId=null;}
+  const voiceTransition={before,after:game,stats:matchStatsSummary(matchStats),pace:aiPace},resolved=resolvedShotAction(before,game);
+  if(!resolved)commentary.observe(before,game,{stats:voiceTransition.stats,pace:aiPace});
   const complete=()=>completeCommittedAction({finish:finished,scored});
-  if(beginShotFlight(before,game,complete,toastOutcome,priorComputerAction))return;
+  if(beginShotFlight(before,game,complete,toastOutcome,priorComputerAction,voiceTransition))return;
   toastOutcome();complete();
+  if(resolved)commentary.observe(before,game,{stats:voiceTransition.stats,pace:aiPace});
 }
 // Presentation runs after the engine outcome is committed. It never rolls or
 // replays an engine action, and never uses a relocated restart taker as a ball.
@@ -545,7 +594,9 @@ function revealShotFlight(){
   flight.revealed=true;flight.caption=flight.outcomeCaption;flight.element.dataset.revealed='true';
   flight.element.setAttribute('aria-label',flight.caption);flight.element.querySelector('.shot-flight-caption').textContent=flight.caption;
   flight.toastOutcome();paintShotFlight();updateClock();
+  announceShotImpact(flight);
 }
+function announceShotImpact(flight){const transition=flight.voiceTransition;if(!transition)return;flight.voiceTransition=null;commentary.observe(transition.before,transition.after,{stats:transition.stats,pace:transition.pace});}
 function paintShotFlight(){
   const flight=shotFlight;if(!flight)return;
   for(const el of squares){
@@ -576,7 +627,7 @@ function paintShotFlight(){
   }
   syncShotFlightPlayback();
 }
-function beginShotFlight(before,after,complete,toastOutcome,priorComputerAction){
+function beginShotFlight(before,after,complete,toastOutcome,priorComputerAction,voiceTransition){
   const action=resolvedShotAction(before,after);if(!action)return false;
   const valid=p=>p&&Number.isFinite(p.x)&&Number.isFinite(p.y),model=action.shotModel||{},goalTarget=action.goalTarget||{x:before.pendingShot.x,y:before.pendingShot.y};
   const origin=action.from||model.origin||before.pendingShot.from;if(!valid(origin))return false;
@@ -605,14 +656,14 @@ function beginShotFlight(before,after,complete,toastOutcome,priorComputerAction)
   const place=p=>({left:`${(p.x+.5)/W*100}%`,top:`${(p.y+.5)/H*100}%`});Object.assign(ball.style,place(reduced?end:origin));
   const pieces=structuredClone(before.pieces),keeper=pieces.find(p=>p.type==='K'&&p.team===before.pendingShot.defendingTeam),keeperPosition=action.keeperMove?.to||model.keeperPosition;
   if(keeper&&valid(keeperPosition)){keeper.x=keeperPosition.x;keeper.y=keeperPosition.y;}
-  const token=++shotFlightGeneration;shotFlight={token,element,ball,pieces,discipline:structuredClone(before.discipline||{}),score:{...before.score},log:[...before.log],priorComputerAction,points,goalTarget:{...goalTarget},caption:reduced?caption:'Shot travelling…',outcomeCaption:caption,revealed:reduced,toastOutcome,shootingTeam:before.pendingShot.shootingTeam,shooterId:before.pendingShot.shooterId,duration,remaining:duration,startedAt:null,timer:null,revealTimer:null,animation:null,complete};
+  const token=++shotFlightGeneration;shotFlight={token,element,ball,pieces,discipline:structuredClone(before.discipline||{}),score:{...before.score},log:[...before.log],priorComputerAction,points,goalTarget:{...goalTarget},caption:reduced?caption:'Shot travelling…',outcomeCaption:caption,revealed:reduced,toastOutcome,voiceTransition,shootingTeam:before.pendingShot.shootingTeam,shooterId:before.pendingShot.shooterId,duration,remaining:duration,startedAt:null,timer:null,revealTimer:null,animation:null,complete};
   if(!reduced&&typeof ball.animate==='function'){
     let travelled=0;const frames=points.map((point,index)=>{if(index)travelled+=Math.hypot(point.x-points[index-1].x,point.y-points[index-1].y);return {...place(point),offset:distance?travelled/distance*.86:0,opacity:1};});
     if(frames.length===1)frames.push({...place(end),offset:.86,opacity:1});
     frames.push({...place(end),offset:1,opacity:fade?0:1});
     try{shotFlight.animation=ball.animate(frames,{duration,fill:'both',easing:'linear'});shotFlight.animation.finished?.catch(()=>{});}catch{Object.assign(ball.style,place(end));}
   }else Object.assign(ball.style,place(end));
-  document.body.classList.add('shot-in-flight');render();save();if(reduced)toastOutcome();return true;
+  document.body.classList.add('shot-in-flight');render();save();if(reduced){toastOutcome();announceShotImpact(shotFlight);}return true;
 }
 function completeCommittedAction({finish=false,scored=false}={}){
   if(finish){if(scored&&lastGoalReplay){replayPendingResult=true;openGoalReplay({automatic:true});}else{render();save();showResult();}return;}
@@ -625,6 +676,7 @@ function openGoalReplay({automatic=false}={}){
   if(!automatic&&stage==='playing'&&advanceClockNow())return;
   if(anyDialog())return;
   cancelAI();replayAutoContinue=automatic;
+  commentary.suspend({preserveGoal:automatic});
   $('replayDialog').showModal();replayPlayer.load(lastGoalReplay,{autoplay:true});
   lastTick=Date.now();render();save();
 }
@@ -649,7 +701,7 @@ function scheduleAI(){
     aiTimer=null;if(!stillCurrent())return;
     if(difficulty==='tactical'&&typeof window.Worker==='function'){
       try{
-        aiWorker=new window.Worker(new URL('./ai-worker.js?v=d5ee7686a5c8',import.meta.url),{type:'module',name:'football-chess-tactical'});
+        aiWorker=new window.Worker(new URL('./ai-worker.js?v=de2c8c1f88e1',import.meta.url),{type:'module',name:'football-chess-tactical'});
         aiWorker.onmessage=event=>{if(!stillCurrent()||event.data?.requestId!==requestId)return;if(event.data.error)fallback();else receive(event.data.action);};
         aiWorker.onerror=event=>{event.preventDefault?.();fallback();};
         aiWatchdog=setTimeout(()=>fallback('casual'),4000);
@@ -713,8 +765,11 @@ for(const id of ['goalTop','goalBottom']){
   $(id).addEventListener('focusin',event=>{const el=event.target.closest('[data-goal-x]');if(el)drawPreview(Number(el.dataset.goalX),Number(el.dataset.goalY));});
   $(id).addEventListener('pointerleave',()=>{document.querySelectorAll('.trajectory').forEach(line=>line.remove());resetKickDetails();});
 }
-function refreshSetup(){if(stage!=='setup')return;cancelAI();replayPlayer.stop();lastGoalReplay=null;replayAutoContinue=false;replayPendingResult=false;game=createGame({foulsEnabled,mode:$('mode').value,minutes:Number($('duration').value)||10,kickoff:$('kickoff').value});duration=Number($('duration').value);resetClock();selectedId=null;lastComputerAction=null;freePawnMode=false;dribbleMode=false;passRunSelected=false;history=[];matchStats=createMatchStats();render();save();}
+function refreshSetup(){if(stage!=='setup')return;resetVoiceover();cancelAI();replayPlayer.stop();lastGoalReplay=null;replayAutoContinue=false;replayPendingResult=false;game=createGame({foulsEnabled,mode:$('mode').value,minutes:Number($('duration').value)||10,kickoff:$('kickoff').value});duration=Number($('duration').value);resetClock();selectedId=null;lastComputerAction=null;freePawnMode=false;dribbleMode=false;passRunSelected=false;history=[];matchStats=createMatchStats();render();save();}
 $('aiPace').addEventListener('change',()=>{const value=Number($('aiPace').value);aiPace=AI_PACES.includes(value)?value:3000;render();save();});
+$('voiceToggle').addEventListener('click',()=>{if(aiPace!==3000)return;voiceEnabled=!voiceEnabled;voiceActivated=voiceEnabled;commentary.setPace(aiPace);commentary.setEnabled(voiceEnabled);saveVoicePreference();syncVoiceover();});
+$('voiceSelect').addEventListener('change',()=>{if(aiPace!==3000||$('voiceSelect').disabled)return;const id=$('voiceSelect').value;if(id&&!commentary.getState().voices.some(voice=>voice.id===id))return;commentary.suspend();voicePreferredId=id;commentary.setVoice(id||null);saveVoicePreference();renderVoiceover();});
+$('voiceDemo').addEventListener('click',()=>{if(aiPace!==3000||!commentary.getState().voices.length||!(stage==='setup'||stage==='playing'&&paused)||anyDialog()||shotFlight)return;voiceEnabled=true;saveVoicePreference();activateVoiceover();resetVoiceover();voiceLifecycle=paused?'paused':stage;commentary.demo();renderVoiceover();});
 $('aiDifficulty').addEventListener('change',()=>{aiDifficulty=$('aiDifficulty').value==='tactical'?'tactical':'casual';$('aiDifficulty').value=aiDifficulty;render();save();});
 $('whiteDifficulty').addEventListener('change',()=>{whiteDifficulty=$('whiteDifficulty').value==='tactical'?'tactical':'casual';$('whiteDifficulty').value=whiteDifficulty;render();save();});
 for(const id of ['mode','kickoff'])$(id).addEventListener('change',refreshSetup);
@@ -725,10 +780,10 @@ $('duration').addEventListener('change',()=>{if(stage!=='setup')return;duration=
 $('normalMoveBtn').addEventListener('click',()=>{if(blocked()||!positionActions(game).normalAvailable)return;setMoveMode('normal');selectedId=null;render();});
 $('dribbleBtn').addEventListener('click',()=>{if(blocked()||!positionActions(game).dribbleAvailable)return;setMoveMode('dribble');selectedId=game.ball.carrierId;render();});
 $('pawnMoveBtn').addEventListener('click',()=>{if(blocked()||!positionActions(game).pawnAvailable)return;setMoveMode('pawn');selectedId=null;render();});
-$('startBtn').addEventListener('click',()=>{if(stage!=='setup')return;resetClock();stage='playing';paused=false;selectedId=null;render();save();});
+$('startBtn').addEventListener('click',()=>{if(stage!=='setup')return;resetVoiceover();activateVoiceover();resetClock();stage='playing';paused=false;selectedId=null;render();save();});
 $('skipBtn').addEventListener('click',()=>{if(!blocked())commit(skipMove(game));});
-$('pauseBtn').addEventListener('click',()=>{if(stage!=='playing'&&!shotFlight||advanceClockNow())return;paused=!paused;lastTick=Date.now();render();save();});
-$('undoBtn').addEventListener('click',()=>{if(!history.length||stage!=='playing'||anyDialog()||advanceClockNow())return;cancelShotFlight();cancelAI();let entry=history.pop();if(game.mode==='solo')while(entry.actor!=='white'&&history.length)entry=history.pop();game=upgradeSavedGame(entry.game);passRunSelected=!!entry.passRunSelected&&['kick','kickoff','keeperRelease'].includes(game.phase);disguiseSelected=entry.disguiseSelected!==false;foulsEnabled=game.foulsEnabled===true;matchStats=restoreMatchStats(entry.matchStats,game,{partial:true});if(lastGoalReplay&&(game.score.white<lastGoalReplay.score.white||game.score.black<lastGoalReplay.score.black))lastGoalReplay=null;if(game.mode==='watch')paused=true;restoreClock(rewindMatchClock(clockSnapshot(),entry.clock,{actionSeconds:ACTION_SECONDS}));selectedId=null;lastComputerAction=null;freePawnMode=false;dribbleMode=false;lastTick=Date.now();render();save();toast(game.mode==='watch'?'Last computer action undone. Press Resume to continue.':'Last move undone.');});
+$('pauseBtn').addEventListener('click',()=>{if(stage!=='playing'&&!shotFlight||advanceClockNow())return;if(paused){if(commentary.getState().demo)resetVoiceover();activateVoiceover();}paused=!paused;lastTick=Date.now();render();save();});
+$('undoBtn').addEventListener('click',()=>{if(!history.length||stage!=='playing'||anyDialog()||advanceClockNow())return;resetVoiceover();cancelShotFlight();cancelAI();let entry=history.pop();if(game.mode==='solo')while(entry.actor!=='white'&&history.length)entry=history.pop();game=upgradeSavedGame(entry.game);passRunSelected=!!entry.passRunSelected&&['kick','kickoff','keeperRelease'].includes(game.phase);disguiseSelected=entry.disguiseSelected!==false;foulsEnabled=game.foulsEnabled===true;matchStats=restoreMatchStats(entry.matchStats,game,{partial:true});if(lastGoalReplay&&(game.score.white<lastGoalReplay.score.white||game.score.black<lastGoalReplay.score.black))lastGoalReplay=null;if(game.mode==='watch')paused=true;restoreClock(rewindMatchClock(clockSnapshot(),entry.clock,{actionSeconds:ACTION_SECONDS}));selectedId=null;lastComputerAction=null;freePawnMode=false;dribbleMode=false;lastTick=Date.now();render();save();toast(game.mode==='watch'?'Last computer action undone. Press Resume to continue.':'Last move undone.');});
 $('flipBtn').addEventListener('click',()=>{flipped=!flipped;render();save();});
 $('replayBtn').addEventListener('click',()=>openGoalReplay());
 function finishMatch({replayGoal=false}={}){if(stage!=='playing'||shotFlight)return;flushClockElapsed();cancelAI();stage='finished';paused=false;game.phase='finished';selectedId=null;if(replayGoal&&lastGoalReplay){replayPendingResult=true;openGoalReplay({automatic:true});}else{render();save();showResult();}}
@@ -794,15 +849,16 @@ function renderMatchStats(){
 }
 function showResult(){const forfeited=game.finishReason==='forfeit',winner=forfeited&&['white','black'].includes(game.winner)?game.winner:game.score.white===game.score.black?null:game.score.white>game.score.black?'white':'black';$('resultTitle').textContent=winner?TEAM[winner]+(forfeited?' wins by forfeit.':' wins.'):'Honours even.';$('resultScore').textContent=`${game.score.white} : ${game.score.black}`;$('resultText').textContent=forfeited?`${TEAM[game.winner==='white'?'black':'white']} has fewer than seven active players. The score shown is the actual score when play stopped.`:winner?'A well-played match. The next move is a fresh start.':'Nothing between the sides. Settle it in a rematch.';renderMatchStats();if(!$('resultDialog').open)$('resultDialog').showModal();}
 $('finishBtn').addEventListener('click',()=>{if(stage==='playing'&&duration===0)finishMatch();});
-$('statsBtn').addEventListener('click',()=>{if(stage==='finished'&&!shotFlight)showResult();});
-function newMatch(){cancelShotFlight();cancelAI();replayPlayer.stop();replayAutoContinue=false;replayPendingResult=false;lastGoalReplay=null;stage='setup';paused=false;for(const dialog of document.querySelectorAll('dialog[open]'))dialog.close();resetClock();selectedId=null;lastComputerAction=null;freePawnMode=false;dribbleMode=false;passRunSelected=false;history=[];game=createGame({foulsEnabled,mode:game.mode,minutes:duration||10,kickoff:$('kickoff').value});matchStats=createMatchStats();render();save();}
-$('newBtn').addEventListener('click',()=>{if(stage==='playing'){if(advanceClockNow())return;$('confirmDialog').showModal();syncShotFlightPlayback();cancelAI();updateClock();}else newMatch();});$('confirmNewBtn').addEventListener('click',newMatch);$('rematchBtn').addEventListener('click',newMatch);
-function openRules(){advanceClockNow();$('rulesDialog').showModal();syncShotFlightPlayback();cancelAI();updateClock();}
+$('statsBtn').addEventListener('click',()=>{if(stage==='finished'&&!shotFlight){commentary.suspend();showResult();renderVoiceover();}});
+function newMatch(){resetVoiceover();cancelShotFlight();cancelAI();replayPlayer.stop();replayAutoContinue=false;replayPendingResult=false;lastGoalReplay=null;stage='setup';paused=false;for(const dialog of document.querySelectorAll('dialog[open]'))dialog.close();resetClock();selectedId=null;lastComputerAction=null;freePawnMode=false;dribbleMode=false;passRunSelected=false;history=[];game=createGame({foulsEnabled,mode:game.mode,minutes:duration||10,kickoff:$('kickoff').value});matchStats=createMatchStats();render();save();}
+$('newBtn').addEventListener('click',()=>{if(stage==='playing'){if(advanceClockNow())return;$('confirmDialog').showModal();syncVoiceover();syncShotFlightPlayback();cancelAI();updateClock();}else newMatch();});$('confirmNewBtn').addEventListener('click',newMatch);$('rematchBtn').addEventListener('click',newMatch);
+function openRules(){advanceClockNow();$('rulesDialog').showModal();syncVoiceover();syncShotFlightPlayback();cancelAI();updateClock();}
 $('rulesBtn').addEventListener('click',openRules);$('detailsBtn').addEventListener('click',openRules);
 for(const el of document.querySelectorAll('[data-close]'))el.addEventListener('click',()=>$(el.dataset.close).close());
 for(const dialog of document.querySelectorAll('dialog')){dialog.addEventListener('close',()=>{if(dialog.id==='replayDialog'){replayPlayer.stop();replayAutoContinue=false;const showFinalResult=replayPendingResult;replayPendingResult=false;if(showFinalResult&&stage==='finished')showResult();}lastTick=Date.now();render();});dialog.addEventListener('click',event=>{if(event.target===dialog){const r=dialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)dialog.close();}});}
 setInterval(()=>{advanceClockNow();},250);
-setInterval(()=>{if(stage==='playing')save();},5000);window.addEventListener('pagehide',()=>{advanceClockNow();save();});
+setInterval(()=>{if(stage==='playing')save();},5000);window.addEventListener('pagehide',()=>{commentary.suspend();advanceClockNow();save();});
+document.addEventListener('visibilitychange',()=>{if(document.hidden)commentary.suspend();syncVoiceover();});
 render();
 if(stage==='playing'&&paused)toast('Your match is restored. Press Resume to continue.');
 else if(legacyMatch){toast('The 14×17 pitch needs a fresh match. Your settings are retained.');save();}

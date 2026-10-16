@@ -1,0 +1,27 @@
+{
+  "selected": true,
+  "rulesVersion": 18,
+  "shotModelVersion": 14,
+  "productionEngineSha256": "db24debe7605f7c12f0734a4e4024553da2cd5acdeadcc420541a436789570d4",
+  "originalGitHubHead": "ca628d4159666e8dc8ccee8e30d359c241f24dd2",
+  "note": "The original protocol status was frozen while the rule was experimental. This selection record follows the completed paired 480-action validation.",
+  "matchedFinalResults": {
+    "scores": [
+      "2-0",
+      "1-1"
+    ],
+    "attempts": 18,
+    "resolvedAttempts": 18,
+    "goals": 4,
+    "postReactionXG": 4.568488519330743
+  },
+  "matchedOriginalResults": {
+    "scores": [
+      "0-1",
+      "0-1"
+    ],
+    "attempts": 13,
+    "goals": 2,
+    "postReactionXG": 2.5684515606767757
+  }
+}

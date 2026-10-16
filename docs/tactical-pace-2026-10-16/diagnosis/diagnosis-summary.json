@@ -1,0 +1,216 @@
+{
+  "protocol": "protocol.json",
+  "summary": {
+    "games": 2,
+    "actions": 960,
+    "scoreHistogram": {
+      "0-1": 2
+    },
+    "goals": 2,
+    "shots": 13,
+    "xG": 2.5684515606767757,
+    "shotsPerGame": 6.5,
+    "xGPerGame": 1.2842257803383879,
+    "meanAttemptXG": 0.1975731969751366,
+    "kicks": 137,
+    "goalOpportunities": 42,
+    "unavailableReasons": {
+      "noGoalGeometry": 79,
+      "friendlyBlock": 16,
+      "offsideBoxInterference": 0
+    },
+    "existingStalls": 0,
+    "exactPositionRepeats": 0,
+    "teamMoveCycleRepeats": 0,
+    "maxSamePlayerDribbleRounds": 5
+  },
+  "examples": {
+    "fiveRoundSelfCarry": {
+      "pieceId": "white-R2",
+      "start": 438,
+      "end": 458,
+      "count": 5,
+      "moves": [
+        {
+          "step": 438,
+          "pieceId": "white-R2",
+          "from": "m11",
+          "to": "f11",
+          "turn": 84,
+          "ballY": 6,
+          "selfPassCollection": false
+        },
+        {
+          "step": 443,
+          "pieceId": "white-R2",
+          "from": "f11",
+          "to": "d11",
+          "turn": 85,
+          "ballY": 6,
+          "selfPassCollection": true
+        },
+        {
+          "step": 448,
+          "pieceId": "white-R2",
+          "from": "d11",
+          "to": "d10",
+          "turn": 86,
+          "ballY": 7,
+          "selfPassCollection": true
+        },
+        {
+          "step": 453,
+          "pieceId": "white-R2",
+          "from": "d10",
+          "to": "e10",
+          "turn": 87,
+          "ballY": 7,
+          "selfPassCollection": true
+        },
+        {
+          "step": 458,
+          "pieceId": "white-R2",
+          "from": "e10",
+          "to": "e8",
+          "turn": 88,
+          "ballY": 9,
+          "selfPassCollection": true
+        }
+      ]
+    },
+    "fourRoundSelfCarry": {
+      "pieceId": "white-Q",
+      "start": 305,
+      "end": 320,
+      "count": 4,
+      "moves": [
+        {
+          "step": 305,
+          "pieceId": "white-Q",
+          "from": "i13",
+          "to": "k15",
+          "turn": 60,
+          "ballY": 4,
+          "selfPassCollection": false
+        },
+        {
+          "step": 311,
+          "pieceId": "white-Q",
+          "from": "k15",
+          "to": "i13",
+          "turn": 61,
+          "ballY": 4,
+          "selfPassCollection": true
+        },
+        {
+          "step": 316,
+          "pieceId": "white-Q",
+          "from": "i13",
+          "to": "g13",
+          "turn": 62,
+          "ballY": 4,
+          "selfPassCollection": true
+        },
+        {
+          "step": 320,
+          "pieceId": "white-Q",
+          "from": "g13",
+          "to": "i13",
+          "turn": 63,
+          "ballY": 4,
+          "selfPassCollection": true
+        }
+      ]
+    },
+    "declinedQueenShotsBecameKnightSetup": [
+      {
+        "step": 173,
+        "team": "black",
+        "pieceId": "black-Q",
+        "pieceType": "Q",
+        "origin": "f4",
+        "goalDistance": 4,
+        "legalGoals": 1,
+        "geometricGoals": 1,
+        "friendlySuppressed": false,
+        "offsideSuppressed": false,
+        "best": {
+          "target": "f0",
+          "disguise": false,
+          "probability": 0.18505840476602317,
+          "beforeReaction": 0.7294189097928364,
+          "onTarget": 0.9153813088990507,
+          "saveGivenOnTarget": 0.7978346258909339,
+          "blockers": [],
+          "blockProbability": 0,
+          "distance": 3.5
+        },
+        "selected": {
+          "type": "kick",
+          "x": 5,
+          "y": 14
+        },
+        "outcome": "kick",
+        "attempt": false
+      },
+      {
+        "step": 288,
+        "team": "black",
+        "pieceId": "black-Q",
+        "pieceType": "Q",
+        "origin": "i4",
+        "goalDistance": 4,
+        "legalGoals": 1,
+        "geometricGoals": 1,
+        "friendlySuppressed": false,
+        "offsideSuppressed": false,
+        "best": {
+          "target": "i0",
+          "disguise": false,
+          "probability": 0.18505840476602317,
+          "beforeReaction": 0.7294189097928364,
+          "onTarget": 0.9153813088990507,
+          "saveGivenOnTarget": 0.7978346258909339,
+          "blockers": [],
+          "blockProbability": 0,
+          "distance": 3.5
+        },
+        "selected": {
+          "type": "kick",
+          "x": 7,
+          "y": 14
+        },
+        "outcome": "kick",
+        "attempt": false
+      }
+    ]
+  },
+  "interpretation": [
+    "Low shot volume is the main measurable bottleneck: 13 attempts over 960 atomic actions. Average taken chance is about 20%, so uniformly terrible finishing is not the explanation.",
+    "Most kick decisions have no aiming ray allowed by the piece geometry, and some are stopped by friendly pieces. The AI has few genuinely good shots to select.",
+    "The two >10% chances declined in seed161 were passes setting up a knight inside the box. One was tackled; the other became the eventual47.2% goal.",
+    "A five-round same-player carry sequence includes four self-pass collections; any carry limit must count those collections.",
+    "Neither sample contains an exact repeated whole-board position or three repeats of an uninterrupted side-specific move pattern. The anti-repeat regression suite remains necessary; do not claim these two seeds reproduce every reported cycle."
+  ],
+  "recommendations": [
+    {
+      "rule": "boxMaxSave",
+      "before": 0.94,
+      "after": 0.9,
+      "reason": "A modest reduction in optimal goalkeeper reliability lifts central and medium-range finishing without changing legal rays, movement, angle penalties, or keeper reaction."
+    },
+    {
+      "rule": "four dribbling rounds; punish fifth attempt",
+      "reason": "Addresses the observed self-pass carry chain and encourages genuine teammate circulation. Apply in both halves, keep nearest-opponent indirect restart."
+    },
+    {
+      "rule": "third repeated possession route",
+      "reason": "Prevents non-progressive ball cycles even when off-ball defenders move. Charge the possessing team causing the repeated route, not the defender responding to it."
+    }
+  ],
+  "limits": [
+    "Only two seeds with opposite kickoff teams; too few to promise a soccer-like goal average.",
+    "Each match has a480-atomic-action budget, not a10-minute wall-clock budget.",
+    "Thinking times measured during concurrent runs are not standalone performance measurements."
+  ]
+}

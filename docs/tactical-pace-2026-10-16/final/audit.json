@@ -1,0 +1,1052 @@
+{
+  "engineSha256": "e8ae15d0bbd799513cd1c4a4a6de5286e4709270364145097483e034a4cd90ec",
+  "productionEngineSha256": "dc29df534e1cf7e98020b40f1b254b4ab9282024ff69f5941a9968ed587d85d2",
+  "protocol": {
+    "actions": 480,
+    "nodes": 1400,
+    "depth": 8,
+    "foulMode": true,
+    "extraPendingShotResolution": false
+  },
+  "aggregate": {
+    "matches": 2,
+    "completed": 2,
+    "errors": [],
+    "actionBudget": [
+      480
+    ],
+    "roundBudget": [
+      null
+    ],
+    "foulsEnabled": [
+      true
+    ],
+    "forfeits": 0,
+    "actions": 960,
+    "outcomes": {
+      "whiteWins": 1,
+      "draws": 1,
+      "blackWins": 0
+    },
+    "scoreHistogram": {
+      "2-1": 1,
+      "0-0": 1
+    },
+    "checkpoints": {
+      "120": {
+        "matches": 2,
+        "goals": 0,
+        "goalsPerMatch": 0,
+        "shotsPerMatch": 2,
+        "xGPerMatch": 0.2662758200823905,
+        "roundsPerMatch": 15.5,
+        "stallsPerMatch": 0.5
+      },
+      "240": {
+        "matches": 2,
+        "goals": 1,
+        "goalsPerMatch": 0.5,
+        "shotsPerMatch": 4.5,
+        "xGPerMatch": 0.7158406776186532,
+        "roundsPerMatch": 34.5,
+        "stallsPerMatch": 0.5
+      },
+      "480": {
+        "matches": 2,
+        "goals": 3,
+        "goalsPerMatch": 1.5,
+        "shotsPerMatch": 9.5,
+        "xGPerMatch": 1.4285933170359064,
+        "roundsPerMatch": 65.5,
+        "stallsPerMatch": 0.5
+      }
+    },
+    "roundCheckpoints": {
+      "20": {
+        "matches": 2,
+        "actionsPerMatch": 145,
+        "goalsPerMatch": 0.5,
+        "shotsPerMatch": 2.5,
+        "xGPerMatch": 0.3450941402897821,
+        "stallsPerMatch": 0.5
+      },
+      "30": {
+        "matches": 2,
+        "actionsPerMatch": 211.5,
+        "goalsPerMatch": 0.5,
+        "shotsPerMatch": 4.5,
+        "xGPerMatch": 0.7158406776186532,
+        "stallsPerMatch": 0.5
+      },
+      "40": {
+        "matches": 2,
+        "actionsPerMatch": 275,
+        "goalsPerMatch": 0.5,
+        "shotsPerMatch": 4.5,
+        "xGPerMatch": 0.7158406776186532,
+        "stallsPerMatch": 0.5
+      },
+      "50": {
+        "matches": 2,
+        "actionsPerMatch": 352.5,
+        "goalsPerMatch": 0.5,
+        "shotsPerMatch": 6,
+        "xGPerMatch": 0.923368845002319,
+        "stallsPerMatch": 0.5
+      },
+      "60": {
+        "matches": 2,
+        "actionsPerMatch": 431,
+        "goalsPerMatch": 0.5,
+        "shotsPerMatch": 7.5,
+        "xGPerMatch": 1.028880911312246,
+        "stallsPerMatch": 0.5
+      }
+    },
+    "possession": {
+      "segments": 40,
+      "meanActions": 24,
+      "meanRounds": 3.275,
+      "whiteActionShare": 0.4864583333333333
+    },
+    "score": {
+      "white": 2,
+      "black": 1,
+      "total": 3,
+      "perMatch": 1.5,
+      "goalless": 1,
+      "atMostOne": 1,
+      "atLeastSix": 0
+    },
+    "totals": {
+      "actions": 960,
+      "thinkMs": 883492.8936889999,
+      "goals": 3,
+      "shots": 19,
+      "opponentGoalAttempts": 19,
+      "ownGoalAttempts": 0,
+      "resolvedShots": 19,
+      "resolvedOpponentGoalAttempts": 19,
+      "resolvedOwnGoalAttempts": 0,
+      "xG": 2.8571866340718124,
+      "opponentGoalXG": 2.8571866340718124,
+      "ownGoalXG": 0,
+      "shotDistance": 69.53706169944351,
+      "catches": 4,
+      "cornersWon": 5,
+      "wideShots": 6,
+      "blockedShots": 3,
+      "blocks": 3,
+      "blockPossessions": 1,
+      "passes": 129,
+      "passRunsOffered": 0,
+      "passRuns": 0,
+      "passRunsSkipped": 0,
+      "teammatePasses": 39,
+      "spacePasses": 87,
+      "interceptedPasses": 0,
+      "inaccuratePasses": 0,
+      "longPasses": 0,
+      "selfCollections": 33,
+      "collections": 86,
+      "dribbles": 97,
+      "dribbleDistance": 304,
+      "tackles": 18,
+      "tackleWins": 15,
+      "fouls": 2,
+      "foulsWon": 2,
+      "yellowCards": 1,
+      "redCards": 1,
+      "secondYellows": 0,
+      "penaltiesWon": 0,
+      "penaltiesTaken": 0,
+      "penaltyGoals": 0,
+      "penaltyFailures": 0,
+      "penaltiesSaved": 0,
+      "turnoversWon": 38,
+      "turnoversLost": 38,
+      "stalls": 1,
+      "offsides": 8,
+      "restartsAwarded": 22,
+      "restartsTaken": 21,
+      "completedOrdinaryRounds": 131,
+      "attackingThirdEntries": 30,
+      "attackActions": 602
+    },
+    "sides": {
+      "white": {
+        "actions": 471,
+        "thinkMs": 449416.9714700005,
+        "goals": 2,
+        "shots": 11,
+        "opponentGoalAttempts": 11,
+        "ownGoalAttempts": 0,
+        "resolvedShots": 11,
+        "resolvedOpponentGoalAttempts": 11,
+        "resolvedOwnGoalAttempts": 0,
+        "xG": 1.554830124237526,
+        "opponentGoalXG": 1.554830124237526,
+        "ownGoalXG": 0,
+        "shotDistance": 40.72681202353685,
+        "shotXG": [
+          0.21613597515466254,
+          0.12726640742585948,
+          0.1576366404147832,
+          0.095101026447531,
+          0.011365175519202719,
+          0.1188747863350644,
+          0.08695703828268034,
+          0.1045579306531205,
+          0.17414820791058727,
+          0.23139346804701721,
+          0.23139346804701721
+        ],
+        "catches": 4,
+        "cornersWon": 5,
+        "wideShots": 4,
+        "blockedShots": 2,
+        "blocks": 1,
+        "blockPossessions": 1,
+        "passes": 58,
+        "passRunsOffered": 0,
+        "passRuns": 0,
+        "passRunsSkipped": 0,
+        "teammatePasses": 17,
+        "spacePasses": 39,
+        "interceptedPasses": 0,
+        "inaccuratePasses": 0,
+        "longPasses": 0,
+        "selfCollections": 16,
+        "collections": 39,
+        "dribbles": 45,
+        "dribbleDistance": 148,
+        "tackles": 6,
+        "tackleWins": 5,
+        "fouls": 0,
+        "foulsWon": 2,
+        "yellowCards": 0,
+        "redCards": 0,
+        "secondYellows": 0,
+        "penaltiesWon": 0,
+        "penaltiesTaken": 0,
+        "penaltyGoals": 0,
+        "penaltyFailures": 0,
+        "penaltiesSaved": 0,
+        "turnoversWon": 19,
+        "turnoversLost": 19,
+        "stalls": 0,
+        "offsides": 3,
+        "restartsAwarded": 15,
+        "restartsTaken": 14,
+        "restartTypes": {
+          "awarded:stalling": 1,
+          "taken:stalling": 1,
+          "awarded:corner": 5,
+          "taken:corner": 4,
+          "awarded:goalKick": 2,
+          "taken:goalKick": 2,
+          "awarded:offside": 5,
+          "taken:offside": 5,
+          "awarded:freeKick": 2,
+          "taken:freeKick": 2
+        },
+        "completedOrdinaryRounds": 57,
+        "attackingThirdEntries": 13,
+        "attackActions": 290,
+        "role": {
+          "K": {
+            "actions": 67,
+            "moves": 49,
+            "dribbles": 3,
+            "passes": 11,
+            "shots": 0,
+            "goals": 0,
+            "tackles": 0,
+            "tackleWins": 0,
+            "collections": 1,
+            "fouls": 0,
+            "yellowCards": 0,
+            "redCards": 0
+          },
+          "Q": {
+            "actions": 114,
+            "moves": 79,
+            "dribbles": 19,
+            "passes": 25,
+            "shots": 8,
+            "goals": 2,
+            "tackles": 1,
+            "tackleWins": 1,
+            "collections": 24,
+            "fouls": 0,
+            "yellowCards": 0,
+            "redCards": 0
+          },
+          "R": {
+            "actions": 60,
+            "moves": 51,
+            "dribbles": 8,
+            "passes": 7,
+            "shots": 1,
+            "goals": 0,
+            "tackles": 0,
+            "tackleWins": 0,
+            "collections": 6,
+            "fouls": 0,
+            "yellowCards": 0,
+            "redCards": 0
+          },
+          "B": {
+            "actions": 58,
+            "moves": 43,
+            "dribbles": 8,
+            "passes": 11,
+            "shots": 2,
+            "goals": 0,
+            "tackles": 0,
+            "tackleWins": 0,
+            "collections": 7,
+            "fouls": 0,
+            "yellowCards": 0,
+            "redCards": 0
+          },
+          "N": {
+            "actions": 29,
+            "moves": 26,
+            "dribbles": 3,
+            "passes": 3,
+            "shots": 0,
+            "goals": 0,
+            "tackles": 1,
+            "tackleWins": 1,
+            "collections": 1,
+            "fouls": 0,
+            "yellowCards": 0,
+            "redCards": 0
+          },
+          "P": {
+            "actions": 139,
+            "moves": 138,
+            "dribbles": 4,
+            "passes": 1,
+            "shots": 0,
+            "goals": 0,
+            "tackles": 4,
+            "tackleWins": 3,
+            "collections": 0,
+            "fouls": 0,
+            "yellowCards": 0,
+            "redCards": 0
+          }
+        }
+      },
+      "black": {
+        "actions": 489,
+        "thinkMs": 434075.9222189994,
+        "goals": 1,
+        "shots": 8,
+        "opponentGoalAttempts": 8,
+        "ownGoalAttempts": 0,
+        "resolvedShots": 8,
+        "resolvedOpponentGoalAttempts": 8,
+        "resolvedOwnGoalAttempts": 0,
+        "xG": 1.3023565098342866,
+        "opponentGoalXG": 1.3023565098342866,
+        "ownGoalXG": 0,
+        "shotDistance": 28.810249675906654,
+        "shotXG": [
+          0.095101026447531,
+          0.21776308901822175,
+          0.10219221930157861,
+          0.23139346804701721,
+          0.23139346804701721,
+          0.21776308901822175,
+          0.10219221930157861,
+          0.1045579306531205
+        ],
+        "catches": 0,
+        "cornersWon": 0,
+        "wideShots": 2,
+        "blockedShots": 1,
+        "blocks": 2,
+        "blockPossessions": 0,
+        "passes": 71,
+        "passRunsOffered": 0,
+        "passRuns": 0,
+        "passRunsSkipped": 0,
+        "teammatePasses": 22,
+        "spacePasses": 48,
+        "interceptedPasses": 0,
+        "inaccuratePasses": 0,
+        "longPasses": 0,
+        "selfCollections": 17,
+        "collections": 47,
+        "dribbles": 52,
+        "dribbleDistance": 156,
+        "tackles": 12,
+        "tackleWins": 10,
+        "fouls": 2,
+        "foulsWon": 0,
+        "yellowCards": 1,
+        "redCards": 1,
+        "secondYellows": 0,
+        "penaltiesWon": 0,
+        "penaltiesTaken": 0,
+        "penaltyGoals": 0,
+        "penaltyFailures": 0,
+        "penaltiesSaved": 0,
+        "turnoversWon": 19,
+        "turnoversLost": 19,
+        "stalls": 1,
+        "offsides": 5,
+        "restartsAwarded": 7,
+        "restartsTaken": 7,
+        "restartTypes": {
+          "awarded:goalKick": 4,
+          "taken:goalKick": 4,
+          "awarded:offside": 3,
+          "taken:offside": 3
+        },
+        "completedOrdinaryRounds": 74,
+        "attackingThirdEntries": 17,
+        "attackActions": 312,
+        "role": {
+          "K": {
+            "actions": 60,
+            "moves": 40,
+            "dribbles": 0,
+            "passes": 10,
+            "shots": 0,
+            "goals": 0,
+            "tackles": 0,
+            "tackleWins": 0,
+            "collections": 4,
+            "fouls": 0,
+            "yellowCards": 0,
+            "redCards": 0
+          },
+          "Q": {
+            "actions": 111,
+            "moves": 84,
+            "dribbles": 17,
+            "passes": 24,
+            "shots": 3,
+            "goals": 0,
+            "tackles": 0,
+            "tackleWins": 0,
+            "collections": 23,
+            "fouls": 0,
+            "yellowCards": 0,
+            "redCards": 0
+          },
+          "R": {
+            "actions": 55,
+            "moves": 47,
+            "dribbles": 8,
+            "passes": 4,
+            "shots": 4,
+            "goals": 1,
+            "tackles": 0,
+            "tackleWins": 0,
+            "collections": 8,
+            "fouls": 0,
+            "yellowCards": 0,
+            "redCards": 0
+          },
+          "B": {
+            "actions": 53,
+            "moves": 43,
+            "dribbles": 7,
+            "passes": 10,
+            "shots": 0,
+            "goals": 0,
+            "tackles": 0,
+            "tackleWins": 0,
+            "collections": 5,
+            "fouls": 0,
+            "yellowCards": 0,
+            "redCards": 0
+          },
+          "N": {
+            "actions": 22,
+            "moves": 16,
+            "dribbles": 5,
+            "passes": 6,
+            "shots": 0,
+            "goals": 0,
+            "tackles": 0,
+            "tackleWins": 0,
+            "collections": 2,
+            "fouls": 0,
+            "yellowCards": 0,
+            "redCards": 0
+          },
+          "P": {
+            "actions": 184,
+            "moves": 166,
+            "dribbles": 15,
+            "passes": 17,
+            "shots": 1,
+            "goals": 0,
+            "tackles": 12,
+            "tackleWins": 10,
+            "collections": 5,
+            "fouls": 2,
+            "yellowCards": 1,
+            "redCards": 1
+          }
+        }
+      }
+    },
+    "rates": {
+      "shotsPerMatch": 9.5,
+      "xGPerMatch": 1.4285933170359062,
+      "goalsPer100Actions": 0.3125,
+      "actionsPerGoal": 320,
+      "conversion": 0.15789473684210525,
+      "meanShotXG": 0.15037824389851645,
+      "meanShotDistance": 3.6598453526022903,
+      "teammatePassShare": 0.3023255813953488,
+      "stallsPerMatch": 0.5,
+      "ordinaryRoundsPerMatch": 65.5,
+      "thinkMsPerAction": 920.3050975927083
+    },
+    "maxExactRepeat": 2,
+    "elapsedMs": 884115.704374,
+    "note": "Fixed atomic-action or ordinary-round budget. These are not timed 10-minute matches; animation, decision pace, and stoppages affect wall-clock match totals."
+  },
+  "matches": [
+    {
+      "label": "final-202610161-white",
+      "seed": 202610161,
+      "kickoff": "white",
+      "actions": 480,
+      "score": {
+        "white": 2,
+        "black": 1
+      },
+      "attempts": 8,
+      "resolvedShots": 8,
+      "pendingShots": 0,
+      "postReactionXG": 1.039244126762856,
+      "paceAwardsByReason": {
+        "repetition": 1
+      },
+      "paceAwards": [
+        {
+          "step": 48,
+          "reason": "repetition",
+          "offender": "black",
+          "beneficiary": "white",
+          "offence": {
+            "x": 10,
+            "y": 16
+          },
+          "cycleRounds": 1,
+          "history": [
+            "10,16:black-Q",
+            "10,16:black-Q"
+          ],
+          "triggeringAction": {
+            "type": "move",
+            "team": "white",
+            "pieceId": "white-P2",
+            "from": {
+              "x": 7,
+              "y": 13
+            },
+            "to": {
+              "x": 7,
+              "y": 14
+            },
+            "path": [
+              {
+                "x": 7,
+                "y": 13
+              },
+              {
+                "x": 7,
+                "y": 14
+              }
+            ],
+            "freePawn": true
+          }
+        }
+      ],
+      "maxBoardStateRepeat": 2,
+      "maxRuleStateRepeat": 2,
+      "maxCarryingRounds": 3,
+      "scored": [
+        {
+          "step": 129,
+          "scorer": "white-Q",
+          "team": "white",
+          "from": {
+            "x": 8,
+            "y": 2
+          },
+          "probability": 0.1576366404147832,
+          "score": {
+            "white": 1,
+            "black": 0
+          }
+        },
+        {
+          "step": 441,
+          "scorer": "black-R2",
+          "team": "black",
+          "from": {
+            "x": 5,
+            "y": 13
+          },
+          "probability": 0.21776308901822175,
+          "score": {
+            "white": 1,
+            "black": 1
+          }
+        },
+        {
+          "step": 464,
+          "scorer": "white-Q",
+          "team": "white",
+          "from": {
+            "x": 5,
+            "y": 3
+          },
+          "probability": 0.1188747863350644,
+          "score": {
+            "white": 2,
+            "black": 1
+          }
+        }
+      ],
+      "shotOutcomes": [
+        {
+          "step": 77,
+          "team": "white",
+          "shooterId": "white-Q",
+          "from": {
+            "x": 5,
+            "y": 3
+          },
+          "goalTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "probability": 0.21613597515466254,
+          "distance": 3.5,
+          "outcome": "corner",
+          "disguised": false
+        },
+        {
+          "step": 105,
+          "team": "white",
+          "shooterId": "white-R1",
+          "from": {
+            "x": 7,
+            "y": 3
+          },
+          "goalTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "probability": 0.12726640742585948,
+          "distance": 3.5,
+          "outcome": "corner",
+          "disguised": false
+        },
+        {
+          "step": 129,
+          "team": "white",
+          "shooterId": "white-Q",
+          "from": {
+            "x": 8,
+            "y": 2
+          },
+          "goalTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "probability": 0.1576366404147832,
+          "distance": 2.5,
+          "outcome": "goal",
+          "disguised": true
+        },
+        {
+          "step": 264,
+          "team": "black",
+          "shooterId": "black-Q",
+          "from": {
+            "x": 10,
+            "y": 15
+          },
+          "goalTarget": {
+            "x": 8,
+            "y": 17
+          },
+          "probability": 0.095101026447531,
+          "distance": 2.5,
+          "outcome": "wide",
+          "disguised": false
+        },
+        {
+          "step": 327,
+          "team": "white",
+          "shooterId": "white-Q",
+          "from": {
+            "x": 10,
+            "y": 1
+          },
+          "goalTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "probability": 0.095101026447531,
+          "distance": 2.5,
+          "outcome": "wide",
+          "disguised": false
+        },
+        {
+          "step": 382,
+          "team": "white",
+          "shooterId": "white-B2",
+          "from": {
+            "x": 13,
+            "y": 4
+          },
+          "goalTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "probability": 0.011365175519202719,
+          "distance": 6.726812023536856,
+          "outcome": "wide",
+          "disguised": false
+        },
+        {
+          "step": 441,
+          "team": "black",
+          "shooterId": "black-R2",
+          "from": {
+            "x": 5,
+            "y": 13
+          },
+          "goalTarget": {
+            "x": 5,
+            "y": 17
+          },
+          "probability": 0.21776308901822175,
+          "distance": 3.5,
+          "outcome": "goal",
+          "disguised": false
+        },
+        {
+          "step": 464,
+          "team": "white",
+          "shooterId": "white-Q",
+          "from": {
+            "x": 5,
+            "y": 3
+          },
+          "goalTarget": {
+            "x": 5,
+            "y": -1
+          },
+          "probability": 0.1188747863350644,
+          "distance": 3.5,
+          "outcome": "goal",
+          "disguised": false
+        }
+      ],
+      "checkpoints": {
+        "120": {
+          "score": {
+            "white": 0,
+            "black": 0
+          },
+          "shots": 2,
+          "xG": 0.343402382580522,
+          "resolvedShots": 2,
+          "ordinaryRounds": 16,
+          "stalls": 1
+        },
+        "240": {
+          "score": {
+            "white": 1,
+            "black": 0
+          },
+          "shots": 3,
+          "xG": 0.5010390229953052,
+          "resolvedShots": 3,
+          "ordinaryRounds": 38,
+          "stalls": 1
+        },
+        "480": {
+          "score": {
+            "white": 2,
+            "black": 1
+          },
+          "shots": 8,
+          "xG": 1.0392441267628563,
+          "resolvedShots": 8,
+          "ordinaryRounds": 69,
+          "stalls": 1
+        }
+      },
+      "exactTransitionsReplayed": 480
+    },
+    {
+      "label": "final-202610162-black",
+      "seed": 202610162,
+      "kickoff": "black",
+      "actions": 480,
+      "score": {
+        "white": 0,
+        "black": 0
+      },
+      "attempts": 11,
+      "resolvedShots": 11,
+      "pendingShots": 0,
+      "postReactionXG": 1.8179425073089566,
+      "paceAwardsByReason": {},
+      "paceAwards": [],
+      "maxBoardStateRepeat": 1,
+      "maxRuleStateRepeat": 1,
+      "maxCarryingRounds": 4,
+      "scored": [],
+      "shotOutcomes": [
+        {
+          "step": 30,
+          "team": "white",
+          "shooterId": "white-Q",
+          "from": {
+            "x": 8,
+            "y": 4
+          },
+          "goalTarget": {
+            "x": 8,
+            "y": -1
+          },
+          "probability": 0.08695703828268034,
+          "distance": 4.5,
+          "outcome": "wide",
+          "disguised": false
+        },
+        {
+          "step": 116,
+          "team": "black",
+          "shooterId": "black-Q",
+          "from": {
+            "x": 3,
+            "y": 14
+          },
+          "goalTarget": {
+            "x": 6,
+            "y": 17
+          },
+          "probability": 0.10219221930157861,
+          "distance": 3.905124837953328,
+          "outcome": "wide",
+          "disguised": false
+        },
+        {
+          "step": 155,
+          "team": "white",
+          "shooterId": "white-Q",
+          "from": {
+            "x": 6,
+            "y": 4
+          },
+          "goalTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "probability": 0.1045579306531205,
+          "distance": 4.5,
+          "outcome": "corner",
+          "disguised": false
+        },
+        {
+          "step": 174,
+          "team": "white",
+          "shooterId": "white-B2",
+          "from": {
+            "x": 4,
+            "y": 1
+          },
+          "goalTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "probability": 0.17414820791058727,
+          "distance": 2.5,
+          "outcome": "wide",
+          "disguised": false
+        },
+        {
+          "step": 192,
+          "team": "black",
+          "shooterId": "black-R2",
+          "from": {
+            "x": 7,
+            "y": 13
+          },
+          "goalTarget": {
+            "x": 7,
+            "y": 17
+          },
+          "probability": 0.23139346804701721,
+          "distance": 3.5,
+          "outcome": "saved",
+          "disguised": false
+        },
+        {
+          "step": 217,
+          "team": "black",
+          "shooterId": "black-R2",
+          "from": {
+            "x": 6,
+            "y": 13
+          },
+          "goalTarget": {
+            "x": 6,
+            "y": 17
+          },
+          "probability": 0.23139346804701721,
+          "distance": 3.5,
+          "outcome": "saved",
+          "disguised": false
+        },
+        {
+          "step": 322,
+          "team": "black",
+          "shooterId": "black-R2",
+          "from": {
+            "x": 8,
+            "y": 13
+          },
+          "goalTarget": {
+            "x": 8,
+            "y": 17
+          },
+          "probability": 0.21776308901822175,
+          "distance": 3.5,
+          "outcome": "saved",
+          "disguised": false
+        },
+        {
+          "step": 367,
+          "team": "black",
+          "shooterId": "black-Q",
+          "from": {
+            "x": 10,
+            "y": 14
+          },
+          "goalTarget": {
+            "x": 7,
+            "y": 17
+          },
+          "probability": 0.10219221930157861,
+          "distance": 3.905124837953328,
+          "outcome": "saved",
+          "disguised": false
+        },
+        {
+          "step": 441,
+          "team": "black",
+          "shooterId": "black-P3",
+          "from": {
+            "x": 7,
+            "y": 12
+          },
+          "goalTarget": {
+            "x": 7,
+            "y": 17
+          },
+          "probability": 0.1045579306531205,
+          "distance": 4.5,
+          "outcome": "blocked",
+          "disguised": false
+        },
+        {
+          "step": 464,
+          "team": "white",
+          "shooterId": "white-Q",
+          "from": {
+            "x": 6,
+            "y": 3
+          },
+          "goalTarget": {
+            "x": 6,
+            "y": -1
+          },
+          "probability": 0.23139346804701721,
+          "distance": 3.5,
+          "outcome": "corner",
+          "disguised": false
+        },
+        {
+          "step": 477,
+          "team": "white",
+          "shooterId": "white-Q",
+          "from": {
+            "x": 7,
+            "y": 3
+          },
+          "goalTarget": {
+            "x": 7,
+            "y": -1
+          },
+          "probability": 0.23139346804701721,
+          "distance": 3.5,
+          "outcome": "corner",
+          "disguised": false
+        }
+      ],
+      "checkpoints": {
+        "120": {
+          "score": {
+            "white": 0,
+            "black": 0
+          },
+          "shots": 2,
+          "xG": 0.18914925758425893,
+          "resolvedShots": 2,
+          "ordinaryRounds": 15,
+          "stalls": 0
+        },
+        "240": {
+          "score": {
+            "white": 0,
+            "black": 0
+          },
+          "shots": 6,
+          "xG": 0.9306423322420012,
+          "resolvedShots": 6,
+          "ordinaryRounds": 31,
+          "stalls": 0
+        },
+        "480": {
+          "score": {
+            "white": 0,
+            "black": 0
+          },
+          "shots": 11,
+          "xG": 1.8179425073089566,
+          "resolvedShots": 11,
+          "ordinaryRounds": 62,
+          "stalls": 0
+        }
+      },
+      "exactTransitionsReplayed": 480
+    }
+  ],
+  "notes": [
+    "All transitions exactly replayed from original seeds.",
+    "The production engine adds conservative malformed-save counter validation; every recorded valid-game transition exactly matches the frozen simulation engine.",
+    "xG uses the actual goal target and goalkeeper reaction at resolution.",
+    "Fixed atomic-action budget, not a timed 10-minute match.",
+    "The shared simulation action counter includes any aborted fifth carry as a submitted move; paceAwards records these separately.",
+    "Board repeat omits pace history for comparison with baseline; rule-state repeat includes pace and every other legal-future field except turn count, random seed and logs."
+  ]
+}

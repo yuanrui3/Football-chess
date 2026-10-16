@@ -1,0 +1,13 @@
+{
+  "passed": 8,
+  "checks": [
+    "Queen can now carry from outside into the opposing box.",
+    "An actual entry keeps controlled possession and consumes the existing carrying allowance.",
+    "Inside-box movement permits four entered squares, costing eight points; five remain illegal.",
+    "The four goal-front cells remain keeper-only.",
+    "A king still cannot enter the opposing box.",
+    "Collecting an own loose pass inside the box from outside remains illegal.",
+    "Pass-and-run still cannot enter the box.",
+    "The fifth carrying round is stopped before box entry and awards the opponent an indirect free kick."
+  ]
+}

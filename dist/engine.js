@@ -9,7 +9,7 @@ export const CENTRAL_GOAL_FILES = Object.freeze([6, 7]);
 export const MIDFIELD_RANK = Math.floor(BOARD_HEIGHT / 2);
 export const BOARD_CENTER_X = (BOARD_WIDTH - 1) / 2;
 export const FILE_LABELS = 'abcdefghijklmn';
-export const RULES_VERSION = 17;
+export const RULES_VERSION = 18;
 export const ALLOW_OUTFIELD_BOXES = true;
 export const LONG_TACKLE_RANGE = 5;
 export const MOVE_RANGE = 10;
@@ -17,15 +17,16 @@ export const BOX_MOVE_COST = 2;
 export const DRIBBLE_RANGE = 8;
 export const ACTION_SECONDS = 30;
 export const STALLING_RULE = Object.freeze({rounds: 3, minProgress: 4});
+export const PACE_RULE = Object.freeze({maxDribbleRounds: 4, repetitionOccurrences: 3, maxCycleRounds: 3, historyRounds: 7});
 // Tunable board-game parameters, not fitted football statistics. Distance is in
 // board squares and time is in abstract units set by ballSpeed.
 export const SHOT_MODEL = Object.freeze({
-  version: 13, ballSpeed: 6, blockPerDefender: 0.45, blockCornerShare: 0.85, knightGoalMultiplier: 1, finishingAccuracyMultiplier: 1.15,
+  version: 14, ballSpeed: 6, blockPerDefender: 0.45, blockCornerShare: 0.85, knightGoalMultiplier: 1, finishingAccuracyMultiplier: 1.15,
   targetBase: 0.98, distanceDecay: 0.018, distancePenaltyStart: 3, longShotDecay: 0.06, rookLongShotDecay: 0.03, minOnTarget: 0.01, maxOnTarget: 0.98,
   angleFloor: 0.65, angleWeight: 0.35, postAngleFloor: 0.10, postAngleWeight: 0.90, postAngleExponent: 1.5,
   wideAngleStartDegrees: 45, wideAngleFullDegrees: 90, wideAngleAccuracyBonus: 0.25,
   centralLaneAccuracyBonus: 0.15,
-  boxRadius: 0.4, boxDiveSpeed: 1.3, boxReactionDelay: 0.15, boxMaxSave: 0.94,
+  boxRadius: 0.4, boxDiveSpeed: 1.3, boxReactionDelay: 0.15, boxMaxSave: 0.90,
   outsideRadius: 0, outsideDiveSpeed: 0, outsideReactionDelay: 0, outsideMaxSave: 0,
   readinessBase: 0.35, readinessTime: 0.45,
   impactSpeedDecay: 0.08, parryMin: 0.05, parrySpeedWeight: 0.60, parryStretchWeight: 0.25, parryMax: 0.90
@@ -115,6 +116,92 @@ export function progressInfo(state) {
 
 function resetProgress(state) { state.ballProgress = freshProgress(state); }
 
+// Only the possessing side's completed rounds enter this history. Defensive
+// replies and free off-ball shuffles cannot make the responding side guilty,
+// or disguise a recurring ball route. A loose self-pass retains its kicker's
+// identity until a different player actually controls the ball.
+const ballAdvance = state => ((state.attack === 'white' ? -1 : 1) * state.ball.y) || 0;
+const paceOwner = state => state.ball.carrierId || looseKickOrigin(state)?.pieceId || null;
+const freshPace = state => ({team: state.attack, carrierId: paceOwner(state), dribbleRounds: 0,
+  dribbledThisRound: false, history: [], furthestAdvance: ballAdvance(state)});
+function paceFor(state) {
+  const saved = state.paceControl, fresh = freshPace(state);
+  if (!saved || saved.team !== state.attack || !TEAMS.includes(saved.team)) return fresh;
+  // Imported/corrupted metadata must not invent four previous carries for a
+  // different player. Live counters already satisfy these finite invariants.
+  const validCarrier = saved.carrierId === null || state.pieces.some(piece => piece.id === saved.carrierId && piece.team === saved.team);
+  if (!validCarrier || !Number.isInteger(saved.dribbleRounds) || saved.dribbleRounds < 0 || saved.dribbleRounds > PACE_RULE.maxDribbleRounds
+      || typeof saved.dribbledThisRound !== 'boolean' || saved.carrierId === null && (saved.dribbleRounds || saved.dribbledThisRound)) return fresh;
+  const carrierId = saved.carrierId || fresh.carrierId;
+  const validKey = key => typeof key === 'string' && key.length < 70
+    && /^(?:[0-9]|1[0-3]),(?:[0-9]|1[0-6]):(?:white|black)-(?:K|Q|R[12]|B[12]|N[12]|P[123])$/.test(key)
+    && key.split(':')[1].startsWith(`${saved.team}-`);
+  return {team: saved.team, carrierId,
+    dribbleRounds: clamp(Math.floor(Number(saved.dribbleRounds) || 0), 0, PACE_RULE.maxDribbleRounds),
+    dribbledThisRound: !!saved.dribbledThisRound && !!carrierId,
+    history: Array.isArray(saved.history) ? saved.history.filter(validKey).slice(-PACE_RULE.historyRounds) : [],
+    furthestAdvance: Number.isFinite(saved.furthestAdvance) ? clamp(saved.furthestAdvance, -BOARD_HEIGHT + 1, BOARD_HEIGHT - 1) || 0 : fresh.furthestAdvance};
+}
+const resetPace = state => { state.paceControl = null; };
+function repeatedPacePeriod(history, occurrences = PACE_RULE.repetitionOccurrences) {
+  for (let period = 1; period <= PACE_RULE.maxCycleRounds; period++) {
+    if (history.length <= period * (occurrences - 1)) continue;
+    const last = history.length - 1;
+    if (Array.from({length: occurrences - 1}, (_, index) => history[last] === history[last - (index + 1) * period]).every(Boolean)
+        && Array.from({length: period}, (_, offset) => history[last - offset] === history[last - period - offset]).every(Boolean)) return period;
+  }
+  return 0;
+}
+export function paceInfo(state) {
+  const tracker = paceFor(state), active = !state.restart && !['kickoff', 'keeperReact', 'finished'].includes(state.phase);
+  const spent = tracker.dribbleRounds + (tracker.dribbledThisRound ? 1 : 0);
+  const repetitionWarning = active && !!repeatedPacePeriod(tracker.history, 2);
+  return {team: tracker.team, active, carrierId: tracker.carrierId, dribbleRounds: tracker.dribbleRounds,
+    dribbledThisRound: tracker.dribbledThisRound, dribbleRoundsRemaining: Math.max(0, PACE_RULE.maxDribbleRounds - spent),
+    warning: active && (spent >= PACE_RULE.maxDribbleRounds - 1 || repetitionWarning), repetitionWarning, historyRounds: tracker.history.length};
+}
+function paceHandoff(state, pieceId) {
+  const tracker = paceFor(state);
+  if (pieceId !== tracker.carrierId) Object.assign(tracker, {carrierId: pieceId, dribbleRounds: 0, dribbledThisRound: false});
+  state.paceControl = tracker;
+}
+function forbiddenPaceCarry(state, piece, move) {
+  if (state.restart || state.phase !== 'attackMove' || piece.team !== state.attack) return false;
+  const carry = state.ball.carrierId === piece.id || !state.ball.carrierId && move.x === state.ball.x && move.y === state.ball.y
+    && looseKickOrigin(state)?.pieceId === piece.id;
+  if (!carry) return false;
+  const tracker = paceFor(state);
+  return tracker.carrierId === piece.id && tracker.dribbleRounds >= PACE_RULE.maxDribbleRounds;
+}
+function paceFreeKick(state, team, offence, reason, details, triggeringAction) {
+  const restart = awardRestart(state, 'stalling', other(team), offence, {reason});
+  state.lastAction = {type: 'stalling', team, reason, offence, ...details, triggeringAction: copy(triggeringAction),
+    restart: copy(restart), to: {...state.ball}, outcome: 'stalling'};
+  addLog(state, reason === 'dribbleLimit'
+    ? `${title(team)} attempts a fifth dribbling round with the same player. ${title(restart.team)} has an indirect free kick near ${square(offence.x, offence.y)}. Both teams may reposition.`
+    : `${title(team)} repeats a ${details.cycleRounds}-round ball route for the third time without new forward progress. ${title(restart.team)} has an indirect free kick near ${square(offence.x, offence.y)}. Both teams may reposition.`);
+  return state;
+}
+function completePaceRound(state, source) {
+  const tracker = state.paceControl ? paceFor(state) : paceFor(source);
+  if (source.restart || source.phase === 'kickoff' || state.restart || state.attack !== source.attack) { resetPace(state); return; }
+  if (tracker.dribbledThisRound) tracker.dribbleRounds = Math.min(PACE_RULE.maxDribbleRounds, tracker.dribbleRounds + 1);
+  tracker.dribbledThisRound = false;
+  const advance = ballAdvance(state);
+  if (advance > tracker.furthestAdvance) { tracker.history = []; tracker.furthestAdvance = advance; }
+  const owner = paceOwner(state) || tracker.carrierId;
+  if (owner) tracker.history = [...tracker.history, `${state.ball.x},${state.ball.y}:${owner}`].slice(-PACE_RULE.historyRounds);
+  state.paceControl = tracker;
+  const cycleRounds = repeatedPacePeriod(tracker.history);
+  if (cycleRounds) paceFreeKick(state, state.attack, {x: state.ball.x, y: state.ball.y}, 'repetition',
+    {cycleRounds, repetitions: PACE_RULE.repetitionOccurrences}, state.lastAction);
+}
+
+function completeAttackingRound(state, source) {
+  completeProgressRound(state, source);
+  if (!state.restart) completePaceRound(state, source);
+}
+
 function completeProgressRound(state, source) {
   if (source.restart || source.phase === 'kickoff') { resetProgress(state); return; }
   const tracker = progressFor(source);
@@ -138,7 +225,7 @@ function completeProgressRound(state, source) {
 }
 
 function finishKickProgress(state, source, backPass, interception) {
-  if (interception) { resetProgress(state); return; }
+  if (interception) { resetProgress(state); resetPace(state); return; }
   const tracker = progressFor(source);
   const excluded = !!source.restart || source.phase === 'kickoff' || tracker.excludeRelease;
   // A loose teammate pass already completed its round before a king picked
@@ -155,8 +242,8 @@ function finishKickProgress(state, source, backPass, interception) {
   }
   if (backPass) {
     state.ballProgress = {...(excluded ? freshProgress(state) : tracker), pendingRelease: true, excludeRelease: excluded};
-  } else if (excluded) resetProgress(state);
-  else completeProgressRound(state, source);
+  } else if (excluded) { resetProgress(state); resetPace(state); }
+  else completeAttackingRound(state, source);
 }
 
 function formation(kickoff) {
@@ -284,7 +371,7 @@ export function createGame({mode = 'solo', minutes = 10, kickoff = 'white', seed
     mode, minutes: Number.isFinite(Number(minutes)) && Number(minutes) > 0 ? Number(minutes) : 10,
     rulesVersion: RULES_VERSION, boardDimensions: {width: BOARD_WIDTH, height: BOARD_HEIGHT}, restart: null, offside: null, looseBallKickOrigin: null, passRun: null,
     foulsEnabled: foulsEnabled === true, discipline: disciplineFor({}), sentOff: [], winner: null, finishReason: null,
-    ballProgress: {team: kickoff, anchorY: carrier.y, rounds: 0, pendingRelease: false, excludeRelease: false}
+    ballProgress: {team: kickoff, anchorY: carrier.y, rounds: 0, pendingRelease: false, excludeRelease: false}, paceControl: null
   };
 }
 
@@ -370,7 +457,7 @@ export function legalMoves(state, pieceId, {freePawn = false} = {}) {
       const x = piece.x + dx * step, y = piece.y + dy * step;
       if (!allowedSquare(piece, x, y) || pieceAt(state, x, y)) break;
       const enteringBox = !previousInBox && isBox(x, y);
-      if ((piece.id === state.ball.carrierId || running) && enteringBox) break;
+      if (running && enteringBox) break;
       movementPoints += enteredSquareCost(x, y);
       if (movementPoints > movementBudget) break;
       if (!(ownPassIntoBox && x === state.ball.x && y === state.ball.y)) moves.set(`${x},${y}`, {x, y, type: 'move', ...(freePawn ? {freePawn: true} : {})});
@@ -495,6 +582,7 @@ export function selectCornerTaker(state, pieceId) {
 }
 
 function awardRestart(state, type, team, requestedSpot, {exit, reason, selectedTakerId} = {}) {
+  resetPace(state);
   const origin = {x: clamp(Math.round(requestedSpot.x), 0, BOARD_WIDTH - 1), y: clamp(Math.round(requestedSpot.y), 0, BOARD_HEIGHT - 1)};
   const eligible = type === 'corner' ? eligibleCornerTakers(state, team) : [];
   if (type === 'corner' && !selectedTakerId && eligible.length) {
@@ -642,6 +730,8 @@ export function normalizeGame(state) {
     ? {...freshProgress(next), pendingRelease: savedProgress.pendingRelease, excludeRelease: savedProgress.excludeRelease}
     : savedProgress;
   next.looseBallKickOrigin = looseKickOrigin(next);
+  if (next.paceControl != null) next.paceControl = (Number(state.rulesVersion) || 0) < 18 || next.restart || next.phase === 'kickoff' || next.phase === 'keeperReact'
+    ? null : paceFor(next);
   // Old pending shots already have their kick-time snapshot. Knights cannot
   // move during keeper reaction, so their saved box squares are still exact.
   // Never reconstruct missing flags from a later defensive line or spend RNG.
@@ -997,6 +1087,7 @@ function resolveShot(next, {roll, targetRoll, keeperMove, landing} = {}) {
   canonicalizePendingShot(next);
   const declaration = next.pendingShot;
   if (!declaration || next.phase !== 'keeperReact') throw new Error('There is no shot awaiting a goalkeeper reaction.');
+  resetPace(next);
   const targetOptions = validatedDisguisedOptions(next, declaration);
   const combinedProbability = targetOptions.length === 2 ? shotChance(next) : null;
   // Delaying the target draw until this point means no stored secret, seed
@@ -1054,7 +1145,7 @@ function resolveShot(next, {roll, targetRoll, keeperMove, landing} = {}) {
     addLog(next, teammateBackPass
       ? `${title(shot.defendingTeam)} goalkeeper catches a teammate’s backward kick and must immediately release the ball.`
       : `${title(shot.defendingTeam)} goalkeeper saves (${Math.round(probability * 100)}% scoring chance). ${title(shot.defendingTeam)} takes possession.`);
-    if (sameTeamSave && !teammateBackPass) completeProgressRound(next, next);
+    if (sameTeamSave && !teammateBackPass) completeAttackingRound(next, next);
   } else if (outcome === 'wide') {
     let missedLanding = {x: shot.x, y: shot.y};
     if (shot.distance > 10 && !shot.penalty) {
@@ -1123,6 +1214,22 @@ export function applyMove(state, pieceId, x, y, {freePawn = false, roll, targetR
     piece.x = x; piece.y = y;
     return callOffside(next, piece, {pieceId, from, intendedTo: {x, y}});
   }
+  const kickOrigin = looseKickOrigin(state);
+  const selfPassCollection = !state.ball.carrierId && state.ball.x === x && state.ball.y === y
+    && kickOrigin?.pieceId === piece.id && kickOrigin.team === piece.team;
+  const ordinaryDribble = !state.restart && state.phase === 'attackMove'
+    && (attackingCarrier(state, piece) || selfPassCollection);
+  if (ordinaryDribble) {
+    paceHandoff(next, piece.id);
+    if (next.paceControl.dribbleRounds >= PACE_RULE.maxDribbleRounds) {
+      next.turn++;
+      return paceFreeKick(next, piece.team, {x: state.ball.x, y: state.ball.y}, 'dribbleLimit',
+        {pieceId, rounds: next.paceControl.dribbleRounds + 1},
+        {type: 'move', team: piece.team, pieceId, from, to: {x, y}, path: [from, {x, y}], attempted: true,
+          ...(selfPassCollection ? {collection: true, selfPassCollection: true} : {})});
+    }
+    next.paceControl.dribbledThisRound = true;
+  }
   piece.x = x; piece.y = y;
   if (state.phase === 'passRun') {
     beginPosition(next);
@@ -1144,8 +1251,6 @@ export function applyMove(state, pieceId, x, y, {freePawn = false, roll, targetR
   if (withFouls && outcomeRoll < FOUL_RULE.foul) return tackleFoul(next, state, piece, carrierBefore, from, {x, y}, outcomeRoll);
   const tackleSuccess = tackling && (withFouls ? outcomeRoll < FOUL_RULE.foul + FOUL_RULE.clean * cleanProbability : cleanProbability === 1 || outcomeRoll < cleanProbability);
   const collection = !next.ball.carrierId && next.ball.x === x && next.ball.y === y;
-  const kickOrigin = looseKickOrigin(state);
-  const selfPassCollection = collection && kickOrigin?.pieceId === piece.id && kickOrigin.team === piece.team;
   if (tackleSuccess || collection || wasCarrier) next.ball = {x, y, carrierId: piece.id};
   next.looseBallKickOrigin = tackleSuccess || collection || wasCarrier ? null : kickOrigin;
   const turnover = (tackleSuccess || collection) && piece.team !== previousAttack;
@@ -1154,8 +1259,10 @@ export function applyMove(state, pieceId, x, y, {freePawn = false, roll, targetR
     next.attack = piece.team;
     beginPosition(next);
     resetProgress(next);
+    resetPace(next);
     next.turn++;
   } else {
+    if (collection && !selfPassCollection && !state.restart) paceHandoff(next, piece.id);
     const usedBudget = freePawn ? 'pawnUsed' : wasCarrier && attackingCarrier(state, piece) ? 'dribbleUsed' : 'normalUsed';
     next.positionBudget = {...budgetFor(state), [usedBudget]: true};
     if (selfPassCollection) next.positionBudget.dribbleUsed = true;
@@ -1180,7 +1287,7 @@ export function applyMove(state, pieceId, x, y, {freePawn = false, roll, targetR
       ? `${title(piece.team)} ${NAMES[piece.type]} wins the tackle (${Math.round(probability * 100)}% chance) and takes possession at ${square(x, y)}.`
       : `${title(piece.team)} ${NAMES[piece.type]} moves to ${square(x, y)}, but the knight evades the tackle (50% chance). The knight keeps the ball; the regular move is used.`
     : `${title(piece.team)} ${NAMES[piece.type]} ${wasCarrier ? 'dribbles' : 'moves'} to ${square(x, y)}${collection ? ' and collects the ball' : ''}${freePawn ? ` (free ${piece.type === 'K' ? 'king' : 'pawn'} move)` : ''}${selfPassCollection ? '; collecting its own pass uses the dribble allowance' : ''}${collectedBackPass ? '; the goalkeeper must immediately release the back-pass' : ''}.`);
-  if (!turnover && !state.restart && state.phase === 'defendMove' && next.phase === 'attackMove' && !next.ball.carrierId) completeProgressRound(next, state);
+  if (!turnover && !state.restart && state.phase === 'defendMove' && next.phase === 'attackMove' && !next.ball.carrierId) completeAttackingRound(next, state);
   return next;
 }
 
@@ -1207,7 +1314,7 @@ export function skipMove(state, {roll, targetRoll, landing} = {}) {
       beginPosition(next); next.turn++;
       next.lastAction = {type: 'skip', team: state.attack, phase: state.phase};
       addLog(next, 'The ball is loose. A new positioning round begins.');
-      completeProgressRound(next, state);
+      completeAttackingRound(next, state);
       return next;
     }
     throw new Error('Only a positioning turn or goalkeeper reaction can be ended.');
@@ -1217,7 +1324,7 @@ export function skipMove(state, {roll, targetRoll, landing} = {}) {
   next.lastAction = {type: 'skip', team: currentTeam(state), phase: state.phase};
   addLog(next, `${title(currentTeam(state))} ends its positioning turn.`);
   const completedLooseRound = advancePosition(next, state.phase);
-  if (completedLooseRound) completeProgressRound(next, state);
+  if (completedLooseRound) completeAttackingRound(next, state);
   return next;
 }
 export const endPositionTurn = skipMove;
@@ -1276,6 +1383,7 @@ export function applyKick(state, x, y, {roll, landing, passRun = false, disguise
   if (disguise && (options.length !== 2 || !options.some(option => option.x === x && option.y === y))) throw new Error('A disguised shot needs two legal opponent-goal targets for the queen or knight.');
   const next = copy(state), carrier = state.pieces.find(p => p.id === state.ball.carrierId), from = {x: carrier.x, y: carrier.y};
   next.ballProgress = progressFor(state);
+  next.paceControl = paceFor(state);
   const restart = state.restart;
   next.offside = offsideSnapshot(state, carrier, restart); next.restart = null;
   next.looseBallKickOrigin = null;
@@ -1283,6 +1391,7 @@ export function applyKick(state, x, y, {roll, landing, passRun = false, disguise
   const boxOffender = boxKnightOffenders(next, next.offside)[0];
   if (boxOffender) return callOffside(next, boxOffender, {pieceId: carrier.id, from, intendedTo: {x, y}, path: kick.path, distance: kick.distance, accuracy: kick.accuracy, ...loft, offsideReason: 'boxKnight', offsidePieceId: boxOffender.id});
   if (kick.goal) {
+    resetPace(next);
     const declaration = disguise ? options[0] : kick;
     const targetOptions = options.map(({x, y, path, distance}) => ({x, y, path, distance}));
     next.pendingShot = {x: declaration.x, y: declaration.y, shooterId: carrier.id, shooterType: carrier.type, shootingTeam: carrier.team, scoringTeam: kick.goal, defendingTeam: other(kick.goal), from, path: declaration.path, distance: declaration.distance,
@@ -1316,6 +1425,7 @@ export function applyKick(state, x, y, {roll, landing, passRun = false, disguise
   if (receiver && flagged(next, receiver)) return callOffside(next, receiver, {...common, path: [...kick.path.slice(0, -1), destination]});
   next.turn++;
   next.ball = {...destination, carrierId: receiver?.id || null}; next.attack = receiver?.team || carrier.team;
+  if (receiver?.team === carrier.team) paceHandoff(next, receiver.id);
   next.looseBallKickOrigin = receiver ? null : {team: carrier.team, pieceId: carrier.id, from};
   if (interception) next.offside = null;
   beginPosition(next);
@@ -1505,6 +1615,7 @@ function keeperHomeValue(piece) {
 }
 
 function moveValue(state, projected, piece, move, team, beforeThreat) {
+  if (forbiddenPaceCarry(state, piece, move)) return -16000;
   const afterPiece = projected.pieces.find(p => p.id === piece.id), carrier = projected.pieces.find(p => p.id === projected.ball.carrierId);
   if (flagged(state, piece) && (move.type === 'tackle' || !state.ball.carrierId && state.ball.x === move.x && state.ball.y === move.y)) return -12000;
   if (move.type === 'tackle') return 12000 * (move.tackleProbability ?? 1) + tacticalShots(projected, team, true) * 500 - tacticalTackleRisk(projected, carrier) * 80;
@@ -1641,7 +1752,7 @@ function tacticalTackleRisk(state, carrier) {
   return state.pieces.some(piece => piece.team !== carrier.team && canTackle(state, piece, carrier)) ? (carrier.type === 'N' ? 0.5 : 1) * (state.foulsEnabled ? FOUL_RULE.clean : 1) : 0;
 }
 
-// A box attack has to be built with an off-ball run and a real passing lane.
+// Off-ball box runs provide receiving chances alongside direct carrying entry.
 // Merely rewarding a nearby teammate cannot distinguish a useful cut-back
 // receiver from a crowd of pieces that the carrier cannot actually reach.
 // These are public, immediate receiving opportunities, not assumed future goals.
@@ -1728,6 +1839,10 @@ function tacticalPositionValue(state, team) {
   let possession = 215 + (BOARD_HEIGHT - Math.max(3, goalDistance(carrier.team, carrier.y))) * 7;
   possession += threat * 450 - risk * (kickNow || !challengePending ? 0 : canEscape ? 65 : 520);
   possession += carrier.type === 'N' ? 24 : carrier.type === 'K' ? -20 : 0;
+  if (!state.restart && state.phase !== 'kickoff') {
+    const pace = paceFor(state);
+    if (pace.carrierId === carrier.id) possession -= pace.dribbleRounds * 14 + (pace.dribbleRounds >= PACE_RULE.maxDribbleRounds ? 80 : 0);
+  }
   possession += (BOARD_CENTER_X - Math.abs(carrier.x - BOARD_CENTER_X)) * 2;
   if (!state.restart && state.phase !== 'kickoff' && isOwnHalf(carrier.team, carrier.y)) {
     const tracker = progressFor(state);
@@ -1770,6 +1885,7 @@ function tacticalPositionValue(state, team) {
 }
 
 function tacticalMoveRank(state, piece, move, beforeThreat, fast = false, threats = []) {
+  if (forbiddenPaceCarry(state, piece, move)) return -16000;
   const projected = projectedMove(state, piece, move);
   const carrier = projected.pieces.find(p => p.id === projected.ball.carrierId), moved = projected.pieces.find(p => p.id === piece.id);
   if (!fast) {
@@ -1949,7 +2065,7 @@ function tacticalSuccessors(state, action) {
 // offside, self-pass collection, an indirect restart, or the progress deadline.
 function tacticalStateKey(state) {
   return JSON.stringify([state.pieces.map(p => [p.id, p.team, p.type, p.x, p.y, p.originalType, p.replacementKeeper]), state.ball, state.attack, state.phase,
-    budgetFor(state), state.score, state.restart, state.offside, state.pendingShot, state.ballProgress,
+    budgetFor(state), state.score, state.restart, state.offside, state.pendingShot, state.ballProgress, state.paceControl,
     state.looseBallKickOrigin, state.releaseReason, state.passRun, state.rulesVersion, state.turn, state.foulsEnabled, state.discipline, state.sentOff, state.winner, state.finishReason]);
 }
 const tacticalActionKey = action => JSON.stringify([action.type, action.pieceId, action.x, action.y, !!action.freePawn, !!action.passRun, !!action.disguise]);

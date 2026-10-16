@@ -1,0 +1,3119 @@
+{
+  "seed": 202610162,
+  "kickoff": "black",
+  "score": {
+    "white": 0,
+    "black": 1
+  },
+  "actions": 480,
+  "error": null,
+  "shotCount": 9,
+  "kickCount": 68,
+  "shotUnavailableReasons": {
+    "noGoalGeometry": 37,
+    "friendlyBlock": 7,
+    "offsideBoxInterference": 0
+  },
+  "shots": [
+    {
+      "step": 105,
+      "team": "black",
+      "pieceId": "black-Q",
+      "origin": "k3",
+      "target": "h0",
+      "outcome": "shotMiss",
+      "detail": "wide",
+      "probability": 0.09238519991092747,
+      "onTarget": 0.32285015559122926,
+      "saveGivenOnTarget": 0.7138449577583624,
+      "blockers": [],
+      "blockProbability": 0,
+      "distance": 3.905124837953328
+    },
+    {
+      "step": 161,
+      "team": "white",
+      "pieceId": "white-Q",
+      "origin": "f14",
+      "target": "f18",
+      "outcome": "save",
+      "detail": "corner",
+      "probability": 0.18505840476602317,
+      "onTarget": 0.9153813088990507,
+      "saveGivenOnTarget": 0.7978346258909339,
+      "blockers": [],
+      "blockProbability": 0,
+      "distance": 3.5
+    },
+    {
+      "step": 260,
+      "team": "black",
+      "pieceId": "black-Q",
+      "origin": "g4",
+      "target": "g0",
+      "outcome": "save",
+      "detail": "corner",
+      "probability": 0.19812206662688478,
+      "onTarget": 0.98,
+      "saveGivenOnTarget": 0.7978346258909339,
+      "blockers": [],
+      "blockProbability": 0,
+      "distance": 3.5
+    },
+    {
+      "step": 273,
+      "team": "black",
+      "pieceId": "black-R2",
+      "origin": "i5",
+      "target": "i0",
+      "outcome": "goal",
+      "detail": "goal",
+      "probability": 0.46716774697247926,
+      "onTarget": 0.4795693322299792,
+      "saveGivenOnTarget": 0.025859838033914884,
+      "blockers": [
+        "white-Q"
+      ],
+      "blockProbability": 0.44999999999999996,
+      "distance": 4.5
+    },
+    {
+      "step": 331,
+      "team": "white",
+      "pieceId": "white-R1",
+      "origin": "h13",
+      "target": "h18",
+      "outcome": "save",
+      "detail": "saved",
+      "probability": 0.08524939423770364,
+      "onTarget": 0.539,
+      "saveGivenOnTarget": 0.8418378585571361,
+      "blockers": [
+        "black-R2"
+      ],
+      "blockProbability": 0.44999999999999996,
+      "distance": 4.5
+    },
+    {
+      "step": 379,
+      "team": "white",
+      "pieceId": "white-R1",
+      "origin": "i14",
+      "target": "i18",
+      "outcome": "save",
+      "detail": "saved",
+      "probability": 0.1025483583331655,
+      "onTarget": 0.5072498630642938,
+      "saveGivenOnTarget": 0.7978346258909339,
+      "blockers": [
+        "black-P1"
+      ],
+      "blockProbability": 0.44999999999999996,
+      "distance": 3.5
+    },
+    {
+      "step": 392,
+      "team": "black",
+      "pieceId": "black-Q",
+      "origin": "f4",
+      "target": "f0",
+      "outcome": "save",
+      "detail": "saved",
+      "probability": 0.18505840476602317,
+      "onTarget": 0.9153813088990507,
+      "saveGivenOnTarget": 0.7978346258909339,
+      "blockers": [],
+      "blockProbability": 0,
+      "distance": 3.5
+    },
+    {
+      "step": 405,
+      "team": "white",
+      "pieceId": "white-Q",
+      "origin": "i14",
+      "target": "i18",
+      "outcome": "save",
+      "detail": "saved",
+      "probability": 0.055980167441722004,
+      "onTarget": 0.2769028459419628,
+      "saveGivenOnTarget": 0.7978346258909339,
+      "blockers": [
+        "black-P1",
+        "black-B1"
+      ],
+      "blockProbability": 0.6975,
+      "distance": 3.5
+    },
+    {
+      "step": 440,
+      "team": "black",
+      "pieceId": "black-Q",
+      "origin": "f4",
+      "target": "f0",
+      "outcome": "shotMiss",
+      "detail": "wide",
+      "probability": 0.18505840476602317,
+      "onTarget": 0.9153813088990507,
+      "saveGivenOnTarget": 0.7978346258909339,
+      "blockers": [],
+      "blockProbability": 0,
+      "distance": 3.5
+    }
+  ],
+  "opportunities": 24,
+  "declinedCount": 15,
+  "opportunityThresholds": {
+    "0.01": {
+      "available": 21,
+      "declined": 12
+    },
+    "0.04": {
+      "available": 17,
+      "declined": 8
+    },
+    "0.08": {
+      "available": 10,
+      "declined": 2
+    },
+    "0.1": {
+      "available": 6,
+      "declined": 0
+    },
+    "0.2": {
+      "available": 1,
+      "declined": 0
+    },
+    "0.3": {
+      "available": 1,
+      "declined": 0
+    }
+  },
+  "meanActualShotXG": 0.1729586830912169,
+  "meanBestOpportunityXG": 0.09244549285641514,
+  "meanBestOnTarget": 0.39250660899164175,
+  "meanBestSaveGivenOnTarget": 0.7749002525034535,
+  "meanBestBlockProbability": 0.3328125,
+  "meanBestShotDistance": 4.876067674573609,
+  "goalDistanceAtKick": {
+    "0-3": 11,
+    "4-5": 17,
+    "6-8": 11,
+    "9-12": 16,
+    "13-18": 13
+  },
+  "topDeclinedShots": [
+    {
+      "step": 63,
+      "team": "black",
+      "pieceId": "black-Q",
+      "pieceType": "Q",
+      "origin": "d2",
+      "goalDistance": 2,
+      "legalGoals": 1,
+      "geometricGoals": 1,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": {
+        "target": "f0",
+        "disguise": false,
+        "probability": 0.08972053704400604,
+        "beforeReaction": 0.10145028274533043,
+        "onTarget": 0.21616203802684567,
+        "saveGivenOnTarget": 0.584938512502073,
+        "blockers": [],
+        "blockProbability": 0,
+        "distance": 2.5
+      },
+      "selected": {
+        "type": "kick",
+        "x": 2,
+        "y": 15
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 433,
+      "team": "black",
+      "pieceId": "black-R2",
+      "pieceType": "R",
+      "origin": "h5",
+      "goalDistance": 5,
+      "legalGoals": 1,
+      "geometricGoals": 1,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": {
+        "target": "h0",
+        "disguise": false,
+        "probability": 0.08524939423770364,
+        "beforeReaction": 0.3490380781121453,
+        "onTarget": 0.539,
+        "saveGivenOnTarget": 0.8418378585571361,
+        "blockers": [
+          "white-N2"
+        ],
+        "blockProbability": 0.44999999999999996,
+        "distance": 4.5
+      },
+      "selected": {
+        "type": "kick",
+        "x": 7,
+        "y": 13
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 99,
+      "team": "black",
+      "pieceId": "black-Q",
+      "pieceType": "Q",
+      "origin": "l3",
+      "goalDistance": 3,
+      "legalGoals": 1,
+      "geometricGoals": 1,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": {
+        "target": "i0",
+        "disguise": false,
+        "probability": 0.0650806818204411,
+        "beforeReaction": 0.21523153388588073,
+        "onTarget": 0.22315315264027924,
+        "saveGivenOnTarget": 0.7083586718340003,
+        "blockers": [],
+        "blockProbability": 0,
+        "distance": 3.905124837953328
+      },
+      "selected": {
+        "type": "kick",
+        "x": 10,
+        "y": 14
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 154,
+      "team": "white",
+      "pieceId": "white-B1",
+      "pieceType": "B",
+      "origin": "c15",
+      "goalDistance": 3,
+      "legalGoals": 1,
+      "geometricGoals": 1,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": {
+        "target": "f18",
+        "disguise": false,
+        "probability": 0.06508068182044101,
+        "beforeReaction": 0.16280569168576658,
+        "onTarget": 0.22315315264027924,
+        "saveGivenOnTarget": 0.7083586718340007,
+        "blockers": [],
+        "blockProbability": 0,
+        "distance": 3.905124837953328
+      },
+      "selected": {
+        "type": "kick",
+        "x": 4,
+        "y": 4
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 303,
+      "team": "white",
+      "pieceId": "white-R1",
+      "pieceType": "R",
+      "origin": "i12",
+      "goalDistance": 6,
+      "legalGoals": 1,
+      "geometricGoals": 1,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": {
+        "target": "i18",
+        "disguise": false,
+        "probability": 0.054918526411937854,
+        "beforeReaction": 0.22456761586240084,
+        "onTarget": 0.42979354614985293,
+        "saveGivenOnTarget": 0.8722211468648023,
+        "blockers": [
+          "black-Q"
+        ],
+        "blockProbability": 0.44999999999999996,
+        "distance": 5.5
+      },
+      "selected": {
+        "type": "kick",
+        "x": 8,
+        "y": 4
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 297,
+      "team": "white",
+      "pieceId": "white-Q",
+      "pieceType": "Q",
+      "origin": "k15",
+      "goalDistance": 3,
+      "legalGoals": 1,
+      "geometricGoals": 1,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": {
+        "target": "h18",
+        "disguise": false,
+        "probability": 0.0517860464963741,
+        "beforeReaction": 0.12954786095780216,
+        "onTarget": 0.1775675855751761,
+        "saveGivenOnTarget": 0.7083586718340006,
+        "blockers": [
+          "black-Q"
+        ],
+        "blockProbability": 0.44999999999999996,
+        "distance": 3.905124837953328
+      },
+      "selected": {
+        "type": "kick",
+        "x": 7,
+        "y": 5
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 309,
+      "team": "white",
+      "pieceId": "white-Q",
+      "pieceType": "Q",
+      "origin": "k15",
+      "goalDistance": 3,
+      "legalGoals": 1,
+      "geometricGoals": 1,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": {
+        "target": "h18",
+        "disguise": false,
+        "probability": 0.05081185995101011,
+        "beforeReaction": 0.0517860464963741,
+        "onTarget": 0.1775675855751761,
+        "saveGivenOnTarget": 0.7138449577583624,
+        "blockers": [
+          "black-Q"
+        ],
+        "blockProbability": 0.44999999999999996,
+        "distance": 3.905124837953328
+      },
+      "selected": {
+        "type": "kick",
+        "x": 8,
+        "y": 4
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 319,
+      "team": "white",
+      "pieceId": "white-Q",
+      "pieceType": "Q",
+      "origin": "g13",
+      "goalDistance": 5,
+      "legalGoals": 1,
+      "geometricGoals": 1,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": {
+        "target": "g18",
+        "disguise": false,
+        "probability": 0.046887166830737,
+        "beforeReaction": 0.046887166830737,
+        "onTarget": 0.29645,
+        "saveGivenOnTarget": 0.8418378585571361,
+        "blockers": [
+          "black-R2",
+          "black-P2"
+        ],
+        "blockProbability": 0.6975,
+        "distance": 4.5
+      },
+      "selected": {
+        "type": "kick",
+        "x": 8,
+        "y": 4
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 314,
+      "team": "white",
+      "pieceId": "white-Q",
+      "pieceType": "Q",
+      "origin": "i13",
+      "goalDistance": 5,
+      "legalGoals": 1,
+      "geometricGoals": 1,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": {
+        "target": "i18",
+        "disguise": false,
+        "probability": 0.038994355909674226,
+        "beforeReaction": 0.15965526987773107,
+        "onTarget": 0.24654671183597338,
+        "saveGivenOnTarget": 0.8418378585571361,
+        "blockers": [
+          "black-P1",
+          "black-B1"
+        ],
+        "blockProbability": 0.6975,
+        "distance": 4.5
+      },
+      "selected": {
+        "type": "kick",
+        "x": 6,
+        "y": 4
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 324,
+      "team": "white",
+      "pieceId": "white-Q",
+      "pieceType": "Q",
+      "origin": "i13",
+      "goalDistance": 5,
+      "legalGoals": 1,
+      "geometricGoals": 1,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": {
+        "target": "i18",
+        "disguise": false,
+        "probability": 0.038994355909674226,
+        "beforeReaction": 0.15965526987773107,
+        "onTarget": 0.24654671183597338,
+        "saveGivenOnTarget": 0.8418378585571361,
+        "blockers": [
+          "black-P1",
+          "black-B1"
+        ],
+        "blockProbability": 0.6975,
+        "distance": 4.5
+      },
+      "selected": {
+        "type": "kick",
+        "x": 7,
+        "y": 5
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 148,
+      "team": "white",
+      "pieceId": "white-Q",
+      "pieceType": "Q",
+      "origin": "h10",
+      "goalDistance": 8,
+      "legalGoals": 1,
+      "geometricGoals": 1,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": {
+        "target": "h18",
+        "disguise": false,
+        "probability": 0.03085129958424458,
+        "beforeReaction": 0.14223711244813633,
+        "onTarget": 0.33419853027842156,
+        "saveGivenOnTarget": 0.9076857113688014,
+        "blockers": [],
+        "blockProbability": 0,
+        "distance": 7.5
+      },
+      "selected": {
+        "type": "kick",
+        "x": 6,
+        "y": 6
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 58,
+      "team": "black",
+      "pieceId": "black-Q",
+      "pieceType": "Q",
+      "origin": "i7",
+      "goalDistance": 7,
+      "legalGoals": 1,
+      "geometricGoals": 1,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": {
+        "target": "i0",
+        "disguise": false,
+        "probability": 0.026578477452557196,
+        "beforeReaction": 0.10591753643333426,
+        "onTarget": 0.24886251131988074,
+        "saveGivenOnTarget": 0.8932001557342079,
+        "blockers": [
+          "white-B2"
+        ],
+        "blockProbability": 0.44999999999999996,
+        "distance": 6.5
+      },
+      "selected": {
+        "type": "kick",
+        "x": 3,
+        "y": 15
+      },
+      "outcome": "kick",
+      "attempt": false
+    }
+  ],
+  "largestDribbleRuns": [
+    {
+      "pieceId": "white-Q",
+      "start": 305,
+      "end": 320,
+      "count": 4,
+      "moves": [
+        {
+          "step": 305,
+          "pieceId": "white-Q",
+          "from": "i13",
+          "to": "k15",
+          "turn": 60,
+          "ballY": 4,
+          "selfPassCollection": false
+        },
+        {
+          "step": 311,
+          "pieceId": "white-Q",
+          "from": "k15",
+          "to": "i13",
+          "turn": 61,
+          "ballY": 4,
+          "selfPassCollection": true
+        },
+        {
+          "step": 316,
+          "pieceId": "white-Q",
+          "from": "i13",
+          "to": "g13",
+          "turn": 62,
+          "ballY": 4,
+          "selfPassCollection": true
+        },
+        {
+          "step": 320,
+          "pieceId": "white-Q",
+          "from": "g13",
+          "to": "i13",
+          "turn": 63,
+          "ballY": 4,
+          "selfPassCollection": true
+        }
+      ]
+    },
+    {
+      "pieceId": "black-Q",
+      "start": 54,
+      "end": 64,
+      "count": 3,
+      "moves": [
+        {
+          "step": 54,
+          "pieceId": "black-Q",
+          "from": "i15",
+          "to": "i7",
+          "turn": 11,
+          "ballY": 2,
+          "selfPassCollection": false
+        },
+        {
+          "step": 60,
+          "pieceId": "black-Q",
+          "from": "i7",
+          "to": "d2",
+          "turn": 12,
+          "ballY": 15,
+          "selfPassCollection": true
+        },
+        {
+          "step": 64,
+          "pieceId": "black-Q",
+          "from": "d2",
+          "to": "c2",
+          "turn": 13,
+          "ballY": 15,
+          "selfPassCollection": true
+        }
+      ]
+    },
+    {
+      "pieceId": "black-R2",
+      "start": 344,
+      "end": 358,
+      "count": 3,
+      "moves": [
+        {
+          "step": 344,
+          "pieceId": "black-R2",
+          "from": "d14",
+          "to": "d11",
+          "turn": 67,
+          "ballY": 3,
+          "selfPassCollection": false
+        },
+        {
+          "step": 349,
+          "pieceId": "black-R2",
+          "from": "d11",
+          "to": "d4",
+          "turn": 68,
+          "ballY": 13,
+          "selfPassCollection": true
+        },
+        {
+          "step": 358,
+          "pieceId": "black-R2",
+          "from": "d4",
+          "to": "i4",
+          "turn": 70,
+          "ballY": 13,
+          "selfPassCollection": true
+        }
+      ]
+    },
+    {
+      "pieceId": "white-Q",
+      "start": 469,
+      "end": 479,
+      "count": 3,
+      "moves": [
+        {
+          "step": 469,
+          "pieceId": "white-Q",
+          "from": "g7",
+          "to": "n14",
+          "turn": 89,
+          "ballY": 10,
+          "selfPassCollection": false
+        },
+        {
+          "step": 474,
+          "pieceId": "white-Q",
+          "from": "n14",
+          "to": "n13",
+          "turn": 90,
+          "ballY": 4,
+          "selfPassCollection": true
+        },
+        {
+          "step": 479,
+          "pieceId": "white-Q",
+          "from": "n13",
+          "to": "l13",
+          "turn": 91,
+          "ballY": 4,
+          "selfPassCollection": true
+        }
+      ]
+    },
+    {
+      "pieceId": "black-B1",
+      "start": 2,
+      "end": 8,
+      "count": 2,
+      "moves": [
+        {
+          "step": 2,
+          "pieceId": "black-B1",
+          "from": "l13",
+          "to": "i10",
+          "turn": 2,
+          "ballY": 4,
+          "selfPassCollection": false
+        },
+        {
+          "step": 8,
+          "pieceId": "black-B1",
+          "from": "i10",
+          "to": "j11",
+          "turn": 3,
+          "ballY": 6,
+          "selfPassCollection": true
+        }
+      ]
+    },
+    {
+      "pieceId": "black-R1",
+      "start": 79,
+      "end": 84,
+      "count": 2,
+      "moves": [
+        {
+          "step": 79,
+          "pieceId": "black-R1",
+          "from": "i8",
+          "to": "n8",
+          "turn": 16,
+          "ballY": 9,
+          "selfPassCollection": false
+        },
+        {
+          "step": 84,
+          "pieceId": "black-R1",
+          "from": "n8",
+          "to": "n9",
+          "turn": 17,
+          "ballY": 8,
+          "selfPassCollection": true
+        }
+      ]
+    },
+    {
+      "pieceId": "black-Q",
+      "start": 95,
+      "end": 100,
+      "count": 2,
+      "moves": [
+        {
+          "step": 95,
+          "pieceId": "black-Q",
+          "from": "g3",
+          "to": "l3",
+          "turn": 19,
+          "ballY": 14,
+          "selfPassCollection": false
+        },
+        {
+          "step": 100,
+          "pieceId": "black-Q",
+          "from": "l3",
+          "to": "k3",
+          "turn": 20,
+          "ballY": 14,
+          "selfPassCollection": true
+        }
+      ]
+    },
+    {
+      "pieceId": "white-Q",
+      "start": 112,
+      "end": 122,
+      "count": 2,
+      "moves": [
+        {
+          "step": 112,
+          "pieceId": "white-Q",
+          "from": "f4",
+          "to": "j8",
+          "turn": 22,
+          "ballY": 13,
+          "selfPassCollection": false
+        },
+        {
+          "step": 122,
+          "pieceId": "white-Q",
+          "from": "j8",
+          "to": "l10",
+          "turn": 24,
+          "ballY": 7,
+          "selfPassCollection": true
+        }
+      ]
+    },
+    {
+      "pieceId": "white-N2",
+      "start": 176,
+      "end": 181,
+      "count": 2,
+      "moves": [
+        {
+          "step": 176,
+          "pieceId": "white-N2",
+          "from": "i10",
+          "to": "g9",
+          "turn": 34,
+          "ballY": 7,
+          "selfPassCollection": false
+        },
+        {
+          "step": 181,
+          "pieceId": "white-N2",
+          "from": "g9",
+          "to": "e8",
+          "turn": 35,
+          "ballY": 9,
+          "selfPassCollection": true
+        }
+      ]
+    },
+    {
+      "pieceId": "black-Q",
+      "start": 250,
+      "end": 255,
+      "count": 2,
+      "moves": [
+        {
+          "step": 250,
+          "pieceId": "black-Q",
+          "from": "d15",
+          "to": "d7",
+          "turn": 50,
+          "ballY": 2,
+          "selfPassCollection": false
+        },
+        {
+          "step": 255,
+          "pieceId": "black-Q",
+          "from": "d7",
+          "to": "g4",
+          "turn": 51,
+          "ballY": 13,
+          "selfPassCollection": true
+        }
+      ]
+    }
+  ],
+  "maxCarrierRun": 4,
+  "exactPositionRepeats": [],
+  "teamMoveCycleRepeats": [],
+  "allKickChoices": [
+    {
+      "step": 1,
+      "team": "black",
+      "pieceId": "black-Q",
+      "pieceType": "Q",
+      "origin": "h9",
+      "goalDistance": 9,
+      "legalGoals": 1,
+      "geometricGoals": 1,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": {
+        "target": "h0",
+        "disguise": false,
+        "probability": 0.008164058966550692,
+        "beforeReaction": 0.034935805229084786,
+        "onTarget": 0.09918392109181028,
+        "saveGivenOnTarget": 0.917687676826231,
+        "blockers": [
+          "white-P2"
+        ],
+        "blockProbability": 0.44999999999999996,
+        "distance": 8.5
+      },
+      "selected": {
+        "type": "kick",
+        "x": 11,
+        "y": 4
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 7,
+      "team": "black",
+      "pieceId": "black-B1",
+      "pieceType": "B",
+      "origin": "i10",
+      "goalDistance": 10,
+      "legalGoals": 0,
+      "geometricGoals": 0,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": null,
+      "selected": {
+        "type": "kick",
+        "x": 9,
+        "y": 6
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 12,
+      "team": "black",
+      "pieceId": "black-B1",
+      "pieceType": "B",
+      "origin": "j11",
+      "goalDistance": 11,
+      "legalGoals": 0,
+      "geometricGoals": 0,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": null,
+      "selected": {
+        "type": "kick",
+        "x": 8,
+        "y": 7
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 23,
+      "team": "white",
+      "pieceId": "white-P3",
+      "pieceType": "P",
+      "origin": "k5",
+      "goalDistance": 13,
+      "legalGoals": 0,
+      "geometricGoals": 0,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": null,
+      "selected": {
+        "type": "kick",
+        "x": 10,
+        "y": 8
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 34,
+      "team": "black",
+      "pieceId": "black-P1",
+      "pieceType": "P",
+      "origin": "h11",
+      "goalDistance": 11,
+      "legalGoals": 1,
+      "geometricGoals": 1,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": {
+        "target": "h0",
+        "disguise": false,
+        "probability": 0.0007821793311092148,
+        "beforeReaction": 0.0024583353665717997,
+        "onTarget": 0.011073124213308194,
+        "saveGivenOnTarget": 0.9293623627766086,
+        "blockers": [
+          "white-N2",
+          "white-P2"
+        ],
+        "blockProbability": 0.6975,
+        "distance": 10.5
+      },
+      "selected": {
+        "type": "kick",
+        "x": 7,
+        "y": 7
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 40,
+      "team": "black",
+      "pieceId": "black-B2",
+      "pieceType": "B",
+      "origin": "k7",
+      "goalDistance": 7,
+      "legalGoals": 0,
+      "geometricGoals": 0,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": null,
+      "selected": {
+        "type": "kick",
+        "x": 11,
+        "y": 9
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 46,
+      "team": "black",
+      "pieceId": "black-N1",
+      "pieceType": "N",
+      "origin": "n7",
+      "goalDistance": 7,
+      "legalGoals": 0,
+      "geometricGoals": 0,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": null,
+      "selected": {
+        "type": "kick",
+        "x": 11,
+        "y": 9
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 52,
+      "team": "black",
+      "pieceId": "black-B2",
+      "pieceType": "B",
+      "origin": "n10",
+      "goalDistance": 10,
+      "legalGoals": 0,
+      "geometricGoals": 0,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": null,
+      "selected": {
+        "type": "kick",
+        "x": 8,
+        "y": 2
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 58,
+      "team": "black",
+      "pieceId": "black-Q",
+      "pieceType": "Q",
+      "origin": "i7",
+      "goalDistance": 7,
+      "legalGoals": 1,
+      "geometricGoals": 1,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": {
+        "target": "i0",
+        "disguise": false,
+        "probability": 0.026578477452557196,
+        "beforeReaction": 0.10591753643333426,
+        "onTarget": 0.24886251131988074,
+        "saveGivenOnTarget": 0.8932001557342079,
+        "blockers": [
+          "white-B2"
+        ],
+        "blockProbability": 0.44999999999999996,
+        "distance": 6.5
+      },
+      "selected": {
+        "type": "kick",
+        "x": 3,
+        "y": 15
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 63,
+      "team": "black",
+      "pieceId": "black-Q",
+      "pieceType": "Q",
+      "origin": "d2",
+      "goalDistance": 2,
+      "legalGoals": 1,
+      "geometricGoals": 1,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": {
+        "target": "f0",
+        "disguise": false,
+        "probability": 0.08972053704400604,
+        "beforeReaction": 0.10145028274533043,
+        "onTarget": 0.21616203802684567,
+        "saveGivenOnTarget": 0.584938512502073,
+        "blockers": [],
+        "blockProbability": 0,
+        "distance": 2.5
+      },
+      "selected": {
+        "type": "kick",
+        "x": 2,
+        "y": 15
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 68,
+      "team": "black",
+      "pieceId": "black-Q",
+      "pieceType": "Q",
+      "origin": "c2",
+      "goalDistance": 2,
+      "legalGoals": 0,
+      "geometricGoals": 0,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": null,
+      "selected": {
+        "type": "kick",
+        "x": 8,
+        "y": 9
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 82,
+      "team": "black",
+      "pieceId": "black-R1",
+      "pieceType": "R",
+      "origin": "n8",
+      "goalDistance": 8,
+      "legalGoals": 0,
+      "geometricGoals": 0,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": null,
+      "selected": {
+        "type": "kick",
+        "x": 13,
+        "y": 8
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 87,
+      "team": "black",
+      "pieceId": "black-R1",
+      "pieceType": "R",
+      "origin": "n9",
+      "goalDistance": 9,
+      "legalGoals": 0,
+      "geometricGoals": 0,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": null,
+      "selected": {
+        "type": "kick",
+        "x": 13,
+        "y": 7
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 93,
+      "team": "black",
+      "pieceId": "black-B2",
+      "pieceType": "B",
+      "origin": "h4",
+      "goalDistance": 4,
+      "legalGoals": 0,
+      "geometricGoals": 0,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": null,
+      "selected": {
+        "type": "kick",
+        "x": 6,
+        "y": 14
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 99,
+      "team": "black",
+      "pieceId": "black-Q",
+      "pieceType": "Q",
+      "origin": "l3",
+      "goalDistance": 3,
+      "legalGoals": 1,
+      "geometricGoals": 1,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": {
+        "target": "i0",
+        "disguise": false,
+        "probability": 0.0650806818204411,
+        "beforeReaction": 0.21523153388588073,
+        "onTarget": 0.22315315264027924,
+        "saveGivenOnTarget": 0.7083586718340003,
+        "blockers": [],
+        "blockProbability": 0,
+        "distance": 3.905124837953328
+      },
+      "selected": {
+        "type": "kick",
+        "x": 10,
+        "y": 14
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 104,
+      "team": "black",
+      "pieceId": "black-Q",
+      "pieceType": "Q",
+      "origin": "k3",
+      "goalDistance": 3,
+      "legalGoals": 1,
+      "geometricGoals": 1,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": {
+        "target": "h0",
+        "disguise": false,
+        "probability": 0.09238519991092747,
+        "beforeReaction": 0.09415644817522577,
+        "onTarget": 0.32285015559122926,
+        "saveGivenOnTarget": 0.7138449577583624,
+        "blockers": [],
+        "blockProbability": 0,
+        "distance": 3.905124837953328
+      },
+      "selected": {
+        "type": "kick",
+        "x": 7,
+        "y": 17
+      },
+      "outcome": "shotAttempt",
+      "attempt": true
+    },
+    {
+      "step": 110,
+      "team": "white",
+      "pieceId": "white-K",
+      "pieceType": "K",
+      "origin": "i1",
+      "goalDistance": 17,
+      "legalGoals": 0,
+      "geometricGoals": 0,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": null,
+      "selected": {
+        "type": "kick",
+        "x": 5,
+        "y": 13
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 116,
+      "team": "white",
+      "pieceId": "white-Q",
+      "pieceType": "Q",
+      "origin": "j8",
+      "goalDistance": 10,
+      "legalGoals": 0,
+      "geometricGoals": 0,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": null,
+      "selected": {
+        "type": "kick",
+        "x": 11,
+        "y": 7
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 129,
+      "team": "black",
+      "pieceId": "black-R2",
+      "pieceType": "R",
+      "origin": "k12",
+      "goalDistance": 12,
+      "legalGoals": 0,
+      "geometricGoals": 0,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": null,
+      "selected": {
+        "type": "kick",
+        "x": 8,
+        "y": 5
+      },
+      "outcome": "offside",
+      "attempt": false
+    },
+    {
+      "step": 134,
+      "team": "white",
+      "pieceId": "white-K",
+      "pieceType": "K",
+      "origin": "f3",
+      "goalDistance": 15,
+      "legalGoals": 0,
+      "geometricGoals": 0,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": null,
+      "selected": {
+        "type": "kick",
+        "x": 5,
+        "y": 7
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 148,
+      "team": "white",
+      "pieceId": "white-Q",
+      "pieceType": "Q",
+      "origin": "h10",
+      "goalDistance": 8,
+      "legalGoals": 1,
+      "geometricGoals": 1,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": {
+        "target": "h18",
+        "disguise": false,
+        "probability": 0.03085129958424458,
+        "beforeReaction": 0.14223711244813633,
+        "onTarget": 0.33419853027842156,
+        "saveGivenOnTarget": 0.9076857113688014,
+        "blockers": [],
+        "blockProbability": 0,
+        "distance": 7.5
+      },
+      "selected": {
+        "type": "kick",
+        "x": 6,
+        "y": 6
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 154,
+      "team": "white",
+      "pieceId": "white-B1",
+      "pieceType": "B",
+      "origin": "c15",
+      "goalDistance": 3,
+      "legalGoals": 1,
+      "geometricGoals": 1,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": {
+        "target": "f18",
+        "disguise": false,
+        "probability": 0.06508068182044101,
+        "beforeReaction": 0.16280569168576658,
+        "onTarget": 0.22315315264027924,
+        "saveGivenOnTarget": 0.7083586718340007,
+        "blockers": [],
+        "blockProbability": 0,
+        "distance": 3.905124837953328
+      },
+      "selected": {
+        "type": "kick",
+        "x": 4,
+        "y": 4
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 160,
+      "team": "white",
+      "pieceId": "white-Q",
+      "pieceType": "Q",
+      "origin": "f14",
+      "goalDistance": 4,
+      "legalGoals": 1,
+      "geometricGoals": 1,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": {
+        "target": "f18",
+        "disguise": false,
+        "probability": 0.18505840476602317,
+        "beforeReaction": 0.7294189097928364,
+        "onTarget": 0.9153813088990507,
+        "saveGivenOnTarget": 0.7978346258909339,
+        "blockers": [],
+        "blockProbability": 0,
+        "distance": 3.5
+      },
+      "selected": {
+        "type": "kick",
+        "x": 5,
+        "y": -1
+      },
+      "outcome": "shotAttempt",
+      "attempt": true
+    },
+    {
+      "step": 167,
+      "team": "white",
+      "pieceId": "white-B1",
+      "pieceType": "B",
+      "origin": "a17",
+      "goalDistance": 1,
+      "legalGoals": 0,
+      "geometricGoals": 0,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": null,
+      "selected": {
+        "type": "kick",
+        "x": 7,
+        "y": 7
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 173,
+      "team": "white",
+      "pieceId": "white-Q",
+      "pieceType": "Q",
+      "origin": "j10",
+      "goalDistance": 8,
+      "legalGoals": 0,
+      "geometricGoals": 0,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": null,
+      "selected": {
+        "type": "kick",
+        "x": 8,
+        "y": 7
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 179,
+      "team": "white",
+      "pieceId": "white-N2",
+      "pieceType": "N",
+      "origin": "g9",
+      "goalDistance": 9,
+      "legalGoals": 0,
+      "geometricGoals": 0,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": null,
+      "selected": {
+        "type": "kick",
+        "x": 4,
+        "y": 9
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 184,
+      "team": "white",
+      "pieceId": "white-N2",
+      "pieceType": "N",
+      "origin": "e8",
+      "goalDistance": 10,
+      "legalGoals": 0,
+      "geometricGoals": 0,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": null,
+      "selected": {
+        "type": "kick",
+        "x": 2,
+        "y": 10
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 190,
+      "team": "white",
+      "pieceId": "white-R1",
+      "pieceType": "R",
+      "origin": "c10",
+      "goalDistance": 8,
+      "legalGoals": 0,
+      "geometricGoals": 0,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": null,
+      "selected": {
+        "type": "kick",
+        "x": 3,
+        "y": 7
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 196,
+      "team": "white",
+      "pieceId": "white-N2",
+      "pieceType": "N",
+      "origin": "c8",
+      "goalDistance": 10,
+      "legalGoals": 0,
+      "geometricGoals": 0,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": null,
+      "selected": {
+        "type": "kick",
+        "x": 1,
+        "y": 7
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 202,
+      "team": "white",
+      "pieceId": "white-R1",
+      "pieceType": "R",
+      "origin": "b17",
+      "goalDistance": 1,
+      "legalGoals": 0,
+      "geometricGoals": 0,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": null,
+      "selected": {
+        "type": "kick",
+        "x": 3,
+        "y": 0
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 248,
+      "team": "black",
+      "pieceId": "black-N2",
+      "pieceType": "N",
+      "origin": "b16",
+      "goalDistance": 16,
+      "legalGoals": 0,
+      "geometricGoals": 0,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": null,
+      "selected": {
+        "type": "kick",
+        "x": 3,
+        "y": 2
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 254,
+      "team": "black",
+      "pieceId": "black-Q",
+      "pieceType": "Q",
+      "origin": "d7",
+      "goalDistance": 7,
+      "legalGoals": 0,
+      "geometricGoals": 0,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": null,
+      "selected": {
+        "type": "kick",
+        "x": 6,
+        "y": 13
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 259,
+      "team": "black",
+      "pieceId": "black-Q",
+      "pieceType": "Q",
+      "origin": "g4",
+      "goalDistance": 4,
+      "legalGoals": 1,
+      "geometricGoals": 1,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": {
+        "target": "g0",
+        "disguise": false,
+        "probability": 0.19812206662688478,
+        "beforeReaction": 0.19812206662688478,
+        "onTarget": 0.98,
+        "saveGivenOnTarget": 0.7978346258909339,
+        "blockers": [],
+        "blockProbability": 0,
+        "distance": 3.5
+      },
+      "selected": {
+        "type": "kick",
+        "x": 6,
+        "y": 17
+      },
+      "outcome": "shotAttempt",
+      "attempt": true
+    },
+    {
+      "step": 266,
+      "team": "black",
+      "pieceId": "black-P1",
+      "pieceType": "P",
+      "origin": "a1",
+      "goalDistance": 1,
+      "legalGoals": 0,
+      "geometricGoals": 0,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": null,
+      "selected": {
+        "type": "kick",
+        "x": 0,
+        "y": 12
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 272,
+      "team": "black",
+      "pieceId": "black-R2",
+      "pieceType": "R",
+      "origin": "i5",
+      "goalDistance": 5,
+      "legalGoals": 1,
+      "geometricGoals": 1,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": {
+        "target": "i0",
+        "disguise": false,
+        "probability": 0.46716774697247926,
+        "beforeReaction": 0.47940984574441886,
+        "onTarget": 0.4795693322299792,
+        "saveGivenOnTarget": 0.025859838033914884,
+        "blockers": [
+          "white-Q"
+        ],
+        "blockProbability": 0.44999999999999996,
+        "distance": 4.5
+      },
+      "selected": {
+        "type": "kick",
+        "x": 8,
+        "y": 17
+      },
+      "outcome": "shotAttempt",
+      "attempt": true
+    },
+    {
+      "step": 274,
+      "team": "white",
+      "pieceId": "white-Q",
+      "pieceType": "Q",
+      "origin": "g9",
+      "goalDistance": 9,
+      "legalGoals": 1,
+      "geometricGoals": 1,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": {
+        "target": "g18",
+        "disguise": false,
+        "probability": 0.008164058966550692,
+        "beforeReaction": 0.034935805229084786,
+        "onTarget": 0.09918392109181028,
+        "saveGivenOnTarget": 0.917687676826231,
+        "blockers": [
+          "black-P2"
+        ],
+        "blockProbability": 0.44999999999999996,
+        "distance": 8.5
+      },
+      "selected": {
+        "type": "kick",
+        "x": 2,
+        "y": 12
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 280,
+      "team": "white",
+      "pieceId": "white-B1",
+      "pieceType": "B",
+      "origin": "f8",
+      "goalDistance": 10,
+      "legalGoals": 0,
+      "geometricGoals": 0,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": null,
+      "selected": {
+        "type": "kick",
+        "x": 4,
+        "y": 10
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 285,
+      "team": "white",
+      "pieceId": "white-B1",
+      "pieceType": "B",
+      "origin": "e7",
+      "goalDistance": 11,
+      "legalGoals": 0,
+      "geometricGoals": 0,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": null,
+      "selected": {
+        "type": "kick",
+        "x": 3,
+        "y": 9
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 291,
+      "team": "white",
+      "pieceId": "white-N1",
+      "pieceType": "N",
+      "origin": "c10",
+      "goalDistance": 8,
+      "legalGoals": 0,
+      "geometricGoals": 0,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": null,
+      "selected": {
+        "type": "kick",
+        "x": 4,
+        "y": 8
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 297,
+      "team": "white",
+      "pieceId": "white-Q",
+      "pieceType": "Q",
+      "origin": "k15",
+      "goalDistance": 3,
+      "legalGoals": 1,
+      "geometricGoals": 1,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": {
+        "target": "h18",
+        "disguise": false,
+        "probability": 0.0517860464963741,
+        "beforeReaction": 0.12954786095780216,
+        "onTarget": 0.1775675855751761,
+        "saveGivenOnTarget": 0.7083586718340006,
+        "blockers": [
+          "black-Q"
+        ],
+        "blockProbability": 0.44999999999999996,
+        "distance": 3.905124837953328
+      },
+      "selected": {
+        "type": "kick",
+        "x": 7,
+        "y": 5
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 303,
+      "team": "white",
+      "pieceId": "white-R1",
+      "pieceType": "R",
+      "origin": "i12",
+      "goalDistance": 6,
+      "legalGoals": 1,
+      "geometricGoals": 1,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": {
+        "target": "i18",
+        "disguise": false,
+        "probability": 0.054918526411937854,
+        "beforeReaction": 0.22456761586240084,
+        "onTarget": 0.42979354614985293,
+        "saveGivenOnTarget": 0.8722211468648023,
+        "blockers": [
+          "black-Q"
+        ],
+        "blockProbability": 0.44999999999999996,
+        "distance": 5.5
+      },
+      "selected": {
+        "type": "kick",
+        "x": 8,
+        "y": 4
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 309,
+      "team": "white",
+      "pieceId": "white-Q",
+      "pieceType": "Q",
+      "origin": "k15",
+      "goalDistance": 3,
+      "legalGoals": 1,
+      "geometricGoals": 1,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": {
+        "target": "h18",
+        "disguise": false,
+        "probability": 0.05081185995101011,
+        "beforeReaction": 0.0517860464963741,
+        "onTarget": 0.1775675855751761,
+        "saveGivenOnTarget": 0.7138449577583624,
+        "blockers": [
+          "black-Q"
+        ],
+        "blockProbability": 0.44999999999999996,
+        "distance": 3.905124837953328
+      },
+      "selected": {
+        "type": "kick",
+        "x": 8,
+        "y": 4
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 314,
+      "team": "white",
+      "pieceId": "white-Q",
+      "pieceType": "Q",
+      "origin": "i13",
+      "goalDistance": 5,
+      "legalGoals": 1,
+      "geometricGoals": 1,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": {
+        "target": "i18",
+        "disguise": false,
+        "probability": 0.038994355909674226,
+        "beforeReaction": 0.15965526987773107,
+        "onTarget": 0.24654671183597338,
+        "saveGivenOnTarget": 0.8418378585571361,
+        "blockers": [
+          "black-P1",
+          "black-B1"
+        ],
+        "blockProbability": 0.6975,
+        "distance": 4.5
+      },
+      "selected": {
+        "type": "kick",
+        "x": 6,
+        "y": 4
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 319,
+      "team": "white",
+      "pieceId": "white-Q",
+      "pieceType": "Q",
+      "origin": "g13",
+      "goalDistance": 5,
+      "legalGoals": 1,
+      "geometricGoals": 1,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": {
+        "target": "g18",
+        "disguise": false,
+        "probability": 0.046887166830737,
+        "beforeReaction": 0.046887166830737,
+        "onTarget": 0.29645,
+        "saveGivenOnTarget": 0.8418378585571361,
+        "blockers": [
+          "black-R2",
+          "black-P2"
+        ],
+        "blockProbability": 0.6975,
+        "distance": 4.5
+      },
+      "selected": {
+        "type": "kick",
+        "x": 8,
+        "y": 4
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 324,
+      "team": "white",
+      "pieceId": "white-Q",
+      "pieceType": "Q",
+      "origin": "i13",
+      "goalDistance": 5,
+      "legalGoals": 1,
+      "geometricGoals": 1,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": {
+        "target": "i18",
+        "disguise": false,
+        "probability": 0.038994355909674226,
+        "beforeReaction": 0.15965526987773107,
+        "onTarget": 0.24654671183597338,
+        "saveGivenOnTarget": 0.8418378585571361,
+        "blockers": [
+          "black-P1",
+          "black-B1"
+        ],
+        "blockProbability": 0.6975,
+        "distance": 4.5
+      },
+      "selected": {
+        "type": "kick",
+        "x": 7,
+        "y": 5
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 330,
+      "team": "white",
+      "pieceId": "white-R1",
+      "pieceType": "R",
+      "origin": "h13",
+      "goalDistance": 5,
+      "legalGoals": 1,
+      "geometricGoals": 1,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": {
+        "target": "h18",
+        "disguise": false,
+        "probability": 0.08524939423770364,
+        "beforeReaction": 0.08524939423770364,
+        "onTarget": 0.539,
+        "saveGivenOnTarget": 0.8418378585571361,
+        "blockers": [
+          "black-R2"
+        ],
+        "blockProbability": 0.44999999999999996,
+        "distance": 4.5
+      },
+      "selected": {
+        "type": "kick",
+        "x": 7,
+        "y": -1
+      },
+      "outcome": "shotAttempt",
+      "attempt": true
+    },
+    {
+      "step": 337,
+      "team": "black",
+      "pieceId": "black-K",
+      "pieceType": "K",
+      "origin": "h17",
+      "goalDistance": 17,
+      "legalGoals": 0,
+      "geometricGoals": 1,
+      "friendlySuppressed": true,
+      "offsideSuppressed": false,
+      "best": null,
+      "selected": {
+        "type": "kick",
+        "x": 6,
+        "y": 0
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 342,
+      "team": "black",
+      "pieceId": "black-K",
+      "pieceType": "K",
+      "origin": "g17",
+      "goalDistance": 17,
+      "legalGoals": 0,
+      "geometricGoals": 1,
+      "friendlySuppressed": true,
+      "offsideSuppressed": false,
+      "best": null,
+      "selected": {
+        "type": "kick",
+        "x": 3,
+        "y": 3
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 348,
+      "team": "black",
+      "pieceId": "black-R2",
+      "pieceType": "R",
+      "origin": "d11",
+      "goalDistance": 11,
+      "legalGoals": 0,
+      "geometricGoals": 0,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": null,
+      "selected": {
+        "type": "kick",
+        "x": 3,
+        "y": 13
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 353,
+      "team": "black",
+      "pieceId": "black-R2",
+      "pieceType": "R",
+      "origin": "d4",
+      "goalDistance": 4,
+      "legalGoals": 0,
+      "geometricGoals": 0,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": null,
+      "selected": {
+        "type": "kick",
+        "x": 8,
+        "y": 13
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 366,
+      "team": "white",
+      "pieceId": "white-B2",
+      "pieceType": "B",
+      "origin": "a10",
+      "goalDistance": 8,
+      "legalGoals": 0,
+      "geometricGoals": 1,
+      "friendlySuppressed": true,
+      "offsideSuppressed": false,
+      "best": null,
+      "selected": {
+        "type": "kick",
+        "x": 1,
+        "y": 8
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 372,
+      "team": "white",
+      "pieceId": "white-Q",
+      "pieceType": "Q",
+      "origin": "b16",
+      "goalDistance": 2,
+      "legalGoals": 0,
+      "geometricGoals": 0,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": null,
+      "selected": {
+        "type": "kick",
+        "x": 3,
+        "y": 3
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 378,
+      "team": "white",
+      "pieceId": "white-R1",
+      "pieceType": "R",
+      "origin": "i14",
+      "goalDistance": 4,
+      "legalGoals": 1,
+      "geometricGoals": 1,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": {
+        "target": "i18",
+        "disguise": false,
+        "probability": 0.1025483583331655,
+        "beforeReaction": 0.4042005648486826,
+        "onTarget": 0.5072498630642938,
+        "saveGivenOnTarget": 0.7978346258909339,
+        "blockers": [
+          "black-P1"
+        ],
+        "blockProbability": 0.44999999999999996,
+        "distance": 3.5
+      },
+      "selected": {
+        "type": "kick",
+        "x": 8,
+        "y": -1
+      },
+      "outcome": "shotAttempt",
+      "attempt": true
+    },
+    {
+      "step": 385,
+      "team": "black",
+      "pieceId": "black-K",
+      "pieceType": "K",
+      "origin": "j17",
+      "goalDistance": 17,
+      "legalGoals": 0,
+      "geometricGoals": 0,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": null,
+      "selected": {
+        "type": "kick",
+        "x": 9,
+        "y": 9
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 391,
+      "team": "black",
+      "pieceId": "black-Q",
+      "pieceType": "Q",
+      "origin": "f4",
+      "goalDistance": 4,
+      "legalGoals": 1,
+      "geometricGoals": 1,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": {
+        "target": "f0",
+        "disguise": false,
+        "probability": 0.18505840476602317,
+        "beforeReaction": 0.7294189097928364,
+        "onTarget": 0.9153813088990507,
+        "saveGivenOnTarget": 0.7978346258909339,
+        "blockers": [],
+        "blockProbability": 0,
+        "distance": 3.5
+      },
+      "selected": {
+        "type": "kick",
+        "x": 5,
+        "y": 17
+      },
+      "outcome": "shotAttempt",
+      "attempt": true
+    },
+    {
+      "step": 398,
+      "team": "white",
+      "pieceId": "white-K",
+      "pieceType": "K",
+      "origin": "e2",
+      "goalDistance": 16,
+      "legalGoals": 0,
+      "geometricGoals": 0,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": null,
+      "selected": {
+        "type": "kick",
+        "x": 4,
+        "y": 7
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 404,
+      "team": "white",
+      "pieceId": "white-Q",
+      "pieceType": "Q",
+      "origin": "i14",
+      "goalDistance": 4,
+      "legalGoals": 1,
+      "geometricGoals": 1,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": {
+        "target": "i18",
+        "disguise": false,
+        "probability": 0.055980167441722004,
+        "beforeReaction": 0.220649220212333,
+        "onTarget": 0.2769028459419628,
+        "saveGivenOnTarget": 0.7978346258909339,
+        "blockers": [
+          "black-P1",
+          "black-B1"
+        ],
+        "blockProbability": 0.6975,
+        "distance": 3.5
+      },
+      "selected": {
+        "type": "kick",
+        "x": 8,
+        "y": -1
+      },
+      "outcome": "shotAttempt",
+      "attempt": true
+    },
+    {
+      "step": 411,
+      "team": "black",
+      "pieceId": "black-K",
+      "pieceType": "K",
+      "origin": "h17",
+      "goalDistance": 17,
+      "legalGoals": 0,
+      "geometricGoals": 1,
+      "friendlySuppressed": true,
+      "offsideSuppressed": false,
+      "best": null,
+      "selected": {
+        "type": "kick",
+        "x": 8,
+        "y": 1
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 417,
+      "team": "black",
+      "pieceId": "black-B1",
+      "pieceType": "B",
+      "origin": "l13",
+      "goalDistance": 13,
+      "legalGoals": 0,
+      "geometricGoals": 0,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": null,
+      "selected": {
+        "type": "kick",
+        "x": 9,
+        "y": 6
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 427,
+      "team": "black",
+      "pieceId": "black-Q",
+      "pieceType": "Q",
+      "origin": "j4",
+      "goalDistance": 4,
+      "legalGoals": 0,
+      "geometricGoals": 1,
+      "friendlySuppressed": true,
+      "offsideSuppressed": false,
+      "best": null,
+      "selected": {
+        "type": "kick",
+        "x": 8,
+        "y": 12
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 433,
+      "team": "black",
+      "pieceId": "black-R2",
+      "pieceType": "R",
+      "origin": "h5",
+      "goalDistance": 5,
+      "legalGoals": 1,
+      "geometricGoals": 1,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": {
+        "target": "h0",
+        "disguise": false,
+        "probability": 0.08524939423770364,
+        "beforeReaction": 0.3490380781121453,
+        "onTarget": 0.539,
+        "saveGivenOnTarget": 0.8418378585571361,
+        "blockers": [
+          "white-N2"
+        ],
+        "blockProbability": 0.44999999999999996,
+        "distance": 4.5
+      },
+      "selected": {
+        "type": "kick",
+        "x": 7,
+        "y": 13
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 439,
+      "team": "black",
+      "pieceId": "black-Q",
+      "pieceType": "Q",
+      "origin": "f4",
+      "goalDistance": 4,
+      "legalGoals": 1,
+      "geometricGoals": 1,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": {
+        "target": "f0",
+        "disguise": false,
+        "probability": 0.18505840476602317,
+        "beforeReaction": 0.7294189097928364,
+        "onTarget": 0.9153813088990507,
+        "saveGivenOnTarget": 0.7978346258909339,
+        "blockers": [],
+        "blockProbability": 0,
+        "distance": 3.5
+      },
+      "selected": {
+        "type": "kick",
+        "x": 5,
+        "y": 17
+      },
+      "outcome": "shotAttempt",
+      "attempt": true
+    },
+    {
+      "step": 445,
+      "team": "white",
+      "pieceId": "white-K",
+      "pieceType": "K",
+      "origin": "f1",
+      "goalDistance": 17,
+      "legalGoals": 0,
+      "geometricGoals": 0,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": null,
+      "selected": {
+        "type": "kick",
+        "x": 5,
+        "y": 14
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 451,
+      "team": "white",
+      "pieceId": "white-N2",
+      "pieceType": "N",
+      "origin": "e1",
+      "goalDistance": 17,
+      "legalGoals": 0,
+      "geometricGoals": 0,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": null,
+      "selected": {
+        "type": "kick",
+        "x": 5,
+        "y": 14
+      },
+      "outcome": "offside",
+      "attempt": false
+    },
+    {
+      "step": 456,
+      "team": "black",
+      "pieceId": "black-K",
+      "pieceType": "K",
+      "origin": "i17",
+      "goalDistance": 17,
+      "legalGoals": 0,
+      "geometricGoals": 0,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": null,
+      "selected": {
+        "type": "kick",
+        "x": 1,
+        "y": 7
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 467,
+      "team": "white",
+      "pieceId": "white-P1",
+      "pieceType": "P",
+      "origin": "f7",
+      "goalDistance": 11,
+      "legalGoals": 0,
+      "geometricGoals": 1,
+      "friendlySuppressed": true,
+      "offsideSuppressed": false,
+      "best": null,
+      "selected": {
+        "type": "kick",
+        "x": 6,
+        "y": 10
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 473,
+      "team": "white",
+      "pieceId": "white-Q",
+      "pieceType": "Q",
+      "origin": "n14",
+      "goalDistance": 4,
+      "legalGoals": 0,
+      "geometricGoals": 0,
+      "friendlySuppressed": false,
+      "offsideSuppressed": false,
+      "best": null,
+      "selected": {
+        "type": "kick",
+        "x": 13,
+        "y": 4
+      },
+      "outcome": "kick",
+      "attempt": false
+    },
+    {
+      "step": 478,
+      "team": "white",
+      "pieceId": "white-Q",
+      "pieceType": "Q",
+      "origin": "n13",
+      "goalDistance": 5,
+      "legalGoals": 0,
+      "geometricGoals": 1,
+      "friendlySuppressed": true,
+      "offsideSuppressed": false,
+      "best": null,
+      "selected": {
+        "type": "kick",
+        "x": 11,
+        "y": 4
+      },
+      "outcome": "kick",
+      "attempt": false
+    }
+  ],
+  "carrierMoves": [
+    {
+      "step": 2,
+      "pieceId": "black-B1",
+      "from": "l13",
+      "to": "i10",
+      "turn": 2,
+      "ballY": 4,
+      "selfPassCollection": false
+    },
+    {
+      "step": 8,
+      "pieceId": "black-B1",
+      "from": "i10",
+      "to": "j11",
+      "turn": 3,
+      "ballY": 6,
+      "selfPassCollection": true
+    },
+    {
+      "step": 14,
+      "pieceId": "black-Q",
+      "from": "i10",
+      "to": "i4",
+      "turn": 4,
+      "ballY": 7,
+      "selfPassCollection": false
+    },
+    {
+      "step": 20,
+      "pieceId": "white-P3",
+      "from": "j5",
+      "to": "k5",
+      "turn": 5,
+      "ballY": 12,
+      "selfPassCollection": false
+    },
+    {
+      "step": 25,
+      "pieceId": "white-Q",
+      "from": "k9",
+      "to": "g13",
+      "turn": 6,
+      "ballY": 8,
+      "selfPassCollection": false
+    },
+    {
+      "step": 30,
+      "pieceId": "black-P1",
+      "from": "h12",
+      "to": "h11",
+      "turn": 7,
+      "ballY": 5,
+      "selfPassCollection": false
+    },
+    {
+      "step": 36,
+      "pieceId": "black-B2",
+      "from": "h10",
+      "to": "k7",
+      "turn": 8,
+      "ballY": 7,
+      "selfPassCollection": false
+    },
+    {
+      "step": 42,
+      "pieceId": "black-N1",
+      "from": "l8",
+      "to": "n7",
+      "turn": 9,
+      "ballY": 9,
+      "selfPassCollection": false
+    },
+    {
+      "step": 49,
+      "pieceId": "black-B2",
+      "from": "l8",
+      "to": "n10",
+      "turn": 10,
+      "ballY": 9,
+      "selfPassCollection": false
+    },
+    {
+      "step": 54,
+      "pieceId": "black-Q",
+      "from": "i15",
+      "to": "i7",
+      "turn": 11,
+      "ballY": 2,
+      "selfPassCollection": false
+    },
+    {
+      "step": 60,
+      "pieceId": "black-Q",
+      "from": "i7",
+      "to": "d2",
+      "turn": 12,
+      "ballY": 15,
+      "selfPassCollection": true
+    },
+    {
+      "step": 64,
+      "pieceId": "black-Q",
+      "from": "d2",
+      "to": "c2",
+      "turn": 13,
+      "ballY": 15,
+      "selfPassCollection": true
+    },
+    {
+      "step": 79,
+      "pieceId": "black-R1",
+      "from": "i8",
+      "to": "n8",
+      "turn": 16,
+      "ballY": 9,
+      "selfPassCollection": false
+    },
+    {
+      "step": 84,
+      "pieceId": "black-R1",
+      "from": "n8",
+      "to": "n9",
+      "turn": 17,
+      "ballY": 8,
+      "selfPassCollection": true
+    },
+    {
+      "step": 88,
+      "pieceId": "black-B2",
+      "from": "n10",
+      "to": "h4",
+      "turn": 18,
+      "ballY": 7,
+      "selfPassCollection": false
+    },
+    {
+      "step": 95,
+      "pieceId": "black-Q",
+      "from": "g3",
+      "to": "l3",
+      "turn": 19,
+      "ballY": 14,
+      "selfPassCollection": false
+    },
+    {
+      "step": 100,
+      "pieceId": "black-Q",
+      "from": "l3",
+      "to": "k3",
+      "turn": 20,
+      "ballY": 14,
+      "selfPassCollection": true
+    },
+    {
+      "step": 112,
+      "pieceId": "white-Q",
+      "from": "f4",
+      "to": "j8",
+      "turn": 22,
+      "ballY": 13,
+      "selfPassCollection": false
+    },
+    {
+      "step": 122,
+      "pieceId": "white-Q",
+      "from": "j8",
+      "to": "l10",
+      "turn": 24,
+      "ballY": 7,
+      "selfPassCollection": true
+    },
+    {
+      "step": 124,
+      "pieceId": "black-R2",
+      "from": "k10",
+      "to": "k12",
+      "turn": 25,
+      "ballY": 7,
+      "selfPassCollection": false
+    },
+    {
+      "step": 144,
+      "pieceId": "white-Q",
+      "from": "f10",
+      "to": "h10",
+      "turn": 29,
+      "ballY": 7,
+      "selfPassCollection": false
+    },
+    {
+      "step": 150,
+      "pieceId": "white-B1",
+      "from": "g11",
+      "to": "c15",
+      "turn": 30,
+      "ballY": 6,
+      "selfPassCollection": false
+    },
+    {
+      "step": 157,
+      "pieceId": "white-Q",
+      "from": "e13",
+      "to": "f14",
+      "turn": 31,
+      "ballY": 4,
+      "selfPassCollection": false
+    },
+    {
+      "step": 170,
+      "pieceId": "white-Q",
+      "from": "h10",
+      "to": "j10",
+      "turn": 33,
+      "ballY": 7,
+      "selfPassCollection": false
+    },
+    {
+      "step": 176,
+      "pieceId": "white-N2",
+      "from": "i10",
+      "to": "g9",
+      "turn": 34,
+      "ballY": 7,
+      "selfPassCollection": false
+    },
+    {
+      "step": 181,
+      "pieceId": "white-N2",
+      "from": "g9",
+      "to": "e8",
+      "turn": 35,
+      "ballY": 9,
+      "selfPassCollection": true
+    },
+    {
+      "step": 186,
+      "pieceId": "white-R1",
+      "from": "c7",
+      "to": "c10",
+      "turn": 36,
+      "ballY": 10,
+      "selfPassCollection": false
+    },
+    {
+      "step": 192,
+      "pieceId": "white-N2",
+      "from": "d10",
+      "to": "c8",
+      "turn": 37,
+      "ballY": 7,
+      "selfPassCollection": false
+    },
+    {
+      "step": 199,
+      "pieceId": "white-R1",
+      "from": "b10",
+      "to": "b17",
+      "turn": 38,
+      "ballY": 7,
+      "selfPassCollection": false
+    },
+    {
+      "step": 243,
+      "pieceId": "black-N2",
+      "from": "d17",
+      "to": "b16",
+      "turn": 49,
+      "ballY": 0,
+      "selfPassCollection": false
+    },
+    {
+      "step": 250,
+      "pieceId": "black-Q",
+      "from": "d15",
+      "to": "d7",
+      "turn": 50,
+      "ballY": 2,
+      "selfPassCollection": false
+    },
+    {
+      "step": 255,
+      "pieceId": "black-Q",
+      "from": "d7",
+      "to": "g4",
+      "turn": 51,
+      "ballY": 13,
+      "selfPassCollection": true
+    },
+    {
+      "step": 269,
+      "pieceId": "black-R2",
+      "from": "a5",
+      "to": "i5",
+      "turn": 53,
+      "ballY": 12,
+      "selfPassCollection": false
+    },
+    {
+      "step": 275,
+      "pieceId": "white-B1",
+      "from": "c5",
+      "to": "f8",
+      "turn": 55,
+      "ballY": 12,
+      "selfPassCollection": false
+    },
+    {
+      "step": 281,
+      "pieceId": "white-B1",
+      "from": "f8",
+      "to": "e7",
+      "turn": 56,
+      "ballY": 10,
+      "selfPassCollection": true
+    },
+    {
+      "step": 286,
+      "pieceId": "white-N1",
+      "from": "d8",
+      "to": "c10",
+      "turn": 57,
+      "ballY": 9,
+      "selfPassCollection": false
+    },
+    {
+      "step": 293,
+      "pieceId": "white-Q",
+      "from": "e9",
+      "to": "k15",
+      "turn": 58,
+      "ballY": 8,
+      "selfPassCollection": false
+    },
+    {
+      "step": 299,
+      "pieceId": "white-R1",
+      "from": "h12",
+      "to": "i12",
+      "turn": 59,
+      "ballY": 5,
+      "selfPassCollection": false
+    },
+    {
+      "step": 305,
+      "pieceId": "white-Q",
+      "from": "i13",
+      "to": "k15",
+      "turn": 60,
+      "ballY": 4,
+      "selfPassCollection": false
+    },
+    {
+      "step": 311,
+      "pieceId": "white-Q",
+      "from": "k15",
+      "to": "i13",
+      "turn": 61,
+      "ballY": 4,
+      "selfPassCollection": true
+    },
+    {
+      "step": 316,
+      "pieceId": "white-Q",
+      "from": "i13",
+      "to": "g13",
+      "turn": 62,
+      "ballY": 4,
+      "selfPassCollection": true
+    },
+    {
+      "step": 320,
+      "pieceId": "white-Q",
+      "from": "g13",
+      "to": "i13",
+      "turn": 63,
+      "ballY": 4,
+      "selfPassCollection": true
+    },
+    {
+      "step": 326,
+      "pieceId": "white-R1",
+      "from": "h12",
+      "to": "h13",
+      "turn": 64,
+      "ballY": 5,
+      "selfPassCollection": false
+    },
+    {
+      "step": 338,
+      "pieceId": "black-K",
+      "from": "h17",
+      "to": "g17",
+      "turn": 66,
+      "ballY": 0,
+      "selfPassCollection": true
+    },
+    {
+      "step": 344,
+      "pieceId": "black-R2",
+      "from": "d14",
+      "to": "d11",
+      "turn": 67,
+      "ballY": 3,
+      "selfPassCollection": false
+    },
+    {
+      "step": 349,
+      "pieceId": "black-R2",
+      "from": "d11",
+      "to": "d4",
+      "turn": 68,
+      "ballY": 13,
+      "selfPassCollection": true
+    },
+    {
+      "step": 358,
+      "pieceId": "black-R2",
+      "from": "d4",
+      "to": "i4",
+      "turn": 70,
+      "ballY": 13,
+      "selfPassCollection": true
+    },
+    {
+      "step": 361,
+      "pieceId": "white-B2",
+      "from": "h3",
+      "to": "a10",
+      "turn": 71,
+      "ballY": 14,
+      "selfPassCollection": false
+    },
+    {
+      "step": 369,
+      "pieceId": "white-Q",
+      "from": "b9",
+      "to": "b16",
+      "turn": 72,
+      "ballY": 8,
+      "selfPassCollection": false
+    },
+    {
+      "step": 375,
+      "pieceId": "white-R1",
+      "from": "d14",
+      "to": "i14",
+      "turn": 73,
+      "ballY": 3,
+      "selfPassCollection": false
+    },
+    {
+      "step": 381,
+      "pieceId": "black-K",
+      "from": "i17",
+      "to": "j17",
+      "turn": 74,
+      "ballY": 0,
+      "selfPassCollection": false
+    },
+    {
+      "step": 387,
+      "pieceId": "black-Q",
+      "from": "j8",
+      "to": "f4",
+      "turn": 75,
+      "ballY": 9,
+      "selfPassCollection": false
+    },
+    {
+      "step": 394,
+      "pieceId": "white-K",
+      "from": "f1",
+      "to": "e2",
+      "turn": 76,
+      "ballY": 16,
+      "selfPassCollection": false
+    },
+    {
+      "step": 401,
+      "pieceId": "white-Q",
+      "from": "e10",
+      "to": "i14",
+      "turn": 77,
+      "ballY": 7,
+      "selfPassCollection": false
+    },
+    {
+      "step": 407,
+      "pieceId": "black-K",
+      "from": "i17",
+      "to": "h17",
+      "turn": 78,
+      "ballY": 0,
+      "selfPassCollection": false
+    },
+    {
+      "step": 413,
+      "pieceId": "black-B1",
+      "from": "i16",
+      "to": "l13",
+      "turn": 79,
+      "ballY": 1,
+      "selfPassCollection": false
+    },
+    {
+      "step": 423,
+      "pieceId": "black-Q",
+      "from": "j11",
+      "to": "j4",
+      "turn": 81,
+      "ballY": 6,
+      "selfPassCollection": false
+    },
+    {
+      "step": 430,
+      "pieceId": "black-R2",
+      "from": "i5",
+      "to": "h5",
+      "turn": 82,
+      "ballY": 12,
+      "selfPassCollection": false
+    },
+    {
+      "step": 436,
+      "pieceId": "black-Q",
+      "from": "h4",
+      "to": "f4",
+      "turn": 83,
+      "ballY": 13,
+      "selfPassCollection": false
+    },
+    {
+      "step": 446,
+      "pieceId": "white-N2",
+      "from": "f3",
+      "to": "e1",
+      "turn": 85,
+      "ballY": 14,
+      "selfPassCollection": false
+    },
+    {
+      "step": 458,
+      "pieceId": "black-Q",
+      "from": "b10",
+      "to": "g5",
+      "turn": 87,
+      "ballY": 7,
+      "selfPassCollection": false
+    },
+    {
+      "step": 462,
+      "pieceId": "white-P1",
+      "from": "f6",
+      "to": "f7",
+      "turn": 88,
+      "ballY": 11,
+      "selfPassCollection": false
+    },
+    {
+      "step": 469,
+      "pieceId": "white-Q",
+      "from": "g7",
+      "to": "n14",
+      "turn": 89,
+      "ballY": 10,
+      "selfPassCollection": false
+    },
+    {
+      "step": 474,
+      "pieceId": "white-Q",
+      "from": "n14",
+      "to": "n13",
+      "turn": 90,
+      "ballY": 4,
+      "selfPassCollection": true
+    },
+    {
+      "step": 479,
+      "pieceId": "white-Q",
+      "from": "n13",
+      "to": "l13",
+      "turn": 91,
+      "ballY": 4,
+      "selfPassCollection": true
+    }
+  ]
+}

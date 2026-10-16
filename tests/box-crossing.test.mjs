@@ -19,12 +19,11 @@ function fixture({team='white',phase='attackMove',carrier='white-Q',positions={}
 const contains=(moves,p)=>moves.some(m=>m.x===p.x&&m.y===p.y);
 const rays=[['white-R1',[3,1],[7,1],[6,1],[5,1]],['white-Q',[3,1],[7,1],[6,1],[5,1]],['white-B1',[3,0],[6,3],[5,2],[4,1]]];
 for(const team of ['white','black'])for(const end of ['top','bottom']){
-  test(`${team}, ${end} box: clear off-ball rays cross the box but carrying rays cannot enter it`,()=>{
+  test(`${team}, ${end} box: clear off-ball and carrying rays cross the box within their weighted limits`,()=>{
     for(const [id,origin,target]of rays)for(const carrying of [false,true]){
       const s=fixture({team,end,carrier:carrying?id:'white-R2',positions:{[id]:origin}}),destination=pointFor(target,team,end),before=JSON.stringify(s);
-      assert.equal(contains(E.legalMoves(s,idFor(id,team)),destination),!carrying);
+      assert.equal(contains(E.legalMoves(s,idFor(id,team)),destination),true);
       assert.ok(E.movementCost(s.pieces.find(p=>p.id===idFor(id,team)),destination.x,destination.y)<=(carrying?E.DRIBBLE_RANGE:E.MOVE_RANGE));
-      if(carrying){assert.throws(()=>E.applyMove(s,idFor(id,team),destination.x,destination.y),/not a legal move/);assert.equal(JSON.stringify(s),before);continue;}
       const next=E.applyMove(s,idFor(id,team),destination.x,destination.y);
       assert.deepEqual({x:next.pieces.find(p=>p.id===idFor(id,team)).x,y:next.pieces.find(p=>p.id===idFor(id,team)).y},destination);
       if(carrying)assert.equal(next.ball.carrierId,idFor(id,team));else assert.deepEqual(next.ball,s.ball);

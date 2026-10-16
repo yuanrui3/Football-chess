@@ -45,7 +45,7 @@ for(const team of ['white','black'])for(const end of ['top','bottom']){
    ['white-B1',[4,5],[9,0],8],['white-B1',[3,6],[9,0],9],['white-B1',[2,7],[9,0],10],['white-B1',[1,8],[9,0],11],
   ])for(const carrying of [false,true]){
    const s=fixture({team,end,actor,origin,carrying}),p=s.pieces.find(p=>p.id===id(actor,team)),target=point(destination,team,end);
-   assert.equal(E.movementCost(p,target.x,target.y),cost);assert.equal(!!offered(s,p.id,target),cost<=(carrying?8:10)&&(!carrying||E.isBox(p.x,p.y)), 'off-ball entry and carrying exits retain weighted costs; carrying entry is forbidden');
+   assert.equal(E.movementCost(p,target.x,target.y),cost);assert.equal(!!offered(s,p.id,target),cost<=(carrying?8:10), 'ordinary box entry, traversal and exit retain weighted costs');
   }
  });
 
@@ -62,7 +62,7 @@ for(const team of ['white','black'])for(const end of ['top','bottom']){
  test(`${team}, ${end}: native knight jumps keep their shape and tackle reach/abstract landings stay unchanged`,()=>{
   for(const carrying of [false,true]){
    const knight=fixture({team,end,actor:'white-N1',origin:[3,3],carrying,positions:{'black-P1':[4,2]}}),actor=id('white-N1',team),target=point([4,1],team,end),p=knight.pieces.find(p=>p.id===actor);
-   assert.equal(E.movementCost(p,target.x,target.y),2);assert.equal(!!offered(knight,actor,target),!carrying);
+   assert.equal(E.movementCost(p,target.x,target.y),2);assert.equal(!!offered(knight,actor,target),true);
   }
   const challenged=fixture({team,end,phase:'defendMove',origin:[3,1],positions:{'black-Q':[8,1]}}),tackler=id('white-R1',team),farLanding=point([9,1],team,end);
   assert.equal(E.movementCost(challenged.pieces.find(p=>p.id===tackler),farLanding.x,farLanding.y),12);

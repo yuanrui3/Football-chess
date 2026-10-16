@@ -82,11 +82,11 @@ function previousDeferredFinish(){
  Object.assign(s,{phase:'kick',attack:'white',ball:{x:6,y:3,carrierId:'white-P1'},positionBudget:{normalUsed:false,pawnUsed:false,dribbleUsed:false},restart:null,offside:null,pendingShot:null,releaseReason:null,turn:36,ballProgress:{team:'white',anchorY:3,rounds:0,pendingRelease:false,excludeRelease:false}});return s;
 }
 
-test('Tactical converts a real 10.9% finish instead of perpetually valuing a backward recycle, either color',()=>{
+test('Tactical converts a credible finish instead of perpetually valuing a backward recycle, either color',()=>{
  // Development game 1632189751, action193. The previous policy controlled
  // possession for 240 actions without a shot, and recycled this very finish.
  for(const s of [previousDeferredFinish(),mirror(previousDeferredFinish())]){
-  const before=clone(s),chance=receivedShotChance(s);assert.ok(chance>.10&&chance<.12);
+  const before=clone(s),chance=receivedShotChance(s);assert.ok(chance>.12&&chance<.14);
   const report=E.analyzeTacticalAction(s),kick=E.legalKicks(s).find(k=>k.x===report.action.x&&k.y===report.action.y);
   assert.equal(kick?.goal,s.attack,'take the credible finish after the real keeper reply and block risk');
   assert.deepEqual(s,before,'planning does not spend outcomes or edit the live snapshot');

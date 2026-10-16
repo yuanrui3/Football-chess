@@ -1,0 +1,19 @@
+{
+  "purpose": "Current GitHub v17 Tactical-vs-Tactical low-score diagnosis",
+  "engineBlob": "637a308",
+  "engine": "../baseline/engine.mjs",
+  "games": [
+    {"seed": 202610161, "kickoff": "white"},
+    {"seed": 202610162, "kickoff": "black"}
+  ],
+  "actionLimit": 480,
+  "whiteDifficulty": "tactical",
+  "blackDifficulty": "tactical",
+  "search": {"nodes": 1400, "depth": 8, "roots": 9, "extensions": 3},
+  "foulsEnabled": true,
+  "integrityValidation": true,
+  "recordEveryTransition": true,
+  "budgetCaveat": "Fixed atomic actions, not timed matches. Long animation and UI decision delays reduce the rounds completed in a real timed match.",
+  "timingCaveat": "Concurrent games and rule experiments share CPU; thinking times are not isolated engine performance measurements.",
+  "coordinateConvention": "a17=(0,0), n1=(13,16). White attacks top goal (y=-1), black bottom (y=17). Model shot distance is Euclidean physical trajectory to the half-square goal edge, not simply endpoint coordinate distance."
+}

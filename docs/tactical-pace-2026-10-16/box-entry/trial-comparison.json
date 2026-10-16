@@ -1,0 +1,308 @@
+{
+  "engineSha256": "cf82976a68525fed680e85f60c483b022086f871c60ab39125d550974f940fc2",
+  "productionEngineSha256": "db24debe7605f7c12f0734a4e4024553da2cd5acdeadcc420541a436789570d4",
+  "groups": [
+    {
+      "variant": "reference",
+      "matches": [
+        {
+          "seed": 202610161,
+          "kickoff": "white",
+          "actions": 240,
+          "score": {
+            "white": 1,
+            "black": 0
+          },
+          "shots": 3,
+          "resolvedShots": 3,
+          "pendingShots": 0,
+          "xG": 0.5010390229953052,
+          "queenShots": 2,
+          "queenGoals": 1,
+          "queenXG": 0.37377261556944574,
+          "entries": [],
+          "variant": "reference"
+        },
+        {
+          "seed": 202610162,
+          "kickoff": "black",
+          "actions": 240,
+          "score": {
+            "white": 0,
+            "black": 0
+          },
+          "shots": 6,
+          "resolvedShots": 6,
+          "pendingShots": 0,
+          "xG": 0.9306423322420011,
+          "queenShots": 3,
+          "queenGoals": 0,
+          "queenXG": 0.2937071882373794,
+          "entries": [],
+          "variant": "reference"
+        }
+      ],
+      "totals": {
+        "actions": 480,
+        "goals": 1,
+        "shots": 9,
+        "resolvedShots": 9,
+        "pendingShots": 0,
+        "postReactionXG": 1.4316813552373064,
+        "queenShots": 5,
+        "queenGoals": 1,
+        "queenXG": 0.6674798038068251,
+        "entries": 0,
+        "entriesByType": {},
+        "queenShotShare": 0.5555555555555556,
+        "shotsByType": {
+          "Q": 5,
+          "R": 3,
+          "B": 1
+        }
+      }
+    },
+    {
+      "variant": "trial",
+      "matches": [
+        {
+          "seed": 202610161,
+          "kickoff": "white",
+          "actions": 240,
+          "score": {
+            "white": 1,
+            "black": 0
+          },
+          "shots": 6,
+          "resolvedShots": 6,
+          "pendingShots": 0,
+          "xG": 1.3067532339242796,
+          "queenShots": 3,
+          "queenGoals": 1,
+          "queenXG": 0.8530621550561831,
+          "entries": [
+            {
+              "step": 49,
+              "pieceId": "black-N2",
+              "type": "N",
+              "team": "black",
+              "from": {
+                "x": 6,
+                "y": 13
+              },
+              "to": {
+                "x": 7,
+                "y": 15
+              },
+              "entrySquare": {
+                "x": 7,
+                "y": 15
+              },
+              "crossedThrough": false,
+              "opponentBox": true
+            },
+            {
+              "step": 147,
+              "pieceId": "black-B2",
+              "type": "B",
+              "team": "black",
+              "from": {
+                "x": 6,
+                "y": 12
+              },
+              "to": {
+                "x": 9,
+                "y": 15
+              },
+              "entrySquare": {
+                "x": 8,
+                "y": 14
+              },
+              "crossedThrough": false,
+              "opponentBox": true
+            },
+            {
+              "step": 161,
+              "pieceId": "black-B2",
+              "type": "B",
+              "team": "black",
+              "from": {
+                "x": 10,
+                "y": 16
+              },
+              "to": {
+                "x": 7,
+                "y": 13
+              },
+              "entrySquare": {
+                "x": 9,
+                "y": 15
+              },
+              "crossedThrough": true,
+              "opponentBox": true
+            }
+          ],
+          "variant": "trial"
+        },
+        {
+          "seed": 202610162,
+          "kickoff": "black",
+          "actions": 240,
+          "score": {
+            "white": 1,
+            "black": 0
+          },
+          "shots": 5,
+          "resolvedShots": 5,
+          "pendingShots": 0,
+          "xG": 0.828694357350655,
+          "queenShots": 2,
+          "queenGoals": 1,
+          "queenXG": 0.44543497670689347,
+          "entries": [
+            {
+              "step": 37,
+              "team": "white",
+              "pieceId": "white-B1",
+              "type": "B",
+              "from": {
+                "x": 9,
+                "y": 5
+              },
+              "to": {
+                "x": 4,
+                "y": 0
+              },
+              "opponentEntry": true,
+              "shot": null
+            },
+            {
+              "step": 43,
+              "team": "white",
+              "pieceId": "white-Q",
+              "type": "Q",
+              "from": {
+                "x": 9,
+                "y": 5
+              },
+              "to": {
+                "x": 9,
+                "y": 0
+              },
+              "opponentEntry": true,
+              "shot": {
+                "step": 47,
+                "actionsAfterEntry": 4,
+                "disguised": false,
+                "resolved": true,
+                "outcome": "goal",
+                "xG": 0.15882290322546946
+              }
+            },
+            {
+              "step": 123,
+              "team": "white",
+              "pieceId": "white-B2",
+              "type": "B",
+              "from": {
+                "x": 5,
+                "y": 6
+              },
+              "to": {
+                "x": 10,
+                "y": 1
+              },
+              "opponentEntry": true,
+              "shot": {
+                "step": 126,
+                "actionsAfterEntry": 3,
+                "disguised": false,
+                "resolved": true,
+                "outcome": "wide",
+                "xG": 0.10633163403390551
+              }
+            },
+            {
+              "step": 192,
+              "team": "white",
+              "pieceId": "white-Q",
+              "type": "Q",
+              "from": {
+                "x": 8,
+                "y": 6
+              },
+              "to": {
+                "x": 4,
+                "y": 2
+              },
+              "opponentEntry": true,
+              "shot": {
+                "step": 201,
+                "actionsAfterEntry": 9,
+                "disguised": false,
+                "resolved": true,
+                "outcome": "saved",
+                "xG": 0.286612073481424
+              }
+            },
+            {
+              "step": 229,
+              "team": "white",
+              "pieceId": "white-B2",
+              "type": "B",
+              "from": {
+                "x": 8,
+                "y": 5
+              },
+              "to": {
+                "x": 4,
+                "y": 1
+              },
+              "opponentEntry": true,
+              "shot": {
+                "step": 232,
+                "actionsAfterEntry": 3,
+                "disguised": false,
+                "resolved": true,
+                "outcome": "wide",
+                "xG": 0.17414820791058727
+              }
+            }
+          ],
+          "variant": "trial"
+        }
+      ],
+      "totals": {
+        "actions": 480,
+        "goals": 2,
+        "shots": 11,
+        "resolvedShots": 11,
+        "pendingShots": 0,
+        "postReactionXG": 2.1354475912749344,
+        "queenShots": 5,
+        "queenGoals": 2,
+        "queenXG": 1.2984971317630767,
+        "entries": 8,
+        "entriesByType": {
+          "N": 1,
+          "B": 5,
+          "Q": 2
+        },
+        "queenShotShare": 0.45454545454545453,
+        "shotsByType": {
+          "Q": 5,
+          "R": 1,
+          "N": 1,
+          "B": 4
+        }
+      }
+    }
+  ],
+  "verdict": "Promising small trial: greater combined chance creation and no observed queen shot monopoly. Two short matches cannot establish long-term piece or attack-defense balance.",
+  "caveats": [
+    "Matched240 atomic actions per game, not timed full matches.",
+    "Both trial goals were by queens, from just two goals.",
+    "Entry counts include crossing through a box and exiting in the same carrying move.",
+    "No pending shots at either trial action cap."
+  ]
+}
