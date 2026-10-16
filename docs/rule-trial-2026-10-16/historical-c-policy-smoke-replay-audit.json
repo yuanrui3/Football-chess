@@ -1,0 +1,17 @@
+{
+  "matches": 4,
+  "actions": 1920,
+  "errors": [],
+  "variants": {
+    "F": {
+      "matches": 4,
+      "actions": 1920,
+      "restartActions": 140,
+      "cornerRestartActions": 60,
+      "maxConsecutiveCorners": 4,
+      "shotBlocks": 4,
+      "blockCorners": 4,
+      "blockPossession": 0
+    }
+  }
+}

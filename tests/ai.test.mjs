@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { performance } from 'node:perf_hooks';
 import {
-  BOARD_WIDTH, BOARD_HEIGHT, isBox, AI_DIFFICULTIES,
+  BOARD_WIDTH, BOARD_HEIGHT, MIDFIELD_RANK, isBox, inOwnBox, canOccupySquare, AI_DIFFICULTIES,
   createGame, currentTeam, chooseAIAction, legalMoves, legalKicks,
   applyMove, applyKick, skipMove, shotChance, positionActions,
 } from '../dist/engine.js';
@@ -15,11 +15,11 @@ const freshBudget = () => ({ normalUsed: false, pawnUsed: false, dribbleUsed: fa
 // avoids accidental occupants in the central combinations being examined.
 function fixture({ phase = 'attackMove', attack = 'white', carrier = 'white-R1', positions = {}, ball, budget, seed = 17, clear = [] } = {}) {
   const state = createGame({ mode: 'solo', kickoff: attack, seed });
-  const assigned = { 'white-K': [4, 14], 'black-K': [7, 0], 'white-R1': [2, 10], ...positions };
+  const assigned = { 'white-K': [6, 16], 'black-K': [7, 0], 'white-R1': [2, 10], ...positions };
   const occupied = new Set(Object.values(assigned).map(([x, y]) => `${x},${y}`));
   assert.equal(occupied.size, Object.keys(assigned).length, 'fixture overrides do not overlap');
   for (const [x, y] of clear) occupied.add(`${x},${y}`);
-  const parking = Array.from({ length: BOARD_HEIGHT }, (_, y) => [[0, y], [11, y]]).flat();
+  const parking = Array.from({ length: BOARD_HEIGHT }, (_, y) => [[0, y], [BOARD_WIDTH - 1, y]]).flat();
   for (const piece of state.pieces) {
     const location = assigned[piece.id] || parking.find(([x, y]) => !occupied.has(`${x},${y}`));
     assert.ok(location, `parking exists for ${piece.id}`);
@@ -35,17 +35,17 @@ function fixture({ phase = 'attackMove', attack = 'white', carrier = 'white-R1',
 }
 
 function reactionFixture() {
-  const state = fixture({ phase: 'kick', positions: { 'white-R1': [4, 4], 'black-K': [6, 0] } });
-  return applyKick(state, 4, -1);
+  const state = fixture({ phase: 'kick', positions: { 'white-R1': [5, 4], 'black-K': [7, 0] } });
+  return applyKick(state, 5, -1);
 }
 
 function restartFixture(type, phase = 'attackMove', team = 'white') {
   const transform = ([x, y]) => team === 'white' ? [x, y] : [BOARD_WIDTH - 1 - x, BOARD_HEIGHT - 1 - y];
   const takerId = `${team}-${type === 'goalKick' ? 'K' : 'R1'}`;
-  const origin = type === 'goalKick' ? [5, 14]
+  const origin = type === 'goalKick' ? [6, BOARD_HEIGHT - 1]
     : type === 'corner' ? [0, 0]
-      : type === 'throwIn' ? [0, 7]
-        : [5, 7];
+      : type === 'throwIn' ? [0, MIDFIELD_RANK]
+        : [6, MIDFIELD_RANK];
   const [x, y] = transform(origin), spot = { x, y };
   const state = fixture({ phase, attack: team, carrier: takerId, positions: { [takerId]: [x, y] } });
   state.restart = { type, team, takerId, spot, indirect: type === 'offside' };
@@ -54,7 +54,7 @@ function restartFixture(type, phase = 'attackMove', team = 'white') {
 
 function scenarios() {
   const reaction = reactionFixture();
-  const backPass = applyKick(fixture({ phase: 'kick', positions: { 'white-R1': [4, 10] } }), 4, 14);
+  const backPass = applyKick(fixture({ phase: 'kick', positions: { 'white-R1': [6, 12] } }), 6, 16);
   const goalKick = skipMove(reaction, { roll: 0.999999 });
   return [
     ['white kick-off', createGame({ kickoff: 'white', seed: 17 })],
@@ -89,7 +89,8 @@ function assertIntegrity(state) {
   }
   for (const piece of state.pieces) {
     assert.ok(piece.x >= 0 && piece.x < BOARD_WIDTH && piece.y >= 0 && piece.y < BOARD_HEIGHT, `${piece.id} stays on the pitch`);
-    if (isBox(piece.x, piece.y)) assert.ok(['K', 'N'].includes(piece.type), 'only kings and knights occupy goal areas');
+    assert.ok(canOccupySquare(piece, piece.x, piece.y), 'pieces obey the current goal-area access rules');
+    if (piece.type === 'K' && isBox(piece.x, piece.y)) assert.ok(inOwnBox(piece.team, piece.x, piece.y), 'a king only enters its own box');
   }
   if (state.ball.carrierId) {
     const carrier = state.pieces.find(piece => piece.id === state.ball.carrierId);
@@ -185,8 +186,8 @@ for (const difficulty of DIFFICULTIES) {
       if (['attackMove', 'defendMove'].includes(state.phase) && action.type === 'move') {
         if (action.freePawn) {
           assert.equal(state.positionBudget.pawnUsed, false, `${name}: spent bonus move cannot be reused`);
-          assert.equal(state.pieces.find(piece => piece.id === action.pieceId).type, 'P');
-          assert.notEqual(action.pieceId, state.ball.carrierId, `${name}: the free pawn action is reserved for an off-ball player`);
+          assert.ok(['P', 'K'].includes(state.pieces.find(piece => piece.id === action.pieceId).type));
+          assert.notEqual(action.pieceId, state.ball.carrierId, `${name}: the shared pawn/king bonus is reserved for an off-ball player`);
         } else if (state.phase === 'attackMove' && action.pieceId === state.ball.carrierId) {
           assert.equal(state.positionBudget.dribbleUsed, false, `${name}: spent dribble cannot be reused`);
         } else assert.equal(state.positionBudget.normalUsed, false, `${name}: spent no-ball action cannot be reused`);

@@ -4,21 +4,22 @@ import * as E from '../dist/engine.js';
 
 const other = team => team === 'white' ? 'black' : 'white';
 const idFor = (id, team) => team === 'white' ? id : id.replace(/^(white|black)/, other);
-const pointFor = ([x,y], team) => team === 'white' ? {x,y} : {x:11-x,y:14-y};
-const ownBox = (team,p) => E.isBox(p.x,p.y) && (team === 'white' ? p.y >= 13 : p.y <= 1);
+const W=E.BOARD_WIDTH,H=E.BOARD_HEIGHT;
+const pointFor = ([x,y], team) => team === 'white' ? {x,y} : {x:W-1-x,y:H-1-y};
+const ownBox = (team,p) => E.isBox(p.x,p.y) && (team === 'white' ? p.y >= H-E.BOX_DEPTH : p.y < E.BOX_DEPTH);
 const clone = value => JSON.parse(JSON.stringify(value));
 function fixture({team='white',phase='attackMove',carrier='white-R1',positions={}}={}) {
   const state=E.createGame({mode:'local',seed:73});
-  const assigned={'white-K':[3,2],'black-K':[6,0],'white-R1':[4,4],'black-R2':[10,4],...positions};
+  const assigned={'white-K':[3,2],'black-K':[7,0],'white-R1':[5,4],'black-R2':[W-2,4],...positions};
   const used=new Set(Object.values(assigned).map(p=>p.join(',')));
   assert.equal(used.size,Object.keys(assigned).length);
-  const parking=Array.from({length:15},(_,i)=>[[0,14-i],[11,14-i]]).flat();
+  const parking=Array.from({length:H},(_,i)=>[[0,H-1-i],[W-1,H-1-i]]).flat();
   for(const piece of state.pieces){
     const position=assigned[piece.id]||parking.find(p=>!used.has(p.join(',')));
     [piece.x,piece.y]=position;used.add(position.join(','));
     if(team==='black'){
       piece.id=idFor(piece.id,team);piece.team=other(piece.team);
-      piece.x=11-piece.x;piece.y=14-piece.y;
+      piece.x=W-1-piece.x;piece.y=H-1-piece.y;
     }
   }
   const owner=state.pieces.find(p=>p.id===idFor(carrier,team));
@@ -41,7 +42,7 @@ function assertIntegrity(state){
 for(const team of ['white','black']){
   test(`${team}: the king cannot move or dribble across the opponent-box boundary`,()=>{
     for(const carrier of ['white-R1','white-K'])for(const [origin,target]of[
-      [[3,0],[4,0]],[[3,1],[4,1]],[[4,2],[4,1]],[[5,2],[5,1]],[[6,2],[6,1]],[[7,2],[7,1]],[[8,1],[7,1]],[[8,0],[7,0]],
+      [[3,0],[4,0]],[[3,1],[4,1]],...E.BOX_FILES.map(x=>[[x,E.BOX_DEPTH],[x,E.BOX_DEPTH-1]]),[[10,1],[9,1]],[[10,0],[9,0]],
     ]){
       const state=fixture({team,carrier,positions:{'white-K':origin}}),before=clone(state),point=pointFor(target,team);
       assert.equal(moveTo(state,'white-K',target,team),undefined);
@@ -52,7 +53,7 @@ for(const team of ['white','black']){
 
   test(`${team}: the king keeps ordinary-field and own-box movement, dribbling and passing`,()=>{
     for(const carrier of ['white-R1','white-K'])for(const [origin,target]of[
-      [[3,2],[3,1]],[[5,12],[5,13]],[[5,13],[6,12]],
+      [[3,2],[3,1]],[[5,H-E.BOX_DEPTH-1],[5,H-E.BOX_DEPTH]],[[5,H-E.BOX_DEPTH],[6,H-E.BOX_DEPTH-1]],[[3,H-E.BOX_DEPTH],[4,H-E.BOX_DEPTH]],[[10,H-1],[9,H-1]],
     ]){
       const state=fixture({team,carrier,positions:{'white-K':origin}}),point=pointFor(target,team);
       assert.ok(moveTo(state,'white-K',target,team));
@@ -64,7 +65,7 @@ for(const team of ['white','black']){
   });
 
   test(`${team}: king tackles and loose-ball collections cannot land in the opponent box`,()=>{
-    const state=fixture({team,phase:'defendMove',carrier:'black-N1',positions:{'black-N1':[4,2]}});
+    const state=fixture({team,phase:'defendMove',carrier:'black-N1',positions:{'black-N1':[4,E.BOX_DEPTH]}});
     state.attack=other(team);
     const moves=E.legalMoves(state,idFor('white-K',team));
     assert.ok(moves.some(move=>move.type==='tackle'),'a reachable tackle outside the box remains legal');
@@ -79,8 +80,8 @@ for(const team of ['white','black']){
   });
 
   test(`${team}: knights retain movement and dribbling access to both boxes`,()=>{
-    for(const carrier of ['white-R1','white-N1'])for(const [origin,target]of[[[3,2],[4,0]],[[3,12],[4,14]]]){
-      const state=fixture({team,carrier,positions:{'white-K':[5,13],'white-N1':origin}}),point=pointFor(target,team);
+    for(const carrier of ['white-R1','white-N1'])for(const [origin,target]of[[[3,2],[4,0]],[[3,H-3],[4,H-1]]]){
+      const state=fixture({team,carrier,positions:{'white-K':[5,H-2],'white-N1':origin}}),point=pointFor(target,team);
       assert.ok(moveTo(state,'white-N1',target,team));
       const next=E.applyMove(state,idFor('white-N1',team),point.x,point.y);assertIntegrity(next);
       if(carrier==='white-N1')assert.equal(next.ball.carrierId,idFor('white-N1',team));
@@ -97,14 +98,14 @@ for(const team of ['white','black']){
     assert.deepEqual(restarted.restart.spot,{x:king.x,y:king.y});assertIntegrity(restarted);
   });
 
-  test(`${team}: saved or undone illegal kings move to a nearest vacant ordinary square without spending an action or RNG`,()=>{
-    for(const version of [undefined,5,9,10,11,12]){
-      const state=fixture({team,positions:{'white-K':[5,0]}});
+  test(`${team}: current-geometry saved or undone illegal kings move to a nearest vacant ordinary square without spending an action or RNG`,()=>{
+    for(const version of [undefined,5,9,10,11,12,13]){
+      const state=fixture({team,positions:{'white-K':[6,0]}});
       state.rulesVersion=version;state.positionBudget={normalUsed:true,pawnUsed:false,dribbleUsed:true};
       state.score={white:2,black:1};state.turn=17;state.minutes=8;
       const before=clone(state),normalized=E.normalizeGame(state),king=piece(normalized,'white-K',team);
-      assert.deepEqual({x:king.x,y:king.y},pointFor([5,2],team),'equal distance favors the team’s own end');
-      assert.equal(E.isBox(king.x,king.y),false);assert.equal(normalized.rulesVersion,13);
+      assert.deepEqual({x:king.x,y:king.y},pointFor([6,E.BOX_DEPTH],team),'equal distance favors the team’s own end');
+      assert.equal(E.isBox(king.x,king.y),false);assert.equal(normalized.rulesVersion,14);
       assert.deepEqual(normalized.positionBudget,before.positionBudget);assert.deepEqual(normalized.score,before.score);
       assert.equal(normalized.phase,before.phase);assert.equal(normalized.turn,before.turn);assert.equal(normalized.minutes,before.minutes);
       assert.equal(normalized.randomState,before.randomState);assert.deepEqual(normalized.log,before.log);
@@ -114,18 +115,18 @@ for(const team of ['white','black']){
   });
 
   test(`${team}: occupied migration destinations are preserved and remaining equal-distance choices rotate with the team`,()=>{
-    const state=fixture({team,positions:{'white-K':[5,0],'white-P1':[5,2],'white-R2':[3,0]}}),before=clone(state);
+    const state=fixture({team,positions:{'white-K':[6,0],'white-P1':[6,E.BOX_DEPTH],'white-R2':[3,0]}}),before=clone(state);
     const normalized=E.normalizeGame(state),king=piece(normalized,'white-K',team);
-    assert.deepEqual({x:king.x,y:king.y},pointFor([4,2],team));
+    assert.deepEqual({x:king.x,y:king.y},pointFor([5,E.BOX_DEPTH],team));
     assert.deepEqual(piece(normalized,'white-P1',team),piece(before,'white-P1',team));
     assert.deepEqual(piece(normalized,'white-R2',team),piece(before,'white-R2',team));assertIntegrity(normalized);
   });
 
   test(`${team}: repair follows a king carrying the ball or taking a protected restart`,()=>{
     for(const restart of [false,true]){
-      const state=fixture({team,carrier:'white-K',positions:{'white-K':[5,0]}});
+      const state=fixture({team,carrier:'white-K',positions:{'white-K':[6,0]}});
       if(restart)state.restart={type:'offside',team,takerId:state.ball.carrierId,spot:{x:state.ball.x,y:state.ball.y},indirect:true};
-      const before=clone(state),normalized=E.normalizeGame(state),point=pointFor([5,2],team);
+      const before=clone(state),normalized=E.normalizeGame(state),point=pointFor([6,E.BOX_DEPTH],team);
       assert.deepEqual(normalized.ball,{...point,carrierId:idFor('white-K',team)});
       if(restart){assert.deepEqual(normalized.restart.spot,point);assert.equal(normalized.restart.takerId,before.restart.takerId);assert.deepEqual(E.legalMoves(normalized,normalized.restart.takerId),[]);}
       assert.deepEqual(normalized.positionBudget,before.positionBudget);assert.equal(normalized.randomState,before.randomState);assertIntegrity(normalized);
@@ -134,7 +135,7 @@ for(const team of ['white','black']){
 
   test(`${team}: pending-shot repairs preserve the declared origin and refresh cached odds, including a legacy king shooter`,()=>{
     for(const carrier of ['white-R1','white-K']){
-      const state=fixture({team,phase:'kick',carrier,positions:{'white-K':[5,0]}}),target=pointFor(carrier==='white-K'?[5,-1]:[4,-1],team);
+      const state=fixture({team,phase:'kick',carrier,positions:{'white-K':[6,0],'white-R1':[5,4]}}),target=pointFor(carrier==='white-K'?[6,-1]:[5,-1],team);
       const pending=E.applyKick(state,target.x,target.y);assert.equal(pending.phase,'keeperReact');
       pending.rulesVersion=10;pending.lastAction.shotModel={stale:true};pending.lastAction.probability=1;
       const before=clone(pending),normalized=E.normalizeGame(pending);
@@ -142,7 +143,7 @@ for(const team of ['white','black']){
       assert.deepEqual(normalized.lastAction.shotModel,E.shotModel(normalized));
       assert.deepEqual(normalized.lastAction.shotModel.origin,before.pendingShot.from);
       assert.equal(normalized.lastAction.probability,E.shotModel(normalized).probability);
-      if(carrier==='white-K')assert.deepEqual(normalized.ball,{...pointFor([5,2],team),carrierId:idFor('white-K',team)});
+      if(carrier==='white-K')assert.deepEqual(normalized.ball,{...pointFor([6,E.BOX_DEPTH],team),carrierId:idFor('white-K',team)});
       assert.equal(normalized.randomState,before.randomState);assert.deepEqual(pending,before);
       assert.deepEqual(E.normalizeGame(clone(normalized)),normalized);assertIntegrity(normalized);
     }
@@ -150,9 +151,9 @@ for(const team of ['white','black']){
 }
 
 test('both illegally placed kings can be repaired together without overlap or moving other players',()=>{
-  const state=fixture({positions:{'white-K':[5,0],'black-K':[6,14]}}),before=clone(state),normalized=E.normalizeGame(state);
-  assert.deepEqual({x:piece(normalized,'white-K','white').x,y:piece(normalized,'white-K','white').y},{x:5,y:2});
-  assert.deepEqual({x:piece(normalized,'black-K','white').x,y:piece(normalized,'black-K','white').y},{x:6,y:12});
+  const state=fixture({positions:{'white-K':[6,0],'black-K':[7,H-1]}}),before=clone(state),normalized=E.normalizeGame(state);
+  assert.deepEqual({x:piece(normalized,'white-K','white').x,y:piece(normalized,'white-K','white').y},{x:6,y:E.BOX_DEPTH});
+  assert.deepEqual({x:piece(normalized,'black-K','white').x,y:piece(normalized,'black-K','white').y},{x:7,y:H-1-E.BOX_DEPTH});
   for(const p of before.pieces.filter(p=>p.type!=='K'))assert.deepEqual(normalized.pieces.find(q=>q.id===p.id),p);
   assert.equal(normalized.randomState,before.randomState);assertIntegrity(normalized);
 });

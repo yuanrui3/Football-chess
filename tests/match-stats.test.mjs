@@ -1,25 +1,29 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {createGame,applyKick,applyMove,skipMove,actionTimeout,legalKicks,legalMoves} from '../dist/engine.js';
+import {createGame,applyKick,applyMove,skipMove,actionTimeout,legalKicks,legalMoves,BOARD_WIDTH,BOARD_HEIGHT,GOAL_FILES,BOX_FILES,BOX_DEPTH,canOccupySquare} from '../dist/engine.js';
 import {createMatchStats,restoreMatchStats,recordMatchTransition,addPossessionTime,matchStatsSummary,normalizeGoalOrigin} from '../dist/match-stats.js';
 
 const clone=value=>structuredClone(value);
 const other=team=>team==='white'?'black':'white';
-const mirror=([x,y])=>[11-x,14-y];
+const mirror=([x,y])=>[BOARD_WIDTH-1-x,BOARD_HEIGHT-1-y];
 
 // Each scenario retains the full roster and keeps uninvolved players off the
 // central passing/shooting lanes. Outcomes use the engine's supported test rolls.
 function fixture({team='white',carrier=`${team}-R1`,positions={},phase='kick',score={white:0,black:0}}={}){
   const state=createGame({mode:'local',kickoff:team,seed:1604});
   const transform=pair=>team==='white'?pair:mirror(pair);
-  const assigned={'white-K':[7,14],'black-K':[7,0],'white-P2':[1,14],'white-P3':[2,14],'black-P2':[1,0],'black-P3':[2,0],[carrier]:transform([4,5]),...positions};
+  const assigned={'white-K':[8,16],'black-K':[8,0],'white-P2':[1,16],'white-P3':[2,16],'black-P2':[1,0],'black-P3':[2,0],[carrier]:transform([6,5]),...positions};
   const used=new Set(Object.values(assigned).map(at=>at.join(',')));
   assert.equal(used.size,Object.keys(assigned).length,'fixture assignments do not overlap');
-  const parking=Array.from({length:15},(_,y)=>[[0,y],[11,y]]).flat();
+  const parking=Array.from({length:BOARD_HEIGHT},(_,y)=>[[0,y],[BOARD_WIDTH-1,y]]).flat();
   for(const piece of state.pieces){
     const at=assigned[piece.id]||parking.find(pair=>!used.has(pair.join(',')));
     assert.ok(at,`parking for ${piece.id}`);
     [piece.x,piece.y]=at;used.add(at.join(','));
+  }
+  for(const piece of state.pieces){
+    assert.ok(piece.x>=0&&piece.x<BOARD_WIDTH&&piece.y>=0&&piece.y<BOARD_HEIGHT,`${piece.id} is on the expanded pitch`);
+    assert.ok(canOccupySquare(piece,piece.x,piece.y),`${piece.id} respects the current box eligibility rule`);
   }
   const owner=state.pieces.find(piece=>piece.id===carrier);
   Object.assign(state,{phase,attack:team,score:{...score},ball:{x:owner.x,y:owner.y,carrierId:carrier},restart:null,offside:null,pendingShot:null,lastAction:null});
@@ -43,7 +47,7 @@ function tracked(state,stats=createMatchStats()){
       return this;
     },
     kick(x,y,options={}){return this.step(applyKick(this.state,x,y,options));},
-    shoot(x=4,y=-1,roll=0){
+    shoot(x=6,y=-1,roll=0){
       this.ready();this.kick(x,y);assert.equal(this.state.phase,'keeperReact');
       return this.step(skipMove(this.state,{roll}),{matchSeconds:75});
     }
@@ -52,9 +56,9 @@ function tracked(state,stats=createMatchStats()){
 
 function assisted({team='white',toSpace=false,provider='R2',scorer='R1'}={}){
   const transform=pair=>team==='white'?pair:mirror(pair),carrier=`${team}-${provider}`;
-  const positions={[carrier]:transform([4,9]),[`${team}-${scorer}`]:transform(toSpace?[6,5]:[4,5])};
+  const positions={[carrier]:transform([6,9]),[`${team}-${scorer}`]:transform(toSpace?[8,5]:[6,5])};
   const run=tracked(fixture({team,carrier,positions}));
-  const [x,y]=transform([4,5]);run.kick(x,y,{roll:0});
+  const [x,y]=transform([6,5]);run.kick(x,y,{roll:0});
   if(toSpace){
     assert.equal(run.state.ball.carrierId,null);
     assert.ok(legalMoves(run.state,`${team}-${scorer}`).some(move=>move.x===x&&move.y===y));
@@ -78,7 +82,7 @@ test('restoration drops an assist candidate whose receiver no longer controls th
 
 test('new match statistics begin complete with zero counts and no possession percentage',()=>{
   const stats=createMatchStats(),summary=matchStatsSummary(stats);
-  assert.equal(stats.version,1);assert.equal(stats.partial,false);assert.deepEqual(stats.goals,[]);
+  assert.equal(stats.version,2);assert.deepEqual(stats.pitch,{width:14,height:17});assert.equal(stats.partial,false);assert.deepEqual(stats.goals,[]);
   for(const team of ['white','black']){
     assert.deepEqual(stats.teams[team],{shots:0,onTarget:0,corners:0,possessionMs:0});
     assert.equal(summary.teams[team].possessionPercent,null);
@@ -88,7 +92,7 @@ test('new match statistics begin complete with zero counts and no possession per
 
 for(const team of ['white','black'])test(`${team} declared shot and actual goal count once with stable scorer ID`,()=>{
   const run=tracked(fixture({team}));
-  const [x,y]=team==='white'?[4,-1]:[7,15];
+  const [x,y]=team==='white'?[6,-1]:[7,17];
   run.kick(x,y);
   assert.equal(run.stats.teams[team].shots,1);
   assert.equal(run.stats.teams[team].onTarget,0,'an unresolved shot is not yet on target');
@@ -97,7 +101,7 @@ for(const team of ['white','black'])test(`${team} declared shot and actual goal 
   assert.equal(run.state.lastAction.type,'goal');
   assert.equal(run.stats.teams[team].shots,1);assert.equal(run.stats.teams[team].onTarget,1);
   assert.equal(run.stats.goals.length,1);
-  assert.deepEqual(run.stats.goals[0],{team,scorerId:`${team}-R1`,assistId:null,ownGoal:false,turn:run.state.turn,matchSeconds:75,origin:team==='white'?{x:4,y:5}:{x:7,y:9},target:{x,y},distance:5.5});
+  assert.deepEqual(run.stats.goals[0],{team,scorerId:`${team}-R1`,assistId:null,ownGoal:false,turn:run.state.turn,matchSeconds:75,origin:team==='white'?{x:6,y:5}:{x:7,y:11},target:{x,y},distance:5.5});
   const otherTeam=other(team),kickoff=legalKicks(run.state).find(kick=>!kick.goal&&kick.accuracy===1&&kick.receiverId?.startsWith(`${otherTeam}-`));
   run.kick(kickoff.x,kickoff.y,{roll:0});run.ready();
   assert.equal(run.stats.teams[team].shots,1,'repositioning and next kickoff do not repeat the goal');
@@ -105,7 +109,7 @@ for(const team of ['white','black'])test(`${team} declared shot and actual goal 
 });
 
 test('a caught save is one shot on target and no corner or goal',()=>{
-  const run=tracked(fixture({positions:{'black-K':[4,0]}}));run.kick(4,-1);
+  const run=tracked(fixture({positions:{'black-K':[6,0]}}));run.kick(6,-1);
   const model=run.state.lastAction.shotModel;
   assert.ok(model.caughtSaveProbability>0);
   run.step(skipMove(run.state,{roll:model.probability+model.cornerProbability+model.caughtSaveProbability/2}));
@@ -115,7 +119,7 @@ test('a caught save is one shot on target and no corner or goal',()=>{
 });
 
 test('a parried shot awards one attacking corner, never a second shot during restart setup',()=>{
-  const run=tracked(fixture({positions:{'black-K':[4,0]}}));run.kick(4,-1);
+  const run=tracked(fixture({positions:{'black-K':[6,0]}}));run.kick(6,-1);
   const model=run.state.lastAction.shotModel;assert.ok(model.cornerProbability>0);
   run.step(skipMove(run.state,{roll:model.probability+model.cornerProbability/2}));
   assert.equal(run.state.lastAction.type,'save');assert.equal(run.state.restart.type,'corner');
@@ -129,7 +133,7 @@ test('a parried shot awards one attacking corner, never a second shot during res
 });
 
 test('an actual wide shot is a shot but is not on target or a corner',()=>{
-  const run=tracked(fixture());run.kick(4,-1);run.step(skipMove(run.state,{roll:.999999}));
+  const run=tracked(fixture());run.kick(6,-1);run.step(skipMove(run.state,{roll:.999999}));
   assert.equal(run.state.lastAction.type,'shotMiss');assert.equal(run.state.restart.type,'goalKick');
   assert.deepEqual({...run.stats.teams.white,possessionMs:0},{shots:1,onTarget:0,corners:0,possessionMs:0});
   assert.equal(run.stats.goals.length,0);
@@ -138,7 +142,7 @@ test('an actual wide shot is a shot but is not on target or a corner',()=>{
 for(const team of ['white','black'])test(`${team} long pass over its own end line awards the opponent a corner without a shot`,()=>{
   const transform=pair=>team==='white'?pair:mirror(pair),carrier=`${team}-R1`;
   const run=tracked(fixture({team,carrier,positions:{[carrier]:transform([2,1])}}));
-  const [x,y]=transform([2,13]),[lx,ly]=transform([2,17]);
+  const [x,y]=transform([2,15]),[lx,ly]=transform([2,19]);
   run.kick(x,y,{roll:.999999,landing:{x:lx,y:ly}});
   assert.equal(run.state.lastAction.type,'out');assert.equal(run.state.restart.type,'corner');
   assert.equal(run.stats.teams[other(team)].corners,1);
@@ -146,50 +150,50 @@ for(const team of ['white','black'])test(`${team} long pass over its own end lin
 });
 
 for(const team of ['white','black'])for(const toSpace of [false,true])test(`${team} accurate ${toSpace?'pass into space and teammate collection':'direct pass'} earns one assist through positioning`,()=>{
-  const run=assisted({team,toSpace});const [x,y]=team==='white'?[4,-1]:[7,15];
+  const run=assisted({team,toSpace});const [x,y]=team==='white'?[6,-1]:[7,17];
   run.shoot(x,y);
   assert.equal(run.stats.goals[0].scorerId,`${team}-R1`);assert.equal(run.stats.goals[0].assistId,`${team}-R2`);
   assert.equal(run.stats.pendingShot,null);
 });
 
 test('the latest accurate teammate pass receives the assist; earlier providers do not',()=>{
-  const run=tracked(fixture({carrier:'white-Q',positions:{'white-Q':[8,9],'white-R2':[4,9],'white-R1':[4,5]}}));
-  run.kick(4,9,{roll:0});run.ready();run.kick(4,5,{roll:0});run.shoot();
+  const run=tracked(fixture({carrier:'white-Q',positions:{'white-Q':[10,9],'white-R2':[6,9],'white-R1':[6,5]}}));
+  run.kick(6,9,{roll:0});run.ready();run.kick(6,5,{roll:0});run.shoot();
   assert.equal(run.stats.goals[0].assistId,'white-R2');
 });
 
 test('the receiver may dribble before scoring without losing a valid assist',()=>{
-  const run=assisted();run.step(applyMove(run.state,'white-R1',4,3));run.shoot();
+  const run=assisted();run.step(applyMove(run.state,'white-R1',6,3));run.shoot();
   assert.equal(run.stats.goals[0].assistId,'white-R2');
 });
 
 test('a collected self pass never creates an assist',()=>{
-  const run=tracked(fixture());run.kick(4,4,{roll:0});
-  assert.equal(run.state.ball.carrierId,null);run.step(applyMove(run.state,'white-R1',4,4));
+  const run=tracked(fixture());run.kick(6,4,{roll:0});
+  assert.equal(run.state.ball.carrierId,null);run.step(applyMove(run.state,'white-R1',6,4));
   assert.equal(run.state.lastAction.selfPassCollection,true);run.shoot();
   assert.equal(run.stats.goals[0].assistId,null);
 });
 
 test('an inaccurate long pass collected by a teammate is not an assist',()=>{
-  const run=tracked(fixture({carrier:'white-R2',positions:{'white-R2':[4,13],'white-R1':[6,5]}}));
-  run.kick(4,2,{roll:.999999,landing:{x:4,y:5}});assert.equal(run.state.lastAction.type,'miss');
-  run.step(applyMove(run.state,'white-R1',4,5));run.shoot();
+  const run=tracked(fixture({carrier:'white-R2',positions:{'white-R2':[6,13],'white-R1':[8,5]}}));
+  run.kick(6,2,{roll:.999999,landing:{x:6,y:5}});assert.equal(run.state.lastAction.type,'miss');
+  run.step(applyMove(run.state,'white-R1',6,5));run.shoot();
   assert.equal(run.stats.goals[0].assistId,null);
 });
 
 test('an inaccurate pass landing directly on the scorer does not create an assist',()=>{
-  const run=tracked(fixture({carrier:'white-R2',positions:{'white-R2':[4,13],'white-R1':[6,5]}}));
-  run.kick(4,2,{roll:.999999,landing:{x:6,y:5}});assert.equal(run.state.lastAction.type,'miss');
+  const run=tracked(fixture({carrier:'white-R2',positions:{'white-R2':[6,13],'white-R1':[8,5]}}));
+  run.kick(6,2,{roll:.999999,landing:{x:8,y:5}});assert.equal(run.state.lastAction.type,'miss');
   assert.equal(run.state.ball.carrierId,'white-R1');
   // The rook first carries onto a goal file; a fortunate scatter still is not an assist.
-  run.step(applyMove(run.state,'white-R1',4,5));run.shoot();
+  run.step(applyMove(run.state,'white-R1',6,5));run.shoot();
   assert.equal(run.stats.goals[0].assistId,null);
 });
 
 test('losing and regaining the ball clears the prior assist provider',()=>{
-  const run=tracked(fixture({carrier:'white-R2',positions:{'white-R2':[4,9],'white-R1':[4,5],'black-R1':[6,5]}}));
-  run.kick(4,5,{roll:0});run.ready();run.kick(6,5,{roll:0});assert.equal(run.state.lastAction.type,'interception');
-  run.ready();run.kick(4,5,{roll:0});assert.equal(run.state.lastAction.type,'interception');
+  const run=tracked(fixture({carrier:'white-R2',positions:{'white-R2':[6,9],'white-R1':[6,5],'black-R1':[8,5]}}));
+  run.kick(6,5,{roll:0});run.ready();run.kick(8,5,{roll:0});assert.equal(run.state.lastAction.type,'interception');
+  run.ready();run.kick(6,5,{roll:0});assert.equal(run.state.lastAction.type,'interception');
   run.shoot();assert.equal(run.stats.goals[0].assistId,null);
 });
 
@@ -203,7 +207,7 @@ test('a saved shot clears the previous assist, so a later regained ball is a new
   const run=assisted();
   const king=run.state.pieces.find(piece=>piece.id==='black-K');
   // The fixture already has the keeper inside its box, away from this ray.
-  assert.ok(king.y<=1);run.ready();run.kick(4,-1);
+  assert.ok(king.y<=1);run.ready();run.kick(6,-1);
   const model=run.state.lastAction.shotModel;
   assert.ok(model.caughtSaveProbability>0);
   run.step(skipMove(run.state,{roll:model.probability+model.cornerProbability+model.caughtSaveProbability/2}));
@@ -211,10 +215,10 @@ test('a saved shot clears the previous assist, so a later regained ball is a new
 });
 
 test('own goals identify the responsible piece and scoring side without awarding an assist',()=>{
-  const run=tracked(fixture({positions:{'white-R1':[4,10]}}));run.kick(4,15);
+  const run=tracked(fixture({positions:{'white-R1':[6,12]}}));run.kick(6,17);
   run.step(skipMove(run.state,{roll:0}),{matchSeconds:90});
   assert.equal(run.state.lastAction.ownGoal,true);
-  assert.deepEqual(run.stats.goals[0],{team:'black',scorerId:'white-R1',assistId:null,ownGoal:true,turn:run.state.turn,matchSeconds:90,origin:{x:4,y:10},target:{x:4,y:15},distance:4.5});
+  assert.deepEqual(run.stats.goals[0],{team:'black',scorerId:'white-R1',assistId:null,ownGoal:true,turn:run.state.turn,matchSeconds:90,origin:{x:6,y:12},target:{x:6,y:17},distance:4.5});
   assert.equal(run.stats.teams.black.shots,0,'own goals are not invented opposing shots');
   assert.equal(run.stats.teams.white.shots,0,'deliberate own-goal targets do not inflate attacking shots');
   assert.equal(run.stats.teams.white.onTarget,0);assert.deepEqual(matchStatsSummary(run.stats).scorers,[]);
@@ -249,7 +253,7 @@ test('kickoffs, protected restarts and finished games do not accrue possession',
 test('loose passes and shot flight retain the attacking team possession until opponent control',()=>{
   const state=fixture({phase:'attackMove'}),stats=createMatchStats();
   const loose={...clone(state),ball:{...state.ball,carrierId:null}};
-  const shot=applyKick({...clone(state),phase:'kick'},4,-1);
+  const shot=applyKick({...clone(state),phase:'kick'},6,-1);
   const next=addPossessionTime(addPossessionTime(stats,loose,2000),shot,1000);
   assert.equal(next.teams.white.possessionMs,3000);assert.equal(next.teams.black.possessionMs,0);
 });
@@ -265,7 +269,7 @@ test('statistics and a pending assist survive a JSON save/reload and cloned undo
 });
 
 test('a pending shot remains one shot after a JSON save/reload before keeper reaction',()=>{
-  const run=assisted();run.ready();run.kick(4,-1);
+  const run=assisted();run.ready();run.kick(6,-1);
   const saved=restoreMatchStats(JSON.parse(JSON.stringify(run.stats)),run.state);
   assert.equal(saved.teams.white.shots,1);
   const resumed=tracked(clone(run.state),saved);resumed.step(skipMove(resumed.state,{roll:0}));
@@ -301,8 +305,8 @@ test('malformed statistics cannot inject unknown players, impossible counts, or 
 test('goal and assist summary aggregates counts by individual stable IDs',()=>{
   const first=assisted();first.shoot();
   // Track the second pass again from its genuine source state, retaining the prior ledger.
-  const source=fixture({carrier:'white-R2',score:first.state.score,positions:{'white-R2':[4,9],'white-R1':[4,5]}});
-  const run=tracked(source,first.stats);run.kick(4,5,{roll:0});run.shoot();
+  const source=fixture({carrier:'white-R2',score:first.state.score,positions:{'white-R2':[6,9],'white-R1':[6,5]}});
+  const run=tracked(source,first.stats);run.kick(6,5,{roll:0});run.shoot();
   const third=tracked(fixture({carrier:'white-R2',score:run.state.score}),run.stats);third.shoot();
   const summary=matchStatsSummary(third.stats);
   assert.deepEqual(summary.scorers,[{team:'white',pieceId:'white-R1',count:2},{team:'white',pieceId:'white-R2',count:1}]);
@@ -311,7 +315,7 @@ test('goal and assist summary aggregates counts by individual stable IDs',()=>{
 });
 
 for(const outcome of ['goal','saved','wide'])test(`a legacy save during keeper reaction remains internally valid after ${outcome}`,()=>{
-  const state=fixture({positions:{'black-K':[4,0]}}),pending=applyKick(state,4,-1),model=pending.lastAction.shotModel;
+  const state=fixture({positions:{'black-K':[6,0]}}),pending=applyKick(state,6,-1),model=pending.lastAction.shotModel;
   const roll=outcome==='goal'?0:outcome==='saved'?model.probability+model.cornerProbability+model.caughtSaveProbability/2:.999999;
   const partial=restoreMatchStats(null,pending),run=tracked(pending,partial);
   run.step(skipMove(pending,{roll}));
@@ -322,37 +326,37 @@ for(const outcome of ['goal','saved','wide'])test(`a legacy save during keeper r
 });
 
 test('an offside intervention aborts the attempted shot without inventing a shot statistic',()=>{
-  const run=tracked(fixture({positions:{'white-N1':[5,0],'black-P2':[3,4],'black-P3':[3,5]}}));
-  run.kick(4,-1);assert.equal(run.state.lastAction.type,'offside');
+  const run=tracked(fixture({positions:{'white-N1':[5,0],'black-P2':[3,4],'black-P3':[4,5]}}));
+  run.kick(6,-1);assert.equal(run.state.lastAction.type,'offside');
   assert.equal(run.stats.teams.white.shots,0);assert.equal(run.stats.teams.white.onTarget,0);
   assert.equal(run.stats.lastPass,null);assert.equal(run.stats.pendingShot,null);
 });
 
 test('an evaded tackle preserves the valid assist to a knight that then scores',()=>{
-  const run=tracked(fixture({carrier:'white-Q',positions:{'white-Q':[3,5],'white-N1':[3,1],'black-N1':[1,2]}}));
-  run.kick(3,1,{roll:0});run.step(skipMove(run.state));
+  const run=tracked(fixture({carrier:'white-Q',positions:{'white-Q':[4,5],'white-N1':[4,1],'black-N1':[2,2]}}));
+  run.kick(4,1,{roll:0});run.step(skipMove(run.state));
   assert.equal(run.state.phase,'defendMove');
   const tackle=legalMoves(run.state,'black-N1').find(move=>move.type==='tackle');assert.ok(tackle);
   run.step(applyMove(run.state,'black-N1',tackle.x,tackle.y,{roll:.999999}));
   assert.equal(run.state.lastAction.type,'tackleMiss');
-  run.shoot(4,-1);assert.equal(run.stats.goals[0].assistId,'white-Q');
+  run.shoot(5,-1);assert.equal(run.stats.goals[0].assistId,'white-Q');
 });
 
 test('the goalkeeper can earn an assist through its mandatory immediate back-pass release',()=>{
-  const run=tracked(fixture({carrier:'white-Q',positions:{'white-Q':[4,11],'white-R1':[7,6]}}));
-  run.kick(7,14,{roll:0});assert.equal(run.state.phase,'keeperRelease');
-  run.kick(7,6,{roll:0});run.shoot(7,-1);
+  const run=tracked(fixture({carrier:'white-Q',positions:{'white-Q':[5,13],'white-R1':[8,6]}}));
+  run.kick(8,16,{roll:0});assert.equal(run.state.phase,'keeperRelease');
+  run.kick(8,6,{roll:0});run.shoot(8,-1);
   assert.equal(run.stats.goals[0].scorerId,'white-R1');assert.equal(run.stats.goals[0].assistId,'white-K');
 });
 
 
 for(const team of ['white','black'])test(`${team} goal records the actual declaration origin through a keeper reaction and kickoff reset`,()=>{
   const run=tracked(fixture({team})),origin={x:run.state.ball.x,y:run.state.ball.y};
-  const [x,y]=team==='white'?[4,-1]:[7,15];
+  const [x,y]=team==='white'?[6,-1]:[7,17];
   run.kick(x,y);const pending=clone(run.state),declaredStats=clone(run.stats),distance=pending.lastAction.shotModel.distance;
   assert.deepEqual(run.stats.pendingShot.origin,origin);assert.deepEqual(run.stats.pendingShot.target,{x,y});
   assert.equal(run.stats.pendingShot.distance,distance);
-  const keeperId=`${other(team)}-K`,reaction=legalMoves(pending,keeperId).find(move=>move.x===6&&move.y===(team==='white'?1:13));assert.ok(reaction);
+  const keeperId=`${other(team)}-K`,reaction=legalMoves(pending,keeperId).find(move=>move.x===7&&move.y===(team==='white'?1:15));assert.ok(reaction);
   run.step(applyMove(pending,keeperId,reaction.x,reaction.y,{roll:0}));assert.equal(run.state.lastAction.type,'goal');
   assert.deepEqual(run.stats.goals[0].origin,origin);assert.deepEqual(run.stats.goals[0].target,{x,y});assert.equal(run.stats.goals[0].distance,distance);
   const scorer=run.state.pieces.find(piece=>piece.id===`${team}-R1`);
@@ -361,28 +365,28 @@ for(const team of ['white','black'])test(`${team} goal records the actual declar
 });
 
 test('a goal after a dribble uses the final shooting square rather than the pass receiving square',()=>{
-  const run=assisted();run.step(applyMove(run.state,'white-R1',4,3));run.shoot();
-  assert.deepEqual(run.stats.goals[0].origin,{x:4,y:3});assert.equal(run.stats.goals[0].distance,3.5);
+  const run=assisted();run.step(applyMove(run.state,'white-R1',6,3));run.shoot();
+  assert.deepEqual(run.stats.goals[0].origin,{x:6,y:3});assert.equal(run.stats.goals[0].distance,3.5);
   assert.equal(run.stats.goals[0].assistId,'white-R2');
 });
 
 test('own-goal origin and target remain actual pitch coordinates and normalize toward the credited goal',()=>{
-  const run=tracked(fixture({positions:{'white-R1':[4,10]}}));run.shoot(4,15);
+  const run=tracked(fixture({positions:{'white-R1':[6,12]}}));run.shoot(6,17);
   const goal=run.stats.goals[0];assert.equal(goal.team,'black');assert.equal(goal.ownGoal,true);
-  assert.deepEqual(goal.origin,{x:4,y:10});assert.deepEqual(goal.target,{x:4,y:15});
+  assert.deepEqual(goal.origin,{x:6,y:12});assert.deepEqual(goal.target,{x:6,y:17});
   assert.deepEqual(normalizeGoalOrigin(goal),{x:7,y:4});
 });
 
 test('mirrored goals normalize to the same attacking position without mutating the goal records',()=>{
-  const white=tracked(fixture());white.shoot();const black=tracked(fixture({team:'black'}));black.shoot(7,15);
+  const white=tracked(fixture());white.shoot();const black=tracked(fixture({team:'black'}));black.shoot(7,17);
   const before=JSON.stringify([white.stats,black.stats]);
-  assert.deepEqual(normalizeGoalOrigin(white.stats.goals[0]),{x:4,y:5});
-  assert.deepEqual(normalizeGoalOrigin(black.stats.goals[0]),{x:4,y:5});
+  assert.deepEqual(normalizeGoalOrigin(white.stats.goals[0]),{x:6,y:5});
+  assert.deepEqual(normalizeGoalOrigin(black.stats.goals[0]),{x:6,y:5});
   assert.equal(JSON.stringify([white.stats,black.stats]),before);
   assert.equal(normalizeGoalOrigin({...white.stats.goals[0],origin:null}),null);
 });
 
-test('older recorded goals without location fields remain unmapped rather than using kickoff positions',()=>{
+test('current-pitch recorded goals without location fields remain unmapped rather than using kickoff positions',()=>{
   const run=assisted();run.shoot();const saved=clone(run.stats);
   for(const key of ['origin','target','distance'])delete saved.goals[0][key];
   const restored=restoreMatchStats(saved,run.state),goal=restored.goals[0];
@@ -394,8 +398,8 @@ test('older recorded goals without location fields remain unmapped rather than u
 test('invalid saved goal-location fields are dropped individually without discarding counters or goals',()=>{
   const run=assisted();run.shoot();
   const cases=[
-    ['origin',{x:-1,y:5}],['origin',{x:12,y:5}],['origin',{x:4,y:15}],['origin',{x:4.5,y:5}],['origin',{x:NaN,y:5}],['origin',{x:'4',y:5}],
-    ['target',{x:3,y:-1}],['target',{x:4,y:0}],['target',{x:7.5,y:-1}],['target',{x:4,y:16}],
+    ['origin',{x:-1,y:5}],['origin',{x:14,y:5}],['origin',{x:6,y:17}],['origin',{x:4.5,y:5}],['origin',{x:NaN,y:5}],['origin',{x:'4',y:5}],
+    ['target',{x:3,y:-1}],['target',{x:6,y:0}],['target',{x:7.5,y:-1}],['target',{x:4,y:16}],
     ['distance',-1],['distance',Infinity],['distance','5.5']
   ];
   for(const [field,value] of cases){
@@ -408,19 +412,19 @@ test('invalid saved goal-location fields are dropped individually without discar
 });
 
 test('pending shot location survives JSON restoration and missing legacy metadata uses known declaration evidence',()=>{
-  const run=assisted();run.ready();run.kick(4,-1);const saved=clone(run.stats);
+  const run=assisted();run.ready();run.kick(6,-1);const saved=clone(run.stats);
   let restored=restoreMatchStats(JSON.parse(JSON.stringify(saved)),run.state);assert.deepEqual(restored.pendingShot,saved.pendingShot);
   for(const field of ['origin','target','distance'])delete saved.pendingShot[field];
   restored=restoreMatchStats(saved,run.state);
   assert.deepEqual(restored.pendingShot.origin,run.state.pendingShot.from);
   const resumed=tracked(clone(run.state),restored);resumed.step(skipMove(resumed.state,{roll:0}));
-  assert.deepEqual(resumed.stats.goals[0].origin,{x:4,y:5});assert.equal(resumed.stats.goals[0].distance,5.5);
+  assert.deepEqual(resumed.stats.goals[0].origin,{x:6,y:5});assert.equal(resumed.stats.goals[0].distance,5.5);
 });
 
 test('goal-map summaries clone locations and restoring an undo snapshot removes the undone marker',()=>{
   const run=assisted(),undoGame=clone(run.state),undoStats=clone(run.stats);run.shoot();
   const summary=matchStatsSummary(run.stats);assert.equal(summary.goals.length,1);summary.goals[0].origin.x=9;
-  assert.deepEqual(run.stats.goals[0].origin,{x:4,y:5},'map rendering cannot alter the event ledger');
+  assert.deepEqual(run.stats.goals[0].origin,{x:6,y:5},'map rendering cannot alter the event ledger');
   assert.equal(matchStatsSummary(run.stats).goals.length,1,'repeated summaries do not append markers');
   const undone=restoreMatchStats(undoStats,undoGame);assert.equal(undone.goals.length,0);
   const replayed=tracked(undoGame,undone);replayed.shoot();assert.equal(replayed.stats.goals.length,1,'resolving after undo adds exactly one current goal');
@@ -440,9 +444,9 @@ test('unmapped goals reject invalid stored distances while valid geometry recomp
 test('location-zone totals classify actual goals and identify unknown legacy origins',()=>{
   let stats=createMatchStats(),score={white:0,black:0},lastGame;
   const goals=[
-    {carrier:'white-R1',origin:[4,5],target:[4,-1]},
-    {carrier:'white-R1',origin:[4,2],target:[4,-1]},
-    {carrier:'white-N1',origin:[4,1],target:[5,-1]},
+    {carrier:'white-R1',origin:[6,BOX_DEPTH+3],target:[6,-1]},
+    {carrier:'white-R1',origin:[6,BOX_DEPTH],target:[6,-1]},
+    {carrier:'white-N1',origin:[6,1],target:[7,-1]},
     {carrier:'white-B1',origin:[3,2],target:[6,-1]}
   ];
   for(const {carrier,origin,target} of goals){
@@ -458,4 +462,102 @@ test('location-zone totals classify actual goals and identify unknown legacy ori
   const legacy=matchStatsSummary(restoreMatchStats(saved,lastGame));
   assert.equal(legacy.goalLocations.known,3);assert.equal(legacy.goalLocations.unknown,1);
   assert.equal(legacy.goalLocations.zones.distant,0);
+});
+
+test('statistics schema records the pitch and refuses to reinterpret old-pitch records',()=>{
+  const run=tracked(fixture());run.shoot();
+  assert.deepEqual(run.stats.pitch,{width:BOARD_WIDTH,height:BOARD_HEIGHT});assert.equal(run.stats.version,2);
+  for(const mutate of [value=>value.version=1,value=>value.pitch={width:12,height:15},value=>delete value.pitch]){
+    const saved=clone(run.stats);mutate(saved);const restored=restoreMatchStats(saved,run.state);
+    assert.equal(restored.partial,true);assert.equal(restored.goals.length,0);
+    assert.deepEqual(restored.baselineScore,run.state.score,'the old score remains known without inventing goal locations');
+    assert.equal(matchStatsSummary(restored).goalLocations.unknown,1);
+  }
+});
+
+test('new-pitch far-edge coordinates survive restoration while the next file and rank are rejected',()=>{
+  const run=tracked(fixture());run.shoot();const saved=clone(run.stats);
+  saved.goals[0].origin={x:13,y:16};
+  const restored=restoreMatchStats(saved,run.state);assert.deepEqual(restored.goals[0].origin,{x:13,y:16});
+  assert.deepEqual(normalizeGoalOrigin({...restored.goals[0],team:'black'}),{x:0,y:0});
+  for(const origin of [{x:14,y:16},{x:13,y:17}]){
+    const malformed=clone(saved);malformed.goals[0].origin=origin;
+    assert.equal(restoreMatchStats(malformed,run.state).goals[0].origin,null);
+  }
+});
+
+for(const team of ['white','black'])for(const x of [4,9])test(`${team} goal from box wing file ${x} maps inside the six-file box`,()=>{
+  const transform=point=>team==='white'?point:mirror(point),carrier=`${team}-N1`,origin=transform([x,1]),target=transform([x===4?5:8,-1]);
+  const run=tracked(fixture({team,carrier,positions:{[carrier]:origin}}));run.shoot(...target);
+  assert.deepEqual(normalizeGoalOrigin(run.stats.goals[0]),{x,y:1});
+  const locations=matchStatsSummary(run.stats).goalLocations;
+  assert.equal(locations.zones.box,1);assert.equal(locations.zones.wide,0);
+  assert.equal(GOAL_FILES.includes(x),false,'these extra box files are outside the four-file goal');
+});
+
+for(const team of ['white','black'])for(const outcome of ['corner','blocked'])test(`${team} defender-block ${outcome} resolves one shot without an on-target shot or assist`,()=>{
+  const enemy=other(team),transform=point=>team==='white'?point:mirror(point),carrier=`${team}-R2`,blockerId=`${enemy}-N1`;
+  const run=tracked(fixture({team,carrier,positions:{
+    [carrier]:transform([6,9]),[`${team}-R1`]:transform([6,5]),[blockerId]:transform([6,3])
+  }}));
+  const receiver=transform([6,5]),target=transform([6,-1]);
+  run.kick(...receiver,{roll:0});run.ready();run.kick(...target);
+  assert.equal(run.state.phase,'keeperReact');assert.equal(run.stats.teams[team].shots,1);
+  assert.equal(run.stats.pendingShot.assistId,`${team}-R2`,'the build-up has a valid potential assist before the block');
+  const model=run.state.lastAction.shotModel;
+  assert.ok(model.blockCornerProbability>0);assert.ok(model.blockPossessionProbability>0);
+  assert.ok(Math.abs(model.probability+model.saveProbability+model.missProbability+model.blockProbability-1)<1e-10);
+  const blockStart=model.probability+model.saveProbability+model.missProbability;
+  const roll=outcome==='corner'?blockStart+model.blockCornerProbability/2:blockStart+model.blockCornerProbability+model.blockPossessionProbability/2;
+  const declaredGame=clone(run.state),declaredStats=clone(run.stats);
+  run.step(skipMove(run.state,{roll}));
+  assert.equal(run.state.lastAction.type,'blockedShot');assert.equal(run.state.lastAction.outcome,outcome);assert.equal(run.state.lastAction.blockerId,blockerId);
+  assert.equal(run.stats.teams[team].shots,1);assert.equal(run.stats.teams[team].onTarget,0);
+  assert.equal(run.stats.teams[team].corners,outcome==='corner'?1:0);assert.equal(run.stats.teams[enemy].shots,0);
+  assert.equal(run.stats.goals.length,0);assert.equal(run.stats.pendingShot,null);assert.equal(run.stats.lastPass,null);
+  assert.deepEqual(matchStatsSummary(run.stats).assists,[]);
+  if(outcome==='corner'){
+    assert.equal(run.state.restart.type,'corner');assert.equal(run.state.restart.team,team);
+    run.ready();assert.equal(run.stats.teams[team].corners,1,'repositioning does not duplicate the corner');
+  }else{
+    assert.equal(run.state.ball.carrierId,blockerId);assert.equal(run.state.attack,enemy);
+  }
+  const restored=restoreMatchStats(JSON.parse(JSON.stringify(run.stats)),run.state);assert.deepEqual(restored,run.stats);
+  const snapshot=JSON.stringify(run.stats);matchStatsSummary(run.stats);matchStatsSummary(run.stats);
+  assert.equal(JSON.stringify(run.stats),snapshot,'replaying or rendering statistics cannot add another block event');
+  // Undo restores the declaration ledger, and a second resolution replaces the
+  // undone result rather than retaining the old corner or adding another shot.
+  const undone=restoreMatchStats(declaredStats,declaredGame),repeated=tracked(declaredGame,undone);
+  assert.equal(undone.teams[team].corners,0);assert.equal(undone.teams[team].shots,1);
+  repeated.step(skipMove(repeated.state,{roll}));
+  assert.equal(repeated.stats.teams[team].shots,1);assert.equal(repeated.stats.teams[team].onTarget,0);
+  assert.equal(repeated.stats.teams[team].corners,outcome==='corner'?1:0);assert.equal(repeated.stats.goals.length,0);
+});
+
+for(const team of ['white','black'])test(`${team} own-goal-target block out awards a goal kick without a corner, shot, or phantom scorer`,()=>{
+  const enemy=other(team),transform=point=>team==='white'?point:mirror(point),carrier=`${team}-R1`,blockerId=`${enemy}-N1`;
+  const run=tracked(fixture({team,carrier,positions:{[carrier]:transform([6,12]),[blockerId]:transform([6,14])}}));
+  run.kick(...transform([6,17]));const model=run.state.lastAction.shotModel;
+  assert.equal(model.blockCornerProbability,0);assert.ok(model.blockOutProbability>0);
+  const roll=model.probability+model.saveProbability+model.missProbability+model.blockOutProbability/2;
+  run.step(skipMove(run.state,{roll}));
+  assert.equal(run.state.lastAction.type,'blockedShot');assert.equal(run.state.lastAction.outcome,'out');
+  assert.equal(run.state.restart.type,'goalKick');assert.equal(run.state.restart.team,team);
+  for(const side of [team,enemy]){
+    assert.equal(run.stats.teams[side].shots,0);assert.equal(run.stats.teams[side].onTarget,0);assert.equal(run.stats.teams[side].corners,0);
+  }
+  assert.equal(run.stats.goals.length,0);assert.equal(run.stats.pendingShot,null);assert.equal(run.stats.lastPass,null);
+  assert.deepEqual(restoreMatchStats(JSON.parse(JSON.stringify(run.stats)),run.state),run.stats);
+});
+
+for(const team of ['white','black'])test(`${team} a stalling-wrapped same-team own-goal catch clears the pending shot without inflating soccer statistics`,()=>{
+  const transform=point=>team==='white'?point:mirror(point),carrier=`${team}-K`,origin=transform([6,16]);
+  const state=fixture({team,carrier,positions:{[carrier]:origin}});
+  state.ballProgress={team,anchorY:transform([0,10])[1],rounds:2,pendingRelease:false,excludeRelease:false};
+  const run=tracked(state);run.kick(...transform([6,BOARD_HEIGHT]));assert.ok(run.stats.pendingShot);
+  const model=run.state.lastAction.shotModel;run.step(skipMove(run.state,{roll:model.probability+model.keeperCornerProbability+model.caughtSaveProbability/2}));
+  assert.equal(run.state.lastAction.type,'stalling');assert.equal(run.state.lastAction.triggeringAction.type,'save');
+  assert.equal(run.stats.teams[team].shots,0);assert.equal(run.stats.teams[team].onTarget,0);assert.equal(run.stats.teams[team].corners,0);
+  assert.equal(run.stats.pendingShot,null);assert.equal(run.stats.lastPass,null);assert.equal(run.stats.goals.length,0);
+  assert.deepEqual(restoreMatchStats(JSON.parse(JSON.stringify(run.stats)),run.state),run.stats);
 });

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import * as engine from '../dist/engine.js';
 
 const {
-  BOARD_WIDTH, BOARD_HEIGHT, isBox, createGame, currentTeam, legalMoves,
+  BOARD_WIDTH, BOARD_HEIGHT, canOccupySquare, RULES_VERSION, createGame, currentTeam, legalMoves,
   legalKicks, applyMove, applyKick, skipMove, normalizeGame, chooseAIAction,
 } = engine;
 const clone = value => JSON.parse(JSON.stringify(value));
@@ -21,7 +21,7 @@ function fixture({team = 'white', phase = 'attackMove', suffix = 'R1', positions
   const assigned = {[`${team}-K`]: transform([5,14]), [`${other(team)}-K`]: transform([6,0]), [`${other(team)}-N2`]: transform([10,0]), [carrierId]: transform([2,10]), ...positions};
   const occupied = new Set(Object.values(assigned).map(pair => pair.join(',')));
   assert.equal(occupied.size, Object.keys(assigned).length, 'fixture assignments do not overlap');
-  const parking = Array.from({length: 12}, (_, index) => [[0,index + 3],[11,index + 3]]).flat().map(transform);
+  const parking = Array.from({length: 12}, (_, index) => [[0,index + 3],[BOARD_WIDTH-1,index + 3]]).flat().map(transform);
   for (const piece of state.pieces) {
     const spot = assigned[piece.id] || parking.find(pair => !occupied.has(pair.join(',')));
     assert.ok(spot, `parking exists for ${piece.id}`);
@@ -47,7 +47,7 @@ function integrity(state) {
   assert.equal(new Set(state.pieces.map(piece => `${piece.x},${piece.y}`)).size, 22, 'no restart overlaps another player');
   for (const piece of state.pieces) {
     assert.ok(piece.x >= 0 && piece.x < BOARD_WIDTH && piece.y >= 0 && piece.y < BOARD_HEIGHT);
-    if (isBox(piece.x, piece.y)) assert.ok(['K','N'].includes(piece.type));
+    assert.ok(canOccupySquare(piece,piece.x,piece.y),'current box eligibility is respected');
   }
   if (state.ball.carrierId) {
     const carrier = state.pieces.find(piece => piece.id === state.ball.carrierId);
@@ -182,8 +182,8 @@ test('forward then backward movement cannot reset the checkpoint before the roun
   }
 });
 
-test('dribbles, off-ball moves and free pawns do not each count as a possession round', () => {
-  for (const team of ['white','black']) {
+test('dribbles, off-ball moves and the shared pawn or king bonus do not each count as a possession round', () => {
+  for (const team of ['white','black']) for(const useKing of [false,true]) {
     const transform = pair => team === 'white' ? pair : mirror(pair);
     let state = fixture({team,rounds:1,positions:{
       [`${team}-R2`]:transform([8,11]),[`${team}-P1`]:transform([9,9]),
@@ -192,9 +192,9 @@ test('dribbles, off-ball moves and free pawns do not each count as a possession 
     for (const action of [
       [`${team}-R1`,...transform([3,10]),{}],
       [`${team}-R2`,...transform([8,10]),{}],
-      [`${team}-P1`,...transform([10,9]),{freePawn:true}],
+      useKing ? [`${team}-K`,...transform([6,14]),{freePawn:true}] : [`${team}-P1`,...transform([10,9]),{freePawn:true}],
       [`${other(team)}-R2`,...transform([8,4]),{}],
-      [`${other(team)}-P1`,...transform([10,4]),{freePawn:true}],
+      useKing ? [`${other(team)}-K`,...transform([7,0]),{freePawn:true}] : [`${other(team)}-P1`,...transform([10,4]),{freePawn:true}],
     ]) {
       state = applyMove(state,...action);
       assert.equal(state.ballProgress.rounds,1);
@@ -359,8 +359,8 @@ test('interceptions and successful tackles start fresh windows while failed knig
 test('opponent-goal shots reset on declaration, and goal, catch, corner and wide resolution each start fresh', () => {
   for (const team of ['white','black']) {
     const transform = pair => team === 'white' ? pair : mirror(pair);
-    const opponent=other(team),target=team==='white'?[4,-1]:[7,15];
-    const initial=fixture({team,phase:'kick',rounds:2,positions:{[`${team}-R1`]:transform([4,4]),[`${opponent}-K`]:transform([4,0])}});
+    const opponent=other(team),target=transform([6,-1]);
+    const initial=fixture({team,phase:'kick',rounds:2,positions:{[`${team}-R1`]:transform([6,4]),[`${opponent}-K`]:transform([6,0])}});
     const reaction=kick(initial,...target);
     assert.equal(reaction.phase,'keeperReact');
     freshProgress(reaction);
@@ -385,8 +385,8 @@ test('opponent-goal shots reset on declaration, and goal, catch, corner and wide
 test('an own-goal attempt does not count as purposeful attacking progress before it resolves', () => {
   for(const team of ['white','black']) {
     const transform=pair=>team==='white'?pair:mirror(pair);
-    const state=fixture({team,phase:'kick',rounds:2,positions:{[`${team}-R1`]:transform([4,10]),[`${team}-K`]:transform([7,14])}});
-    const target=team==='white'?[4,15]:[7,-1];
+    const state=fixture({team,phase:'kick',rounds:2,positions:{[`${team}-R1`]:transform([6,10]),[`${team}-K`]:transform([8,16])}});
+    const target=transform([6,BOARD_HEIGHT]);
     const pending=kick(state,...target);
     assert.equal(pending.phase,'keeperReact');
     assert.deepEqual(pending.ballProgress,state.ballProgress,'a shot toward your own goal cannot erase the attacking deadline');
@@ -398,7 +398,7 @@ test('a same-team catch of an own-goal attempt cannot erase the deadline, while 
   for(const team of ['white','black']) for(const phase of ['kick','kickoff']) {
     const transform=pair=>team==='white'?pair:mirror(pair);
     const initial=fixture({team,suffix:'K',phase,rounds:2,anchorY:transform([5,10])[1],positions:{[`${team}-K`]:transform([5,14])}});
-    const target=team==='white'?[5,15]:[6,-1];
+    const target=transform([5,BOARD_HEIGHT]);
     const pending=kick(initial,...target);
     assert.equal(pending.ballProgress.rounds,phase==='kick'?2:0);
     const model=engine.shotModel(pending,...target);
@@ -426,7 +426,7 @@ test('a corner back-pass keeps the forced own-goal shot excluded while an outsid
     const release=kick(state,...transform([5,5]));
     assert.equal(release.phase,'keeperRelease');
     assert.equal(release.ballProgress.excludeRelease,true);
-    const target=team==='white'?[5,15]:[6,-1];
+    const target=transform([5,BOARD_HEIGHT]);
     const pending=kick(release,...target);
     assert.equal(pending.phase,'keeperReact');
     assert.equal(pending.ballProgress.excludeRelease,true,'declaration preserves the restart exclusion through the keeper reaction');
@@ -478,7 +478,7 @@ test('legacy migration gives older saves a fresh full window and preserves curre
     const before=clone(state),seed=state.randomState;
     const normalized=normalizeGame(state);
     assert.deepEqual(state,before);
-    assert.equal(normalized.rulesVersion,13);
+    assert.equal(normalized.rulesVersion,RULES_VERSION);
     assert.deepEqual(normalized.ballProgress,state.ballProgress,'in-progress windows survive save restoration and Undo');
     assert.equal(normalized.randomState,seed);
     assert.deepEqual(normalizeGame(normalized),normalized,'migration is idempotent');
@@ -487,7 +487,7 @@ test('legacy migration gives older saves a fresh full window and preserves curre
     delete legacy.ballProgress;
     const legacyBefore=clone(legacy),upgraded=normalizeGame(legacy);
     assert.deepEqual(legacy,legacyBefore);
-    assert.equal(upgraded.rulesVersion,13);
+    assert.equal(upgraded.rulesVersion,RULES_VERSION);
     assert.equal(upgraded.randomState,seed);
     assert.equal(engine.progressInfo(upgraded).roundsRemaining,3,'old snapshots cannot receive an immediate historical penalty');
     assert.equal(upgraded.ballProgress.rounds,0);

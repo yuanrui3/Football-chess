@@ -1,0 +1,231 @@
+{
+  "rulesVersion": 14,
+  "boardWidth": 14,
+  "boardHeight": 17,
+  "goalFiles": [
+    5,
+    6,
+    7,
+    8
+  ],
+  "boxFiles": [
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "boxDepth": 3,
+  "dribbleRange": 8,
+  "longTackleRange": 5,
+  "stallingRule": {
+    "rounds": 3,
+    "minProgress": 4
+  },
+  "shotModel": {
+    "version": 12,
+    "ballSpeed": 6,
+    "blockPerDefender": 0.45,
+    "blockCornerShare": 0.85,
+    "knightGoalMultiplier": 1,
+    "targetBase": 0.98,
+    "distanceDecay": 0.018,
+    "distancePenaltyStart": 3,
+    "longShotDecay": 0.06,
+    "rookLongShotDecay": 0.03,
+    "minOnTarget": 0.01,
+    "maxOnTarget": 0.98,
+    "angleFloor": 0.65,
+    "angleWeight": 0.35,
+    "postAngleFloor": 0.1,
+    "postAngleWeight": 0.9,
+    "postAngleExponent": 1.5,
+    "wideAngleStartDegrees": 45,
+    "wideAngleFullDegrees": 90,
+    "wideAngleAccuracyBonus": 0.25,
+    "centralLaneAccuracyBonus": 0.15,
+    "boxRadius": 0.4,
+    "boxDiveSpeed": 1.3,
+    "boxReactionDelay": 0.15,
+    "boxMaxSave": 0.94,
+    "outsideRadius": 0,
+    "outsideDiveSpeed": 0,
+    "outsideReactionDelay": 0,
+    "outsideMaxSave": 0,
+    "readinessBase": 0.35,
+    "readinessTime": 0.45,
+    "impactSpeedDecay": 0.08,
+    "parryMin": 0.05,
+    "parrySpeedWeight": 0.6,
+    "parryStretchWeight": 0.25,
+    "parryMax": 0.9
+  },
+  "formation": [
+    {
+      "id": "white-K",
+      "team": "white",
+      "type": "K",
+      "x": 6,
+      "y": 15
+    },
+    {
+      "id": "white-Q",
+      "team": "white",
+      "type": "Q",
+      "x": 6,
+      "y": 8
+    },
+    {
+      "id": "white-R1",
+      "team": "white",
+      "type": "R",
+      "x": 1,
+      "y": 13
+    },
+    {
+      "id": "white-R2",
+      "team": "white",
+      "type": "R",
+      "x": 12,
+      "y": 13
+    },
+    {
+      "id": "white-B1",
+      "team": "white",
+      "type": "B",
+      "x": 2,
+      "y": 12
+    },
+    {
+      "id": "white-B2",
+      "team": "white",
+      "type": "B",
+      "x": 11,
+      "y": 12
+    },
+    {
+      "id": "white-N1",
+      "team": "white",
+      "type": "N",
+      "x": 3,
+      "y": 9
+    },
+    {
+      "id": "white-N2",
+      "team": "white",
+      "type": "N",
+      "x": 9,
+      "y": 10
+    },
+    {
+      "id": "white-P1",
+      "team": "white",
+      "type": "P",
+      "x": 5,
+      "y": 13
+    },
+    {
+      "id": "white-P2",
+      "team": "white",
+      "type": "P",
+      "x": 7,
+      "y": 13
+    },
+    {
+      "id": "white-P3",
+      "team": "white",
+      "type": "P",
+      "x": 9,
+      "y": 13
+    },
+    {
+      "id": "black-K",
+      "team": "black",
+      "type": "K",
+      "x": 7,
+      "y": 1
+    },
+    {
+      "id": "black-Q",
+      "team": "black",
+      "type": "Q",
+      "x": 7,
+      "y": 4
+    },
+    {
+      "id": "black-R1",
+      "team": "black",
+      "type": "R",
+      "x": 12,
+      "y": 3
+    },
+    {
+      "id": "black-R2",
+      "team": "black",
+      "type": "R",
+      "x": 1,
+      "y": 3
+    },
+    {
+      "id": "black-B1",
+      "team": "black",
+      "type": "B",
+      "x": 11,
+      "y": 4
+    },
+    {
+      "id": "black-B2",
+      "team": "black",
+      "type": "B",
+      "x": 2,
+      "y": 4
+    },
+    {
+      "id": "black-N1",
+      "team": "black",
+      "type": "N",
+      "x": 10,
+      "y": 7
+    },
+    {
+      "id": "black-N2",
+      "team": "black",
+      "type": "N",
+      "x": 4,
+      "y": 6
+    },
+    {
+      "id": "black-P1",
+      "team": "black",
+      "type": "P",
+      "x": 8,
+      "y": 3
+    },
+    {
+      "id": "black-P2",
+      "team": "black",
+      "type": "P",
+      "x": 6,
+      "y": 3
+    },
+    {
+      "id": "black-P3",
+      "team": "black",
+      "type": "P",
+      "x": 4,
+      "y": 3
+    }
+  ],
+  "notes": [
+    "All variants share every constant listed except knightGoalMultiplier; the box access flag is the other factorial knob.",
+    "Shared Pawn-or-King bonus uses the existing pawnUsed budget field.",
+    "Chance-model values are abstract board-game parameters, not fitted soccer coefficients."
+  ],
+  "tacticalSearch": {
+    "maxDepth": 8,
+    "rootWidth": 9,
+    "nodeLimit": 1400,
+    "extensions": 3
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "matches": 76,
+  "declarations": 479,
+  "resolutions": 479,
+  "wrappedResolutions": 2,
+  "ownGoalDirected": 4,
+  "corrections": [
+    {
+      "v": "B",
+      "difficulty": "tactical",
+      "file": "902774113-white.json",
+      "step": 121,
+      "underlyingType": "save",
+      "probability": 0.014439705259851115
+    },
+    {
+      "v": "C",
+      "difficulty": "tactical",
+      "file": "902774113-white.json",
+      "step": 121,
+      "underlyingType": "save",
+      "probability": 0.014439705259851115
+    }
+  ]
+}

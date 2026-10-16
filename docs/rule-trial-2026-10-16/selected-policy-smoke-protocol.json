@@ -1,0 +1,23 @@
+{
+  "frozenAt": "2026-10-16T06:45:21.438157+00:00",
+  "variants": {
+    "F": {
+      "SHA256": "882ef0b2423153dcddc61816913c12d91526b0939a420a8a682a0620e7c41b25",
+      "access": "All outfield both boxes; King own only",
+      "knightMultiplier": 1
+    }
+  },
+  "casual": {
+    "seeds": [
+      398127601,
+      2910473883
+    ],
+    "kickoffs": [
+      "white",
+      "black"
+    ],
+    "matchesPerVariant": 4,
+    "actions": 480
+  },
+  "note": "Final B after K collector eligibility fix and different-teammate-own-shot catch immediate backpass release fix. Corrected wrapped-shot harness and release round counters. No policy tuning."
+}

@@ -6,9 +6,9 @@ import {
 } from '../dist/engine.js';
 
 const WHITE_HOME = {
-  K: [5, 13], Q: [5, 10], R1: [1, 11], R2: [10, 11],
-  B1: [2, 10], B2: [9, 10], N1: [3, 8], N2: [8, 9],
-  P1: [4, 12], P2: [6, 12], P3: [8, 12],
+  K: [6, 15], Q: [6, 12], R1: [1, 13], R2: [12, 13],
+  B1: [2, 12], B2: [11, 12], N1: [3, 9], N2: [9, 10],
+  P1: [5, 13], P2: [7, 13], P3: [9, 13],
 };
 const clone = value => JSON.parse(JSON.stringify(value));
 const other = team => team === 'white' ? 'black' : 'white';
@@ -20,7 +20,7 @@ const home = (team, suffix) => point(team, WHITE_HOME[suffix]);
 const freshBudget = () => ({normalUsed: false, pawnUsed: false, dribbleUsed: false});
 
 function expectedLocation(team, suffix, kickoff) {
-  return suffix === 'Q' && team === kickoff ? team === 'white' ? [5, 7] : [6, 7] : home(team, suffix);
+  return suffix === 'Q' && team === kickoff ? team === 'white' ? [6, 8] : [7, 8] : home(team, suffix);
 }
 function assertRoster(state) {
   assert.equal(state.pieces.length, 22);
@@ -63,7 +63,7 @@ test('both modes and kickoff choices use the selected asymmetric formation with 
     assert.equal(currentTeam(state), kickoff);
     assert.deepEqual(state.ball, {x: queen.x, y: queen.y, carrierId: queen.id});
     assert.deepEqual(state.positionBudget, freshBudget());
-    assert.equal(state.rulesVersion, 13, 'changing a default formation does not rewrite live rules');
+    assert.equal(state.rulesVersion, 14, 'the larger pitch uses the current rules version');
   }
 });
 
@@ -91,23 +91,23 @@ test('every formation player starts in its own half, with complete rosters and l
       assert.equal(squad.length, 11);
       assert.deepEqual(Object.fromEntries(['K', 'Q', 'R', 'B', 'N', 'P'].map(type => [type, squad.filter(piece => piece.type === type).length])), {K: 1, Q: 1, R: 2, B: 2, N: 2, P: 3});
       for (const piece of squad) {
-        if (piece.id === `${kickoff}-Q`) assert.equal(piece.y, 7, 'only the kickoff queen occupies the neutral row');
-        else assert.ok(team === 'white' ? piece.y > 7 : piece.y < 7, `${piece.id} stays in its own half`);
+        if (piece.id === `${kickoff}-Q`) assert.equal(piece.y, 8, 'only the kickoff queen occupies the neutral row');
+        else assert.ok(team === 'white' ? piece.y > 8 : piece.y < 8, `${piece.id} stays in its own half`);
       }
       const keeper = player(state, team, 'K');
       assert.equal(isBox(keeper.x, keeper.y), true);
-      assert.equal(keeper.y, team === 'white' ? 13 : 1, 'the keeper starts one row in from its own goal line');
+      assert.equal(keeper.y, team === 'white' ? 15 : 1, 'the keeper starts one row in from its own goal line');
     }
   }
 });
 
-test('the wide rooks have an unobstructed accurate nine-square cross-field connection in both directions', () => {
-  for (const kickoff of ['white', 'black']) for (const team of ['white', 'black']) for (const [from, to] of [['R1', 'R2'], ['R2', 'R1']]) {
+test('the wide rooks connect accurately to the nearest pawn in front of the expanded box', () => {
+  for (const kickoff of ['white', 'black']) for (const team of ['white', 'black']) for (const [from, to, expectedDistance] of [['R1', 'P1', 4], ['R2', 'P3', 3]]) {
     const state = createGame({kickoff, seed: 12});
     const {kicking, kick, receiver} = receiverKick(state, team, from, to);
-    assert.equal(kick.distance, 9);
+    assert.equal(kick.distance, expectedDistance);
     assert.equal(kick.accuracy, 1);
-    assert.equal(kick.path.length, 10, 'the path includes its start and nine traveled squares');
+    assert.equal(kick.path.length, expectedDistance + 1, 'the path includes its start and every traveled square');
     const before = clone(kicking), received = applyKick(kicking, receiver.x, receiver.y, {roll: 0});
     assert.deepEqual(kicking, before);
     assert.equal(received.ball.carrierId, receiver.id);
@@ -115,13 +115,13 @@ test('the wide rooks have an unobstructed accurate nine-square cross-field conne
   }
 });
 
-test('opposite-color bishops connect the rear pawn screen and advanced knight while the home queen supports the leading knight', () => {
+test('opposite-color bishops, the second bishop outlet and the home queen support the advanced knights behind the pawn screen', () => {
   for (const team of ['white', 'black']) {
     // The other team kicks off so this side's queen remains at its home square.
     const state = createGame({kickoff: other(team), seed: 26});
     const b1 = player(state, team, 'B1'), b2 = player(state, team, 'B2');
     assert.notEqual((b1.x + b1.y) % 2, (b2.x + b2.y) % 2, 'the bishop pair covers both square colors');
-    for (const [from, to, expectedDistance] of [['B1', 'P1', 2], ['B2', 'N2', 1], ['Q', 'N1', 2]]) {
+    for (const [from, to, expectedDistance] of [['B2', 'N2', 2], ['Q', 'N1', 3]]) {
       const {kick} = receiverKick(state, team, from, to);
       assert.equal(kick.distance, expectedDistance);
       assert.equal(kick.accuracy, 1);
@@ -135,8 +135,8 @@ test('opposite-color bishops connect the rear pawn screen and advanced knight wh
       assert.ok(team === 'white' ? knight.y < b1.y : knight.y > b1.y, 'both knights start ahead of the bishop line');
     }
     const keeper = player(state, team, 'K'), pawns = ['P1', 'P2', 'P3'].map(suffix => player(state, team, suffix));
-    assert.deepEqual(pawns.map(pawn => pawn.y), Array(3).fill(keeper.y + (team === 'white' ? -1 : 1)), 'all three pawns screen one row ahead of the keeper');
-    assert.deepEqual(pawns.map(pawn => pawn.x).sort((a, b) => a - b), team === 'white' ? [4, 6, 8] : [3, 5, 7]);
+    assert.deepEqual(pawns.map(pawn => pawn.y), Array(3).fill(keeper.y + (team === 'white' ? -2 : 2)), 'all three pawns screen in front of the three-row keeper box');
+    assert.deepEqual(pawns.map(pawn => pawn.x).sort((a, b) => a - b), team === 'white' ? [5, 7, 9] : [4, 6, 8]);
     for (const pawn of pawns.slice(0, 2)) assert.equal(Math.abs(pawn.x - keeper.x), 1, 'the first two pawns flank the keeper diagonally');
   }
 });
@@ -145,9 +145,9 @@ function goalFixture(mode, shootingTeam, scoringTeam) {
   const state = createGame({mode, kickoff: other(shootingTeam), seed: 67});
   const shooterId = `${shootingTeam}-R1`;
   const upper = scoringTeam === 'white';
-  const assigned = {'white-K': [5, 13], 'black-K': [6, 1], [shooterId]: upper ? [4, 3] : [7, 11]};
+  const assigned = {'white-K': [6, 15], 'black-K': [7, 1], [shooterId]: upper ? [5, 3] : [8, 13]};
   const occupied = new Set(Object.values(assigned).map(pair => pair.join(',')));
-  const parking = Array.from({length: 15}, (_, y) => [[0, y], [11, y]]).flat();
+  const parking = Array.from({length: 17}, (_, y) => [[0, y], [13, y]]).flat();
   for (const piece of state.pieces) {
     const spot = assigned[piece.id] || parking.find(pair => !occupied.has(pair.join(',')));
     assert.ok(spot);
@@ -157,7 +157,7 @@ function goalFixture(mode, shootingTeam, scoringTeam) {
   state.score = {white: 2, black: 4};
   state.turn = 11;
   const kicking = asKicker(state, shootingTeam, 'R1');
-  return {state: kicking, x: upper ? 4 : 7, y: upper ? -1 : 15};
+  return {state: kicking, x: upper ? 5 : 8, y: upper ? -1 : 17};
 }
 
 test('goals at either end, including own goals, reset all 22 players to the new formation and the conceding kickoff', () => {
@@ -201,14 +201,15 @@ test('loading or undoing an active custom position preserves every coordinate an
       assert.deepEqual(snapshot, before);
       assert.deepEqual(restored, before, `${mode} ${phase}: changing defaults must never rearrange a saved or undone match`);
       assert.deepEqual(normalizeGame(clone(restored)), restored);
-      assert.equal(restored.rulesVersion, 13);
+      assert.equal(restored.rulesVersion, 14);
     }
     const legacy = clone(state);
-    legacy.rulesVersion = 8;
+    legacy.rulesVersion = 13;
     delete legacy.looseBallKickOrigin;
     const migrated = normalizeGame(legacy);
-    assert.deepEqual(migrated.pieces, legacy.pieces, 'migrating an older save changes no custom player coordinates');
+    assert.deepEqual(migrated.pieces, legacy.pieces, 'an older rule tag with current board dimensions preserves valid custom positions');
     assert.deepEqual(migrated.ball, legacy.ball);
+    assert.equal(migrated.rulesVersion, 14);
     assert.equal(migrated.randomState, legacy.randomState);
   }
 });

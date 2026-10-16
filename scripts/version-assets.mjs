@@ -15,8 +15,14 @@ let matchClock=await readFile(asset('match-clock.js'),'utf8');
 matchClock=matchClock.replace(/from ['"]\.\/engine\.js(?:\?v=[^'"]+)?['"]/,`from './engine.js?v=${engineVersion}'`);
 await writeFile(asset('match-clock.js'),matchClock);
 const clockVersion=hash(matchClock);
-const replayVersion=hash(await readFile(asset('goal-replay.js'),'utf8'));
-const statsVersion=hash(await readFile(asset('match-stats.js'),'utf8'));
+async function versionEngineImport(name){
+  let source=await readFile(asset(name),'utf8');
+  source=source.replace(/from ['"]\.\/engine\.js(?:\?v=[^'"]+)?['"]/,`from './engine.js?v=${engineVersion}'`);
+  await writeFile(asset(name),source);
+  return hash(source);
+}
+const replayVersion=await versionEngineImport('goal-replay.js');
+const statsVersion=await versionEngineImport('match-stats.js');
 let app=await readFile(asset('app.js'),'utf8');
 app=app.replace(/from ['"]\.\/engine\.js(?:\?v=[^'"]+)?['"]/,`from './engine.js?v=${engineVersion}'`);
 app=app.replace(/['"]\.\/ai-worker\.js(?:\?v=[^'"]+)?['"]/,`'./ai-worker.js?v=${workerVersion}'`);

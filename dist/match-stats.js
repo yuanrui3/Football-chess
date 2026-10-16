@@ -1,5 +1,7 @@
 /** Match records are independent of engine decisions and replay playback. */
+import {BOARD_WIDTH, BOARD_HEIGHT, GOAL_FILES, BOX_FILES, BOX_DEPTH} from './engine.js?v=882ef0b24231';
 const TEAMS = ['white', 'black'];
+const SHOT_RESULTS = ['goal', 'save', 'shotMiss', 'blockedShot'];
 const IDS = /^(white|black)-(K|Q|[RBN][12]|P[123])$/;
 const isTeam = team => TEAMS.includes(team);
 const isId = id => typeof id === 'string' && IDS.test(id);
@@ -9,27 +11,28 @@ const finite = value => Number.isFinite(value) && value >= 0;
 const copy = value => JSON.parse(JSON.stringify(value));
 const emptyTeam = () => ({shots: 0, onTarget: 0, corners: 0, possessionMs: 0});
 const scoreOf = score => Object.fromEntries(TEAMS.map(team => [team, count(score?.[team]) ? score[team] : 0]));
-const pitchPoint = point => point && Number.isInteger(point.x) && Number.isInteger(point.y) && point.x >= 0 && point.x < 12 && point.y >= 0 && point.y < 15 ? {x: point.x, y: point.y} : null;
-const goalPoint = point => point && [4, 5, 6, 7].includes(point.x) && [-1, 15].includes(point.y) ? {x: point.x, y: point.y} : null;
+const pitchPoint = point => point && Number.isInteger(point.x) && Number.isInteger(point.y) && point.x >= 0 && point.x < BOARD_WIDTH && point.y >= 0 && point.y < BOARD_HEIGHT ? {x: point.x, y: point.y} : null;
+const goalPoint = point => point && GOAL_FILES.includes(point.x) && [-1, BOARD_HEIGHT].includes(point.y) ? {x: point.x, y: point.y} : null;
+const maxShotDistance = Math.hypot(Math.max(GOAL_FILES.at(-1), BOARD_WIDTH - 1 - GOAL_FILES[0]), BOARD_HEIGHT - 0.5);
 function locationFields(record = {}, shot = null) {
   const origin = pitchPoint(shot?.from) || pitchPoint(record.origin);
   const target = goalPoint(shot ? {x: shot.x, y: shot.y} : null) || goalPoint(record.target);
   // Engine shooting distance ends on the goal plane between the pitch and goal
   // square, rather than at the centre of the decorative goal square.
-  const distance = origin && target ? Math.hypot(target.x - origin.x, (target.y < 0 ? -0.5 : 14.5) - origin.y)
-    : finite(record.distance) && record.distance > 0 && record.distance <= 20 ? record.distance : null;
+  const distance = origin && target ? Math.hypot(target.x - origin.x, (target.y < 0 ? -0.5 : BOARD_HEIGHT - 0.5) - origin.y)
+    : finite(record.distance) && record.distance > 0 && record.distance <= maxShotDistance ? record.distance : null;
   return {origin, target, distance};
 }
 export function normalizeGoalOrigin(goal) {
   const origin = pitchPoint(goal?.origin);
-  return origin ? goal.team === 'black' ? {x: 11 - origin.x, y: 14 - origin.y} : origin : null;
+  return origin ? goal.team === 'black' ? {x: BOARD_WIDTH - 1 - origin.x, y: BOARD_HEIGHT - 1 - origin.y} : origin : null;
 }
-const goalZone = origin => origin.y >= 5 ? 'distant' : origin.x < 4 || origin.x > 7 ? 'wide' : origin.y < 2 ? 'box' : 'central';
+const goalZone = origin => origin.y >= BOX_DEPTH + 3 ? 'distant' : !BOX_FILES.includes(origin.x) ? 'wide' : origin.y < BOX_DEPTH ? 'box' : 'central';
 const emptyZones = () => ({box: 0, central: 0, wide: 0, distant: 0});
 export const shortPieceId = id => isId(id) ? id.split('-')[1] : 'Unknown';
 
 export function createMatchStats({partial = false, baselineScore = {white: 0, black: 0}} = {}) {
-  return {version: 1, partial: !!partial, baselineScore: scoreOf(baselineScore),
+  return {version: 2, pitch: {width: BOARD_WIDTH, height: BOARD_HEIGHT}, partial: !!partial, baselineScore: scoreOf(baselineScore),
     teams: {white: emptyTeam(), black: emptyTeam()}, goals: [], lastPass: null, pendingShot: null};
 }
 
@@ -45,7 +48,7 @@ export function restoreMatchStats(saved, game, {partial = true} = {}) {
     }
     return stats;
   };
-  if (saved?.version !== 1 || typeof saved.partial !== 'boolean' || !Array.isArray(saved.goals)
+  if (saved?.version !== 2 || saved.pitch?.width !== BOARD_WIDTH || saved.pitch?.height !== BOARD_HEIGHT || typeof saved.partial !== 'boolean' || !Array.isArray(saved.goals)
       || !TEAMS.every(team => count(saved.baselineScore?.[team]) && ['shots', 'onTarget', 'corners'].every(key => count(saved.teams?.[team]?.[key])) && finite(saved.teams?.[team]?.possessionMs))) return fallback();
   if (!saved.goals.every(goal => isTeam(goal.team) && isId(goal.scorerId) && (goal.assistId === null || isId(goal.assistId))
       && typeof goal.ownGoal === 'boolean' && count(goal.turn) && (goal.matchSeconds === null || finite(goal.matchSeconds))
@@ -76,13 +79,17 @@ export function addPossessionTime(stats, game, elapsedMs) {
 
 export function recordMatchTransition(stats, before, after, {matchSeconds = null} = {}) {
   if (!after || after === before) return stats;
-  const next = copy(stats), action = after.lastAction || {};
+  const next = copy(stats), recordedAction = after.lastAction || {};
+  // A caught own-goal attempt can complete a stalling round. The outer action
+  // carries the penalty while its triggering action still resolves the shot.
+  const action = before.phase === 'keeperReact' && recordedAction.type === 'stalling' && SHOT_RESULTS.includes(recordedAction.triggeringAction?.type)
+    ? recordedAction.triggeringAction : recordedAction;
   const newShot = after.phase === 'keeperReact' && before.phase !== 'keeperReact' && action.type === 'shotAttempt';
-  const resolution = before.phase === 'keeperReact' && ['goal', 'save', 'shotMiss'].includes(action.type);
+  const resolution = before.phase === 'keeperReact' && SHOT_RESULTS.includes(action.type);
   const shootingTeam = before.pendingShot?.shootingTeam || action.shootingTeam;
   if (newShot && isTeam(action.team) && after.pendingShot?.scoringTeam === action.team) next.teams[action.team].shots++;
   if (resolution && isTeam(shootingTeam) && before.pendingShot?.scoringTeam === shootingTeam && ['goal', 'save'].includes(action.type)) next.teams[shootingTeam].onTarget++;
-  if (['save', 'out', 'shotMiss'].includes(action.type) && action.restart?.type === 'corner' && isTeam(action.restart.team)) next.teams[action.restart.team].corners++;
+  if (['save', 'out', 'shotMiss', 'blockedShot'].includes(action.type) && action.restart?.type === 'corner' && isTeam(action.restart.team)) next.teams[action.restart.team].corners++;
   if (resolution && action.type === 'goal' && isTeam(action.team)) {
     const scorerId = action.shooterId || action.pieceId || before.pendingShot?.shooterId;
     if (isId(scorerId)) {

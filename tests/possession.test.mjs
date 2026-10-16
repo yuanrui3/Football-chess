@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import * as engine from '../dist/engine.js';
 
 const {
-  BOARD_WIDTH, BOARD_HEIGHT, isBox, createGame, currentTeam,
+  BOARD_WIDTH, BOARD_HEIGHT, GOAL_FILES, BOX_DEPTH, RULES_VERSION, inOwnBox, canOccupySquare, isBox, createGame, currentTeam,
   legalMoves, legalKicks, applyMove, applyKick, skipMove, chooseAIAction,
 } = engine;
 const clone = value => JSON.parse(JSON.stringify(value));
@@ -19,7 +19,7 @@ function fixture({ team = 'white', phase = 'attackMove', carrier = `${team}-R1`,
   const occupied = new Set(Object.values(assigned).map(pair => pair.join(',')));
   assert.equal(occupied.size, Object.keys(assigned).length, 'fixture assignments cannot overlap');
   for (const pair of clear) occupied.add(pair.join(','));
-  const parking = Array.from({ length: BOARD_HEIGHT }, (_, y) => [[0, y], [11, y]]).flat();
+  const parking = Array.from({ length: BOARD_HEIGHT }, (_, y) => [[0, y], [BOARD_WIDTH-1, y]]).flat();
   for (const piece of state.pieces) {
     const spot = assigned[piece.id] || parking.find(pair => !occupied.has(pair.join(',')));
     assert.ok(spot, `parking exists for ${piece.id}`);
@@ -44,7 +44,7 @@ function integrity(state) {
   assert.equal(new Set(state.pieces.map(piece => `${piece.x},${piece.y}`)).size, 22, 'no players overlap');
   for (const piece of state.pieces) {
     assert.ok(piece.x >= 0 && piece.x < BOARD_WIDTH && piece.y >= 0 && piece.y < BOARD_HEIGHT);
-    if (isBox(piece.x, piece.y)) assert.ok(['K', 'N'].includes(piece.type));
+    assert.ok(canOccupySquare(piece,piece.x,piece.y), `${piece.id} respects current box access`);
   }
   if (state.ball.carrierId) {
     const carrier = state.pieces.find(piece => piece.id === state.ball.carrierId);
@@ -122,7 +122,7 @@ test('a spent dribble cannot reuse an unused normal action and a spent normal ac
   assert.ok(legalMoves(state, 'white-P1', { freePawn: true }).length);
 });
 
-test('every carrier gets exactly one dribble in every allowance order, with the bonus reserved for an off-ball pawn', () => {
+test('every carrier gets exactly one dribble in every allowance order, with the shared bonus reserved for an off-ball pawn or king', () => {
   const dribbleTargets = { K: [5, 8], Q: [5, 8], R1: [5, 8], B1: [5, 7], N1: [6, 7], P1: [5, 8] };
   for (const team of ['white', 'black']) for (const [suffix, dribbleTarget] of Object.entries(dribbleTargets)) {
     for (const order of permutations(['dribble', 'normal', 'pawn'])) {
@@ -139,7 +139,7 @@ test('every carrier gets exactly one dribble in every allowance order, with the 
       };
       for (const kind of order) {
         const before = clone(state);
-        assert.deepEqual(legalMoves(state, carrierId, { freePawn: true }), [], 'a bonus pawn move cannot carry the ball, even before its dribble');
+        assert.deepEqual(legalMoves(state, carrierId, { freePawn: true }), [], 'the pawn-or-king bonus cannot carry the ball, even before its dribble');
         assert.throws(() => applyMove(state, carrierId, ...transform(dribbleTarget), { freePawn: true }));
         assert.deepEqual(state, before, 'rejected carrier bonus preserves the saved/undo state');
         if (spent.has('dribble')) assert.deepEqual(legalMoves(state, carrierId), [], 'unused off-ball or pawn allowances cannot grant a second dribble');
@@ -313,7 +313,7 @@ function assertGoalKick(state, team, phase = 'attackMove') {
   assert.equal(state.restart.team, team);
   assert.deepEqual(state.restart.spot, { x: state.ball.x, y: state.ball.y });
   assert.ok(isBox(state.ball.x, state.ball.y));
-  assert.equal(team === 'black' ? state.ball.y <= 1 : state.ball.y >= 13, true);
+  assert.ok(inOwnBox(team,state.ball.x,state.ball.y));
   assert.deepEqual(legalMoves(state, state.ball.carrierId), [], 'the king is locked during resettling');
   assert.equal(engine.positionActions(state).dribbleAvailable, false);
   for (const piece of state.pieces) for (const freePawn of [false, true]) {
@@ -324,7 +324,7 @@ function assertGoalKick(state, team, phase = 'attackMove') {
     assert.ok(kicks.length, 'the king has a legal pass after both teams reposition');
     assert.equal(kicks.some(kick => kick.goal), false, 'a goal kick must be a pass rather than a direct shot');
   } else assert.deepEqual(kicks, [], 'neither team may skip the other positioning turn by kicking early');
-  assert.throws(() => applyKick(state, 5, team === 'black' ? -1 : 15));
+  assert.throws(() => applyKick(state, GOAL_FILES[0], team === 'black' ? -1 : BOARD_HEIGHT));
 }
 
 test('long-pass end-line exits give both teams resettling before the king passes, even when a knight is nearer', () => {
@@ -341,8 +341,8 @@ test('long-pass end-line exits give both teams resettling before the king passes
 test('wide shots also allow resettling before the king passes and preserve the wide-shot record', () => {
   for (const team of ['white', 'black']) {
     const transform = pair => team === 'white' ? pair : mirror(pair);
-    const state = fixture({ team, phase: 'kick', positions: { [`${team}-R1`]: transform([4, 7]), [`${other(team)}-K`]: transform([7, 0]), [`${other(team)}-N1`]: transform([5, 0]) }, clear: Array.from({ length: 8 }, (_, y) => transform([4, y])) });
-    const target = team === 'white' ? [4, -1] : [7, 15];
+    const state = fixture({ team, phase: 'kick', positions: { [`${team}-R1`]: transform([GOAL_FILES[0], 7]), [`${other(team)}-K`]: transform([7, 0]), [`${other(team)}-N1`]: transform([GOAL_FILES[1], 0]) }, clear: Array.from({ length: 8 }, (_, y) => transform([GOAL_FILES[0], y])) });
+    const target = transform([GOAL_FILES[0], -1]);
     const declared = applyKick(state, ...target);
     assert.equal(declared.phase, 'keeperReact');
     const result = skipMove(declared, { roll: .999999 });
@@ -396,7 +396,7 @@ test('version-five immediate goal kicks migrate to a fresh protected round, incl
     if (!hasMetadata) { delete state.restart; delete state.offside; }
     const before = clone(state), normalized = engine.normalizeGame(state);
     assert.deepEqual(state, before, 'loading must not mutate the saved match or undo snapshot');
-    assert.equal(normalized.rulesVersion, 13);
+    assert.equal(normalized.rulesVersion, RULES_VERSION);
     assert.equal(normalized.randomState, state.randomState);
     assert.deepEqual(normalized.score, state.score);
     assert.deepEqual(normalized.positionBudget, budget(), 'both teams receive a fresh round after an old immediate restart');
@@ -418,7 +418,7 @@ test('normalizing existing resettling saves preserves phase, spent budget and ev
       state.rulesVersion = 5;
       const before = clone(state), normalized = engine.normalizeGame(state);
       assert.deepEqual(state, before);
-      assert.deepEqual(normalized, { ...state, rulesVersion: 13 }, 'valid protected restart is preserved exactly except the version');
+      assert.deepEqual(normalized, { ...state, rulesVersion: RULES_VERSION }, 'valid protected restart is preserved exactly except the version');
       assert.deepEqual(engine.normalizeGame(normalized), normalized);
       assertGoalKick(normalized, team, phase);
     }
@@ -477,7 +477,7 @@ test('loading or undoing a legacy bonus carry keeps its dribble spent while refr
     const snapshot = JSON.parse(JSON.stringify(state)), before = clone(snapshot);
     const normalized = engine.normalizeGame(snapshot);
     assert.deepEqual(snapshot, before, 'a cached match or undo snapshot remains unmodified');
-    assert.deepEqual(normalized, { ...before, rulesVersion: 13, positionBudget: budget(false, true, true), ballProgress: {...before.ballProgress, anchorY: before.ball.y, rounds: 0} }, 'only the rules version, progress checkpoint and already-used carry allowance change');
+    assert.deepEqual(normalized, { ...before, rulesVersion: RULES_VERSION, positionBudget: budget(false, true, true), ballProgress: {...before.ballProgress, anchorY: before.ball.y, rounds: 0} }, 'only the rules version, progress checkpoint and already-used carry allowance change');
     assert.equal(normalized.randomState, before.randomState, 'loading consumes no future random outcome');
     assert.deepEqual(legalMoves(normalized, `${team}-P1`), [], 'the past bonus carry counts as the one permitted dribble');
     assert.deepEqual(legalMoves(normalized, `${team}-P1`, { freePawn: true }), []);
@@ -502,7 +502,7 @@ test('legacy migration distinguishes bonus collection, off-ball moves and unrela
   for (const [name, state] of [['collection', collected], ['off-ball bonus', offBall], ['current version', currentVersion], ['defending phase', defending], ['no previous action', noAction], ['non-move action', unrelatedAction]]) {
     const before = clone(state), normalized = engine.normalizeGame(state);
     assert.deepEqual(state, before, `${name}: normalization is pure`);
-    assert.deepEqual(normalized, { ...before, rulesVersion: 13, ballProgress: {...before.ballProgress, anchorY: before.ball.y, rounds: 0} }, `${name}: the dribble allowance must not be consumed without evidence of a carry`);
+    assert.deepEqual(normalized, { ...before, rulesVersion: RULES_VERSION, ballProgress: {...before.ballProgress, anchorY: before.ball.y, rounds: 0} }, `${name}: the dribble allowance must not be consumed without evidence of a carry`);
     assert.equal(normalized.randomState, before.randomState);
     assert.deepEqual(engine.normalizeGame(normalized), normalized);
   }

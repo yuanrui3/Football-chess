@@ -1,0 +1,217 @@
+{
+  "A": {
+    "matches": 4,
+    "goals": 0,
+    "goalsPerGame": 0,
+    "shots": 1,
+    "opponentGoalAttempts": 1,
+    "ownGoalAttempts": 0,
+    "opponentGoalXG": 0.5351736587614522,
+    "ownGoalXG": 0,
+    "resolvedShots": 1,
+    "unresolvedShots": 0,
+    "xG": 0.5351736587614522,
+    "goalsByType": {},
+    "certainAtDeclare": 0,
+    "certainAfterKeeper": 0,
+    "certainEvenBestKeeper": 0,
+    "unanswerable": [],
+    "zeroGoalMatches": 4,
+    "highGoalMatches": 0,
+    "maxGoals": 0,
+    "maxRepeat": 1,
+    "turnovers": 39,
+    "stalls": 3,
+    "offsides": 4,
+    "corners": 1,
+    "blocks": 0,
+    "blockCorners": 0,
+    "blockPossessions": 0,
+    "attemptsThroughBodies": 0,
+    "blockxG": 0,
+    "restartsTaken": 8,
+    "ordinaryRounds": 333,
+    "actions": 1920,
+    "actionsPerGoal": null,
+    "meanPossessionActions": 44.651162790697676,
+    "longestPossessionActions": 139,
+    "goalsInBox": 0,
+    "goalsFromEndline": 0,
+    "goalOrigins": {},
+    "shotDistances": {
+      "le3": 1,
+      "from3to6": 0,
+      "over6": 0
+    },
+    "goalDistances": {
+      "le3": 0,
+      "from3to6": 0,
+      "over6": 0
+    },
+    "first8": {
+      "goals": 0,
+      "certain": 0
+    },
+    "kingBonusMoves": 162,
+    "pawnBonusMoves": 576,
+    "restartActions": 40,
+    "cornerRestartActions": 5,
+    "maxConsecutiveCorners": 1,
+    "ms": 722056.6879169999,
+    "scores": [
+      "0-0",
+      "0-0",
+      "0-0",
+      "0-0"
+    ]
+  },
+  "B": {
+    "matches": 4,
+    "goals": 0,
+    "goalsPerGame": 0,
+    "shots": 4,
+    "opponentGoalAttempts": 2,
+    "ownGoalAttempts": 2,
+    "opponentGoalXG": 0.4884286246448497,
+    "ownGoalXG": 0.02887941051970223,
+    "resolvedShots": 4,
+    "unresolvedShots": 0,
+    "xG": 0.5173080351645519,
+    "goalsByType": {},
+    "certainAtDeclare": 0,
+    "certainAfterKeeper": 0,
+    "certainEvenBestKeeper": 0,
+    "unanswerable": [],
+    "zeroGoalMatches": 4,
+    "highGoalMatches": 0,
+    "maxGoals": 0,
+    "maxRepeat": 1,
+    "turnovers": 55,
+    "stalls": 1,
+    "offsides": 7,
+    "corners": 1,
+    "blocks": 0,
+    "blockCorners": 0,
+    "blockPossessions": 0,
+    "attemptsThroughBodies": 0,
+    "blockxG": 0,
+    "restartsTaken": 11,
+    "ordinaryRounds": 310,
+    "actions": 1920,
+    "actionsPerGoal": null,
+    "meanPossessionActions": 32.54237288135593,
+    "longestPossessionActions": 224,
+    "goalsInBox": 0,
+    "goalsFromEndline": 0,
+    "goalOrigins": {},
+    "shotDistances": {
+      "le3": 2,
+      "from3to6": 0,
+      "over6": 2
+    },
+    "goalDistances": {
+      "le3": 0,
+      "from3to6": 0,
+      "over6": 0
+    },
+    "first8": {
+      "goals": 0,
+      "certain": 0
+    },
+    "kingBonusMoves": 129,
+    "pawnBonusMoves": 603,
+    "restartActions": 55,
+    "cornerRestartActions": 10,
+    "maxConsecutiveCorners": 1,
+    "ms": 774392.167977,
+    "scores": [
+      "0-0",
+      "0-0",
+      "0-0",
+      "0-0"
+    ]
+  },
+  "C": {
+    "matches": 4,
+    "goals": 2,
+    "goalsPerGame": 0.5,
+    "shots": 5,
+    "opponentGoalAttempts": 3,
+    "ownGoalAttempts": 2,
+    "opponentGoalXG": 2.042466396497918,
+    "ownGoalXG": 0.02887941051970223,
+    "resolvedShots": 5,
+    "unresolvedShots": 0,
+    "xG": 2.0713458070176203,
+    "goalsByType": {
+      "N": 1,
+      "R": 1
+    },
+    "certainAtDeclare": 1,
+    "certainAfterKeeper": 1,
+    "certainEvenBestKeeper": 1,
+    "unanswerable": [
+      {
+        "step": 438,
+        "piece": "N",
+        "origin": {
+          "x": 7,
+          "y": 0
+        },
+        "goal": true,
+        "bestKeeperChance": 1
+      }
+    ],
+    "zeroGoalMatches": 2,
+    "highGoalMatches": 0,
+    "maxGoals": 1,
+    "maxRepeat": 1,
+    "turnovers": 56,
+    "stalls": 3,
+    "offsides": 9,
+    "corners": 0,
+    "blocks": 0,
+    "blockCorners": 0,
+    "blockPossessions": 0,
+    "attemptsThroughBodies": 0,
+    "blockxG": 0,
+    "restartsTaken": 14,
+    "ordinaryRounds": 319,
+    "actions": 1920,
+    "actionsPerGoal": 960,
+    "meanPossessionActions": 32,
+    "longestPossessionActions": 162,
+    "goalsInBox": 2,
+    "goalsFromEndline": 2,
+    "goalOrigins": {
+      "7,0": 1,
+      "8,0": 1
+    },
+    "shotDistances": {
+      "le3": 3,
+      "from3to6": 0,
+      "over6": 2
+    },
+    "goalDistances": {
+      "le3": 2,
+      "from3to6": 0,
+      "over6": 0
+    },
+    "first8": {
+      "goals": 2,
+      "certain": 1
+    },
+    "kingBonusMoves": 168,
+    "pawnBonusMoves": 587,
+    "restartActions": 70,
+    "cornerRestartActions": 5,
+    "maxConsecutiveCorners": 1,
+    "ms": 824189.555865,
+    "scores": [
+      "1-0",
+      "1-0",
+      "0-0",
+      "0-0"
+    ]
+  }
+}

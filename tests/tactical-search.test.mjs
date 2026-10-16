@@ -10,10 +10,10 @@ const freshBudget = () => ({normalUsed: false, pawnUsed: false, dribbleUsed: fal
 // irrelevant bodies clear of the central continuation without removing them.
 function fixture({phase = 'attackMove', carrier = 'white-Q', positions = {}, ball, budget} = {}) {
   const state = e.createGame({seed: 31029});
-  const assigned = {'white-K': [4, 14], 'black-K': [7, 0], ...positions};
+  const assigned = {'white-K': [6, 16], 'black-K': [7, 0], ...positions};
   const used = new Set(Object.values(assigned).map(point => point.join(',')));
   assert.equal(used.size, Object.keys(assigned).length, 'diagram has no overlapping assignments');
-  const parking = Array.from({length: 15}, (_, y) => [[0, y], [11, y]]).flat();
+  const parking = Array.from({length: e.BOARD_HEIGHT}, (_, y) => [[0, y], [e.BOARD_WIDTH - 1, y]]).flat();
   for (const piece of state.pieces) {
     const location = assigned[piece.id] || parking.find(point => !used.has(point.join(',')));
     assert.ok(location);
@@ -33,21 +33,21 @@ function fixture({phase = 'attackMove', carrier = 'white-Q', positions = {}, bal
   state.ballProgress = {team: state.attack, anchorY: state.ball.y, rounds: 0, pendingRelease: false, excludeRelease: false};
   assert.equal(state.pieces.length, 22);
   assert.equal(new Set(state.pieces.map(piece => `${piece.x},${piece.y}`)).size, 22);
-  assert.ok(state.pieces.every(piece => !e.isBox(piece.x, piece.y) || ['K', 'N'].includes(piece.type)));
+  assert.ok(state.pieces.every(piece => e.canOccupySquare(piece, piece.x, piece.y)));
   return state;
 }
 
 function mirrored(state) {
   const swapped = clone(state), id = value => value?.replace(/^(white|black)/, other) ?? null;
-  const point = value => value && ({x: 11 - value.x, y: 14 - value.y});
+  const point = value => value && ({x: e.BOARD_WIDTH - 1 - value.x, y: e.BOARD_HEIGHT - 1 - value.y});
   swapped.attack = other(state.attack);
   swapped.score = {white: state.score.black, black: state.score.white};
   swapped.pieces = state.pieces.map(piece => ({...piece, ...point(piece), id: id(piece.id), team: other(piece.team)}));
   swapped.ball = {...point(state.ball), carrierId: id(state.ball.carrierId)};
   if (state.restart) swapped.restart = {...state.restart, team: other(state.restart.team), takerId: id(state.restart.takerId), spot: point(state.restart.spot)};
-  if (state.ballProgress) swapped.ballProgress = {...state.ballProgress, team: other(state.ballProgress.team), anchorY: 14 - state.ballProgress.anchorY};
+  if (state.ballProgress) swapped.ballProgress = {...state.ballProgress, team: other(state.ballProgress.team), anchorY: e.BOARD_HEIGHT - 1 - state.ballProgress.anchorY};
   if (state.looseBallKickOrigin) swapped.looseBallKickOrigin = {team: other(state.looseBallKickOrigin.team), pieceId: id(state.looseBallKickOrigin.pieceId)};
-  if (state.offside) swapped.offside = {...state.offside, team: other(state.offside.team), kickerId: id(state.offside.kickerId), flaggedIds: state.offside.flaggedIds.map(id), ball: point(state.offside.ball), secondLastY: 14 - state.offside.secondLastY};
+  if (state.offside) swapped.offside = {...state.offside, team: other(state.offside.team), kickerId: id(state.offside.kickerId), flaggedIds: state.offside.flaggedIds.map(id), ball: point(state.offside.ball), secondLastY: e.BOARD_HEIGHT - 1 - state.offside.secondLastY};
   return swapped;
 }
 
@@ -133,16 +133,16 @@ test('transposition reuse preserves the fully completed result of the uncached s
 });
 
 test('a cutoff bound tied with the best score cannot replace a proven stronger defensive continuation', () => {
-  // Captured after action 215 of a legal Casual game, seed 53003. An independent
-  // exhaustive search of the same selective tree gives B2-f9 a value of -264;
-  // every other shortlisted move is -295 at depth five. Before the fix, a
-  // pruned R2-f11 branch returned only an upper bound of -264 and incorrectly
-  // replaced B2 as if those two continuations were equally good.
+  // This diagram originated after action 215 of a Casual game, seed 53003;
+  // its keeper was moved into the new 14×17 own box. The original bug treated
+  // a pruned R2 branch's upper bound as an exact tie and replaced the proven
+  // stronger B2 continuation. Both cache modes must still finish with that
+  // continuation and the same recalculated value on the expanded pitch.
   const state = fixture({phase: 'defendMove', carrier: 'black-N1', positions: {
-    'white-K': [6, 14], 'white-Q': [7, 5], 'white-R1': [2, 9], 'white-R2': [6, 4],
+    'white-K': [6, 15], 'white-Q': [7, 5], 'white-R1': [2, 9], 'white-R2': [6, 4],
     'white-B1': [9, 3], 'white-B2': [1, 2], 'white-N1': [1, 3], 'white-N2': [6, 5],
     'white-P1': [2, 8], 'white-P2': [6, 7], 'white-P3': [8, 6],
-    'black-K': [7, 1], 'black-Q': [0, 6], 'black-R1': [8, 2], 'black-R2': [3, 6],
+    'black-K': [7, 1], 'black-Q': [0, 6], 'black-R1': [8, 3], 'black-R2': [3, 6],
     'black-B1': [3, 8], 'black-B2': [2, 1], 'black-N1': [5, 5], 'black-N2': [3, 7],
     'black-P1': [6, 6], 'black-P2': [5, 8], 'black-P3': [4, 4],
   }});
@@ -157,12 +157,12 @@ test('a cutoff bound tied with the best score cannot replace a proven stronger d
     assert.equal(report.stats.completedDepth, options.maxDepth);
     assert.equal(report.stats.aborted, false);
     assert.deepEqual(report.action, expected, 'preserve the genuinely best defensive continuation when another branch only ties its bound');
-    assert.equal(report.value, -264, 'the selected action has the independently verified value');
+    assert.equal(report.value, -268, 'the selected action has the verified expanded-pitch value');
   }
 });
 
 test('Tactical horizon extensions resolve a close finish instead of valuing an unresolved shot as possession, either color', () => {
-  const original = fixture({phase: 'kick', carrier: 'white-R1', positions: {'white-R1': [4, 2], 'black-K': [7, 0]}});
+  const original = fixture({phase: 'kick', carrier: 'white-R1', positions: {'white-R1': [5, 3], 'black-K': [8, 0]}});
   for (const state of [original, mirrored(original)]) {
     const report = analysis(state, {maxDepth: 1, nodeLimit: 12000});
     assert.equal(report.stats.completedDepth, 1);
@@ -201,7 +201,7 @@ test('Tactical wins certain possession during its defensive turn, either color',
 });
 
 test('forced keeper release remains a kick even when deeper search values a future reposition, either color', () => {
-  const original = fixture({phase: 'keeperRelease', carrier: 'white-K', positions: {'white-K': [4, 14], 'white-Q': [4, 9], 'white-R1': [2, 10]}});
+  const original = fixture({phase: 'keeperRelease', carrier: 'white-K', positions: {'white-K': [6, 16], 'white-Q': [6, 11], 'white-R1': [2, 12]}});
   for (const state of [original, mirrored(original)]) {
     const report = analysis(state, {maxDepth: 4, nodeLimit: 650});
     assert.equal(report.action.type, 'kick');

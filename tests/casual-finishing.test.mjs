@@ -7,10 +7,10 @@ const other = team => team === 'white' ? 'black' : 'white';
 
 function fixture({phase = 'attackMove', carrier = 'white-Q', positions = {}, budget} = {}) {
   const state = e.createGame({seed: 17});
-  const assigned = {'white-K': [4, 14], 'black-K': [6, 0], 'white-Q': [4, 3], ...positions};
+  const assigned = {'white-K': [6, 16], 'black-K': [8, 0], 'white-Q': [6, 3], ...positions};
   const used = new Set(Object.values(assigned).map(point => point.join(',')));
   assert.equal(used.size, Object.keys(assigned).length);
-  const parking = Array.from({length: 15}, (_, y) => [[0, y], [11, y]]).flat();
+  const parking = Array.from({length: e.BOARD_HEIGHT}, (_, y) => [[0, y], [e.BOARD_WIDTH - 1, y]]).flat();
   for (const piece of state.pieces) {
     const point = assigned[piece.id] || parking.find(point => !used.has(point.join(',')));
     assert.ok(point);
@@ -30,20 +30,20 @@ function fixture({phase = 'attackMove', carrier = 'white-Q', positions = {}, bud
   state.looseBallKickOrigin = null;
   assert.equal(state.pieces.length, 22);
   assert.equal(new Set(state.pieces.map(piece => `${piece.x},${piece.y}`)).size, 22);
-  assert.ok(state.pieces.every(piece => !e.isBox(piece.x, piece.y) || ['K', 'N'].includes(piece.type)));
+  assert.ok(state.pieces.every(piece => e.canOccupySquare(piece, piece.x, piece.y)));
   return state;
 }
 
 function mirrored(state) {
   const swapped = clone(state), id = value => value?.replace(/^(white|black)/, other) ?? null;
-  const point = value => value && ({x: 11 - value.x, y: 14 - value.y});
+  const point = value => value && ({x: e.BOARD_WIDTH - 1 - value.x, y: e.BOARD_HEIGHT - 1 - value.y});
   swapped.attack = other(state.attack);
   swapped.score = {white: state.score.black, black: state.score.white};
   swapped.pieces = state.pieces.map(piece => ({...piece, ...point(piece), id: id(piece.id), team: other(piece.team)}));
   swapped.ball = {...point(state.ball), carrierId: id(state.ball.carrierId)};
-  swapped.ballProgress = {...state.ballProgress, team: other(state.ballProgress.team), anchorY: 14 - state.ballProgress.anchorY};
+  swapped.ballProgress = {...state.ballProgress, team: other(state.ballProgress.team), anchorY: e.BOARD_HEIGHT - 1 - state.ballProgress.anchorY};
   if (state.restart) swapped.restart = {...state.restart, team: other(state.restart.team), takerId: id(state.restart.takerId), spot: point(state.restart.spot)};
-  if (state.offside) swapped.offside = {...state.offside, team: other(state.offside.team), kickerId: id(state.offside.kickerId), flaggedIds: state.offside.flaggedIds.map(id), ball: point(state.offside.ball), secondLastY: 14 - state.offside.secondLastY};
+  if (state.offside) swapped.offside = {...state.offside, team: other(state.offside.team), kickerId: id(state.offside.kickerId), flaggedIds: state.offside.flaggedIds.map(id), ball: point(state.offside.ball), secondLastY: e.BOARD_HEIGHT - 1 - state.offside.secondLastY};
   return swapped;
 }
 
@@ -104,10 +104,8 @@ test('Casual preserves a strong finish through positioning instead of repeating 
   const original = fixture();
   const before = bestFinish(original);
   assert.ok(before > 0.65, 'a clear close chance survives the best legal keeper reaction');
-  // Reproduced with the frozen pre-fix Casual engine: e12-e11 was its first
-  // action, reducing the best finish from 66.44% to 48.16%. Check that recorded
-  // action with the public rules so the regression describes an actual loss.
-  const abandoned = e.applyMove(original, 'white-Q', 4, 4);
+  // Retreating one row abandons a substantially better existing finish.
+  const abandoned = e.applyMove(original, 'white-Q', 6, 4);
   assert.ok(bestFinish(abandoned) < before - 0.15);
   for (const start of [original, mirrored(original)]) {
     const initial = bestFinish(start);
@@ -123,7 +121,7 @@ test('Casual preserves a strong finish through positioning instead of repeating 
 });
 
 test('Casual takes a strong open finish at the kick rather than substituting a pass, either color', () => {
-  const original = fixture({phase: 'kick', carrier: 'white-R1', positions: {'white-Q': [2, 10], 'white-R1': [4, 2], 'black-K': [7, 0]}});
+  const original = fixture({phase: 'kick', carrier: 'white-R1', positions: {'white-Q': [4, 10], 'white-R1': [6, 2], 'black-K': [9, 0]}});
   for (const state of [original, mirrored(original)]) {
     const best = bestFinish(state);
     assert.ok(best > 0.6);
@@ -134,7 +132,7 @@ test('Casual takes a strong open finish at the kick rather than substituting a p
 });
 
 test('protecting an existing shot does not freeze a carrier facing a guaranteed defensive challenge, either color', () => {
-  const original = fixture({positions: {'black-R1': [4, 7]}, budget: {normalUsed: true, pawnUsed: true, dribbleUsed: false}});
+  const original = fixture({positions: {'black-R1': [6, 7]}, budget: {normalUsed: true, pawnUsed: true, dribbleUsed: false}});
   for (const state of [original, mirrored(original)]) {
     const danger = {...state, phase: 'defendMove', positionBudget: {normalUsed: false, pawnUsed: true, dribbleUsed: false}};
     const tackles = value => value.pieces.filter(piece => piece.team === e.currentTeam(value)).flatMap(piece => e.legalMoves(value, piece.id).filter(move => move.type === 'tackle' && move.tackleProbability === 1));
@@ -150,7 +148,7 @@ test('protecting an existing shot does not freeze a carrier facing a guaranteed 
 });
 
 test('Casual attempts a useful moderate rook shot from midfield when its passes have no safe receiving outlet, either color', () => {
-  const original = fixture({phase: 'kick', carrier: 'white-R1', positions: {'white-Q': [2, 10], 'white-R1': [5, 8], 'black-K': [2, 2]}});
+  const original = fixture({phase: 'kick', carrier: 'white-R1', positions: {'white-Q': [4, 10], 'white-R1': [7, 8], 'black-K': [4, 2]}});
   for (const state of [original, mirrored(original)]) {
     const best = bestFinish(state);
     assert.ok(best > 0.25 && best < 0.45, 'this is a worthwhile attempt below the strong-finish priority threshold');
@@ -176,7 +174,7 @@ test('the finishing preference retains goal-kick, throw and indirect-free-kick r
 });
 
 test('Casual clears an offside box knight before choosing a finish, either color', () => {
-  const original = fixture({positions: {'white-N1': [7, 1]}});
+  const original = fixture({positions: {'white-N1': [9, 1]}});
   for (const state of [original, mirrored(original)]) {
     assert.equal(e.offsideInfo(state).boxKnightIds.length, 1);
     assert.ok(e.legalKicks({...state, phase: 'kick'}).some(kick => kick.goal === state.attack && kick.offsideReason === 'boxKnight'));
@@ -189,7 +187,7 @@ test('Casual clears an offside box knight before choosing a finish, either color
 });
 
 test('Casual finishing decisions are pure and independent of upcoming random outcomes', () => {
-  const scenarios = [fixture(), fixture({phase: 'kick'}), fixture({positions: {'black-R1': [4, 7]}, budget: {normalUsed: true, pawnUsed: true, dribbleUsed: false}})];
+  const scenarios = [fixture(), fixture({phase: 'kick'}), fixture({positions: {'black-R1': [6, 7]}, budget: {normalUsed: true, pawnUsed: true, dribbleUsed: false}})];
   for (const state of scenarios) {
     const expected = choose(state);
     for (const randomState of [0, 0xffffffff, 912175]) assert.deepEqual(choose({...clone(state), randomState}), expected);

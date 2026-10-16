@@ -1,0 +1,79 @@
+{
+  "frozenAt": "2026-10-16T06:22:00.523Z",
+  "baseSHA256": "b07811166cf279491cf0345cc9a5fa3275e11a561f4cacd9de7b96054aa50c53",
+  "geometry": {
+    "width": 14,
+    "height": 17,
+    "goalFiles": [
+      5,
+      6,
+      7,
+      8
+    ],
+    "boxFiles": [
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "boxDepth": 3
+  },
+  "shotModel": 12,
+  "sharedBonus": "one offball Pawn-or-King move per positional turn; no bonus tackle or dribble",
+  "casual": {
+    "seeds": [
+      84100,
+      84101,
+      84102,
+      84103,
+      84104,
+      84105,
+      84106,
+      84107
+    ],
+    "kickoffs": [
+      "white",
+      "black"
+    ],
+    "matchesPerVariant": 16,
+    "actions": 480
+  },
+  "tactical": {
+    "seeds": [
+      2713884127,
+      902774113
+    ],
+    "kickoffs": [
+      "white",
+      "black"
+    ],
+    "matchesPerVariant": 4,
+    "actions": 480
+  },
+  "screen": "Same paired seeds as previous hard-block factorial. All Casual runs first; no AI tuning. Tactical A/B/C only.",
+  "chaos": "Provisional >50% goal inflation over A, or N>60% of goals with many certain finishes. Also inspect restart burden, consecutive corners, repeats, origin concentration. Cap100 alone does not disqualify intended bonus.",
+  "variants": {
+    "A": {
+      "access": "restricted; N both boxes; K own only",
+      "knightMultiplier": 1,
+      "SHA256": "b07811166cf279491cf0345cc9a5fa3275e11a561f4cacd9de7b96054aa50c53"
+    },
+    "B": {
+      "access": "all outfield both boxes; K own only",
+      "knightMultiplier": 1,
+      "SHA256": "88c487c52056d0c93ad6a49e548e500704fa03777936ee1aab8992aec9d647d5"
+    },
+    "C": {
+      "access": "all outfield both boxes; K own only",
+      "knightMultiplier": 2,
+      "SHA256": "e3175a0547cfde5ee53e76afd8049b7cc9251b03dc0017473b4b7ac94b312489"
+    },
+    "D": {
+      "access": "restricted; N both boxes; K own only",
+      "knightMultiplier": 2,
+      "SHA256": "71ae5b36582c28661f17ab75d7be9545bcd50ede71cb4886aa5145ec3a11c34e"
+    }
+  }
+}

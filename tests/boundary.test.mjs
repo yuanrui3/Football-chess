@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  BOARD_WIDTH, BOARD_HEIGHT, GOAL_FILES, isBox, createGame, currentTeam,
+  BOARD_WIDTH, BOARD_HEIGHT, GOAL_FILES, BOX_DEPTH, inOwnBox, canOccupySquare, isBox, createGame, currentTeam,
   legalMoves, legalKicks, applyMove, applyKick, skipMove, boundaryExit,
 } from '../dist/engine.js';
 
@@ -45,7 +45,7 @@ function assertIntegrity(state) {
   assert.equal(new Set(state.pieces.map(piece => `${piece.x},${piece.y}`)).size, 22, 'restart relocation does not overlap players');
   for (const piece of state.pieces) {
     assert.ok(inside(piece), `${piece.id} stays on the pitch`);
-    if (isBox(piece.x, piece.y)) assert.ok(['K', 'N'].includes(piece.type), `${piece.id} respects box eligibility`);
+    assert.ok(canOccupySquare(piece,piece.x,piece.y), `${piece.id} respects box eligibility`);
   }
   assert.ok(inside(state.ball), 'the playable ball is inside the pitch');
   if (state.ball.carrierId) {
@@ -59,7 +59,7 @@ function assertIntegrity(state) {
 function raySquares(origin) {
   const squares = [];
   for (const [dx, dy] of [[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]]) {
-    for (let length = 1; length <= 15; length++) {
+    for (let length = 1; length <= Math.max(BOARD_WIDTH,BOARD_HEIGHT); length++) {
       const [x, y] = [origin[0] + dx * length, origin[1] + dy * length];
       if (!inside({x,y})) break;
       squares.push([x,y]);
@@ -80,7 +80,7 @@ function longPass({attack = 'white', side = 'left', ownEnd = false, positions = 
   const source = transform(ownEnd ? [2,1] : [2,13]);
   const target = transform(ownEnd ? [2,13] : [2,1]);
   const landing = transform(side === 'end' ? ownEnd ? [2,17] : [2,-3] : [-3,1]);
-  const clear = Array.from({length: 15}, (_, y) => transform([2,y]));
+  const clear = Array.from({length: BOARD_HEIGHT}, (_, y) => transform([2,y]));
   const focus = transform(side === 'end' ? ownEnd ? [0,14] : [2,0] : [0,7]);
   const carrier = `${attack}-R1`;
   const state = fixture({attack, carrier, positions: {[carrier]: source, ...positions}, clear, focus, seed});
@@ -103,9 +103,9 @@ test('boundary exits use the first crossed line, including mirror-image diagonal
   assert.equal(boundaryExit({x:2,y:13}, {x:2,y:1}), null);
   for (const [from, landing, expected] of [
     [{x:2,y:13}, {x:-3,y:1}, {x:-.5,y:7,line:'left'}],
-    [{x:9,y:1}, {x:14,y:13}, {x:11.5,y:7,line:'right'}],
+    [{x:BOARD_WIDTH-3,y:BOARD_HEIGHT-14}, {x:BOARD_WIDTH+2,y:BOARD_HEIGHT-2}, {x:BOARD_WIDTH-.5,y:BOARD_HEIGHT-8,line:'right'}],
     [{x:2,y:13}, {x:2,y:-3}, {x:2,y:-.5,line:'top'}],
-    [{x:9,y:1}, {x:9,y:17}, {x:9,y:14.5,line:'bottom'}],
+    [{x:BOARD_WIDTH-3,y:BOARD_HEIGHT-14}, {x:BOARD_WIDTH-3,y:BOARD_HEIGHT+2}, {x:BOARD_WIDTH-3,y:BOARD_HEIGHT-.5,line:'bottom'}],
     [{x:2,y:7}, {x:-2,y:-10}, {x:4/17,y:-.5,line:'top'}],
   ]) {
     const exit = boundaryExit(from, landing);
@@ -147,7 +147,7 @@ test('opposing end-line last touches yield goal kicks, while own end-line last t
         assert.equal(taker.type, 'K', 'only the king takes goal kicks');
         assert.equal(taker.id, `${opposing}-K`);
         assert.ok(isBox(taker.x,taker.y));
-        assert.equal(taker.y <= 1, opposing === 'black');
+        assert.ok(inOwnBox(opposing,taker.x,taker.y));
         assert.equal(result.phase,'attackMove');
         assert.equal(result.releaseReason,null);
         assert.deepEqual(legalKicks(result), [], 'both teams reposition before the goal kick');
@@ -155,8 +155,8 @@ test('opposing end-line last touches yield goal kicks, while own end-line last t
         assert.ok(legalKicks(ready).length, 'the king distributes after both positioning turns');
         assert.equal(legalKicks(ready).some(kick=>kick.goal),false,'the king must distribute');
       } else {
-        assert.equal(taker.y, opposing === 'black' ? 14 : 0);
-        assert.ok([0,11].includes(taker.x), 'corner taker is at the nearest pitch corner');
+        assert.equal(taker.y, opposing === 'black' ? BOARD_HEIGHT-1 : 0);
+        assert.ok([0,BOARD_WIDTH-1].includes(taker.x), 'corner taker is at the nearest pitch corner');
       }
       assert.equal(result.phase,'attackMove');
       assert.deepEqual(result.score,state.score);
@@ -276,10 +276,10 @@ test('long-pass misses may land loose inside, while short ordinary passes never 
   assertIntegrity(certain);
 });
 
-function longShot(attack='white') {
+function longShot(attack='white',sourceY=12) {
   const transform=pair=>attack==='white'?pair:mirror(pair);
-  const shooter=`${attack}-R1`, target=transform([4,-1]);
-  const state=fixture({attack,carrier:shooter,positions:{[shooter]:transform([4,12])},clear:Array.from({length:15},(_,y)=>transform([4,y])),focus:transform([0,7])});
+  const shooter=`${attack}-R1`, target=transform([GOAL_FILES[0],-1]);
+  const state=fixture({attack,carrier:shooter,positions:{[shooter]:transform([GOAL_FILES[0],sourceY])},clear:Array.from({length:BOARD_HEIGHT},(_,y)=>transform([GOAL_FILES[0],y])),focus:transform([0,7])});
   const kick=legalKicks(state).find(kick=>kick.x===target[0]&&kick.y===target[1]&&kick.goal);
   assert.ok(kick?.distance>10);
   return {state,reaction:applyKick(state,...target),transform};
@@ -299,8 +299,8 @@ test('long shots going wide may cross a touchline first, while short wide shots 
     assert.deepEqual(reaction,before);
     assertIntegrity(result);
   }
-  const short=fixture({positions:{'white-R1':[4,4]},clear:[[4,0],[4,1],[4,2],[4,3]]});
-  const reaction=applyKick(short,4,-1);
+  const short=fixture({positions:{'white-R1':[GOAL_FILES[0],4]},clear:Array.from({length:4},(_,y)=>[GOAL_FILES[0],y])});
+  const reaction=applyKick(short,GOAL_FILES[0],-1);
   const result=skipMove(reaction,{roll:.999999,landing:{x:-20,y:7}});
   assert.equal(result.restart.type,'goalKick','short-shot wide resolution ignores long-shot scatter override');
   assert.equal(result.restart.team,'black');
@@ -311,9 +311,9 @@ test('short and long stopped shots distinguish catches from keeper last-touch co
   for(const attack of ['white','black']) for(const range of ['short','long']) {
     const defending=attack==='white'?'black':'white';
     const transform=pair=>attack==='white'?pair:mirror(pair);
-    const shooter=`${attack}-R1`, source=transform([4,range==='short'?3:12]);
-    const state=fixture({attack,carrier:shooter,positions:{[shooter]:source,[`${defending}-K`]:transform([5,0])},clear:Array.from({length:15},(_,y)=>transform([4,y])),focus:transform([0,7])});
-    const reaction=applyKick(state,...transform([4,-1]));
+    const shooter=`${attack}-R1`, source=transform([GOAL_FILES[0],range==='short'?3:12]);
+    const state=fixture({attack,carrier:shooter,positions:{[shooter]:source,[`${defending}-K`]:transform([GOAL_FILES[1],0])},clear:Array.from({length:BOARD_HEIGHT},(_,y)=>transform([GOAL_FILES[0],y])),focus:transform([0,7])});
+    const reaction=applyKick(state,...transform([GOAL_FILES[0],-1]));
     const model=reaction.lastAction.shotModel;
     assert.ok(model.saveProbability>0&&model.cornerProbability>0&&model.caughtSaveProbability>0);
     const caughtRoll=model.goalProbability+model.cornerProbability+model.caughtSaveProbability/2;
@@ -431,9 +431,11 @@ test('both teams can use normal and free-pawn positioning before goal kicks, cor
 test('seeded long-shot misses naturally produce both goal kicks and touchline throws', () => {
   const seen=new Set();
   for(let seed=0;seed<48;seed++) {
-    const {state}=longShot();
+    // The wider pitch needs a deeper, higher-scatter shot to sample a
+    // touchline-first miss naturally rather than overriding its landing.
+    const {state}=longShot('white',BOARD_HEIGHT-3);
     state.randomState=seed*1000;
-    const reaction=applyKick(state,4,-1), before=clone(reaction);
+    const reaction=applyKick(state,GOAL_FILES[0],-1), before=clone(reaction);
     const result=skipMove(reaction,{roll:.999999});
     assert.deepEqual(skipMove(reaction,{roll:.999999}),result,'saved shot RNG reproduces the landing and restart');
     assert.deepEqual(reaction,before);
@@ -447,7 +449,7 @@ test('seeded long-shot misses naturally produce both goal kicks and touchline th
 test('a throw cannot score directly and a knight throw stops at the first interceptor', () => {
   for(const attack of ['white','black']) {
     const transform=pair=>attack==='white'?pair:mirror(pair);
-    const from=transform([0,3]), target=transform([4,-1]), carrier=`${attack}-B1`;
+    const from=transform([0,GOAL_FILES[0]-1]), target=transform([GOAL_FILES[0],-1]), carrier=`${attack}-B1`;
     const state=fixture({attack,carrier,positions:{[carrier]:from},clear:raySquares(from),focus:from});
     assert.ok(legalKicks(state).some(kick=>kick.goal&&kick.x===target[0]&&kick.y===target[1]),'fixture normally has a direct diagonal shot');
     state.restart={type:'throwIn',team:attack,takerId:carrier,spot:{x:from[0],y:from[1]},indirect:false};

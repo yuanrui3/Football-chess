@@ -1,28 +1,34 @@
 // A replay is a bounded recording of the match, never another engine run.
-const W=12,H=15,FILES='abcdefghijkl',TEAMS=['white','black'];
+import {BOARD_WIDTH as W,BOARD_HEIGHT as H,GOAL_FILES,BOX_FILES,BOX_DEPTH,FILE_LABELS as FILES,RULES_VERSION,canOccupySquare} from './engine.js?v=882ef0b24231';
+const TEAMS=['white','black'];
+const REPLAY_VERSION=2;
+const geometry=()=>({width:W,height:H,goalFiles:[...GOAL_FILES],boxFiles:[...BOX_FILES],boxDepth:BOX_DEPTH});
+const sameFiles=(value,expected)=>Array.isArray(value)&&value.length===expected.length&&value.every((file,index)=>file===expected[index]);
+const validGeometry=value=>value&&value.width===W&&value.height===H&&value.boxDepth===BOX_DEPTH&&sameFiles(value.goalFiles,GOAL_FILES)&&sameFiles(value.boxFiles,BOX_FILES);
+const currentStateGeometry=state=>state?.rulesVersion===RULES_VERSION&&state.boardDimensions?.width===W&&state.boardDimensions?.height===H;
 const TEAM={white:'Ivory FC',black:'Obsidian FC'};
 const NAMES={K:'Goalkeeper',Q:'Queen',R:'Rook',B:'Bishop',N:'Knight',P:'Pawn'};
 const SYMBOLS={K:'♚',Q:'♛',R:'♜',B:'♝',N:'♞',P:'♟'};
-const ACTIONS=new Set(['move','tackle','tackleMiss','kick','miss','interception','skip','shotAttempt','goal','save','shotMiss','out','offside','stalling','timeout']);
+const ACTIONS=new Set(['move','tackle','tackleMiss','kick','miss','interception','skip','shotAttempt','goal','save','blockedShot','shotMiss','out','offside','stalling','timeout']);
 const ROSTER=['K','Q','R1','R2','B1','B2','N1','N2','P1','P2','P3'];
 const IDS=new Set(TEAMS.flatMap(team=>ROSTER.map(id=>`${team}-${id}`)));
 const MAX_FRAMES=12,MAX_BYTES=90000;
 const clone=value=>structuredClone(value);
 const integer=(value,min,max)=>Number.isInteger(value)&&value>=min&&value<=max;
-const point=value=>value&&integer(value.x,-24,35)&&integer(value.y,-24,38);
+const point=value=>value&&integer(value.x,-24,W+23)&&integer(value.y,-24,H+23);
 const pitchPoint=value=>point(value)&&integer(value.x,0,W-1)&&integer(value.y,0,H-1);
 const score=value=>value&&integer(value.white,0,9999)&&integer(value.black,0,9999);
 const sameScore=(a,b)=>a?.white===b?.white&&a?.black===b?.black;
-const coordinate=p=>p.y===-1||p.y===H?`${FILES[p.x].toUpperCase()} goal`:`${FILES[p.x]}${H-p.y}`;
-const boxTeam=(x,y)=>x>=4&&x<=7?(y<=1?'black':y>=H-2?'white':null):null;
+const coordinate=p=>GOAL_FILES.includes(p.x)&&(p.y===-1||p.y===H)?`${FILES[p.x].toUpperCase()} goal`:pitchPoint(p)?`${FILES[p.x]}${H-p.y}`:'outside the pitch';
+const boxTeam=(x,y)=>BOX_FILES.includes(x)?(y<BOX_DEPTH?'black':y>=H-BOX_DEPTH?'white':null):null;
 
 function validPieces(pieces){
   if(!Array.isArray(pieces)||pieces.length!==22)return false;
   const ids=new Set(),occupied=new Set();
   for(const piece of pieces){
     if(!piece||!IDS.has(piece.id)||ids.has(piece.id)||!TEAMS.includes(piece.team)||!NAMES[piece.type]||!piece.id.startsWith(`${piece.team}-`)||piece.id.split('-')[1][0]!==piece.type||!pitchPoint(piece))return false;
-    const box=boxTeam(piece.x,piece.y),square=`${piece.x},${piece.y}`;
-    if(occupied.has(square)||box&&(piece.type==='K'?piece.team!==box:piece.type!=='N'))return false;
+    const square=`${piece.x},${piece.y}`;
+    if(occupied.has(square)||!canOccupySquare(piece,piece.x,piece.y))return false;
     ids.add(piece.id);occupied.add(square);
   }
   return true;
@@ -37,6 +43,7 @@ function recordAction(action){
   if(action.keeperMove)result.keeperMove={pieceId:action.keeperMove.pieceId,from:{...action.keeperMove.from},to:{...action.keeperMove.to}};
   if(Number.isFinite(action.probability))result.probability=action.probability;
   if(action.ownGoal!==undefined)result.ownGoal=!!action.ownGoal;
+  if(action.type==='blockedShot'){result.blockerId=action.blockerId;result.outcome=action.outcome;}
   if(action.lofted){result.lofted=true;result.bypassedPieceId=action.bypassedPieceId;result.bypassedSquare={...action.bypassedSquare};}
   return result;
 }
@@ -50,11 +57,12 @@ function validAction(action){
   if(action.path!==undefined&&(!Array.isArray(action.path)||action.path.length<1||action.path.length>32||!action.path.every(point)))return false;
   if(action.probability!==undefined&&(!Number.isFinite(action.probability)||action.probability<0||action.probability>1))return false;
   if(action.ownGoal!==undefined&&typeof action.ownGoal!=='boolean')return false;
+  if(action.type==='blockedShot'&&(!IDS.has(action.blockerId)||!['corner','blocked','out'].includes(action.outcome)))return false;
   if(action.lofted!==undefined){
     if(action.lofted!==true||!['kick','miss','interception','out','offside'].includes(action.type)||!IDS.has(action.bypassedPieceId)||!pitchPoint(action.bypassedSquare))return false;
   }else if(action.bypassedPieceId!==undefined||action.bypassedSquare!==undefined)return false;
   const move=action.keeperMove;
-  return !move||(IDS.has(move.pieceId)&&move.pieceId.endsWith('-K')&&pitchPoint(move.from)&&pitchPoint(move.to)&&Math.max(Math.abs(move.from.x-move.to.x),Math.abs(move.from.y-move.to.y))<=1);
+  return !move||(IDS.has(move.pieceId)&&move.pieceId.endsWith('-K')&&pitchPoint(move.from)&&pitchPoint(move.to)&&boxTeam(move.from.x,move.from.y)===move.pieceId.split('-')[0]&&Math.max(Math.abs(move.from.x-move.to.x),Math.abs(move.from.y-move.to.y))<=1);
 }
 
 function frameCaption(state){
@@ -68,6 +76,10 @@ function frameCaption(state){
   if(['kick','miss','interception'].includes(action.type))return `${side} ${action.lofted?'lofts a pass over one player toward':'plays the ball toward'} ${coordinate(action.to)}${action.type==='miss'?' — inaccurate pass':action.type==='interception'?' — intercepted':''}.`;
   if(action.type==='skip')return `${side} ends positioning.`;
   if(action.type==='save')return `${side} makes the save.`;
+  if(action.type==='blockedShot'){
+    const blocker=state.pieces.find(piece=>piece.id===action.blockerId);
+    return `${blocker?`${TEAM[blocker.team]} ${NAMES[blocker.type].toLowerCase()}`:'A defender'} blocks the shot${action.outcome==='corner'?', conceding a corner.':action.outcome==='out'?' out for a goal kick.':'; the defending side recovers possession.'}`;
+  }
   if(action.type==='shotMiss')return 'The previous shot goes wide.';
   if(action.type==='goal')return 'The teams prepare for kickoff.';
   return `${side} prepares the next passage of play.`;
@@ -81,7 +93,7 @@ function validFrame(frame,isGoal){
   if(!frame||!validPieces(frame.pieces)||!score(frame.score)||!validAction(frame.action)||typeof frame.caption!=='string'||frame.caption.length>280)return false;
   const ball=frame.ball;
   if(!ball||!point(ball)||ball.carrierId!==null&&!IDS.has(ball.carrierId))return false;
-  if(isGoal)return ball.carrierId===null&&integer(ball.x,4,7)&&(ball.y===-1||ball.y===H)&&frame.action?.type==='goal';
+  if(isGoal)return ball.carrierId===null&&GOAL_FILES.includes(ball.x)&&(ball.y===-1||ball.y===H)&&frame.action?.type==='goal';
   if(!pitchPoint(ball))return false;
   const carrier=frame.pieces.find(p=>p.id===ball.carrierId);
   return ball.carrierId===null||!!carrier&&carrier.x===ball.x&&carrier.y===ball.y;
@@ -90,7 +102,7 @@ function validFrame(frame,isGoal){
 /** Validate local storage without normalising or inventing historical positions. */
 export function restoreGoalReplay(value){
   try{
-    if(!value||JSON.stringify(value).length>MAX_BYTES||value.version!==1||!score(value.score)||!TEAMS.includes(value.team)||!TEAMS.includes(value.shootingTeam)||typeof value.ownGoal!=='boolean'||value.ownGoal!==(value.team!==value.shootingTeam)||!IDS.has(value.shooterId)||!value.shooterId.startsWith(`${value.shootingTeam}-`)||!integer(value.goalTurn,0,1000000000)||!Array.isArray(value.frames)||value.frames.length<2||value.frames.length>MAX_FRAMES)return null;
+    if(!value||JSON.stringify(value).length>MAX_BYTES||value.version!==REPLAY_VERSION||!validGeometry(value.board)||!score(value.score)||!TEAMS.includes(value.team)||!TEAMS.includes(value.shootingTeam)||typeof value.ownGoal!=='boolean'||value.ownGoal!==(value.team!==value.shootingTeam)||!IDS.has(value.shooterId)||!value.shooterId.startsWith(`${value.shootingTeam}-`)||!integer(value.goalTurn,0,1000000000)||!Array.isArray(value.frames)||value.frames.length<2||value.frames.length>MAX_FRAMES)return null;
     const frames=value.frames;
     if(!frames.every((frame,index)=>validFrame(frame,index===frames.length-1)))return null;
     const final=frames.at(-1),previous=frames.at(-2),other=value.team==='white'?'black':'white';
@@ -101,13 +113,13 @@ export function restoreGoalReplay(value){
       else if(recorded.x!==piece.x||recorded.y!==piece.y)return null;
     }
     // Keep a known, bounded schema. Extra stored properties never reach the UI.
-    return {version:1,score:{...value.score},team:value.team,shootingTeam:value.shootingTeam,ownGoal:value.ownGoal,shooterId:value.shooterId,goalTurn:value.goalTurn,frames:frames.map(frame=>({pieces:frame.pieces.map(({id,type,team,x,y})=>({id,type,team,x,y})),ball:{...frame.ball},score:{...frame.score},action:recordAction(frame.action),caption:frame.caption}))};
+    return {version:REPLAY_VERSION,board:geometry(),score:{...value.score},team:value.team,shootingTeam:value.shootingTeam,ownGoal:value.ownGoal,shooterId:value.shooterId,goalTurn:value.goalTurn,frames:frames.map(frame=>({pieces:frame.pieces.map(({id,type,team,x,y})=>({id,type,team,x,y})),ball:{...frame.ball},score:{...frame.score},action:recordAction(frame.action),caption:frame.caption}))};
   }catch{return null;}
 }
 
 /** Capture a real goal before the engine's kickoff formation replaces the scene. */
 export function buildGoalReplay(history,before,after){
-  if(after?.lastAction?.type!=='goal'||before?.phase!=='keeperReact'||!before.pendingShot)return null;
+  if(after?.lastAction?.type!=='goal'||before?.phase!=='keeperReact'||!before.pendingShot||!currentStateGeometry(before)||!currentStateGeometry(after))return null;
   try{
     const action=after.lastAction,states=[];
     // Older undo entries may contain positions from previous rule versions.
@@ -117,7 +129,7 @@ export function buildGoalReplay(history,before,after){
     let lastKey=null;
     for(let index=candidates.length-1;index>=0&&states.length<MAX_FRAMES-1;index--){
       const state=candidates[index];
-      if(!state||!sameScore(state.score,before.score)||!validPieces(state.pieces))break;
+      if(!currentStateGeometry(state)||!sameScore(state.score,before.score)||!validPieces(state.pieces))break;
       const frame=recordFrame(state);
       if(!validFrame(frame,false))break;
       const key=JSON.stringify(frame);
@@ -131,7 +143,7 @@ export function buildGoalReplay(history,before,after){
     const shooter=before.pieces.find(piece=>piece.id===action.pieceId);
     const held=action.shotModel?.keeperInBox?' Keeper holds position.':' The king is outside its box; no keeper reaction.';
     final.caption=`${TEAM[action.team]} ${action.ownGoal?'benefits from an own goal':'scores'}! ${shooter?NAMES[shooter.type]: 'Shot'} from ${coordinate(action.from)} to the ${coordinate(action.to)}.${move?` Keeper reacts from ${coordinate(move.from)} to ${coordinate(move.to)}.`:held}`;
-    return restoreGoalReplay({version:1,score:{...after.score},team:action.team,shootingTeam:action.shootingTeam,ownGoal:!!action.ownGoal,shooterId:action.pieceId,goalTurn:after.turn,frames:[...states,final]});
+    return restoreGoalReplay({version:REPLAY_VERSION,board:geometry(),score:{...after.score},team:action.team,shootingTeam:action.shootingTeam,ownGoal:!!action.ownGoal,shooterId:action.pieceId,goalTurn:after.turn,frames:[...states,final]});
   }catch{return null;}
 }
 
@@ -140,6 +152,12 @@ export function createReplayPlayer({onComplete=()=>{},onInteract=()=>{}}={}){
   const $=id=>document.getElementById(id),pitch=$('replayPitch'),board=$('replayBoard'),overlay=$('replayOverlay'),ball=$('replayBall');
   const tokens=new Map(),animations=new Set();
   let replay=null,index=0,timer=null,playing=false,completed=false;
+  const svg=(name,attributes)=>{const node=document.createElementNS('http://www.w3.org/2000/svg',name);for(const [key,value]of Object.entries(attributes))node.setAttribute(key,String(value));return node;};
+  overlay.replaceChildren(
+    svg('rect',{x:3,y:103,width:W*100-6,height:H*100-6}),
+    svg('path',{d:`M0 ${100+H*50}H${W*100}M${BOX_FILES[0]*100} 100V${100+BOX_DEPTH*100}H${(BOX_FILES.at(-1)+1)*100}V100M${BOX_FILES[0]*100} ${(H+1)*100}V${(H+1-BOX_DEPTH)*100}H${(BOX_FILES.at(-1)+1)*100}V${(H+1)*100}`}),
+    svg('circle',{cx:W*50,cy:100+H*50,r:110})
+  );
   for(let y=0;y<H;y++)for(let x=0;x<W;x++){
     const square=document.createElement('div');square.className=`replay-square${(x+y)%2?' checker':''}${boxTeam(x,y)?' box':''}`;square.setAttribute('role','gridcell');square.setAttribute('aria-label',`${FILES[x]}${H-y}`);board.append(square);
   }

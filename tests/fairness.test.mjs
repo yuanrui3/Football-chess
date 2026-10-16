@@ -3,10 +3,11 @@ import assert from 'node:assert/strict';
 import * as engine from '../dist/engine.js';
 
 const {createGame, legalMoves, legalKicks, applyMove, applyKick, skipMove, currentTeam, normalizeGame, shotModel, isBox} = engine;
+const W=engine.BOARD_WIDTH,H=engine.BOARD_HEIGHT;
 const clone = value => JSON.parse(JSON.stringify(value));
 const other = team => team === 'white' ? 'black' : 'white';
 const budget = (normalUsed = false, pawnUsed = false, dribbleUsed = false) => ({normalUsed, pawnUsed, dribbleUsed});
-const mirror = ([x, y]) => [11 - x, 14 - y];
+const mirror = ([x, y]) => [W-1-x, H-1-y];
 const point = (team, pair) => team === 'white' ? pair : mirror(pair);
 const id = (team, suffix) => `${team}-${suffix}`;
 
@@ -15,11 +16,11 @@ const id = (team, suffix) => `${team}-${suffix}`;
 function fixture({team = 'white', phase = 'kick', suffix = 'Q', positions = {}, clear = [], seed = 581} = {}) {
   const state = createGame({mode: 'local', kickoff: 'white', seed});
   const carrierId = `white-${suffix}`;
-  const assigned = {'white-K': [5, 14], 'black-K': [6, 0], [carrierId]: [1, 7], 'white-R2': [2, 10], 'white-P2': [8, 11], ...positions};
+  const assigned = {'white-K': [6, H-1], 'black-K': [7, 0], [carrierId]: [1, 7], 'white-R2': [2, 10], 'white-P2': [8, 11], ...positions};
   const occupied = new Set(Object.values(assigned).map(pair => pair.join(',')));
   assert.equal(occupied.size, Object.keys(assigned).length);
   for (const pair of clear) occupied.add(pair.join(','));
-  const parking = Array.from({length: 15}, (_, y) => [[0, y], [11, y]]).flat();
+  const parking = Array.from({length:H}, (_, y) => [[0,y], [W-1,y]]).flat();
   for (const piece of state.pieces) {
     const spot = assigned[piece.id] || parking.find(pair => !occupied.has(pair.join(',')));
     assert.ok(spot, `parking exists for ${piece.id}`);
@@ -43,8 +44,8 @@ function fixture({team = 'white', phase = 'kick', suffix = 'Q', positions = {}, 
       [piece.x, piece.y] = mirror([piece.x, piece.y]);
     }
     state.attack = team;
-    state.ball = {x: 11 - state.ball.x, y: 14 - state.ball.y, carrierId: id(team, suffix)};
-    state.ballProgress = {...state.ballProgress, team, anchorY: 14 - state.ballProgress.anchorY};
+    state.ball = {x: W-1-state.ball.x, y: H-1-state.ball.y, carrierId: id(team, suffix)};
+    state.ballProgress = {...state.ballProgress, team, anchorY: H-1-state.ballProgress.anchorY};
   }
   return state;
 }
@@ -53,8 +54,8 @@ function integrity(state) {
   assert.equal(new Set(state.pieces.map(piece => piece.id)).size, 22);
   assert.equal(new Set(state.pieces.map(piece => `${piece.x},${piece.y}`)).size, 22);
   for (const piece of state.pieces) {
-    assert.ok(piece.x >= 0 && piece.x < 12 && piece.y >= 0 && piece.y < 15);
-    if (isBox(piece.x, piece.y)) assert.ok(['K', 'N'].includes(piece.type));
+    assert.ok(piece.x >= 0 && piece.x < W && piece.y >= 0 && piece.y < H);
+    assert.ok(engine.canOccupySquare(piece,piece.x,piece.y));
   }
   if (state.ball.carrierId) {
     const carrier = state.pieces.find(piece => piece.id === state.ball.carrierId);
@@ -227,7 +228,7 @@ test('version-nine migration infers an old loose pass only when the immediately 
     delete old.looseBallKickOrigin;
     const before = clone(old), migrated = normalizeGame(old);
     assert.deepEqual(old, before);
-    assert.equal(migrated.rulesVersion, 13);
+    assert.equal(migrated.rulesVersion,14);
     assert.deepEqual(migrated.looseBallKickOrigin, {team, pieceId: id(team, 'Q')});
     assert.equal(migrated.randomState, old.randomState);
     assert.deepEqual(normalizeGame(migrated), migrated);
@@ -235,7 +236,7 @@ test('version-nine migration infers an old loose pass only when the immediately 
     assert.equal(collected.positionBudget.dribbleUsed, true);
     for (const modify of [
       state => { state.lastAction.type = 'skip'; },
-      state => { state.lastAction.to.x = (state.ball.x + 1) % 12; },
+      state => { state.lastAction.to.x = (state.ball.x + 1) % W; },
       state => { state.lastAction.receiverId = id(team, 'R2'); },
       state => { state.lastAction.pieceId = 'missing-piece'; },
       state => { state.lastAction.team = other(team); },
@@ -285,7 +286,7 @@ test('a 30-second action deadline penalizes the current actor in every ordinary 
   assert.equal(typeof engine.actionTimeout, 'function');
   for (const team of ['white', 'black']) for (const phase of ['kickoff', 'attackMove', 'defendMove', 'kick', 'keeperRelease']) {
     const suffix = phase === 'keeperRelease' ? 'K' : 'Q';
-    const state = fixture({team, phase, suffix, positions: {'black-R1': [3, 7], 'white-K': [5, 14]}});
+    const state = fixture({team, phase, suffix, positions: {'black-R1': [3, 7], 'white-K': [6,H-1]}});
     if (phase === 'keeperRelease') state.releaseReason = 'backPass';
     state.positionBudget = budget(true, true, true);
     state.looseBallKickOrigin = {team, pieceId: id(team, 'P2')};
@@ -300,7 +301,7 @@ test('a 30-second action deadline penalizes the current actor in every ordinary 
 test('loose-ball and protected-restart actors cannot stall the clock or retain an earlier restart', () => {
   for (const team of ['white', 'black']) for (const phase of ['attackMove', 'defendMove', 'kick']) {
     for (const kind of ['loose', 'goalKick', 'corner', 'throwIn', 'offside', 'stalling', 'timeout']) {
-      const state = fixture({team, phase, suffix: kind === 'goalKick' ? 'K' : 'Q', positions: {'white-K': [5, 14], 'black-R1': [3, 7]}});
+      const state = fixture({team, phase, suffix: kind === 'goalKick' ? 'K' : 'Q', positions: {'white-K': [6,H-1], 'black-R1': [3, 7]}});
       if (kind === 'loose') state.ball.carrierId = null;
       else state.restart = {type: kind, team, takerId: state.ball.carrierId, spot: {x: state.ball.x, y: state.ball.y}, indirect: ['offside', 'stalling', 'timeout'].includes(kind)};
       const before = clone(state), next = engine.actionTimeout(state);
@@ -312,8 +313,8 @@ test('loose-ball and protected-restart actors cannot stall the clock or retain a
 
 test('keeper reaction expiration resolves the declared shot by holding with the normal seeded outcome', () => {
   for (const team of ['white', 'black']) for (const seed of [1, 73, 581, 901]) {
-    const state = fixture({team, seed, suffix: 'N1', positions: {'white-N1': [3, 1], 'black-K': [4, 0]}});
-    const [x, y] = point(team, [4, -1]);
+    const state = fixture({team, seed, suffix: 'N1', positions: {'white-N1': [4,1], 'black-K': [5,0]}});
+    const [x, y] = point(team, [5,-1]);
     const pending = applyKick(state, x, y), before = clone(pending);
     const expected = skipMove(pending), next = engine.actionTimeout(pending);
     assert.deepEqual(pending, before);
@@ -337,34 +338,35 @@ test('finished matches ignore action expiration without mutating state or consum
   assert.notEqual(next, state, 'the no-op still preserves pure transition semantics');
 });
 
-test('saved pending knight shots discard the old multiplier and use the shared model after loading or undo', () => {
+test('saved pending knight shots refresh stale bonuses with the selected current model after loading or undo', () => {
   for (const team of ['white', 'black']) {
-    const initial = fixture({team, suffix: 'N1', positions: {'white-N1': [3, 1], 'black-K': [4, 0]}});
-    const [x, y] = point(team, [4, -1]);
+    const initial = fixture({team, suffix: 'N1', positions: {'white-N1': [4,1], 'black-K': [5,0]}});
+    const [x, y] = point(team, [5,-1]);
     const pending = applyKick(initial, x, y), legacy = clone(pending);
     legacy.rulesVersion = 8;
     legacy.lastAction.probability = 1;
-    legacy.lastAction.shotModel = {...legacy.lastAction.shotModel, probability: 1, goalProbability: 1, scoringMultiplier: 2, modelVersion: 6};
+    legacy.lastAction.shotModel = {...legacy.lastAction.shotModel, probability: 1, goalProbability: 1, scoringMultiplier:99, modelVersion: 6};
     const before = clone(legacy), restored = normalizeGame(legacy);
     assert.deepEqual(legacy, before);
-    assert.equal(restored.rulesVersion, 13);
+    assert.equal(restored.rulesVersion,14);
     assert.equal(restored.randomState, legacy.randomState);
     assert.equal(restored.pendingShot.shooterType, 'N', 'movement identity is retained independently of scoring strength');
     const details = shotModel(restored);
-    assert.equal(details.modelVersion, 10);
-    assert.equal(details.scoringMultiplier, 1);
-    assert.ok(details.goalProbability < 1);
+    assert.equal(details.modelVersion,12);
+    assert.equal(engine.SHOT_MODEL.knightGoalMultiplier,1);
+    assert.equal(details.scoringMultiplier,1);
+    assert.equal(details.goalProbability,details.baseGoalProbability);
     assert.deepEqual(restored.lastAction.shotModel, details);
     assert.equal(restored.lastAction.probability, details.goalProbability);
-    assert.deepEqual(skipMove(restored), skipMove(pending), 'legacy restoration cannot retain the removed scoring bonus');
+    assert.deepEqual(skipMove(restored),skipMove(pending),'restoration cannot retain stale odds or an obsolete scoring bonus');
     assert.deepEqual(normalizeGame(clone(restored)), restored);
   }
 });
 
-test('close-range shooting probabilities share the same curve for all six piece types', () => {
-  for (const team of ['white', 'black']) for (const keeper of [[4, 0], [7, 0]]) {
-    const state = fixture({team, suffix: 'N1', positions: {'white-N1': [3, 1], 'black-K': keeper}});
-    const [x, y] = point(team, [4, -1]);
+test('close-range shooting curves remain shared without a knight finishing bonus', () => {
+  for (const team of ['white', 'black']) for (const keeper of [[5,0],[8,0]]) {
+    const state = fixture({team, suffix: 'N1', positions: {'white-N1': [4,1], 'black-K': keeper}});
+    const [x, y] = point(team, [5,-1]);
     const reference = shotModel(state, x, y);
     for (const type of ['K', 'Q', 'R', 'B', 'N', 'P']) {
       const changed = clone(state);
@@ -372,7 +374,10 @@ test('close-range shooting probabilities share the same curve for all six piece 
       const model = shotModel(changed, x, y);
       assert.equal(model.shooterType, type);
       assert.equal(model.distancePenaltyRate, type === 'R' ? .03 : .06);
-      assert.deepEqual({...model, shooterType: reference.shooterType, distancePenaltyRate: reference.distancePenaltyRate}, reference, `${type}: close-range probabilities share the same curve without an identity multiplier`);
+      for(const key of ['baseOnTargetProbability','baseGoalProbability','distance','postAngleFactor','wideAngleFactor','centralLaneFactor','goalOpeningRatio','arrivalSpeed','keeperPathDistance','timeToKeeper','reach','keeperInBox','blockerIds'])assert.deepEqual(model[key],reference[key],`${type}: shared base curve and geometry`);
+      assert.equal(model.scoringMultiplier,1);
+      assert.equal(model.goalProbability,Math.min(1,model.baseGoalProbability*model.scoringMultiplier));
+      assert.ok(Math.abs(model.goalProbability+model.saveProbability+model.missProbability+model.blockProbability-1)<1e-12);
     }
   }
 });

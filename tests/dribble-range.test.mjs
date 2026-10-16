@@ -31,7 +31,8 @@ function fixture(team, suffix, origin, { vector, carrying = true, phase = 'attac
     Array.from({ length: BOARD_WIDTH }, (_, x) => [x, y])).flat();
   for (const piece of state.pieces) {
     const spot = piece.id === id ? origin : spaces.find(([x, y]) =>
-      !reserved.has(key([x, y])) && (!isBox(x, y) || ['K', 'N'].includes(piece.type)));
+      !reserved.has(key([x, y])) && (!isBox(x, y) || piece.type === 'N'
+        || piece.type === 'K' && (piece.team === 'white' ? y >= BOARD_HEIGHT - 2 : y <= 1)));
     assert.ok(spot, `parking exists for ${piece.id}`);
     [piece.x, piece.y] = spot;
     reserved.add(key(spot));
@@ -47,7 +48,8 @@ const rayCases = [
   ['R1', straight],
   ['B1', diagonal],
 ];
-const originFor = ([dx, dy]) => [dx > 0 ? 1 : dx < 0 ? 10 : 2, dy > 0 ? 2 : dy < 0 ? 12 : 7];
+const originFor = ([dx, dy]) => [dx > 0 ? 1 : dx < 0 ? BOARD_WIDTH - 2 : 2,
+  dy > 0 ? 2 : dy < 0 ? BOARD_HEIGHT - 3 : Math.floor(BOARD_HEIGHT / 2)];
 const targetAt = (origin, vector, step) => [origin[0] + vector[0] * step, origin[1] + vector[1] * step];
 const offered = (state, id, target) => legalMoves(state, id).some(move => move.x === target[0] && move.y === target[1]);
 
@@ -88,9 +90,9 @@ test('the same queens, rooks and bishops still move nine and ten squares without
 
 test('the dribble cap leaves ten-square certain passes and longer inaccurate passes available', () => {
   for (const team of ['white', 'black']) for (const [suffix, baseOrigin, baseVector] of [
-    ['Q', [2, 13], [0, -1]], ['R1', [2, 13], [0, -1]], ['B1', [0, 12], [1, -1]],
+    ['Q', [2, BOARD_HEIGHT - 2], [0, -1]], ['R1', [2, BOARD_HEIGHT - 2], [0, -1]], ['B1', [0, BOARD_HEIGHT - 3], [1, -1]],
   ]) {
-    const mirror = ([x, y]) => team === 'white' ? [x, y] : [11 - x, 14 - y];
+    const mirror = ([x, y]) => team === 'white' ? [x, y] : [BOARD_WIDTH - 1 - x, BOARD_HEIGHT - 1 - y];
     const origin = mirror(baseOrigin), vector = team === 'white' ? baseVector : baseVector.map(value => -value);
     const state = fixture(team, suffix, origin, { vector, phase: 'kick' });
     const kicks = legalKicks(state);
@@ -108,7 +110,7 @@ test('kings, pawns and knights retain their short dribble patterns for either si
   for (const team of ['white', 'black']) for (const [suffix, vectors] of [
     ['K', [...straight, ...diagonal]], ['P1', straight], ['N1', knight],
   ]) {
-    const origin = [5, 7], id = `${team}-${suffix}`;
+    const origin = [Math.floor(BOARD_WIDTH / 2) - 1, Math.floor(BOARD_HEIGHT / 2)], id = `${team}-${suffix}`;
     const state = fixture(team, suffix, origin);
     assert.deepEqual(new Set(legalMoves(state, id).map(move => key([move.x, move.y]))),
       new Set(vectors.map(vector => key(targetAt(origin, vector, 1)))));

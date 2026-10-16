@@ -7,9 +7,9 @@ import path from 'node:path';
 const TEAMS = ['white','black'];
 const other = team => team === 'white' ? 'black' : 'white';
 const zeroRole = () => Object.fromEntries(['K','Q','R','B','N','P'].map(type=>[type,{actions:0,moves:0,dribbles:0,passes:0,shots:0,goals:0,tackles:0,tackleWins:0,collections:0}]));
-const sideStats = () => ({actions:0,thinkMs:0,goals:0,shots:0,resolvedShots:0,xG:0,shotDistance:0,shotXG:[],catches:0,cornersWon:0,wideShots:0,passes:0,teammatePasses:0,spacePasses:0,interceptedPasses:0,inaccuratePasses:0,longPasses:0,selfCollections:0,collections:0,dribbles:0,dribbleDistance:0,tackles:0,tackleWins:0,turnoversWon:0,turnoversLost:0,stalls:0,offsides:0,restartsAwarded:0,restartsTaken:0,restartTypes:{},completedOrdinaryRounds:0,attackingThirdEntries:0,attackActions:0,role:zeroRole()});
+const sideStats = () => ({actions:0,thinkMs:0,goals:0,shots:0,opponentGoalAttempts:0,ownGoalAttempts:0,resolvedShots:0,resolvedOpponentGoalAttempts:0,resolvedOwnGoalAttempts:0,xG:0,opponentGoalXG:0,ownGoalXG:0,shotDistance:0,shotXG:[],catches:0,cornersWon:0,wideShots:0,blockedShots:0,blocks:0,blockPossessions:0,passes:0,teammatePasses:0,spacePasses:0,interceptedPasses:0,inaccuratePasses:0,longPasses:0,selfCollections:0,collections:0,dribbles:0,dribbleDistance:0,tackles:0,tackleWins:0,turnoversWon:0,turnoversLost:0,stalls:0,offsides:0,restartsAwarded:0,restartsTaken:0,restartTypes:{},completedOrdinaryRounds:0,attackingThirdEntries:0,attackActions:0,role:zeroRole()});
 function inc(obj,key,n=1){obj[key]=(obj[key]||0)+n;}
-function entryZone(team,y){return team==='white'?y<=4:y>=10;}
+function entryZone(team,y,height=baseline.BOARD_HEIGHT){const depth=Math.floor(height/3);return team==='white'?y<depth:y>=height-depth;}
 function positional(phase){return ['attackMove','defendMove'].includes(phase);}
 export function applyAction(rules,state,action){
   if(action.type==='kick') return rules.applyKick(state,action.x,action.y);
@@ -33,7 +33,7 @@ export function runMatch({rules=baseline,whitePolicy=rules,blackPolicy=rules,whi
     catch(e){error={step:actions,stage:'apply',message:e.message,phase:before.phase,team,action};break;}
     if(validate){
       const slots=new Set(state.pieces.map(p=>`${p.x},${p.y}`));
-      if(state.pieces.length!==22||slots.size!==22||state.pieces.some(p=>p.x<0||p.x>=12||p.y<0||p.y>=15)){error={step:actions,stage:'integrity',message:'Invalid piece occupancy'};break;}
+      if(state.pieces.length!==22||slots.size!==22||state.pieces.some(p=>p.x<0||p.x>=rules.BOARD_WIDTH||p.y<0||p.y>=rules.BOARD_HEIGHT)){error={step:actions,stage:'integrity',message:'Invalid piece occupancy'};break;}
       const carrier=state.pieces.find(p=>p.id===state.ball.carrierId);
       if(carrier&&(carrier.x!==state.ball.x||carrier.y!==state.ball.y||carrier.team!==state.attack)){error={step:actions,stage:'integrity',message:'Carrier mismatch'};break;}
     }
@@ -43,13 +43,19 @@ export function runMatch({rules=baseline,whitePolicy=rules,blackPolicy=rules,whi
     if(role)role.actions++;
     // Count the submitted action and phase, never a stale lastAction retained by
     // transitions. A reaction resolves exactly one attempted shot.
-    if(before.phase==='keeperReact'&&['goal','save','shotMiss'].includes(result.type)){
-      const shot=before.pendingShot,shooting=stats[shot.shootingTeam],details=result.shotModel||rules.shotModel(state,shot.x,shot.y);
+    // A same-team catch can complete the progress deadline and wrap that save
+    // in a stalling award. Its stored triggeringAction is still the resolution.
+    const shotResult=before.phase==='keeperReact'&&result.type==='stalling'&&result.triggeringAction?.shotModel?result.triggeringAction:result;
+    if(before.phase==='keeperReact'&&['goal','save','shotMiss','blockedShot'].includes(shotResult.type)){
+      const shot=before.pendingShot,shooting=stats[shot.shootingTeam],details=shotResult.shotModel||rules.shotModel(state,shot.x,shot.y),ownGoalAttempt=shot.scoringTeam!==shot.shootingTeam;
       shooting.resolvedShots++;shooting.xG+=details.probability;shooting.shotDistance+=details.distance;shooting.shotXG.push(details.probability);
-      if(result.type==='save'&&result.outcome==='saved')stats[shot.defendingTeam].catches++;
-      if(result.outcome==='corner')shooting.cornersWon++;
-      if(result.outcome==='wide')shooting.wideShots++;
-      if(pendingShotRound)shooting.completedOrdinaryRounds++;
+      shooting[ownGoalAttempt?'resolvedOwnGoalAttempts':'resolvedOpponentGoalAttempts']++;
+      shooting[ownGoalAttempt?'ownGoalXG':'opponentGoalXG']+=details.probability;
+      if(shotResult.type==='save'&&shotResult.outcome==='saved')stats[shot.defendingTeam].catches++;
+      if(shotResult.outcome==='corner')stats[shotResult.restart?.team||state.restart?.team||shot.scoringTeam].cornersWon++;
+      if(shotResult.type==='blockedShot'){shooting.blockedShots++;stats[shotResult.team].blocks++;if(shotResult.outcome==='blocked')stats[shotResult.team].blockPossessions++;}
+      if(shotResult.outcome==='wide')shooting.wideShots++;
+      if(pendingShotRound&&state.phase!=='keeperRelease')shooting.completedOrdinaryRounds++;
       if(state.score[shot.scoringTeam]>before.score[shot.scoringTeam]){
         stats[shot.scoringTeam].goals+=state.score[shot.scoringTeam]-before.score[shot.scoringTeam];
         const scoringRole=shooting.role[shot.shooterType||before.pieces.find(p=>p.id===shot.shooterId)?.type];
@@ -62,7 +68,7 @@ export function runMatch({rules=baseline,whitePolicy=rules,blackPolicy=rules,whi
         // An offside attacker in the box can stop the kick before a shot is
         // declared. Count the actual attempt, rather than the submitted target.
         if(state.phase==='keeperReact'&&result.type==='shotAttempt'){
-          s.shots++;role.shots++;pendingShotRound=!before.restart&&before.phase!=='kickoff'&&!before.ballProgress?.excludeRelease;
+          s.shots++;s[kick.goal===team?'opponentGoalAttempts':'ownGoalAttempts']++;role.shots++;pendingShotRound=!before.restart&&before.phase!=='kickoff'&&!before.ballProgress?.excludeRelease&&!before.ballProgress?.releaseAlreadyCounted;
         }
       }
       else{
@@ -73,7 +79,7 @@ export function runMatch({rules=baseline,whitePolicy=rules,blackPolicy=rules,whi
         if(result.type==='interception')s.interceptedPasses++;
         if(['miss','out'].includes(result.type))s.inaccuratePasses++;
         if(before.restart){s.restartsTaken++;inc(s.restartTypes,`taken:${before.restart.type}`);}
-        if(!before.restart&&before.phase!=='kickoff'&&!before.ballProgress?.excludeRelease&&!result.backPass)s.completedOrdinaryRounds++;
+        if(!before.restart&&before.phase!=='kickoff'&&!before.ballProgress?.excludeRelease&&!before.ballProgress?.releaseAlreadyCounted&&!result.backPass)s.completedOrdinaryRounds++;
       }
     }
     if(action.type==='move'&&actor&&before.phase!=='keeperReact'){
@@ -85,7 +91,7 @@ export function runMatch({rules=baseline,whitePolicy=rules,blackPolicy=rules,whi
     }
     // Loose-ball cycles complete a possession round without a kick.
     if(before.phase==='defendMove'&&state.phase==='attackMove'&&!before.ball.carrierId&&!state.ball.carrierId&&!before.restart&&!state.restart&&before.attack===state.attack)stats[before.attack].completedOrdinaryRounds++;
-    if(result.type==='stalling'&&before.phase!=='keeperReact')stats[result.team].stalls++;
+    if(result.type==='stalling')stats[result.team].stalls++;
     if(result.type==='offside'&&before.phase!=='keeperReact')stats[result.team].offsides++;
     if(state.restart&&(!before.restart||JSON.stringify(state.restart)!==JSON.stringify(before.restart))){
       stats[state.restart.team].restartsAwarded++;inc(stats[state.restart.team].restartTypes,`awarded:${state.restart.type}`);
@@ -95,7 +101,7 @@ export function runMatch({rules=baseline,whitePolicy=rules,blackPolicy=rules,whi
       possessions.push({team:possessionTeam,actions:actions+1-possessionStart,ordinaryRounds:stats[possessionTeam].completedOrdinaryRounds-possessionStartRounds,end:result.type});
       possessionTeam=state.attack;possessionStart=actions+1;possessionStartRounds=stats[possessionTeam].completedOrdinaryRounds;
     }
-    if(before.attack===state.attack&&!state.restart&&!['goal','shotMiss','save'].includes(result.type)&&!entryZone(state.attack,before.ball.y)&&entryZone(state.attack,state.ball.y))stats[state.attack].attackingThirdEntries++;
+    if(before.attack===state.attack&&!state.restart&&!['goal','shotMiss','save','blockedShot'].includes(result.type)&&!entryZone(state.attack,before.ball.y,rules.BOARD_HEIGHT)&&entryZone(state.attack,state.ball.y,rules.BOARD_HEIGHT))stats[state.attack].attackingThirdEntries++;
     const key=JSON.stringify([state.pieces.map(p=>[p.id,p.x,p.y]),state.ball,state.attack,state.phase,state.positionBudget,state.restart,state.ballProgress,state.offside]);
     const repeats=(seen.get(key)||0)+1;seen.set(key,repeats);maxExactRepeat=Math.max(maxExactRepeat,repeats);
     if(record)events.push({step:actions+1,team,phase:before.phase,action,ms,result:structuredClone(result),score:structuredClone(state.score),state:structuredClone(state)});

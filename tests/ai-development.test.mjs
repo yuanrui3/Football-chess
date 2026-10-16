@@ -4,9 +4,9 @@ import * as e from '../dist/engine.js';
 const candidate=e;
 const budget=()=>({normalUsed:false,pawnUsed:false,dribbleUsed:false});
 function fixture({phase='attackMove',attack='white',carrier='white-Q',positions={},ball=null,origin=null,clear=[]}={}){
- const s=e.createGame({seed:17}); const assigned={'white-K':[4,14],'black-K':[7,0],...positions};
+ const s=e.createGame({seed:17}); const assigned={'white-K':[6,16],'black-K':[7,0],...positions};
  const used=new Set(Object.values(assigned).map(p=>p.join(','))); for(const p of clear)used.add(p.join(','));
- const parking=Array.from({length:15},(_,y)=>[[0,y],[11,y]]).flat();
+ const parking=Array.from({length:e.BOARD_HEIGHT},(_,y)=>[[0,y],[e.BOARD_WIDTH-1,y]]).flat();
  for(const p of s.pieces){let v=assigned[p.id]||parking.find(v=>!used.has(v.join(',')));if(!v)throw Error('parking exhausted');[p.x,p.y]=v;used.add(v.join(','));}
  s.phase=phase;s.attack=attack;s.positionBudget=budget();s.restart=null;s.offside=null;s.pendingShot=null;s.releaseReason=null;s.looseBallKickOrigin=origin;
  const p=s.pieces.find(p=>p.id===carrier);s.ball=ball||{x:p.x,y:p.y,carrierId:p.id};s.ballProgress={team:attack,anchorY:s.ball.y,rounds:0,pendingRelease:false,excludeRelease:false};return s;
@@ -19,17 +19,17 @@ const other=t=>t==='white'?'black':'white';
 function mirror(s){
  const t=clone(s),id=v=>v?.replace(/^(white|black)/,other)??null;
  t.attack=other(s.attack);t.score={white:s.score.black,black:s.score.white};
- t.pieces=s.pieces.map(p=>({...p,id:id(p.id),team:other(p.team),x:11-p.x,y:14-p.y}));
- t.ball={x:11-s.ball.x,y:14-s.ball.y,carrierId:id(s.ball.carrierId)};
- if(s.restart)t.restart={...s.restart,team:other(s.restart.team),takerId:id(s.restart.takerId),spot:{x:11-s.restart.spot.x,y:14-s.restart.spot.y}};
- if(s.ballProgress)t.ballProgress={...s.ballProgress,team:other(s.ballProgress.team),anchorY:14-s.ballProgress.anchorY};
+ t.pieces=s.pieces.map(p=>({...p,id:id(p.id),team:other(p.team),x:e.BOARD_WIDTH-1-p.x,y:e.BOARD_HEIGHT-1-p.y}));
+ t.ball={x:e.BOARD_WIDTH-1-s.ball.x,y:e.BOARD_HEIGHT-1-s.ball.y,carrierId:id(s.ball.carrierId)};
+ if(s.restart)t.restart={...s.restart,team:other(s.restart.team),takerId:id(s.restart.takerId),spot:{x:e.BOARD_WIDTH-1-s.restart.spot.x,y:e.BOARD_HEIGHT-1-s.restart.spot.y}};
+ if(s.ballProgress)t.ballProgress={...s.ballProgress,team:other(s.ballProgress.team),anchorY:e.BOARD_HEIGHT-1-s.ballProgress.anchorY};
  if(s.looseBallKickOrigin)t.looseBallKickOrigin={team:other(s.looseBallKickOrigin.team),pieceId:id(s.looseBallKickOrigin.pieceId)};
- if(s.offside)t.offside={...s.offside,team:other(s.offside.team),kickerId:id(s.offside.kickerId),flaggedIds:s.offside.flaggedIds.map(id),ball:s.offside.ball?{x:11-s.offside.ball.x,y:14-s.offside.ball.y}:undefined,secondLastY:14-s.offside.secondLastY};
+ if(s.offside)t.offside={...s.offside,team:other(s.offside.team),kickerId:id(s.offside.kickerId),flaggedIds:s.offside.flaggedIds.map(id),ball:s.offside.ball?{x:e.BOARD_WIDTH-1-s.offside.ball.x,y:e.BOARD_HEIGHT-1-s.offside.ball.y}:undefined,secondLastY:e.BOARD_HEIGHT-1-s.offside.secondLastY};
  return t;
 }
 function selfPassState(){return fixture({positions:{'white-Q':[5,10],'white-R1':[1,4],'black-R1':[7,4]},ball:{x:5,y:4,carrierId:null},origin:{team:'white',pieceId:'white-Q'}});}
 function offsideState(){const s=fixture({phase:'kick',carrier:'white-B2',positions:{'white-Q':[5,5],'white-R1':[1,6],'white-B2':[1,10],'black-Q':[0,6],'black-R1':[7,6],'black-R2':[11,6],'black-B1':[0,7],'black-B2':[11,7],'black-N1':[0,8],'black-N2':[11,8],'black-P1':[0,9],'black-P2':[11,9],'black-P3':[0,10]}});return e.applyKick(s,5,6);}
-function kingState(){const s=fixture({phase:'defendMove',attack:'black',carrier:'black-Q',positions:{"white-K":[5,13],"white-Q":[5,7],"white-R1":[10,11],"white-R2":[6,8],"white-B1":[4,8],"white-B2":[9,10],"white-N1":[7,8],"white-N2":[7,6],"white-P1":[5,9],"white-P2":[6,9],"white-P3":[8,13],"black-K":[6,1],"black-Q":[10,13],"black-R1":[10,12],"black-R2":[1,3],"black-B1":[5,8],"black-B2":[2,4],"black-N1":[7,9],"black-N2":[5,6],"black-P1":[7,5],"black-P2":[5,5],"black-P3":[3,4]}});s.turn=10;s.ballProgress={team:'black',anchorY:12,rounds:1,pendingRelease:false,excludeRelease:false};return s;}
+function kingState(){const s=fixture({phase:'defendMove',attack:'black',carrier:'black-Q',positions:{"white-K":[5,15],"white-Q":[5,7],"white-R1":[10,11],"white-R2":[6,8],"white-B1":[4,8],"white-B2":[9,10],"white-N1":[7,8],"white-N2":[7,6],"white-P1":[5,9],"white-P2":[6,9],"white-P3":[8,13],"black-K":[6,1],"black-Q":[10,13],"black-R1":[10,12],"black-R2":[1,3],"black-B1":[5,8],"black-B2":[2,4],"black-N1":[7,9],"black-N2":[5,6],"black-P1":[7,5],"black-P2":[5,5],"black-P3":[3,4]}});s.turn=10;s.ballProgress={team:'black',anchorY:12,rounds:1,pendingRelease:false,excludeRelease:false};return s;}
 function legalChoice(s,a){
  if(a.type==='move')assert.ok(e.legalMoves(s,a.pieceId,{freePawn:!!a.freePawn}).some(m=>m.x===a.x&&m.y===a.y));
  else if(a.type==='kick')assert.ok(e.legalKicks(s).some(k=>k.x===a.x&&k.y===a.y));
@@ -58,7 +58,7 @@ for(const difficulty of ['casual','tactical']){
   const original=kingState();
   for(const s of [original,mirror(original)]){
    const a=candidate.chooseAIAction(s,{difficulty});legalChoice(s,a);const p=s.pieces.find(p=>p.id===a.pieceId);
-   if(a.type==='move'&&p.type==='K')assert.ok(a.x>=4&&a.x<=7&&(p.team==='white'?a.y>=13:a.y<=1),'keeper protects the goal when there is no tackle or immediate goal ray');
+   if(a.type==='move'&&p.type==='K')assert.ok(e.inOwnBox(p.team,a.x,a.y),'keeper protects the goal when there is no tackle or immediate goal ray');
   }
  });
  test(`${difficulty}: public-board choices preserve state and ignore future random values`,()=>{
@@ -71,7 +71,7 @@ for(const difficulty of ['casual','tactical']){
   let s=e.createGame({seed:89922});
   for(let i=0;i<120;i++){
    const a=candidate.chooseAIAction(s,{difficulty});legalChoice(s,a);s=act(s,a);assert.equal(s.pieces.length,22);assert.equal(new Set(s.pieces.map(p=>`${p.x},${p.y}`)).size,22);
-   assert.ok(s.pieces.every(p=>p.x>=0&&p.x<12&&p.y>=0&&p.y<15&&(!e.isBox(p.x,p.y)||['K','N'].includes(p.type))));
+   assert.ok(s.pieces.every(p=>p.x>=0&&p.x<e.BOARD_WIDTH&&p.y>=0&&p.y<e.BOARD_HEIGHT&&e.canOccupySquare(p,p.x,p.y)));
    if(s.ball.carrierId){const p=s.pieces.find(p=>p.id===s.ball.carrierId);assert.equal(p.team,s.attack);assert.equal(p.x,s.ball.x);assert.equal(p.y,s.ball.y);}
   }
  });
@@ -80,7 +80,7 @@ for(const difficulty of ['casual','tactical']){
 // Reusing a public snapshot after editing an observable piece must not retain
 // analysis of the old board. Equality to a fresh clone checks the contract.
 test('Casual choices on an edited snapshot equal choices on a fresh identical board',()=>{
- const s=fixture({phase:'defendMove',carrier:'white-B1',positions:{"white-K":[5,13],"white-Q":[5,7],"white-R1":[1,11],"white-R2":[10,4],"white-B1":[4,8],"white-B2":[9,10],"white-N1":[3,8],"white-N2":[8,9],"white-P1":[4,12],"white-P2":[6,11],"white-P3":[8,12],"black-K":[6,1],"black-Q":[6,4],"black-R1":[10,3],"black-R2":[1,3],"black-B1":[9,4],"black-B2":[2,4],"black-N1":[8,6],"black-N2":[3,5],"black-P1":[7,2],"black-P2":[5,2],"black-P3":[3,2]}});
+ const s=fixture({phase:'defendMove',carrier:'white-B1',positions:{"white-K":[5,15],"white-Q":[5,7],"white-R1":[1,11],"white-R2":[10,4],"white-B1":[4,8],"white-B2":[9,10],"white-N1":[3,8],"white-N2":[8,9],"white-P1":[4,12],"white-P2":[6,11],"white-P3":[8,12],"black-K":[6,1],"black-Q":[6,4],"black-R1":[10,3],"black-R2":[1,3],"black-B1":[9,4],"black-B2":[2,4],"black-N1":[8,6],"black-N2":[3,5],"black-P1":[7,2],"black-P2":[5,2],"black-P3":[3,2]}});
  s.turn=2;s.ballProgress={team:'white',anchorY:10,rounds:0,pendingRelease:false,excludeRelease:false};
  candidate.chooseAIAction(s,{difficulty:'casual'});
  const carrier=s.pieces.find(p=>p.id==='white-B1');carrier.x=9;carrier.y=2;s.ball={x:9,y:2,carrierId:carrier.id};
@@ -90,14 +90,14 @@ test('Casual choices on an edited snapshot equal choices on a fresh identical bo
 });
 
 function throwFixture(){
- const s=fixture({phase:'defendMove',carrier:'white-B1',positions:{'white-B1':[0,4],'white-R1':[4,4],'black-B1':[7,8],'black-K':[6,0]}});
+ const s=fixture({phase:'defendMove',carrier:'white-B1',positions:{'white-B1':[0,4],'white-R1':[5,4],'black-B1':[8,8],'black-K':[7,0]}});
  s.restart={type:'throwIn',team:'white',takerId:'white-B1',spot:{x:0,y:4},indirect:false};return s;
 }
 function afterReceiverShotThreat(state,target,receiverId){
  const kicking={...state,phase:'kick'};
  const kick=e.legalKicks(kicking).find(k=>k.x===target.x&&k.y===target.y&&k.receiverId===receiverId);
  if(!kick)return 0;
- const received=e.applyKick(kicking,target.x,target.y);
+ const received=e.applyKick(kicking,target.x,target.y,{roll:0});
  if(received.ball.carrierId!==receiverId)return 0;
  return bestReactedShotThreat(received);
 }
@@ -116,11 +116,12 @@ function verifyReceiverPress(state,target,receiverId){
  // attacking positioning turn and the defence gets a reply before any shot.
  const kicking=state.phase==='defendMove'?e.skipMove(state):state;
  assert.equal(kicking.phase,'kick');
- const received=e.applyKick(kicking,target.x,target.y);
+ const received=e.applyKick(kicking,target.x,target.y,{roll:0});
  assert.equal(received.ball.carrierId,receiverId);
  const held=e.skipMove(received),defendingTeam=e.currentTeam(held);
  const replies=position=>position.pieces.filter(p=>p.team===e.currentTeam(position)).flatMap(piece=>
-  e.legalMoves(position,piece.id).map(move=>({...move,pieceId:piece.id})));
+  [false,true].flatMap(freePawn=>e.legalMoves(position,piece.id,{freePawn}).map(move=>({...move,pieceId:piece.id,freePawn}))))
+  .sort((a,b)=>Number(b.type==='tackle')-Number(a.type==='tackle')||Number(b.pieceId.endsWith('-K'))-Number(a.pieceId.endsWith('-K')));
  assert.ok(replies(held).some(move=>move.type==='tackle'&&move.targetId===receiverId&&move.tackleProbability===1),
   'an uncovered receiving ray is acceptable only with a real guaranteed tackle on the receiver');
  const carries=[null,...e.legalMoves(received,receiverId)];
@@ -128,13 +129,20 @@ function verifyReceiverPress(state,target,receiverId){
   let attackPosition=carry?e.applyMove(received,receiverId,carry.x,carry.y):received;
   if(attackPosition.phase==='attackMove')attackPosition=e.skipMove(attackPosition);
   assert.equal(attackPosition.phase,'defendMove');
+  const shotBefore=bestReactedShotThreat(attackPosition);
   const answers=[null,...replies(attackPosition)];
+  const satisfactory=position=>{
+   if(position.attack===defendingTeam)return true;
+   const kicking=position.phase==='defendMove'?e.skipMove(position):position;
+   return bestReactedShotThreat(kicking)<=shotBefore*(1-e.SHOT_MODEL.blockPerDefender)+1e-10;
+  };
   assert.ok(answers.some(answer=>{
-   let defended=answer?e.applyMove(attackPosition,answer.pieceId,answer.x,answer.y,{roll:0}):attackPosition;
-   if(defended.attack===defendingTeam)return true;
-   if(defended.phase==='defendMove')defended=e.skipMove(defended);
-   return bestReactedShotThreat(defended)===0;
-  }),`holding or carrying to ${carry?`${carry.x},${carry.y}`:'the receiving square'} must have a legal reply that removes the shot`);
+   const defended=answer?e.applyMove(attackPosition,answer.pieceId,answer.x,answer.y,{freePawn:answer.freePawn,roll:0}):attackPosition;
+   if(satisfactory(defended))return true;
+   // A king can combine its normal and shared bonus steps before the kick.
+   // Test that real defensive round, rather than only one action from it.
+   return defended.phase==='defendMove'&&replies(defended).some(reply=>satisfactory(e.applyMove(defended,reply.pieceId,reply.x,reply.y,{freePawn:reply.freePawn,roll:0})));
+  }),`holding or carrying to ${carry?`${carry.x},${carry.y}`:'the receiving square'} must have a legal reply that wins the ball or reduces the shot by at least one defender's block`);
  }
 }
 for(const difficulty of ['casual','tactical'])test(`${difficulty}: covers a straight throw from a bishop as a real receiving threat, either color`,()=>{
