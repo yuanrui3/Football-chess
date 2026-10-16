@@ -1,0 +1,40 @@
+{
+  "time": "2026-10-16T14:10:45Z",
+  "completedDevelopmentGames": 3,
+  "interrupted": [
+    {
+      "seed": 1632189751,
+      "tacticalColor": "black",
+      "kickoff": "black",
+      "progressObserved": 240,
+      "status": "Will rerun to full720"
+    },
+    {
+      "seed": 3807295163,
+      "tacticalColor": "white",
+      "kickoff": "white",
+      "progressObserved": 240,
+      "status": "Not completed; no result used for C2 tuning"
+    },
+    {
+      "seed": 3807295163,
+      "tacticalColor": "white",
+      "kickoff": "black",
+      "progressObserved": 240,
+      "status": "Not completed; no result used for C2 tuning"
+    }
+  ],
+  "unstarted": [
+    {
+      "seed": 3807295163,
+      "tacticalColor": "black",
+      "kickoff": "white"
+    },
+    {
+      "seed": 3807295163,
+      "tacticalColor": "black",
+      "kickoff": "black"
+    }
+  ],
+  "reason": "Root capped C1 at four balanced first-seed development games; stop worker pool discarded only unfinished jobs, preserving all three finished games. Fourth development job restarted alone. Candidate C2 was frozen before these heldout outcomes were observed."
+}

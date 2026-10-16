@@ -1,0 +1,78 @@
+{
+  "frozenAt": "2026-10-16T06:12:21.093Z",
+  "baseSHA256": "79d21bc46394c7b4a318c699ead8e318147015a0423410a12df10cdfeed6a213",
+  "geometry": {
+    "width": 14,
+    "height": 17,
+    "goalFiles": [
+      5,
+      6,
+      7,
+      8
+    ],
+    "boxFiles": [
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "boxDepth": 2
+  },
+  "shotModel": 11,
+  "casual": {
+    "seeds": [
+      84100,
+      84101,
+      84102,
+      84103,
+      84104,
+      84105,
+      84106,
+      84107
+    ],
+    "kickoffs": [
+      "white",
+      "black"
+    ],
+    "matchesPerVariant": 16,
+    "actions": 480
+  },
+  "tactical": {
+    "seeds": [
+      2713884127,
+      902774113
+    ],
+    "kickoffs": [
+      "white",
+      "black"
+    ],
+    "matchesPerVariant": 4,
+    "actions": 480
+  },
+  "screen": "A/Cfirst8Casualgamecheckpoint; all16eachprespecified. NoAIparametertuning.",
+  "chaos": "Provisional >50%goal-inflationoverA,orN>60%goalswithmanycertainunanswerablefinishes. Reportuncertaintyandcontext,notmechanicalsinglecriterion.",
+  "variants": {
+    "A": {
+      "access": "restricted,Nbothboxes,Kownonly",
+      "knightMultiplier": 1,
+      "SHA256": "79d21bc46394c7b4a318c699ead8e318147015a0423410a12df10cdfeed6a213"
+    },
+    "B": {
+      "access": "alloutfieldbothboxes,Kownonly",
+      "knightMultiplier": 1,
+      "SHA256": "2128a74e0aae0ad2a586521b58507e88cc3d085a4876ed36d8cc640bde0b3927"
+    },
+    "C": {
+      "access": "alloutfieldbothboxes,Kownonly",
+      "knightMultiplier": 2,
+      "SHA256": "af79181670cf0585c7ff777f2bc310071afdde744beddfdfbae9a94aeb71ab33"
+    },
+    "D": {
+      "access": "restricted,Nbothboxes,Kownonly",
+      "knightMultiplier": 2,
+      "SHA256": "3fbb70dcc905ae5cac0c6aacd0c56ad05c7a41428c5173c938eed4ec69a18f5d"
+    }
+  }
+}

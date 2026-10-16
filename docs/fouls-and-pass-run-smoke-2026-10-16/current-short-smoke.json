@@ -1,0 +1,125 @@
+[
+  {
+    "status": "current short no-crash smoke, not balance evidence",
+    "SHA256": "f8f4869965c49adf6d5e122846938531dc2404f52b373bb120cd54675abad59c",
+    "difficulty": "casual",
+    "seed": 3621279913,
+    "kickoff": "white",
+    "actionLimit": 120,
+    "actions": 120,
+    "error": null,
+    "foulsEnabled": true,
+    "score": {
+      "white": 0,
+      "black": 0
+    },
+    "elapsedMs": 1307.0193740000002,
+    "activePlayers": {
+      "white": 11,
+      "black": 11
+    },
+    "dismissedPlayers": {
+      "white": 0,
+      "black": 0
+    },
+    "phases": {
+      "kickoff": 1,
+      "attackMove": 50,
+      "defendMove": 45,
+      "kick": 21,
+      "passRun": 3
+    },
+    "results": {
+      "kick": 22,
+      "move": 95,
+      "tackle": 2,
+      "skip": 1
+    },
+    "totals": {
+      "shots": 0,
+      "opponentGoalAttempts": 0,
+      "ownGoalAttempts": 0,
+      "resolvedShots": 0,
+      "opponentGoalXG": 0,
+      "ownGoalXG": 0,
+      "fouls": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "penaltiesTaken": 0,
+      "penaltyGoals": 0,
+      "passRunsOffered": 3,
+      "passRuns": 3,
+      "passRunsSkipped": 0,
+      "completedOrdinaryRounds": 21
+    },
+    "audit": {
+      "exactStateReplay": true,
+      "legalMoves": 97,
+      "forbiddenDribbleOrRunBoxEntries": 0,
+      "occupancyValid": true
+    },
+    "maxExactRepeat": 1
+  },
+  {
+    "status": "current short no-crash smoke, not balance evidence",
+    "SHA256": "f8f4869965c49adf6d5e122846938531dc2404f52b373bb120cd54675abad59c",
+    "difficulty": "tactical",
+    "seed": 3621279913,
+    "kickoff": "white",
+    "actionLimit": 120,
+    "actions": 120,
+    "error": null,
+    "foulsEnabled": true,
+    "score": {
+      "white": 0,
+      "black": 0
+    },
+    "elapsedMs": 31301.38883,
+    "activePlayers": {
+      "white": 11,
+      "black": 11
+    },
+    "dismissedPlayers": {
+      "white": 0,
+      "black": 0
+    },
+    "phases": {
+      "kickoff": 1,
+      "passRun": 4,
+      "attackMove": 55,
+      "defendMove": 44,
+      "kick": 15,
+      "keeperRelease": 1
+    },
+    "results": {
+      "kick": 17,
+      "move": 98,
+      "tackle": 3,
+      "skip": 2
+    },
+    "totals": {
+      "shots": 0,
+      "opponentGoalAttempts": 0,
+      "ownGoalAttempts": 0,
+      "resolvedShots": 0,
+      "opponentGoalXG": 0,
+      "ownGoalXG": 0,
+      "fouls": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "penaltiesTaken": 0,
+      "penaltyGoals": 0,
+      "passRunsOffered": 4,
+      "passRuns": 4,
+      "passRunsSkipped": 0,
+      "completedOrdinaryRounds": 19
+    },
+    "audit": {
+      "exactStateReplay": true,
+      "legalMoves": 101,
+      "forbiddenDribbleOrRunBoxEntries": 0,
+      "occupancyValid": true
+    },
+    "maxExactRepeat": 1
+  }
+]

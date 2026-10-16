@@ -1,0 +1,2437 @@
+{
+  "updated": "2026-10-16T14:18:57.840Z",
+  "reports": [
+    {
+      "file": "baseline-1632189751-black-black.json",
+      "variant": "baseline",
+      "seed": 1632189751,
+      "tacticalColor": "black",
+      "kickoff": "black",
+      "maxScoredRepeat": 1,
+      "maxCornerChain": 0,
+      "corners": {
+        "white": 0,
+        "black": 0
+      },
+      "restarts": {
+        "offside": 1,
+        "goalKick": 2
+      },
+      "shotOutcomes": {
+        "shotMiss:wide": 2
+      },
+      "attempts": [
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 3,
+            "y": 16
+          },
+          "distance": 2,
+          "fromRestart": null,
+          "step": 646
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 3,
+            "y": 1
+          },
+          "distance": 2,
+          "fromRestart": null,
+          "step": 714
+        }
+      ]
+    },
+    {
+      "file": "baseline-1632189751-black-white.json",
+      "variant": "baseline",
+      "seed": 1632189751,
+      "tacticalColor": "black",
+      "kickoff": "white",
+      "maxScoredRepeat": 1,
+      "maxCornerChain": 0,
+      "corners": {
+        "white": 0,
+        "black": 0
+      },
+      "restarts": {},
+      "shotOutcomes": {
+        "goal:goal": 1
+      },
+      "attempts": [
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 8,
+            "y": 15
+          },
+          "distance": 2,
+          "fromRestart": null,
+          "step": 339
+        }
+      ]
+    },
+    {
+      "file": "baseline-1632189751-white-black.json",
+      "variant": "baseline",
+      "seed": 1632189751,
+      "tacticalColor": "white",
+      "kickoff": "black",
+      "maxScoredRepeat": 1,
+      "maxCornerChain": 1,
+      "corners": {
+        "white": 0,
+        "black": 1
+      },
+      "restarts": {
+        "goalKick": 1,
+        "offside": 7,
+        "corner": 1
+      },
+      "shotOutcomes": {
+        "shotMiss:wide": 1,
+        "save:saved": 2,
+        "save:corner": 1,
+        "goal:goal": 1
+      },
+      "attempts": [
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 3,
+            "y": 14
+          },
+          "distance": 3,
+          "fromRestart": null,
+          "step": 11
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 5,
+            "y": 2
+          },
+          "distance": 3,
+          "fromRestart": null,
+          "step": 327
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 8,
+            "y": 13
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 540
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 8,
+            "y": 13
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 630
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 2,
+            "y": 14
+          },
+          "distance": 3,
+          "fromRestart": null,
+          "step": 694
+        }
+      ]
+    },
+    {
+      "file": "baseline-1632189751-white-white.json",
+      "variant": "baseline",
+      "seed": 1632189751,
+      "tacticalColor": "white",
+      "kickoff": "white",
+      "maxScoredRepeat": 1,
+      "maxCornerChain": 1,
+      "corners": {
+        "white": 0,
+        "black": 2
+      },
+      "restarts": {
+        "corner": 2
+      },
+      "shotOutcomes": {
+        "save:saved": 1,
+        "goal:goal": 2,
+        "save:corner": 2
+      },
+      "attempts": [
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 5,
+            "y": 2
+          },
+          "distance": 3,
+          "fromRestart": null,
+          "step": 296
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 5,
+            "y": 1
+          },
+          "distance": 2,
+          "fromRestart": null,
+          "step": 317
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 3,
+            "y": 14
+          },
+          "distance": 3,
+          "fromRestart": null,
+          "step": 329
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 8,
+            "y": 3
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 437
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 3,
+            "y": 14
+          },
+          "distance": 3,
+          "fromRestart": null,
+          "step": 449
+        }
+      ]
+    },
+    {
+      "file": "baseline-3807295163-black-black.json",
+      "variant": "baseline",
+      "seed": 3807295163,
+      "tacticalColor": "black",
+      "kickoff": "black",
+      "maxScoredRepeat": 1,
+      "maxCornerChain": 0,
+      "corners": {
+        "white": 0,
+        "black": 0
+      },
+      "restarts": {
+        "freeKick": 1,
+        "stalling": 1,
+        "goalKick": 2,
+        "offside": 2
+      },
+      "shotOutcomes": {
+        "shotMiss:wide": 2,
+        "save:saved": 1
+      },
+      "attempts": [
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 4,
+            "y": 16
+          },
+          "distance": 2,
+          "fromRestart": null,
+          "step": 506
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 8,
+            "y": 6
+          },
+          "distance": 7,
+          "fromRestart": null,
+          "step": 545
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 5,
+            "y": 15
+          },
+          "distance": 2,
+          "fromRestart": null,
+          "step": 589
+        }
+      ]
+    },
+    {
+      "file": "baseline-3807295163-black-white.json",
+      "variant": "baseline",
+      "seed": 3807295163,
+      "tacticalColor": "black",
+      "kickoff": "white",
+      "maxScoredRepeat": 1,
+      "maxCornerChain": 0,
+      "corners": {
+        "white": 0,
+        "black": 0
+      },
+      "restarts": {},
+      "shotOutcomes": {
+        "goal:goal": 1
+      },
+      "attempts": [
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 8,
+            "y": 15
+          },
+          "distance": 2,
+          "fromRestart": null,
+          "step": 339
+        }
+      ]
+    },
+    {
+      "file": "baseline-3807295163-white-black.json",
+      "variant": "baseline",
+      "seed": 3807295163,
+      "tacticalColor": "white",
+      "kickoff": "black",
+      "maxScoredRepeat": 1,
+      "maxCornerChain": 1,
+      "corners": {
+        "white": 0,
+        "black": 1
+      },
+      "restarts": {
+        "corner": 1,
+        "offside": 1,
+        "freeKick": 1,
+        "goalKick": 2
+      },
+      "shotOutcomes": {
+        "save:corner": 1,
+        "shotMiss:wide": 2,
+        "goal:goal": 2
+      },
+      "attempts": [
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 3,
+            "y": 14
+          },
+          "distance": 3,
+          "fromRestart": null,
+          "step": 11
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 10,
+            "y": 15
+          },
+          "distance": 2,
+          "fromRestart": null,
+          "step": 566
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 9,
+            "y": 1
+          },
+          "distance": 2,
+          "fromRestart": null,
+          "step": 607
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 6,
+            "y": 1
+          },
+          "distance": 2,
+          "fromRestart": null,
+          "step": 699
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 3,
+            "y": 14
+          },
+          "distance": 3,
+          "fromRestart": null,
+          "step": 711
+        }
+      ]
+    },
+    {
+      "file": "baseline-3807295163-white-white.json",
+      "variant": "baseline",
+      "seed": 3807295163,
+      "tacticalColor": "white",
+      "kickoff": "white",
+      "maxScoredRepeat": 1,
+      "maxCornerChain": 0,
+      "corners": {
+        "white": 0,
+        "black": 0
+      },
+      "restarts": {
+        "goalKick": 1
+      },
+      "shotOutcomes": {
+        "goal:goal": 3,
+        "shotMiss:wide": 1
+      },
+      "attempts": [
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 5,
+            "y": 2
+          },
+          "distance": 3,
+          "fromRestart": null,
+          "step": 296
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 3,
+            "y": 14
+          },
+          "distance": 3,
+          "fromRestart": null,
+          "step": 308
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 5,
+            "y": 3
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 627
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 3,
+            "y": 14
+          },
+          "distance": 3,
+          "fromRestart": null,
+          "step": 639
+        }
+      ]
+    },
+    {
+      "file": "candidate-1632189751-black-black.json",
+      "variant": "candidate",
+      "seed": 1632189751,
+      "tacticalColor": "black",
+      "kickoff": "black",
+      "maxScoredRepeat": 1,
+      "maxCornerChain": 1,
+      "corners": {
+        "white": 0,
+        "black": 1
+      },
+      "restarts": {
+        "corner": 1,
+        "offside": 5,
+        "stalling": 1,
+        "goalKick": 1,
+        "freeKick": 1
+      },
+      "shotOutcomes": {
+        "blockedShot:corner": 1,
+        "shotMiss:wide": 1,
+        "save:saved": 1
+      },
+      "attempts": [
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 9,
+            "y": 15
+          },
+          "distance": 2,
+          "fromRestart": null,
+          "step": 115
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 9,
+            "y": 3
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 646
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 8,
+            "y": 4
+          },
+          "distance": 5,
+          "fromRestart": null,
+          "step": 706
+        }
+      ]
+    },
+    {
+      "file": "candidate-1632189751-black-white.json",
+      "variant": "candidate",
+      "seed": 1632189751,
+      "tacticalColor": "black",
+      "kickoff": "white",
+      "maxScoredRepeat": 1,
+      "maxCornerChain": 0,
+      "corners": {
+        "white": 0,
+        "black": 0
+      },
+      "restarts": {
+        "goalKick": 1,
+        "freeKick": 1,
+        "offside": 3
+      },
+      "shotOutcomes": {
+        "shotMiss:wide": 1,
+        "save:saved": 1,
+        "goal:goal": 2
+      },
+      "attempts": [
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 10,
+            "y": 15
+          },
+          "distance": 2,
+          "fromRestart": null,
+          "step": 53
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 7,
+            "y": 3
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 319
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 4,
+            "y": 3
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 544
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 8,
+            "y": 14
+          },
+          "distance": 3,
+          "fromRestart": null,
+          "step": 655
+        }
+      ]
+    },
+    {
+      "file": "candidate-1632189751-white-black.json",
+      "variant": "candidate",
+      "seed": 1632189751,
+      "tacticalColor": "white",
+      "kickoff": "black",
+      "maxScoredRepeat": 1,
+      "maxCornerChain": 2,
+      "corners": {
+        "white": 2,
+        "black": 0
+      },
+      "restarts": {
+        "goalKick": 4,
+        "freeKick": 1,
+        "corner": 2
+      },
+      "shotOutcomes": {
+        "shotMiss:wide": 4,
+        "goal:goal": 2,
+        "save:corner": 2
+      },
+      "attempts": [
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 3,
+            "y": 14
+          },
+          "distance": 3,
+          "fromRestart": null,
+          "step": 11
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 10,
+            "y": 1
+          },
+          "distance": 2,
+          "fromRestart": null,
+          "step": 157
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 3,
+            "y": 14
+          },
+          "distance": 3,
+          "fromRestart": null,
+          "step": 169
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 10,
+            "y": 1
+          },
+          "distance": 2,
+          "fromRestart": null,
+          "step": 235
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 6,
+            "y": 3
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 459
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 9,
+            "y": 1
+          },
+          "distance": 2,
+          "fromRestart": null,
+          "step": 472
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 5,
+            "y": 1
+          },
+          "distance": 2,
+          "fromRestart": null,
+          "step": 501
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 3,
+            "y": 14
+          },
+          "distance": 3,
+          "fromRestart": null,
+          "step": 513
+        }
+      ]
+    },
+    {
+      "file": "candidate-1632189751-white-white.json",
+      "variant": "candidate",
+      "seed": 1632189751,
+      "tacticalColor": "white",
+      "kickoff": "white",
+      "maxScoredRepeat": 1,
+      "maxCornerChain": 1,
+      "corners": {
+        "white": 1,
+        "black": 1
+      },
+      "restarts": {
+        "offside": 4,
+        "corner": 2,
+        "goalKick": 1
+      },
+      "shotOutcomes": {
+        "save:corner": 2,
+        "goal:goal": 1,
+        "shotMiss:wide": 1
+      },
+      "attempts": [
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 6,
+            "y": 13
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 145
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 11,
+            "y": 14
+          },
+          "distance": 3,
+          "fromRestart": null,
+          "step": 439
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 3,
+            "y": 15
+          },
+          "distance": 2,
+          "fromRestart": null,
+          "step": 527
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 10,
+            "y": 1
+          },
+          "distance": 2,
+          "fromRestart": null,
+          "step": 719
+        }
+      ]
+    },
+    {
+      "file": "c2-1632189751-black-black.json",
+      "variant": "c2",
+      "seed": 1632189751,
+      "tacticalColor": "black",
+      "kickoff": "black",
+      "maxScoredRepeat": 1,
+      "maxCornerChain": 3,
+      "corners": {
+        "white": 0,
+        "black": 4
+      },
+      "restarts": {
+        "goalKick": 3,
+        "corner": 4,
+        "offside": 2,
+        "freeKick": 2
+      },
+      "shotOutcomes": {
+        "save:saved": 4,
+        "shotMiss:wide": 3,
+        "save:corner": 3,
+        "blockedShot:corner": 1
+      },
+      "attempts": [
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 5,
+            "y": 12
+          },
+          "distance": 5,
+          "fromRestart": null,
+          "step": 13
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 10,
+            "y": 15
+          },
+          "distance": 2,
+          "fromRestart": null,
+          "step": 196
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 5,
+            "y": 13
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 236
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 5,
+            "y": 13
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 300
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 7,
+            "y": 15
+          },
+          "distance": 2,
+          "fromRestart": null,
+          "step": 359
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 3,
+            "y": 1
+          },
+          "distance": 2,
+          "fromRestart": null,
+          "step": 411
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 11,
+            "y": 14
+          },
+          "distance": 3,
+          "fromRestart": null,
+          "step": 457
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 8,
+            "y": 3
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 474
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 7,
+            "y": 13
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 557
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 9,
+            "y": 15
+          },
+          "distance": 2,
+          "fromRestart": null,
+          "step": 594
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 5,
+            "y": 13
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 708
+        }
+      ]
+    },
+    {
+      "file": "c2-1632189751-black-white.json",
+      "variant": "c2",
+      "seed": 1632189751,
+      "tacticalColor": "black",
+      "kickoff": "white",
+      "maxScoredRepeat": 1,
+      "maxCornerChain": 2,
+      "corners": {
+        "white": 0,
+        "black": 5
+      },
+      "restarts": {
+        "freeKick": 2,
+        "goalKick": 5,
+        "offside": 16,
+        "corner": 5
+      },
+      "shotOutcomes": {
+        "goal:goal": 3,
+        "save:saved": 3,
+        "shotMiss:wide": 5,
+        "blockedShot:corner": 3,
+        "save:corner": 2
+      },
+      "attempts": [
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 5,
+            "y": 15
+          },
+          "distance": 2,
+          "fromRestart": null,
+          "step": 66
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 6,
+            "y": 13
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 105
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 7,
+            "y": 13
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 140
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 9,
+            "y": 16
+          },
+          "distance": 1,
+          "fromRestart": null,
+          "step": 203
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 3,
+            "y": 15
+          },
+          "distance": 2,
+          "fromRestart": null,
+          "step": 231
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 5,
+            "y": 12
+          },
+          "distance": 5,
+          "fromRestart": null,
+          "step": 288
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 11,
+            "y": 3
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 315
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 5,
+            "y": 3
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 357
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 6,
+            "y": 13
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 420
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 5,
+            "y": 13
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 433
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 8,
+            "y": 13
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 456
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 3,
+            "y": 15
+          },
+          "distance": 2,
+          "fromRestart": null,
+          "step": 598
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 7,
+            "y": 12
+          },
+          "distance": 5,
+          "fromRestart": null,
+          "step": 632
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 7,
+            "y": 13
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 666
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 6,
+            "y": 13
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 679
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 10,
+            "y": 15
+          },
+          "distance": 2,
+          "fromRestart": null,
+          "step": 698
+        }
+      ]
+    },
+    {
+      "file": "c2-1632189751-white-black.json",
+      "variant": "c2",
+      "seed": 1632189751,
+      "tacticalColor": "white",
+      "kickoff": "black",
+      "maxScoredRepeat": 1,
+      "maxCornerChain": 5,
+      "corners": {
+        "white": 9,
+        "black": 0
+      },
+      "restarts": {
+        "goalKick": 5,
+        "corner": 9,
+        "freeKick": 1
+      },
+      "shotOutcomes": {
+        "shotMiss:wide": 5,
+        "blockedShot:corner": 3,
+        "save:saved": 5,
+        "goal:goal": 3,
+        "save:corner": 6
+      },
+      "attempts": [
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 2,
+            "y": 14
+          },
+          "distance": 3,
+          "fromRestart": null,
+          "step": 16
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 6,
+            "y": 3
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 37
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 8,
+            "y": 3
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 104
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 6,
+            "y": 3
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 122
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 2,
+            "y": 14
+          },
+          "distance": 3,
+          "fromRestart": null,
+          "step": 139
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 6,
+            "y": 3
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 160
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 7,
+            "y": 5
+          },
+          "distance": 6,
+          "fromRestart": null,
+          "step": 236
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 5,
+            "y": 3
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 301
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 8,
+            "y": 1
+          },
+          "distance": 2,
+          "fromRestart": null,
+          "step": 314
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 5,
+            "y": 3
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 327
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 5,
+            "y": 3
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 340
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 9,
+            "y": 0
+          },
+          "distance": 1,
+          "fromRestart": null,
+          "step": 359
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 8,
+            "y": 13
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 396
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 8,
+            "y": 3
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 415
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 5,
+            "y": 1
+          },
+          "distance": 2,
+          "fromRestart": null,
+          "step": 428
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 2,
+            "y": 14
+          },
+          "distance": 3,
+          "fromRestart": null,
+          "step": 445
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 10,
+            "y": 2
+          },
+          "distance": 3,
+          "fromRestart": null,
+          "step": 487
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 5,
+            "y": 5
+          },
+          "distance": 6,
+          "fromRestart": null,
+          "step": 517
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 2,
+            "y": 14
+          },
+          "distance": 3,
+          "fromRestart": null,
+          "step": 534
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 6,
+            "y": 3
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 573
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 6,
+            "y": 3
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 658
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 6,
+            "y": 3
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 713
+        }
+      ]
+    },
+    {
+      "file": "c2-1632189751-white-white.json",
+      "variant": "c2",
+      "seed": 1632189751,
+      "tacticalColor": "white",
+      "kickoff": "white",
+      "maxScoredRepeat": 1,
+      "maxCornerChain": 2,
+      "corners": {
+        "white": 7,
+        "black": 0
+      },
+      "restarts": {
+        "goalKick": 8,
+        "corner": 7,
+        "freeKick": 1,
+        "stalling": 1,
+        "offside": 3
+      },
+      "shotOutcomes": {
+        "save:saved": 2,
+        "shotMiss:wide": 8,
+        "save:corner": 5,
+        "blockedShot:corner": 2,
+        "goal:goal": 2
+      },
+      "attempts": [
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 6,
+            "y": 4
+          },
+          "distance": 5,
+          "fromRestart": null,
+          "step": 13
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 3,
+            "y": 15
+          },
+          "distance": 2,
+          "fromRestart": null,
+          "step": 31
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 8,
+            "y": 2
+          },
+          "distance": 3,
+          "fromRestart": null,
+          "step": 49
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 10,
+            "y": 1
+          },
+          "distance": 2,
+          "fromRestart": null,
+          "step": 62
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 11,
+            "y": 2
+          },
+          "distance": 3,
+          "fromRestart": null,
+          "step": 80
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 8,
+            "y": 3
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 164
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 6,
+            "y": 3
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 215
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 10,
+            "y": 2
+          },
+          "distance": 3,
+          "fromRestart": null,
+          "step": 250
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 6,
+            "y": 3
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 283
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 5,
+            "y": 3
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 357
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 2,
+            "y": 14
+          },
+          "distance": 3,
+          "fromRestart": null,
+          "step": 374
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 10,
+            "y": 2
+          },
+          "distance": 3,
+          "fromRestart": null,
+          "step": 416
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 8,
+            "y": 5
+          },
+          "distance": 6,
+          "fromRestart": null,
+          "step": 439
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 10,
+            "y": 2
+          },
+          "distance": 3,
+          "fromRestart": null,
+          "step": 452
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 4,
+            "y": 1
+          },
+          "distance": 2,
+          "fromRestart": null,
+          "step": 471
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 7,
+            "y": 3
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 511
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 2,
+            "y": 14
+          },
+          "distance": 3,
+          "fromRestart": null,
+          "step": 528
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 10,
+            "y": 2
+          },
+          "distance": 3,
+          "fromRestart": null,
+          "step": 594
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 6,
+            "y": 3
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 692
+        }
+      ]
+    },
+    {
+      "file": "c2-3807295163-black-black.json",
+      "variant": "c2",
+      "seed": 3807295163,
+      "tacticalColor": "black",
+      "kickoff": "black",
+      "maxScoredRepeat": 1,
+      "maxCornerChain": 1,
+      "corners": {
+        "white": 1,
+        "black": 3
+      },
+      "restarts": {
+        "corner": 4,
+        "goalKick": 3,
+        "freeKick": 1
+      },
+      "shotOutcomes": {
+        "save:corner": 3,
+        "blockedShot:blocked": 2,
+        "goal:goal": 2,
+        "blockedShot:corner": 1,
+        "shotMiss:wide": 3,
+        "save:saved": 1
+      },
+      "attempts": [
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 5,
+            "y": 12
+          },
+          "distance": 5,
+          "fromRestart": null,
+          "step": 13
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 8,
+            "y": 13
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 211
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 7,
+            "y": 13
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 312
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 7,
+            "y": 13
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 347
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 8,
+            "y": 10
+          },
+          "distance": 7,
+          "fromRestart": null,
+          "step": 379
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 7,
+            "y": 5
+          },
+          "distance": 6,
+          "fromRestart": null,
+          "step": 396
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 7,
+            "y": 3
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 418
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 6,
+            "y": 13
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 469
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 8,
+            "y": 13
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 492
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 9,
+            "y": 15
+          },
+          "distance": 2,
+          "fromRestart": null,
+          "step": 546
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 10,
+            "y": 15
+          },
+          "distance": 2,
+          "fromRestart": null,
+          "step": 606
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 6,
+            "y": 13
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 646
+        }
+      ]
+    },
+    {
+      "file": "c2-3807295163-black-white.json",
+      "variant": "c2",
+      "seed": 3807295163,
+      "tacticalColor": "black",
+      "kickoff": "white",
+      "maxScoredRepeat": 1,
+      "maxCornerChain": 1,
+      "corners": {
+        "white": 2,
+        "black": 4
+      },
+      "restarts": {
+        "freeKick": 4,
+        "corner": 6,
+        "offside": 3
+      },
+      "shotOutcomes": {
+        "save:saved": 5,
+        "blockedShot:corner": 3,
+        "goal:goal": 3,
+        "save:corner": 3
+      },
+      "attempts": [
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 6,
+            "y": 12
+          },
+          "distance": 5,
+          "fromRestart": null,
+          "step": 88
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 7,
+            "y": 13
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 129
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 5,
+            "y": 15
+          },
+          "distance": 2,
+          "fromRestart": null,
+          "step": 148
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 8,
+            "y": 13
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 171
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 10,
+            "y": 14
+          },
+          "distance": 3,
+          "fromRestart": null,
+          "step": 276
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 6,
+            "y": 3
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 310
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 6,
+            "y": 13
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 345
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 6,
+            "y": 12
+          },
+          "distance": 5,
+          "fromRestart": null,
+          "step": 375
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 8,
+            "y": 13
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 398
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 7,
+            "y": 13
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 455
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 9,
+            "y": 16
+          },
+          "distance": 1,
+          "fromRestart": null,
+          "step": 606
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 8,
+            "y": 13
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 645
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 8,
+            "y": 2
+          },
+          "distance": 3,
+          "fromRestart": null,
+          "step": 680
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 7,
+            "y": 13
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 707
+        }
+      ]
+    },
+    {
+      "file": "c2-3807295163-white-black.json",
+      "variant": "c2",
+      "seed": 3807295163,
+      "tacticalColor": "white",
+      "kickoff": "black",
+      "maxScoredRepeat": 1,
+      "maxCornerChain": 2,
+      "corners": {
+        "white": 4,
+        "black": 0
+      },
+      "restarts": {
+        "goalKick": 3,
+        "corner": 4,
+        "offside": 1,
+        "freeKick": 2
+      },
+      "shotOutcomes": {
+        "shotMiss:wide": 3,
+        "save:saved": 6,
+        "blockedShot:corner": 1,
+        "save:corner": 3,
+        "goal:goal": 2,
+        "blockedShot:blocked": 1
+      },
+      "attempts": [
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 2,
+            "y": 14
+          },
+          "distance": 3,
+          "fromRestart": null,
+          "step": 16
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 6,
+            "y": 3
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 37
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 7,
+            "y": 5
+          },
+          "distance": 6,
+          "fromRestart": null,
+          "step": 113
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 5,
+            "y": 3
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 178
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 6,
+            "y": 3
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 259
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 5,
+            "y": 4
+          },
+          "distance": 5,
+          "fromRestart": null,
+          "step": 344
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 6,
+            "y": 3
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 357
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 8,
+            "y": 1
+          },
+          "distance": 2,
+          "fromRestart": null,
+          "step": 376
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 2,
+            "y": 14
+          },
+          "distance": 3,
+          "fromRestart": null,
+          "step": 393
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 6,
+            "y": 3
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 414
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 7,
+            "y": 5
+          },
+          "distance": 6,
+          "fromRestart": null,
+          "step": 490
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 5,
+            "y": 3
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 555
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 5,
+            "y": 12
+          },
+          "distance": 5,
+          "fromRestart": null,
+          "step": 567
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 8,
+            "y": 1
+          },
+          "distance": 2,
+          "fromRestart": null,
+          "step": 620
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 2,
+            "y": 14
+          },
+          "distance": 3,
+          "fromRestart": null,
+          "step": 637
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 6,
+            "y": 3
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 658
+        }
+      ]
+    },
+    {
+      "file": "c2-3807295163-white-white.json",
+      "variant": "c2",
+      "seed": 3807295163,
+      "tacticalColor": "white",
+      "kickoff": "white",
+      "maxScoredRepeat": 1,
+      "maxCornerChain": 1,
+      "corners": {
+        "white": 4,
+        "black": 2
+      },
+      "restarts": {
+        "corner": 6,
+        "goalKick": 8,
+        "offside": 4,
+        "freeKick": 2
+      },
+      "shotOutcomes": {
+        "save:corner": 4,
+        "shotMiss:wide": 8,
+        "save:saved": 3,
+        "goal:goal": 2,
+        "blockedShot:corner": 2,
+        "blockedShot:blocked": 1
+      },
+      "attempts": [
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 6,
+            "y": 4
+          },
+          "distance": 5,
+          "fromRestart": null,
+          "step": 13
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 10,
+            "y": 2
+          },
+          "distance": 3,
+          "fromRestart": null,
+          "step": 32
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 8,
+            "y": 4
+          },
+          "distance": 5,
+          "fromRestart": null,
+          "step": 91
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 6,
+            "y": 13
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 131
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 4,
+            "y": 0
+          },
+          "distance": 1,
+          "fromRestart": null,
+          "step": 180
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 7,
+            "y": 3
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 252
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 2,
+            "y": 14
+          },
+          "distance": 3,
+          "fromRestart": null,
+          "step": 269
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 10,
+            "y": 2
+          },
+          "distance": 3,
+          "fromRestart": null,
+          "step": 311
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 8,
+            "y": 5
+          },
+          "distance": 6,
+          "fromRestart": null,
+          "step": 334
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 10,
+            "y": 2
+          },
+          "distance": 3,
+          "fromRestart": null,
+          "step": 347
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 7,
+            "y": 3
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 376
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 2,
+            "y": 14
+          },
+          "distance": 3,
+          "fromRestart": null,
+          "step": 393
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 6,
+            "y": 3
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 421
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 6,
+            "y": 3
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 461
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 7,
+            "y": 4
+          },
+          "distance": 5,
+          "fromRestart": null,
+          "step": 505
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 8,
+            "y": 4
+          },
+          "distance": 5,
+          "fromRestart": null,
+          "step": 556
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 6,
+            "y": 4
+          },
+          "distance": 5,
+          "fromRestart": null,
+          "step": 579
+        },
+        {
+          "team": "white",
+          "scoringTeam": "white",
+          "from": {
+            "x": 8,
+            "y": 3
+          },
+          "distance": 4,
+          "fromRestart": null,
+          "step": 654
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 5,
+            "y": 12
+          },
+          "distance": 5,
+          "fromRestart": null,
+          "step": 689
+        },
+        {
+          "team": "black",
+          "scoringTeam": "black",
+          "from": {
+            "x": 2,
+            "y": 14
+          },
+          "distance": 3,
+          "fromRestart": null,
+          "step": 701
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,110 @@
+{
+  "F": {
+    "matches": 4,
+    "goals": 7,
+    "goalsPerGame": 1.75,
+    "shots": 31,
+    "opponentGoalAttempts": 31,
+    "ownGoalAttempts": 0,
+    "opponentGoalXG": 9.137356615193758,
+    "ownGoalXG": 0,
+    "resolvedShots": 31,
+    "unresolvedShots": 0,
+    "xG": 9.137356615193758,
+    "goalsByType": {
+      "R": 1,
+      "N": 4,
+      "B": 2
+    },
+    "certainAtDeclare": 3,
+    "certainAfterKeeper": 3,
+    "certainEvenBestKeeper": 3,
+    "unanswerable": [
+      {
+        "step": 222,
+        "piece": "N",
+        "origin": {
+          "x": 7,
+          "y": 1
+        },
+        "goal": true,
+        "bestKeeperChance": 1
+      },
+      {
+        "step": 473,
+        "piece": "N",
+        "origin": {
+          "x": 7,
+          "y": 0
+        },
+        "goal": true,
+        "bestKeeperChance": 1
+      },
+      {
+        "step": 267,
+        "piece": "N",
+        "origin": {
+          "x": 7,
+          "y": 1
+        },
+        "goal": true,
+        "bestKeeperChance": 1
+      }
+    ],
+    "zeroGoalMatches": 0,
+    "highGoalMatches": 0,
+    "maxGoals": 4,
+    "maxRepeat": 1,
+    "turnovers": 57,
+    "stalls": 1,
+    "offsides": 6,
+    "corners": 12,
+    "blocks": 4,
+    "blockCorners": 4,
+    "blockPossessions": 0,
+    "attemptsThroughBodies": 5,
+    "blockxG": 2.745,
+    "restartsTaken": 28,
+    "ordinaryRounds": 295,
+    "actions": 1920,
+    "actionsPerGoal": 274.2857142857143,
+    "meanPossessionActions": 31.475409836065573,
+    "longestPossessionActions": 192,
+    "goalsInBox": 7,
+    "goalsFromEndline": 3,
+    "goalOrigins": {
+      "5,0": 1,
+      "7,1": 2,
+      "5,2": 1,
+      "7,0": 1,
+      "9,1": 1,
+      "9,0": 1
+    },
+    "shotDistances": {
+      "le3": 21,
+      "from3to6": 10,
+      "over6": 0
+    },
+    "goalDistances": {
+      "le3": 6,
+      "from3to6": 1,
+      "over6": 0
+    },
+    "first8": {
+      "goals": 7,
+      "certain": 3
+    },
+    "kingBonusMoves": 153,
+    "pawnBonusMoves": 539,
+    "restartActions": 140,
+    "cornerRestartActions": 60,
+    "maxConsecutiveCorners": 4,
+    "ms": 15796.617377,
+    "scores": [
+      "2-2",
+      "0-1",
+      "0-1",
+      "1-0"
+    ]
+  }
+}

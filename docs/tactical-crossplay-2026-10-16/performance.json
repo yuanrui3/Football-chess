@@ -1,0 +1,1207 @@
+{
+  "engineSha256": "2b5df6d6cd8aa495ed5de08428149d4bdf8bfeaa2a39e479e4244023ea6fe711",
+  "states": [
+    {
+      "label": "kickoff",
+      "ms": 696.2774499999999,
+      "phase": "kickoff",
+      "action": {
+        "type": "kick",
+        "x": 2,
+        "y": 12
+      },
+      "stats": {
+        "nodes": 1400,
+        "completedDepth": 4,
+        "cacheHits": 61,
+        "extensions": 612,
+        "cutoffs": 306,
+        "aborted": true
+      },
+      "snapshotId": "createGame:seed1632189751:foulsOn:kickoffWhite"
+    },
+    {
+      "label": "defense",
+      "ms": 612.041029,
+      "phase": "defendMove",
+      "action": {
+        "type": "move",
+        "pieceId": "black-Q",
+        "x": 7,
+        "y": 4,
+        "freePawn": false
+      },
+      "stats": {
+        "nodes": 1400,
+        "completedDepth": 5,
+        "cacheHits": 45,
+        "extensions": 659,
+        "cutoffs": 406,
+        "aborted": true
+      },
+      "snapshotId": "profile-v29:1632189751:tacticalWhite:kickoffWhite:afterAction100",
+      "snapshot": {
+        "pieces": [
+          {
+            "id": "white-K",
+            "team": "white",
+            "type": "K",
+            "x": 6,
+            "y": 16
+          },
+          {
+            "id": "white-Q",
+            "team": "white",
+            "type": "Q",
+            "x": 1,
+            "y": 0
+          },
+          {
+            "id": "white-R1",
+            "team": "white",
+            "type": "R",
+            "x": 6,
+            "y": 7
+          },
+          {
+            "id": "white-R2",
+            "team": "white",
+            "type": "R",
+            "x": 4,
+            "y": 2
+          },
+          {
+            "id": "white-B1",
+            "team": "white",
+            "type": "B",
+            "x": 3,
+            "y": 11
+          },
+          {
+            "id": "white-B2",
+            "team": "white",
+            "type": "B",
+            "x": 11,
+            "y": 12
+          },
+          {
+            "id": "white-N1",
+            "team": "white",
+            "type": "N",
+            "x": 3,
+            "y": 9
+          },
+          {
+            "id": "white-N2",
+            "team": "white",
+            "type": "N",
+            "x": 9,
+            "y": 10
+          },
+          {
+            "id": "white-P1",
+            "team": "white",
+            "type": "P",
+            "x": 5,
+            "y": 6
+          },
+          {
+            "id": "white-P2",
+            "team": "white",
+            "type": "P",
+            "x": 7,
+            "y": 7
+          },
+          {
+            "id": "white-P3",
+            "team": "white",
+            "type": "P",
+            "x": 8,
+            "y": 13
+          },
+          {
+            "id": "black-K",
+            "team": "black",
+            "type": "K",
+            "x": 6,
+            "y": 0
+          },
+          {
+            "id": "black-Q",
+            "team": "black",
+            "type": "Q",
+            "x": 6,
+            "y": 5
+          },
+          {
+            "id": "black-R1",
+            "team": "black",
+            "type": "R",
+            "x": 0,
+            "y": 7
+          },
+          {
+            "id": "black-R2",
+            "team": "black",
+            "type": "R",
+            "x": 8,
+            "y": 6
+          },
+          {
+            "id": "black-B1",
+            "team": "black",
+            "type": "B",
+            "x": 2,
+            "y": 1
+          },
+          {
+            "id": "black-B2",
+            "team": "black",
+            "type": "B",
+            "x": 3,
+            "y": 1
+          },
+          {
+            "id": "black-N1",
+            "team": "black",
+            "type": "N",
+            "x": 10,
+            "y": 7
+          },
+          {
+            "id": "black-N2",
+            "team": "black",
+            "type": "N",
+            "x": 4,
+            "y": 6
+          },
+          {
+            "id": "black-P1",
+            "team": "black",
+            "type": "P",
+            "x": 5,
+            "y": 3
+          },
+          {
+            "id": "black-P2",
+            "team": "black",
+            "type": "P",
+            "x": 4,
+            "y": 4
+          },
+          {
+            "id": "black-P3",
+            "team": "black",
+            "type": "P",
+            "x": 5,
+            "y": 4
+          }
+        ],
+        "ball": {
+          "x": 7,
+          "y": 7,
+          "carrierId": "white-P2"
+        },
+        "attack": "white",
+        "phase": "defendMove",
+        "positionBudget": {
+          "normalUsed": false,
+          "pawnUsed": false,
+          "dribbleUsed": false
+        },
+        "pendingShot": null,
+        "releaseReason": null,
+        "score": {
+          "white": 0,
+          "black": 0
+        },
+        "turn": 20,
+        "randomState": 296056200,
+        "log": [],
+        "lastAction": null,
+        "mode": "local",
+        "minutes": 10,
+        "rulesVersion": 15,
+        "boardDimensions": {
+          "width": 14,
+          "height": 17
+        },
+        "restart": null,
+        "offside": {
+          "team": "white",
+          "kickerId": "white-R1",
+          "ball": {
+            "x": 1,
+            "y": 7
+          },
+          "secondLastY": 1,
+          "flaggedIds": [
+            "white-Q"
+          ]
+        },
+        "looseBallKickOrigin": null,
+        "passRun": null,
+        "foulsEnabled": true,
+        "discipline": {},
+        "sentOff": [],
+        "winner": null,
+        "finishReason": null,
+        "ballProgress": {
+          "team": "white",
+          "anchorY": 7,
+          "rounds": 0,
+          "pendingRelease": false,
+          "excludeRelease": false
+        }
+      }
+    },
+    {
+      "label": "finish",
+      "ms": 360.8670649999999,
+      "phase": "kick",
+      "action": {
+        "type": "kick",
+        "x": 6,
+        "y": -1
+      },
+      "stats": {
+        "nodes": 1400,
+        "completedDepth": 4,
+        "cacheHits": 52,
+        "extensions": 580,
+        "cutoffs": 285,
+        "aborted": true
+      },
+      "snapshotId": "profile-v29:1632189751:tacticalWhite:kickoffWhite:afterAction192",
+      "snapshot": {
+        "pieces": [
+          {
+            "id": "white-K",
+            "team": "white",
+            "type": "K",
+            "x": 6,
+            "y": 16
+          },
+          {
+            "id": "white-Q",
+            "team": "white",
+            "type": "Q",
+            "x": 7,
+            "y": 3
+          },
+          {
+            "id": "white-R1",
+            "team": "white",
+            "type": "R",
+            "x": 1,
+            "y": 6
+          },
+          {
+            "id": "white-R2",
+            "team": "white",
+            "type": "R",
+            "x": 3,
+            "y": 5
+          },
+          {
+            "id": "white-B1",
+            "team": "white",
+            "type": "B",
+            "x": 11,
+            "y": 3
+          },
+          {
+            "id": "white-B2",
+            "team": "white",
+            "type": "B",
+            "x": 11,
+            "y": 12
+          },
+          {
+            "id": "white-N1",
+            "team": "white",
+            "type": "N",
+            "x": 2,
+            "y": 6
+          },
+          {
+            "id": "white-N2",
+            "team": "white",
+            "type": "N",
+            "x": 9,
+            "y": 10
+          },
+          {
+            "id": "white-P1",
+            "team": "white",
+            "type": "P",
+            "x": 6,
+            "y": 3
+          },
+          {
+            "id": "white-P2",
+            "team": "white",
+            "type": "P",
+            "x": 7,
+            "y": 5
+          },
+          {
+            "id": "white-P3",
+            "team": "white",
+            "type": "P",
+            "x": 8,
+            "y": 12
+          },
+          {
+            "id": "black-K",
+            "team": "black",
+            "type": "K",
+            "x": 7,
+            "y": 0
+          },
+          {
+            "id": "black-Q",
+            "team": "black",
+            "type": "Q",
+            "x": 6,
+            "y": 2
+          },
+          {
+            "id": "black-R1",
+            "team": "black",
+            "type": "R",
+            "x": 2,
+            "y": 12
+          },
+          {
+            "id": "black-R2",
+            "team": "black",
+            "type": "R",
+            "x": 8,
+            "y": 3
+          },
+          {
+            "id": "black-B1",
+            "team": "black",
+            "type": "B",
+            "x": 2,
+            "y": 1
+          },
+          {
+            "id": "black-B2",
+            "team": "black",
+            "type": "B",
+            "x": 0,
+            "y": 4
+          },
+          {
+            "id": "black-N1",
+            "team": "black",
+            "type": "N",
+            "x": 10,
+            "y": 7
+          },
+          {
+            "id": "black-N2",
+            "team": "black",
+            "type": "N",
+            "x": 4,
+            "y": 6
+          },
+          {
+            "id": "black-P1",
+            "team": "black",
+            "type": "P",
+            "x": 6,
+            "y": 5
+          },
+          {
+            "id": "black-P2",
+            "team": "black",
+            "type": "P",
+            "x": 5,
+            "y": 4
+          },
+          {
+            "id": "black-P3",
+            "team": "black",
+            "type": "P",
+            "x": 4,
+            "y": 5
+          }
+        ],
+        "ball": {
+          "x": 6,
+          "y": 3,
+          "carrierId": "white-P1"
+        },
+        "attack": "white",
+        "phase": "kick",
+        "positionBudget": {
+          "normalUsed": false,
+          "pawnUsed": false,
+          "dribbleUsed": false
+        },
+        "pendingShot": null,
+        "releaseReason": null,
+        "score": {
+          "white": 0,
+          "black": 0
+        },
+        "turn": 36,
+        "randomState": 345476381,
+        "log": [],
+        "lastAction": null,
+        "mode": "local",
+        "minutes": 10,
+        "rulesVersion": 15,
+        "boardDimensions": {
+          "width": 14,
+          "height": 17
+        },
+        "restart": null,
+        "offside": {
+          "team": "white",
+          "kickerId": "white-P2",
+          "ball": {
+            "x": 7,
+            "y": 5
+          },
+          "secondLastY": 1,
+          "flaggedIds": []
+        },
+        "looseBallKickOrigin": null,
+        "passRun": null,
+        "foulsEnabled": true,
+        "discipline": {},
+        "sentOff": [],
+        "winner": null,
+        "finishReason": null,
+        "ballProgress": {
+          "team": "white",
+          "anchorY": 3,
+          "rounds": 0,
+          "pendingRelease": false,
+          "excludeRelease": false
+        }
+      }
+    },
+    {
+      "label": "looseCollect",
+      "ms": 491.8501170000002,
+      "phase": "attackMove",
+      "action": {
+        "type": "move",
+        "pieceId": "white-Q",
+        "x": 6,
+        "y": 4,
+        "freePawn": false
+      },
+      "stats": {
+        "nodes": 1400,
+        "completedDepth": 4,
+        "cacheHits": 69,
+        "extensions": 515,
+        "cutoffs": 168,
+        "aborted": true
+      },
+      "snapshotId": "profile-v29:1632189751:tacticalWhite:kickoffWhite:afterAction193",
+      "snapshot": {
+        "pieces": [
+          {
+            "id": "white-K",
+            "team": "white",
+            "type": "K",
+            "x": 6,
+            "y": 16
+          },
+          {
+            "id": "white-Q",
+            "team": "white",
+            "type": "Q",
+            "x": 7,
+            "y": 3
+          },
+          {
+            "id": "white-R1",
+            "team": "white",
+            "type": "R",
+            "x": 1,
+            "y": 6
+          },
+          {
+            "id": "white-R2",
+            "team": "white",
+            "type": "R",
+            "x": 3,
+            "y": 5
+          },
+          {
+            "id": "white-B1",
+            "team": "white",
+            "type": "B",
+            "x": 11,
+            "y": 3
+          },
+          {
+            "id": "white-B2",
+            "team": "white",
+            "type": "B",
+            "x": 11,
+            "y": 12
+          },
+          {
+            "id": "white-N1",
+            "team": "white",
+            "type": "N",
+            "x": 2,
+            "y": 6
+          },
+          {
+            "id": "white-N2",
+            "team": "white",
+            "type": "N",
+            "x": 9,
+            "y": 10
+          },
+          {
+            "id": "white-P1",
+            "team": "white",
+            "type": "P",
+            "x": 6,
+            "y": 3
+          },
+          {
+            "id": "white-P2",
+            "team": "white",
+            "type": "P",
+            "x": 7,
+            "y": 5
+          },
+          {
+            "id": "white-P3",
+            "team": "white",
+            "type": "P",
+            "x": 8,
+            "y": 12
+          },
+          {
+            "id": "black-K",
+            "team": "black",
+            "type": "K",
+            "x": 7,
+            "y": 0
+          },
+          {
+            "id": "black-Q",
+            "team": "black",
+            "type": "Q",
+            "x": 6,
+            "y": 2
+          },
+          {
+            "id": "black-R1",
+            "team": "black",
+            "type": "R",
+            "x": 2,
+            "y": 12
+          },
+          {
+            "id": "black-R2",
+            "team": "black",
+            "type": "R",
+            "x": 8,
+            "y": 3
+          },
+          {
+            "id": "black-B1",
+            "team": "black",
+            "type": "B",
+            "x": 2,
+            "y": 1
+          },
+          {
+            "id": "black-B2",
+            "team": "black",
+            "type": "B",
+            "x": 0,
+            "y": 4
+          },
+          {
+            "id": "black-N1",
+            "team": "black",
+            "type": "N",
+            "x": 10,
+            "y": 7
+          },
+          {
+            "id": "black-N2",
+            "team": "black",
+            "type": "N",
+            "x": 4,
+            "y": 6
+          },
+          {
+            "id": "black-P1",
+            "team": "black",
+            "type": "P",
+            "x": 6,
+            "y": 5
+          },
+          {
+            "id": "black-P2",
+            "team": "black",
+            "type": "P",
+            "x": 5,
+            "y": 4
+          },
+          {
+            "id": "black-P3",
+            "team": "black",
+            "type": "P",
+            "x": 4,
+            "y": 5
+          }
+        ],
+        "ball": {
+          "x": 6,
+          "y": 4,
+          "carrierId": null
+        },
+        "attack": "white",
+        "phase": "attackMove",
+        "positionBudget": {
+          "normalUsed": false,
+          "pawnUsed": false,
+          "dribbleUsed": false
+        },
+        "pendingShot": null,
+        "releaseReason": null,
+        "score": {
+          "white": 0,
+          "black": 0
+        },
+        "turn": 37,
+        "randomState": 1915726808,
+        "log": [],
+        "lastAction": null,
+        "mode": "local",
+        "minutes": 10,
+        "rulesVersion": 15,
+        "boardDimensions": {
+          "width": 14,
+          "height": 17
+        },
+        "restart": null,
+        "offside": {
+          "team": "white",
+          "kickerId": "white-P1",
+          "ball": {
+            "x": 6,
+            "y": 3
+          },
+          "secondLastY": 1,
+          "flaggedIds": []
+        },
+        "looseBallKickOrigin": {
+          "team": "white",
+          "pieceId": "white-P1",
+          "from": {
+            "x": 6,
+            "y": 3
+          }
+        },
+        "passRun": null,
+        "foulsEnabled": true,
+        "discipline": {},
+        "sentOff": [],
+        "winner": null,
+        "finishReason": null,
+        "ballProgress": {
+          "team": "white",
+          "anchorY": 4,
+          "rounds": 0,
+          "pendingRelease": false,
+          "excludeRelease": false
+        }
+      }
+    },
+    {
+      "label": "passRun",
+      "ms": 267.22923500000024,
+      "phase": "passRun",
+      "action": {
+        "type": "move",
+        "pieceId": "white-R1",
+        "x": 2,
+        "y": 2,
+        "freePawn": false
+      },
+      "stats": {
+        "nodes": 1400,
+        "completedDepth": 4,
+        "cacheHits": 44,
+        "extensions": 553,
+        "cutoffs": 273,
+        "aborted": true
+      },
+      "snapshotId": "profile-v29:1632189751:tacticalWhite:kickoffWhite:afterAction68",
+      "snapshot": {
+        "pieces": [
+          {
+            "id": "white-K",
+            "team": "white",
+            "type": "K",
+            "x": 6,
+            "y": 16
+          },
+          {
+            "id": "white-Q",
+            "team": "white",
+            "type": "Q",
+            "x": 3,
+            "y": 1
+          },
+          {
+            "id": "white-R1",
+            "team": "white",
+            "type": "R",
+            "x": 2,
+            "y": 1
+          },
+          {
+            "id": "white-R2",
+            "team": "white",
+            "type": "R",
+            "x": 4,
+            "y": 2
+          },
+          {
+            "id": "white-B1",
+            "team": "white",
+            "type": "B",
+            "x": 3,
+            "y": 11
+          },
+          {
+            "id": "white-B2",
+            "team": "white",
+            "type": "B",
+            "x": 11,
+            "y": 12
+          },
+          {
+            "id": "white-N1",
+            "team": "white",
+            "type": "N",
+            "x": 3,
+            "y": 9
+          },
+          {
+            "id": "white-N2",
+            "team": "white",
+            "type": "N",
+            "x": 9,
+            "y": 10
+          },
+          {
+            "id": "white-P1",
+            "team": "white",
+            "type": "P",
+            "x": 6,
+            "y": 8
+          },
+          {
+            "id": "white-P2",
+            "team": "white",
+            "type": "P",
+            "x": 7,
+            "y": 9
+          },
+          {
+            "id": "white-P3",
+            "team": "white",
+            "type": "P",
+            "x": 9,
+            "y": 13
+          },
+          {
+            "id": "black-K",
+            "team": "black",
+            "type": "K",
+            "x": 5,
+            "y": 0
+          },
+          {
+            "id": "black-Q",
+            "team": "black",
+            "type": "Q",
+            "x": 6,
+            "y": 5
+          },
+          {
+            "id": "black-R1",
+            "team": "black",
+            "type": "R",
+            "x": 7,
+            "y": 3
+          },
+          {
+            "id": "black-R2",
+            "team": "black",
+            "type": "R",
+            "x": 8,
+            "y": 6
+          },
+          {
+            "id": "black-B1",
+            "team": "black",
+            "type": "B",
+            "x": 1,
+            "y": 2
+          },
+          {
+            "id": "black-B2",
+            "team": "black",
+            "type": "B",
+            "x": 1,
+            "y": 3
+          },
+          {
+            "id": "black-N1",
+            "team": "black",
+            "type": "N",
+            "x": 10,
+            "y": 7
+          },
+          {
+            "id": "black-N2",
+            "team": "black",
+            "type": "N",
+            "x": 4,
+            "y": 6
+          },
+          {
+            "id": "black-P1",
+            "team": "black",
+            "type": "P",
+            "x": 6,
+            "y": 3
+          },
+          {
+            "id": "black-P2",
+            "team": "black",
+            "type": "P",
+            "x": 4,
+            "y": 3
+          },
+          {
+            "id": "black-P3",
+            "team": "black",
+            "type": "P",
+            "x": 5,
+            "y": 4
+          }
+        ],
+        "ball": {
+          "x": 3,
+          "y": 1,
+          "carrierId": "white-Q"
+        },
+        "attack": "white",
+        "phase": "passRun",
+        "positionBudget": {
+          "normalUsed": false,
+          "pawnUsed": false,
+          "dribbleUsed": false
+        },
+        "pendingShot": null,
+        "releaseReason": null,
+        "score": {
+          "white": 0,
+          "black": 0
+        },
+        "turn": 15,
+        "randomState": 4139681353,
+        "log": [],
+        "lastAction": null,
+        "mode": "local",
+        "minutes": 10,
+        "rulesVersion": 15,
+        "boardDimensions": {
+          "width": 14,
+          "height": 17
+        },
+        "restart": null,
+        "offside": {
+          "team": "white",
+          "kickerId": "white-R1",
+          "ball": {
+            "x": 2,
+            "y": 1
+          },
+          "secondLastY": 2,
+          "flaggedIds": []
+        },
+        "looseBallKickOrigin": null,
+        "passRun": {
+          "pieceId": "white-R1",
+          "team": "white"
+        },
+        "foulsEnabled": true,
+        "discipline": {},
+        "sentOff": [],
+        "winner": null,
+        "finishReason": null,
+        "ballProgress": {
+          "team": "white",
+          "anchorY": 1,
+          "rounds": 0,
+          "pendingRelease": false,
+          "excludeRelease": false
+        }
+      }
+    },
+    {
+      "label": "cornerSelection",
+      "ms": 307.564429,
+      "phase": "cornerSelect",
+      "action": {
+        "type": "cornerTaker",
+        "pieceId": "white-Q"
+      },
+      "stats": {
+        "nodes": 1400,
+        "completedDepth": 7,
+        "cacheHits": 107,
+        "extensions": 503,
+        "cutoffs": 294,
+        "aborted": true
+      },
+      "snapshotId": "c2:1632189751:tacticalWhite:kickoffWhite:afterAction50",
+      "snapshot": {
+        "pieces": [
+          {
+            "id": "white-K",
+            "team": "white",
+            "type": "K",
+            "x": 6,
+            "y": 16
+          },
+          {
+            "id": "white-Q",
+            "team": "white",
+            "type": "Q",
+            "x": 8,
+            "y": 2
+          },
+          {
+            "id": "white-R1",
+            "team": "white",
+            "type": "R",
+            "x": 1,
+            "y": 13
+          },
+          {
+            "id": "white-R2",
+            "team": "white",
+            "type": "R",
+            "x": 12,
+            "y": 6
+          },
+          {
+            "id": "white-B1",
+            "team": "white",
+            "type": "B",
+            "x": 11,
+            "y": 3
+          },
+          {
+            "id": "white-B2",
+            "team": "white",
+            "type": "B",
+            "x": 2,
+            "y": 13
+          },
+          {
+            "id": "white-N1",
+            "team": "white",
+            "type": "N",
+            "x": 3,
+            "y": 9
+          },
+          {
+            "id": "white-N2",
+            "team": "white",
+            "type": "N",
+            "x": 8,
+            "y": 12
+          },
+          {
+            "id": "white-P1",
+            "team": "white",
+            "type": "P",
+            "x": 5,
+            "y": 13
+          },
+          {
+            "id": "white-P2",
+            "team": "white",
+            "type": "P",
+            "x": 7,
+            "y": 13
+          },
+          {
+            "id": "white-P3",
+            "team": "white",
+            "type": "P",
+            "x": 8,
+            "y": 13
+          },
+          {
+            "id": "black-K",
+            "team": "black",
+            "type": "K",
+            "x": 6,
+            "y": 0
+          },
+          {
+            "id": "black-Q",
+            "team": "black",
+            "type": "Q",
+            "x": 3,
+            "y": 15
+          },
+          {
+            "id": "black-R1",
+            "team": "black",
+            "type": "R",
+            "x": 9,
+            "y": 12
+          },
+          {
+            "id": "black-R2",
+            "team": "black",
+            "type": "R",
+            "x": 1,
+            "y": 3
+          },
+          {
+            "id": "black-B1",
+            "team": "black",
+            "type": "B",
+            "x": 8,
+            "y": 1
+          },
+          {
+            "id": "black-B2",
+            "team": "black",
+            "type": "B",
+            "x": 3,
+            "y": 3
+          },
+          {
+            "id": "black-N1",
+            "team": "black",
+            "type": "N",
+            "x": 10,
+            "y": 7
+          },
+          {
+            "id": "black-N2",
+            "team": "black",
+            "type": "N",
+            "x": 4,
+            "y": 6
+          },
+          {
+            "id": "black-P1",
+            "team": "black",
+            "type": "P",
+            "x": 8,
+            "y": 4
+          },
+          {
+            "id": "black-P2",
+            "team": "black",
+            "type": "P",
+            "x": 6,
+            "y": 2
+          },
+          {
+            "id": "black-P3",
+            "team": "black",
+            "type": "P",
+            "x": 5,
+            "y": 3
+          }
+        ],
+        "ball": {
+          "x": 0,
+          "y": 0,
+          "carrierId": null
+        },
+        "attack": "white",
+        "phase": "cornerSelect",
+        "positionBudget": {
+          "normalUsed": false,
+          "pawnUsed": false,
+          "dribbleUsed": false
+        },
+        "pendingShot": null,
+        "releaseReason": null,
+        "score": {
+          "white": 0,
+          "black": 0
+        },
+        "turn": 10,
+        "randomState": 1920761362,
+        "log": [],
+        "lastAction": null,
+        "mode": "local",
+        "minutes": 10,
+        "rulesVersion": 16,
+        "boardDimensions": {
+          "width": 14,
+          "height": 17
+        },
+        "restart": {
+          "type": "corner",
+          "team": "white",
+          "takerId": null,
+          "spot": {
+            "x": 0,
+            "y": 0
+          },
+          "indirect": false,
+          "exit": {
+            "line": "top",
+            "x": 5.5,
+            "y": -0.5
+          }
+        },
+        "offside": null,
+        "looseBallKickOrigin": null,
+        "passRun": null,
+        "foulsEnabled": true,
+        "discipline": {},
+        "sentOff": [],
+        "winner": null,
+        "finishReason": null,
+        "ballProgress": {
+          "team": "white",
+          "anchorY": 0,
+          "rounds": 0,
+          "pendingRelease": false,
+          "excludeRelease": false
+        }
+      }
+    }
+  ],
+  "medianMs": 426.35859100000005,
+  "maxMs": 696.2774499999999,
+  "conditions": "One analysis process, arena workers stopped; final npm test suite running concurrently on the same host. Six observations, no browser worker or device guarantee.",
+  "defaultNodeLimit": 1400,
+  "browserWatchdogMs": 4000,
+  "observedAtUTC": "2026-10-16T14:19:47.754590+00:00"
+}

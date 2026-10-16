@@ -1,0 +1,37 @@
+{
+  "matches": 12,
+  "actions": 5760,
+  "errors": [],
+  "variants": {
+    "A": {
+      "matches": 4,
+      "actions": 1920,
+      "restartActions": 65,
+      "cornerRestartActions": 10,
+      "maxConsecutiveCorners": 1,
+      "shotBlocks": 0,
+      "blockCorners": 0,
+      "blockPossession": 0
+    },
+    "B": {
+      "matches": 4,
+      "actions": 1920,
+      "restartActions": 35,
+      "cornerRestartActions": 0,
+      "maxConsecutiveCorners": 0,
+      "shotBlocks": 0,
+      "blockCorners": 0,
+      "blockPossession": 0
+    },
+    "C": {
+      "matches": 4,
+      "actions": 1920,
+      "restartActions": 60,
+      "cornerRestartActions": 15,
+      "maxConsecutiveCorners": 1,
+      "shotBlocks": 0,
+      "blockCorners": 0,
+      "blockPossession": 0
+    }
+  }
+}

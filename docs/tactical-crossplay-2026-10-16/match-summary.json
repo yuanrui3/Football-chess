@@ -1,0 +1,582 @@
+[
+  {
+    "variant": "baseline",
+    "seed": 1632189751,
+    "tacticalColor": "black",
+    "kickoff": "black",
+    "actions": 720,
+    "error": null,
+    "score": {
+      "white": 0,
+      "black": 0
+    },
+    "shots": {
+      "white": 1,
+      "black": 1
+    },
+    "xG": {
+      "white": 0.08972053704400604,
+      "black": 0.053672250040840766
+    },
+    "ordinaryRounds": {
+      "white": 11,
+      "black": 110
+    },
+    "tacticalMsPerDecision": 444.2357351509011,
+    "corners": 0,
+    "cornerSelections": 0,
+    "forfeit": false,
+    "maxExactRepeat": 1
+  },
+  {
+    "variant": "candidate",
+    "seed": 1632189751,
+    "tacticalColor": "black",
+    "kickoff": "black",
+    "actions": 720,
+    "error": null,
+    "score": {
+      "white": 0,
+      "black": 0
+    },
+    "shots": {
+      "white": 2,
+      "black": 1
+    },
+    "xG": {
+      "white": 0.216717140060468,
+      "black": 0.09036252527921172
+    },
+    "ordinaryRounds": {
+      "white": 15,
+      "black": 102
+    },
+    "tacticalMsPerDecision": 512.0374556882489,
+    "corners": 1,
+    "cornerSelections": 1,
+    "forfeit": false,
+    "maxExactRepeat": 1
+  },
+  {
+    "variant": "baseline",
+    "seed": 1632189751,
+    "tacticalColor": "black",
+    "kickoff": "white",
+    "actions": 720,
+    "error": null,
+    "score": {
+      "white": 0,
+      "black": 1
+    },
+    "shots": {
+      "white": 0,
+      "black": 1
+    },
+    "xG": {
+      "white": 0,
+      "black": 0.977729772362488
+    },
+    "ordinaryRounds": {
+      "white": 10,
+      "black": 121
+    },
+    "tacticalMsPerDecision": 450.0035519455784,
+    "corners": 0,
+    "cornerSelections": 0,
+    "forfeit": false,
+    "maxExactRepeat": 2
+  },
+  {
+    "variant": "candidate",
+    "seed": 1632189751,
+    "tacticalColor": "black",
+    "kickoff": "white",
+    "actions": 720,
+    "error": null,
+    "score": {
+      "white": 1,
+      "black": 1
+    },
+    "shots": {
+      "white": 2,
+      "black": 2
+    },
+    "xG": {
+      "white": 0.19677731502038115,
+      "black": 0.3579298534389942
+    },
+    "ordinaryRounds": {
+      "white": 30,
+      "black": 94
+    },
+    "tacticalMsPerDecision": 620.6895386116746,
+    "corners": 0,
+    "cornerSelections": 0,
+    "forfeit": false,
+    "maxExactRepeat": 1
+  },
+  {
+    "variant": "baseline",
+    "seed": 1632189751,
+    "tacticalColor": "white",
+    "kickoff": "black",
+    "actions": 720,
+    "error": null,
+    "score": {
+      "white": 0,
+      "black": 1
+    },
+    "shots": {
+      "white": 1,
+      "black": 4
+    },
+    "xG": {
+      "white": 0.2564795706936638,
+      "black": 0.628094012808205
+    },
+    "ordinaryRounds": {
+      "white": 93,
+      "black": 14
+    },
+    "tacticalMsPerDecision": 472.36107943333315,
+    "corners": 1,
+    "cornerSelections": 1,
+    "forfeit": false,
+    "maxExactRepeat": 1
+  },
+  {
+    "variant": "candidate",
+    "seed": 1632189751,
+    "tacticalColor": "white",
+    "kickoff": "black",
+    "actions": 720,
+    "error": null,
+    "score": {
+      "white": 2,
+      "black": 0
+    },
+    "shots": {
+      "white": 5,
+      "black": 3
+    },
+    "xG": {
+      "white": 1.5195884135850424,
+      "black": 0.2771555997327824
+    },
+    "ordinaryRounds": {
+      "white": 107,
+      "black": 15
+    },
+    "tacticalMsPerDecision": 567.0330081052631,
+    "corners": 2,
+    "cornerSelections": 2,
+    "forfeit": false,
+    "maxExactRepeat": 2
+  },
+  {
+    "variant": "baseline",
+    "seed": 1632189751,
+    "tacticalColor": "white",
+    "kickoff": "white",
+    "actions": 720,
+    "error": null,
+    "score": {
+      "white": 2,
+      "black": 0
+    },
+    "shots": {
+      "white": 3,
+      "black": 2
+    },
+    "xG": {
+      "white": 1.421969809673421,
+      "black": 0.18477039982185495
+    },
+    "ordinaryRounds": {
+      "white": 117,
+      "black": 4
+    },
+    "tacticalMsPerDecision": 512.3638555762333,
+    "corners": 2,
+    "cornerSelections": 2,
+    "forfeit": false,
+    "maxExactRepeat": 2
+  },
+  {
+    "variant": "candidate",
+    "seed": 1632189751,
+    "tacticalColor": "white",
+    "kickoff": "white",
+    "actions": 720,
+    "error": null,
+    "score": {
+      "white": 0,
+      "black": 1
+    },
+    "shots": {
+      "white": 1,
+      "black": 3
+    },
+    "xG": {
+      "white": 0.08972053704400591,
+      "black": 0.3646530311926563
+    },
+    "ordinaryRounds": {
+      "white": 99,
+      "black": 19
+    },
+    "tacticalMsPerDecision": 666.5259940639806,
+    "corners": 2,
+    "cornerSelections": 1,
+    "forfeit": false,
+    "maxExactRepeat": 2
+  },
+  {
+    "variant": "baseline",
+    "seed": 3807295163,
+    "tacticalColor": "black",
+    "kickoff": "black",
+    "actions": 720,
+    "error": null,
+    "score": {
+      "white": 0,
+      "black": 0
+    },
+    "shots": {
+      "white": 1,
+      "black": 2
+    },
+    "xG": {
+      "white": 0.19257733896969864,
+      "black": 0.5659005932365335
+    },
+    "ordinaryRounds": {
+      "white": 17,
+      "black": 102
+    },
+    "tacticalMsPerDecision": 409.66335700236993,
+    "corners": 0,
+    "cornerSelections": 0,
+    "forfeit": false,
+    "maxExactRepeat": 1
+  },
+  {
+    "variant": "baseline",
+    "seed": 3807295163,
+    "tacticalColor": "black",
+    "kickoff": "white",
+    "actions": 720,
+    "error": null,
+    "score": {
+      "white": 0,
+      "black": 1
+    },
+    "shots": {
+      "white": 0,
+      "black": 1
+    },
+    "xG": {
+      "white": 0,
+      "black": 0.977729772362488
+    },
+    "ordinaryRounds": {
+      "white": 10,
+      "black": 121
+    },
+    "tacticalMsPerDecision": 287.4427336235819,
+    "corners": 0,
+    "cornerSelections": 0,
+    "forfeit": false,
+    "maxExactRepeat": 2
+  },
+  {
+    "variant": "baseline",
+    "seed": 3807295163,
+    "tacticalColor": "white",
+    "kickoff": "black",
+    "actions": 720,
+    "error": null,
+    "score": {
+      "white": 1,
+      "black": 1
+    },
+    "shots": {
+      "white": 2,
+      "black": 3
+    },
+    "xG": {
+      "white": 1.1082254896994252,
+      "black": 0.28622068256718536
+    },
+    "ordinaryRounds": {
+      "white": 108,
+      "black": 12
+    },
+    "tacticalMsPerDecision": 402.3100749147464,
+    "corners": 1,
+    "cornerSelections": 1,
+    "forfeit": false,
+    "maxExactRepeat": 1
+  },
+  {
+    "variant": "baseline",
+    "seed": 3807295163,
+    "tacticalColor": "white",
+    "kickoff": "white",
+    "actions": 720,
+    "error": null,
+    "score": {
+      "white": 2,
+      "black": 1
+    },
+    "shots": {
+      "white": 2,
+      "black": 2
+    },
+    "xG": {
+      "white": 0.6576599710797238,
+      "black": 0.18477039982185495
+    },
+    "ordinaryRounds": {
+      "white": 119,
+      "black": 6
+    },
+    "tacticalMsPerDecision": 470.5605829642043,
+    "corners": 0,
+    "cornerSelections": 0,
+    "forfeit": false,
+    "maxExactRepeat": 2
+  },
+  {
+    "variant": "c2",
+    "seed": 1632189751,
+    "tacticalColor": "black",
+    "kickoff": "black",
+    "actions": 720,
+    "error": null,
+    "score": {
+      "white": 0,
+      "black": 0
+    },
+    "shots": {
+      "white": 2,
+      "black": 9
+    },
+    "xG": {
+      "white": 0.27617209764976147,
+      "black": 1.5171832463552584
+    },
+    "ordinaryRounds": {
+      "white": 16,
+      "black": 88
+    },
+    "tacticalMsPerDecision": 503.47533282566604,
+    "corners": 4,
+    "cornerSelections": 4,
+    "forfeit": false,
+    "maxExactRepeat": 1
+  },
+  {
+    "variant": "c2",
+    "seed": 1632189751,
+    "tacticalColor": "black",
+    "kickoff": "white",
+    "actions": 720,
+    "error": null,
+    "score": {
+      "white": 0,
+      "black": 3
+    },
+    "shots": {
+      "white": 2,
+      "black": 14
+    },
+    "xG": {
+      "white": 0.23378847461277708,
+      "black": 2.976831035781237
+    },
+    "ordinaryRounds": {
+      "white": 27,
+      "black": 57
+    },
+    "tacticalMsPerDecision": 624.9563751114051,
+    "corners": 5,
+    "cornerSelections": 5,
+    "forfeit": false,
+    "maxExactRepeat": 2
+  },
+  {
+    "variant": "c2",
+    "seed": 1632189751,
+    "tacticalColor": "white",
+    "kickoff": "black",
+    "actions": 720,
+    "error": null,
+    "score": {
+      "white": 3,
+      "black": 0
+    },
+    "shots": {
+      "white": 17,
+      "black": 5
+    },
+    "xG": {
+      "white": 2.6955709290731935,
+      "black": 0.4453811320477876
+    },
+    "ordinaryRounds": {
+      "white": 65,
+      "black": 45
+    },
+    "tacticalMsPerDecision": 601.7100297894737,
+    "corners": 9,
+    "cornerSelections": 9,
+    "forfeit": false,
+    "maxExactRepeat": 4
+  },
+  {
+    "variant": "c2",
+    "seed": 1632189751,
+    "tacticalColor": "white",
+    "kickoff": "white",
+    "actions": 720,
+    "error": null,
+    "score": {
+      "white": 2,
+      "black": 0
+    },
+    "shots": {
+      "white": 16,
+      "black": 3
+    },
+    "xG": {
+      "white": 1.9871140800253444,
+      "black": 0.21988190068488825
+    },
+    "ordinaryRounds": {
+      "white": 77,
+      "black": 27
+    },
+    "tacticalMsPerDecision": 601.6550791507542,
+    "corners": 7,
+    "cornerSelections": 7,
+    "forfeit": false,
+    "maxExactRepeat": 2
+  },
+  {
+    "variant": "c2",
+    "seed": 3807295163,
+    "tacticalColor": "black",
+    "kickoff": "black",
+    "actions": 720,
+    "error": null,
+    "score": {
+      "white": 0,
+      "black": 2
+    },
+    "shots": {
+      "white": 2,
+      "black": 10
+    },
+    "xG": {
+      "white": 0.17674501936403614,
+      "black": 1.2009121633026463
+    },
+    "ordinaryRounds": {
+      "white": 19,
+      "black": 93
+    },
+    "tacticalMsPerDecision": 417.9890820097112,
+    "corners": 4,
+    "cornerSelections": 4,
+    "forfeit": false,
+    "maxExactRepeat": 2
+  },
+  {
+    "variant": "c2",
+    "seed": 3807295163,
+    "tacticalColor": "black",
+    "kickoff": "white",
+    "actions": 720,
+    "error": null,
+    "score": {
+      "white": 0,
+      "black": 3
+    },
+    "shots": {
+      "white": 2,
+      "black": 12
+    },
+    "xG": {
+      "white": 0.23214135638153838,
+      "black": 1.6056707484449073
+    },
+    "ordinaryRounds": {
+      "white": 32,
+      "black": 68
+    },
+    "tacticalMsPerDecision": 398.8254838368982,
+    "corners": 6,
+    "cornerSelections": 6,
+    "forfeit": false,
+    "maxExactRepeat": 2
+  },
+  {
+    "variant": "c2",
+    "seed": 3807295163,
+    "tacticalColor": "white",
+    "kickoff": "black",
+    "actions": 720,
+    "error": null,
+    "score": {
+      "white": 2,
+      "black": 0
+    },
+    "shots": {
+      "white": 12,
+      "black": 4
+    },
+    "xG": {
+      "white": 2.403516485317427,
+      "black": 0.32414900714619677
+    },
+    "ordinaryRounds": {
+      "white": 57,
+      "black": 56
+    },
+    "tacticalMsPerDecision": 389.29909864525195,
+    "corners": 4,
+    "cornerSelections": 4,
+    "forfeit": false,
+    "maxExactRepeat": 2
+  },
+  {
+    "variant": "c2",
+    "seed": 3807295163,
+    "tacticalColor": "white",
+    "kickoff": "white",
+    "actions": 720,
+    "error": null,
+    "score": {
+      "white": 2,
+      "black": 0
+    },
+    "shots": {
+      "white": 15,
+      "black": 5
+    },
+    "xG": {
+      "white": 1.5053788690079861,
+      "black": 0.5222710737730816
+    },
+    "ordinaryRounds": {
+      "white": 62,
+      "black": 33
+    },
+    "tacticalMsPerDecision": 610.4569707631595,
+    "corners": 6,
+    "cornerSelections": 6,
+    "forfeit": false,
+    "maxExactRepeat": 2
+  }
+]

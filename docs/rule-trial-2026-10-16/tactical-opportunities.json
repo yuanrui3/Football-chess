@@ -1,0 +1,175 @@
+{
+  "A": [
+    {
+      "file": "2713884127-black.json",
+      "kicks": 64,
+      "maxAvailableReactedChance": 0.5351736587614522,
+      "opportunities25": 1,
+      "opportunities50": 1,
+      "missed25": 0,
+      "missed": [],
+      "shots": [
+        {
+          "step": 230,
+          "best": 0.5351736587614522,
+          "selected": 0.98
+        }
+      ],
+      "maxForward": 16
+    },
+    {
+      "file": "2713884127-white.json",
+      "kicks": 56,
+      "maxAvailableReactedChance": 0.07819754587899953,
+      "opportunities25": 0,
+      "opportunities50": 0,
+      "missed25": 0,
+      "missed": [],
+      "shots": [],
+      "maxForward": 16
+    },
+    {
+      "file": "902774113-black.json",
+      "kicks": 69,
+      "maxAvailableReactedChance": 0.19812206662688478,
+      "opportunities25": 0,
+      "opportunities50": 0,
+      "missed25": 0,
+      "missed": [],
+      "shots": [],
+      "maxForward": 16
+    },
+    {
+      "file": "902774113-white.json",
+      "kicks": 62,
+      "maxAvailableReactedChance": 0.1621317918310917,
+      "opportunities25": 0,
+      "opportunities50": 0,
+      "missed25": 0,
+      "missed": [],
+      "shots": [],
+      "maxForward": 16
+    }
+  ],
+  "B": [
+    {
+      "file": "2713884127-black.json",
+      "kicks": 68,
+      "maxAvailableReactedChance": 0.19812206662688478,
+      "opportunities25": 0,
+      "opportunities50": 0,
+      "missed25": 0,
+      "missed": [],
+      "shots": [],
+      "maxForward": 16
+    },
+    {
+      "file": "2713884127-white.json",
+      "kicks": 64,
+      "maxAvailableReactedChance": 0.4104107663457141,
+      "opportunities25": 1,
+      "opportunities50": 0,
+      "missed25": 0,
+      "missed": [],
+      "shots": [
+        {
+          "step": 338,
+          "best": 0.4104107663457141,
+          "selected": 0.828110519465204
+        }
+      ],
+      "maxForward": 16
+    },
+    {
+      "file": "902774113-black.json",
+      "kicks": 64,
+      "maxAvailableReactedChance": 0.18905474917796872,
+      "opportunities25": 0,
+      "opportunities50": 0,
+      "missed25": 0,
+      "missed": [],
+      "shots": [],
+      "maxForward": 16
+    },
+    {
+      "file": "902774113-white.json",
+      "kicks": 56,
+      "maxAvailableReactedChance": 0.16188964569589656,
+      "opportunities25": 0,
+      "opportunities50": 0,
+      "missed25": 0,
+      "missed": [],
+      "shots": [
+        {
+          "step": 317,
+          "best": 0.07801785829913557,
+          "selected": 0.08821763716985254
+        }
+      ],
+      "maxForward": 16
+    }
+  ],
+  "C": [
+    {
+      "file": "2713884127-black.json",
+      "kicks": 59,
+      "maxAvailableReactedChance": 1,
+      "opportunities25": 1,
+      "opportunities50": 1,
+      "missed25": 0,
+      "missed": [],
+      "shots": [
+        {
+          "step": 438,
+          "best": 1,
+          "selected": 1
+        }
+      ],
+      "maxForward": 16
+    },
+    {
+      "file": "2713884127-white.json",
+      "kicks": 60,
+      "maxAvailableReactedChance": 0.9542487593280655,
+      "opportunities25": 1,
+      "opportunities50": 1,
+      "missed25": 0,
+      "missed": [],
+      "shots": [
+        {
+          "step": 304,
+          "best": 0.9542487593280655,
+          "selected": 0.9551857396427224
+        },
+        {
+          "step": 442,
+          "best": 0.08821763716985255,
+          "selected": 0.17261292480409715
+        }
+      ],
+      "maxForward": 16
+    },
+    {
+      "file": "902774113-black.json",
+      "kicks": 60,
+      "maxAvailableReactedChance": 0.19812206662688478,
+      "opportunities25": 0,
+      "opportunities50": 0,
+      "missed25": 0,
+      "missed": [],
+      "shots": [],
+      "maxForward": 16
+    },
+    {
+      "file": "902774113-white.json",
+      "kicks": 50,
+      "maxAvailableReactedChance": 0.13682468615133447,
+      "opportunities25": 0,
+      "opportunities50": 0,
+      "missed25": 0,
+      "missed": [],
+      "shots": [],
+      "maxForward": 16
+    }
+  ]
+}

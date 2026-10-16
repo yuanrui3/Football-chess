@@ -1,0 +1,112 @@
+{
+  "frozenAt": "2026-10-16T07:05:27.549Z",
+  "purpose": "Test whether moderate global accuracy gain creates more opponent-goal shot attempts, rather than merely increasing conversion. No policy, search-budget, geometry or other coefficient tuning.",
+  "baselineSHA256": "c22c54754b016c0ee355bfa3fc6e8f40ffe71142f006f3089a4fb1ef07204e1e",
+  "harnessSHA256": "37e361e6d2b8b1146269c95dd887d16b5bd4fa30c923f881d27cb0af71a1374c",
+  "geometry": {
+    "width": 14,
+    "height": 17,
+    "goalFiles": [
+      5,
+      6,
+      7,
+      8
+    ],
+    "boxFiles": [
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "boxDepth": 3
+  },
+  "movement": {
+    "offballBudget": 10,
+    "dribbleBudget": 8,
+    "enteredBoxCellCost": 2,
+    "enteredOutsideCellCost": 1
+  },
+  "casual": {
+    "seeds": [
+      1479304283,
+      3682195741
+    ],
+    "kickoffs": [
+      "white",
+      "black"
+    ],
+    "matchesPerVariant": 4,
+    "actions": 480
+  },
+  "tactical": {
+    "seeds": [
+      1479304283,
+      3682195741
+    ],
+    "kickoffs": [
+      "white",
+      "black"
+    ],
+    "matchesPerVariant": 4,
+    "actions": 480
+  },
+  "variants": {
+    "A": {
+      "SHA256": "c22c54754b016c0ee355bfa3fc6e8f40ffe71142f006f3089a4fb1ef07204e1e",
+      "finishingAccuracyMultiplier": 1,
+      "label": "Weighted moves, ordinary finishing",
+      "knightGoalMultiplier": 1,
+      "unrealizedLeafShotThreat": 650
+    },
+    "B": {
+      "SHA256": "2372d575416364a4afef3f2d969096346708b71d35b3710254561004c3251bc0",
+      "finishingAccuracyMultiplier": 1.15,
+      "label": "Weighted moves, global finishing accuracy +15%",
+      "knightGoalMultiplier": 1,
+      "unrealizedLeafShotThreat": 650
+    },
+    "C": {
+      "SHA256": "aee831984ae2e5178aaa6328baa5bf0c7d694cb7b758536a1668de868fdba9c3",
+      "finishingAccuracyMultiplier": 1.15,
+      "unrealizedLeafShotThreat": 450,
+      "label": "Global finishing accuracy +15% and lower unrealized Tactical leaf shot reward",
+      "knightGoalMultiplier": 1,
+      "optional": true,
+      "rulesIdenticalTo": "B",
+      "tactical": {
+        "seeds": [
+          1479304283,
+          3682195741
+        ],
+        "kickoffs": [
+          "white",
+          "black"
+        ],
+        "matchesPerVariant": 4,
+        "actions": 480
+      }
+    }
+  },
+  "optionalVariantPredeclaredAt": "2026-10-16T07:06:14.781Z",
+  "optionalVariantCondition": "Run C only if accuracy-only B does not increase meaningful opponent-goal attempts (reacted goal chance >=0.15), or a release-opportunity audit shows meaningful shots repeatedly deferred. Decide after first paired screen; no further coefficient tuning.",
+  "optionalVariantTriggered": {
+    "recordedAt": "2026-10-16T07:10:51.975Z",
+    "cohort": "Seed1479304283 both kickoffs, two completed games per primary variant",
+    "baseline": {
+      "opponentAttempts": 3,
+      "meaningful15": 2,
+      "goals": 0
+    },
+    "accuracyOnly": {
+      "opponentAttempts": 1,
+      "meaningful15": 1,
+      "goals": 1
+    },
+    "reason": "Accuracy-only did not increase meaningful attempts in the first paired screen; execute predeclared C on all four pinned Tactical games."
+  },
+  "foulsEnabled": false,
+  "selectedVariant": "C",
+  "selectionReason": "User requested greater Tactical willingness to shoot; accepts measured shot-quality tradeoff. No claim of improved strength or calibrated soccer scoring."
+}

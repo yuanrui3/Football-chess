@@ -1,0 +1,47 @@
+{
+  "matches": 64,
+  "actions": 30720,
+  "errors": [],
+  "variants": {
+    "A": {
+      "matches": 16,
+      "actions": 7680,
+      "restartActions": 620,
+      "cornerRestartActions": 110,
+      "maxConsecutiveCorners": 2,
+      "shotBlocks": 0,
+      "blockCorners": 0,
+      "blockPossession": 0
+    },
+    "B": {
+      "matches": 16,
+      "actions": 7680,
+      "restartActions": 420,
+      "cornerRestartActions": 40,
+      "maxConsecutiveCorners": 1,
+      "shotBlocks": 0,
+      "blockCorners": 0,
+      "blockPossession": 0
+    },
+    "C": {
+      "matches": 16,
+      "actions": 7680,
+      "restartActions": 423,
+      "cornerRestartActions": 50,
+      "maxConsecutiveCorners": 1,
+      "shotBlocks": 0,
+      "blockCorners": 0,
+      "blockPossession": 0
+    },
+    "D": {
+      "matches": 16,
+      "actions": 7680,
+      "restartActions": 600,
+      "cornerRestartActions": 107,
+      "maxConsecutiveCorners": 2,
+      "shotBlocks": 0,
+      "blockCorners": 0,
+      "blockPossession": 0
+    }
+  }
+}

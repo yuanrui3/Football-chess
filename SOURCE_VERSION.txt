@@ -1,0 +1,5 @@
+Published site version: 31
+Source commit: 163749912ea85f6b0c9e2ead74da0a8d2438b27c
+Rules version: 17
+Shot model: 13
+Export date: 2026-10-16

@@ -1,0 +1,56 @@
+{
+  "date": "2026-10-16",
+  "purpose": "Compare Tactical improvements against unchanged Casual under selectable-corner rules.",
+  "rulesVersion": 16,
+  "board": [
+    14,
+    17
+  ],
+  "box": [
+    6,
+    3
+  ],
+  "foulsEnabled": true,
+  "actionLimit": 720,
+  "timeBasis": "Fixed atomic-action budget; not timed 10-minute matches.",
+  "developmentSeed": 1632189751,
+  "heldoutSeed": 3807295163,
+  "colors": [
+    "white",
+    "black"
+  ],
+  "kickoffs": [
+    "white",
+    "black"
+  ],
+  "configurationsPerSeed": 4,
+  "baselineGames": 8,
+  "c1Games": 4,
+  "c2Games": 8,
+  "sharedActualRulesSHA256": "774b0010310c6dc7bba490c9e1e99640a43ad1a46e24916387793cf6310de675",
+  "legacySourceCommit": "13a9d624ead69e0d6e05427f641fb75f0a7a6ebd",
+  "legacySourceSHA256": "4723a9d91510bfa4d63e1825bc2b6abdb14df4965dcf7629edf40323f28d1dc8",
+  "adaptedBaselineSHA256": "cdb60c74d60c00cc40749f1ab1c5724cab64e08767ad5ee77c1700d2e33627f4",
+  "c1SHA256": "774b0010310c6dc7bba490c9e1e99640a43ad1a46e24916387793cf6310de675",
+  "c2SHA256": "2b5df6d6cd8aa495ed5de08428149d4bdf8bfeaa2a39e479e4244023ea6fe711",
+  "tacticalSearch": {
+    "nodes": 1400,
+    "depth": 8,
+    "extensions": 3,
+    "roots": 9
+  },
+  "actualRules": "All transitions use the same immutable shared rules module. Legacy AI tail spliced onto the shared rules prefix with corner ranking/successor compatibility; its old heuristics/search remain unchanged.",
+  "cornerSelection": "For this comparison only, both Tactical policies and Casual use the same shared Casual corner selector in real play. This removes new selector-policy differences as a confound.",
+  "c2DifferenceFromC1": "Public chance probabilities and goal value remain unchanged. Controlled possession, loose-ball race and keeper position utility scaled by 0.35; pending corner gets owned restart value. A normalization hardening for malformed corner saves differs in the C2 module, but normalizeGame is never called by this match harness or internal policy search.",
+  "heldout": "C2 frozen before any second-seed outcomes were inspected. Two incomplete C1 second-seed workers were interrupted after progress-only output; no completed heldout C1 games were discarded or used for tuning.",
+  "c1Stopping": "C1 capped at four complete balanced development games after initial exploratory comparison; fourth game restarted alone when stopping the worker pool. Three completed games preserved. No partial game counted as a result.",
+  "maxConcurrentArenaWorkers": 8,
+  "validation": "Every initial and resulting state checked for roster IDs/count, positions, legal square eligibility, carrier consistency, dismissal/card persistence, min-player forfeit, pass-and-run metadata, and pending corner eligibility.",
+  "xG": "Resolved opponent-goal attempt probability after actual keeper reaction; own-goal attempts counted separately.",
+  "limitations": [
+    "Small deterministic sample; outcomes within a seed are correlated.",
+    "Fixed action budget does not map directly to UI match scores or equal ordinary rounds.",
+    "Thinking cost measured under varying worker contention; descriptive, not a clean single-core speed benchmark.",
+    "No heldout tuning or additional seeds after selection."
+  ]
+}
