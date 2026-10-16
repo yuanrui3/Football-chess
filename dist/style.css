@@ -93,3 +93,11 @@
 .action-kinds[hidden]{display:none}
 /* Both possible aims stay visible until the goalkeeper has reacted. */
 .disguised-shot-choice{display:flex;align-items:flex-start;gap:9px;margin:8px 0 12px;padding:11px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);cursor:pointer}.disguised-shot-choice[hidden]{display:none}.disguised-shot-choice input{width:16px;height:16px;flex:none;margin:1px 0 0;accent-color:var(--green)}.disguised-shot-choice input:focus-visible{outline:3px solid #d49b38;outline-offset:3px}.disguised-shot-choice b{display:block;font-size:11px}.disguised-shot-choice small{display:block;font-size:9px;line-height:1.6;margin-top:4px;color:var(--muted)}.goal-disguise-risk{font-size:6px;font-weight:700;line-height:1.15;letter-spacing:.15px;color:#5c4e26}.goal-cell.disguised-target{box-shadow:inset 0 0 0 2px #d3b66b}.goal-cell.disguised-target.shot-selected{border-style:dashed}@media(max-width:600px){.left-panel #turnPanel>.disguised-shot-choice{grid-column:1/-1;margin:4px 0}.disguised-shot-choice small{font-size:10px}}
+
+/* Keep squad labels clear of the carried ball, including on a rotated pitch. */
+.square .piece-id{left:0;right:auto;top:auto;bottom:0;transform:none;min-width:8px;padding:0 1px;font-size:6px;line-height:1.15}
+.pitch-area.flipped .square .piece-id{left:auto;right:0;top:0;bottom:auto;transform:rotate(180deg)}
+.square:has(.piece>.ball) .piece{z-index:7}
+.square .piece>.ball{width:44%;height:44%;min-width:8px;min-height:8px;right:-6%;bottom:-6%;border:1px solid #183a2d;outline:2px solid #f7dc79;background:#fffdf2;box-shadow:0 1px 5px #102d3cbb}
+.square .piece>.ball svg{width:100%;height:100%}
+@media(max-width:600px){.square .piece-id{font-size:5px;min-width:7px;padding:0 .5px}}
