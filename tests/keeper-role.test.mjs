@@ -26,7 +26,7 @@ function fixture(team='white',keeper=[6,2],phase='kick'){
 const goal=(team,x=5)=>team==='white'?{x,y:-1}:{x:11-x,y:15};
 
 test('shot model is version 9 and legacy outside parameters are zero',()=>{
-  assert.equal(E.SHOT_MODEL.version,9);
+  assert.equal(E.SHOT_MODEL.version,10);
   for(const key of ['outsideRadius','outsideDiveSpeed','outsideReactionDelay','outsideMaxSave'])assert.equal(E.SHOT_MODEL[key],0);
 });
 

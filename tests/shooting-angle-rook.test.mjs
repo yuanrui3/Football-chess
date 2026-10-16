@@ -18,7 +18,7 @@ function fixture({team='white',type='Q',origin=[4,7],keeper=[6,0]}={}){
   s.ballProgress={team,anchorY:owner.y,rounds:0,pendingRelease:false,excludeRelease:false};return s;
 }
 const model=(s,file=4,keeper)=>{const target=point([file,-1],s.attack);return E.shotModel(s,target.x,target.y,keeper);};
-const scoringFields=['probability','goalProbability','baseGoalProbability','scoringMultiplier','saveProbability','missProbability','onTargetProbability','baseOnTargetProbability','saveGivenOnTarget','cornerProbability','caughtSaveProbability','arrivalSpeed','keeperStretch','parryGivenSave','distance','shotAngleDegrees','goalDepth','goalOpeningDegrees','centralGoalOpeningDegrees','goalOpeningRatio','postAngleFactor','keeperPathDistance','timeToKeeper','reach'];
+const scoringFields=['probability','goalProbability','baseGoalProbability','scoringMultiplier','saveProbability','missProbability','onTargetProbability','baseOnTargetProbability','saveGivenOnTarget','cornerProbability','caughtSaveProbability','arrivalSpeed','keeperStretch','parryGivenSave','distance','shotAngleDegrees','goalDepth','goalOpeningDegrees','centralGoalOpeningDegrees','goalOpeningRatio','postAngleFactor','wideAngleFactor','keeperPathDistance','timeToKeeper','reach'];
 function conserved(m){
   close(m.goalProbability+m.saveProbability+m.missProbability,1,'three outcomes');
   close(m.goalProbability+m.cornerProbability+m.caughtSaveProbability+m.missProbability,1,'handling outcomes');
@@ -27,8 +27,8 @@ function conserved(m){
   assert.equal(m.scoringMultiplier,1);
 }
 
-test('model version 9 adds a shared visible-goal penalty and a rook-only weaker long-distance curve',()=>{
-  assert.equal(E.SHOT_MODEL.version,9);assert.equal(E.SHOT_MODEL.longShotDecay,.06);assert.equal(E.SHOT_MODEL.rookLongShotDecay,.03);
+test('model version 10 retains the goal-opening penalty and rook long-distance curve with a wide-opening bonus',()=>{
+  assert.equal(E.SHOT_MODEL.version,10);assert.equal(E.SHOT_MODEL.longShotDecay,.06);assert.equal(E.SHOT_MODEL.rookLongShotDecay,.03);
   assert.equal(E.SHOT_MODEL.distancePenaltyStart,3);assert.equal(E.SHOT_MODEL.postAngleFloor,.25);assert.equal(E.SHOT_MODEL.postAngleWeight,.75);
   assert.equal(E.createGame({seed:1}).rulesVersion,13,'matches use the current progress-migration rules version');
 });
@@ -72,7 +72,7 @@ for(const team of ['white','black']){
     const n=model(fixture({team,type:'N',origin:[3,1],keeper:[7,0]})),q=model(fixture({team,type:'Q',origin:[3,1],keeper:[7,0]}));
     assert.equal(n.shooterType,'N');assert.equal(n.distancePenaltyRate,.06);close(n.postAngleFactor,.625);
     for(const key of scoringFields)close(n[key],q[key],key);
-    assert.ok(n.goalProbability<.56&&n.goalProbability>.55,'the old near-post knight chance is reduced without restoring its removed multiplier');
+    const unboosted=n.goalProbability/n.wideAngleFactor;assert.ok(unboosted<.56&&unboosted>.55,'the post penalty remains in force before the shared wide-opening bonus');assert.ok(n.goalProbability<.58,'the removed knight-specific multiplier remains absent');
     conserved(n);
   });
 
@@ -80,7 +80,7 @@ for(const team of ['white','black']){
     for(const type of E.TYPES){
       let previous=1;
       for(const row of [2,3,5,7,10,12]){
-        const m=model(fixture({team,type,origin:[5,row]}),5);assert.ok(m.onTargetProbability<previous||m.onTargetProbability===.01);previous=m.onTargetProbability;
+        const m=model(fixture({team,type,origin:[5,row]}),5);assert.ok(m.onTargetProbability<previous||m.onTargetProbability===.01||m.onTargetProbability===E.SHOT_MODEL.maxOnTarget);previous=m.onTargetProbability;
         for(const key of scoringFields)assert.ok(Number.isFinite(m[key]),key);
         for(const key of ['goalProbability','saveProbability','missProbability','onTargetProbability','saveGivenOnTarget','parryGivenSave','goalOpeningRatio'])assert.ok(m[key]>=0&&m[key]<=1,key);
         assert.ok(m.postAngleFactor>=.25&&m.postAngleFactor<=1);conserved(m);
@@ -103,7 +103,7 @@ for(const team of ['white','black']){
   test(`${team}: load, Undo and the keeper reaction use the current rook model without changing the declared origin or random seed`,()=>{
     const initial=fixture({team,type:'R'}),target=point([4,-1],team),pending=E.applyKick(initial,target.x,target.y);pending.lastAction.shotModel={modelVersion:8,probability:1};pending.lastAction.probability=1;
     const before=clone(pending),restored=E.normalizeGame(pending),expected=E.shotModel(restored);
-    assert.equal(expected.modelVersion,9);assert.equal(expected.shooterType,'R');assert.equal(expected.distancePenaltyRate,.03);
+    assert.equal(expected.modelVersion,10);assert.equal(expected.shooterType,'R');assert.equal(expected.distancePenaltyRate,.03);
     assert.deepEqual(restored.lastAction.shotModel,expected);assert.equal(restored.lastAction.probability,expected.probability);
     assert.equal(restored.randomState,before.randomState);assert.deepEqual(restored.pendingShot,before.pendingShot);assert.deepEqual(pending,before);assert.deepEqual(E.normalizeGame(clone(restored)),restored);
     const keeperId=id('black-K',team),move=E.legalMoves(restored,keeperId)[0];assert.ok(move);
@@ -123,7 +123,7 @@ test('horizontal and 180-degree mirrored shots have the same opening penalty and
 
 test('invalid shot inputs expose finite zero-valued geometry diagnostics and preserve probability mass',()=>{
   for(const state of [null,{}, {pieces:[],ball:{x:NaN,y:0}}, {...fixture({type:'R'}),pendingShot:{from:{x:Infinity,y:0},shooterType:'R'}}]){
-    const m=E.shotModel(state,4,-1);assert.equal(m.modelVersion,9);
+    const m=E.shotModel(state,4,-1);assert.equal(m.modelVersion,10);
     for(const key of ['goalDepth','goalOpeningDegrees','centralGoalOpeningDegrees','goalOpeningRatio','postAngleFactor','distancePenaltyRate'])assert.equal(m[key],0,key);
     for(const key of scoringFields)assert.ok(Number.isFinite(m[key]),key);conserved(m);
   }

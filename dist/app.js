@@ -1,7 +1,7 @@
-import {createGame, legalMoves, legalKicks, applyMove, applyKick, skipMove, chooseAIAction, currentTeam, BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, isBox, shotChance, shotModel, offsideInfo, LONG_TACKLE_RANGE, DRIBBLE_RANGE, STALLING_RULE, ACTION_SECONDS, actionTimeout, progressInfo, positionActions, normalizeGame} from './engine.js?v=bd15a4aaf810';
+import {createGame, legalMoves, legalKicks, applyMove, applyKick, skipMove, chooseAIAction, currentTeam, BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, isBox, shotChance, shotModel, offsideInfo, LONG_TACKLE_RANGE, DRIBBLE_RANGE, STALLING_RULE, ACTION_SECONDS, actionTimeout, progressInfo, positionActions, normalizeGame} from './engine.js?v=895834d735df';
 import {createMatchClock, restoreMatchClock, tickMatchClock, settleMatchClock, rewindMatchClock} from './match-clock.js?v=73476bff5019';
 import {buildGoalReplay, restoreGoalReplay, createReplayPlayer} from './goal-replay.js?v=e077e064f828';
-import {createMatchStats, restoreMatchStats, recordMatchTransition, addPossessionTime, matchStatsSummary, shortPieceId, normalizeGoalOrigin} from './match-stats.js?v=66d7357b1f6d';
+import {createMatchStats, restoreMatchStats, recordMatchTransition, addPossessionTime, matchStatsSummary, shortPieceId} from './match-stats.js?v=66d7357b1f6d';
 
 const $ = id => document.getElementById(id);
 const NAMES = {K:'Goalkeeper',Q:'Queen',R:'Rook',B:'Bishop',N:'Knight',P:'Pawn'};
@@ -213,7 +213,7 @@ function outcomeBreakdown(model){
   const goal=Math.round(model.goalProbability*1000),saved=Math.round(model.saveProbability*1000),wide=1000-goal-saved;
   return `Goal ${(goal/10).toFixed(1)}% · Save ${(saved/10).toFixed(1)}% · Wide ${(wide/10).toFixed(1)}%`;
 }
-function shotGeometry(model){return `Shot ${model.distance.toFixed(1)} squares · Keeper ${model.keeperPathDistance.toFixed(1)} squares off path${model.postAngleFactor<0.99?` · Tight-angle penalty: ${percent(1-model.postAngleFactor)}`:''}${model.shooterType==='R'&&model.distance>3?' · Rook long-range accuracy':''} · ${model.keeperInBox?'Full box reach':'No saving reach outside own box'}${model.saveProbability>0?` · Parry if stopped: ${percent(model.parryGivenSave)}`:''}`;}
+function shotGeometry(model){return `Shot ${model.distance.toFixed(1)} squares · Keeper ${model.keeperPathDistance.toFixed(1)} squares off path${model.postAngleFactor<0.99?` · Tight-angle penalty: ${percent(1-model.postAngleFactor)}`:''}${model.wideAngleFactor>1.005?` · Wide-opening accuracy bonus: +${percent(model.wideAngleFactor-1)}`:''}${model.shooterType==='R'&&model.distance>3?' · Rook long-range accuracy':''} · ${model.keeperInBox?'Full box reach':'No saving reach outside own box'}${model.saveProbability>0?` · Parry if stopped: ${percent(model.parryGivenSave)}`:''}`;}
 function showShotModel(model,caption='chance to score with the keeper here'){
   $('shotOdds').textContent=`${shotPercent(model.probability)} ${caption}`;
   $('shotBreakdown').textContent=outcomeBreakdown(model);
@@ -440,7 +440,7 @@ function scheduleAI(){
     aiTimer=null;if(!stillCurrent())return;
     if(difficulty==='tactical'&&typeof window.Worker==='function'){
       try{
-        aiWorker=new window.Worker(new URL('./ai-worker.js?v=5f5083f349a5',import.meta.url),{type:'module',name:'football-chess-tactical'});
+        aiWorker=new window.Worker(new URL('./ai-worker.js?v=cda0a62c170f',import.meta.url),{type:'module',name:'football-chess-tactical'});
         aiWorker.onmessage=event=>{if(!stillCurrent()||event.data?.requestId!==requestId)return;if(event.data.error)fallback();else receive(event.data.action);};
         aiWorker.onerror=event=>{event.preventDefault?.();fallback();};
         aiWatchdog=setTimeout(()=>fallback('casual'),4000);
@@ -517,24 +517,27 @@ function renderGoalMap(summary){
   const NS='http://www.w3.org/2000/svg',svg=$('statsGoalMap');
   svg.replaceChildren();
   const draw=(tag,attrs={},parent=svg,text='')=>{const node=document.createElementNS(NS,tag);for(const [key,value] of Object.entries(attrs))node.setAttribute(key,String(value));if(text)node.textContent=text;parent.append(node);return node;};
-  draw('title',{id:'statsMapTitle'},svg,'Goal origins, both teams attacking upwards');
-  draw('desc',{},svg,'Each marker shows the square where the scoring shot was taken. Black team positions are rotated to put the goal attacked at the top.');
+  draw('title',{id:'statsMapTitle'},svg,'Goal origins at both ends of the pitch');
+  draw('desc',{},svg,'Each marker shows the original pitch square where the scoring shot was taken. Ivory FC attacks the upper goal and Obsidian FC attacks the lower goal.');
   draw('rect',{x:30,y:30,width:240,height:300,rx:1,class:'stats-map-pitch'});
   draw('rect',{x:30,y:30,width:80,height:100,class:'stats-map-wide-zone'});draw('rect',{x:190,y:30,width:80,height:100,class:'stats-map-wide-zone'});
   draw('rect',{x:110,y:70,width:80,height:60,class:'stats-map-central-zone'});
+  draw('rect',{x:30,y:230,width:80,height:100,class:'stats-map-wide-zone'});draw('rect',{x:190,y:230,width:80,height:100,class:'stats-map-wide-zone'});
+  draw('rect',{x:110,y:230,width:80,height:60,class:'stats-map-central-zone'});
   draw('rect',{x:110,y:10,width:80,height:20,class:'stats-map-goal'});draw('rect',{x:110,y:330,width:80,height:20,class:'stats-map-goal'});
   draw('rect',{x:110,y:30,width:80,height:40,class:'stats-map-box'});draw('rect',{x:110,y:290,width:80,height:40,class:'stats-map-box'});
   draw('line',{x1:30,y1:180,x2:270,y2:180,class:'stats-map-line'});draw('circle',{cx:150,cy:180,r:29,class:'stats-map-line'});draw('circle',{cx:150,cy:180,r:2,class:'stats-map-centre'});
-  draw('text',{x:150,y:370,'text-anchor':'middle',class:'stats-map-direction'},svg,'ATTACKING DIRECTION ↑');
+  draw('text',{x:150,y:7,'text-anchor':'middle',class:'stats-map-direction'},svg,'IVORY FC ATTACKS ↑');
+  draw('text',{x:150,y:370,'text-anchor':'middle',class:'stats-map-direction'},svg,'OBSIDIAN FC ATTACKS ↓');
   const groups=new Map();
-  summary.goals.forEach((goal,index)=>{const origin=normalizeGoalOrigin(goal);if(!origin)return;const key=`${origin.x},${origin.y}`;if(!groups.has(key))groups.set(key,{origin,goals:[]});groups.get(key).goals.push({goal,index});});
+  summary.goals.forEach((goal,index)=>{const origin=goal.origin;if(!origin)return;const key=`${origin.x},${origin.y}`;if(!groups.has(key))groups.set(key,{origin,goals:[]});groups.get(key).goals.push({goal,index});});
   let selectedMarker=null;
   const timeOf=goal=>goal.matchSeconds===null?`Round ${goal.turn}`:`${Math.floor(goal.matchSeconds/60)}:${String(Math.floor(goal.matchSeconds%60)).padStart(2,'0')}`;
   const describe=({goal,index})=>`Goal ${index+1}: ${TEAM[goal.team]}, ${shortPieceId(goal.scorerId)}${goal.ownGoal?` own goal by ${TEAM[goal.scorerId.split('-')[0]]}`:''}, ${timeOf(goal)}, shot from ${coord(goal.origin.x,goal.origin.y)}${goal.distance!==null?`, ${goal.distance.toFixed(1)} squares`:''}`;
   const select=(group,marker)=>{if(selectedMarker)selectedMarker.classList.remove('selected');selectedMarker=marker;marker.classList.add('selected');$('statsMapSelectionTitle').textContent=`${group.goals.length} goal${group.goals.length===1?'':'s'} from this square`;$('statsMapSelection').innerHTML=group.goals.map(({goal,index})=>`<li><span class="stats-team-dot ${goal.team}" aria-hidden="true"></span><span><b>${TEAM[goal.team]} · ${shortPieceId(goal.scorerId)}${goal.ownGoal?' (OG)':''}</b><small>${timeOf(goal)} · From ${coord(goal.origin.x,goal.origin.y)}${goal.distance!==null?` · ${goal.distance.toFixed(1)} squares`:''}${goal.ownGoal?` · By ${TEAM[goal.scorerId.split('-')[0]]}`:''}</small></span></li>`).join('');};
   for(const group of groups.values()){
     const {origin,goals}=group,x=30+(origin.x+0.5)*20,y=30+(origin.y+0.5)*20,teams=new Set(goals.map(({goal})=>goal.team)),mixed=teams.size>1,team=goals[0].goal.team;
-    const detail=goals.map(describe).join('; '),marker=draw('g',{class:`stats-map-marker ${mixed?'mixed':team}${goals.some(({goal})=>goal.ownGoal)?' own-goal':''}`,tabindex:0,role:'button','aria-label':`${goals.length} goal${goals.length===1?'':'s'} from this square. ${detail}. Show goal details.`,'data-goal-count':goals.length,'data-origin-x':goals[0].goal.origin.x,'data-origin-y':goals[0].goal.origin.y,'data-normalized-x':origin.x,'data-normalized-y':origin.y});
+    const detail=goals.map(describe).join('; '),marker=draw('g',{class:`stats-map-marker ${mixed?'mixed':team}${goals.some(({goal})=>goal.ownGoal)?' own-goal':''}`,tabindex:0,role:'button','aria-label':`${goals.length} goal${goals.length===1?'':'s'} from this square. ${detail}. Show goal details.`,'data-goal-count':goals.length,'data-origin-x':goals[0].goal.origin.x,'data-origin-y':goals[0].goal.origin.y,'data-pitch-x':origin.x,'data-pitch-y':origin.y});
     draw('title',{},marker,detail);draw('circle',{cx:x,cy:y,r:8},marker);
     if(mixed)draw('path',{d:`M ${x} ${y-8} A 8 8 0 0 1 ${x} ${y+8} Z`,class:'stats-map-split'},marker);
     draw('text',{x,y:y+2.5,'text-anchor':'middle',class:'stats-map-id'},marker,goals.length===1?shortPieceId(goals[0].goal.scorerId):`×${goals.length}`);
@@ -543,7 +546,7 @@ function renderGoalMap(summary){
   }
   if(!groups.size){$('statsMapSelectionTitle').textContent='Goal origin details';$('statsMapSelection').innerHTML='<li class="stats-empty">No goal locations recorded.</li>';}
   const info=summary.goalLocations;
-  $('statsMapNote').textContent=`${info.known} goal${info.known===1?'':'s'} mapped.${info.unknown?` ${info.unknown} goal${info.unknown===1?' has':'s have'} no recorded location.`:''} Both teams attack upwards. Select a marker for scorer IDs and times; a number groups goals from the same square.`;
+  $('statsMapNote').textContent=`${info.known} goal${info.known===1?'':'s'} mapped.${info.unknown?` ${info.unknown} goal${info.unknown===1?' has':'s have'} no recorded location.`:''} Original pitch positions: Ivory attacks the upper goal; Obsidian attacks the lower goal. Select a marker for scorer IDs and times; a number groups goals from the same square.`;
   const zones=[['Inside keeper box','box'],['Central approach','central'],['Wide close','wide'],['Further out','distant']];
   $('statsGoalZoneRows').innerHTML=zones.map(([label,key])=>`<tr><td>${info.byTeam.white.zones[key]}</td><th scope="row">${label}</th><td>${info.byTeam.black.zones[key]}</td></tr>`).join('');
 }

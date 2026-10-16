@@ -598,7 +598,7 @@ test('goal declarations wait for the defending goalkeeper before resolving the s
   assert.ok(reaction.pendingShot);
   assert.equal(reaction.rulesVersion, 13);
   assert.deepEqual(reaction.pendingShot.from, { x: 4, y: 4 });
-  assert.equal(reaction.lastAction.shotModel.modelVersion, 9);
+  assert.equal(reaction.lastAction.shotModel.modelVersion, 10);
   assert.deepEqual(reaction.lastAction.shotModel, shotModel(state, 4, -1));
   assert.deepEqual(reaction.score, { white: 0, black: 0 });
   assert.deepEqual(legalKicks(reaction), []);
@@ -645,7 +645,7 @@ test('outfield players still intercept a shot before the net', () => {
 test('the shot preview exposes Euclidean distance, goal-plane geometry and complete probabilities', () => {
   const state = fixture({ phase: 'kick', positions: { 'white-R1': [4, 6], 'black-K': [5, 0] } });
   const model = shotModel(state, 4, -1);
-  assert.equal(model.modelVersion, 9);
+  assert.equal(model.modelVersion, 10);
   assert.deepEqual(model.origin, { x: 4, y: 6 });
   assert.deepEqual(model.target, { x: 4, y: -.5 });
   assert.equal(model.distance, 6.5);
@@ -681,7 +681,7 @@ test('close shots are more dangerous while longer flight gives a fixed keeper mo
 });
 
 test('extra distance pressure starts beyond three squares with a shared close-shot distance curve', () => {
-  assert.equal(SHOT_MODEL.version, 9);
+  assert.equal(SHOT_MODEL.version, 10);
   assert.equal(SHOT_MODEL.distancePenaltyStart, 3);
   assert.equal(SHOT_MODEL.longShotDecay, .06);
   assert.equal(SHOT_MODEL.minOnTarget, .01);
@@ -692,8 +692,8 @@ test('extra distance pressure starts beyond three squares with a shared close-sh
     const model = shotModel(state, 4, -1);
     assert.ok(model.distance <= 3, 'short-range fixture stays inside the protected range');
     const angleCos = Math.cos(model.shotAngleDegrees * Math.PI / 180);
-    const expectedAccuracy = .98 * Math.exp(-.018 * model.distance) * (.65 + .35 * angleCos) * model.postAngleFactor;
-    almostEqual(model.baseOnTargetProbability, expectedAccuracy, 'close shots retain the shared distance curve and receive the goal-opening penalty');
+    const expectedAccuracy = Math.min(.98, .98 * Math.exp(-.018 * model.distance) * (.65 + .35 * angleCos) * model.postAngleFactor * model.wideAngleFactor);
+    almostEqual(model.baseOnTargetProbability, expectedAccuracy, 'close shots retain the shared distance curve and receive both goal-opening adjustments');
   }
 });
 
@@ -703,7 +703,7 @@ test('central straight shots lose accuracy progressively with range and settle a
     const state = fixture({ phase: 'kick', carrier: 'white-Q', positions: { 'white-Q': [5, y] } });
     const model = shotModel(state, 5, -1);
     assert.ok(model.onTargetProbability <= previous, `accuracy cannot rise at distance ${model.distance}`);
-    const expected = Math.max(.01, .98 * Math.exp(-.018 * model.distance - .06 * Math.max(0, model.distance - 3) ** 2) * model.postAngleFactor);
+    const expected = Math.max(.01, Math.min(.98, .98 * Math.exp(-.018 * model.distance - .06 * Math.max(0, model.distance - 3) ** 2) * model.postAngleFactor * model.wideAngleFactor));
     almostEqual(model.onTargetProbability, expected);
     if (y <= 10) assert.ok(model.onTargetProbability < previous, 'accuracy strictly decreases before reaching its floor');
     previous = model.onTargetProbability;
@@ -762,7 +762,7 @@ test('parry splitting preserves the established goal, total-save and miss probab
   for (const [origin, keeper] of [[[4, 3], [5, 0]], [[4, 7], [6, 0]], [[4, 12], [4, 1]]]) {
     const state = fixture({ phase: 'kick', positions: { 'white-R1': origin, 'black-K': keeper } });
     const model = shotModel(state, 4, -1);
-    const onTarget = Math.max(.01, .98 * Math.exp(-.018 * model.distance - .03 * Math.max(0, model.distance - 3) ** 2) * model.postAngleFactor);
+    const onTarget = Math.max(.01, Math.min(.98, .98 * Math.exp(-.018 * model.distance - .03 * Math.max(0, model.distance - 3) ** 2) * model.postAngleFactor * model.wideAngleFactor));
     const time = (origin[1] - keeper[1]) / 6;
     const reach = .4 + 1.3 * Math.max(0, time - .15);
     const saveGivenTarget = .94 * (1 - Math.exp(-(.35 + time) / .45)) * Math.exp(-((Math.abs(keeper[0] - origin[0]) / reach) ** 2));

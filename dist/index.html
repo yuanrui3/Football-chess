@@ -6,7 +6,7 @@
   <meta name="description" content="Football tactics meet chess. Play an eleven-a-side tactical match on a 12 by 15 pitch, with goalkeeper reactions, shot odds, and chess-inspired football.">
   <title>Football Chess · The beautiful game, one move at a time</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23214f3b'/%3E%3Ctext x='32' y='48' font-size='47' text-anchor='middle' fill='%23dbef84'%3E♞%3C/text%3E%3C/svg%3E">
-  <link rel="stylesheet" href="style.css?v=29ea63e613d9">
+  <link rel="stylesheet" href="style.css?v=ad588ea86677">
 </head>
 <body>
 <header class="masthead">
@@ -95,7 +95,7 @@
   <p>Move, tackle, and pass range counts the larger horizontal or vertical displacement: an eight-by-eight diagonal is eight squares. Shot accuracy and goalkeeper coverage use straight-line distance to the goal plane, half a square beyond the end row.</p>
   <p>Knights can enter both teams’ goal boxes. A knight scores when one L-shaped kick lands in a goal cell; for example, d14 to the upper E goal, or f14 to the upper E goal from inside the box. Its scoring chance uses the normal distance, angle, and keeper model, with no multiplier. A keeper inside its own box still reacts first. A midfield knight cannot shoot directly at goal. Unreachable goal targets show “—”.</p>
   <h3>A finish depends on the whole shot</h3>
-  <p>Closer shots give the keeper less time to react. A tight angle beside a post reduces the visible goal opening and carries an extra accuracy penalty. Central long shots are judged relative to a central shooter at the same depth, so this extra penalty chiefly affects side approaches. The keeper’s position matters along the actual shot path, from the shooter to the chosen goal target: a shot travelling farther from the keeper is harder to save.</p>
+  <p>Closer shots give the keeper less time to react. A tight angle beside a post reduces the visible goal opening and carries an extra accuracy penalty. A larger opening between the posts improves finishing: above 45° the accuracy bonus increases smoothly, reaching +25% at 90°, before the 98% on-target cap. Central long shots are judged relative to a central shooter at the same depth, so the tight-angle penalty chiefly affects side approaches. The keeper’s position matters along the actual shot path, from the shooter to the chosen goal target: a shot travelling farther from the keeper is harder to save.</p>
   <p>The model combines the chance of hitting the target with the chance of beating the keeper. A longer flight lets the keeper cover more ground. Kings have saving reach and an extra shot reaction only while inside their own four-by-two box. A king may step out onto the ordinary field during positioning, but cannot enter the opponent’s box. Outside its own box it is an ordinary king: no saving reach, catches, parries, or extra reaction. Its occupied square can still intercept a kick like any other piece. Re-entering its own box during ordinary positioning restores goalkeeper abilities. The blue reach area and dashed coverage line show this geometry during a shot preview.</p>
   <p>Shots beyond three squares lose accuracy increasingly quickly. Rooks have a gentler distance penalty, giving them stronger long shots along their horizontal and vertical kicking lines. Close shots use the normal distance curve; every piece still faces angle penalties and the keeper’s reaction. Very long shots can fall to a 1% on-target chance. Passing uses its separate accuracy rule below.</p>
   <p>After the defending king reacts or holds, a shot can score, be caught, be parried out, or go wide. If the keeper stops it, estimated arrival pace and the stretch needed determine whether they hold it or concede a corner. Shorter travel means a faster arrival and a greater chance of a parry; reaching away from the body also makes the ball harder to control. Slower, central stops are easier to hold. The game currently gives all shots the same launch power and uses travel distance as a proxy for arrival pace.</p>
@@ -153,8 +153,8 @@
     <p id="statsPossessionNote" class="stats-note"></p>
     <div class="stats-contributions"><div><h3>Goal scorers</h3><ul id="statsScorers"></ul></div><div><h3>Assist providers</h3><ul id="statsAssists"></ul></div></div>
     <div class="stats-goal-locations"><h3>Where goals were scored</h3>
-      <p class="stats-map-legend"><span><i class="stats-team-dot white"></i>Ivory FC</span><span><i class="stats-team-dot black"></i>Obsidian FC</span><span>OG = own goal</span></p>
-      <div class="stats-map-layout"><svg id="statsGoalMap" class="stats-goal-map" viewBox="0 0 300 380" role="group" aria-labelledby="statsMapTitle"></svg><div class="stats-zone-panel"><table class="stats-table stats-zone-table"><thead><tr><th scope="col">Ivory</th><th scope="col">Goal origins</th><th scope="col">Obsidian</th></tr></thead><tbody id="statsGoalZoneRows"></tbody></table><p class="stats-note">Custom board zones: keeper box = goal files, nearest 2 ranks; central approach = goal files, next 3 ranks; wide close = outside goal files, nearest 5 ranks; further out = remaining ranks. These are game zones, not real soccer penalty areas.</p></div></div>
+      <p class="stats-map-legend"><span><i class="stats-team-dot white"></i>Ivory FC ↑</span><span><i class="stats-team-dot black"></i>Obsidian FC ↓</span><span>OG = own goal</span></p>
+      <div class="stats-map-layout"><svg id="statsGoalMap" class="stats-goal-map" viewBox="0 0 300 380" role="group" aria-labelledby="statsMapTitle"></svg><div class="stats-zone-panel"><table class="stats-table stats-zone-table"><thead><tr><th scope="col">Ivory</th><th scope="col">Goal origins</th><th scope="col">Obsidian</th></tr></thead><tbody id="statsGoalZoneRows"></tbody></table><p class="stats-note">Zones are measured toward each team’s attacking goal: keeper box = goal files, nearest 2 ranks; central approach = goal files, next 3 ranks; wide close = outside goal files, nearest 5 ranks; further out = remaining ranks. These are game zones, not real soccer penalty areas.</p></div></div>
       <p id="statsMapNote" class="stats-note"></p><div class="stats-map-selection"><h4 id="statsMapSelectionTitle">Goal origin details</h4><ul id="statsMapSelection"></ul></div>
     </div>
     <div class="stats-goal-log"><h3>Goals</h3><ol id="statsGoalLog"></ol></div>
@@ -162,6 +162,6 @@
   <button class="primary wide" id="rematchBtn">Play another match <span>↗</span></button>
 </dialog>
 <dialog id="confirmDialog"><div class="dialog-heading"><p class="eyebrow">START FRESH</p><button class="icon-button" data-close="confirmDialog" aria-label="Cancel">×</button></div><h2>A new game?</h2><p>Your current match will be replaced.</p><div class="dialog-actions"><button class="utility-button" data-close="confirmDialog">Keep playing</button><button class="primary" id="confirmNewBtn">New match ↗</button></div></dialog>
-<script type="module" src="app.js?v=2197306bf2ff"></script>
+<script type="module" src="app.js?v=614dd4f412f4"></script>
 </body>
 </html>
