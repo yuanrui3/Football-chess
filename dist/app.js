@@ -1,6 +1,6 @@
-import {createGame, legalMoves, legalKicks, applyMove, applyKick, skipMove, chooseAIAction, currentTeam, BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, isBox, shotChance, shotModel, offsideInfo, LONG_TACKLE_RANGE, DRIBBLE_RANGE, STALLING_RULE, ACTION_SECONDS, actionTimeout, progressInfo, positionActions, normalizeGame} from './engine.js?v=773c08c98207';
+import {createGame, legalMoves, legalKicks, applyMove, applyKick, skipMove, chooseAIAction, currentTeam, BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, isBox, shotChance, shotModel, offsideInfo, LONG_TACKLE_RANGE, DRIBBLE_RANGE, STALLING_RULE, ACTION_SECONDS, actionTimeout, progressInfo, positionActions, normalizeGame} from './engine.js?v=3e55cdb8dab3';
 import {createMatchClock, restoreMatchClock, tickMatchClock, settleMatchClock, rewindMatchClock} from './match-clock.js?v=73476bff5019';
-import {buildGoalReplay, restoreGoalReplay, createReplayPlayer} from './goal-replay.js?v=f22760e44272';
+import {buildGoalReplay, restoreGoalReplay, createReplayPlayer} from './goal-replay.js?v=e077e064f828';
 
 const $ = id => document.getElementById(id);
 const NAMES = {K:'Goalkeeper',Q:'Queen',R:'Rook',B:'Bishop',N:'Knight',P:'Pawn'};
@@ -102,8 +102,8 @@ function isOffsideTarget(target){
 function accuracyLabel(){return game.restart?.type==='throwIn'?'throw':'pass';}
 function restartGuide(){
   const restart=game.restart;if(!restart)return '';
-  if(restart.type==='goalKick'&&kickPhase())return 'Both teams have resettled. The king must now pass from the goal box; a direct shot is not allowed.';
-  if(kickPhase())return restart.type==='throwIn'?'Throw along any straight or diagonal direction. Accurate through 5 squares, unpredictable beyond 5, maximum 10. No direct goal.':restart.indirect?'Take an indirect free kick. Pass or find space; a direct shot is not allowed.':'The positioning round is complete. Take the restart using the taker’s kicking pattern.';
+  if(restart.type==='goalKick'&&kickPhase())return 'Both teams have resettled. The king must now pass from the goal box and may loft over one intervening player; a direct shot is not allowed.';
+  if(kickPhase())return restart.type==='throwIn'?'Throw along any straight or diagonal direction. Accurate through 5 squares, unpredictable beyond 5, maximum 10. No direct goal.':restart.indirect?'Take an indirect free kick. A pass may loft over one intervening player; a direct shot is not allowed.':'The positioning round is complete. Take the corner using the taker’s kicking pattern. A pass may loft over one intervening player; shots still require a clear path.';
   return `${restart.type==='stalling'?'Awarded for insufficient forward progress. ':''}Both teams resettle before the restart: attacking side first, then defence. Each has one off-ball move and a free pawn action. ${restart.type==='goalKick'?'The king':'The taker'} stays at the restart spot; no dribbling or tackling until the ball is played.`;
 }
 function renderRestart(){
@@ -146,6 +146,10 @@ function targetDescription(target){
     return `OFFSIDE: attacking knight${knight?` at ${coord(knight.x,knight.y)}`:''} in the opponent’s box is involved in play; this kick awards the opponents an indirect free kick`;
   }
   if(isOffsideTarget(target))return `OFFSIDE warning at ${destination}: touching this ball awards the opponents an indirect free kick`;
+  if(target.lofted){
+    const blocker=game.pieces.find(piece=>piece.id===target.bypassedPieceId),over=blocker?`${TEAM[blocker.team]} ${pieceLabel(blocker)} at ${coord(blocker.x,blocker.y)}`:'one intervening player';
+    return `Lofted pass over ${over} to ${receiver?`${TEAM[receiver.team]} ${pieceLabel(receiver)}`:'space'} at ${destination}${receiver&&receiver.team!==currentTeam(game)?'; the opponent will intercept':''}; kicker stays in place`;
+  }
   if(kind==='setup')return `Starting formation square ${destination}`;
   if(kind==='keeper')return `Keeper reaction to ${destination}`;
   if(kind==='tackle')return `Tackle landing at ${destination}, ${percent(target.tackleProbability??1)} tackle success`;
@@ -186,7 +190,7 @@ function renderActionContext(selected){
   $('actionContext').dataset.action=kind;$('actionType').textContent=title;$('actionRule').textContent=rule;
 }
 function addLine(points,className){
-  const line=document.createElementNS('http://www.w3.org/2000/svg','polyline');line.classList.add(className);
+  const line=document.createElementNS('http://www.w3.org/2000/svg','polyline');line.setAttribute('class',className);
   line.setAttribute('points',points.map(p=>`${p.x*100+50},${p.y*100+50}`).join(' '));
   document.querySelector('.pitch-markings').append(line);
 }
@@ -226,6 +230,7 @@ function renderBoard(){
     const kind=target?targetKind(target):null;
     el.className=['square',(x+y)%2?'checker':'',isBox(x,y)?'box':'',y===7&&(x===5||x===6)?'kickoff':'',isSelected?'selected':'',last?.x===x&&last?.y===y?'last-move':'',target?'legal':'',kind?`action-${kind}`:'',target?.type==='tackle'?'tackle':'',showTrace&&action.from?.x===x&&action.from?.y===y?'computer-from':'',showTrace&&action.to?.x===x&&action.to?.y===y?'computer-to':''].filter(Boolean).join(' ');
     if(kind)el.dataset.action=kind;else delete el.dataset.action;
+    el.classList.toggle('loft-target',!!target?.lofted);
     el.classList.toggle('offside-flag',!!piece&&activeFlags.has(piece.id));el.classList.toggle('offside-position',!!piece&&positionFlags.has(piece.id)&&!activeFlags.has(piece.id));el.classList.toggle('offside-target',!!target&&isOffsideTarget(target));el.classList.toggle('restart-taker',!!piece&&piece.id===game.restart?.takerId);
     el.setAttribute('aria-selected',String(isSelected));
     let label=coord(x,y)+(piece?`, ${TEAM[piece.team]} ${pieceLabel(piece)}`:', empty');
@@ -237,6 +242,7 @@ function renderBoard(){
     el.setAttribute('aria-label',label);el.title=label;
     el.innerHTML=piece?`<span class="piece ${piece.team}"><span>${SYMBOLS[piece.type]}</span>${hasBall?`<span class="ball">${ballSVG}</span>`:''}</span>`:hasBall?`<span class="ball loose">${ballSVG}</span>`:'';
     if(target?.accuracy<1)el.insertAdjacentHTML('beforeend',`<span class="accuracy-badge">${percent(target.accuracy)}</span>`);
+    if(target?.lofted)el.insertAdjacentHTML('beforeend','<span class="loft-badge">LOFT</span>');
     if(target&&isOffsideTarget(target))el.insertAdjacentHTML('beforeend','<span class="offside-badge">OFF</span>');
     else if(piece&&(activeFlags.has(piece.id)||positionFlags.has(piece.id)))el.insertAdjacentHTML('beforeend','<span class="offside-badge">!</span>');
     if(target?.type==='tackle'&&target.tackleProbability<1)el.insertAdjacentHTML('beforeend',`<span class="accuracy-badge tackle-chance">${percent(target.tackleProbability)}</span>`);
@@ -424,7 +430,7 @@ function scheduleAI(){
     aiTimer=null;if(!stillCurrent())return;
     if(difficulty==='tactical'&&typeof window.Worker==='function'){
       try{
-        aiWorker=new window.Worker(new URL('./ai-worker.js?v=37b308f712f4',import.meta.url),{type:'module',name:'football-chess-tactical'});
+        aiWorker=new window.Worker(new URL('./ai-worker.js?v=d545cba35821',import.meta.url),{type:'module',name:'football-chess-tactical'});
         aiWorker.onmessage=event=>{if(!stillCurrent()||event.data?.requestId!==requestId)return;if(event.data.error)fallback();else receive(event.data.action);};
         aiWorker.onerror=event=>{event.preventDefault?.();fallback();};
         aiWatchdog=setTimeout(()=>fallback('casual'),4000);
@@ -441,7 +447,7 @@ function drawPreview(x,y){
   if(kickPhase()){
     if(target.offsideReason==='boxKnight'){clearKeeperOverlay();$('kickDetails').textContent=targetDescription(target);}
     else if(target.goal){const model=shotModel(game,x,y);addLine([model.origin,model.target],'trajectory');drawKeeperOverlay(model);$('kickDetails').textContent=`${targetDescription(target)} · ${shotGeometry(model)}. ${outcomeBreakdown(model)} before the keeper’s reaction.`;}
-    else{clearKeeperOverlay();if(target.path)addLine(target.path,'trajectory');$('kickDetails').textContent=`${targetDescription(target)} · ${target.distance} squares · ${percent(target.accuracy)} ${accuracyLabel()} accuracy. ${target.distance>10?'An inaccurate landing can cross a boundary. ':''}The player stays in place.`;}
+    else{clearKeeperOverlay();if(target.path)addLine(target.path,target.lofted?'trajectory lofted-trajectory':'trajectory');$('kickDetails').textContent=`${targetDescription(target)} · ${target.distance} squares · ${percent(target.accuracy)} ${accuracyLabel()} accuracy. ${target.distance>10?'An inaccurate landing can cross a boundary. ':''}The player stays in place.`;}
   }else $('kickDetails').textContent=`${targetDescription(target)}. ${stage==='setup'?'Formation only; no turn used.':freePawnMode?'Uses the free pawn action.':targetKind(target)==='dribble'?'Uses the separate dribble action; the off-ball allowance is independent.':'Uses the off-ball positioning action; passing and shooting happen later.'}`;
 }
 $('board').addEventListener('pointerover',event=>{const el=event.target.closest('.square');if(el)drawPreview(Number(el.dataset.x),Number(el.dataset.y));});

@@ -146,7 +146,7 @@ export function createGame({mode = 'solo', minutes = 10, kickoff = 'white', seed
     score: {white: 0, black: 0}, turn: 1, randomState: normalizeSeed(seed),
     log: [`${title(kickoff)} has kick-off. Kick the ball to begin.`], lastAction: null,
     mode, minutes: Number.isFinite(Number(minutes)) && Number(minutes) > 0 ? Number(minutes) : 10,
-    rulesVersion: 11, restart: null, offside: null, looseBallKickOrigin: null,
+    rulesVersion: 12, restart: null, offside: null, looseBallKickOrigin: null,
     ballProgress: {team: kickoff, anchorY: carrier.y, rounds: 0, pendingRelease: false, excludeRelease: false}
   };
 }
@@ -178,7 +178,10 @@ function canTackle(state, piece, carrier) {
   const straight = dx === 0 || dy === 0, diagonal = Math.abs(dx) === Math.abs(dy);
   if (!(piece.type === 'Q' ? straight || diagonal : piece.type === 'R' ? straight : diagonal)) return false;
   const sx = Math.sign(dx), sy = Math.sign(dy);
-  for (let step = 1; step < reach; step++) if (pieceAt(state, piece.x + sx * step, piece.y + sy * step)) return false;
+  for (let step = 1; step < reach; step++) {
+    const x = piece.x + sx * step, y = piece.y + sy * step;
+    if (!allowedSquare(piece, x, y) || pieceAt(state, x, y)) return false;
+  }
   return true;
 }
 
@@ -200,8 +203,8 @@ export function legalMoves(state, pieceId, {freePawn = false} = {}) {
   for (const [dx, dy] of shape.vectors) {
     for (let step = 1; step <= range; step++) {
       const x = piece.x + dx * step, y = piece.y + dy * step;
-      if (!inside(x, y) || pieceAt(state, x, y)) break;
-      if (allowedSquare(piece, x, y)) moves.set(`${x},${y}`, {x, y, type: 'move', ...(freePawn ? {freePawn: true} : {})});
+      if (!allowedSquare(piece, x, y) || pieceAt(state, x, y)) break;
+      moves.set(`${x},${y}`, {x, y, type: 'move', ...(freePawn ? {freePawn: true} : {})});
     }
   }
   if (!freePawn && !state.restart) {
@@ -259,6 +262,7 @@ export function offsideInfo(state, team = state?.pieces?.find(p => p.id === stat
 }
 
 const offsideExempt = restart => ['goalKick', 'corner', 'throwIn'].includes(restart?.type);
+const loftedRestart = restart => ['goalKick', 'corner', 'offside', 'stalling', 'timeout'].includes(restart?.type);
 function boxKnightOffenders(state, snapshot) {
   if (!snapshot) return [];
   return state.pieces.filter(piece => piece.team === snapshot.team && piece.type === 'N'
@@ -403,7 +407,7 @@ export function normalizeGame(state) {
     const details = shotModel(next);
     next.lastAction = {...next.lastAction, probability: details.probability, shotModel: details};
   }
-  next.rulesVersion = 11;
+  next.rulesVersion = 12;
   return next;
 }
 
@@ -527,14 +531,21 @@ function rawKicks(state) {
   const vectors = state.restart?.type === 'throwIn' ? DIRECTIONS : carrier.type === 'P' ? STRAIGHTS : carrier.type === 'B' ? DIAGONALS : carrier.type === 'R' ? STRAIGHTS : DIRECTIONS;
   for (const [dx, dy] of vectors) {
     const path = [{x: carrier.x, y: carrier.y}];
-    // Ordinary passes stop at the first piece, including a goalkeeper.
+    // The first occupied target remains an ordinary ground pass. Eligible
+    // set pieces may instead loft over that one player; the second occupied
+    // square can receive/intercept, and always ends this passing ray.
+    let bypassed = null;
     for (let step = 1; step <= (state.restart?.type === 'throwIn' ? 10 : BOARD_HEIGHT + 1); step++) {
       const x = carrier.x + dx * step, y = carrier.y + dy * step;
       if (!inside(x, y)) break;
       path.push({x, y});
       const receiver = pieceAt(state, x, y);
-      kicks.push(kickRecord(state, carrier, x, y, [...path], receiver, undefined, boxWarning));
-      if (receiver) break;
+      kicks.push({...kickRecord(state, carrier, x, y, [...path], receiver, undefined, boxWarning),
+        ...(bypassed ? {lofted: true, bypassedPieceId: bypassed.id, bypassedSquare: {x: bypassed.x, y: bypassed.y}} : {})});
+      if (receiver) {
+        if (!loftedRestart(state.restart) || bypassed) break;
+        bypassed = receiver;
+      }
     }
     if (!dy || ['throwIn', 'goalKick'].includes(state.restart?.type) || state.restart?.indirect) continue;
     // An opposing king in its own box gets a save reaction. Outside that box,
@@ -768,8 +779,9 @@ export function applyKick(state, x, y, {roll, landing} = {}) {
   const restart = state.restart;
   next.offside = offsideSnapshot(state, carrier, restart); next.restart = null;
   next.looseBallKickOrigin = null;
+  const loft = kick.lofted ? {lofted: true, bypassedPieceId: kick.bypassedPieceId, bypassedSquare: {...kick.bypassedSquare}} : {};
   const boxOffender = boxKnightOffenders(next, next.offside)[0];
-  if (boxOffender) return callOffside(next, boxOffender, {pieceId: carrier.id, from, intendedTo: {x, y}, path: kick.path, distance: kick.distance, accuracy: kick.accuracy, offsideReason: 'boxKnight', offsidePieceId: boxOffender.id});
+  if (boxOffender) return callOffside(next, boxOffender, {pieceId: carrier.id, from, intendedTo: {x, y}, path: kick.path, distance: kick.distance, accuracy: kick.accuracy, ...loft, offsideReason: 'boxKnight', offsidePieceId: boxOffender.id});
   if (kick.goal) {
     next.pendingShot = {x, y, shooterId: carrier.id, shooterType: carrier.type, shootingTeam: carrier.team, scoringTeam: kick.goal, defendingTeam: other(kick.goal), from, path: kick.path, distance: kick.distance};
     next.phase = 'keeperReact'; next.releaseReason = null;
@@ -786,7 +798,7 @@ export function applyKick(state, x, y, {roll, landing} = {}) {
   }
   const accuracy = kick.accuracy, outcomeRoll = nextRoll(next, roll), successful = accuracy === 1 || outcomeRoll < accuracy;
   const destination = successful ? {x, y} : scatterSquare(next, {x, y}, kick.distance, restart?.type === 'throwIn', landing);
-  const common = {team: carrier.team, pieceId: carrier.id, from, intendedTo: {x, y}, distance: kick.distance, accuracy, probability: accuracy, roll: outcomeRoll, ...(restart ? {restartType: restart.type} : {})};
+  const common = {team: carrier.team, pieceId: carrier.id, from, intendedTo: {x, y}, distance: kick.distance, accuracy, probability: accuracy, roll: outcomeRoll, ...(restart ? {restartType: restart.type} : {}), ...loft};
   if (!successful) {
     const boundaryRestart = restartForExit(next, from, destination, carrier.team);
     if (boundaryRestart) {
@@ -809,8 +821,8 @@ export function applyKick(state, x, y, {roll, landing} = {}) {
   addLog(next, receiver
     ? interception ? `${title(receiver.team)} ${NAMES[receiver.type]} intercepts at ${square(destination.x, destination.y)}.`
       : backPass ? `${title(carrier.team)} passes back to the goalkeeper. The goalkeeper must immediately release the ball.`
-      : `${title(carrier.team)} ${restart?.type === 'throwIn' ? 'throws' : 'passes'} to the ${NAMES[receiver.type]} at ${square(destination.x, destination.y)} (${Math.round(accuracy * 100)}% accuracy).`
-    : `${title(carrier.team)} ${successful ? 'kicks' : 'scatters the ball'} to ${square(destination.x, destination.y)} (${Math.round(accuracy * 100)}% accuracy). The ball is loose.`);
+      : `${title(carrier.team)} ${restart?.type === 'throwIn' ? 'throws' : kick.lofted ? 'lofts a pass' : 'passes'} to the ${NAMES[receiver.type]} at ${square(destination.x, destination.y)} (${Math.round(accuracy * 100)}% accuracy).`
+    : `${title(carrier.team)} ${successful ? kick.lofted ? 'lofts the ball' : 'kicks' : 'scatters the ball'} to ${square(destination.x, destination.y)} (${Math.round(accuracy * 100)}% accuracy). The ball is loose.`);
   finishKickProgress(next, state, backPass, interception);
   return next;
 }
@@ -865,14 +877,15 @@ function receiverValue(state, receiver, canDribble = true) {
 function passLane(state, carrier, target) {
   const dx = target.x - carrier.x, dy = target.y - carrier.y;
   if (!dx && !dy) return false;
-  const vectors = state.restart?.type === 'throwIn' ? DIRECTIONS : carrier.type === 'N' ? KNIGHT : carrier.type === 'P' || carrier.type === 'R' ? STRAIGHTS : carrier.type === 'B' ? DIAGONALS : DIRECTIONS;
+  const throwing = state.restart?.type === 'throwIn', jumping = carrier.type === 'N' && !throwing;
+  const vectors = throwing ? DIRECTIONS : jumping ? KNIGHT : carrier.type === 'P' || carrier.type === 'R' ? STRAIGHTS : carrier.type === 'B' ? DIAGONALS : DIRECTIONS;
   for (const [vx, vy] of vectors) {
     const steps = vx ? dx / vx : dy / vy;
-    if (!Number.isInteger(steps) || steps < 1 || (carrier.type === 'N' && steps !== 1) || vx * steps !== dx || vy * steps !== dy) continue;
-    if (carrier.type !== 'N') {
-      let clear = true;
-      for (let step = 1; step < steps; step++) if (pieceAt(state, carrier.x + vx * step, carrier.y + vy * step)) { clear = false; break; }
-      if (!clear) continue;
+    if (!Number.isInteger(steps) || steps < 1 || (jumping && steps !== 1) || (throwing && steps > 10) || vx * steps !== dx || vy * steps !== dy) continue;
+    if (!jumping) {
+      let blockers = 0;
+      for (let step = 1; step < steps; step++) if (pieceAt(state, carrier.x + vx * step, carrier.y + vy * step)) blockers++;
+      if (blockers > (loftedRestart(state.restart) ? 1 : 0)) continue;
     }
     return true;
   }
@@ -1096,7 +1109,10 @@ function canCollect(state, piece, target) {
     const steps = vx ? dx / vx : dy / vy;
     if (!Number.isInteger(steps) || steps < 1 || steps > shape.range || vx * steps !== dx || vy * steps !== dy) continue;
     let clear = true;
-    for (let step = 1; step < steps; step++) if (pieceAt(state, piece.x + vx * step, piece.y + vy * step)) { clear = false; break; }
+    for (let step = 1; step < steps; step++) {
+      const x = piece.x + vx * step, y = piece.y + vy * step;
+      if (!allowedSquare(piece, x, y) || pieceAt(state, x, y)) { clear = false; break; }
+    }
     if (clear) return true;
   }
   return false;

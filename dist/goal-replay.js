@@ -37,6 +37,7 @@ function recordAction(action){
   if(action.keeperMove)result.keeperMove={pieceId:action.keeperMove.pieceId,from:{...action.keeperMove.from},to:{...action.keeperMove.to}};
   if(Number.isFinite(action.probability))result.probability=action.probability;
   if(action.ownGoal!==undefined)result.ownGoal=!!action.ownGoal;
+  if(action.lofted){result.lofted=true;result.bypassedPieceId=action.bypassedPieceId;result.bypassedSquare={...action.bypassedSquare};}
   return result;
 }
 
@@ -49,6 +50,9 @@ function validAction(action){
   if(action.path!==undefined&&(!Array.isArray(action.path)||action.path.length<1||action.path.length>32||!action.path.every(point)))return false;
   if(action.probability!==undefined&&(!Number.isFinite(action.probability)||action.probability<0||action.probability>1))return false;
   if(action.ownGoal!==undefined&&typeof action.ownGoal!=='boolean')return false;
+  if(action.lofted!==undefined){
+    if(action.lofted!==true||!['kick','miss','interception','out','offside'].includes(action.type)||!IDS.has(action.bypassedPieceId)||!pitchPoint(action.bypassedSquare))return false;
+  }else if(action.bypassedPieceId!==undefined||action.bypassedSquare!==undefined)return false;
   const move=action.keeperMove;
   return !move||(IDS.has(move.pieceId)&&move.pieceId.endsWith('-K')&&pitchPoint(move.from)&&pitchPoint(move.to)&&Math.max(Math.abs(move.from.x-move.to.x),Math.abs(move.from.y-move.to.y))<=1);
 }
@@ -61,7 +65,7 @@ function frameCaption(state){
   if(action.type==='move')return `${side} ${name.toLowerCase()} moves to ${coordinate(action.to)}.`;
   if(action.type==='tackle')return `${side} wins possession with a tackle.`;
   if(action.type==='tackleMiss')return `${side} attempts a tackle; the knight keeps the ball.`;
-  if(['kick','miss','interception'].includes(action.type))return `${side} plays the ball toward ${coordinate(action.to)}${action.type==='miss'?' — inaccurate pass':action.type==='interception'?' — intercepted':''}.`;
+  if(['kick','miss','interception'].includes(action.type))return `${side} ${action.lofted?'lofts a pass over one player toward':'plays the ball toward'} ${coordinate(action.to)}${action.type==='miss'?' — inaccurate pass':action.type==='interception'?' — intercepted':''}.`;
   if(action.type==='skip')return `${side} ends positioning.`;
   if(action.type==='save')return `${side} makes the save.`;
   if(action.type==='shotMiss')return 'The previous shot goes wide.';
@@ -175,7 +179,7 @@ export function createReplayPlayer({onComplete=()=>{},onInteract=()=>{}}={}){
     function line(points,className){const el=document.createElementNS('http://www.w3.org/2000/svg','polyline');el.setAttribute('class',className);el.setAttribute('points',points.map(p=>`${p.x*100+50},${p.y*100+150}`).join(' '));overlay.append(el);}
     if(action?.path?.length>1)line(action.path,'replay-action-line');
     if(action?.keeperMove)line([action.keeperMove.from,action.keeperMove.to],'replay-keeper-line');
-    $('replayMoment').textContent=goal?'GOAL':action?.type==='shotAttempt'?'SHOT DECLARED':'BUILD-UP';
+    $('replayMoment').textContent=goal?'GOAL':action?.type==='shotAttempt'?'SHOT DECLARED':action?.lofted?'LOFTED PASS':'BUILD-UP';
     controls();
   }
   function schedule(){

@@ -1,4 +1,4 @@
-import {chooseAIAction} from './engine.js?v=773c08c98207';
+import {chooseAIAction} from './engine.js?v=3e55cdb8dab3';
 
 if(typeof self!=='undefined')self.onmessage=({data})=>{
   const {requestId,state,difficulty}=data;

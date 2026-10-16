@@ -227,7 +227,7 @@ test('version-nine migration infers an old loose pass only when the immediately 
     delete old.looseBallKickOrigin;
     const before = clone(old), migrated = normalizeGame(old);
     assert.deepEqual(old, before);
-    assert.equal(migrated.rulesVersion, 11);
+    assert.equal(migrated.rulesVersion, 12);
     assert.deepEqual(migrated.looseBallKickOrigin, {team, pieceId: id(team, 'Q')});
     assert.equal(migrated.randomState, old.randomState);
     assert.deepEqual(normalizeGame(migrated), migrated);
@@ -347,7 +347,7 @@ test('saved pending knight shots discard the old multiplier and use the shared m
     legacy.lastAction.shotModel = {...legacy.lastAction.shotModel, probability: 1, goalProbability: 1, scoringMultiplier: 2, modelVersion: 6};
     const before = clone(legacy), restored = normalizeGame(legacy);
     assert.deepEqual(legacy, before);
-    assert.equal(restored.rulesVersion, 11);
+    assert.equal(restored.rulesVersion, 12);
     assert.equal(restored.randomState, legacy.randomState);
     assert.equal(restored.pendingShot.shooterType, 'N', 'movement identity is retained independently of scoring strength');
     const details = shotModel(restored);

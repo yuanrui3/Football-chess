@@ -98,13 +98,13 @@ for(const team of ['white','black']){
   });
 
   test(`${team}: saved or undone illegal kings move to a nearest vacant ordinary square without spending an action or RNG`,()=>{
-    for(const version of [undefined,5,9,10,11]){
+    for(const version of [undefined,5,9,10,11,12]){
       const state=fixture({team,positions:{'white-K':[5,0]}});
       state.rulesVersion=version;state.positionBudget={normalUsed:true,pawnUsed:false,dribbleUsed:true};
       state.score={white:2,black:1};state.turn=17;state.minutes=8;
       const before=clone(state),normalized=E.normalizeGame(state),king=piece(normalized,'white-K',team);
       assert.deepEqual({x:king.x,y:king.y},pointFor([5,2],team),'equal distance favors the team’s own end');
-      assert.equal(E.isBox(king.x,king.y),false);assert.equal(normalized.rulesVersion,11);
+      assert.equal(E.isBox(king.x,king.y),false);assert.equal(normalized.rulesVersion,12);
       assert.deepEqual(normalized.positionBudget,before.positionBudget);assert.deepEqual(normalized.score,before.score);
       assert.equal(normalized.phase,before.phase);assert.equal(normalized.turn,before.turn);assert.equal(normalized.minutes,before.minutes);
       assert.equal(normalized.randomState,before.randomState);assert.deepEqual(normalized.log,before.log);

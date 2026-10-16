@@ -49,6 +49,23 @@ test('keeper reaction in the scoring frame comes from the recorded move',()=>{
   assert.deepEqual(final.pieces.filter(piece=>piece.id!=='black-K'),before.pieces.filter(piece=>piece.id!=='black-K'));
 });
 
+test('a lofted restart in the real goal build-up keeps its bypass metadata through storage',()=>{
+  const {state,target}=fixture(),taker=state.pieces.find(piece=>piece.id==='white-R2'),blocker=state.pieces.find(piece=>piece.id==='black-P1');
+  Object.assign(taker,{x:4,y:12});Object.assign(blocker,{x:4,y:8});
+  state.ball={x:taker.x,y:taker.y,carrierId:taker.id};
+  state.restart={type:'stalling',team:'white',takerId:taker.id,spot:{x:taker.x,y:taker.y},indirect:true};
+  const received=applyKick(state,4,4,{roll:0});
+  assert.equal(received.lastAction.lofted,true);assert.equal(received.ball.carrierId,'white-R1');
+  const defence=skipMove(received),ready=skipMove(defence),before=applyKick(ready,target.x,target.y),after=skipMove(before,{roll:0});
+  const replay=buildGoalReplay([state,received,defence,ready,before].map(game=>({game})),before,after);assert.ok(replay);
+  const loft=replay.frames.find(frame=>frame.action?.lofted);assert.ok(loft);
+  assert.equal(loft.action.bypassedPieceId,blocker.id);assert.deepEqual(loft.action.bypassedSquare,{x:4,y:8});
+  assert.match(loft.caption,/lofts a pass over one player/);
+  assert.deepEqual(restoreGoalReplay(JSON.parse(JSON.stringify(replay))),replay);
+  const invalid=clone(replay);invalid.frames.find(frame=>frame.action?.lofted).action.bypassedPieceId='unknown';
+  assert.equal(restoreGoalReplay(invalid),null);
+});
+
 for(const team of ['white','black'])for(const ownGoal of [false,true]){
   test(`${team} ${ownGoal?'own goal':'goal'} identifies shooter and scoring team separately`,()=>{
     const {replay}=recordedGoal({team,ownGoal});assert.ok(replay);
