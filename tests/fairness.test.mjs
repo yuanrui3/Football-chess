@@ -351,7 +351,7 @@ test('saved pending knight shots discard the old multiplier and use the shared m
     assert.equal(restored.randomState, legacy.randomState);
     assert.equal(restored.pendingShot.shooterType, 'N', 'movement identity is retained independently of scoring strength');
     const details = shotModel(restored);
-    assert.equal(details.modelVersion, 7);
+    assert.equal(details.modelVersion, 8);
     assert.equal(details.scoringMultiplier, 1);
     assert.ok(details.goalProbability < 1);
     assert.deepEqual(restored.lastAction.shotModel, details);

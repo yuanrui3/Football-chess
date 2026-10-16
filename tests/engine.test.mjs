@@ -596,7 +596,7 @@ test('goal declarations wait for the defending goalkeeper before resolving the s
   assert.ok(reaction.pendingShot);
   assert.equal(reaction.rulesVersion, 9);
   assert.deepEqual(reaction.pendingShot.from, { x: 4, y: 4 });
-  assert.equal(reaction.lastAction.shotModel.modelVersion, 7);
+  assert.equal(reaction.lastAction.shotModel.modelVersion, 8);
   assert.deepEqual(reaction.lastAction.shotModel, shotModel(state, 4, -1));
   assert.deepEqual(reaction.score, { white: 0, black: 0 });
   assert.deepEqual(legalKicks(reaction), []);
@@ -643,7 +643,7 @@ test('outfield players still intercept a shot before the net', () => {
 test('the shot preview exposes Euclidean distance, goal-plane geometry and complete probabilities', () => {
   const state = fixture({ phase: 'kick', positions: { 'white-R1': [4, 6], 'black-K': [5, 0] } });
   const model = shotModel(state, 4, -1);
-  assert.equal(model.modelVersion, 7);
+  assert.equal(model.modelVersion, 8);
   assert.deepEqual(model.origin, { x: 4, y: 6 });
   assert.deepEqual(model.target, { x: 4, y: -.5 });
   assert.equal(model.distance, 6.5);
@@ -679,7 +679,7 @@ test('close shots are more dangerous while longer flight gives a fixed keeper mo
 });
 
 test('extra distance pressure starts beyond three squares and preserves close-shot accuracy', () => {
-  assert.equal(SHOT_MODEL.version, 7);
+  assert.equal(SHOT_MODEL.version, 8);
   assert.equal(SHOT_MODEL.distancePenaltyStart, 3);
   assert.equal(SHOT_MODEL.longShotDecay, .06);
   assert.equal(SHOT_MODEL.minOnTarget, .01);
@@ -771,9 +771,12 @@ test('parry splitting preserves the established goal, total-save and miss probab
   }
 });
 
-test('parry rates stay capped and absent keepers cannot generate saves or corners', () => {
-  const capState = fixture({ phase: 'kick', positions: { 'white-R1': [4, 2], 'black-K': [5, 2] } });
+test('parry rates stay capped in the own box and outside or absent keepers cannot generate saves or corners', () => {
+  // Isolate the geometry model's cap with two legal box occupants at the same
+  // depth. Piece-specific kicking shapes are tested independently.
+  const capState = fixture({ phase: 'kick', carrier: 'white-N1', positions: { 'white-N1': [4, 0], 'black-K': [5, 0] } });
   const capped = shotModel(capState, 4, -1);
+  assert.equal(capped.keeperInBox, true);
   almostEqual(capped.parryGivenSave, .9);
   assert.ok(capped.saveProbability > 0);
   almostEqual(capped.cornerProbability, capped.saveProbability * .9);
@@ -784,6 +787,9 @@ test('parry rates stay capped and absent keepers cannot generate saves or corner
   assert.equal(empty.saveProbability, 0);
   assert.equal(empty.cornerProbability, 0);
   assert.equal(empty.caughtSaveProbability, 0);
+  const outside = shotModel(capState, 4, -1, {x: 5, y: 2});
+  assert.equal(outside.keeperInBox, false);
+  for (const key of ['reach', 'parryGivenSave', 'saveProbability', 'cornerProbability', 'caughtSaveProbability']) assert.equal(outside[key], 0, key);
   const invalid = shotModel(capState, 2, -1);
   for (const key of ['arrivalSpeed', 'parryGivenSave', 'cornerProbability', 'caughtSaveProbability']) assert.equal(invalid[key], 0, key);
 });
@@ -847,10 +853,15 @@ test('the keeper is compared with the finite shot segment and cannot save from b
   assert.deepEqual(inFront.closestPoint, { x: 4, y: 4 });
   assert.equal(inFront.keeperPathDistance, 1);
   assert.ok(inFront.timeToKeeper > 0);
-  assert.ok(inFront.saveGivenOnTarget > 0);
+  assert.equal(inFront.saveGivenOnTarget, 0, 'being in front is insufficient while outside the own box');
+  const inBox = shotModel(state, 4, -1, { x: 5, y: 1 });
+  assert.deepEqual(inBox.closestPoint, { x: 4, y: 1 });
+  assert.equal(inBox.keeperPathDistance, 1);
+  assert.ok(inBox.timeToKeeper > inFront.timeToKeeper);
+  assert.ok(inBox.saveGivenOnTarget > 0, 'a keeper in front and inside its own box can save');
 });
 
-test('only the defending keeper own box grants full saving reach and readiness', () => {
+test('only the defending keeper own box grants any saving reach or readiness', () => {
   const state = fixture({ phase: 'kick', positions: { 'white-R1': [4, 7], 'black-K': [4, 1] } });
   const inBox = shotModel(state, 4, -1);
   const outside = shotModel(state, 4, -1, { x: 4, y: 2 });
@@ -859,7 +870,12 @@ test('only the defending keeper own box grants full saving reach and readiness',
   assert.ok(inBox.reach > outside.reach);
   assert.ok(inBox.saveGivenOnTarget > outside.saveGivenOnTarget);
   assert.ok(inBox.probability < outside.probability);
-  assert.equal(shotModel(state, 4, -1, { x: 4, y: 14 }).keeperInBox, false, 'the opponent box is not the keeper own box');
+  assert.equal(outside.reach, 0);
+  assert.equal(outside.saveGivenOnTarget, 0);
+  const otherBox = shotModel(state, 4, -1, { x: 4, y: 14 });
+  assert.equal(otherBox.keeperInBox, false, 'the opponent box is not the keeper own box');
+  assert.equal(otherBox.reach, 0);
+  assert.equal(otherBox.saveProbability, 0);
 });
 
 test('shot model probabilities stay finite and total one across all goals and keeper squares', () => {

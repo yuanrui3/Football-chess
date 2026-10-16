@@ -1,4 +1,4 @@
-import {createGame, legalMoves, legalKicks, applyMove, applyKick, skipMove, chooseAIAction, currentTeam, BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, isBox, shotChance, shotModel, offsideInfo, LONG_TACKLE_RANGE, DRIBBLE_RANGE, STALLING_RULE, ACTION_SECONDS, actionTimeout, progressInfo, positionActions, normalizeGame} from './engine.js?v=5592db35b1fa';
+import {createGame, legalMoves, legalKicks, applyMove, applyKick, skipMove, chooseAIAction, currentTeam, BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, isBox, shotChance, shotModel, offsideInfo, LONG_TACKLE_RANGE, DRIBBLE_RANGE, STALLING_RULE, ACTION_SECONDS, actionTimeout, progressInfo, positionActions, normalizeGame} from './engine.js?v=6a80c4905886';
 import {createMatchClock, restoreMatchClock, tickMatchClock, settleMatchClock, rewindMatchClock} from './match-clock.js?v=73476bff5019';
 
 const $ = id => document.getElementById(id);
@@ -18,6 +18,7 @@ const percent = chance => `${Math.round(chance*100)}%`;
 const shotPercent = chance => `${(chance*100).toFixed(1)}%`;
 const kickPhase = () => ['kick','kickoff','keeperRelease'].includes(game.phase);
 const positionPhase = () => ['attackMove','defendMove'].includes(game.phase);
+const keeperCanReact = () => {const king=game.pieces.find(p=>p.type==='K'&&p.team===currentTeam(game));return !!king&&GOAL_FILES.includes(king.x)&&(king.team==='white'?king.y>=H-2:king.y<=1);};
 const ballSVG = '<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18" fill="#fff9e9" stroke="#23372f" stroke-width="1"/><path d="M20 11l9 6-3 10H14l-3-10zM3 17l8 0M29 17l8 0M20 11V2M14 27l-5 8M26 27l5 8" fill="#25392e" stroke="#25392e" stroke-width="1.5"/></svg>';
 let game = createGame();
 let stage='setup',paused=false,remaining=600,duration=10,flipped=false;
@@ -155,7 +156,7 @@ function renderActionContext(selected){
   else if(stage==='setup'){
     kind='setup';title=selected?'Arrange the formation':'Three ways to play';
     rule=selected?`Without the ball: ${MOVE_PATTERNS[selected.type]}. Dribble: ${DRIBBLE_PATTERNS[selected.type]}. ${KICK_PATTERNS[selected.type]}. Setup placement follows the starting-formation rules.`:'Move without the ball to find space. Dribble to carry it. Pass or shoot to send the ball while the player stays.';
-  }else if(reacting){kind='keeper';title='Keeper reaction';rule='The shot is already in flight. Move only the defending king one square, or hold. This extra reaction is separate from ordinary positioning.';}
+  }else if(reacting){kind='keeper';title=keeperCanReact()?'Keeper reaction':'Resolve shot';rule=keeperCanReact()?'The shot is already in flight. Move only the defending king one square, or hold. This extra reaction is separate from ordinary positioning.':'The king is outside its own box and has no saving reach or extra reaction. Resolve the committed shot; ordinary re-entry into the box restores goalkeeper abilities.';}
   else if(game.restart){kind='pass';title=selected?.id===game.restart.takerId&&!kicking?'Restart taker · locked':RESTART_NAMES[game.restart.type];rule=restartGuide();}
   else if(kicking&&selected){kind='pass';title='Pass / shoot';rule=`${pieceLabel(selected)} stays at ${coord(selected.x,selected.y)}; only the ball travels. ${KICK_PATTERNS[selected.type]}.${selected.type==='N'?' A goal cell must be one L-shaped jump away to shoot. Knights enter both boxes and use the same scoring model as every other piece.':' Kicks can travel beyond 10 squares with reduced pass accuracy.'}`;}
   else if(positionPhase()&&freePawnMode){kind='offball';title='Free pawn · off ball';rule='Reposition one pawn that does not carry the ball by one square forward, back, left, or right. It may collect a loose ball, but cannot dribble or tackle. A carrying pawn uses the single Dribble action.';}
@@ -189,7 +190,7 @@ function outcomeBreakdown(model){
   const goal=Math.round(model.goalProbability*1000),saved=Math.round(model.saveProbability*1000),wide=1000-goal-saved;
   return `Goal ${(goal/10).toFixed(1)}% · Save ${(saved/10).toFixed(1)}% · Wide ${(wide/10).toFixed(1)}%`;
 }
-function shotGeometry(model){return `Shot ${model.distance.toFixed(1)} squares · Keeper ${model.keeperPathDistance.toFixed(1)} squares off path · ${model.keeperInBox?'Full box reach':'Reduced outside-box reach'}${model.saveProbability>0?` · Parry if stopped: ${percent(model.parryGivenSave)}`:''}`;}
+function shotGeometry(model){return `Shot ${model.distance.toFixed(1)} squares · Keeper ${model.keeperPathDistance.toFixed(1)} squares off path · ${model.keeperInBox?'Full box reach':'No saving reach outside own box'}${model.saveProbability>0?` · Parry if stopped: ${percent(model.parryGivenSave)}`:''}`;}
 function showShotModel(model,caption='chance to score with the keeper here'){
   $('shotOdds').textContent=`${shotPercent(model.probability)} ${caption}`;
   $('shotBreakdown').textContent=outcomeBreakdown(model);
@@ -260,7 +261,7 @@ function renderBoard(){
 function resetKickDetails(){
   if(game.phase==='keeperReact'&&game.pendingShot){
     const shot=game.pendingShot;showShotModel(shotModel(game,shot.x,shot.y));
-    $('kickDetails').textContent='Select a lit square to move the keeper, or hold position to resolve the shot.';
+    $('kickDetails').textContent=keeperCanReact()?'Select a lit square to move the keeper, or hold position to resolve the shot.':'The king is outside its own box. Resolve the shot; no goalkeeper move or save is available.';
   }else{clearKeeperOverlay();$('kickDetails').textContent=game.restart&&stage==='playing'?restartGuide():stage==='setup'?'Move a player to find space · Dribble to carry the ball · Pass / shoot to send it.':kickPhase()&&stage==='playing'?'Pass / shoot: the player stays. OFF marks offside involvement. Long inaccurate balls may cross a boundary. Hover or focus to preview odds.':game.phase==='attackMove'?'Attack: one dribble + one off-ball move + one optional free pawn action, in any order. The dashed line previews offside.':'Defence: one regular move or tackle + one optional free pawn action. The dashed line previews offside.';}
 }
 function render(){
@@ -276,15 +277,15 @@ function render(){
   $('setupPanel').hidden=stage!=='setup';$('turnPanel').hidden=stage==='setup';
   renderRestart();renderProgress();
   $('opponentControls').hidden=game.mode!=='solo';$('computerRecap').hidden=!lastComputerAction||game.mode!=='solo';$('computerActionText').textContent=lastComputerAction?.summary||'';
-  $('difficultyHelp').textContent=aiDifficulty==='tactical'?'Plans ahead against your replies and weighs risky outcomes.':'Reacts to the current position with straightforward tactics.';
+  $('difficultyHelp').textContent=aiDifficulty==='tactical'?'Plans ahead against your replies and weighs risky outcomes.':'Builds passing lanes, protects the ball, and covers likely receivers.';
   $('whiteScore').textContent=game.score.white;$('blackScore').textContent=game.score.black;
   $('whiteSub').textContent=(game.mode==='solo'?'YOU':'PLAYER 1')+' · ATTACKING '+(flipped?'↓':'↑');$('blackSub').textContent=(game.mode==='solo'?'COMPUTER':'PLAYER 2')+' · ATTACKING '+(flipped?'↑':'↓');
   $('turnNumber').textContent=`POSSESSION ${String(game.turn).padStart(2,'0')}`;
   let heading,help,status;
   if(stage==='finished'){heading='Full time.';help='The final whistle has sounded. Start a new match to play again.';status='Full time. Thanks for playing.';}
   else if(paused){heading='Take a breath.';help='The match is paused. Resume when you’re ready.';status='Match paused.';}
-  else if(isComputer()&&stage==='playing'){heading=reacting?'Computer’s keeper.':'Computer’s turn.';help=reacting?'Obsidian can move its keeper once before the shot is resolved.':game.restart?restartGuide():aiDifficulty==='tactical'?'Obsidian is planning ahead and considering your replies.':kicking?'Obsidian is choosing a pass or shot.':'Obsidian is choosing its remaining positioning actions.';status=`Obsidian · ${aiDifficulty==='tactical'?'Tactical':'Casual'} · thinking…`;}
-  else if(reacting){heading='Position your keeper.';help='The shot is committed. Move your king one square, or hold position. The displayed scoring chance is then rolled.';status=`${TEAM[acting]} · keeper reaction`;}
+  else if(isComputer()&&stage==='playing'){heading=reacting?'Computer’s keeper.':'Computer’s turn.';help=reacting?(keeperCanReact()?'Obsidian can move its keeper once before the shot is resolved.':'Obsidian’s king is outside its own box. The shot resolves without a goalkeeper reaction.'):game.restart?restartGuide():aiDifficulty==='tactical'?'Obsidian is planning ahead and considering your replies.':kicking?'Obsidian is choosing a pass or shot.':'Obsidian is choosing its remaining positioning actions.';status=`Obsidian · ${aiDifficulty==='tactical'?'Tactical':'Casual'} · thinking…`;}
+  else if(reacting){heading=keeperCanReact()?'Position your keeper.':'Resolve the shot.';help=keeperCanReact()?'The shot is committed. Move your king one square, or hold position. The displayed scoring chance is then rolled.':'Your king is outside its own box, so it has no extra reaction or saving reach. Resolve the shot using the displayed chance.';status=`${TEAM[acting]} · ${keeperCanReact()?'keeper reaction':'shot resolution'}`;}
   else if(game.restart){heading=RESTART_NAMES[game.restart.type]+'.';help=restartGuide();status=`${TEAM[acting]} · ${RESTART_NAMES[game.restart.type]} · ${kicking?'take the restart':'positioning'}`;}
   else if(game.phase==='keeperRelease'){heading='King must release.';help='A teammate passed to the king. Choose an immediate kick; the king cannot move or hold this back-pass.';status=`${TEAM[acting]} · immediate keeper kick`;}
   else if(game.phase==='kickoff'){heading=game.mode==='solo'?'Your kickoff.':TEAM[acting]+' kicks off.';help='Choose a pass destination, or a lit goal cell to commit a shot.';status='Choose a pass to start play.';}
@@ -304,8 +305,8 @@ function render(){
   $('normalMoveBtn').textContent=game.restart||attackingRound?'Off-ball move':'Move / tackle';
   $('normalMoveBtn').setAttribute('aria-pressed',String(!freePawnMode&&!dribbleMode));$('dribbleBtn').setAttribute('aria-pressed',String(dribbleMode));$('pawnMoveBtn').setAttribute('aria-pressed',String(freePawnMode));
   $('shotPanel').hidden=!reacting||stage!=='playing';
-  if(reacting&&game.pendingShot)$('shotSummary').textContent=`Shot aimed at column ${FILES[game.pendingShot.x].toUpperCase()}. ${TEAM[acting]} may move its king one square before resolution.`;
-  $('skipBtn').hidden=kicking||stage==='finished';$('skipBtn').disabled=blocked();$('skipBtn').textContent=reacting?'Hold keeper · resolve shot':'End positioning · skip unused →';
+  if(reacting&&game.pendingShot)$('shotSummary').textContent=`Shot aimed at column ${FILES[game.pendingShot.x].toUpperCase()}. ${keeperCanReact()?`${TEAM[acting]} may move its king one square before resolution.`:'The defending king is outside its own box and has no goalkeeper reaction.'}`;
+  $('skipBtn').hidden=kicking||stage==='finished';$('skipBtn').disabled=blocked();$('skipBtn').textContent=reacting?(keeperCanReact()?'Hold keeper · resolve shot':'Resolve shot · king outside box'):'End positioning · skip unused →';
   $('pauseBtn').disabled=stage!=='playing';$('pauseBtn').textContent=paused?'▶ Resume':'Ⅱ Pause';$('finishBtn').disabled=stage!=='playing'||duration>0;$('finishBtn').title=duration>0?'Timed matches end after the clock and final chance settle.':'Finish this untimed match.';$('undoBtn').disabled=!history.length||stage!=='playing'||anyDialog();
   document.body.classList.toggle('thinking',stage==='playing'&&isComputer()&&!paused);document.body.classList.toggle('paused',paused&&stage==='playing');
   const carrier=game.pieces.find(p=>p.id===game.ball.carrierId);
@@ -389,7 +390,7 @@ function scheduleAI(){
     aiTimer=null;if(!stillCurrent())return;
     if(aiDifficulty==='tactical'&&typeof window.Worker==='function'){
       try{
-        aiWorker=new window.Worker(new URL('./ai-worker.js?v=457f2fb3c1ff',import.meta.url),{type:'module',name:'football-chess-tactical'});
+        aiWorker=new window.Worker(new URL('./ai-worker.js?v=b3c43fc4556a',import.meta.url),{type:'module',name:'football-chess-tactical'});
         aiWorker.onmessage=event=>{if(!stillCurrent()||event.data?.requestId!==requestId)return;if(event.data.error)fallback();else receive(event.data.action);};
         aiWorker.onerror=event=>{event.preventDefault?.();fallback();};
         aiWatchdog=setTimeout(()=>fallback('casual'),4000);
@@ -421,7 +422,7 @@ $('board').addEventListener('click',event=>{
   try{
     if(target){if(kickPhase())commit(applyKick(game,x,y));else commit(applyMove(game,selectedId,x,y,{freePawn:positionPhase()&&freePawnMode}));return;}
     if(kickPhase()){toast(game.restart?.type==='throwIn'?'Choose a highlighted throw target within 10 squares. Throws cannot score directly.':'Choose a highlighted pass destination or a lit goal cell.');return;}
-    if(game.phase==='keeperReact'){toast('Only the king may react to this shot. Choose a lit square or hold the keeper.');return;}
+    if(game.phase==='keeperReact'){toast(keeperCanReact()?'Only the king may react to this shot. Choose a lit square or hold the keeper.':'The king is outside its own box and cannot react. Choose Resolve shot.');return;}
     if(piece&&piece.team===currentTeam(game)){
       if(freePawnMode&&(piece.type!=='P'||piece.id===game.ball.carrierId)){toast('Choose a pawn without the ball for the free action. A carrying pawn must use Dribble, once per attacking turn.');return;}
       if(!freePawnMode){const actions=positionActions(game),carrying=piece.id===game.ball.carrierId;

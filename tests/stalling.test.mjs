@@ -416,7 +416,7 @@ test('a same-team catch of an own-goal attempt cannot erase the deadline, while 
   }
 });
 
-test('a corner back-pass followed by a forced king own-goal shot keeps the entire restart chain excluded', () => {
+test('a corner back-pass keeps the forced own-goal shot excluded while an outside king cannot catch it', () => {
   for(const team of ['white','black']) {
     const transform=pair=>team==='white'?pair:mirror(pair);
     const state=fixture({team,suffix:'Q',phase:'kick',rounds:2,positions:{
@@ -431,12 +431,21 @@ test('a corner back-pass followed by a forced king own-goal shot keeps the entir
     assert.equal(pending.phase,'keeperReact');
     assert.equal(pending.ballProgress.excludeRelease,true,'declaration preserves the restart exclusion through the keeper reaction');
     const model=engine.shotModel(pending,...target);
-    assert.ok(model.caughtSaveProbability>0);
-    const caught=skipMove(pending,{roll:model.goalProbability+model.cornerProbability+model.caughtSaveProbability/2});
-    assert.equal(caught.lastAction.type,'save');
-    assert.equal(caught.attack,team);
-    assert.equal(caught.restart,null);
-    freshProgress(caught);
+    assert.equal(model.keeperInBox,false,'the corner can reach this king at midfield, outside its own box');
+    for(const key of ['saveProbability','cornerProbability','caughtSaveProbability']) assert.equal(model[key],0,key);
+    assert.deepEqual(legalMoves(pending,`${team}-K`),[],'the outside king gets no extra keeper move');
+    for(const [roll,outcome] of [[0,'goal'],[.999999,'shotMiss']]) {
+      const resolved=skipMove(pending,{roll});
+      assert.equal(resolved.lastAction.type,outcome);
+      if(outcome==='goal') {
+        assert.equal(resolved.attack,team,'the conceding team takes kickoff after its own goal');
+        assert.equal(resolved.restart,null);
+      } else {
+        assert.equal(resolved.attack,team==='white'?'black':'white');
+        assert.equal(resolved.restart.type,'corner','a last touch by the defending side across its own end line awards the opponents a corner');
+      }
+      freshProgress(resolved);
+    }
   }
 });
 

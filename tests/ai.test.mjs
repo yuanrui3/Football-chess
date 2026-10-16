@@ -319,33 +319,18 @@ function guaranteedTackles(state) {
       .map(move => ({ type: 'move', pieceId: piece.id, x: move.x, y: move.y, freePawn: false })));
 }
 
-test('Tactical avoids an attacking dribble exposed to an immediate short-range queen reply, at either end', () => {
+test('both levels avoid an attacking dribble exposed to an immediate short-range queen reply, at either end', () => {
   const original = fixture({
     carrier: 'white-B1',
     positions: { 'white-B1': [9, 7], 'white-R1': [9, 10], 'black-R1': [8, 2] },
     budget: { normalUsed: true, pawnUsed: true, dribbleUsed: false },
   });
-  for (const state of [original, mirroredState(original)]) {
-    const casualAction = assertPureChoice(state, 'casual');
-    const casualNext = applyAction(state, casualAction);
-    assert.equal(casualNext.phase, 'defendMove');
-    const replies = guaranteedTackles(casualNext);
-    assert.ok(replies.length, 'the greedy attack has a concrete legal possession-losing reply');
-    assert.ok(replies.some(reply => {
-      const defender = casualNext.pieces.find(piece => piece.id === reply.pieceId);
-      return defender.type === 'Q' && Math.max(Math.abs(defender.x - casualNext.ball.x), Math.abs(defender.y - casualNext.ball.y)) <= 5;
-    }), 'the refutation uses the new five-square tackle reach');
-    const refutation = applyAction(casualNext, replies[0]);
-    assert.notEqual(refutation.attack, state.attack);
-    assert.equal(refutation.ball.carrierId, replies[0].pieceId, 'the opponent wins the ball without relying on randomness');
-
-    const tacticalAction = assertPureChoice(state, 'tactical');
-    assert.notDeepEqual(tacticalAction, casualAction);
-    const tacticalNext = applyAction(state, tacticalAction);
-    assert.equal(tacticalNext.phase, 'defendMove', 'compare both decisions before the same opponent reply opportunity');
-    assert.equal(tacticalNext.attack, state.attack);
-    assert.ok(tacticalNext.ball.carrierId);
-    assert.equal(guaranteedTackles(tacticalNext).length, 0, 'the stronger level retains possession outside immediate tackling lines');
-    assertIntegrity(tacticalNext);
+  for (const state of [original, mirroredState(original)]) for (const difficulty of DIFFICULTIES) {
+    const next = applyAction(state, assertPureChoice(state, difficulty));
+    assert.equal(next.phase, 'defendMove', 'compare decisions before the same opponent reply opportunity');
+    assert.equal(next.attack, state.attack);
+    assert.ok(next.ball.carrierId);
+    assert.equal(guaranteedTackles(next).length, 0, `${difficulty} retains possession outside immediate tackling lines`);
+    assertIntegrity(next);
   }
 });
