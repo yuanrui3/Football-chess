@@ -67,28 +67,34 @@ function assertRestart(state, type, team) {
   assert.equal(state.offside, null);
 }
 
-test('knights may move and dribble into both penalty boxes at either end', () => {
+test('knights may enter both boxes off the ball but cannot dribble into either', () => {
   for (const team of ['white', 'black']) for (const ballCarrier of [false, true]) {
     for (const [origin, target] of [[[3, 3], [4, 1]], [[3, 13], [4, 15]]]) {
       const state = fixture({team, phase: 'attackMove', carrier: ballCarrier ? 'white-N1' : 'white-Q', positions: {'white-K': [8, 14], 'white-N1': origin}});
       const id = idFor('white-N1', team), destination = pointFor(target, team);
       assert.equal(isBox(destination.x, destination.y), true);
+      if(ballCarrier){
+        assert.equal(hasMove(state,id,destination.x,destination.y),false);
+        assert.throws(()=>applyMove(state,id,destination.x,destination.y),/not a legal move/);continue;
+      }
       assert.ok(hasMove(state, id, destination.x, destination.y));
       const next = applyMove(state, id, destination.x, destination.y);
       assert.deepEqual(next.pieces.find(piece => piece.id === id), {...state.pieces.find(piece => piece.id === id), ...destination});
-      if (ballCarrier) assert.deepEqual(next.ball, {...destination, carrierId: id});
-      else assert.deepEqual(next.ball, state.ball);
+      assert.deepEqual(next.ball, state.ball);
       assert.equal(next.pieces.length, 22);
     }
   }
 });
 
-test('queen, rook, bishop, and pawn may now enter a penalty box', () => {
+test('queen, rook, bishop and pawn enter a box off the ball while their carrying entry is denied', () => {
   for (const team of ['white', 'black']) {
     for (const [id, origin] of [['white-Q', [4, 3]], ['white-R1', [5, 3]], ['white-B1', [4, 3]], ['white-P1', [5, 3]]]) {
-      const state = fixture({team, phase: 'attackMove', positions: {[id]: origin}});
+      const state = fixture({team, phase: 'attackMove', carrier:'white-N2',positions: {[id]: origin}});
       const target = pointFor([5, 2], team);
       assert.equal(hasMove(state, idFor(id, team), target.x, target.y), true);
+      const carrying=clone(state),carrier=carrying.pieces.find(piece=>piece.id===idFor(id,team));
+      carrying.ball={x:carrier.x,y:carrier.y,carrierId:carrier.id};
+      assert.equal(hasMove(carrying,carrier.id,target.x,target.y),false);
     }
   }
 });
@@ -200,7 +206,7 @@ test('players in their own half or exactly on halfway are onside', () => {
 
 test('the second-last opponent is computed from all eleven players rather than assuming the keeper is last', () => {
   for (const team of ['white', 'black']) {
-    const state = fixture({team, positions: {'black-K': [8, 10], 'black-R1': [8, 0], 'black-R2': [9, 5]}});
+    const state = fixture({team, positions: {'black-K': [8, 10], 'black-R1': [9, 0], 'black-R2': [9, 5]}});
     const info = offsideInfo(state);
     assert.equal(info.secondLastY, team === 'white' ? 5 : BOARD_HEIGHT-1-5);
     assert.equal(info.players.find(piece => piece.id === idFor('white-R1', team)).offside, true);

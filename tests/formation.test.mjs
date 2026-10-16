@@ -63,7 +63,7 @@ test('both modes and kickoff choices use the selected asymmetric formation with 
     assert.equal(currentTeam(state), kickoff);
     assert.deepEqual(state.ball, {x: queen.x, y: queen.y, carrierId: queen.id});
     assert.deepEqual(state.positionBudget, freshBudget());
-    assert.equal(state.rulesVersion, 14, 'the larger pitch uses the current rules version');
+    assert.equal(state.rulesVersion, 15, 'the larger pitch uses the current rules version');
   }
 });
 
@@ -201,7 +201,7 @@ test('loading or undoing an active custom position preserves every coordinate an
       assert.deepEqual(snapshot, before);
       assert.deepEqual(restored, before, `${mode} ${phase}: changing defaults must never rearrange a saved or undone match`);
       assert.deepEqual(normalizeGame(clone(restored)), restored);
-      assert.equal(restored.rulesVersion, 14);
+      assert.equal(restored.rulesVersion, 15);
     }
     const legacy = clone(state);
     legacy.rulesVersion = 13;
@@ -209,7 +209,7 @@ test('loading or undoing an active custom position preserves every coordinate an
     const migrated = normalizeGame(legacy);
     assert.deepEqual(migrated.pieces, legacy.pieces, 'an older rule tag with current board dimensions preserves valid custom positions');
     assert.deepEqual(migrated.ball, legacy.ball);
-    assert.equal(migrated.rulesVersion, 14);
+    assert.equal(migrated.rulesVersion, 15);
     assert.equal(migrated.randomState, legacy.randomState);
   }
 });

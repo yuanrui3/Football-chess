@@ -1,0 +1,47 @@
+{
+  "scope": "Current rule implementation smoke only, not calibration or strength comparison",
+  "engineSHA256": "f8f4869965c49adf6d5e122846938531dc2404f52b373bb120cd54675abad59c",
+  "harnessSHA256": "f69dd6bc15aff12b9e70c230424c09aaa1a5b0e6a79b7433fd3c21a9c0e67bfd",
+  "foulsEnabled": true,
+  "seed": 3621279913,
+  "kickoff": "white",
+  "difficulties": [
+    "casual",
+    "tactical"
+  ],
+  "actionsPerGame": 120,
+  "matches": 2,
+  "rules": {
+    "board": [
+      14,
+      17
+    ],
+    "boxSize": [
+      6,
+      3
+    ],
+    "reservedGoalMouthCells": 8,
+    "outsideToBoxDribbleOrPassRun": false,
+    "passRunOptional": true,
+    "movePoints": 10,
+    "dribblePoints": 8,
+    "enteredBoxCellCost": 2,
+    "otherCellCost": 1,
+    "finishingAccuracyMultiplier": 1.15,
+    "unrealizedLeafShotThreat": 450,
+    "knightGoalMultiplier": 1
+  },
+  "coverageLimit": "Natural smoke has no shots, fouls, cards, or penalties; focused tests cover those branches. Natural pass-run: 3 Casual and 4 Tactical, all taken. Explicit decline is covered by focused tests.",
+  "tests": {
+    "command": "node --test tests/foul-simulation.test.mjs tests/simulation-stats.test.mjs",
+    "pass": 34,
+    "fail": 0
+  },
+  "replay": {
+    "actions": 240,
+    "exactFullStateReplay": true,
+    "legalMoveActions": 198,
+    "forbiddenDribbleOrRunBoxEntries": 0,
+    "occupancyValid": true
+  }
+}

@@ -27,7 +27,7 @@ function fixture(team='white',keeper=[6,3],phase='kick'){
 const goal=(team,x=5)=>team==='white'?{x,y:-1}:{x:W-1-x,y:H};
 
 test('shot model is version 12 and outside-keeper save parameters are zero',()=>{
-  assert.equal(E.SHOT_MODEL.version,12);
+  assert.equal(E.SHOT_MODEL.version,13);
   for(const key of ['outsideRadius','outsideDiveSpeed','outsideReactionDelay','outsideMaxSave'])assert.equal(E.SHOT_MODEL[key],0);
 });
 
@@ -36,7 +36,7 @@ for(const team of ['white','black']){
   test(`${team}: own-box boundaries alone enable probabilistic saves`,()=>{
     for(const keeper of E.BOX_FILES.flatMap(x=>Array.from({length:E.BOX_DEPTH},(_,y)=>[x,y]))){
       const state=fixture(team,keeper),target=goal(team),model=E.shotModel(state,target.x,target.y);
-      assert.equal(model.modelVersion,12);
+      assert.equal(model.modelVersion,13);
       assert.equal(model.keeperInBox,true);assert.ok(model.reach>0);assert.ok(model.saveProbability>0);
     }
     for(const keeper of [[3,0],[10,0],[3,1],[10,1],[3,2],[10,2],[5,E.BOX_DEPTH],[5,H-E.BOX_DEPTH]]){

@@ -480,12 +480,12 @@ test('blocked and unreachable knight challenges are rejected before consuming ra
   }
 });
 
-test('all outfield players can enter either goal area; kings can enter only their own', () => {
+test('outfield players can enter either box off the ball; kings enter only their own and carriers cannot dribble into either', () => {
   for (const [id, from, to] of [
     ['white-B1',[3,BOX_DEPTH],[4,BOX_DEPTH-1]],['white-R1',[6,BOX_DEPTH],[6,BOX_DEPTH-1]],
     ['white-P1',[7,BOARD_HEIGHT-BOX_DEPTH-1],[7,BOARD_HEIGHT-BOX_DEPTH]],
   ]) {
-    const state = fixture({ positions: { [id]: from } });
+    const state = fixture({ carrier:id==='white-R1'?'white-Q':'white-R1',positions: { [id]: from } });
     assert.equal(hasMove(state,id,...to),true);
   }
   const state = fixture({ positions: { 'white-K': [3, 2] } });
@@ -498,9 +498,12 @@ test('all outfield players can enter either goal area; kings can enter only thei
     ['black', 'black-N1', [8, 3], [7, 1]],
     ['black','black-N1',[10,BOARD_HEIGHT-4],[9,BOARD_HEIGHT-2]],
   ]) {
-    const knight = fixture({ attack, carrier, positions: { [carrier]: from } });
-    assert.equal(hasMove(knight, carrier, ...to), true, `${carrier} can enter either box while dribbling`);
+    const knight = fixture({ attack, carrier:`${attack}-R1`, positions: { [carrier]: from } });
+    assert.equal(hasMove(knight, carrier, ...to), true, `${carrier} can enter either box off the ball`);
     assertIntegrity(applyMove(knight, carrier, ...to));
+    const carrying=clone(knight),piece=carrying.pieces.find(piece=>piece.id===carrier);
+    carrying.ball={x:piece.x,y:piece.y,carrierId:carrier};
+    assert.equal(hasMove(carrying,carrier,...to),false,`${carrier} cannot jump into either box while carrying the ball`);
   }
 });
 
@@ -598,9 +601,9 @@ test('goal declarations wait for the defending goalkeeper before resolving the s
   assert.equal(reaction.phase, 'keeperReact');
   assert.equal(currentTeam(reaction), 'black');
   assert.ok(reaction.pendingShot);
-  assert.equal(reaction.rulesVersion,14);
+  assert.equal(reaction.rulesVersion,15);
   assert.deepEqual(reaction.pendingShot.from, { x: 5, y: 4 });
-  assert.equal(reaction.lastAction.shotModel.modelVersion,12);
+  assert.equal(reaction.lastAction.shotModel.modelVersion,13);
   assert.deepEqual(reaction.lastAction.shotModel, shotModel(state, 5, -1));
   assert.deepEqual(reaction.score, { white: 0, black: 0 });
   assert.deepEqual(legalKicks(reaction), []);
@@ -659,7 +662,9 @@ test('outfield players intercept ordinary passes and give shots a probabilistic 
 test('the shot preview exposes Euclidean distance, goal-plane geometry and complete probabilities', () => {
   const state = fixture({ phase: 'kick', positions: { 'white-R1': [5, 6], 'black-K': [6, 0] } });
   const model = shotModel(state, 5, -1);
-  assert.equal(model.modelVersion,12);
+  assert.equal(model.modelVersion,13);
+  assert.equal(SHOT_MODEL.finishingAccuracyMultiplier,1.15);
+  assert.equal(model.finishingAccuracyMultiplier,1.15);
   assert.deepEqual(model.origin, { x: 5, y: 6 });
   assert.deepEqual(model.target, { x: 5, y: -.5 });
   assert.equal(model.distance, 6.5);
@@ -671,7 +676,7 @@ test('the shot preview exposes Euclidean distance, goal-plane geometry and compl
   assert.equal(model.keeperInBox, true);
   almostEqual(model.reach, .4 + 1.3 * (1 - .15));
   almostEqual(model.postAngleFactor,.1+.9*model.goalOpeningRatio**1.5);
-  almostEqual(model.onTargetProbability,Math.max(.01,Math.min(.98,.98*Math.exp(-.018*6.5-.03*(6.5-3)**2)*model.postAngleFactor*model.wideAngleFactor*model.centralLaneFactor)));
+  almostEqual(model.onTargetProbability,Math.max(.01,Math.min(.98,.98*1.15*Math.exp(-.018*6.5-.03*(6.5-3)**2)*model.postAngleFactor*model.wideAngleFactor*model.centralLaneFactor)));
   almostEqual(model.goalProbability, model.onTargetProbability * (1 - model.saveGivenOnTarget));
   almostEqual(model.saveProbability, model.onTargetProbability * model.saveGivenOnTarget);
   almostEqual(model.missProbability, 1 - model.onTargetProbability);
@@ -696,7 +701,7 @@ test('close shots are more dangerous while longer flight gives a fixed keeper mo
 });
 
 test('extra distance pressure starts beyond three squares with a shared close-shot distance curve', () => {
-  assert.equal(SHOT_MODEL.version,12);
+  assert.equal(SHOT_MODEL.version,13);
   assert.equal(SHOT_MODEL.distancePenaltyStart, 3);
   assert.equal(SHOT_MODEL.longShotDecay, .06);
   assert.equal(SHOT_MODEL.minOnTarget, .01);
@@ -707,7 +712,7 @@ test('extra distance pressure starts beyond three squares with a shared close-sh
     const model = shotModel(state, 5, -1);
     assert.ok(model.distance <= 3, 'short-range fixture stays inside the protected range');
     const angleCos = Math.cos(model.shotAngleDegrees * Math.PI / 180);
-    const expectedAccuracy=Math.max(.01,Math.min(.98,.98*Math.exp(-.018*model.distance)*(.65+.35*angleCos)*model.postAngleFactor*model.wideAngleFactor*model.centralLaneFactor));
+    const expectedAccuracy=Math.max(.01,Math.min(.98,.98*1.15*Math.exp(-.018*model.distance)*(.65+.35*angleCos)*model.postAngleFactor*model.wideAngleFactor*model.centralLaneFactor));
     almostEqual(model.baseOnTargetProbability, expectedAccuracy, 'close shots retain the shared distance curve and receive both goal-opening adjustments');
   }
 });
@@ -719,7 +724,7 @@ test('central straight shots lose accuracy progressively with range and settle a
     const model = shotModel(state, 6, -1);
     assert.ok(model.onTargetProbability <= previous, `accuracy cannot rise at distance ${model.distance}`);
     assert.equal(model.centralLaneFactor,1.15);
-    const expected=Math.max(.01,Math.min(.98,.98*Math.exp(-.018*model.distance-.06*Math.max(0,model.distance-3)**2)*model.postAngleFactor*model.wideAngleFactor*model.centralLaneFactor));
+    const expected=Math.max(.01,Math.min(.98,.98*1.15*Math.exp(-.018*model.distance-.06*Math.max(0,model.distance-3)**2)*model.postAngleFactor*model.wideAngleFactor*model.centralLaneFactor));
     almostEqual(model.onTargetProbability, expected);
     if(previous<.98&&model.onTargetProbability>.01)assert.ok(model.onTargetProbability<previous,'accuracy strictly decreases between its explicit cap and floor');
     previous = model.onTargetProbability;
@@ -733,12 +738,12 @@ test('an ordinary midfield shot retains strong range pressure before and after k
   const reaction = applyKick(state, 5, -1);
   const after = [held, ...legalMoves(reaction, 'black-K').map(move => shotModel(reaction, 5, -1, move))];
   const bestReaction = Math.min(...after.map(model => model.goalProbability));
-  const previousAccuracy = .98 * Math.exp(-.018 * held.distance);
+  const previousAccuracy = Math.max(.01,Math.min(.98,.98*1.15*Math.exp(-.018*held.distance)*held.postAngleFactor*held.wideAngleFactor*held.centralLaneFactor));
   const previousHoldChance = previousAccuracy * (1 - held.saveGivenOnTarget);
   almostEqual(held.distance,8.5);
-  assert.ok(previousHoldChance>.57&&previousHoldChance<.58,'removing range pressure would make this true midfield attempt excessively strong');
-  assert.ok(held.goalProbability>.09&&held.goalProbability<.10,'holding keeper concedes less than 10%');
-  assert.ok(bestReaction>.03&&bestReaction<.04,'best keeper reaction reduces this midfield attempt below 4%');
+  assert.ok(previousHoldChance>.63&&previousHoldChance<.64,'removing range pressure while retaining the finishing and angle adjustments would make this midfield attempt excessively strong');
+  assert.ok(held.goalProbability>.10&&held.goalProbability<.11,'the higher finishing baseline still limits the holding-keeper chance to about 10%');
+  assert.ok(bestReaction>.04&&bestReaction<.05,'best keeper reaction reduces this midfield attempt below 5%');
   assert.ok(held.goalProbability < previousHoldChance / 3, 'range penalty cuts midfield scoring chance by more than two thirds');
 });
 
@@ -778,7 +783,7 @@ test('parry splitting preserves the established goal, total-save and miss probab
   for (const [origin, keeper] of [[[5, 3], [6, 0]], [[5, 7], [7, 0]], [[5, 12], [5, 1]]]) {
     const state = fixture({ phase: 'kick', positions: { 'white-R1': origin, 'black-K': keeper } });
     const model = shotModel(state, 5, -1);
-    const onTarget=Math.max(.01,Math.min(.98,.98*Math.exp(-.018*model.distance-.03*Math.max(0,model.distance-3)**2)*model.postAngleFactor*model.wideAngleFactor*model.centralLaneFactor));
+    const onTarget=Math.max(.01,Math.min(.98,.98*1.15*Math.exp(-.018*model.distance-.03*Math.max(0,model.distance-3)**2)*model.postAngleFactor*model.wideAngleFactor*model.centralLaneFactor));
     const time = (origin[1] - keeper[1]) / 6;
     const reach = .4 + 1.3 * Math.max(0, time - .15);
     const saveGivenTarget = .94 * (1 - Math.exp(-(.35 + time) / .45)) * Math.exp(-((Math.abs(keeper[0] - origin[0]) / reach) ** 2));
@@ -860,7 +865,7 @@ test('angled shots have a lower on-target probability than straight shots', () =
   almostEqual(angled.distance, Math.hypot(2, 7.5));
   almostEqual(angled.shotAngleDegrees, Math.atan2(2, 7.5) * 180 / Math.PI);
   assert.ok(angled.onTargetProbability < straight.onTargetProbability);
-  almostEqual(angled.onTargetProbability,Math.max(.01,Math.min(.98,.98*Math.exp(-.018*angled.distance-.03*(angled.distance-3)**2)*(.65+.35*Math.cos(angled.shotAngleDegrees*Math.PI/180))*angled.postAngleFactor*angled.wideAngleFactor*angled.centralLaneFactor)));
+  almostEqual(angled.onTargetProbability,Math.max(.01,Math.min(.98,.98*1.15*Math.exp(-.018*angled.distance-.03*(angled.distance-3)**2)*(.65+.35*Math.cos(angled.shotAngleDegrees*Math.PI/180))*angled.postAngleFactor*angled.wideAngleFactor*angled.centralLaneFactor)));
 });
 
 test('the keeper is compared with the finite shot segment and cannot save from behind the shooter', () => {
@@ -908,7 +913,7 @@ test('shot model probabilities stay finite and total one across all goals and ke
       const state=fixture({phase:'kick',attack,carrier:shooter,positions:{[shooter]:origin,[keeper]:[6,attack==='white'?0:BOARD_HEIGHT-1]}});
       for(const x of GOAL_FILES)for(const position of [{x:4,y:0},{x:9,y:1},{x:10,y:8},{x:4,y:BOARD_HEIGHT-1}]){
         const model=shotModel(state,x,attack==='white'?-1:BOARD_HEIGHT,position);
-        assert.equal(model.modelVersion,12);assert.ok(model.distance>0,'each sampled goal is the current external goal plane');
+        assert.equal(model.modelVersion,13);assert.ok(model.distance>0,'each sampled goal is the current external goal plane');
         for (const key of ['probability', 'saveProbability', 'missProbability', 'onTargetProbability', 'saveGivenOnTarget', 'keeperStretch', 'parryGivenSave', 'cornerProbability', 'caughtSaveProbability']) assert.ok(Number.isFinite(model[key]) && model[key] >= 0 && model[key] <= 1, key);
         for (const key of ['distance', 'keeperPathDistance', 'timeToKeeper', 'reach', 'shotAngleDegrees']) assert.ok(Number.isFinite(model[key]) && model[key] >= 0, key);
         almostEqual(model.goalProbability + model.saveProbability + model.missProbability + model.blockProbability, 1);
@@ -1080,7 +1085,7 @@ test('knights score only when a single L-shaped kick lands on a goal square', ()
     const mirror=([x,y])=>attack==='white'?[x,y]:[BOARD_WIDTH-1-x,BOARD_HEIGHT-1-y];
     const defending = attack === 'white' ? 'black' : 'white';
     for (const [origin, blockers] of [
-      [[4,1],[[4,0],[5,0]]],
+      [[4,1],[[4,0],[5,1]]],
       [[3,0],[[4,0],[4,1]]],
     ]) {
       const carrier = `${attack}-N1`, keeper = `${defending}-K`;
@@ -1089,7 +1094,8 @@ test('knights score only when a single L-shaped kick lands on a goal square', ()
         phase: 'kick', attack, carrier,
         positions: {
           [carrier]:mirror(origin),[keeper]:mirror([7,0]),
-          // Defending knights may occupy the expanded box along the jumped ray.
+          // Defenders occupy legal box squares beside the jump; the four
+          // goal-front cells themselves are reserved for the goalkeeper.
           [`${defending}-N1`]:mirror(blockers[0]),
           [`${defending}-N2`]:mirror(blockers[1]),
         },

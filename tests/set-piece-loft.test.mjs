@@ -109,7 +109,7 @@ for(const team of ['white','black']){
     const s=fixture({team,type:'goalKick',positions:{'white-Q':[6,5],'black-P1':[6,10],'black-N1':[4,3]}}),before=clone(s);
     for(const difficulty of ['casual','tactical']){
       const action=E.chooseAIAction(s,{difficulty}),target=pointFor([6,5],team);
-      assert.deepEqual(action,{type:'kick',x:target.x,y:target.y});
+      assert.deepEqual(action,{type:'kick',x:target.x,y:target.y,passRun:true});
       const k=record(s,[6,5],team);assert.equal(k.distance,11);assert.equal(k.accuracy,0.9);assertLoft(k,'black-P1',[6,10],team);
       assert.deepEqual(E.chooseAIAction({...clone(s),randomState:123456789},{difficulty}),action);
       const next=kick(s,[6,5],team,{roll:0});assert.equal(next.ball.carrierId,idFor('white-Q',team));assert.deepEqual(s,before);
@@ -119,6 +119,6 @@ for(const team of ['white','black']){
 
 test('current normalization keeps already valid saved positions and declared shots intact',()=>{
   const state=fixture({type:'corner',origin:[5,6]});state.restart=null;const pending=E.applyKick(state,5,-1);pending.rulesVersion=14;
-  const before=clone(pending),normalized=E.normalizeGame(pending);assert.equal(normalized.rulesVersion,14);
+  const before=clone(pending),normalized=E.normalizeGame(pending);assert.equal(normalized.rulesVersion,15);
   assert.deepEqual(normalized.pendingShot,before.pendingShot);assert.deepEqual(normalized.pieces,before.pieces);assert.equal(normalized.randomState,before.randomState);assert.deepEqual(pending,before);
 });

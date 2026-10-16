@@ -9,6 +9,7 @@ const other = team => team === 'white' ? 'black' : 'white';
 const budget = (normalUsed = false, pawnUsed = false, dribbleUsed = false) => ({normalUsed, pawnUsed, dribbleUsed});
 const mirror = ([x, y]) => [W-1-x, H-1-y];
 const point = (team, pair) => team === 'white' ? pair : mirror(pair);
+const pointObject = (team, pair) => {const [x,y]=point(team,pair);return {x,y};};
 const id = (team, suffix) => `${team}-${suffix}`;
 
 // Build a complete white-attacking position, then rotate it and exchange teams
@@ -83,7 +84,7 @@ function looseQueenPass(team) {
   const state = fixture({team, clear: [[11, 7], [3, 10], [9, 11]]});
   const passed = pass(state, team, [11, 7]);
   assert.equal(passed.ball.carrierId, null);
-  assert.deepEqual(passed.looseBallKickOrigin, {team, pieceId: id(team, 'Q')});
+  assert.deepEqual(passed.looseBallKickOrigin, {team, pieceId: id(team, 'Q'), from: pointObject(team,[1,7])});
   return passed;
 }
 
@@ -129,7 +130,7 @@ test('an intervening free pawn action cannot hide the kicker before an immediate
     let state = looseQueenPass(team);
     const seed = state.randomState;
     state = move(state, team, 'P2', [9, 11], {freePawn: true});
-    assert.deepEqual(state.looseBallKickOrigin, {team, pieceId: id(team, 'Q')});
+    assert.deepEqual(state.looseBallKickOrigin, {team, pieceId: id(team, 'Q'), from: pointObject(team,[1,7])});
     state = move(state, team, 'Q', [11, 7]);
     assert.equal(state.phase, 'defendMove', 'collection spends the final ordinary action and the otherwise unused dribble');
     assert.equal(state.looseBallKickOrigin, null);
@@ -144,7 +145,7 @@ test('a scattered pass retains its original kicker until collection and cannot o
     state = pass(state, team, [1, 0], {roll: .99, landing: {x: landingX, y: landingY}});
     assert.equal(state.lastAction.type, 'miss');
     assert.equal(state.ball.carrierId, null);
-    assert.deepEqual(state.looseBallKickOrigin, {team, pieceId: id(team, 'Q')});
+    assert.deepEqual(state.looseBallKickOrigin, {team, pieceId: id(team, 'Q'), from: pointObject(team,[1,12])});
     const seed = state.randomState;
     state = move(normalizeGame(clone(state)), team, 'Q', [1, 4]);
     assert.equal(state.lastAction.selfPassCollection, true);
@@ -228,8 +229,8 @@ test('version-nine migration infers an old loose pass only when the immediately 
     delete old.looseBallKickOrigin;
     const before = clone(old), migrated = normalizeGame(old);
     assert.deepEqual(old, before);
-    assert.equal(migrated.rulesVersion,14);
-    assert.deepEqual(migrated.looseBallKickOrigin, {team, pieceId: id(team, 'Q')});
+    assert.equal(migrated.rulesVersion,15);
+    assert.deepEqual(migrated.looseBallKickOrigin, {team, pieceId: id(team, 'Q'), from: pointObject(team,[1,7])});
     assert.equal(migrated.randomState, old.randomState);
     assert.deepEqual(normalizeGame(migrated), migrated);
     const collected = move(migrated, team, 'Q', [11, 7]);
@@ -348,11 +349,11 @@ test('saved pending knight shots refresh stale bonuses with the selected current
     legacy.lastAction.shotModel = {...legacy.lastAction.shotModel, probability: 1, goalProbability: 1, scoringMultiplier:99, modelVersion: 6};
     const before = clone(legacy), restored = normalizeGame(legacy);
     assert.deepEqual(legacy, before);
-    assert.equal(restored.rulesVersion,14);
+    assert.equal(restored.rulesVersion,15);
     assert.equal(restored.randomState, legacy.randomState);
     assert.equal(restored.pendingShot.shooterType, 'N', 'movement identity is retained independently of scoring strength');
     const details = shotModel(restored);
-    assert.equal(details.modelVersion,12);
+    assert.equal(details.modelVersion,13);
     assert.equal(engine.SHOT_MODEL.knightGoalMultiplier,1);
     assert.equal(details.scoringMultiplier,1);
     assert.equal(details.goalProbability,details.baseGoalProbability);

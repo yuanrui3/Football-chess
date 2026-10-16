@@ -19,5 +19,5 @@ export function fixture({team='white',type='Q',origin=[6,3],keeper=[8,0]}={}){
  state.ballProgress={team,anchorY:owner.y,rounds:0,pendingRelease:false,excludeRelease:false};return state;
 }
 export function model(state,file=6,keeper){const goal=point([file,-1],state.attack);return E.shotModel(state,goal.x,goal.y,keeper);}
-export const rawAccuracy=m=>.98*Math.exp(-.018*m.distance-m.distancePenaltyRate*Math.max(0,m.distance-3)**2)*(.65+.35*Math.cos(m.shotAngleDegrees*Math.PI/180))*m.postAngleFactor*m.wideAngleFactor*m.centralLaneFactor;
+export const rawAccuracy=m=>.98*E.SHOT_MODEL.finishingAccuracyMultiplier*Math.exp(-.018*m.distance-m.distancePenaltyRate*Math.max(0,m.distance-3)**2)*(.65+.35*Math.cos(m.shotAngleDegrees*Math.PI/180))*m.postAngleFactor*m.wideAngleFactor*m.centralLaneFactor;
 export const clampAccuracy=p=>Math.max(.01,Math.min(.98,p));

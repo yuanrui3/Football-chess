@@ -1,0 +1,7 @@
+{
+  "transitions": 120,
+  "sourceDifference": "Only unrealized Tactical leaf threat650 to450",
+  "identicalCasualActions": true,
+  "identicalLegalKicksAndModels": true,
+  "identicalFullStates": true
+}

@@ -1,0 +1,164 @@
+{
+  "matches": 4,
+  "goals": 2,
+  "goalsPerGame": 0.5,
+  "shots": 7,
+  "opponentGoalAttempts": 7,
+  "ownGoalAttempts": 0,
+  "meaningfulOpponentAttempts15": 7,
+  "meaningfulOpponentAttempts25": 5,
+  "opponentGoalXG": 2.9021534260543334,
+  "ownGoalXG": 0,
+  "resolvedShots": 7,
+  "unresolvedShots": 0,
+  "xG": 2.9021534260543334,
+  "goalsByType": {
+    "Q": 1,
+    "N": 1
+  },
+  "certainAtDeclare": 0,
+  "certainAfterKeeper": 0,
+  "certainEvenBestKeeper": 0,
+  "unanswerable": [],
+  "zeroGoalMatches": 2,
+  "highGoalMatches": 0,
+  "maxGoals": 1,
+  "maxRepeat": 1,
+  "turnovers": 40,
+  "stalls": 3,
+  "offsides": 3,
+  "corners": 2,
+  "blocks": 1,
+  "blockCorners": 1,
+  "blockPossessions": 0,
+  "attemptsThroughBodies": 1,
+  "blockxG": 0.44999999999999996,
+  "restartsTaken": 15,
+  "ordinaryRounds": 318,
+  "actions": 1920,
+  "actionsPerGoal": 960,
+  "meanPossessionActions": 43.63636363636363,
+  "longestPossessionActions": 165,
+  "goalsInBox": 2,
+  "goalsFromEndline": 1,
+  "goalOrigins": {
+    "5,0": 1,
+    "7,1": 1
+  },
+  "shotDistances": {
+    "le3": 6,
+    "from3to6": 1,
+    "over6": 0
+  },
+  "goalDistances": {
+    "le3": 2,
+    "from3to6": 0,
+    "over6": 0
+  },
+  "first8": {
+    "goals": 2,
+    "certain": 0
+  },
+  "kingBonusMoves": 157,
+  "pawnBonusMoves": 557,
+  "restartActions": 75,
+  "cornerRestartActions": 10,
+  "maxConsecutiveCorners": 1,
+  "ms": 866075.0161659999,
+  "scores": [
+    "0-1",
+    "0-0",
+    "0-1",
+    "0-0"
+  ],
+  "scope": "Historical f03, before reserved goal-mouth cells, box entry bans, pass-and-run, and AI own-goal-shot filtering.",
+  "fouls": 4,
+  "foulsWon": 4,
+  "yellowCards": 3,
+  "redCards": 0,
+  "secondYellows": 0,
+  "penaltiesWon": 0,
+  "penaltiesTaken": 0,
+  "penaltyGoals": 0,
+  "penaltyFailures": 0,
+  "penaltiesSaved": 0,
+  "games": [
+    {
+      "seed": 2488063171,
+      "kickoff": "black",
+      "actions": 480,
+      "score": {
+        "white": 0,
+        "black": 1
+      },
+      "elapsedMs": 254723.27097800002,
+      "error": null,
+      "activePlayers": {
+        "white": 11,
+        "black": 11
+      },
+      "dismissedPlayers": {
+        "white": 0,
+        "black": 0
+      }
+    },
+    {
+      "seed": 2488063171,
+      "kickoff": "white",
+      "actions": 480,
+      "score": {
+        "white": 0,
+        "black": 0
+      },
+      "elapsedMs": 271988.02301999996,
+      "error": null,
+      "activePlayers": {
+        "white": 11,
+        "black": 11
+      },
+      "dismissedPlayers": {
+        "white": 0,
+        "black": 0
+      }
+    },
+    {
+      "seed": 729413587,
+      "kickoff": "black",
+      "actions": 480,
+      "score": {
+        "white": 0,
+        "black": 1
+      },
+      "elapsedMs": 171464.887717,
+      "error": null,
+      "activePlayers": {
+        "white": 11,
+        "black": 11
+      },
+      "dismissedPlayers": {
+        "white": 0,
+        "black": 0
+      }
+    },
+    {
+      "seed": 729413587,
+      "kickoff": "white",
+      "actions": 480,
+      "score": {
+        "white": 0,
+        "black": 0
+      },
+      "elapsedMs": 167898.834451,
+      "error": null,
+      "activePlayers": {
+        "white": 11,
+        "black": 11
+      },
+      "dismissedPlayers": {
+        "white": 0,
+        "black": 0
+      }
+    }
+  ],
+  "exactReplay": true
+}

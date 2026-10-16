@@ -106,7 +106,7 @@ test('Casual preserves a strong finish through positioning instead of repeating 
   assert.ok(before > 0.65, 'a clear close chance survives the best legal keeper reaction');
   // Retreating one row abandons a substantially better existing finish.
   const abandoned = e.applyMove(original, 'white-Q', 6, 4);
-  assert.ok(bestFinish(abandoned) < before - 0.15);
+  assert.ok(bestFinish(abandoned) < before - 0.10, 'retreating loses at least ten percentage points under the current finishing model');
   for (const start of [original, mirrored(original)]) {
     const initial = bestFinish(start);
     const {state, actions} = finishAttackPositioning(start);

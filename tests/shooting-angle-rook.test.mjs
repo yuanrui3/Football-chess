@@ -5,7 +5,7 @@ const close=(a,b,label='')=>assert.ok(Math.abs(a-b)<1e-10,`${label}: ${a} != ${b
 const fields=['probability','baseGoalProbability','scoringMultiplier','saveProbability','missProbability','onTargetProbability','baseOnTargetProbability','cornerProbability','keeperCornerProbability','caughtSaveProbability','blockProbability','blockOutProbability','blockPossessionProbability','arrivalSpeed','keeperStretch','parryGivenSave','distance','shotAngleDegrees','goalDepth','goalOpeningDegrees','centralGoalOpeningDegrees','goalOpeningRatio','postAngleFactor','wideAngleFactor','centralLaneFactor','keeperPathDistance','timeToKeeper','reach'];
 function conserved(m){close(m.goalProbability+m.saveProbability+m.missProbability+m.blockProbability,1);close(m.blockOutProbability+m.blockPossessionProbability,m.blockProbability);close(m.keeperCornerProbability+m.caughtSaveProbability,m.saveProbability);close(m.onTargetProbability,m.goalProbability+m.saveProbability);for(const f of fields)assert.ok(Number.isFinite(m[f]),f);}
 test('current model has stronger post penalties, the rook distance curve and the central-lane reward',()=>{
- assert.equal(E.SHOT_MODEL.version,12);assert.equal(E.SHOT_MODEL.postAngleFloor,.10);assert.equal(E.SHOT_MODEL.postAngleWeight,.90);assert.equal(E.SHOT_MODEL.postAngleExponent,1.5);assert.equal(E.SHOT_MODEL.centralLaneAccuracyBonus,.15);assert.equal(E.SHOT_MODEL.rookLongShotDecay,.03);assert.equal(E.SHOT_MODEL.longShotDecay,.06);assert.equal(E.createGame().rulesVersion,14);
+ assert.equal(E.SHOT_MODEL.version,13);assert.equal(E.SHOT_MODEL.finishingAccuracyMultiplier,1.15);assert.equal(E.SHOT_MODEL.postAngleFloor,.10);assert.equal(E.SHOT_MODEL.postAngleWeight,.90);assert.equal(E.SHOT_MODEL.postAngleExponent,1.5);assert.equal(E.SHOT_MODEL.centralLaneAccuracyBonus,.15);assert.equal(E.SHOT_MODEL.rookLongShotDecay,.03);assert.equal(E.SHOT_MODEL.longShotDecay,.06);assert.equal(E.createGame().rulesVersion,E.RULES_VERSION);
 });
 for(const team of ['white','black']){
  test(`${team}: a legal wide queen finish has a stronger physical opening penalty`,()=>{
@@ -38,7 +38,7 @@ for(const team of ['white','black']){
  });
  test(`${team}: reload and keeper resolution preserve committed origin and seeded outcomes`,()=>{
   const s=fixture({team,type:'R',origin:[5,6]}),target=point([5,-1],team),pending=E.applyKick(s,target.x,target.y),before=clone(pending);pending.lastAction.shotModel={modelVersion:10,probability:1};
-  const restored=E.normalizeGame(pending),m=E.shotModel(restored);assert.equal(m.modelVersion,12);assert.deepEqual(restored.lastAction.shotModel,m);assert.equal(restored.randomState,before.randomState);assert.deepEqual(restored.pendingShot,before.pendingShot);assert.deepEqual(E.normalizeGame(clone(restored)),restored);
+  const restored=E.normalizeGame(pending),m=E.shotModel(restored);assert.equal(m.modelVersion,E.SHOT_MODEL.version);assert.deepEqual(restored.lastAction.shotModel,m);assert.equal(restored.randomState,before.randomState);assert.deepEqual(restored.pendingShot,before.pendingShot);assert.deepEqual(E.normalizeGame(clone(restored)),restored);
   const keeperId=pieceId('black-K',team),move=E.legalMoves(restored,keeperId)[0];assert.ok(move);const resolved=E.applyMove(restored,keeperId,move.x,move.y,{roll:0});assert.deepEqual(resolved.lastAction.shotModel.origin,before.pendingShot.from);assert.equal(resolved.lastAction.shotModel.shooterType,'R');
  });
 }
@@ -46,5 +46,5 @@ test('horizontal and half-turn reflections retain all model probabilities and ph
  for(const type of ['Q','R','N'])for(const origin of [[3,1],[5,3],[6,4],[6,8],[5,12]]){const a=model(fixture({type,origin,keeper:[8,0]}),5),b=model(fixture({team:'black',type,origin,keeper:[8,0]}),5),c=model(fixture({type,origin:[13-origin[0],origin[1]],keeper:[5,0]}),8);for(const f of fields){close(a[f],b[f],f);close(a[f],c[f],f);}}
 });
 test('invalid shot previews remain finite, conserve mass and expose no scoring opportunity',()=>{
- for(const state of [null,{}, {pieces:[],ball:{x:NaN,y:0}}, {...fixture(),pendingShot:{from:{x:Infinity,y:0}}}]){const m=E.shotModel(state,5,-1);assert.equal(m.modelVersion,12);assert.equal(m.probability,0);conserved(m);}const m=E.shotModel(fixture(),3,-1);assert.equal(m.probability,0);conserved(m);
+ for(const state of [null,{}, {pieces:[],ball:{x:NaN,y:0}}, {...fixture(),pendingShot:{from:{x:Infinity,y:0}}}]){const m=E.shotModel(state,5,-1);assert.equal(m.modelVersion,E.SHOT_MODEL.version);assert.equal(m.probability,0);conserved(m);}const m=E.shotModel(fixture(),3,-1);assert.equal(m.probability,0);conserved(m);
 });

@@ -1,0 +1,18 @@
+[
+  {
+    "file": "1479304283-black.json",
+    "step": 257,
+    "bestKeeperGoalChance": 0.19812206662688478,
+    "baselineAction": {
+      "type": "kick",
+      "x": 8,
+      "y": 13
+    },
+    "candidateAction": {
+      "type": "kick",
+      "x": 8,
+      "y": 13
+    },
+    "candidateShootsOpponentGoal": false
+  }
+]

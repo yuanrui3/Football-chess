@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {createGame,applyKick,applyMove,skipMove,BOARD_WIDTH as W,BOARD_HEIGHT as H,GOAL_FILES,BOX_FILES,BOX_DEPTH} from '../dist/engine.js';
-import {buildGoalReplay,restoreGoalReplay} from '../dist/goal-replay.js';
+import {createGame,applyKick,applyMove,skipMove,legalKicks,legalMoves,canOccupySquare,BOARD_WIDTH as W,BOARD_HEIGHT as H,GOAL_FILES,BOX_FILES,BOX_DEPTH} from '../dist/engine.js';
+import {buildGoalReplay,restoreGoalReplay,createReplayPlayer} from '../dist/goal-replay.js';
 
 const clone=value=>structuredClone(value);
 function fixture({team='white',ownGoal=false,knight=false,keeperFrom=null,extraPositions={}}={}){
@@ -29,6 +29,37 @@ function recordedGoal(options={}){
   assert.equal(after.lastAction.type,'goal');
   const history=[{game:state,actor:options.team||'white'},{game:pending,actor:pending.pendingShot.defendingTeam}];
   return {state,before,after,history,replay:buildGoalReplay(history,before,after)};
+}
+
+// Mirror a complete, legal challenge rather than manufacturing a replay card.
+function foulFixture({team='white',inside=true,keeper=false}={}){
+  const state=createGame({mode:'local',seed:89317,foulsEnabled:true}),other=team==='white'?'black':'white';
+  const cy=inside?BOX_DEPTH-1:BOX_DEPTH,offenderId=`${other}-${keeper?'K':'R1'}`,carrierId=`${team}-Q`;
+  const rotate=([x,y])=>team==='white'?{x,y}:{x:W-1-x,y:H-1-y};
+  const placements={'white-K':[6,H-2],'black-K':[6,0],'white-Q':[6,cy],[`black-${keeper?'K':'R1'}`]:[6,keeper?cy-1:cy+2]};
+  const used=new Set(Object.values(placements).map(p=>p.join())),parking=Array.from({length:H},(_,y)=>[[0,y],[W-1,y]]).flat();
+  for(const piece of state.pieces){
+    const at=placements[piece.id]||parking.find(p=>!used.has(p.join()));used.add(at.join());Object.assign(piece,rotate(at));
+    if(team==='black'){piece.team=piece.team==='white'?'black':'white';piece.id=piece.id.replace(/^(white|black)/,v=>v==='white'?'black':'white');}
+  }
+  const carrier=state.pieces.find(piece=>piece.id===carrierId);
+  state.attack=team;state.phase='defendMove';state.positionBudget={normalUsed:false,pawnUsed:false,dribbleUsed:false};
+  state.ball={x:carrier.x,y:carrier.y,carrierId};state.lastAction=null;
+  return {state,offenderId,carrierId,target:rotate([5,cy]),team,other};
+}
+function recordedFoulGoal(options={}){
+  const f=foulFixture(options),history=[f.state],take=game=>{history.push(game);return game;};
+  const awarded=take(applyMove(f.state,f.offenderId,f.target.x,f.target.y,{roll:options.roll??.01}));
+  assert.equal(awarded.lastAction.type,'foul');
+  const defence=take(skipMove(awarded)),ready=take(skipMove(defence));
+  const shot=legalKicks(ready).find(kick=>kick.goal===f.team);assert.ok(shot);
+  const before=take(applyKick(ready,shot.x,shot.y));
+  const keeper=before.pieces.find(piece=>piece.team===f.other&&piece.type==='K');
+  const reaction=options.moveKeeper?legalMoves(before,keeper.id)[0]:null;
+  if(options.moveKeeper)assert.ok(reaction,'an ordinary free-kick shot allows the promoted keeper to react');
+  const after=reaction?applyMove(before,keeper.id,reaction.x,reaction.y,{roll:0}):skipMove(before,{roll:0});
+  assert.equal(after.lastAction.type,'goal');
+  return {...f,awarded,before,after,history,replay:buildGoalReplay(history.map(game=>({game})),before,after)};
 }
 
 test('goal recording preserves actual pre-goal positions, shot path and final score',()=>{
@@ -275,4 +306,186 @@ test('non-goals and missing pending-shot evidence do not create replays',()=>{
   assert.equal(buildGoalReplay(history,before,{...after,lastAction:{type:'save'}}),null);
   assert.equal(buildGoalReplay(history,{...before,pendingShot:null},after),null);
   assert.equal(buildGoalReplay(history,{...before,phase:'kickoff'},after),null);
+});
+
+for(const team of ['white','black']){
+  test(`${team}: a red card and penalty goal keep the real reduced roster through JSON storage`,()=>{
+    const {replay,awarded,before,after,offenderId}=recordedFoulGoal({team});assert.ok(replay);
+    assert.equal(replay.frames[0].pieces.length,22);
+    const foul=replay.frames.find(frame=>frame.action?.type==='foul');assert.ok(foul);
+    assert.equal(foul.pieces.length,21);assert.equal(foul.action.sentOffId,offenderId);
+    assert.equal(foul.action.outcome,'penalty');assert.deepEqual(foul.action.contactSpot,awarded.lastAction.contactSpot);
+    assert.deepEqual(foul.sentOff,awarded.sentOff);assert.match(foul.caption,/Red card.*penalty is awarded/);
+    for(const frame of replay.frames.slice(replay.frames.indexOf(foul))){
+      assert.ok(!frame.pieces.some(piece=>piece.id===offenderId));assert.equal(frame.sentOff.length,1);
+    }
+    assert.equal(before.pendingShot.penalty,true);
+    assert.equal(replay.frames.at(-2).action.penalty,true);
+    assert.equal(replay.frames.at(-1).action.penalty,true);assert.equal(replay.frames.at(-1).action.probability,.8);
+    assert.equal(replay.frames.at(-1).action.keeperMove,undefined);
+    assert.deepEqual(replay.frames.at(-1).action.path,after.lastAction.path);
+    assert.match(replay.frames.at(-1).caption,/scores a penalty.*Keeper holds for the penalty/);
+    assert.equal(after.pieces.length,21,'the subsequent kickoff does not resurrect the dismissed player');
+    assert.deepEqual(restoreGoalReplay(JSON.parse(JSON.stringify(replay))),replay);
+    const movedKeeper=clone(replay),final=movedKeeper.frames.at(-1),keeper=final.pieces.find(piece=>piece.type==='K'&&piece.team!==team);
+    final.action.keeperMove={pieceId:keeper.id,from:{x:keeper.x,y:keeper.y},to:{x:keeper.x,y:keeper.y}};
+    assert.equal(restoreGoalReplay(movedKeeper),null,'penalties cannot acquire a keeper reaction in storage');
+  });
+
+  test(`${team}: a dismissed goalkeeper is replaced under its teammate's original ID and can react later`,()=>{
+    const {replay,awarded,offenderId}=recordedFoulGoal({team,inside:false,keeper:true,moveKeeper:true});assert.ok(replay);
+    const replacement=awarded.pieces.find(piece=>piece.replacementKeeper),foul=replay.frames.find(frame=>frame.action?.type==='foul');
+    assert.ok(replacement);assert.notEqual(replacement.id,offenderId);assert.equal(replacement.originalType,'P');
+    assert.deepEqual(foul.action.keeperReplacement,awarded.lastAction.keeperReplacement);
+    const original=replay.frames[0].pieces.find(piece=>piece.id===replacement.id);
+    assert.equal(original.type,'P');assert.equal(original.replacementKeeper,undefined);
+    const promoted=foul.pieces.find(piece=>piece.id===replacement.id);
+    assert.equal(promoted.type,'K');assert.equal(promoted.originalType,'P');assert.equal(promoted.replacementKeeper,true);
+    assert.match(foul.caption,/Red card.*free kick.*takes over in goal/);
+    assert.equal(replay.frames.at(-1).action.keeperMove.pieceId,replacement.id);
+    assert.deepEqual(restoreGoalReplay(clone(replay)),replay);
+    const invented=clone(replay);
+    invented.frames.find(frame=>frame.action?.type==='foul').action.keeperReplacement.originalType='Q';
+    assert.equal(restoreGoalReplay(invented),null,'the retained ID bounds the original role');
+  });
+
+  test(`${team}: plain fouls and yellow cards retain their distinct captions and on-field roles`,()=>{
+    for(const [roll,card]of [[.08,null],[.04,'yellow']]){
+      const {replay,offenderId}=recordedFoulGoal({team,roll});assert.ok(replay);
+      const foul=replay.frames.find(frame=>frame.action?.type==='foul'),offender=foul.pieces.find(piece=>piece.id===offenderId);
+      assert.equal(foul.action.card,card);assert.equal(foul.pieces.length,22);assert.deepEqual(foul.sentOff,[]);
+      assert.equal(offender.type,'R');assert.equal(offender.yellowCards,card?1:undefined);
+      assert.equal(/Yellow card/.test(foul.caption),!!card);
+      assert.deepEqual(restoreGoalReplay(clone(replay)),replay);
+    }
+  });
+}
+
+test('a real second yellow produces one dismissal and preserves its two-card ledger',()=>{
+  const f=foulFixture(),first=applyMove(f.state,f.offenderId,f.target.x,f.target.y,{roll:.04});
+  const positioned=clone(first);positioned.restart=null;positioned.phase='defendMove';positioned.positionBudget={normalUsed:false,pawnUsed:false,dribbleUsed:false};
+  const second=applyMove(positioned,f.offenderId,6,3,{roll:.04});assert.equal(second.lastAction.secondYellow,true);
+  const defence=skipMove(second),ready=skipMove(defence),shot=legalKicks(ready).find(kick=>kick.goal===f.team);
+  const before=applyKick(ready,shot.x,shot.y),after=skipMove(before,{roll:0});
+  const replay=buildGoalReplay([f.state,first,positioned,second,defence,ready,before].map(game=>({game})),before,after);assert.ok(replay);
+  const foul=replay.frames.find(frame=>frame.action?.secondYellow);
+  assert.equal(foul.action.card,'red');assert.match(foul.caption,/second yellow means a red card/);
+  assert.deepEqual(foul.sentOff.map(piece=>[piece.id,piece.reason,piece.yellowCards]),[[f.offenderId,'secondYellow',2]]);
+  assert.deepEqual(restoreGoalReplay(clone(replay)),replay);
+});
+
+test('a full legacy schema-two replay without card or role metadata still restores safely',()=>{
+  const legacy=clone(recordedGoal().replay);
+  for(const frame of legacy.frames){delete frame.sentOff;for(const piece of frame.pieces){delete piece.yellowCards;delete piece.originalType;delete piece.replacementKeeper;}}
+  const restored=restoreGoalReplay(legacy);assert.ok(restored);
+  assert.ok(restored.frames.every(frame=>frame.pieces.length===22&&frame.sentOff.length===0));
+  assert.equal(restored.version,2);assert.deepEqual(restoreGoalReplay(restored),restored);
+});
+
+test('same-size historical goal-front occupants remain in their recorded cells after the live rule reserves them for the keeper',()=>{
+  const legacy=clone(recordedGoal().replay);
+  for(const frame of legacy.frames){const knight=frame.pieces.find(piece=>piece.id==='black-N2');knight.x=5;knight.y=0;assert.equal(canOccupySquare(knight,5,0),false);}
+  const restored=restoreGoalReplay(legacy);assert.ok(restored);
+  for(const frame of restored.frames)assert.deepEqual(frame.pieces.find(piece=>piece.id==='black-N2'),legacy.frames[0].pieces.find(piece=>piece.id==='black-N2'));
+  const opposingKing=clone(legacy);
+  for(const frame of opposingKing.frames){const king=frame.pieces.find(piece=>piece.id==='white-K');king.x=6;king.y=0;}
+  assert.equal(restoreGoalReplay(opposingKing),null,'historical outfield compatibility does not allow kings into the opponent box');
+});
+
+test('a seven-a-side goal remains recordable with all eight departed original IDs accounted for',()=>{
+  const {state,target}=fixture(),ids=['Q','R2','B1','B2'];
+  const removed=state.pieces.filter(piece=>ids.includes(piece.id.split('-')[1]));
+  state.pieces=state.pieces.filter(piece=>!removed.includes(piece));state.sentOff=removed.map(piece=>({...piece,reason:'red',yellowCards:0}));
+  const before=applyKick(state,target.x,target.y),after=skipMove(before,{roll:0});
+  const replay=buildGoalReplay([{game:state},{game:before}],before,after);assert.ok(replay);
+  assert.ok(replay.frames.every(frame=>frame.pieces.length===14&&frame.sentOff.length===8));
+  assert.deepEqual(restoreGoalReplay(clone(replay)),replay);
+  const missing=clone(replay);missing.frames[0].sentOff.pop();assert.equal(restoreGoalReplay(missing),null);
+});
+
+test('stored card replays reject missing ledgers, resurrected players and invented keeper promotions',()=>{
+  const {replay}=recordedFoulGoal({inside:false,keeper:true}),foulIndex=replay.frames.findIndex(frame=>frame.action?.type==='foul');
+  assert.ok(replay);
+  const mutations=[
+    value=>delete value.frames[foulIndex].sentOff,
+    value=>value.frames[foulIndex].sentOff.push(clone(value.frames[foulIndex].sentOff[0])),
+    value=>value.frames[foulIndex].sentOff[0].reason='injury',
+    value=>value.frames[foulIndex].action.card='yellow',
+    value=>value.frames[foulIndex].action.offenderId='white-K',
+    value=>value.frames[foulIndex].action.targetId=value.frames[foulIndex].action.offenderId,
+    value=>delete value.frames[foulIndex].action.keeperReplacement,
+    value=>value.frames[foulIndex].pieces.find(piece=>piece.replacementKeeper).originalType='Q',
+    value=>{const next=value.frames[foulIndex+1],departed=next.sentOff.pop();next.pieces.push({...departed,reason:undefined,yellowCards:undefined});},
+    value=>value.frames[foulIndex+1].sentOff[0].x++,
+    value=>{const promoted=value.frames[0].pieces.find(piece=>piece.id==='white-P1');promoted.type='K';promoted.originalType='P';promoted.replacementKeeper=true;},
+    value=>{const promoted=value.frames[foulIndex].pieces.find(piece=>piece.replacementKeeper);promoted.x=5;promoted.y=H-1;},
+  ];
+  for(const mutate of mutations){const invalid=clone(replay);mutate(invalid);assert.equal(restoreGoalReplay(invalid),null);}
+});
+
+// A small DOM surface exercises playback state, independently of app rendering.
+function replayDOM(){
+  class Element{
+    constructor(tag='div'){this.tagName=tag;this.children=[];this.style={};this.dataset={};this.attributes=new Map();this.listeners=new Map();this.className='';this.hidden=false;this.textContent='';}
+    append(...nodes){for(const node of nodes){node.remove();node.parentElement=this;this.children.push(node);}}
+    replaceChildren(...nodes){for(const child of [...this.children])child.remove();this.append(...nodes);}
+    remove(){if(this.parentElement){const siblings=this.parentElement.children;siblings.splice(siblings.indexOf(this),1);this.parentElement=null;}}
+    setAttribute(name,value){this.attributes.set(name,String(value));if(name==='class')this.className=String(value);}
+    getAttribute(name){return this.attributes.get(name)??null;}
+    get firstElementChild(){return this.children[0]??null;}
+    getBoundingClientRect(){return {width:350};}
+    querySelectorAll(selector){const classes=selector.split(',').map(value=>value.trim().slice(1)),result=[];for(const child of this.children){if(classes.some(name=>child.className.split(' ').includes(name)))result.push(child);result.push(...child.querySelectorAll(selector));}return result;}
+    addEventListener(type,handler){if(!this.listeners.has(type))this.listeners.set(type,[]);this.listeners.get(type).push(handler);}
+    fire(type){for(const handler of this.listeners.get(type)||[])handler({target:this});}
+  }
+  const ids=['replayPitch','replayBoard','replayOverlay','replayBall','replayPlayBtn','replayPrevBtn','replayNextBtn','replayRestartBtn','replayScrub','replayStep','replayCaption','replayScore','replayMoment','replayTitle','replayDetails'];
+  const nodes=Object.fromEntries(ids.map(id=>[id,new Element()]));
+  return {nodes,document:{getElementById:id=>nodes[id],createElement:tag=>new Element(tag),createElementNS:(_namespace,tag)=>new Element(tag)}};
+}
+
+test('scrubbing a keeper dismissal hides the departed ID, changes the retained pawn role and reverses both',()=>{
+  const {replay,awarded,offenderId}=recordedFoulGoal({keeper:true,inside:false}),replacement=awarded.pieces.find(piece=>piece.replacementKeeper);
+  const dom=replayDOM(),previousDocument=globalThis.document;globalThis.document=dom.document;
+  try{
+    let completions=0,interactions=0;
+    const player=createReplayPlayer({onComplete:()=>completions++,onInteract:()=>interactions++});
+    assert.equal(dom.nodes.replayBoard.children.length,W*H);
+    assert.equal(player.load(replay,{autoplay:false}),true);
+    const tokens=()=>dom.nodes.replayPitch.children.filter(node=>node.className==='replay-token');
+    const token=id=>tokens().find(node=>node.dataset.pieceId===id);
+    const seek=index=>{dom.nodes.replayScrub.value=String(index);dom.nodes.replayScrub.fire('input');};
+    assert.equal(tokens().filter(node=>!node.hidden).length,22);
+    assert.equal(token(replacement.id).firstElementChild.textContent,'♟');
+    seek(replay.frames.findIndex(frame=>frame.action?.type==='foul'));
+    assert.equal(token(offenderId).hidden,true);assert.equal(token(offenderId).style.display,'none');
+    assert.equal(token(offenderId).getAttribute('aria-hidden'),'true');
+    assert.equal(tokens().filter(node=>!node.hidden).length,21);
+    assert.equal(token(replacement.id).firstElementChild.textContent,'♚');assert.equal(token(replacement.id).dataset.pieceRole,'K');
+    assert.equal(token(replacement.id).dataset.replacementKeeper,'true');assert.match(token(replacement.id).getAttribute('aria-label'),/originally pawn/);
+    assert.equal(dom.nodes.replayMoment.textContent,'RED CARD');
+    seek(0);
+    assert.equal(token(offenderId).hidden,false);assert.equal(token(offenderId).style.display,'');assert.equal(token(offenderId).getAttribute('aria-hidden'),'false');
+    assert.equal(token(replacement.id).firstElementChild.textContent,'♟');assert.equal(token(replacement.id).dataset.replacementKeeper,'false');
+    seek(replay.frames.length-1);assert.equal(token(offenderId).hidden,true);
+    assert.equal(player.load(recordedGoal().replay,{autoplay:false}),true);
+    assert.equal(tokens().filter(node=>!node.hidden).length,22,'loading another full-roster goal clears the previous hidden state');
+    assert.equal(token(replacement.id).firstElementChild.textContent,'♟');
+    assert.equal(completions,0);assert.equal(interactions,3);player.stop();
+  }finally{if(previousDocument===undefined)delete globalThis.document;else globalThis.document=previousDocument;}
+});
+
+test('replay shows and clears yellow-card badges while penalty frames use their own label and odds',()=>{
+  const {replay,offenderId}=recordedFoulGoal({roll:.04}),dom=replayDOM(),previousDocument=globalThis.document;globalThis.document=dom.document;
+  try{
+    const player=createReplayPlayer();assert.equal(player.load(replay,{autoplay:false}),true);
+    const token=dom.nodes.replayPitch.children.find(node=>node.dataset.pieceId===offenderId),seek=index=>{dom.nodes.replayScrub.value=String(index);dom.nodes.replayScrub.fire('input');};
+    assert.equal(token.querySelectorAll('.yellow-card-badge').length,0);
+    seek(replay.frames.findIndex(frame=>frame.action?.type==='foul'));
+    assert.equal(token.querySelectorAll('.yellow-card-badge').length,1);assert.match(token.getAttribute('aria-label'),/yellow card/);
+    assert.equal(dom.nodes.replayMoment.textContent,'YELLOW CARD');
+    seek(replay.frames.length-2);assert.equal(dom.nodes.replayMoment.textContent,'PENALTY');
+    assert.match(dom.nodes.replayDetails.textContent,/80% penalty scoring chance/);
+    seek(0);assert.equal(token.querySelectorAll('.yellow-card-badge').length,0);assert.doesNotMatch(token.getAttribute('aria-label'),/yellow card/);
+    player.stop();
+  }finally{if(previousDocument===undefined)delete globalThis.document;else globalThis.document=previousDocument;}
 });

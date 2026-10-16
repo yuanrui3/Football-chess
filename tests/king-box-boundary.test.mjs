@@ -51,11 +51,16 @@ for(const team of ['white','black']){
     }
   });
 
-  test(`${team}: the king keeps ordinary-field and own-box movement, dribbling and passing`,()=>{
+  test(`${team}: the king keeps field and own-box movement, may dribble inside or out, and must enter its box off the ball`,()=>{
     for(const carrier of ['white-R1','white-K'])for(const [origin,target]of[
       [[3,2],[3,1]],[[5,H-E.BOX_DEPTH-1],[5,H-E.BOX_DEPTH]],[[5,H-E.BOX_DEPTH],[6,H-E.BOX_DEPTH-1]],[[3,H-E.BOX_DEPTH],[4,H-E.BOX_DEPTH]],[[10,H-1],[9,H-1]],
     ]){
       const state=fixture({team,carrier,positions:{'white-K':origin}}),point=pointFor(target,team);
+      const startsInBox=E.isBox(...origin),entersBox=!startsInBox&&E.isBox(...target);
+      if(carrier==='white-K'&&entersBox){
+        assert.equal(moveTo(state,'white-K',target,team),undefined,'a carrying king follows the same outside-to-inside dribble restriction');
+        assert.throws(()=>E.applyMove(state,idFor('white-K',team),point.x,point.y),/not a legal move/);continue;
+      }
       assert.ok(moveTo(state,'white-K',target,team));
       const moved=E.applyMove(state,idFor('white-K',team),point.x,point.y);assertIntegrity(moved);
       if(carrier==='white-K')assert.deepEqual(moved.ball,{...point,carrierId:idFor('white-K',team)});
@@ -79,17 +84,21 @@ for(const team of ['white','black']){
     assert.equal(E.applyMove(loose,idFor('white-K',team),outside.x,outside.y).ball.carrierId,idFor('white-K',team));
   });
 
-  test(`${team}: knights retain movement and dribbling access to both boxes`,()=>{
+  test(`${team}: knights enter legal cells in both boxes off the ball but cannot dribble into either`,()=>{
     for(const carrier of ['white-R1','white-N1'])for(const [origin,target]of[[[3,2],[4,0]],[[3,H-3],[4,H-1]]]){
       const state=fixture({team,carrier,positions:{'white-K':[5,H-2],'white-N1':origin}}),point=pointFor(target,team);
+      if(carrier==='white-N1'){
+        assert.equal(moveTo(state,'white-N1',target,team),undefined);
+        assert.throws(()=>E.applyMove(state,idFor('white-N1',team),point.x,point.y),/not a legal move/);continue;
+      }
       assert.ok(moveTo(state,'white-N1',target,team));
       const next=E.applyMove(state,idFor('white-N1',team),point.x,point.y);assertIntegrity(next);
-      if(carrier==='white-N1')assert.equal(next.ball.carrierId,idFor('white-N1',team));
+      assert.deepEqual(next.ball,state.ball);
     }
   });
 
   test(`${team}: new restart placement cannot put a king inside the opponent box`,()=>{
-    const state=fixture({team,carrier:'black-N1',positions:{'white-K':[3,0],'black-N1':[5,0]}});
+    const state=fixture({team,carrier:'black-N1',positions:{'white-K':[3,0],'black-N1':[4,0]}});
     state.attack=other(team);
     const restarted=E.actionTimeout(state);
     assert.equal(restarted.restart.team,team);assert.equal(restarted.restart.takerId,idFor('white-K',team));
@@ -105,7 +114,7 @@ for(const team of ['white','black']){
       state.score={white:2,black:1};state.turn=17;state.minutes=8;
       const before=clone(state),normalized=E.normalizeGame(state),king=piece(normalized,'white-K',team);
       assert.deepEqual({x:king.x,y:king.y},pointFor([6,E.BOX_DEPTH],team),'equal distance favors the team’s own end');
-      assert.equal(E.isBox(king.x,king.y),false);assert.equal(normalized.rulesVersion,14);
+      assert.equal(E.isBox(king.x,king.y),false);assert.equal(normalized.rulesVersion,15);
       assert.deepEqual(normalized.positionBudget,before.positionBudget);assert.deepEqual(normalized.score,before.score);
       assert.equal(normalized.phase,before.phase);assert.equal(normalized.turn,before.turn);assert.equal(normalized.minutes,before.minutes);
       assert.equal(normalized.randomState,before.randomState);assert.deepEqual(normalized.log,before.log);

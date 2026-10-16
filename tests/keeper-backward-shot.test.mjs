@@ -39,7 +39,7 @@ for(const team of ['white','black']){
    assert.equal(caught.ballProgress.releaseAlreadyCounted,undefined,'the original shot round has not ended at this catch');
    assert.equal(caught.randomState,(Math.imul(1664525,pending.randomState)+1013904223)>>>0);
    assert.ok(Math.abs(caught.lastAction.roll-.08933599549345672)<1e-12);
-   assert.ok(Math.abs(caught.lastAction.shotModel.goalProbability-.014439705259851115)<1e-12,'keeper odds are unchanged by the release rule');
+   assert.ok(Math.abs(caught.lastAction.shotModel.goalProbability-.014439705259851115*E.SHOT_MODEL.finishingAccuracyMultiplier)<1e-12,'keeper odds are unchanged by the release rule');
    assert.deepEqual(E.legalMoves(caught,id('white-K',team)),[]);assert.deepEqual(E.legalMoves(caught,id('white-K',team),{freePawn:true}),[]);
    assert.throws(()=>E.skipMove(caught));
    const saved=clone(caught),restored=E.normalizeGame(caught);assert.deepEqual(restored,caught);assert.deepEqual(caught,saved);

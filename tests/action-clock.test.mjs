@@ -71,6 +71,31 @@ test('a final backpass must finish its compulsory release and possible shot', ()
   assert.equal(result.finish,true);
 });
 
+test('a declared pass-and-run finishes its run before the whistle', () => {
+  let result=settle(overtime(null),state('kick'),state('passRun'));
+  assert.equal(result.finish,false);
+  result=settle(result.clock,state('passRun'),state('attackMove'));
+  assert.equal(result.finish,true,'the run does not buy another attacking round');
+});
+
+test('a final live chance completes an optional run without granting another chance', () => {
+  let result=settle(overtime({team:'white',phase:'live'}),state('kick'),state('passRun'));
+  assert.equal(result.finish,false);
+  assert.deepEqual(result.clock.finalChance,{team:'white',phase:'release'});
+  result=settle(result.clock,state('passRun'),state('attackMove'));
+  assert.equal(result.finish,true);
+  assert.equal(result.clock.finalChance,null);
+});
+
+test('a protected restart can include a run before its following live attack', () => {
+  let result=settle(overtime({team:'white',phase:'restart'}),state('kick',{restart:{type:'freeKick',team:'white'}}),state('passRun'));
+  assert.equal(result.finish,false);
+  assert.deepEqual(result.clock.finalChance,{team:'white',phase:'live'});
+  result=settle(result.clock,state('passRun'),state('attackMove'));
+  assert.equal(result.finish,false);
+  assert.deepEqual(result.clock.finalChance,{team:'white',phase:'live'});
+});
+
 test('indirect restart backpass release does not use the following live round', () => {
   let result=settle(overtime({team:'white',phase:'restart'}),state('kick',{restart:{type:'timeout'}}),state('keeperRelease'));
   assert.equal(result.finish,false);

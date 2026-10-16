@@ -2,6 +2,8 @@
 
 The final rules are **B: every outfield piece may enter either box, with the ordinary knight goal probability (×1)**. The king cannot enter the opponent's box. The user removed the proposed knight doubling after the trial. This was a rule screen, not an AI strength comparison or a calibration to professional football.
 
+This historical trial predates weighted movement, the later accuracy adjustment, fouls, reserved goal-mouth cells, the outside-to-box dribble/run ban and optional pass-and-run. Its all-outfield access selection remains subject to those later movement and occupancy restrictions; its observed rates describe the frozen trial builds.
+
 All factorial variants share a 14 × 17 board, four-cell goal (files 5–8), six-by-three box (files 4–9), model 12 defender blocks, the stricter post-angle curve, central-origin bonus, the same pawn-front formation and one shared off-ball Pawn-or-King bonus move. Each defender intersecting an ordinary shot contributes a 45% block chance; a block goes out 85% of the time and otherwise gives the defender possession. Knights retain their lob/jump bypass. The experimental multiplier rescales all failed-outcome probability so the complete distribution sums to one. `constants.json` preserves the common geometry, model coefficients, formation and search budget.
 
 | Variant | Outfield box access | Knight multiplier | Casual goals / opponent-goal attempts | Goals per 480 actions | Knight goals | Certain goals despite best legal keeper reaction | Endline goals |

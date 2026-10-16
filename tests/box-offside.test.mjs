@@ -52,7 +52,7 @@ function assertOffside(state, original, team, offender = 'white-N1') {
 
 for (const team of ['white', 'black']) {
   test(`${team}: offside box knights are involved in every teammate kick, including the original keeper screen`, () => {
-    const state = fixture({team, positions: {'white-N2': [6, 0]}}), before = clone(state);
+    const state = fixture({team, positions: {'white-N2': [8, 1]}}), before = clone(state);
     const info = E.offsideInfo(state);
     assert.deepEqual(info.boxKnightIds, [idFor('white-N1', team), idFor('white-N2', team)].sort());
     const target = pointFor([5, -1], team), kicks = E.legalKicks(state);
@@ -85,7 +85,7 @@ for (const team of ['white', 'black']) {
       const next = kick(state, scenario.target, team);
       assert.equal(next.phase, 'keeperReact'); assert.notEqual(next.lastAction.type, 'offside');
     }
-    const ahead = fixture({team, positions: {'white-N1': [6, 0], 'black-R2': [9, 1]}});
+    const ahead = fixture({team, positions: {'white-N1': [6, 1], 'black-R2': [9, 2]}});
     assertOffside(kick(ahead, [5, -1], team), ahead, team);
   });
 

@@ -1,0 +1,565 @@
+{
+  "A": [
+    {
+      "file": "1479304283-black.json",
+      "kicks": 64,
+      "maxAvailableReactedChance": 0.6342773128633359,
+      "opportunities15": 3,
+      "deferred15": 1,
+      "deferred15Details": [
+        {
+          "step": 265,
+          "best": 0.19812206662688478,
+          "target": {
+            "x": 7,
+            "y": 17
+          },
+          "action": {
+            "type": "kick",
+            "x": 6,
+            "y": 13
+          },
+          "carrier": {
+            "id": "black-R1",
+            "team": "black",
+            "type": "R",
+            "x": 7,
+            "y": 13
+          }
+        }
+      ],
+      "opportunities25": 2,
+      "opportunities50": 1,
+      "missed25": 0,
+      "missed": [],
+      "shots": [
+        {
+          "step": 80,
+          "best": 0.31686856866462637,
+          "selected": 0.8837698229028849
+        },
+        {
+          "step": 344,
+          "best": 0.6342773128633359,
+          "selected": 0.7959518806897473
+        }
+      ],
+      "maxForward": 16
+    },
+    {
+      "file": "1479304283-white.json",
+      "kicks": 57,
+      "maxAvailableReactedChance": 0.19812206662688478,
+      "opportunities15": 2,
+      "deferred15": 2,
+      "deferred15Details": [
+        {
+          "step": 211,
+          "best": 0.16154340276981383,
+          "target": {
+            "x": 6,
+            "y": 17
+          },
+          "action": {
+            "type": "kick",
+            "x": 6,
+            "y": 13
+          },
+          "carrier": {
+            "id": "black-B1",
+            "team": "black",
+            "type": "B",
+            "x": 4,
+            "y": 15
+          }
+        },
+        {
+          "step": 427,
+          "best": 0.19812206662688478,
+          "target": {
+            "x": 7,
+            "y": 17
+          },
+          "action": {
+            "type": "kick",
+            "x": 8,
+            "y": 13
+          },
+          "carrier": {
+            "id": "black-P1",
+            "team": "black",
+            "type": "P",
+            "x": 7,
+            "y": 13
+          }
+        }
+      ],
+      "opportunities25": 0,
+      "opportunities50": 0,
+      "missed25": 0,
+      "missed": [],
+      "shots": [
+        {
+          "step": 447,
+          "best": 0.0780178582991356,
+          "selected": 0.08821763716985255
+        }
+      ],
+      "maxForward": 16
+    },
+    {
+      "file": "3682195741-black.json",
+      "kicks": 65,
+      "maxAvailableReactedChance": 0.31686856866462637,
+      "opportunities15": 2,
+      "deferred15": 1,
+      "deferred15Details": [
+        {
+          "step": 373,
+          "best": 0.1621317918310917,
+          "target": {
+            "x": 5,
+            "y": 17
+          },
+          "action": {
+            "type": "kick",
+            "x": 3,
+            "y": 13
+          },
+          "carrier": {
+            "id": "black-R1",
+            "team": "black",
+            "type": "R",
+            "x": 5,
+            "y": 13
+          }
+        }
+      ],
+      "opportunities25": 1,
+      "opportunities50": 0,
+      "missed25": 0,
+      "missed": [],
+      "shots": [
+        {
+          "step": 80,
+          "best": 0.31686856866462637,
+          "selected": 0.8837698229028849
+        }
+      ],
+      "maxForward": 16
+    },
+    {
+      "file": "3682195741-white.json",
+      "kicks": 57,
+      "maxAvailableReactedChance": 0.19812206662688478,
+      "opportunities15": 2,
+      "deferred15": 2,
+      "deferred15Details": [
+        {
+          "step": 211,
+          "best": 0.16154340276981383,
+          "target": {
+            "x": 6,
+            "y": 17
+          },
+          "action": {
+            "type": "kick",
+            "x": 6,
+            "y": 13
+          },
+          "carrier": {
+            "id": "black-B1",
+            "team": "black",
+            "type": "B",
+            "x": 4,
+            "y": 15
+          }
+        },
+        {
+          "step": 427,
+          "best": 0.19812206662688478,
+          "target": {
+            "x": 7,
+            "y": 17
+          },
+          "action": {
+            "type": "kick",
+            "x": 8,
+            "y": 13
+          },
+          "carrier": {
+            "id": "black-P1",
+            "team": "black",
+            "type": "P",
+            "x": 7,
+            "y": 13
+          }
+        }
+      ],
+      "opportunities25": 0,
+      "opportunities50": 0,
+      "missed25": 0,
+      "missed": [],
+      "shots": [
+        {
+          "step": 447,
+          "best": 0.0780178582991356,
+          "selected": 0.08821763716985255
+        }
+      ],
+      "maxForward": 16
+    }
+  ],
+  "B": [
+    {
+      "file": "1479304283-black.json",
+      "kicks": 62,
+      "maxAvailableReactedChance": 0.19812206662688478,
+      "opportunities15": 1,
+      "deferred15": 1,
+      "deferred15Details": [
+        {
+          "step": 257,
+          "best": 0.19812206662688478,
+          "target": {
+            "x": 6,
+            "y": 17
+          },
+          "action": {
+            "type": "kick",
+            "x": 8,
+            "y": 13
+          },
+          "carrier": {
+            "id": "black-Q",
+            "team": "black",
+            "type": "Q",
+            "x": 6,
+            "y": 13
+          }
+        }
+      ],
+      "opportunities25": 0,
+      "opportunities50": 0,
+      "missed25": 0,
+      "missed": [],
+      "shots": [],
+      "maxForward": 16
+    },
+    {
+      "file": "1479304283-white.json",
+      "kicks": 58,
+      "maxAvailableReactedChance": 0.9790386783740017,
+      "opportunities15": 1,
+      "deferred15": 0,
+      "deferred15Details": [],
+      "opportunities25": 1,
+      "opportunities50": 1,
+      "missed25": 0,
+      "missed": [],
+      "shots": [
+        {
+          "step": 153,
+          "best": 0.9790386783740017,
+          "selected": 0.98
+        }
+      ],
+      "maxForward": 16
+    },
+    {
+      "file": "3682195741-black.json",
+      "kicks": 67,
+      "maxAvailableReactedChance": 0.4719723812975713,
+      "opportunities15": 1,
+      "deferred15": 0,
+      "deferred15Details": [],
+      "opportunities25": 1,
+      "opportunities50": 0,
+      "missed25": 0,
+      "missed": [],
+      "shots": [
+        {
+          "step": 121,
+          "best": 0.4719723812975713,
+          "selected": 0.4719723812975713
+        }
+      ],
+      "maxForward": 16
+    },
+    {
+      "file": "3682195741-white.json",
+      "kicks": 58,
+      "maxAvailableReactedChance": 0.9790386783740017,
+      "opportunities15": 1,
+      "deferred15": 0,
+      "deferred15Details": [],
+      "opportunities25": 1,
+      "opportunities50": 1,
+      "missed25": 0,
+      "missed": [],
+      "shots": [
+        {
+          "step": 153,
+          "best": 0.9790386783740017,
+          "selected": 0.98
+        }
+      ],
+      "maxForward": 16
+    }
+  ],
+  "C": [
+    {
+      "file": "1479304283-black.json",
+      "kicks": 59,
+      "maxAvailableReactedChance": 0.2605760964922306,
+      "opportunities15": 4,
+      "deferred15": 1,
+      "deferred15Details": [
+        {
+          "step": 72,
+          "best": 0.16429550050765768,
+          "target": {
+            "x": 7,
+            "y": 17
+          },
+          "action": {
+            "type": "kick",
+            "x": 10,
+            "y": 15
+          },
+          "carrier": {
+            "id": "black-Q",
+            "team": "black",
+            "type": "Q",
+            "x": 9,
+            "y": 15
+          }
+        }
+      ],
+      "opportunities25": 2,
+      "opportunities50": 0,
+      "missed25": 0,
+      "missed": [],
+      "shots": [
+        {
+          "step": 77,
+          "best": 0.08972053704400594,
+          "selected": 0.10145028274533043
+        },
+        {
+          "step": 95,
+          "best": 0.16429550050765768,
+          "selected": 0.3933881044630029
+        },
+        {
+          "step": 158,
+          "best": 0.2605760964922306,
+          "selected": 0.2605760964922306
+        },
+        {
+          "step": 456,
+          "best": 0.2564795706936638,
+          "selected": 0.9623588488954952
+        }
+      ],
+      "maxForward": 16
+    },
+    {
+      "file": "1479304283-white.json",
+      "kicks": 63,
+      "maxAvailableReactedChance": 0.16429550050765768,
+      "opportunities15": 1,
+      "deferred15": 0,
+      "deferred15Details": [],
+      "opportunities25": 0,
+      "opportunities50": 0,
+      "missed25": 0,
+      "missed": [],
+      "shots": [
+        {
+          "step": 381,
+          "best": 0.16429550050765768,
+          "selected": 0.3933881044630029
+        }
+      ],
+      "maxForward": 16
+    },
+    {
+      "file": "3682195741-black.json",
+      "kicks": 72,
+      "maxAvailableReactedChance": 0.19812206662688478,
+      "opportunities15": 6,
+      "deferred15": 5,
+      "deferred15Details": [
+        {
+          "step": 72,
+          "best": 0.16429550050765768,
+          "target": {
+            "x": 7,
+            "y": 17
+          },
+          "action": {
+            "type": "kick",
+            "x": 10,
+            "y": 15
+          },
+          "carrier": {
+            "id": "black-Q",
+            "team": "black",
+            "type": "Q",
+            "x": 9,
+            "y": 15
+          }
+        },
+        {
+          "step": 308,
+          "best": 0.18505840476602317,
+          "target": {
+            "x": 5,
+            "y": 17
+          },
+          "action": {
+            "type": "kick",
+            "x": 6,
+            "y": 12
+          },
+          "carrier": {
+            "id": "black-Q",
+            "team": "black",
+            "type": "Q",
+            "x": 5,
+            "y": 13
+          }
+        },
+        {
+          "step": 405,
+          "best": 0.19175667589875342,
+          "target": {
+            "x": 5,
+            "y": 17
+          },
+          "action": {
+            "type": "kick",
+            "x": 4,
+            "y": 13
+          },
+          "carrier": {
+            "id": "black-Q",
+            "team": "black",
+            "type": "Q",
+            "x": 4,
+            "y": 16
+          }
+        },
+        {
+          "step": 411,
+          "best": 0.18505840476602317,
+          "target": {
+            "x": 5,
+            "y": 17
+          },
+          "action": {
+            "type": "kick",
+            "x": 6,
+            "y": 13
+          },
+          "carrier": {
+            "id": "black-P2",
+            "team": "black",
+            "type": "P",
+            "x": 5,
+            "y": 13
+          }
+        },
+        {
+          "step": 416,
+          "best": 0.19812206662688478,
+          "target": {
+            "x": 6,
+            "y": 17
+          },
+          "action": {
+            "type": "kick",
+            "x": 6,
+            "y": 11
+          },
+          "carrier": {
+            "id": "black-P2",
+            "team": "black",
+            "type": "P",
+            "x": 6,
+            "y": 13
+          }
+        }
+      ],
+      "opportunities25": 0,
+      "opportunities50": 0,
+      "missed25": 0,
+      "missed": [],
+      "shots": [
+        {
+          "step": 77,
+          "best": 0.08972053704400594,
+          "selected": 0.10145028274533043
+        },
+        {
+          "step": 95,
+          "best": 0.16429550050765768,
+          "selected": 0.3933881044630029
+        },
+        {
+          "step": 450,
+          "best": 0.10546617174431437,
+          "selected": 0.10559970332806169
+        },
+        {
+          "step": 479,
+          "best": 0.08972053704400591,
+          "selected": 0.10145028274533041
+        }
+      ],
+      "maxForward": 16
+    },
+    {
+      "file": "3682195741-white.json",
+      "kicks": 64,
+      "maxAvailableReactedChance": 0.19257733896969864,
+      "opportunities15": 2,
+      "deferred15": 1,
+      "deferred15Details": [
+        {
+          "step": 476,
+          "best": 0.19257733896969864,
+          "target": {
+            "x": 8,
+            "y": 17
+          },
+          "action": {
+            "type": "kick",
+            "x": 6,
+            "y": 12
+          },
+          "carrier": {
+            "id": "black-Q",
+            "team": "black",
+            "type": "Q",
+            "x": 8,
+            "y": 10
+          }
+        }
+      ],
+      "opportunities25": 0,
+      "opportunities50": 0,
+      "missed25": 0,
+      "missed": [],
+      "shots": [
+        {
+          "step": 381,
+          "best": 0.16429550050765768,
+          "selected": 0.3933881044630029
+        }
+      ],
+      "maxForward": 16
+    }
+  ]
+}

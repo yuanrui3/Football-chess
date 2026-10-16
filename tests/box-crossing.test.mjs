@@ -17,12 +17,14 @@ function fixture({team='white',phase='attackMove',carrier='white-Q',positions={}
   s.phase=phase;s.attack=phase==='defendMove'?other(team):team;s.restart=null;s.offside=null;s.positionBudget={normalUsed:false,pawnUsed:false,dribbleUsed:false};s.ballProgress={team:s.attack,anchorY:s.ball.y,rounds:0,pendingRelease:false,excludeRelease:false};return s;
 }
 const contains=(moves,p)=>moves.some(m=>m.x===p.x&&m.y===p.y);
-const rays=[['white-R1',[3,1],[9,1],[6,1],[5,1]],['white-Q',[3,1],[9,1],[6,1],[5,1]],['white-B1',[3,0],[6,3],[5,2],[4,1]]];
+const rays=[['white-R1',[3,1],[7,1],[6,1],[5,1]],['white-Q',[3,1],[7,1],[6,1],[5,1]],['white-B1',[3,0],[6,3],[5,2],[4,1]]];
 for(const team of ['white','black'])for(const end of ['top','bottom']){
-  test(`${team}, ${end} box: every clear slider ray may move or dribble across the box`,()=>{
+  test(`${team}, ${end} box: clear off-ball rays cross the box but carrying rays cannot enter it`,()=>{
     for(const [id,origin,target]of rays)for(const carrying of [false,true]){
       const s=fixture({team,end,carrier:carrying?id:'white-R2',positions:{[id]:origin}}),destination=pointFor(target,team,end),before=JSON.stringify(s);
-      assert.ok(contains(E.legalMoves(s,idFor(id,team)),destination));
+      assert.equal(contains(E.legalMoves(s,idFor(id,team)),destination),!carrying);
+      assert.ok(E.movementCost(s.pieces.find(p=>p.id===idFor(id,team)),destination.x,destination.y)<=(carrying?E.DRIBBLE_RANGE:E.MOVE_RANGE));
+      if(carrying){assert.throws(()=>E.applyMove(s,idFor(id,team),destination.x,destination.y),/not a legal move/);assert.equal(JSON.stringify(s),before);continue;}
       const next=E.applyMove(s,idFor(id,team),destination.x,destination.y);
       assert.deepEqual({x:next.pieces.find(p=>p.id===idFor(id,team)).x,y:next.pieces.find(p=>p.id===idFor(id,team)).y},destination);
       if(carrying)assert.equal(next.ball.carrierId,idFor(id,team));else assert.deepEqual(next.ball,s.ball);
@@ -51,10 +53,12 @@ for(const team of ['white','black'])for(const end of ['top','bottom']){
     }
   });
 }
-for(const team of ['white','black'])test(`${team}: AI does not assume a rook can collect an eleven-square pass in one move`,()=>{
-  const s=fixture({team,phase:'kick',carrier:'white-P1',positions:{'white-P1':[12,10],'white-R1':[1,0],'white-Q':[0,16],'white-R2':[13,16],'white-B1':[0,15],'white-B2':[13,15],'white-N1':[0,14],'white-N2':[13,14],'white-P2':[0,13],'white-P3':[13,13],'black-N1':[2,0],'black-N2':[1,1]}});
+for(const team of ['white','black'])test(`${team}: AI does not assume a rook can collect a nine-square pass across the box for fifteen movement points`,()=>{
+  const s=fixture({team,phase:'kick',carrier:'white-P1',positions:{'white-P1':[10,11],'white-R1':[1,1],'white-Q':[0,16],'white-R2':[13,16],'white-B1':[0,15],'white-B2':[13,15],'white-N1':[0,14],'white-N2':[13,14],'white-P2':[0,13],'white-P3':[13,13],'black-N1':[0,1],'black-N2':[12,0]}});
   s.restart={type:'stalling',team,takerId:s.ball.carrierId,spot:{x:s.ball.x,y:s.ball.y},indirect:true};
-  const target=pointFor([12,0],team),before=JSON.stringify(s);assert.ok(E.legalKicks(s).some(k=>k.x===target.x&&k.y===target.y));
+  const target=pointFor([10,1],team),before=JSON.stringify(s);assert.ok(E.legalKicks(s).some(k=>k.x===target.x&&k.y===target.y));
+  assert.equal(E.movementCost(s.pieces.find(p=>p.id===idFor('white-R1',team)),target.x,target.y),15);
+  assert.equal(E.offsideInfo(s).flaggedIds.includes(idFor('white-R1',team)),false,'the potential collector is level with the last two defenders');
   const collecting={...s,restart:null,phase:'attackMove',ball:{...target,carrierId:null}};for(const p of s.pieces.filter(p=>p.team===team))assert.equal(contains(E.legalMoves(collecting,p.id),target),false);
   for(const difficulty of ['casual','tactical']){const a=E.chooseAIAction(s,{difficulty});assert.equal(a.type,'kick');assert.ok(a.x!==target.x||a.y!==target.y);assert.ok(E.legalKicks(s).some(k=>k.x===a.x&&k.y===a.y));assert.equal(JSON.stringify(s),before);}
 });

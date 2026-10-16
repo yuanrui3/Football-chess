@@ -1,0 +1,26 @@
+{
+  "frozenAt": "2026-10-16T07:25:15.012692+00:00",
+  "variants": {
+    "F": {
+      "SHA256": "f03a0e518b6cc1ca2a963923adf85fe0339554d729d155eee16ab29d9c71e301",
+      "finishingAccuracyMultiplier": 1.15,
+      "unrealizedLeafShotThreat": 450,
+      "knightGoalMultiplier": 1
+    }
+  },
+  "harnessSHA256": "98232e544fb62c5b26a4ab58a8455238dfafe1da718613f0f56cc886bb2f5625",
+  "foulsEnabled": true,
+  "tactical": {
+    "seeds": [
+      2488063171,
+      729413587
+    ],
+    "kickoffs": [
+      "white",
+      "black"
+    ],
+    "matchesPerVariant": 4,
+    "actions": 480
+  },
+  "note": "Implementation/integrity smoke after weighted/accuracy selection; no calibration, comparisons or policy tuning."
+}

@@ -1,8 +1,8 @@
-// Match time stays a wall clock. An unfinished decision and an awarded timeout
-// free kick must be settled before the final whistle can erase their outcome.
+// An unfinished decision or an awarded attacking restart must settle before
+// the final whistle can erase its outcome.
 const TEAMS = ['white', 'black'];
 const CHANCE_PHASES = ['restart', 'restartRelease', 'live', 'release', 'shot'];
-const RELEASE_PHASES = ['keeperReact', 'keeperRelease'];
+const RELEASE_PHASES = ['keeperReact', 'keeperRelease', 'passRun'];
 const clone = value => value == null ? null : {...value};
 const seconds = (value, fallback, maximum = Infinity) => Number.isFinite(value) ? Math.max(0, Math.min(maximum, value)) : fallback;
 
@@ -37,7 +37,7 @@ function nextChance(chance, before, next) {
   // A declared shot always resolves, even if it is an own-goal attempt.
   if (next.phase === 'keeperReact') return {...chance, phase: 'shot'};
   if (chance.phase === 'shot' || next.attack !== chance.team) return null;
-  if (chance.phase === 'release') return next.phase === 'keeperRelease' ? {...chance} : null;
+  if (chance.phase === 'release') return ['keeperRelease', 'passRun'].includes(next.phase) ? {...chance} : null;
   if (chance.phase === 'restart' || chance.phase === 'restartRelease') {
     if (next.restart) return {...chance};
     return {...chance, phase: next.phase === 'keeperRelease' ? 'restartRelease' : 'live'};
@@ -45,7 +45,7 @@ function nextChance(chance, before, next) {
   // A new restart ends a live chance, including an offside/stalling offence.
   if (next.restart) return null;
   if (['kick', 'keeperRelease'].includes(before.phase)) {
-    return next.phase === 'keeperRelease' ? {...chance, phase: 'release'} : null;
+    return ['keeperRelease', 'passRun'].includes(next.phase) ? {...chance, phase: 'release'} : null;
   }
   // A loose-ball round can finish without a kick or a carrier.
   if (before.phase === 'defendMove' && next.phase === 'attackMove' && next.turn > before.turn) return null;
@@ -54,7 +54,9 @@ function nextChance(chance, before, next) {
 
 export function settleMatchClock(clock, before, next, {timedOut = false, timed = true, actionSeconds = 30} = {}) {
   if (!timed) return {clock: {...clock, actionRemaining: actionSeconds, fullTimePending: false, finalChance: null}, finish: false};
-  const finalChance = timedOut && next.lastAction?.type === 'timeout' && next.restart?.type === 'timeout'
+  const protectedAward = timedOut && next.lastAction?.type === 'timeout' && next.restart?.type === 'timeout'
+    || next.lastAction?.type === 'foul' && ['freeKick', 'penalty'].includes(next.restart?.type);
+  const finalChance = protectedAward
     ? {team: next.restart.team, phase: 'restart'}
     : nextChance(clock.finalChance, before, next);
   const updated = {...clock, actionRemaining: actionSeconds, finalChance};

@@ -15,7 +15,7 @@ function fixture(team,{offside=false,block=false,seed=1}={}){
     [`${team}-K`]:transform([8,16]),[`${enemy}-K`]:transform([10,3]),
     [`${team}-R1`]:transform([6,5]),[`${team}-P2`]:transform([1,16]),[`${team}-P3`]:transform([2,16]),
     [`${enemy}-P2`]:transform(offside?[3,4]:[1,0]),[`${enemy}-P3`]:transform(offside?[3,5]:[2,0]),
-    ...(offside?{[`${team}-N1`]:transform([5,0])}:{}),
+    ...(offside?{[`${team}-N1`]:transform([5,1])}:{}),
     ...(block?{[`${enemy}-N1`]:transform([6,3])}:{})
   };
   const occupied=new Set(Object.values(assigned).map(pair=>pair.join(',')));

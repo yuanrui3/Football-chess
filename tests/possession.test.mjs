@@ -341,7 +341,7 @@ test('long-pass end-line exits give both teams resettling before the king passes
 test('wide shots also allow resettling before the king passes and preserve the wide-shot record', () => {
   for (const team of ['white', 'black']) {
     const transform = pair => team === 'white' ? pair : mirror(pair);
-    const state = fixture({ team, phase: 'kick', positions: { [`${team}-R1`]: transform([GOAL_FILES[0], 7]), [`${other(team)}-K`]: transform([7, 0]), [`${other(team)}-N1`]: transform([GOAL_FILES[1], 0]) }, clear: Array.from({ length: 8 }, (_, y) => transform([GOAL_FILES[0], y])) });
+    const state = fixture({ team, phase: 'kick', positions: { [`${team}-R1`]: transform([GOAL_FILES[0], 7]), [`${other(team)}-K`]: transform([7, 0]), [`${other(team)}-N1`]: transform([GOAL_FILES[1], 1]) }, clear: Array.from({ length: 8 }, (_, y) => transform([GOAL_FILES[0], y])) });
     const target = transform([GOAL_FILES[0], -1]);
     const declared = applyKick(state, ...target);
     assert.equal(declared.phase, 'keeperReact');

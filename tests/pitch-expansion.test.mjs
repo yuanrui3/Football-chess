@@ -17,7 +17,7 @@ function kick(s,target,team,options={roll:0}){const p=point(target,team);assert.
 function integrity(s){assert.equal(s.pieces.length,22);assert.equal(new Set(s.pieces.map(p=>`${p.x},${p.y}`)).size,22);for(const p of s.pieces){assert.ok(p.x>=0&&p.x<14&&p.y>=0&&p.y<17);assert.ok(E.canOccupySquare(p,p.x,p.y));}}
 
 test('pitch, goals, boxes and midfield have independent centered dimensions',()=>{
-  assert.equal(E.BOARD_WIDTH,14);assert.equal(E.BOARD_HEIGHT,17);assert.equal(E.RULES_VERSION,14);
+  assert.equal(E.BOARD_WIDTH,14);assert.equal(E.BOARD_HEIGHT,17);assert.equal(E.RULES_VERSION,15);
   assert.deepEqual(E.GOAL_FILES,[5,6,7,8]);assert.deepEqual(E.BOX_FILES,[4,5,6,7,8,9]);assert.equal(E.BOX_DEPTH,3);
   assert.deepEqual(E.CENTRAL_GOAL_FILES,[6,7]);assert.equal(E.MIDFIELD_RANK,8);assert.equal(E.BOARD_CENTER_X,6.5);assert.equal(E.FILE_LABELS,'abcdefghijklmn');
   let cells=0;for(let y=-1;y<=17;y++)for(let x=-1;x<=14;x++){
@@ -28,7 +28,7 @@ test('pitch, goals, boxes and midfield have independent centered dimensions',()=
 
 test('the new formation is legal, mirrored, screened by pawns and supplied by opposite-color bishops',()=>{
   for(const mode of ['solo','local'])for(const kickoff of ['white','black']){
-    const s=E.createGame({mode,kickoff,seed:1});integrity(s);assert.deepEqual(s.boardDimensions,{width:14,height:17});assert.equal(s.rulesVersion,14);
+    const s=E.createGame({mode,kickoff,seed:1});integrity(s);assert.deepEqual(s.boardDimensions,{width:14,height:17});assert.equal(s.rulesVersion,15);
     for(const team of ['white','black']){
       const own=s.pieces.filter(p=>p.team===team),king=own.find(p=>p.type==='K'),pawns=own.filter(p=>p.type==='P'),rooks=own.filter(p=>p.type==='R'),bishops=own.filter(p=>p.type==='B');
       assert.equal(own.length,11);assert.ok(E.inOwnBox(team,king.x,king.y));assert.equal(king.y,team==='white'?15:1);
@@ -59,17 +59,20 @@ for(const team of ['white','black']){
     assert.ok(E.legalMoves(n,id('white-N1',team)).length);for(const move of E.legalMoves(n,id('white-N1',team)))assert.ok(move.x>=0&&move.x<14&&move.y>=0&&move.y<17);
   });
 
-  test(`${team}: wider boxes admit every outfield type and their own king, while excluding the opposing king`,()=>{
+  test(`${team}: wider boxes admit off-ball outfield players and their own king while excluding opposing kings and new dribble entries`,()=>{
     assert.equal(E.ALLOW_OUTFIELD_BOXES,true);
-    const knight=fixture({team,phase:'attackMove',carrier:'white-N1',origin:[8,3]}),target=point([9,1],team);
+    const knight=fixture({team,phase:'attackMove',carrier:'white-Q',origin:[2,10],positions:{'white-N1':[8,3]}}),target=point([9,1],team);
     assert.ok(E.legalMoves(knight,id('white-N1',team)).some(m=>m.x===target.x&&m.y===target.y));
     assert.ok(E.isBox(target.x,target.y));assert.ok(!E.GOAL_FILES.includes(target.x));
+    const carrying=clone(knight),carrier=carrying.pieces.find(piece=>piece.id===id('white-N1',team));
+    carrying.ball={x:carrier.x,y:carrier.y,carrierId:carrier.id};
+    assert.ok(!E.legalMoves(carrying,carrier.id).some(m=>m.x===target.x&&m.y===target.y));
     for(const type of ['K','Q','R1','B1','P1']){
-      const s=fixture({team,phase:'attackMove',carrier:`white-${type}`,origin:type==='B1'?[3,2]:[3,1]}),p=point([4,1],team);
+      const s=fixture({team,phase:'attackMove',carrier:'white-N2',origin:[2,10],positions:{[`white-${type}`]:type==='B1'?[3,2]:[3,1]}}),p=point([4,1],team);
       assert.equal(E.legalMoves(s,id(`white-${type}`,team)).some(m=>m.x===p.x&&m.y===p.y),type!=='K');
       if(type!=='K')assert.ok(E.canOccupySquare(s.pieces.find(p=>p.id===id(`white-${type}`,team)),p.x,p.y));
     }
-    const king=fixture({team,phase:'attackMove',carrier:'white-K',origin:[4,13]}),own=point([4,14],team);
+    const king=fixture({team,phase:'attackMove',positions:{'white-K':[4,13]}}),own=point([4,14],team);
     assert.ok(E.legalMoves(king,id('white-K',team)).some(m=>m.x===own.x&&m.y===own.y));
   });
 
@@ -127,5 +130,5 @@ test('old pitch dimensions or old untagged saves are rejected without translatin
   }
   const old=E.createGame({seed:1});delete old.boardDimensions;old.rulesVersion=13;assert.throws(()=>E.normalizeGame(old),/different pitch size/);
   const legacyFixture=E.createGame({seed:1});legacyFixture.rulesVersion=6;const before=clone(legacyFixture),normalized=E.normalizeGame(legacyFixture);
-  assert.equal(normalized.rulesVersion,14);assert.deepEqual(normalized.boardDimensions,{width:14,height:17});assert.deepEqual(normalized.pieces,before.pieces);assert.equal(normalized.randomState,before.randomState);assert.deepEqual(legacyFixture,before);
+  assert.equal(normalized.rulesVersion,15);assert.deepEqual(normalized.boardDimensions,{width:14,height:17});assert.deepEqual(normalized.pieces,before.pieces);assert.equal(normalized.randomState,before.randomState);assert.deepEqual(legacyFixture,before);
 });
