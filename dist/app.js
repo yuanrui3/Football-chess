@@ -1,4 +1,4 @@
-import {createGame, legalMoves, legalKicks, applyMove, applyKick, skipMove, chooseAIAction, currentTeam, BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, isBox, shotChance, shotModel, offsideInfo, LONG_TACKLE_RANGE, DRIBBLE_RANGE, positionActions, normalizeGame} from './engine.js?v=24277ff62667';
+import {createGame, legalMoves, legalKicks, applyMove, applyKick, skipMove, chooseAIAction, currentTeam, BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, isBox, shotChance, shotModel, offsideInfo, LONG_TACKLE_RANGE, DRIBBLE_RANGE, STALLING_RULE, progressInfo, positionActions, normalizeGame} from './engine.js?v=1ee144066903';
 
 const $ = id => document.getElementById(id);
 const NAMES = {K:'Goalkeeper',Q:'Queen',R:'Rook',B:'Bishop',N:'Knight',P:'Pawn'};
@@ -10,7 +10,7 @@ const MOVE_PATTERNS={K:'One square in any direction',Q:'Up to 10 squares straigh
 const DRIBBLE_PATTERNS={...MOVE_PATTERNS,Q:`Up to ${DRIBBLE_RANGE} squares straight or diagonally`,R:`Up to ${DRIBBLE_RANGE} squares horizontally or vertically`,B:`Up to ${DRIBBLE_RANGE} squares diagonally`};
 const KICK_PATTERNS={K:'Straight or diagonal kicks, like a queen',Q:'Straight or diagonal kicks',R:'Horizontal or vertical kicks',B:'Diagonal kicks',N:'One L-shaped kick over other pieces',P:'Forward, backward, left, or right kicks'};
 const TACKLE_PATTERNS={K:'1 square in any direction',Q:`up to ${LONG_TACKLE_RANGE} squares straight or diagonally`,R:`up to ${LONG_TACKLE_RANGE} squares horizontally or vertically`,B:`up to ${LONG_TACKLE_RANGE} squares diagonally`,N:'one L-shaped jump',P:'1 square diagonally, forward or backward'};
-const RESTART_NAMES={throwIn:'Throw-in',corner:'Corner kick',goalKick:'Goal kick',offside:'Indirect free kick'};
+const RESTART_NAMES={throwIn:'Throw-in',corner:'Corner kick',goalKick:'Goal kick',offside:'Indirect free kick',stalling:'Stalling free kick'};
 const FILES = 'abcdefghijkl';
 const coord = (x,y) => `${FILES[x]}${H-y}`;
 const percent = chance => `${Math.round(chance*100)}%`;
@@ -85,7 +85,7 @@ function restartGuide(){
   const restart=game.restart;if(!restart)return '';
   if(restart.type==='goalKick'&&kickPhase())return 'Both teams have resettled. The king must now pass from the goal box; a direct shot is not allowed.';
   if(kickPhase())return restart.type==='throwIn'?'Throw along any straight or diagonal direction. Accurate through 5 squares, unpredictable beyond 5, maximum 10. No direct goal.':restart.indirect?'Take an indirect free kick. Pass or find space; a direct shot is not allowed.':'The positioning round is complete. Take the restart using the taker’s kicking pattern.';
-  return `Both teams resettle before the restart: attacking side first, then defence. Each has one off-ball move and a free pawn action. ${restart.type==='goalKick'?'The king':'The taker'} stays at the restart spot; no dribbling or tackling until the ball is played.`;
+  return `${restart.type==='stalling'?'Awarded for insufficient forward progress. ':''}Both teams resettle before the restart: attacking side first, then defence. Each has one off-ball move and a free pawn action. ${restart.type==='goalKick'?'The king':'The taker'} stays at the restart spot; no dribbling or tackling until the ball is played.`;
 }
 function renderRestart(){
   const restart=game.restart,taker=game.pieces.find(piece=>piece.id===restart?.takerId);
@@ -95,6 +95,15 @@ function renderRestart(){
   $('restartInfo').textContent=`${taker?pieceLabel(taker):'Nearest eligible player'} at ${coord(restart.spot.x,restart.spot.y)}. ${restartGuide()}`;
   $('throwGuide').hidden=restart.type!=='throwIn';
   $('throwGuide').textContent='1–5 squares: 100% · 6: 85% · 7: 70% · 8: 55% · 9: 40% · 10: 25%';
+}
+function renderProgress(){
+  const info=progressInfo(game),panel=$('progressPanel');
+  panel.hidden=stage!=='playing'||!info.active;
+  panel.dataset.warning=String(info.warning);
+  if(panel.hidden)return;
+  $('progressTitle').textContent=`${TEAM[info.team]} · ${info.warning?'Last round to progress':'Keep the attack moving'}`;
+  const net=info.progress>=0?`${info.progress} forward`:`${Math.abs(info.progress)} backward`;
+  $('progressInfo').textContent=`${info.rounds}/${STALLING_RULE.rounds} rounds used · ${net} squares. ${info.needed>0?`Advance ${info.needed} more toward goal or shoot within ${info.roundsRemaining} ${info.roundsRemaining===1?'round':'rounds'} to avoid an indirect free kick.`:'Keep this forward gain through your kick to reset the count.'}`;
 }
 function targetKind(target){
   if(stage==='setup')return 'setup';
@@ -258,7 +267,7 @@ function render(){
     if(dribbleMode)selectedId=game.ball.carrierId;
   }
   $('setupPanel').hidden=stage!=='setup';$('turnPanel').hidden=stage==='setup';
-  renderRestart();
+  renderRestart();renderProgress();
   $('opponentControls').hidden=game.mode!=='solo';$('computerRecap').hidden=!lastComputerAction||game.mode!=='solo';$('computerActionText').textContent=lastComputerAction?.summary||'';
   $('difficultyHelp').textContent=aiDifficulty==='tactical'?'Plans ahead against your replies and weighs risky outcomes.':'Reacts to the current position with straightforward tactics.';
   $('whiteScore').textContent=game.score.white;$('blackScore').textContent=game.score.black;
@@ -308,6 +317,7 @@ function commit(next){
   game=next;selectedId=null;freePawnMode=false;dribbleMode=false;
   lastComputerAction=actor==='black'&&game.mode==='solo'?{action:game.lastAction,summary:game.log.at(-1).replaceAll('White','Ivory').replaceAll('Black','Obsidian')}:null;
   if(game.score.white+game.score.black>oldScore)toast(`${TEAM[game.lastAction.team]} scores! ${game.score.white} : ${game.score.black}${game.lastAction.ownGoal?' · Own goal':''}`);
+  else if(game.lastAction?.type==='stalling')toast(`Stalling: ${TEAM[game.restart.team]} wins an indirect free kick near the ball.`);
   else if(game.restart)toast(`${RESTART_NAMES[game.restart.type]} for ${TEAM[game.restart.team]}. Position the teams, then restart.`);
   else if(game.lastAction?.type==='save')toast(`${TEAM[game.attack]} saves the shot and takes possession.`);
   else if(game.lastAction?.type==='miss')toast('The long pass missed its target. The ball is loose.');
@@ -336,7 +346,7 @@ function scheduleAI(){
     aiTimer=null;if(!stillCurrent())return;
     if(aiDifficulty==='tactical'&&typeof window.Worker==='function'){
       try{
-        aiWorker=new window.Worker(new URL('./ai-worker.js?v=5f885d71d3bd',import.meta.url),{type:'module',name:'football-chess-tactical'});
+        aiWorker=new window.Worker(new URL('./ai-worker.js?v=404e885d2739',import.meta.url),{type:'module',name:'football-chess-tactical'});
         aiWorker.onmessage=event=>{if(!stillCurrent()||event.data?.requestId!==requestId)return;if(event.data.error)fallback();else receive(event.data.action);};
         aiWorker.onerror=event=>{event.preventDefault?.();fallback();};
         aiWatchdog=setTimeout(()=>fallback('casual'),4000);

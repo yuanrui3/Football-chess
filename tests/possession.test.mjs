@@ -396,7 +396,7 @@ test('version-five immediate goal kicks migrate to a fresh protected round, incl
     if (!hasMetadata) { delete state.restart; delete state.offside; }
     const before = clone(state), normalized = engine.normalizeGame(state);
     assert.deepEqual(state, before, 'loading must not mutate the saved match or undo snapshot');
-    assert.equal(normalized.rulesVersion, 7);
+    assert.equal(normalized.rulesVersion, 8);
     assert.equal(normalized.randomState, state.randomState);
     assert.deepEqual(normalized.score, state.score);
     assert.deepEqual(normalized.positionBudget, budget(), 'both teams receive a fresh round after an old immediate restart');
@@ -418,7 +418,7 @@ test('normalizing existing resettling saves preserves phase, spent budget and ev
       state.rulesVersion = 5;
       const before = clone(state), normalized = engine.normalizeGame(state);
       assert.deepEqual(state, before);
-      assert.deepEqual(normalized, { ...state, rulesVersion: 7 }, 'valid protected restart is preserved exactly except the version');
+      assert.deepEqual(normalized, { ...state, rulesVersion: 8 }, 'valid protected restart is preserved exactly except the version');
       assert.deepEqual(engine.normalizeGame(normalized), normalized);
       assertGoalKick(normalized, team, phase);
     }
@@ -477,7 +477,7 @@ test('loading or undoing a legacy bonus carry cannot grant another dribble and p
     const snapshot = JSON.parse(JSON.stringify(state)), before = clone(snapshot);
     const normalized = engine.normalizeGame(snapshot);
     assert.deepEqual(snapshot, before, 'a cached match or undo snapshot remains unmodified');
-    assert.deepEqual(normalized, { ...before, rulesVersion: 7, positionBudget: budget(false, true, true) }, 'only the rules version and already-used carry allowance change');
+    assert.deepEqual(normalized, { ...before, rulesVersion: 8, positionBudget: budget(false, true, true) }, 'only the rules version and already-used carry allowance change');
     assert.equal(normalized.randomState, before.randomState, 'loading consumes no future random outcome');
     assert.deepEqual(legalMoves(normalized, `${team}-P1`), [], 'the past bonus carry counts as the one permitted dribble');
     assert.deepEqual(legalMoves(normalized, `${team}-P1`, { freePawn: true }), []);
@@ -502,7 +502,7 @@ test('legacy migration distinguishes bonus collection, off-ball moves and unrela
   for (const [name, state] of [['collection', collected], ['off-ball bonus', offBall], ['current version', currentVersion], ['defending phase', defending], ['no previous action', noAction], ['non-move action', unrelatedAction]]) {
     const before = clone(state), normalized = engine.normalizeGame(state);
     assert.deepEqual(state, before, `${name}: normalization is pure`);
-    assert.deepEqual(normalized, { ...before, rulesVersion: 7 }, `${name}: the dribble allowance must not be consumed without evidence of a carry`);
+    assert.deepEqual(normalized, { ...before, rulesVersion: 8 }, `${name}: the dribble allowance must not be consumed without evidence of a carry`);
     assert.equal(normalized.randomState, before.randomState);
     assert.deepEqual(engine.normalizeGame(normalized), normalized);
   }

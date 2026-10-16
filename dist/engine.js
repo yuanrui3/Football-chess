@@ -5,6 +5,7 @@ export const BOARD_HEIGHT = 15;
 export const GOAL_FILES = Object.freeze([4, 5, 6, 7]);
 export const LONG_TACKLE_RANGE = 5;
 export const DRIBBLE_RANGE = 8;
+export const STALLING_RULE = Object.freeze({rounds: 3, minProgress: 4});
 // Tunable board-game parameters, not fitted football statistics. Distance is in
 // board squares and time is in abstract units set by ballSpeed.
 export const SHOT_MODEL = Object.freeze({
@@ -44,6 +45,58 @@ const attackingCarrier = (state, piece) => state.phase === 'attackMove' && !stat
 const clamp = (number, minimum, maximum) => Math.max(minimum, Math.min(maximum, number));
 const inOwnBox = (team, x, y) => inside(x, y) && GOAL_FILES.includes(x) && (team === 'black' ? y <= 1 : team === 'white' ? y >= BOARD_HEIGHT - 2 : false);
 
+const freshProgress = state => ({team: state.attack, anchorY: state.ball.y, rounds: 0, pendingRelease: false, excludeRelease: false});
+const netProgress = (team, anchorY, y) => ((team === 'white' ? -1 : 1) * (y - anchorY)) || 0;
+function progressFor(state) {
+  const tracker = state.ballProgress;
+  if (!tracker || tracker.team !== state.attack || !TEAMS.includes(tracker.team)
+      || !Number.isInteger(tracker.anchorY) || tracker.anchorY < 0 || tracker.anchorY >= BOARD_HEIGHT
+      || !Number.isInteger(tracker.rounds) || tracker.rounds < 0 || tracker.rounds >= STALLING_RULE.rounds) return freshProgress(state);
+  return {team: tracker.team, anchorY: tracker.anchorY, rounds: tracker.rounds, pendingRelease: !!tracker.pendingRelease, excludeRelease: !!tracker.excludeRelease};
+}
+
+// A round ends at the resolved kick, not at its furthest dribble. Thus carrying
+// forward and passing back does not manufacture progress. The preview remains
+// useful during positioning without committing a new checkpoint too early.
+export function progressInfo(state) {
+  const tracker = progressFor(state);
+  const progress = netProgress(tracker.team, tracker.anchorY, state.ball.y);
+  const active = !state.restart && !['kickoff', 'keeperReact', 'finished'].includes(state.phase) && !tracker.excludeRelease;
+  const needed = Math.max(0, STALLING_RULE.minProgress - progress);
+  return {team: tracker.team, rounds: tracker.rounds, roundsRemaining: STALLING_RULE.rounds - tracker.rounds,
+    anchorY: tracker.anchorY, progress, needed, active, warning: active && tracker.rounds >= STALLING_RULE.rounds - 1 && needed > 0};
+}
+
+function resetProgress(state) { state.ballProgress = freshProgress(state); }
+
+function completeProgressRound(state, source) {
+  if (source.restart || source.phase === 'kickoff') { resetProgress(state); return; }
+  const tracker = progressFor(source);
+  if (tracker.team !== state.attack || tracker.excludeRelease) { resetProgress(state); return; }
+  const progress = netProgress(tracker.team, tracker.anchorY, state.ball.y);
+  if (progress >= STALLING_RULE.minProgress) { resetProgress(state); return; }
+  const rounds = tracker.rounds + 1;
+  if (rounds < STALLING_RULE.rounds) {
+    state.ballProgress = {...tracker, rounds, pendingRelease: false, excludeRelease: false};
+    return;
+  }
+  const offence = {x: state.ball.x, y: state.ball.y}, triggeringAction = copy(state.lastAction);
+  const restart = awardRestart(state, 'stalling', other(tracker.team), offence, {reason: 'stalling'});
+  state.lastAction = {type: 'stalling', team: tracker.team, offence, progress, rounds,
+    triggeringAction, restart: copy(restart), to: {...state.ball}, outcome: 'stalling'};
+  addLog(state, `${title(tracker.team)} fails to advance the ball at least ${STALLING_RULE.minProgress} net squares in ${STALLING_RULE.rounds} completed rounds. ${title(restart.team)} has an indirect free kick near ${square(offence.x, offence.y)}. Both teams may reposition.`);
+}
+
+function finishKickProgress(state, source, backPass, interception) {
+  if (interception) { resetProgress(state); return; }
+  const tracker = progressFor(source);
+  const excluded = !!source.restart || source.phase === 'kickoff' || tracker.excludeRelease;
+  if (backPass) {
+    state.ballProgress = {...(excluded ? freshProgress(state) : tracker), pendingRelease: true, excludeRelease: excluded};
+  } else if (excluded) resetProgress(state);
+  else completeProgressRound(state, source);
+}
+
 function formation(kickoff) {
   const white = {K: [5, 14], Q: [5, 10], R1: [1, 11], R2: [10, 11], B1: [3, 11], B2: [8, 11], N1: [2, 12], N2: [9, 12], P1: [4, 9], P2: [6, 9], P3: [8, 9]};
   const locations = {white, black: Object.fromEntries(Object.entries(white).map(([id, [x, y]]) => [id, [BOARD_WIDTH - 1 - x, BOARD_HEIGHT - 1 - y]]))};
@@ -76,7 +129,8 @@ export function createGame({mode = 'solo', minutes = 10, kickoff = 'white', seed
     score: {white: 0, black: 0}, turn: 1, randomState: normalizeSeed(seed),
     log: [`${title(kickoff)} has kick-off. Kick the ball to begin.`], lastAction: null,
     mode, minutes: Number.isFinite(Number(minutes)) && Number(minutes) > 0 ? Number(minutes) : 10,
-    rulesVersion: 7, restart: null, offside: null
+    rulesVersion: 8, restart: null, offside: null,
+    ballProgress: {team: kickoff, anchorY: carrier.y, rounds: 0, pendingRelease: false, excludeRelease: false}
   };
 }
 
@@ -229,7 +283,8 @@ function awardRestart(state, type, team, requestedSpot, {exit, reason} = {}) {
   else spot = origin;
   state.ball = {...spot, carrierId: taker?.id || null}; state.attack = team;
   beginPosition(state); state.offside = null;
-  state.restart = {type, team, takerId: taker?.id || null, spot: {...spot}, indirect: type === 'offside', ...(exit ? {exit} : {}), ...(reason ? {reason} : {})};
+  state.restart = {type, team, takerId: taker?.id || null, spot: {...spot}, indirect: ['offside', 'stalling'].includes(type), ...(exit ? {exit} : {}), ...(reason ? {reason} : {})};
+  resetProgress(state);
   return state.restart;
 }
 
@@ -270,7 +325,8 @@ export function normalizeGame(state) {
     }
     next.releaseReason = null;
   }
-  next.rulesVersion = 7;
+  next.ballProgress = progressFor(next);
+  next.rulesVersion = 8;
   return next;
 }
 
@@ -439,7 +495,9 @@ function advancePosition(state, previousPhase) {
     beginPosition(state);
     state.turn++;
     addLog(state, 'The ball is loose. A new positioning round begins.');
+    return !state.restart;
   }
+  return false;
 }
 
 function resolveShot(next, {roll, keeperMove, landing} = {}) {
@@ -461,6 +519,7 @@ function resolveShot(next, {roll, keeperMove, landing} = {}) {
     next.positionBudget = freshBudget();
     next.pendingShot = null;
     next.releaseReason = null; next.restart = null; next.offside = null;
+    resetProgress(next);
     next.turn++;
     next.lastAction = {...common, type: 'goal', team: shot.scoringTeam, to: {x: shot.x, y: shot.y}, path: shot.path, outcome: 'goal', ownGoal: shot.scoringTeam !== shot.shootingTeam};
     addLog(next, `${title(shot.scoringTeam)} scores (${Math.round(probability * 100)}% chance)${shot.scoringTeam !== shot.shootingTeam ? ' — an own goal!' : '!'} ${next.score.white}–${next.score.black}. ${title(conceded)} kicks off.`);
@@ -477,10 +536,13 @@ function resolveShot(next, {roll, keeperMove, landing} = {}) {
     const destination = keeper ? {x: keeper.x, y: keeper.y} : {x: shot.x, y: shot.y < 0 ? 0 : BOARD_HEIGHT - 1};
     next.ball = {...destination, carrierId: keeper?.id || null};
     next.attack = shot.defendingTeam; next.restart = null;
+    const sameTeamSave = shot.shootingTeam === shot.defendingTeam;
+    if (!sameTeamSave) resetProgress(next);
     // A deliberate save does not erase a teammate-kick offside snapshot.
     beginPosition(next); next.turn++;
     next.lastAction = {...common, type: 'save', team: shot.defendingTeam, keeperId: keeper?.id, to: destination, path: [...shot.path.slice(0, -1), destination], outcome: 'saved'};
     addLog(next, `${title(shot.defendingTeam)} goalkeeper saves (${Math.round(probability * 100)}% scoring chance). ${title(shot.defendingTeam)} takes possession.`);
+    if (sameTeamSave) completeProgressRound(next, next);
   } else {
     let missedLanding = {x: shot.x, y: shot.y};
     if (shot.distance > 10) {
@@ -502,6 +564,7 @@ export function applyMove(state, pieceId, x, y, {freePawn = false, roll, landing
   const move = legalMoves(state, pieceId, {freePawn}).find(candidate => candidate.x === x && candidate.y === y);
   if (!move) throw new Error('That is not a legal move.');
   const next = copy(state), piece = next.pieces.find(p => p.id === pieceId), from = {x: piece.x, y: piece.y};
+  next.ballProgress = progressFor(state);
   if (state.phase !== 'keeperReact' && flagged(state, piece) && (move.type === 'tackle' || (!state.ball.carrierId && state.ball.x === x && state.ball.y === y))) {
     piece.x = x; piece.y = y;
     return callOffside(next, piece, {pieceId, from, intendedTo: {x, y}});
@@ -522,6 +585,7 @@ export function applyMove(state, pieceId, x, y, {freePawn = false, roll, landing
   if (turnover) {
     next.attack = piece.team;
     beginPosition(next);
+    resetProgress(next);
     next.turn++;
   } else {
     const usedBudget = freePawn ? 'pawnUsed' : wasCarrier && attackingCarrier(state, piece) ? 'dribbleUsed' : 'normalUsed';
@@ -540,6 +604,7 @@ export function applyMove(state, pieceId, x, y, {freePawn = false, roll, landing
       ? `${title(piece.team)} ${NAMES[piece.type]} wins the tackle (${Math.round(probability * 100)}% chance) and takes possession at ${square(x, y)}.`
       : `${title(piece.team)} ${NAMES[piece.type]} moves to ${square(x, y)}, but the knight evades the tackle (50% chance). The knight keeps the ball; the regular move is used.`
     : `${title(piece.team)} ${NAMES[piece.type]} ${wasCarrier ? 'dribbles' : 'moves'} to ${square(x, y)}${collection ? ' and collects the ball' : ''}${freePawn ? ' (free pawn move)' : ''}.`);
+  if (!turnover && !state.restart && state.phase === 'defendMove' && next.phase === 'attackMove' && !next.ball.carrierId) completeProgressRound(next, state);
   return next;
 }
 
@@ -552,17 +617,21 @@ export function skipMove(state, {roll, landing} = {}) {
   if (!positionalTurn(state)) {
     if (['kick', 'keeperRelease'].includes(state.phase) && !state.ball.carrierId) {
       const next = copy(state);
+      next.ballProgress = progressFor(state);
       beginPosition(next); next.turn++;
       next.lastAction = {type: 'skip', team: state.attack, phase: state.phase};
       addLog(next, 'The ball is loose. A new positioning round begins.');
+      completeProgressRound(next, state);
       return next;
     }
     throw new Error('Only a positioning turn or goalkeeper reaction can be ended.');
   }
   const next = copy(state);
+  next.ballProgress = progressFor(state);
   next.lastAction = {type: 'skip', team: currentTeam(state), phase: state.phase};
   addLog(next, `${title(currentTeam(state))} ends its positioning turn.`);
-  advancePosition(next, state.phase);
+  const completedLooseRound = advancePosition(next, state.phase);
+  if (completedLooseRound) completeProgressRound(next, state);
   return next;
 }
 export const endPositionTurn = skipMove;
@@ -584,11 +653,14 @@ export function applyKick(state, x, y, {roll, landing} = {}) {
   const kick = legalKicks(state).find(candidate => candidate.x === x && candidate.y === y);
   if (!kick) throw new Error('That is not a legal kick.');
   const next = copy(state), carrier = state.pieces.find(p => p.id === state.ball.carrierId), from = {x: carrier.x, y: carrier.y};
+  next.ballProgress = progressFor(state);
   const restart = state.restart;
   next.offside = offsideSnapshot(state, carrier, restart); next.restart = null;
   if (kick.goal) {
     next.pendingShot = {x, y, shooterId: carrier.id, shooterType: carrier.type, shootingTeam: carrier.team, scoringTeam: kick.goal, defendingTeam: other(kick.goal), from, path: kick.path, distance: kick.distance};
     next.phase = 'keeperReact'; next.releaseReason = null;
+    if (kick.goal === carrier.team) resetProgress(next);
+    else if (restart || state.phase === 'kickoff' || progressFor(state).excludeRelease) next.ballProgress = {...freshProgress(next), excludeRelease: true};
     const details = shotModel(next, x, y);
     next.lastAction = {type: 'shotAttempt', team: carrier.team, pieceId: carrier.id, from, to: {x, y}, path: kick.path, goalTarget: {x, y}, probability: details.probability, shotModel: details, outcome: 'pending'};
     addLog(next, `${title(carrier.team)} ${NAMES[carrier.type]} shoots toward ${'abcdefghijkl'[x]}! ${title(other(kick.goal))} may move its goalkeeper or hold before the shot resolves.`);
@@ -620,6 +692,7 @@ export function applyKick(state, x, y, {roll, landing} = {}) {
       : backPass ? `${title(carrier.team)} passes back to the goalkeeper. The goalkeeper must immediately release the ball.`
       : `${title(carrier.team)} ${restart?.type === 'throwIn' ? 'throws' : 'passes'} to the ${NAMES[receiver.type]} at ${square(destination.x, destination.y)} (${Math.round(accuracy * 100)}% accuracy).`
     : `${title(carrier.team)} ${successful ? 'kicks' : 'scatters the ball'} to ${square(destination.x, destination.y)} (${Math.round(accuracy * 100)}% accuracy). The ball is loose.`);
+  finishKickProgress(next, state, backPass, interception);
   return next;
 }
 
@@ -641,9 +714,29 @@ function reactedShotChance(state, kick) {
   return probability;
 }
 
+function progressRank(state, team, y, completesRound = false) {
+  const tracker = progressFor(state);
+  if (tracker.team !== team || state.restart || state.phase === 'kickoff' || tracker.excludeRelease) return 0;
+  const direction = team === 'white' ? -1 : 1;
+  const net = direction * (y - tracker.anchorY), advance = direction * (y - state.ball.y);
+  const urgency = tracker.rounds + 1;
+  let value = advance * (4 + tracker.rounds * 4);
+  if (net >= STALLING_RULE.minProgress) value += urgency * 30;
+  else if (completesRound) value -= tracker.rounds >= STALLING_RULE.rounds - 1 ? 650 : urgency * 12;
+  return value;
+}
+
+function attackingShotRank(state, kick, team) {
+  if (kick.goal !== team) return -5000;
+  const chance = reactedShotChance(state, kick);
+  // A token attempt from the other end of the pitch is usually a giveaway,
+  // even when it clears the progress clock. Keep genuine finishes attractive.
+  return chance * 1400 - (chance < 0.04 ? 850 : 90);
+}
+
 function kickValue(state, kick, team) {
   if (kick.offside) return -10000;
-  if (kick.goal) return kick.goal === team ? reactedShotChance(state, kick) * 1400 - 90 : -3000;
+  if (kick.goal) return attackingShotRank(state, kick, team);
   const carrier = state.pieces.find(p => p.id === state.ball.carrierId), receiver = state.pieces.find(p => p.id === kick.receiverId);
   const progress = goalDistance(team, carrier.y) - goalDistance(team, kick.y);
   let value = progress * 8 + 5.5 - Math.abs(kick.x - 5.5);
@@ -661,6 +754,7 @@ function kickValue(state, kick, team) {
     value += Math.max(-3, Math.min(3, enemyDistance - ownDistance)) * 12 - 35;
     if (isBox(kick.x, kick.y)) value -= 70;
   }
+  value += progressRank(state, team, kick.y, receiver?.type !== 'K');
   return value * kick.accuracy - (1 - kick.accuracy) * 100;
 }
 
@@ -682,6 +776,7 @@ function moveValue(state, projected, piece, move, team, beforeThreat) {
   } else if (carrier?.team === team) {
     if (carrier.id === piece.id) {
       value += forward * 12 + bestShot(projected, team) * 600;
+      value += progressRank(state, team, move.y);
       if (projected.pieces.some(p => p.team !== team && canTackle(projected, p, carrier))) value -= 180 * (carrier.type === 'N' ? 0.5 : 1);
     } else {
       value += forward * 1.8 + (distance(piece, carrier) - distance(afterPiece, carrier)) * 2;
@@ -815,6 +910,14 @@ function tacticalPositionValue(state, team) {
   possession += threat * 650 - risk * (kickNow ? 85 : 230);
   possession += carrier.type === 'N' ? 24 : carrier.type === 'K' ? -20 : 0;
   possession += (5.5 - Math.abs(carrier.x - 5.5)) * 2;
+  if (!state.restart && state.phase !== 'kickoff') {
+    const tracker = progressFor(state);
+    if (tracker.team === carrier.team && !tracker.excludeRelease) {
+      const net = (carrier.team === 'white' ? -1 : 1) * (carrier.y - tracker.anchorY);
+      possession += Math.min(STALLING_RULE.minProgress, net) * (3 + tracker.rounds * 3);
+      if (net < STALLING_RULE.minProgress) possession -= tracker.rounds * 40;
+    }
+  }
   const support = state.pieces.filter(piece => piece.team === carrier.team && piece.id !== carrier.id && piece.type !== 'K')
     .map(piece => distance(piece, carrier)).sort((a, b) => a - b).slice(0, 2);
   possession += support.reduce((sum, length) => sum + Math.max(0, 5 - length) * 3, 0);
@@ -840,6 +943,7 @@ function tacticalMoveRank(state, piece, move, beforeThreat) {
     value = carrier.id === piece.id
       ? forward * 11 + tacticalShots(projected, team) * 600 - tacticalTackleRisk(projected, carrier) * 260
       : forward * 1.7 + (distance(piece, carrier) - distance({x: move.x, y: move.y}, carrier)) * 2;
+    if (carrier.id === piece.id) value += progressRank(state, team, move.y);
     if (piece.type === 'K') value -= Math.abs(move.y - (team === 'white' ? BOARD_HEIGHT - 1 : 0)) * 5;
   } else if (carrier) {
     value = (distance(piece, carrier) - distance({x: move.x, y: move.y}, carrier)) * 5 + (beforeThreat - tacticalShots(projected, carrier.team)) * 900;
@@ -850,7 +954,7 @@ function tacticalMoveRank(state, piece, move, beforeThreat) {
 
 function tacticalKickRank(state, kick, team) {
   if (kick.offside) return -10000;
-  if (kick.goal) return kick.goal === team ? reactedShotChance(state, kick) * 1400 - 90 : -5000;
+  if (kick.goal) return attackingShotRank(state, kick, team);
   const carrier = state.pieces.find(piece => piece.id === state.ball.carrierId), receiver = state.pieces.find(piece => piece.id === kick.receiverId);
   const progress = goalDistance(team, carrier.y) - goalDistance(team, kick.y);
   let value = progress * 8 + 5.5 - Math.abs(kick.x - 5.5);
@@ -863,6 +967,7 @@ function tacticalKickRank(state, kick, team) {
     const projected = {...state, ball: {x: kick.x, y: kick.y, carrierId: null}, phase: 'attackMove', positionBudget: freshBudget()};
     value += looseBallValue(projected, team) - 60;
   }
+  value += progressRank(state, team, kick.y, receiver?.type !== 'K');
   return value * kick.accuracy - (1 - kick.accuracy) * 150;
 }
 
