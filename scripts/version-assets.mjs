@@ -23,7 +23,11 @@ async function versionEngineImport(name){
 }
 const replayVersion=await versionEngineImport('goal-replay.js');
 const statsVersion=await versionEngineImport('match-stats.js');
-const commentaryVersion=hash(await readFile(asset('commentary.js'),'utf8'));
+const commentaryClipsVersion=hash(await readFile(asset('commentary-clips.js'),'utf8'));
+let commentary=await readFile(asset('commentary.js'),'utf8');
+commentary=commentary.replace(/from ['"]\.\/commentary-clips\.js(?:\?v=[^'"]+)?['"]/,`from './commentary-clips.js?v=${commentaryClipsVersion}'`);
+await writeFile(asset('commentary.js'),commentary);
+const commentaryVersion=hash(commentary);
 let app=await readFile(asset('app.js'),'utf8');
 app=app.replace(/from ['"]\.\/engine\.js(?:\?v=[^'"]+)?['"]/,`from './engine.js?v=${engineVersion}'`);
 app=app.replace(/['"]\.\/ai-worker\.js(?:\?v=[^'"]+)?['"]/,`'./ai-worker.js?v=${workerVersion}'`);
@@ -37,4 +41,4 @@ let html=await readFile(asset('index.html'),'utf8');
 html=html.replace(/href="style\.css(?:\?v=[^"]+)?"/,`href="style.css?v=${cssVersion}"`)
   .replace(/src="app\.js(?:\?v=[^"]+)?"/,`src="app.js?v=${appVersion}"`);
 await writeFile(asset('index.html'),html);
-console.log('Versioned game assets:',{app:appVersion,engine:engineVersion,worker:workerVersion,replay:replayVersion,stats:statsVersion,commentary:commentaryVersion,clock:clockVersion,css:cssVersion});
+console.log('Versioned game assets:',{app:appVersion,engine:engineVersion,worker:workerVersion,replay:replayVersion,stats:statsVersion,commentary:commentaryVersion,commentaryClips:commentaryClipsVersion,clock:clockVersion,css:cssVersion});

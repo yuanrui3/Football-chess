@@ -1,0 +1,560 @@
+{
+  "generatedAt": "2026-10-16",
+  "provider": "Runway",
+  "voice": "Tom",
+  "model": "eleven_v3",
+  "originalScripts": true,
+  "usageGuidance": "https://help.runwayml.com/hc/en-us/articles/21668707517587-Can-I-use-the-content-I-made-in-Runway-for-commercial-purposes",
+  "clips": [
+    {
+      "key": "enable",
+      "taskId": "8c5e4d0b-07d0-4616-ac82-c03af3e9a69e",
+      "text": "Welcome to Football Chess. Let’s get into the action!",
+      "delivery": "excited",
+      "durationSeconds": 2.847347,
+      "file": "dist/audio/commentary/enable.mp3",
+      "bytes": 46018,
+      "sha256": "25b52ae7aec4f8cfe8f8111f98256769cf1872b9202d4a91f3745e7ed1abbc7f"
+    },
+    {
+      "key": "test",
+      "taskId": "6cf2ce60-4fed-4949-8f7f-5c553498bd79",
+      "text": "A chance to shoot… Oh, what a finish! That is magnificent!",
+      "delivery": "excited",
+      "durationSeconds": 5.146122,
+      "file": "dist/audio/commentary/test.mp3",
+      "bytes": 82798,
+      "sha256": "81e118386a32c4e1183a39e9290656149e401c70813d554d6c6ce6799ba762ed"
+    },
+    {
+      "key": "demo",
+      "taskId": "db082eea-8685-4cba-b6df-265ae757b076",
+      "text": "Here’s a taste of the action. They’re building down the wing.",
+      "delivery": "calm",
+      "durationSeconds": 3.082449,
+      "file": "dist/audio/commentary/demo.mp3",
+      "bytes": 49780,
+      "sha256": "175ddb142ed01faf30d64f1fa414aa960c843d8555e98c3d74dec926e2b1046d"
+    },
+    {
+      "key": "kickoff",
+      "taskId": "aebdd85e-5745-4364-9acb-4ca2cc7c52ea",
+      "text": "And we’re underway! The battle for space begins.",
+      "delivery": "excited",
+      "durationSeconds": 3.160816,
+      "file": "dist/audio/commentary/kickoff.mp3",
+      "bytes": 51034,
+      "sha256": "4e9bd5f2ab056db77fd0f2862325d38357c73568313cf181f0263ccf7568121d"
+    },
+    {
+      "key": "turnover",
+      "taskId": "0610331c-c17a-4931-a3e4-7bcae4958b0f",
+      "text": "They’ve won it back! Can they make this count?",
+      "delivery": "urgent",
+      "durationSeconds": 2.429388,
+      "file": "dist/audio/commentary/turnover.mp3",
+      "bytes": 39331,
+      "sha256": "01f9c0f312961567f1359c6cd86a661099796316802e8cd1f5306d60dd3763db"
+    },
+    {
+      "key": "counter",
+      "taskId": "4c01736b-94b0-42cc-915b-058e5b9b70a0",
+      "text": "They’re away on the counter! Now there’s ground to attack!",
+      "delivery": "urgent",
+      "durationSeconds": 3.317551,
+      "file": "dist/audio/commentary/counter.mp3",
+      "bytes": 53541,
+      "sha256": "f52c1a10397425b4faad082405af182f4de2bab3314be087c1bc377fe33bee16"
+    },
+    {
+      "key": "forward_centre",
+      "taskId": "a94e68a9-f483-4e70-a60d-5a5f01c3f0dc",
+      "text": "Forward through the middle. They’re looking to open things up.",
+      "delivery": "calm",
+      "durationSeconds": 3.395918,
+      "file": "dist/audio/commentary/forward_centre.mp3",
+      "bytes": 54795,
+      "sha256": "27b384acfa2e0ff3b759c203eeef81f045c75379b7f895473c4203210ec107af"
+    },
+    {
+      "key": "forward_wide",
+      "taskId": "e847d3c4-8eda-41ed-9c3e-b7d0b9b4a51f",
+      "text": "They move it down the flank. A bit of width now.",
+      "delivery": "calm",
+      "durationSeconds": 3.63102,
+      "file": "dist/audio/commentary/forward_wide.mp3",
+      "bytes": 58557,
+      "sha256": "722524edadd21724fc935a1100ff9067681e4185ad5a389be20ce275a5eac683"
+    },
+    {
+      "key": "switch",
+      "taskId": "0f274439-5eb3-42fd-a35a-d196aa3ca531",
+      "text": "A switch of play! Stretching the defence across the pitch.",
+      "delivery": "calm",
+      "durationSeconds": 3.317551,
+      "file": "dist/audio/commentary/switch.mp3",
+      "bytes": 53541,
+      "sha256": "1c88c4ec8ad00840c5fe9f91e87f6ba41c913d1cd31452d15bc23f221d38e5ab"
+    },
+    {
+      "key": "queen_linebreak",
+      "taskId": "8a9fe73a-55ec-4fc2-8813-74bb365f10e6",
+      "text": "The queen breaks the lines! That pass takes defenders out.",
+      "delivery": "excited",
+      "durationSeconds": 3.866122,
+      "file": "dist/audio/commentary/queen_linebreak.mp3",
+      "bytes": 62318,
+      "sha256": "ebb07ca8c896f0e4b7b9cf79450c9a21f1f01653049e4ed3a7a0bb0319082b01"
+    },
+    {
+      "key": "rook_wide",
+      "taskId": "2621fae2-ed2c-4ee4-ae5b-7dad8ab9631e",
+      "text": "The rook sends it up the wide channel. Good forward intent.",
+      "delivery": "calm",
+      "durationSeconds": 3.082449,
+      "file": "dist/audio/commentary/rook_wide.mp3",
+      "bytes": 49780,
+      "sha256": "b21f6db2a33a2b43e59a91485ec193d61f4449971c9d20eb8f4e14fd83552456"
+    },
+    {
+      "key": "bishop_diagonal",
+      "taskId": "aebf3197-fd51-4bf9-bc28-e7f08e6b0f7e",
+      "text": "A diagonal from the bishop. Changing the angle of attack.",
+      "delivery": "calm",
+      "durationSeconds": 4.127347,
+      "file": "dist/audio/commentary/bishop_diagonal.mp3",
+      "bytes": 66498,
+      "sha256": "8392bf28cf9fba1f329e50569c47f8b4e65b7518cd8329fbec4fe9a7c6799171"
+    },
+    {
+      "key": "knight_pocket",
+      "taskId": "52fcbd5b-dab1-4318-b5ca-900f746f6b5e",
+      "text": "The knight has found a pocket of space near goal!",
+      "delivery": "urgent",
+      "durationSeconds": 2.35102,
+      "file": "dist/audio/commentary/knight_pocket.mp3",
+      "bytes": 38077,
+      "sha256": "1fe52c4fe9fafd3cf4f7e13348e20448760b543aebd1ea3049e34dc4440543a4"
+    },
+    {
+      "key": "build_back",
+      "taskId": "5edb637d-d5bd-470b-a6d7-2843700d4db7",
+      "text": "Building from the back. Looking for that first opening.",
+      "delivery": "calm",
+      "durationSeconds": 3.160816,
+      "file": "dist/audio/commentary/build_back.mp3",
+      "bytes": 51034,
+      "sha256": "5a7bad55511318501a2259409a7a2fff8e28bd8d02a831191206f6a14db23cc3"
+    },
+    {
+      "key": "midfield",
+      "taskId": "bfd6199e-97db-406d-9438-db55a44ac89d",
+      "text": "The midfield battle continues. Who can take the initiative?",
+      "delivery": "calm",
+      "durationSeconds": 3.395918,
+      "file": "dist/audio/commentary/midfield.mp3",
+      "bytes": 54795,
+      "sha256": "4d2fd4994253c7df6732d93d8502c679f90f4a674260f95fe8c60e1be67c0cb3"
+    },
+    {
+      "key": "final_third",
+      "taskId": "efb80258-69d8-4c50-89d9-44c461a57c65",
+      "text": "They’re in the final third now. Can they find the opening?",
+      "delivery": "urgent",
+      "durationSeconds": 3.239184,
+      "file": "dist/audio/commentary/final_third.mp3",
+      "bytes": 52287,
+      "sha256": "867dd82f3913a68f46840bb5e2d3ffb7fd8485d69295acdb5c7cfd3d047d2e6a"
+    },
+    {
+      "key": "central_possession",
+      "taskId": "34a85efe-41d7-475c-b551-0188c4a7d6d5",
+      "text": "They’re working it through the centre, looking for an opening.",
+      "delivery": "calm",
+      "durationSeconds": 2.586122,
+      "file": "dist/audio/commentary/central_possession.mp3",
+      "bytes": 41838,
+      "sha256": "d841822e6b73b464b1874de985f06b5243695392b36d9cdbd971c7c1051edb0f"
+    },
+    {
+      "key": "wide_possession",
+      "taskId": "a4b224e5-15b5-4247-8b26-ed5b7acba01a",
+      "text": "They’ve got it out wide. Trying to stretch this defence.",
+      "delivery": "calm",
+      "durationSeconds": 3.082449,
+      "file": "dist/audio/commentary/wide_possession.mp3",
+      "bytes": 49780,
+      "sha256": "3c7da6ed07b18d4a9120a9d5472018d16f344ad0422bdad4f55b0db7c9c47f63"
+    },
+    {
+      "key": "tight_space",
+      "taskId": "0a02eb65-b905-4dad-94f6-f4ba715ce0a2",
+      "text": "Defenders close by. Very little room to work with here.",
+      "delivery": "urgent",
+      "durationSeconds": 3.63102,
+      "file": "dist/audio/commentary/tight_space.mp3",
+      "bytes": 58557,
+      "sha256": "29e8b774f3daec199f5b9f10c73dbf02ba9e3b7042253f9248c78f796f162a1c"
+    },
+    {
+      "key": "loose_ball",
+      "taskId": "b1e6f3f3-b034-42c1-a276-eacb5df927e8",
+      "text": "A loose ball! Who’s going to get there first?",
+      "delivery": "urgent",
+      "durationSeconds": 2.507755,
+      "file": "dist/audio/commentary/loose_ball.mp3",
+      "bytes": 40585,
+      "sha256": "f063daeafe7053ca30515b51ffcd43dc08decccee4e20a76b0b5859842d439a9"
+    },
+    {
+      "key": "level_score",
+      "taskId": "0128586f-c56d-4c74-beb9-0c361c5d90e1",
+      "text": "Still all square. One moment could turn this contest.",
+      "delivery": "calm",
+      "durationSeconds": 3.552653,
+      "file": "dist/audio/commentary/level_score.mp3",
+      "bytes": 57303,
+      "sha256": "3c955b5917af36b496c24c9ada9ccfc03456635711cc819065e42ec7baaed764"
+    },
+    {
+      "key": "leader",
+      "taskId": "e29993c9-77e0-4b42-b482-811347915565",
+      "text": "The leaders have the advantage. Plenty for the other side to do.",
+      "delivery": "calm",
+      "durationSeconds": 3.787755,
+      "file": "dist/audio/commentary/leader.mp3",
+      "bytes": 61065,
+      "sha256": "9fc062b0d2db407d605aaadffd7c5f1d4285edf313ec871ac56221f7342179a8"
+    },
+    {
+      "key": "advance_centre",
+      "taskId": "89b8c2cf-58ed-41c9-b2a5-86df3a1512cd",
+      "text": "They’re making ground through the middle. The initiative is theirs.",
+      "delivery": "calm",
+      "durationSeconds": 4.284082,
+      "file": "dist/audio/commentary/advance_centre.mp3",
+      "bytes": 69006,
+      "sha256": "6986771e96b001d25673436edd60dbbd599765816b4f4d6d6e0bc021e842bfad"
+    },
+    {
+      "key": "advance_wide",
+      "taskId": "bbbc0d97-9879-4f94-94ec-f95d7791f772",
+      "text": "Progress down the wing. They’re working those outer files.",
+      "delivery": "calm",
+      "durationSeconds": 3.866122,
+      "file": "dist/audio/commentary/advance_wide.mp3",
+      "bytes": 62318,
+      "sha256": "7bd00f66d00f2e6a8b959c1ae33b7147f8a4b8630629eb1380db23dc45d0afd8"
+    },
+    {
+      "key": "pressure",
+      "taskId": "3c52d72a-1eff-4747-bdd6-0b74894d630b",
+      "text": "They’re keeping it in the final third. The pressure is building.",
+      "delivery": "urgent",
+      "durationSeconds": 3.63102,
+      "file": "dist/audio/commentary/pressure.mp3",
+      "bytes": 58557,
+      "sha256": "1a89d5b3820cd68e8d053bf08e9dcf3df86010de7826fe88846cb726784e613c"
+    },
+    {
+      "key": "patient",
+      "taskId": "ba416aff-b159-4deb-8790-6a996ee65e3b",
+      "text": "Patient possession. They’re still searching for a way through.",
+      "delivery": "calm",
+      "durationSeconds": 3.787755,
+      "file": "dist/audio/commentary/patient.mp3",
+      "bytes": 61065,
+      "sha256": "2e195daa6203704df7f5047c051788071c8bcb13ea02b39fdd5a9c2f4544dd7d"
+    },
+    {
+      "key": "shot_close",
+      "taskId": "e3956537-0c8b-492b-af8a-4c1cfd8baade",
+      "text": "A real chance here! Goes for goal!",
+      "delivery": "urgent",
+      "durationSeconds": 2.507755,
+      "file": "dist/audio/commentary/shot_close.mp3",
+      "bytes": 40585,
+      "sha256": "ed71d8135f468c31b8f284228f695ab0f7c34c23ca932cd8925f23a783d25b3e"
+    },
+    {
+      "key": "shot_close_2",
+      "taskId": "ba3cfebf-1e40-4779-8d7d-46a9a025221a",
+      "text": "Close to goal! Can they finish?",
+      "delivery": "urgent",
+      "durationSeconds": 2.037551,
+      "file": "dist/audio/commentary/shot_close_2.mp3",
+      "bytes": 33061,
+      "sha256": "3a8b7eb27ed996d5cf731cd5c66312c48acf12690744b0e77c303daf396020ab"
+    },
+    {
+      "key": "shot_normal",
+      "taskId": "77e3dcdd-e30c-4ad4-8221-f11d7f8a7fde",
+      "text": "There’s the shot! A chance to test the keeper!",
+      "delivery": "urgent",
+      "durationSeconds": 2.847347,
+      "file": "dist/audio/commentary/shot_normal.mp3",
+      "bytes": 46018,
+      "sha256": "63c02d2c815d7a23d7b17075a3e5659bf9764e6ef52ab8277a3799e61b9f199b"
+    },
+    {
+      "key": "shot_normal_2",
+      "taskId": "4e79d12f-6bbc-4dc9-b43f-2f87a2ab094c",
+      "text": "Goes for goal! Can they find a way through?",
+      "delivery": "urgent",
+      "durationSeconds": 2.690612,
+      "file": "dist/audio/commentary/shot_normal_2.mp3",
+      "bytes": 43510,
+      "sha256": "286bea8ee665f6ce1f80e16fa9e92b88fe89470125fd3202a591483c3801b739"
+    },
+    {
+      "key": "shot_long",
+      "taskId": "60af672b-6deb-4142-b02b-d546ca37190e",
+      "text": "They’ll have a go from distance! An ambitious effort!",
+      "delivery": "urgent",
+      "durationSeconds": 3.395918,
+      "file": "dist/audio/commentary/shot_long.mp3",
+      "bytes": 54795,
+      "sha256": "82539d42c3ca644274b24bdcb8a62b5df304114833155dda14c3edd82d6f28ec"
+    },
+    {
+      "key": "shot_long_2",
+      "taskId": "01bf6502-8b02-4e8d-a280-1e88c4e7883e",
+      "text": "Lets fly from range! What a moment this could be!",
+      "delivery": "urgent",
+      "durationSeconds": 3.63102,
+      "file": "dist/audio/commentary/shot_long_2.mp3",
+      "bytes": 58557,
+      "sha256": "d42c27ee378b92589fb6097513d06306c57ff1e1c216024eee356b9b9170a46b"
+    },
+    {
+      "key": "shot_penalty",
+      "taskId": "9cbc0d27-362e-4d09-8767-df4e053aded0",
+      "text": "Here comes the penalty! A huge moment!",
+      "delivery": "urgent",
+      "durationSeconds": 3.004082,
+      "file": "dist/audio/commentary/shot_penalty.mp3",
+      "bytes": 48526,
+      "sha256": "357ad02928c8887e70aa60e736fd91438f9daed5bd7d99dca9e090a9968f2b0e"
+    },
+    {
+      "key": "shot_ownward",
+      "taskId": "8bb7458a-2fb0-4a57-a7eb-affd03cecdfb",
+      "text": "Careful! That’s heading towards their own goal!",
+      "delivery": "urgent",
+      "durationSeconds": 2.925714,
+      "file": "dist/audio/commentary/shot_ownward.mp3",
+      "bytes": 47272,
+      "sha256": "f04fa7cbb277a7e948f984d0dd6f193126dc43375ab3ff9a46dabad71116b6ff"
+    },
+    {
+      "key": "save_hold",
+      "taskId": "ef06b378-d830-493c-bbac-6624c539cf0d",
+      "text": "Saved! The keeper holds on. That settles the danger.",
+      "delivery": "excited",
+      "durationSeconds": 4.127347,
+      "file": "dist/audio/commentary/save_hold.mp3",
+      "bytes": 66498,
+      "sha256": "ac3d8029234939e839e913bb97102592d83c27d660dfa307c96ac84321a18165"
+    },
+    {
+      "key": "save_corner",
+      "taskId": "251b890c-ee9c-48fd-85b8-68a8d6a3e897",
+      "text": "What a save! Turned behind, and it’s a corner!",
+      "delivery": "excited",
+      "durationSeconds": 3.552653,
+      "file": "dist/audio/commentary/save_corner.mp3",
+      "bytes": 57303,
+      "sha256": "ab5745569ebc5551de548095a966aafd149ae815be55430646d8636caa4668f2"
+    },
+    {
+      "key": "keeper_release",
+      "taskId": "22fd9596-4074-4170-be96-115fd93f340b",
+      "text": "The keeper gathers it. That ball must be released straight away.",
+      "delivery": "calm",
+      "durationSeconds": 4.91102,
+      "file": "dist/audio/commentary/keeper_release.mp3",
+      "bytes": 79037,
+      "sha256": "aa42b1645b151b04a641eb223d7d9a9664f78071f20b637b3821d01a1e5b7235"
+    },
+    {
+      "key": "block_possession",
+      "taskId": "50199c93-e1c0-42cb-9378-9977fe978085",
+      "text": "Blocked! The defender takes the ball. Danger averted.",
+      "delivery": "excited",
+      "durationSeconds": 5.642449,
+      "file": "dist/audio/commentary/block_possession.mp3",
+      "bytes": 90740,
+      "sha256": "f77ea485977a1bb3bbbcbcf2b77387a84b6456b40ce4e0199bf5310bfd62b528"
+    },
+    {
+      "key": "block_corner",
+      "taskId": "6a19cb6d-b7f1-44d5-8814-ccc57c60f78e",
+      "text": "The shot is blocked! Behind it goes for a corner.",
+      "delivery": "excited",
+      "durationSeconds": 3.160816,
+      "file": "dist/audio/commentary/block_corner.mp3",
+      "bytes": 51034,
+      "sha256": "17cd8face293d2a3ce275faa3df9ff02a5621d5852d453fa9900db07974b80c2"
+    },
+    {
+      "key": "miss",
+      "taskId": "591d308f-9548-4380-88bd-e0ecc339a382",
+      "text": "Off target! The chance is gone. It’ll be a goal kick.",
+      "delivery": "excited",
+      "durationSeconds": 3.552653,
+      "file": "dist/audio/commentary/miss.mp3",
+      "bytes": 57303,
+      "sha256": "49456d7e2f676da48ccdd3d3d04b9145f494db68b6163855db0e4c5671f0f9b7"
+    },
+    {
+      "key": "penalty_award",
+      "taskId": "c11871e3-1f3a-4f6b-b308-5e7edd6bad19",
+      "text": "Penalty! A foul in the box. A massive opportunity!",
+      "delivery": "excited",
+      "durationSeconds": 4.362449,
+      "file": "dist/audio/commentary/penalty_award.mp3",
+      "bytes": 70260,
+      "sha256": "6cac0a54e629e06ea7aa8688c248455eaccd1031aa428afce424ebcd25a6dd01"
+    },
+    {
+      "key": "goal_opening",
+      "taskId": "c6182eae-0b0c-4484-a495-d2b0abc53c5e",
+      "text": "Goal! The breakthrough! The deadlock is broken!",
+      "delivery": "excited",
+      "durationSeconds": 4.04898,
+      "file": "dist/audio/commentary/goal_opening.mp3",
+      "bytes": 65244,
+      "sha256": "d5a4bceeb6a0fb213355f351cc4b28dfdfeb03286a699739258bf40023c8e02b"
+    },
+    {
+      "key": "goal_equalizer",
+      "taskId": "91da6b2b-7cfb-4fca-8bc4-211f1b691762",
+      "text": "Goal! They’ve drawn level! What a response!",
+      "delivery": "excited",
+      "durationSeconds": 4.04898,
+      "file": "dist/audio/commentary/goal_equalizer.mp3",
+      "bytes": 65244,
+      "sha256": "61ff0c2c53e74ca0950540dcc106aeda2c00c71ed3e4c120ebd9da7bd1f1eb53"
+    },
+    {
+      "key": "goal_ahead",
+      "taskId": "df88b68b-828b-47cf-9ab6-4817d2f681f8",
+      "text": "It’s in! They take the lead! What a moment!",
+      "delivery": "excited",
+      "durationSeconds": 3.239184,
+      "file": "dist/audio/commentary/goal_ahead.mp3",
+      "bytes": 52287,
+      "sha256": "f4488b2c99159776afcb700f12fa046b12aa2b99cec818ce02de724868f25e2a"
+    },
+    {
+      "key": "goal_extend",
+      "taskId": "c6d14928-bae9-4ca3-85ba-bdbe5cbccd81",
+      "text": "Goal! They extend their lead! That could be so important!",
+      "delivery": "excited",
+      "durationSeconds": 4.754286,
+      "file": "dist/audio/commentary/goal_extend.mp3",
+      "bytes": 76529,
+      "sha256": "3bbe6d3ecb31b251179aeb3ddb854b4f12914eb56f93150b2a36da805bbb2f7c"
+    },
+    {
+      "key": "goal_pullback",
+      "taskId": "1bb03614-c26f-4f21-ac24-f6160ec5f3c8",
+      "text": "Goal! They’ve pulled one back! There’s life in this contest!",
+      "delivery": "excited",
+      "durationSeconds": 3.787755,
+      "file": "dist/audio/commentary/goal_pullback.mp3",
+      "bytes": 61065,
+      "sha256": "387531467ca35a8f313750471e4604a20c5c6cb00e8adac401641d20ed6e1e92"
+    },
+    {
+      "key": "goal_generic",
+      "taskId": "7cb0c454-d294-4e55-89ed-2a75dcb9f1b6",
+      "text": "Goal! It’s in! What a moment for the attacking side!",
+      "delivery": "excited",
+      "durationSeconds": 3.63102,
+      "file": "dist/audio/commentary/goal_generic.mp3",
+      "bytes": 58557,
+      "sha256": "7dacc691c4589cfc6565688ac6c1650702b9550968ff267fbff162d313a5bff0"
+    },
+    {
+      "key": "goal_own",
+      "taskId": "acff344d-6298-4128-8093-a9ed85f76832",
+      "text": "Oh, an own goal! A dreadful moment for the defending side!",
+      "delivery": "excited",
+      "durationSeconds": 3.970612,
+      "file": "dist/audio/commentary/goal_own.mp3",
+      "bytes": 63990,
+      "sha256": "9318564ff2d2483d15a16db9a5c12c0bbbaa469049a30597be7c2aaf0caaa98f"
+    },
+    {
+      "key": "corner",
+      "taskId": "5e0a9805-e6a2-414f-a9a7-5344222cc1b5",
+      "text": "A corner. A chance to load the box and ask questions.",
+      "delivery": "calm",
+      "durationSeconds": 3.63102,
+      "file": "dist/audio/commentary/corner.mp3",
+      "bytes": 58557,
+      "sha256": "eef88a89b69eaceb6f793863e38ea1ab32adff6e80b893390266c4bf43691b1e"
+    },
+    {
+      "key": "throw",
+      "taskId": "20352fe1-cc6e-49f5-afad-5fb65e544ef1",
+      "text": "A throw-in. A moment to reset and find the next pass.",
+      "delivery": "calm",
+      "durationSeconds": 4.362449,
+      "file": "dist/audio/commentary/throw.mp3",
+      "bytes": 70260,
+      "sha256": "7e02f63670d518c4073e43ccb026db9bee260d9b43c79b2d4848dc247f135035"
+    },
+    {
+      "key": "free",
+      "taskId": "4d0ffa26-4d43-43b3-a287-3c2dec7bbc86",
+      "text": "A free kick. Can they make something of this set piece?",
+      "delivery": "calm",
+      "durationSeconds": 3.239184,
+      "file": "dist/audio/commentary/free.mp3",
+      "bytes": 52287,
+      "sha256": "10630d10c53239c53dc4dd43da9eed54e8938372298ec491c4af7df1f50065f9"
+    },
+    {
+      "key": "indirect",
+      "taskId": "0f569266-8dd4-454b-9954-9f11d4ab6275",
+      "text": "An indirect free kick. They’ll need to build the chance.",
+      "delivery": "calm",
+      "durationSeconds": 3.474286,
+      "file": "dist/audio/commentary/indirect.mp3",
+      "bytes": 56049,
+      "sha256": "356f6eef9a564abd240a6145bd52c8fc8e0222c87787c1fa4093102177f78fc2"
+    },
+    {
+      "key": "goalkick",
+      "taskId": "57b776d5-8b3d-4f55-8176-526b8d2b189e",
+      "text": "A goal kick. Time to reset the shape and build again.",
+      "delivery": "calm",
+      "durationSeconds": 3.474286,
+      "file": "dist/audio/commentary/goalkick.mp3",
+      "bytes": 56049,
+      "sha256": "9c2053721f9b0aba72421f2a602d286dead74d10e470f0c68e49792b4a294dc1"
+    },
+    {
+      "key": "offside",
+      "taskId": "4b6000bb-72ff-4570-9999-5e05548bd00b",
+      "text": "The flag is up! Offside. That move comes to an end.",
+      "delivery": "urgent",
+      "durationSeconds": 3.866122,
+      "file": "dist/audio/commentary/offside.mp3",
+      "bytes": 62318,
+      "sha256": "76f5f7bf38e1bfcd8f068389e3a77cf3000b1be5c56068ce860a02eb93eef987"
+    },
+    {
+      "key": "timeout",
+      "taskId": "9100692e-c5e8-42a5-ae55-ce6accb6e28a",
+      "text": "Too much hesitation! An indirect free kick to the other side.",
+      "delivery": "urgent",
+      "durationSeconds": 4.440816,
+      "file": "dist/audio/commentary/timeout.mp3",
+      "bytes": 71514,
+      "sha256": "bdfe15ef86c1eac160383e5027f8c5b3cc72dd7e84de0afcdd44ad44479faab8"
+    }
+  ]
+}

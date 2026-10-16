@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {createCommentary, commentaryEvent, commentaryPiece, commentaryVoices, commentarySituation, analyseCommentaryTrend, completedCommentaryRound, COMMENTARY_DEMO} from '../dist/commentary.js';
 import {E, fixture, point} from './helpers/shot-fixture.mjs';
 import {createMatchStats, recordMatchTransition} from '../dist/match-stats.js';
+import {COMMENTARY_CLIPS, COMMENTARY_RECORDING} from '../dist/commentary-clips.js';
 
 const clone = structuredClone;
 function shot({team = 'white', type = 'Q', blocker = false} = {}) {
@@ -11,7 +12,7 @@ function shot({team = 'white', type = 'Q', blocker = false} = {}) {
   const aim = point([6, -1], team), pending = E.applyKick(before, aim.x, aim.y);
   return {before, pending, model: E.shotModel(pending)};
 }
-function clockHarness({supported = true, fail = false, enabled = true, voices} = {}) {
+function clockHarness({supported = true, fail = false, enabled = true, voices, AudioCtor, clips, onPlaybackChanged} = {}) {
   let time = 0, serial = 0;
   const timers = new Map(), captions = [], spoken = [];
   const speech = {cancelled: 0, speak(value) {if (fail) throw Error('Speech unavailable'); spoken.push(value);}, cancel() {this.cancelled++;}};
@@ -19,6 +20,7 @@ function clockHarness({supported = true, fail = false, enabled = true, voices} =
   if (voices !== undefined) Object.assign(speech, {getVoices: () => voices, addEventListener: (name, fn) => listeners.set(name, fn), removeEventListener: name => listeners.delete(name)});
   class Utterance {constructor(text) {this.text = text;}}
   const controller = createCommentary({speechSynthesis: supported ? speech : null, Utterance: supported ? Utterance : null,
+    AudioCtor, ...(clips ? {clips} : {}), onPlaybackChanged,
     onCaption: (text, event) => captions.push({text, event}), now: () => time,
     setTimer(fn, delay) {const id = ++serial; timers.set(id, {at: time + delay, fn}); return id;}, clearTimer: id => timers.delete(id)});
   controller.setPace(3000); if (enabled) controller.setEnabled(true);
@@ -436,4 +438,145 @@ test('a fresh measured buildup leads the heartbeat, while stale or opposing samp
   const other = buildup(); other.controller.tick({...state, attack: 'black'});
   assert.doesNotMatch(other.spoken.at(-1).text, /Ivory are advancing/);
   const hidden = buildup(); assert.equal(hidden.controller.tick({...state, phase: 'keeperReact', pendingShot: {}}), false);
+});
+
+function audioHarness(options = {}) {
+  const audios = [], statuses = [];
+  class Audio {
+    constructor(src) {this.src = src; this.paused = 0; this.loaded = 0; audios.push(this);}
+    play() {return options.play?.(this);}
+    pause() {this.paused++;}
+    removeAttribute(name) {if (name === 'src') this.src = '';}
+    load() {this.loaded++;}
+  }
+  const h = clockHarness({...options, AudioCtor: Audio, onPlaybackChanged: value => statuses.push(value)});
+  return {...h, audios, statuses};
+}
+const recordedLine = (kind, key, id = key) => ({...line(kind, id), clipKey: key});
+
+test('recorded commentary works without a speech engine or an English device voice', () => {
+  const h = audioHarness({supported: false});
+  assert.equal(h.controller.getState().playback, 'recorded');
+  assert.equal(h.controller.getState().supported, true);
+  assert.equal(h.controller.confirmEnabled(), true);
+  assert.match(h.audios[0].src, /\/audio\/commentary\/enable\.mp3$/);
+  assert.equal(h.audios[0].volume, 1); assert.equal(h.audios[0].preload, 'auto');
+  assert.equal(h.captions.at(-1).text, COMMENTARY_CLIPS.enable.text);
+  assert.equal(h.controller.getState().audioStatus, 'playing');
+  h.audios[0].onended(); assert.equal(h.controller.getState().speaking, false);
+  h.controller.setPlayback('device'); assert.equal(h.controller.getState().supported, false);
+  assert.equal(h.controller.setPlayback('not-a-mode'), false);
+  const emptyVoices = audioHarness({voices: []}); emptyVoices.controller.setPlayback('device');
+  assert.equal(emptyVoices.controller.getState().supported, false);
+});
+
+test('recorded captions match the exact generic call, rather than a different score or named player', () => {
+  const h = audioHarness(), {before, pending} = shot(), goal = E.skipMove(pending, {roll: 0});
+  const attempt = h.controller.observe(before, pending);
+  assert.ok(COMMENTARY_CLIPS[attempt.clipKey]);
+  assert.equal(h.captions.at(-1).text, COMMENTARY_CLIPS[attempt.clipKey].text);
+  assert.equal(h.spoken.length, 0);
+  const deferred = h.controller.observe(pending, goal, {deferResult: true});
+  assert.equal(deferred.clipKey, 'goal_opening'); assert.equal(h.audios.length, 1);
+  h.controller.reveal(deferred);
+  assert.equal(h.audios.length, 2); assert.equal(h.captions.at(-1).text, COMMENTARY_CLIPS.goal_opening.text);
+  assert.equal(h.spoken.length, 0); assert.doesNotMatch(h.captions.at(-1).text, /Ivory|Obsidian|queen|\d/);
+});
+
+test('recorded shot outcomes and goal contexts map to factually matching clips', () => {
+  const {before, pending, model} = shot({blocker: true});
+  let start = 0;
+  for (const [branch, key] of [['goalProbability', 'goal_opening'], ['keeperCornerProbability', 'save_corner'],
+    ['caughtSaveProbability', 'save_hold'], ['missProbability', 'miss'], ['blockOutProbability', 'block_corner'],
+    ['blockPossessionProbability', 'block_possession']]) {
+    const after = E.skipMove(pending, {roll: start + model[branch] / 2});
+    assert.equal(commentaryEvent(pending, after).clipKey, key); start += model[branch];
+  }
+  const scored = E.skipMove(pending, {roll: 0});
+  for (const [oldScore, newScore, key] of [
+    [{white: 0, black: 1}, {white: 1, black: 1}, 'goal_equalizer'],
+    [{white: 1, black: 1}, {white: 2, black: 1}, 'goal_ahead'],
+    [{white: 1, black: 0}, {white: 2, black: 0}, 'goal_extend'],
+    [{white: 0, black: 2}, {white: 1, black: 2}, 'goal_pullback']])
+    assert.equal(commentaryEvent({...pending, score: oldScore}, {...scored, score: newScore}).clipKey, key);
+  pending.pendingShot.penalty = true;
+  assert.equal(commentaryEvent(before, pending).clipKey, 'shot_penalty');
+});
+
+test('failed recorded playback falls back once using exactly the same words', async () => {
+  const h = audioHarness({play: () => Promise.reject(Error('Playback blocked'))});
+  h.controller.testVoice(); const staleError = h.audios[0].onerror;
+  await Promise.resolve();
+  assert.equal(h.spoken.length, 1); assert.equal(h.spoken[0].text, COMMENTARY_CLIPS.test.text);
+  assert.equal(h.captions.at(-1).text, h.spoken[0].text);
+  assert.equal(h.controller.getState().audioStatus, 'fallback');
+  staleError(); assert.equal(h.spoken.length, 1);
+});
+
+test('late audio promises and callbacks cannot speak after OFF, reset or preemption', async () => {
+  for (const stop of ['off', 'reset', 'goal']) {
+    let reject;
+    const h = audioHarness({play: () => new Promise((resolve, fail) => {reject = fail;})});
+    h.controller.testVoice(); const old = h.audios[0], oldError = old.onerror, oldEnd = old.onended, oldReject = reject;
+    if (stop === 'off') h.controller.setEnabled(false);
+    else if (stop === 'reset') h.controller.reset();
+    else h.controller.reveal(recordedLine('goal', 'goal_generic'));
+    oldReject(Error('Late rejection')); oldError(); oldEnd(); await Promise.resolve();
+    assert.equal(h.spoken.length, 0); assert.ok(old.paused > 0); assert.equal(old.src, '');
+    if (stop === 'goal') assert.equal(h.captions.at(-1).text, COMMENTARY_CLIPS.goal_generic.text);
+    else {assert.equal(h.controller.getState().speaking, false); assert.equal(h.timers.size, 0);}
+  }
+  let resolve;
+  const h = audioHarness({play: () => new Promise(done => {resolve = done;})});
+  h.controller.testVoice(); h.controller.setEnabled(false); const pauses = h.audios[0].paused;
+  resolve(); await Promise.resolve(); assert.ok(h.audios[0].paused > pauses); assert.equal(h.spoken.length, 0);
+});
+
+test('audio priority, replay preservation and three-second-only restriction match device speech', () => {
+  const h = audioHarness(); h.controller.reveal(recordedLine('trend', 'build_back'));
+  const oldEnd = h.audios[0].onended;
+  h.controller.reveal(recordedLine('attempt', 'shot_normal'));
+  h.controller.reveal(recordedLine('outcome', 'save_hold'));
+  h.controller.reveal(recordedLine('goal', 'goal_generic'));
+  assert.equal(h.audios.length, 4); assert.ok(h.audios.slice(0, 3).every(audio => audio.paused > 0));
+  oldEnd(); assert.equal(h.controller.getState().speaking, true);
+  assert.equal(h.controller.reveal(recordedLine('trend', 'midfield')), false);
+  h.controller.suspend({preserveGoal: true}); assert.equal(h.audios[3].paused, 0);
+  h.controller.setPace(1200); assert.ok(h.audios[3].paused > 0); assert.equal(h.controller.getState().enabled, false);
+  assert.equal(h.controller.setEnabled(true), false); assert.equal(h.timers.size, 0);
+});
+
+test('recorded heartbeat skips duplicate clip words and keeps twelve-second cadence', () => {
+  const h = audioHarness(), state = fixture({origin: [6, 8]});
+  h.controller.confirmEnabled(); h.audios.at(-1).onended();
+  const calls = [];
+  for (let index = 0; index < 10; index++) {
+    h.advance(12000); assert.equal(h.controller.tick(state), true);
+    calls.push(h.captions.at(-1).text); h.audios.at(-1).onended();
+  }
+  assert.equal(h.audios.length, 11);
+  assert.ok(calls.every((text, index) => !index || text !== calls[index - 1]));
+  assert.equal(h.controller.tick(state), false);
+});
+
+test('audio load timeout is fresh-only, mode switch stops it, and unsupported audio remains captioned', () => {
+  const h = audioHarness({play: () => new Promise(() => {})});
+  h.controller.testVoice(); h.advance(5000);
+  assert.equal(h.spoken.length, 1); assert.equal(h.controller.getState().audioStatus, 'fallback');
+  h.controller.setPlayback('device'); assert.equal(h.controller.getState().speaking, false);
+  assert.equal(h.controller.getState().playback, 'device');
+  const silent = audioHarness({supported: false, play: () => {throw Error('No audio');}});
+  silent.controller.testVoice(); assert.equal(silent.controller.getState().audioStatus, 'unavailable');
+  assert.equal(silent.captions.at(-1).text, COMMENTARY_CLIPS.test.text);
+  silent.controller.setEnabled(false); assert.equal(silent.timers.size, 0);
+});
+
+test('the static bank credits the stock voice and every source URL stays within the app audio directory', () => {
+  assert.equal(Object.keys(COMMENTARY_CLIPS).length, 55);
+  assert.equal(COMMENTARY_RECORDING.voice, 'Tom'); assert.equal(COMMENTARY_RECORDING.provider, 'Runway');
+  for (const [key, clip] of Object.entries(COMMENTARY_CLIPS)) {
+    assert.equal(clip.key, key); assert.ok(clip.text.length > 15);
+    assert.match(clip.src, new RegExp(`/audio/commentary/${key}\\.mp3$`));
+    assert.ok(['calm', 'urgent', 'excited'].includes(clip.delivery));
+  }
 });

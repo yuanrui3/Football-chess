@@ -2,7 +2,7 @@ import {createGame, legalMoves, legalKicks, disguisedShotTargets, applyMove, app
 import {createMatchClock, restoreMatchClock, tickMatchClock, settleMatchClock, rewindMatchClock} from './match-clock.js?v=1fa32f5eed6c';
 import {buildGoalReplay, restoreGoalReplay, createReplayPlayer} from './goal-replay.js?v=79837985ace2';
 import {createMatchStats, restoreMatchStats, recordMatchTransition, addPossessionTime, matchStatsSummary, shortPieceId} from './match-stats.js?v=ed082e4db7ee';
-import {createCommentary} from './commentary.js?v=61d21b924bfc';
+import {createCommentary} from './commentary.js?v=f88aa7c0dc84';
 
 const $ = id => document.getElementById(id);
 const normalShotLegend = document.querySelector('.shot-legend').textContent;
@@ -43,8 +43,8 @@ let aiWorker=null,aiWatchdog=null,aiGeneration=0;
 let lastGoalReplay=null,replayAutoContinue=false,replayPendingResult=false;
 let matchStats=createMatchStats();
 let shotFlight=null,shotFlightGeneration=0;
-let voiceEnabled=false,voiceActivated=false,voiceLastCaption='',voiceCaptionDemo=false,voiceLifecycle=null,voicePreferredId='',voiceOptionsKey='',commentary=null;
-try{const preference=JSON.parse(localStorage.getItem(VOICE_STORE)||'null');voiceEnabled=preference?.enabled===true;voicePreferredId=typeof preference?.voiceId==='string'?preference.voiceId:'';}catch{}
+let voiceEnabled=false,voiceActivated=false,voiceLastCaption='',voiceCaptionDemo=false,voiceLifecycle=null,voicePreferredId='',voicePlayback='recorded',voiceOptionsKey='',commentary=null;
+try{const preference=JSON.parse(localStorage.getItem(VOICE_STORE)||'null');voiceEnabled=preference?.enabled===true;voicePreferredId=typeof preference?.voiceId==='string'?preference.voiceId:'';voicePlayback=preference?.playback==='device'?'device':'recorded';}catch{}
 try {
   const saved=JSON.parse(localStorage.getItem(STORE)||'null');
   const geometryMatches=saved?.version===4&&Object.entries(SAVE_GEOMETRY).every(([key,value])=>saved.geometry?.[key]===value)
@@ -98,25 +98,30 @@ const replayPlayer=createReplayPlayer({
 });
 commentary=createCommentary({speechSynthesis:window.speechSynthesis,Utterance:window.SpeechSynthesisUtterance,
   onCaption(text,event){voiceLastCaption=text||'';voiceCaptionDemo=!!event?.demo;renderVoiceover();},
+  onPlaybackChanged(){if(commentary)renderVoiceover();},
   onVoicesChanged(){if(commentary){applyVoicePreference();renderVoiceover();}}});
+commentary.setPlayback(voicePlayback);
 applyVoicePreference();
 
 function applyVoicePreference(){const state=commentary.getState();if(voicePreferredId&&state.voices.some(voice=>voice.id===voicePreferredId)&&state.voiceId!==voicePreferredId)commentary.setVoice(voicePreferredId);}
 
 function renderVoiceover(){
-  const state=commentary?.getState()||{supported:!!window.speechSynthesis,speaking:false,demo:false,voices:[]},allowed=aiPace===3000,voices=state.voices||[];
+  const state=commentary?.getState()||{supported:false,speaking:false,demo:false,voices:[]},allowed=aiPace===3000,voices=state.voices||[],recorded=voicePlayback==='recorded',audioAvailable=!!state.supported;
   $('voiceToggle').textContent=voiceEnabled?'On':'Off';$('voiceToggle').setAttribute('aria-pressed',String(voiceEnabled));
   $('voiceToggle').disabled=!allowed;$('voiceToggle').setAttribute('aria-label',allowed?`Turn match commentary ${voiceEnabled?'off':'on'}`:'Match commentary is available at Relaxed, three-second pace');
   $('voicePanel').dataset.speaking=String(voiceEnabled&&state.speaking);
   $('voiceCaption').hidden=!voiceEnabled||!voiceLastCaption;$('voiceCaption').textContent=voiceCaptionDemo&&voiceLastCaption?`DEMO · ${voiceLastCaption}`:voiceLastCaption;
   const optionsKey=JSON.stringify(voices.map(voice=>[voice.id,voice.name,voice.lang,voice.preferred]));
   if(optionsKey!==voiceOptionsKey){voiceOptionsKey=optionsKey;const options=[];const auto=document.createElement('option');auto.value='';auto.textContent=voices.length?'Auto · best available English voice':'No English speech voices available';options.push(auto);for(const voice of voices){const option=document.createElement('option');option.value=voice.id;option.textContent=`${voice.name} · ${voice.lang}${voice.preferred?' · Suggested':''}`;options.push(option);}$('voiceSelect').replaceChildren(...options);}
-  $('voiceSelect').value=voices.some(voice=>voice.id===voicePreferredId)?voicePreferredId:'';$('voiceSelect').disabled=!allowed||!voices.length;
-  $('voiceNote').textContent=state.voiceName?`Selected: ${state.voiceName}.`:'English speech voices load from your browser or device. Captions are available while no voice is ready.';
-  const demoAvailable=allowed&&voices.length>0&&(stage==='setup'||stage==='playing'&&paused)&&!anyDialog()&&!shotFlight;
-  $('voiceDemo').disabled=!demoAvailable;$('voiceDemo').title=!allowed?'Available at Relaxed · 3 seconds.':!voices.length?'An English speech voice must be available to hear a sample.':demoAvailable?'Hear example commentary in the selected voice without changing your match.':'Pause the match to sample the selected voice.';
-  $('voiceTest').disabled=!allowed||!voices.length||anyDialog();$('voiceTest').title=allowed?'Hear one short line in the selected voice. This does not pause or change your match.':'Available at Relaxed · 3 seconds.';
-  $('voiceStatus').textContent=!allowed?'Available at Relaxed · 3 seconds.':!voiceEnabled?'Off · Football commentary at Relaxed pace.':!voiceActivated?'On · Start or resume the match to activate sound.':voiceCaptionDemo&&state.demo?'Demo · Selected voice sample; your match is unchanged.':!state.supported||!voices.length?'On · Captions only; no English speech voice is ready.':paused?'On · Paused. Resume for fresh commentary.':anyDialog()?(replayAutoContinue?'On · Goal replay.':'On · Commentary paused while this panel is open.'):stage==='setup'?'On · Ready for kickoff.':stage==='finished'?'On · Full time.':'On · Match calls and analysis about every 10–15 seconds of live play.';
+  $('voicePlayback').value=voicePlayback;$('voicePlayback').disabled=!allowed;
+  $('voiceDeviceControls').hidden=recorded;
+  $('voiceSelect').value=voices.some(voice=>voice.id===voicePreferredId)?voicePreferredId:'';$('voiceSelect').disabled=!allowed||recorded||!voices.length;
+  $('voiceNote').textContent=recorded?(state.audioStatus==='fallback'?'Saved audio unavailable for this call · using your device voice.':state.audioStatus==='unavailable'?'Audio is unavailable. Check sound or choose a device voice.':'British match commentary · saved audio.')
+    :state.voiceName?`Selected: ${state.voiceName}.`:'English speech voices load from your browser or device. Captions are available while no voice is ready.';
+  const demoAvailable=allowed&&audioAvailable&&(stage==='setup'||stage==='playing'&&paused)&&!anyDialog()&&!shotFlight;
+  $('voiceDemo').disabled=!demoAvailable;$('voiceDemo').title=!allowed?'Available at Relaxed · 3 seconds.':!audioAvailable?'Commentary audio must be available to hear a sample.':demoAvailable?'Hear example match commentary without changing your match.':'Pause the match to hear the match sample.';
+  $('voiceTest').disabled=!allowed||!audioAvailable||anyDialog();$('voiceTest').title=allowed?'Hear one short call. This does not pause or change your match.':'Available at Relaxed · 3 seconds.';
+  $('voiceStatus').textContent=!allowed?'Available at Relaxed · 3 seconds.':!voiceEnabled?'Off · Football commentary at Relaxed pace.':!voiceActivated?'On · Start or resume the match to activate sound.':voiceCaptionDemo&&state.demo?'Demo · Match sample; your match is unchanged.':!audioAvailable?'On · Captions only; commentary audio is unavailable.':state.audioStatus==='loading'?'On · Loading the next commentary call…':paused?'On · Paused. Resume for fresh commentary.':anyDialog()?(replayAutoContinue?'On · Goal replay.':'On · Commentary paused while this panel is open.'):stage==='setup'?'On · Ready for kickoff.':stage==='finished'?'On · Full time.':'On · Match calls and analysis about every 10–15 seconds of live play.';
 }
 function syncVoiceover(){
   if(aiPace!==3000&&voiceEnabled){voiceEnabled=false;voiceActivated=false;saveVoicePreference();}
@@ -130,7 +135,7 @@ function syncVoiceover(){
 }
 function activateVoiceover(){if(voiceEnabled&&aiPace===3000){voiceActivated=true;commentary.setEnabled(!document.hidden);}}
 function resetVoiceover(){commentary.reset();voiceLastCaption='';voiceCaptionDemo=false;voiceLifecycle=null;renderVoiceover();}
-function saveVoicePreference(){try{localStorage.setItem(VOICE_STORE,JSON.stringify({enabled:voiceEnabled,voiceId:voicePreferredId}));}catch{}}
+function saveVoicePreference(){try{localStorage.setItem(VOICE_STORE,JSON.stringify({enabled:voiceEnabled,voiceId:voicePreferredId,playback:voicePlayback}));}catch{}}
 
 function clockSnapshot(){return {remaining,actionRemaining,fullTimePending,finalChance:finalChance?{...finalChance}:null};}
 function restoreClock(clock){({remaining,actionRemaining,fullTimePending,finalChance}=clock);}
@@ -769,9 +774,10 @@ for(const id of ['goalTop','goalBottom']){
 function refreshSetup(){if(stage!=='setup')return;resetVoiceover();cancelAI();replayPlayer.stop();lastGoalReplay=null;replayAutoContinue=false;replayPendingResult=false;game=createGame({foulsEnabled,mode:$('mode').value,minutes:Number($('duration').value)||10,kickoff:$('kickoff').value});duration=Number($('duration').value);resetClock();selectedId=null;lastComputerAction=null;freePawnMode=false;dribbleMode=false;passRunSelected=false;history=[];matchStats=createMatchStats();render();save();}
 $('aiPace').addEventListener('change',()=>{const value=Number($('aiPace').value);aiPace=AI_PACES.includes(value)?value:3000;render();save();});
 $('voiceToggle').addEventListener('click',()=>{if(aiPace!==3000)return;voiceEnabled=!voiceEnabled;voiceActivated=voiceEnabled;commentary.setPace(aiPace);commentary.setEnabled(voiceEnabled);saveVoicePreference();syncVoiceover();if(voiceEnabled)commentary.confirmEnabled();});
+$('voicePlayback').addEventListener('change',()=>{if(aiPace!==3000||$('voicePlayback').disabled)return;const mode=$('voicePlayback').value;if(!['recorded','device'].includes(mode))return;commentary.suspend();voicePlayback=mode;commentary.setPlayback(mode);voiceLastCaption='';voiceCaptionDemo=false;saveVoicePreference();renderVoiceover();});
 $('voiceSelect').addEventListener('change',()=>{if(aiPace!==3000||$('voiceSelect').disabled)return;const id=$('voiceSelect').value;if(id&&!commentary.getState().voices.some(voice=>voice.id===id))return;commentary.suspend();voicePreferredId=id;commentary.setVoice(id||null);saveVoicePreference();renderVoiceover();});
-$('voiceTest').addEventListener('click',()=>{if(aiPace!==3000||!commentary.getState().voices.length||anyDialog())return;voiceEnabled=true;saveVoicePreference();activateVoiceover();commentary.testVoice();renderVoiceover();});
-$('voiceDemo').addEventListener('click',()=>{if(aiPace!==3000||!commentary.getState().voices.length||!(stage==='setup'||stage==='playing'&&paused)||anyDialog()||shotFlight)return;voiceEnabled=true;saveVoicePreference();activateVoiceover();resetVoiceover();voiceLifecycle=paused?'paused':stage;commentary.demo();renderVoiceover();});
+$('voiceTest').addEventListener('click',()=>{if(aiPace!==3000||!commentary.getState().supported||anyDialog())return;voiceEnabled=true;saveVoicePreference();activateVoiceover();commentary.testVoice();renderVoiceover();});
+$('voiceDemo').addEventListener('click',()=>{if(aiPace!==3000||!commentary.getState().supported||!(stage==='setup'||stage==='playing'&&paused)||anyDialog()||shotFlight)return;voiceEnabled=true;saveVoicePreference();activateVoiceover();resetVoiceover();voiceLifecycle=paused?'paused':stage;commentary.demo();renderVoiceover();});
 $('aiDifficulty').addEventListener('change',()=>{aiDifficulty=$('aiDifficulty').value==='tactical'?'tactical':'casual';$('aiDifficulty').value=aiDifficulty;render();save();});
 $('whiteDifficulty').addEventListener('change',()=>{whiteDifficulty=$('whiteDifficulty').value==='tactical'?'tactical':'casual';$('whiteDifficulty').value=whiteDifficulty;render();save();});
 for(const id of ['mode','kickoff'])$(id).addEventListener('change',refreshSetup);
@@ -860,7 +866,7 @@ for(const el of document.querySelectorAll('[data-close]'))el.addEventListener('c
 for(const dialog of document.querySelectorAll('dialog')){dialog.addEventListener('close',()=>{if(dialog.id==='replayDialog'){replayPlayer.stop();replayAutoContinue=false;const showFinalResult=replayPendingResult;replayPendingResult=false;if(showFinalResult&&stage==='finished')showResult();}lastTick=Date.now();render();});dialog.addEventListener('click',event=>{if(event.target===dialog){const r=dialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)dialog.close();}});}
 setInterval(()=>{advanceClockNow();},250);
 setInterval(()=>{if(stage==='playing'&&voiceEnabled&&voiceActivated&&aiPace===3000&&!paused&&!anyDialog()&&!shotFlight&&!document.hidden)commentary.tick(game,{stats:matchStatsSummary(matchStats)});},1000);
-setInterval(()=>{if(stage==='playing')save();},5000);window.addEventListener('pagehide',()=>{commentary.suspend();advanceClockNow();save();});
+setInterval(()=>{if(stage==='playing')save();},5000);window.addEventListener('pagehide',()=>{voiceActivated=false;voiceLifecycle=null;commentary.setEnabled(false);renderVoiceover();advanceClockNow();save();});
 document.addEventListener('visibilitychange',()=>{if(document.hidden)commentary.suspend();syncVoiceover();});
 render();
 if(stage==='playing'&&paused)toast('Your match is restored. Press Resume to continue.');
