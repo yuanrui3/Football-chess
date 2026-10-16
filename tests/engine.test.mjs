@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {
   BOARD_WIDTH, BOARD_HEIGHT, GOAL_FILES, BOX_FILES, BOX_DEPTH, SHOT_MODEL, isBox, canOccupySquare,
   createGame, legalMoves, legalKicks, applyMove, applyKick,
-  skipMove, chooseAIAction, currentTeam, shotChance, shotModel, passAccuracy, positionActions,
+  skipMove, chooseAIAction, currentTeam, shotChance, shotModel, passAccuracy, positionActions, cornerTakers, selectCornerTaker,
 } from '../dist/engine.js';
 
 const TEAM_IDS = ['K', 'Q', 'R1', 'R2', 'B1', 'B2', 'N1', 'N2', 'P1', 'P2', 'P3'];
@@ -68,7 +68,11 @@ function assertIntegrity(state) {
     assert.deepEqual(legalMoves(state, state.ball.carrierId), []);
   } else assert.equal(state.releaseReason, null, 'release reasons are cleared after the forced kick');
   if (state.restart) {
-    assert.ok(['attackMove', 'defendMove', 'kick'].includes(state.phase), 'all dead-ball restarts retain their positioning round');
+    assert.ok(['cornerSelect', 'attackMove', 'defendMove', 'kick'].includes(state.phase), 'all dead-ball restarts retain their positioning round');
+    if(state.phase==='cornerSelect') {
+      assert.equal(state.restart.type,'corner');assert.equal(state.restart.takerId,null);
+      assert.equal(state.ball.carrierId,null);assert.ok(cornerTakers(state).length,'a chooser has an eligible attacking-half player');
+    }
     assert.equal(state.restart.team, state.attack);
     assert.equal(state.restart.takerId, state.ball.carrierId);
     assert.deepEqual({ x: state.ball.x, y: state.ball.y }, state.restart.spot);
@@ -85,7 +89,11 @@ function applyAction(state, action) {
   }
   if (action.type === 'kick') {
     assert.ok(hasKick(state, action.x, action.y), 'AI kick must be offered by legalKicks');
-    return applyKick(state, action.x, action.y);
+    return applyKick(state, action.x, action.y,{passRun:!!action.passRun});
+  }
+  if(action.type==='cornerTaker') {
+    assert.ok(cornerTakers(state).some(piece=>piece.id===action.pieceId),'AI corner taker must be offered by cornerTakers');
+    return selectCornerTaker(state,action.pieceId);
   }
   assert.equal(action.type, 'skip');
   return skipMove(state);
@@ -601,7 +609,7 @@ test('goal declarations wait for the defending goalkeeper before resolving the s
   assert.equal(reaction.phase, 'keeperReact');
   assert.equal(currentTeam(reaction), 'black');
   assert.ok(reaction.pendingShot);
-  assert.equal(reaction.rulesVersion,15);
+  assert.equal(reaction.rulesVersion,16);
   assert.deepEqual(reaction.pendingShot.from, { x: 5, y: 4 });
   assert.equal(reaction.lastAction.shotModel.modelVersion,13);
   assert.deepEqual(reaction.lastAction.shotModel, shotModel(state, 5, -1));
@@ -957,7 +965,7 @@ test('one seeded shot roll partitions exact goal, parried corner, caught save an
       assert.equal(result.lastAction.type, 'goal');
     } else if (outcome === 'corner') {
       assert.equal(result.attack, 'white');
-      assert.equal(result.phase, 'attackMove');
+      assert.equal(result.phase, 'cornerSelect');
       assert.equal(result.restart.type, 'corner');
       assert.equal(result.restart.team, 'white');
       assert.equal(result.lastAction.type, 'save');

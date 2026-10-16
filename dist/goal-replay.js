@@ -1,5 +1,5 @@
 // A replay is a bounded recording of the match, never another engine run.
-import {BOARD_WIDTH as W,BOARD_HEIGHT as H,GOAL_FILES,BOX_FILES,BOX_DEPTH,FILE_LABELS as FILES,RULES_VERSION,canOccupySquare} from './engine.js?v=4723a9d91510';
+import {BOARD_WIDTH as W,BOARD_HEIGHT as H,GOAL_FILES,BOX_FILES,BOX_DEPTH,FILE_LABELS as FILES,RULES_VERSION,canOccupySquare} from './engine.js?v=2b5df6d6cd8a';
 const TEAMS=['white','black'];
 const REPLAY_VERSION=2;
 const geometry=()=>({width:W,height:H,goalFiles:[...GOAL_FILES],boxFiles:[...BOX_FILES],boxDepth:BOX_DEPTH});
@@ -9,7 +9,7 @@ const currentStateGeometry=state=>state?.rulesVersion===RULES_VERSION&&state.boa
 const TEAM={white:'Ivory FC',black:'Obsidian FC'};
 const NAMES={K:'Goalkeeper',Q:'Queen',R:'Rook',B:'Bishop',N:'Knight',P:'Pawn'};
 const SYMBOLS={K:'♚',Q:'♛',R:'♜',B:'♝',N:'♞',P:'♟'};
-const ACTIONS=new Set(['move','tackle','tackleMiss','foul','kick','miss','interception','skip','shotAttempt','goal','save','blockedShot','shotMiss','out','offside','stalling','timeout']);
+const ACTIONS=new Set(['move','cornerTaker','tackle','tackleMiss','foul','kick','miss','interception','skip','shotAttempt','goal','save','blockedShot','shotMiss','out','offside','stalling','timeout']);
 const ROSTER=['K','Q','R1','R2','B1','B2','N1','N2','P1','P2','P3'];
 const IDS=new Set(TEAMS.flatMap(team=>ROSTER.map(id=>`${team}-${id}`)));
 const MAX_FRAMES=12,MAX_BYTES=90000;
@@ -119,6 +119,7 @@ function frameCaption(state){
     return `${side} ${role} commits a foul.${card}${award}${replacement}`;
   }
   if(action.type==='move')return `${side} ${name.toLowerCase()} moves to ${coordinate(action.to)}.`;
+  if(action.type==='cornerTaker')return `${side} chooses the ${name.toLowerCase()} as corner taker at ${coordinate(action.to)}.`;
   if(action.type==='tackle')return `${side} wins possession with a tackle.`;
   if(action.type==='tackleMiss')return `${side} attempts a tackle; the knight keeps the ball.`;
   if(['kick','miss','interception'].includes(action.type))return `${side} ${action.lofted?'lofts a pass over one player toward':'plays the ball toward'} ${coordinate(action.to)}${action.type==='miss'?' — inaccurate pass':action.type==='interception'?' — intercepted':''}.`;

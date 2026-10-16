@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {createGame,applyKick,applyMove,skipMove,actionTimeout,legalKicks,legalMoves,BOARD_WIDTH,BOARD_HEIGHT,GOAL_FILES,BOX_FILES,BOX_DEPTH,canOccupySquare,normalizeGame} from '../dist/engine.js';
+import {createGame,applyKick,applyMove,skipMove,actionTimeout,legalKicks,legalMoves,BOARD_WIDTH,BOARD_HEIGHT,GOAL_FILES,BOX_FILES,BOX_DEPTH,canOccupySquare,normalizeGame,cornerTakers,selectCornerTaker} from '../dist/engine.js';
 import {createMatchStats,restoreMatchStats,recordMatchTransition,addPossessionTime,matchStatsSummary,normalizeGoalOrigin} from '../dist/match-stats.js';
 
 const clone=value=>structuredClone(value);
@@ -42,6 +42,7 @@ function tracked(state,stats=createMatchStats()){
       return this;
     },
     ready(){
+      if(this.state.phase==='cornerSelect')this.step(selectCornerTaker(this.state,cornerTakers(this.state)[0].id));
       for(let count=0;['attackMove','defendMove'].includes(this.state.phase)&&count<3;count++)this.step(skipMove(this.state));
       assert.ok(['kick','keeperRelease'].includes(this.state.phase),`ready to kick, received ${this.state.phase}`);
       return this;

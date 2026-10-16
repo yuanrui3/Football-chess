@@ -5,6 +5,7 @@ import {
   BOARD_WIDTH, BOARD_HEIGHT, MIDFIELD_RANK, isBox, inOwnBox, canOccupySquare, AI_DIFFICULTIES,
   createGame, currentTeam, chooseAIAction, legalMoves, legalKicks,
   applyMove, applyKick, skipMove, shotChance, positionActions,
+  cornerTakers, selectCornerTaker,
 } from '../dist/engine.js';
 
 const DIFFICULTIES = ['casual', 'tactical'];
@@ -56,6 +57,9 @@ function scenarios() {
   const reaction = reactionFixture();
   const backPass = applyKick(fixture({ phase: 'kick', positions: { 'white-R1': [6, 12] } }), 6, 16);
   const goalKick = skipMove(reaction, { roll: 0.999999 });
+  const cornerSelect = restartFixture('corner', 'cornerSelect');
+  cornerSelect.restart.takerId = null;
+  cornerSelect.ball.carrierId = null;
   return [
     ['white kick-off', createGame({ kickoff: 'white', seed: 17 })],
     ['black kick-off', createGame({ kickoff: 'black', seed: 17 })],
@@ -74,6 +78,7 @@ function scenarios() {
     ['keeper reaction', reaction],
     ['back-pass immediate release', backPass],
     ['wide shot goal kick positioning', goalKick],
+    ['corner taker selection', cornerSelect],
     ...['goalKick', 'corner', 'throwIn', 'offside'].flatMap(type =>
       ['attackMove', 'defendMove', 'kick'].map(phase => [`${type} restart ${phase}`, restartFixture(type, phase)])),
   ];
@@ -111,8 +116,14 @@ function assertIntegrity(state) {
     assert.equal(state.pieces.find(piece => piece.id === state.ball.carrierId)?.type, 'K');
   } else assert.equal(state.releaseReason, null);
   if (state.restart) {
-    assert.ok(['attackMove', 'defendMove', 'kick'].includes(state.phase), 'all dead-ball restarts retain their positioning round');
+    assert.ok(['cornerSelect', 'attackMove', 'defendMove', 'kick'].includes(state.phase), 'dead-ball restarts select a taker if necessary, then retain their positioning round');
     assert.equal(state.restart.team, state.attack);
+    if (state.phase === 'cornerSelect') {
+      assert.equal(state.restart.type, 'corner');
+      assert.equal(state.restart.takerId, null);
+      assert.equal(state.ball.carrierId, null);
+      assert.ok(cornerTakers(state).length > 0, 'pending selection has an eligible attacking-half player');
+    }
     assert.equal(state.restart.takerId, state.ball.carrierId);
     assert.deepEqual({ x: state.ball.x, y: state.ball.y }, state.restart.spot);
     assert.deepEqual(legalMoves(state, state.restart.takerId), [], 'restart taker cannot dribble');
@@ -140,6 +151,11 @@ function selectedMove(state, action) {
 
 function applyAction(state, action, overrides = {}) {
   assert.ok(action && typeof action === 'object', 'AI returns an action');
+  if (action.type === 'cornerTaker') {
+    assert.equal(state.phase, 'cornerSelect');
+    assert.ok(cornerTakers(state).some(piece => piece.id === action.pieceId), 'AI chooses a publicly eligible corner taker');
+    return selectCornerTaker(state, action.pieceId);
+  }
   if (action.type === 'move') {
     assert.ok(selectedMove(state, action), 'AI move is offered by the shared rules engine');
     const piece = state.pieces.find(candidate => candidate.id === action.pieceId);

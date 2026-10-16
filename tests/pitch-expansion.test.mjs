@@ -17,7 +17,7 @@ function kick(s,target,team,options={roll:0}){const p=point(target,team);assert.
 function integrity(s){assert.equal(s.pieces.length,22);assert.equal(new Set(s.pieces.map(p=>`${p.x},${p.y}`)).size,22);for(const p of s.pieces){assert.ok(p.x>=0&&p.x<14&&p.y>=0&&p.y<17);assert.ok(E.canOccupySquare(p,p.x,p.y));}}
 
 test('pitch, goals, boxes and midfield have independent centered dimensions',()=>{
-  assert.equal(E.BOARD_WIDTH,14);assert.equal(E.BOARD_HEIGHT,17);assert.equal(E.RULES_VERSION,15);
+  assert.equal(E.BOARD_WIDTH,14);assert.equal(E.BOARD_HEIGHT,17);assert.equal(E.RULES_VERSION,16);
   assert.deepEqual(E.GOAL_FILES,[5,6,7,8]);assert.deepEqual(E.BOX_FILES,[4,5,6,7,8,9]);assert.equal(E.BOX_DEPTH,3);
   assert.deepEqual(E.CENTRAL_GOAL_FILES,[6,7]);assert.equal(E.MIDFIELD_RANK,8);assert.equal(E.BOARD_CENTER_X,6.5);assert.equal(E.FILE_LABELS,'abcdefghijklmn');
   let cells=0;for(let y=-1;y<=17;y++)for(let x=-1;x<=14;x++){
@@ -28,7 +28,7 @@ test('pitch, goals, boxes and midfield have independent centered dimensions',()=
 
 test('the new formation is legal, mirrored, screened by pawns and supplied by opposite-color bishops',()=>{
   for(const mode of ['solo','local'])for(const kickoff of ['white','black']){
-    const s=E.createGame({mode,kickoff,seed:1});integrity(s);assert.deepEqual(s.boardDimensions,{width:14,height:17});assert.equal(s.rulesVersion,15);
+    const s=E.createGame({mode,kickoff,seed:1});integrity(s);assert.deepEqual(s.boardDimensions,{width:14,height:17});assert.equal(s.rulesVersion,16);
     for(const team of ['white','black']){
       const own=s.pieces.filter(p=>p.team===team),king=own.find(p=>p.type==='K'),pawns=own.filter(p=>p.type==='P'),rooks=own.filter(p=>p.type==='R'),bishops=own.filter(p=>p.type==='B');
       assert.equal(own.length,11);assert.ok(E.inOwnBox(team,king.x,king.y));assert.equal(king.y,team==='white'?15:1);
@@ -91,7 +91,10 @@ for(const team of ['white','black']){
     assert.equal(goalKick.restart.type,'goalKick');assert.equal(goalKick.restart.team,other(team));
     assert.deepEqual(goalKick.restart.spot,point([4,0],team));assert.ok(E.inOwnBox(other(team),goalKick.ball.x,goalKick.ball.y));assert.ok(!E.GOAL_FILES.includes(goalKick.ball.x));integrity(goalKick);
     const corner=kick(s,target,team,{roll:.999,landing:point([2,20],team)});assert.equal(corner.restart.type,'corner');
-    assert.deepEqual(corner.restart.spot,point([1,16],team),'the occupied corner keeps its player, so the nearest taker uses the adjacent end-line square');integrity(corner);
+    assert.equal(corner.phase,'cornerSelect');assert.equal(corner.restart.takerId,null);
+    assert.deepEqual(corner.restart.spot,point([0,16],team),'the pending corner retains the physical end-line spot until a taker is chosen');
+    const taker=E.cornerTakers(corner)[0], selected=E.selectCornerTaker(corner,taker.id);
+    assert.deepEqual(selected.restart.spot,point([1,16],team),'the occupied corner keeps its player, so the selected taker uses the adjacent end-line square');integrity(selected);
     const thrown=kick(s,target,team,{roll:.999,landing:point([17,1],team)});assert.equal(thrown.restart.type,'throwIn');assert.equal(thrown.restart.spot.x,point([13,0],team).x);assert.ok(thrown.restart.spot.y>=0&&thrown.restart.spot.y<17);integrity(thrown);
   });
 
@@ -130,5 +133,5 @@ test('old pitch dimensions or old untagged saves are rejected without translatin
   }
   const old=E.createGame({seed:1});delete old.boardDimensions;old.rulesVersion=13;assert.throws(()=>E.normalizeGame(old),/different pitch size/);
   const legacyFixture=E.createGame({seed:1});legacyFixture.rulesVersion=6;const before=clone(legacyFixture),normalized=E.normalizeGame(legacyFixture);
-  assert.equal(normalized.rulesVersion,15);assert.deepEqual(normalized.boardDimensions,{width:14,height:17});assert.deepEqual(normalized.pieces,before.pieces);assert.equal(normalized.randomState,before.randomState);assert.deepEqual(legacyFixture,before);
+  assert.equal(normalized.rulesVersion,16);assert.deepEqual(normalized.boardDimensions,{width:14,height:17});assert.deepEqual(normalized.pieces,before.pieces);assert.equal(normalized.randomState,before.randomState);assert.deepEqual(legacyFixture,before);
 });

@@ -12,13 +12,14 @@ function inc(obj,key,n=1){obj[key]=(obj[key]||0)+n;}
 function entryZone(team,y,height=baseline.BOARD_HEIGHT){const depth=Math.floor(height/3);return team==='white'?y<depth:y>=height-depth;}
 function positional(phase){return ['attackMove','defendMove'].includes(phase);}
 export function applyAction(rules,state,action){
+  if(action.type==='cornerTaker') return rules.selectCornerTaker(state,action.pieceId);
   if(action.type==='kick') return rules.applyKick(state,action.x,action.y,{passRun:!!action.passRun});
   if(action.type==='move') return rules.applyMove(state,action.pieceId,action.x,action.y,{freePawn:!!action.freePawn});
   return rules.skipMove(state);
 }
 
 function integrityProblem(rules,state,previous){
-  if(!['kickoff','attackMove','defendMove','kick','keeperRelease','keeperReact','passRun','finished'].includes(state.phase))return 'Unknown game phase';
+  if(!['kickoff','attackMove','defendMove','kick','keeperRelease','keeperReact','passRun','cornerSelect','finished'].includes(state.phase))return 'Unknown game phase';
   const pieces=state.pieces,sentOff=state.sentOff??[],discipline=state.discipline??{};
   if(!Array.isArray(pieces)||!Array.isArray(sentOff)||pieces.some(p=>!p||typeof p!=='object')||sentOff.some(p=>!p||typeof p!=='object')||!discipline||typeof discipline!=='object'||Array.isArray(discipline))return 'Invalid roster or discipline data';
   const validId=piece=>piece&&/^(white|black)-(K|Q|R[12]|B[12]|N[12]|P[123])$/.test(piece.id)&&piece.id.startsWith(piece.team+'-');
@@ -43,6 +44,10 @@ function integrityProblem(rules,state,previous){
   if(!short.length&&TEAMS.some(team=>pieces.filter(p=>p.team===team&&p.type==='K').length!==1))return 'A live team must have one goalkeeper';
   const carrier=pieces.find(p=>p.id===state.ball?.carrierId);
   if(state.ball?.carrierId&&!carrier||carrier&&(carrier.x!==state.ball.x||carrier.y!==state.ball.y||carrier.team!==state.attack))return 'Carrier mismatch';
+  if(state.phase==='cornerSelect'){
+    if(state.restart?.type!=='corner'||state.restart.team!==state.attack||state.restart.takerId!=null||state.ball.carrierId!=null
+        ||state.ball.x!==state.restart.spot?.x||state.ball.y!==state.restart.spot?.y||typeof rules.cornerTakers!=='function'||!rules.cornerTakers(state).length)return 'Invalid pending corner selection';
+  }
   if(state.phase==='passRun'){
     const runner=pieces.find(p=>p.id===state.passRun?.pieceId);
     if(!runner||runner.team!==state.attack||state.passRun.team!==state.attack||!carrier||runner.id===carrier.id||state.restart||state.positionBudget?.normalUsed)return 'Invalid pass-and-run phase';
@@ -143,7 +148,7 @@ export function runMatch({rules=baseline,whitePolicy=rules,blackPolicy=rules,whi
     if(before.phase==='defendMove'&&state.phase==='attackMove'&&!before.ball.carrierId&&!state.ball.carrierId&&!before.restart&&!state.restart&&before.attack===state.attack)stats[before.attack].completedOrdinaryRounds++;
     if(result.type==='stalling')stats[result.team].stalls++;
     if(result.type==='offside'&&before.phase!=='keeperReact')stats[result.team].offsides++;
-    if(state.restart&&(!before.restart||JSON.stringify(state.restart)!==JSON.stringify(before.restart))){
+    if(result.type!=='cornerTaker'&&state.restart&&(!before.restart||JSON.stringify(state.restart)!==JSON.stringify(before.restart))){
       stats[state.restart.team].restartsAwarded++;inc(stats[state.restart.team].restartTypes,`awarded:${state.restart.type}`);
     }
     if(before.attack!==state.attack){

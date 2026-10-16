@@ -70,7 +70,7 @@ Every offside attacking outfield piece inside the opponents' box counts as invol
 
 ## Restarts and progress
 
-Goal kicks, corners, throws and indirect free kicks all have protected attacking positioning, defending positioning, then the restart. Each side has one off-ball move and one shared pawn-or-King bonus. The taker is locked; no extra dribble or tackle occurs before the restart. Goal kicks always belong to the King at a vacant own-box square, then require a pass. Other restart takers are the nearest eligible teammate by Euclidean distance, stable ID ties, at the nearest vacant legal square. Nobody is displaced.
+Goal kicks, corners, throws and indirect free kicks all have protected attacking positioning, defending positioning, then the restart. Each side has one off-ball move and one shared pawn-or-King bonus. The taker is locked; no extra dribble or tackle occurs before the restart. Goal kicks always belong to the King at a vacant own-box square, then require a pass. For a corner, first choose any active teammate in the **attacking half**: Ivory y<8 or Obsidian y>8; the middle row does not qualify. Choosing a taker places that piece at the nearest free legal square to the corner without using a positioning allowance. Both teams then resettle normally. If nobody is in the attacking half, the nearest teammate takes it automatically. The corner-choice deadline also chooses a legal taker automatically. Throws and free kicks retain nearest-eligible selection by Euclidean distance with stable ID ties. Nobody is displaced.
 
 Goal-kick, corner and free-kick passes may loft over one intervening player of either side. The first remains a ground-pass target; the second occupied square can receive/intercept but cannot be bypassed. Normal piece kicking patterns, accuracy and offside still apply. LOFT marks targets beyond the bypassed player. Throws and ordinary passes keep normal interception; shooting uses the separate model above.
 
@@ -92,7 +92,9 @@ Rules version 15 supplies missing discipline metadata when loading a version-14 
 
 ## Computers and clocks
 
-Casual ranks legal moves using safe progress, collectable passing lanes, tackle risk, shooting chances and keeper position. A shot worth at least 45% after the best legal keeper reaction takes priority over a positional pass. Lower-probability shots compete normally. Tactical searches actual phase transitions with iterative deepening, full rule-state transpositions, alpha-beta decision pruning and expected values for uncertain outcomes. It extends pending shots, forced releases, loose collections and imminent challenges. Retained shooting potential has a weight of 450, reduced from 650 so preserving a possible future shot is less attractive than taking a useful attempt now. Default budget is 1,400 expanded nodes, up to eight iterative depths and three horizon actions; root shortlists retain nine candidates. Only the last completed iteration selects the action. Both policies follow identical rules and do not inspect future randomness. Selective search is not a solved strategy or Elo guarantee.
+Casual ranks legal moves using safe progress, collectable passing lanes, tackle risk, shooting chances and keeper position. A shot worth at least 45% after the best legal keeper reaction takes priority over a positional pass. Lower-probability shots compete normally.
+
+Tactical searches actual phase transitions with iterative deepening, full rule-state transpositions, alpha-beta decision pruning and expected values for uncertain outcomes. Its candidate set retains purposeful off-ball runs into the box, and it evaluates onside receiving finishes using the real passing lane, accuracy, keeper reaction and tackle exposure. It values dismissed players and card warnings, and treats an awarded corner as protected possession. Positional possession, loose-ball and keeper utility is scaled by 0.35 relative to actual goals worth 2,000; this makes a useful shot competitive with retaining the ball. Future shooting potential keeps its raw weight of 450 within that scaled positional value. Tactical uses ordinary passes instead of adding a redundant optional pass-and-run choice; the following off-ball allowance still permits the same legal run. It extends pending shots, forced releases, loose collections and imminent challenges. Default budget remains 1,400 expanded nodes, up to eight iterative depths and three horizon actions; root shortlists retain nine candidates. Only the last completed iteration selects the action. Both policies follow identical rules and do not inspect future randomness. Selective search is not a solved strategy or Elo guarantee.
 
 Tactical runs in a module worker to keep controls responsive. Stale results are discarded; unsupported workers use the bounded main-thread policy, and a worker timeout falls back to Casual for that action. Opponent pace is a separate setting (three seconds by default), with visible action paths and team-labelled recaps. Reduced-motion preferences are respected.
 
@@ -111,6 +113,17 @@ Run `npm run simulate -- --seeds=16 --actions=480 --out=simulation-results` for 
 ## Weighted-movement shooting trial
 
 The paired Fouls-OFF study in [weighted accuracy trial data](docs/weighted-accuracy-trial-2026-10-16/) used two independent seeds, both kickoffs and 480 actions per run. All variants used double-cost box movement. Four Tactical runs at the old accuracy / threat weight 650 produced five opponent-goal attempts and one goal; +15% accuracy alone produced three attempts and three goals. The selected +15% accuracy / threat weight 450 produced ten attempts and one goal. Meaningful attempts worth at least 15% rose from three to six versus accuracy alone, while average attempted quality fell. This is a willingness/quality tradeoff, not evidence of stronger play. Casual’s paired four-run screen went from 18 to 23 attempts, with six goals in each. All 9,600 actions replayed exactly. These measurements predate Fouls mode and are separate from its final smoke check.
+
+## Tactical crossplay: 16 October 2026
+
+The [crossplay study](docs/tactical-crossplay-2026-10-16/) compared the previous Tactical policy with the selected updated policy against unchanged Casual, using identical corner-selection rules, Fouls mode, two fixed seeds, both Tactical colours and both kickoff choices. Each variant played eight games capped at 720 atomic actions with the same 1,400-node search allowance. Rows below report Tactical's results against Casual.
+
+| Policy | Wins–draws–losses | Goals for–against | Opponent-goal attempts | Attacking xG |
+| --- | --- | --- | --- | --- |
+| Previous Tactical | 4–3–1 | 7–3 | 13 | 6.019 |
+| Updated Tactical | 7–1–0 | 17–0 | 105 | 15.892 |
+
+On the separate validation seed, the updated policy won all four games, scoring 9–0; the previous policy won two and drew two, scoring 4–2. The updated bot accepts more moderate finishes: its added shot volume raises total attacking xG while reducing average xG per attempt. Actual shooting probabilities and piece abilities are identical for both difficulties. The two-seed, fixed-action sample supports the selected improvement; broader win rates remain uncertain. The study retains the rejected intermediate policy, stopped experimental runs, exact-replay audit, and frozen rules/policy sources.
 
 ## Historical box-access trial: 16 October 2026
 

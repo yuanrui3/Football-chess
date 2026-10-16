@@ -157,7 +157,7 @@ test('a cutoff bound tied with the best score cannot replace a proven stronger d
     assert.equal(report.stats.completedDepth, options.maxDepth);
     assert.equal(report.stats.aborted, false);
     assert.deepEqual(report.action, expected, 'preserve the genuinely best defensive continuation when another branch only ties its bound');
-    assert.equal(report.value, -268, 'the selected action has the verified expanded-pitch value');
+    assert.equal(report.value, -93.8, 'the verified defensive continuation retains its value after non-goal utility is scaled by 0.35');
   }
 });
 

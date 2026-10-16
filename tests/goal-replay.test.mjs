@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {createGame,applyKick,applyMove,skipMove,legalKicks,legalMoves,canOccupySquare,BOARD_WIDTH as W,BOARD_HEIGHT as H,GOAL_FILES,BOX_FILES,BOX_DEPTH} from '../dist/engine.js';
+import {createGame,applyKick,applyMove,skipMove,legalKicks,legalMoves,canOccupySquare,BOARD_WIDTH as W,BOARD_HEIGHT as H,GOAL_FILES,BOX_FILES,BOX_DEPTH,selectCornerTaker} from '../dist/engine.js';
 import {buildGoalReplay,restoreGoalReplay,createReplayPlayer} from '../dist/goal-replay.js';
 
 const clone=value=>structuredClone(value);
@@ -259,6 +259,7 @@ for(const ownGoal of [false,true])test(`a real block ${ownGoal?'out for a goal k
   current=take(skipMove(current,{roll:.75}));
   assert.equal(current.lastAction.type,'blockedShot');assert.equal(current.lastAction.outcome,ownGoal?'out':'corner');
   assert.equal(current.restart.type,ownGoal?'goalKick':'corner');
+  if(current.phase==='cornerSelect')current=take(selectCornerTaker(current,'white-Q'));
   if(!ownGoal)current=take(applyMove(current,'white-R1',4,4));
   current=take(skipMove(current));current=take(skipMove(current));
   current=take(applyKick(current,ownGoal?8:4,ownGoal?H-5:4,{roll:0}));
@@ -271,6 +272,11 @@ for(const ownGoal of [false,true])test(`a real block ${ownGoal?'out for a goal k
   const frame=replay.frames.find(frame=>frame.action?.type==='blockedShot');assert.ok(frame);
   assert.equal(frame.action.outcome,ownGoal?'out':'corner');
   assert.match(frame.caption,ownGoal?/out for a goal kick/:/conceding a corner/);
+  if(!ownGoal){
+    const selection=replay.frames.find(frame=>frame.action?.type==='cornerTaker');
+    assert.ok(selection,'the chosen corner taker is preserved in the scoring build-up');
+    assert.equal(selection.action.pieceId,'white-Q');assert.match(selection.caption,/chooses the queen as corner taker/);
+  }
   assert.deepEqual(restoreGoalReplay(clone(replay)),replay);
 });
 

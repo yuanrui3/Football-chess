@@ -9,7 +9,7 @@ export const CENTRAL_GOAL_FILES = Object.freeze([6, 7]);
 export const MIDFIELD_RANK = Math.floor(BOARD_HEIGHT / 2);
 export const BOARD_CENTER_X = (BOARD_WIDTH - 1) / 2;
 export const FILE_LABELS = 'abcdefghijklmn';
-export const RULES_VERSION = 15;
+export const RULES_VERSION = 16;
 export const ALLOW_OUTFIELD_BOXES = true;
 export const LONG_TACKLE_RANGE = 5;
 export const MOVE_RANGE = 10;
@@ -467,9 +467,36 @@ export function boundaryExit(from, landing) {
   const {t, ...exit} = crossings[0]; return exit;
 }
 
-function awardRestart(state, type, team, requestedSpot, {exit, reason} = {}) {
+const attackingHalf = (team, y) => team === 'white' ? y < MIDFIELD_RANK : y > MIDFIELD_RANK;
+const eligibleCornerTakers = (state, team) => state.pieces.filter(piece => piece.team === team && attackingHalf(team, piece.y));
+
+export function cornerTakers(state) {
+  return state?.phase === 'cornerSelect' && state.restart?.type === 'corner'
+    ? eligibleCornerTakers(state, state.restart.team).map(piece => ({...piece})) : [];
+}
+
+export function selectCornerTaker(state, pieceId) {
+  if (!cornerTakers(state).some(piece => piece.id === pieceId)) throw new Error('Choose a corner taker from your attacking half.');
+  const next = copy(state), chosen = next.pieces.find(piece => piece.id === pieceId);
+  const from = {x: chosen.x, y: chosen.y}, pending = next.restart;
+  const restart = awardRestart(next, 'corner', pending.team, pending.spot, {exit: pending.exit, reason: pending.reason, selectedTakerId: pieceId});
+  next.lastAction = {type: 'cornerTaker', team: pending.team, pieceId, from, to: {x: chosen.x, y: chosen.y}, restart: copy(restart)};
+  addLog(next, `${title(pending.team)} chooses ${NAMES[chosen.type]} ${pieceId.split('-')[1]} for the corner. Both teams may reposition before the kick.`);
+  return next;
+}
+
+function awardRestart(state, type, team, requestedSpot, {exit, reason, selectedTakerId} = {}) {
   const origin = {x: clamp(Math.round(requestedSpot.x), 0, BOARD_WIDTH - 1), y: clamp(Math.round(requestedSpot.y), 0, BOARD_HEIGHT - 1)};
-  const candidates = state.pieces.filter(p => p.team === team && (type !== 'goalKick' || p.type === 'K'));
+  const eligible = type === 'corner' ? eligibleCornerTakers(state, team) : [];
+  if (type === 'corner' && !selectedTakerId && eligible.length) {
+    state.ball = {...origin, carrierId: null}; state.attack = team;
+    state.looseBallKickOrigin = null;
+    beginPosition(state); state.phase = 'cornerSelect'; state.offside = null;
+    state.restart = {type, team, takerId: null, spot: {...origin}, indirect: false, ...(exit ? {exit} : {}), ...(reason ? {reason} : {})};
+    resetProgress(state);
+    return state.restart;
+  }
+  const candidates = state.pieces.filter(p => p.team === team && (type !== 'goalKick' || p.type === 'K') && (!selectedTakerId || p.id === selectedTakerId));
   candidates.sort((a, b) => Math.hypot(a.x - origin.x, a.y - origin.y) - Math.hypot(b.x - origin.x, b.y - origin.y) || a.id.localeCompare(b.id));
   let taker, spot;
   for (const candidate of candidates) {
@@ -490,7 +517,7 @@ function awardRestart(state, type, team, requestedSpot, {exit, reason} = {}) {
   state.ball = {...spot, carrierId: taker?.id || null}; state.attack = team;
   state.looseBallKickOrigin = null;
   beginPosition(state); state.offside = null;
-  state.restart = {type, team, takerId: taker?.id || null, spot: {...spot}, indirect: ['offside', 'stalling', 'timeout'].includes(type), ...(exit ? {exit} : {}), ...(reason ? {reason} : {})};
+  state.restart = {type, team, takerId: taker?.id || null, spot: {...spot}, indirect: ['offside', 'stalling', 'timeout'].includes(type), ...(type === 'corner' && !eligible.length ? {cornerFallback: true} : {}), ...(exit ? {exit} : {}), ...(reason ? {reason} : {})};
   resetProgress(state);
   return state.restart;
 }
@@ -551,6 +578,22 @@ export function normalizeGame(state) {
   }
   next.restart ??= null;
   next.offside ??= null;
+  if (next.phase === 'cornerSelect') {
+    if (next.restart?.type === 'corner' && TEAMS.includes(next.restart.team)) {
+      next.attack = next.restart.team;
+      if (!inside(next.restart.spot?.x, next.restart.spot?.y)) {
+        next.restart.spot = {x: Number(next.ball?.x) > BOARD_CENTER_X ? BOARD_WIDTH - 1 : 0, y: next.attack === 'white' ? 0 : BOARD_HEIGHT - 1};
+      }
+      next.restart.takerId = null;
+      next.restart.indirect = false;
+      next.ball = {x: next.restart.spot.x, y: next.restart.spot.y, carrierId: null};
+      next.passRun = null; next.offside = null; next.pendingShot = null; next.looseBallKickOrigin = null;
+      if (!eligibleCornerTakers(next, next.attack).length) {
+        const pending = next.restart;
+        awardRestart(next, 'corner', pending.team, pending.spot, {exit: pending.exit, reason: pending.reason});
+      }
+    } else beginPosition(next);
+  }
   if (next.phase === 'passRun') {
     const runner = next.pieces.find(piece => piece.id === next.passRun?.pieceId);
     const receiver = next.pieces.find(piece => piece.id === next.ball.carrierId);
@@ -1090,6 +1133,13 @@ export const endPositionTurn = skipMove;
 export function actionTimeout(state) {
   const team = currentTeam(state);
   if (!TEAMS.includes(team)) return copy(state);
+  if (state.phase === 'cornerSelect') {
+    const action = chooseAIAction(state, {difficulty: 'casual'});
+    const next = selectCornerTaker(state, action.pieceId);
+    next.lastAction.timedOutTeam = team;
+    addLog(next, `${title(team)} runs out of corner-selection time; a taker is chosen automatically.`);
+    return next;
+  }
   if (state.phase === 'passRun') {
     const next = skipMove(state);
     next.lastAction.timedOutTeam = team;
@@ -1388,8 +1438,29 @@ function moveValue(state, projected, piece, move, team, beforeThreat) {
   return value;
 }
 
+function cornerTakerRank(state, piece) {
+  const placed = selectCornerTaker(state, piece.id);
+  const kicking = {...placed, phase: 'kick'};
+  let best = -Infinity;
+  for (const kick of legalKicks(kicking)) best = Math.max(best, kickValue(kicking, kick, piece.team));
+  // Keep a central box receiver available for the delivery and avoid taking
+  // the goalkeeper away from its goal unless there is no useful alternative.
+  return best - (piece.type === 'K' ? 180 : 0)
+    - (isBox(piece.x, piece.y) && !inOwnBox(piece.team, piece.x, piece.y) ? 25 : 0);
+}
+
+function chooseCornerAction(state) {
+  let best = null, value = -Infinity;
+  for (const piece of cornerTakers(state)) {
+    const rank = cornerTakerRank(state, piece);
+    if (rank > value) { best = piece; value = rank; }
+  }
+  return best ? {type: 'cornerTaker', pieceId: best.id} : {type: 'skip'};
+}
+
 function chooseCasualAction(state) {
   if (!state || state.phase === 'finished') return {type: 'skip'};
+  if (state.phase === 'cornerSelect') return chooseCornerAction(state);
   const team = currentTeam(state);
   if (state.phase === 'keeperReact') {
     const keeper = state.pieces.find(p => p.team === team && p.type === 'K');
@@ -1472,6 +1543,33 @@ function tacticalTackleRisk(state, carrier) {
   return state.pieces.some(piece => piece.team !== carrier.team && canTackle(state, piece, carrier)) ? (carrier.type === 'N' ? 0.5 : 1) * (state.foulsEnabled ? FOUL_RULE.clean : 1) : 0;
 }
 
+// A box attack has to be built with an off-ball run and a real passing lane.
+// Merely rewarding a nearby teammate cannot distinguish a useful cut-back
+// receiver from a crowd of pieces that the carrier cannot actually reach.
+// These are public, immediate receiving opportunities, not assumed future goals.
+const tacticalOutletCache = new WeakMap();
+function tacticalOutlets(state, carrier) {
+  const cached = tacticalOutletCache.get(state);
+  if (cached) return cached;
+  if (!carrier) return {best: 0, second: 0};
+  const chances = [];
+  for (const receiver of state.pieces) {
+    if (receiver.team !== carrier.team || receiver.id === carrier.id || receiver.type === 'K'
+      || !onsideAtKick(state, receiver, carrier) || !passLane(state, carrier, receiver)) continue;
+    const received = receivingState(state, receiver);
+    const accuracy = state.restart?.type === 'throwIn' ? throwAccuracy(distance(carrier, receiver)) : passAccuracy(distance(carrier, receiver));
+    // The receiver gets its positioning turn, but has to survive a defensive
+    // reply before shooting. Exposed receivers are substantially less useful.
+    const chance = tacticalShots(received, carrier.team, true) * accuracy
+      * (1 - tacticalTackleRisk(received, receiver) * 0.8);
+    if (chance > 0) chances.push(chance);
+  }
+  chances.sort((a, b) => b - a);
+  const result = {best: chances[0] || 0, second: chances[1] || 0};
+  tacticalOutletCache.set(state, result);
+  return result;
+}
+
 function canCollect(state, piece, target) {
   if (!allowedSquare(piece, target.x, target.y) || pieceAt(state, target.x, target.y)) return false;
   if (ownPassEntryForbidden(state, piece, target)) return false;
@@ -1509,8 +1607,18 @@ function looseBallValue(state, team) {
 function tacticalPositionValue(state, team) {
   if (state.phase === 'finished' && state.winner) return state.winner === team ? 1000000 : -1000000;
   let value = (state.score[team] - state.score[other(team)]) * 2000;
+  // Losing a player removes an attacking outlet and a defensive reply for the
+  // rest of the match. The old leaf ignored this until a minimum-roster forfeit.
+  const material = {Q: 150, R: 105, B: 100, N: 90, P: 55, K: 0};
+  for (const piece of state.pieces) {
+    value += (piece.team === team ? 1 : -1) * ((material[piece.type] || 0)
+      - (state.discipline?.[piece.id]?.yellowCards ? 8 : 0));
+  }
   const carrier = state.pieces.find(piece => piece.id === state.ball.carrierId);
-  if (!carrier) return value + looseBallValue(state, team);
+  if (!carrier && state.phase === 'cornerSelect' && state.restart?.type === 'corner') {
+    return value + (state.restart.team === team ? 1 : -1) * 215 * 0.35;
+  }
+  if (!carrier) return value + looseBallValue(state, team) * 0.35;
   const sign = carrier.team === team ? 1 : -1;
   const risk = tacticalTackleRisk(state, carrier);
   // A dangerous-looking pass is less valuable when the opponent can win the
@@ -1541,6 +1649,8 @@ function tacticalPositionValue(state, team) {
   const outletAccuracy = length => state.restart?.type === 'throwIn' ? throwAccuracy(length) : passAccuracy(length);
   possession += Math.min(3, outlets.reduce((sum, piece) => sum + outletAccuracy(distance(piece, carrier)), 0)) * 12;
   if (outlets.some(piece => piece.x < carrier.x) && outlets.some(piece => piece.x > carrier.x)) possession += 10;
+  const finishingOutlets = tacticalOutlets(state, carrier);
+  possession += finishingOutlets.best * 250 + finishingOutlets.second * 60;
   // An end-line run needs a finish or a central outlet. Reaching the deepest
   // row alone should not outweigh an attack that can actually reach the goal.
   const centralOutlet = outlets.some(piece => Math.abs(piece.x - BOARD_CENTER_X) <= 2.5 && goalDistance(piece.team, piece.y) <= 6);
@@ -1553,18 +1663,25 @@ function tacticalPositionValue(state, team) {
     && (carrier.team === 'white' ? piece.y < carrier.y : piece.y > carrier.y)
     && distance(piece, carrier) <= 5).length;
   possession -= Math.min(2, cover) * 12;
-  value += sign * possession;
+  value += sign * possession * 0.35;
   for (const keeper of state.pieces.filter(piece => piece.type === 'K')) {
     const positioning = keeperHomeValue(keeper);
-    value += (keeper.team === team ? 1 : -1) * positioning;
+    value += (keeper.team === team ? 1 : -1) * positioning * 0.35;
   }
   return value;
 }
 
 function tacticalMoveRank(state, piece, move, beforeThreat, fast = false, threats = []) {
   const projected = projectedMove(state, piece, move);
-  if (!fast) return moveValue(state, projected, piece, move, piece.team, beforeThreat);
   const carrier = projected.pieces.find(p => p.id === projected.ball.carrierId), moved = projected.pieces.find(p => p.id === piece.id);
+  if (!fast) {
+    let rank = moveValue(state, projected, piece, move, piece.team, beforeThreat);
+    if (carrier?.team === piece.team && carrier.id !== piece.id) {
+      const previous = state.pieces.find(p => p.id === state.ball.carrierId);
+      rank += (tacticalOutlets(projected, carrier).best - tacticalOutlets(state, previous).best) * 850;
+    }
+    return rank;
+  }
   if (flagged(state, piece) && (move.type === 'tackle' || !state.ball.carrierId && state.ball.x === move.x && state.ball.y === move.y)) return -12000;
   const home = piece.type === 'K' ? keeperHomeValue(moved) - keeperHomeValue(piece) : 0;
   if (move.type === 'tackle') return 12000 * (move.tackleProbability ?? 1) - tacticalTackleRisk(projected, carrier) * 120;
@@ -1577,6 +1694,7 @@ function tacticalMoveRank(state, piece, move, beforeThreat, fast = false, threat
       + (tacticalTackleRisk(state, piece) - tacticalTackleRisk(projected, carrier)) * 680 + progressRank(state, piece.team, move.y);
     const original = state.pieces.find(p => p.id === carrier.id);
     return supportPotential(projected, moved, carrier) - supportPotential(state, piece, original)
+      + (tacticalOutlets(projected, carrier).best - tacticalOutlets(state, original).best) * 850
       + (tacticalTackleRisk(state, original) - tacticalTackleRisk(projected, carrier)) * 450
       + home;
   }
@@ -1606,10 +1724,14 @@ function rankedTacticalActions(state, width, root = false) {
   // rather than spend branching budget rediscovering all nine possible moves.
   if (state.phase === 'keeperReact') return [{action: chooseCasualAction(state), rank: 0}];
   let candidates = [];
-  if (['kick', 'kickoff', 'keeperRelease'].includes(state.phase)) {
+  if (state.phase === 'cornerSelect') {
+    candidates = cornerTakers(state).map(piece => ({action: {type: 'cornerTaker', pieceId: piece.id}, rank: cornerTakerRank(state, piece), category: 'cornerTaker'}));
+  } else if (['kick', 'kickoff', 'keeperRelease'].includes(state.phase)) {
     candidates = legalKicks(state).filter(kick => !kick.goal || kick.goal === team).map(kick => {
-      const receiver = state.pieces.find(piece => piece.id === kick.receiverId);
-      return {action: {type: 'kick', x: kick.x, y: kick.y, ...(receiver?.team === team && receiver.type !== 'K' ? {passRun: true} : {})}, rank: tacticalKickRank(state, kick, team), category: kick.goal ? 'shot' : kick.receiverId ? 'pass' : 'space'};
+      // The ordinary attacking phase already permits the original passer's
+      // off-ball run, with the same shared movement budget. Avoid inserting an
+      // optional pass-run/decline phase that spends a search ply on no new right.
+      return {action: {type: 'kick', x: kick.x, y: kick.y}, rank: tacticalKickRank(state, kick, team), category: kick.goal ? 'shot' : kick.receiverId ? 'pass' : 'space'};
     });
   } else if (positionalTurn(state) || state.phase === 'passRun') {
     const carrier = state.pieces.find(piece => piece.id === state.ball.carrierId);
@@ -1620,7 +1742,8 @@ function rankedTacticalActions(state, width, root = false) {
       for (const freePawn of [false, true]) for (const move of legalMoves(state, piece.id, {freePawn})) {
         const carrying = piece.id === carrier?.id;
         const safeDribble = carrying && !tacticalTackleRisk(projectedMove(state, piece, move), {...piece, x: move.x, y: move.y});
-        candidates.push({action: {type: 'move', pieceId: piece.id, x: move.x, y: move.y, freePawn}, rank: tacticalMoveRank(state, piece, move, beforeThreat, !root, threats) + (freePawn ? 0.01 : 0), category: freePawn ? 'pawn' : move.type === 'tackle' ? 'tackle' : carrying ? safeDribble ? 'safeDribble' : 'dribble' : 'support'});
+        const boxRun = !carrying && carrier?.team === team && isBox(move.x, move.y) && !inOwnBox(team, move.x, move.y);
+        candidates.push({action: {type: 'move', pieceId: piece.id, x: move.x, y: move.y, freePawn}, rank: tacticalMoveRank(state, piece, move, beforeThreat, !root, threats) + (freePawn ? 0.01 : 0), category: freePawn ? 'pawn' : move.type === 'tackle' ? 'tackle' : carrying ? safeDribble ? 'safeDribble' : 'dribble' : boxRun ? 'boxRun' : 'support'});
       }
     }
   }
@@ -1629,7 +1752,7 @@ function rankedTacticalActions(state, width, root = false) {
   // A greedy shot-blocking rank must never prune every possession-winning
   // reply. Likewise, consider an actual shot alongside a pass in kicking turns.
   if (!root && width > 1) {
-    const categories = positionalTurn(state) ? ['tackle', 'safeDribble', 'support'] : ['shot', 'pass'];
+    const categories = positionalTurn(state) ? ['tackle', 'safeDribble', 'boxRun', 'support'] : ['shot', 'pass'];
     shortlist = [];
     for (const category of categories) {
       const candidate = candidates.find(entry => entry.category === category);
@@ -1641,7 +1764,7 @@ function rankedTacticalActions(state, width, root = false) {
   // Root diversity gives both a safe pass and a shot, or a supporting move and
   // a dribble, a chance to survive the inexpensive first-stage ranking.
   if (root) {
-    const wanted = positionalTurn(state) ? ['pawn', 'support', 'safeDribble', 'dribble', 'tackle'] : ['shot', 'pass', 'space'];
+    const wanted = positionalTurn(state) ? ['pawn', 'boxRun', 'support', 'safeDribble', 'dribble', 'tackle'] : ['shot', 'pass', 'space'];
     shortlist = [];
     for (const category of wanted) {
       const candidate = candidates.find(entry => entry.category === category);
@@ -1662,7 +1785,8 @@ function planningState(state) {
 function tacticalSuccessors(state, action) {
   const source = planningState(state);
   const apply = (roll, landing) => {
-    const next = action.type === 'kick' ? applyKick(source, action.x, action.y, {roll, landing, passRun: !!action.passRun})
+    const next = action.type === 'cornerTaker' ? selectCornerTaker(source, action.pieceId)
+      : action.type === 'kick' ? applyKick(source, action.x, action.y, {roll, landing, passRun: !!action.passRun})
       : action.type === 'move' ? applyMove(source, action.pieceId, action.x, action.y, {freePawn: !!action.freePawn, roll, landing})
         : skipMove(source, {roll, landing});
     return planningState(next);
@@ -1730,7 +1854,7 @@ const tacticalActionKey = action => JSON.stringify([action.type, action.pieceId,
 const SEARCH_ABORT = Symbol('Tactical search allowance exhausted');
 
 function tacticalUnsettled(state) {
-  if (state.phase === 'keeperReact' || state.phase === 'keeperRelease' || state.phase === 'kick' || state.phase === 'passRun') return true;
+  if (state.phase === 'keeperReact' || state.phase === 'keeperRelease' || state.phase === 'kick' || state.phase === 'passRun' || state.phase === 'cornerSelect') return true;
   const carrier = state.pieces.find(p => p.id === state.ball.carrierId);
   if (!carrier) return positionalTurn(state) && state.pieces.some(piece => piece.team === currentTeam(state) && !flagged(state, piece)
     && canCollect(state, piece, state.ball) && (!budgetFor(state).normalUsed || ['P', 'K'].includes(piece.type) && !budgetFor(state).pawnUsed));
@@ -1881,6 +2005,6 @@ function chooseTacticalAction(state) {
 export function chooseAIAction(state, {difficulty = 'casual'} = {}) {
   // Keep geometry reuse within a decision, while allowing custom setups or
   // API callers to edit an existing state object between decisions.
-  if (state && typeof state === 'object') passThreatCache.delete(state);
+  if (state && typeof state === 'object') { passThreatCache.delete(state); tacticalOutletCache.delete(state); }
   return difficulty === 'tactical' ? chooseTacticalAction(state) : chooseCasualAction(state);
 }

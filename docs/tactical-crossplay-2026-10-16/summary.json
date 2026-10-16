@@ -1,0 +1,437 @@
+{
+  "summary": {
+    "baseline": {
+      "games": 8,
+      "actions": 5760,
+      "errors": [],
+      "tacticalWDL": [
+        4,
+        3,
+        1
+      ],
+      "tacticalGoals": 7,
+      "casualGoals": 3,
+      "tacticalShots": 13,
+      "casualShots": 13,
+      "tacticalXG": 6.0193672291485845,
+      "casualXG": 1.5661533710328048,
+      "ownGoalAttempts": 0,
+      "tacticalMeanShotXG": 0.46302824839604495,
+      "tacticalMeanShotDistance": 2.194725579908742,
+      "tacticalPasses": 744,
+      "tacticalSpacePasses": 501,
+      "tacticalTeammatePasses": 231,
+      "tacticalOrdinaryRounds": 891,
+      "casualOrdinaryRounds": 84,
+      "tacticalActions": 3495,
+      "tacticalThinkMs": 1507181.501044999,
+      "casualThinkMs": 30353.006545999728,
+      "tacticalMsPerDecision": 431.23934221602264,
+      "maxExactRepeat": 2,
+      "forfeits": 0,
+      "fouls": 2,
+      "yellowCards": 1,
+      "redCards": 0
+    },
+    "candidate": {
+      "games": 4,
+      "actions": 2880,
+      "errors": [],
+      "tacticalWDL": [
+        1,
+        2,
+        1
+      ],
+      "tacticalGoals": 3,
+      "casualGoals": 2,
+      "tacticalShots": 9,
+      "casualShots": 10,
+      "tacticalXG": 2.0576013293472544,
+      "casualXG": 1.055303086006288,
+      "ownGoalAttempts": 0,
+      "tacticalMeanShotXG": 0.2286223699274727,
+      "tacticalMeanShotDistance": 2.5,
+      "tacticalPasses": 332,
+      "tacticalSpacePasses": 226,
+      "tacticalTeammatePasses": 99,
+      "tacticalOrdinaryRounds": 402,
+      "casualOrdinaryRounds": 79,
+      "tacticalActions": 1651,
+      "tacticalThinkMs": 976365.0641179994,
+      "casualThinkMs": 13754.750636999759,
+      "tacticalMsPerDecision": 591.3779915917622,
+      "maxExactRepeat": 2,
+      "forfeits": 0,
+      "fouls": 3,
+      "yellowCards": 2,
+      "redCards": 0
+    },
+    "c2": {
+      "games": 8,
+      "actions": 5760,
+      "errors": [],
+      "tacticalWDL": [
+        7,
+        1,
+        0
+      ],
+      "tacticalGoals": 17,
+      "casualGoals": 0,
+      "tacticalShots": 105,
+      "casualShots": 25,
+      "tacticalXG": 15.892177557308,
+      "casualXG": 2.4305300616600674,
+      "ownGoalAttempts": 0,
+      "tacticalMeanShotXG": 0.1513540719743619,
+      "tacticalMeanShotDistance": 3.5346324728397285,
+      "tacticalPasses": 465,
+      "tacticalSpacePasses": 317,
+      "tacticalTeammatePasses": 139,
+      "tacticalOrdinaryRounds": 567,
+      "casualOrdinaryRounds": 255,
+      "tacticalActions": 3092,
+      "tacticalThinkMs": 1604367.3576440015,
+      "casualThinkMs": 28326.678571999866,
+      "tacticalMsPerDecision": 518.8768944514882,
+      "maxExactRepeat": 4,
+      "forfeits": 0,
+      "fouls": 15,
+      "yellowCards": 7,
+      "redCards": 2
+    }
+  },
+  "seedSummaries": {
+    "1632189751": {
+      "baseline": {
+        "games": 4,
+        "actions": 2880,
+        "errors": [],
+        "tacticalWDL": [
+          2,
+          1,
+          1
+        ],
+        "tacticalGoals": 3,
+        "casualGoals": 1,
+        "tacticalShots": 6,
+        "casualShots": 7,
+        "tacticalXG": 2.709851402770414,
+        "casualXG": 0.902584949674066,
+        "ownGoalAttempts": 0,
+        "tacticalMeanShotXG": 0.45164190046173563,
+        "tacticalMeanShotDistance": 2.260258802134805,
+        "tacticalPasses": 366,
+        "tacticalSpacePasses": 237,
+        "tacticalTeammatePasses": 121,
+        "tacticalOrdinaryRounds": 441,
+        "casualOrdinaryRounds": 39,
+        "tacticalActions": 1751,
+        "tacticalThinkMs": 822598.1657640002,
+        "casualThinkMs": 16906.859379,
+        "tacticalMsPerDecision": 469.7876446396346,
+        "maxExactRepeat": 2,
+        "forfeits": 0,
+        "fouls": 0,
+        "yellowCards": 0,
+        "redCards": 0
+      },
+      "candidate": {
+        "games": 4,
+        "actions": 2880,
+        "errors": [],
+        "tacticalWDL": [
+          1,
+          2,
+          1
+        ],
+        "tacticalGoals": 3,
+        "casualGoals": 2,
+        "tacticalShots": 9,
+        "casualShots": 10,
+        "tacticalXG": 2.0576013293472544,
+        "casualXG": 1.055303086006288,
+        "ownGoalAttempts": 0,
+        "tacticalMeanShotXG": 0.2286223699274727,
+        "tacticalMeanShotDistance": 2.5,
+        "tacticalPasses": 332,
+        "tacticalSpacePasses": 226,
+        "tacticalTeammatePasses": 99,
+        "tacticalOrdinaryRounds": 402,
+        "casualOrdinaryRounds": 79,
+        "tacticalActions": 1651,
+        "tacticalThinkMs": 976365.0641179994,
+        "casualThinkMs": 13754.750636999759,
+        "tacticalMsPerDecision": 591.3779915917622,
+        "maxExactRepeat": 2,
+        "forfeits": 0,
+        "fouls": 3,
+        "yellowCards": 2,
+        "redCards": 0
+      },
+      "c2": {
+        "games": 4,
+        "actions": 2880,
+        "errors": [],
+        "tacticalWDL": [
+          3,
+          1,
+          0
+        ],
+        "tacticalGoals": 8,
+        "casualGoals": 0,
+        "tacticalShots": 56,
+        "casualShots": 12,
+        "tacticalXG": 9.176699291235034,
+        "casualXG": 1.1752236049952145,
+        "ownGoalAttempts": 0,
+        "tacticalMeanShotXG": 0.1638696302006256,
+        "tacticalMeanShotDistance": 3.406782898551043,
+        "tacticalPasses": 245,
+        "tacticalSpacePasses": 167,
+        "tacticalTeammatePasses": 72,
+        "tacticalOrdinaryRounds": 287,
+        "casualOrdinaryRounds": 115,
+        "tacticalActions": 1568,
+        "tacticalThinkMs": 911652.398696,
+        "casualThinkMs": 16515.381043999318,
+        "tacticalMsPerDecision": 581.4109685561225,
+        "maxExactRepeat": 4,
+        "forfeits": 0,
+        "fouls": 6,
+        "yellowCards": 2,
+        "redCards": 1
+      }
+    },
+    "3807295163": {
+      "baseline": {
+        "games": 4,
+        "actions": 2880,
+        "errors": [],
+        "tacticalWDL": [
+          2,
+          2,
+          0
+        ],
+        "tacticalGoals": 4,
+        "casualGoals": 2,
+        "tacticalShots": 7,
+        "casualShots": 6,
+        "tacticalXG": 3.3095158263781705,
+        "casualXG": 0.663568421358739,
+        "ownGoalAttempts": 0,
+        "tacticalMeanShotXG": 0.4727879751968815,
+        "tacticalMeanShotDistance": 2.138554246572116,
+        "tacticalPasses": 378,
+        "tacticalSpacePasses": 264,
+        "tacticalTeammatePasses": 110,
+        "tacticalOrdinaryRounds": 450,
+        "casualOrdinaryRounds": 45,
+        "tacticalActions": 1744,
+        "tacticalThinkMs": 684583.335280999,
+        "casualThinkMs": 13446.147166999726,
+        "tacticalMsPerDecision": 392.53631610149023,
+        "maxExactRepeat": 2,
+        "forfeits": 0,
+        "fouls": 2,
+        "yellowCards": 1,
+        "redCards": 0
+      },
+      "candidate": {
+        "games": 0,
+        "actions": 0,
+        "errors": [],
+        "tacticalWDL": [
+          0,
+          0,
+          0
+        ],
+        "tacticalGoals": 0,
+        "casualGoals": 0,
+        "tacticalShots": 0,
+        "casualShots": 0,
+        "tacticalXG": 0,
+        "casualXG": 0,
+        "ownGoalAttempts": 0,
+        "tacticalMeanShotXG": null,
+        "tacticalMeanShotDistance": null,
+        "tacticalPasses": 0,
+        "tacticalSpacePasses": 0,
+        "tacticalTeammatePasses": 0,
+        "tacticalOrdinaryRounds": 0,
+        "casualOrdinaryRounds": 0,
+        "tacticalActions": 0,
+        "tacticalThinkMs": 0,
+        "casualThinkMs": 0,
+        "tacticalMsPerDecision": null,
+        "maxExactRepeat": 0,
+        "forfeits": 0,
+        "fouls": 0,
+        "yellowCards": 0,
+        "redCards": 0
+      },
+      "c2": {
+        "games": 4,
+        "actions": 2880,
+        "errors": [],
+        "tacticalWDL": [
+          4,
+          0,
+          0
+        ],
+        "tacticalGoals": 9,
+        "casualGoals": 0,
+        "tacticalShots": 49,
+        "casualShots": 13,
+        "tacticalXG": 6.715478266072966,
+        "casualXG": 1.2553064566648529,
+        "ownGoalAttempts": 0,
+        "tacticalMeanShotXG": 0.13705057685863198,
+        "tacticalMeanShotDistance": 3.680746272026798,
+        "tacticalPasses": 220,
+        "tacticalSpacePasses": 150,
+        "tacticalTeammatePasses": 67,
+        "tacticalOrdinaryRounds": 280,
+        "casualOrdinaryRounds": 140,
+        "tacticalActions": 1524,
+        "tacticalThinkMs": 692714.9589480017,
+        "casualThinkMs": 11811.297528000548,
+        "tacticalMsPerDecision": 454.5373746377964,
+        "maxExactRepeat": 2,
+        "forfeits": 0,
+        "fouls": 9,
+        "yellowCards": 5,
+        "redCards": 1
+      }
+    }
+  },
+  "pairs": [
+    {
+      "seed": 1632189751,
+      "tacticalColor": "black",
+      "kickoff": "black",
+      "baselineScore": {
+        "white": 0,
+        "black": 0
+      },
+      "c2Score": {
+        "white": 0,
+        "black": 0
+      },
+      "tacticalGoalDifferenceChange": 0,
+      "tacticalShotChange": 8,
+      "tacticalXGChange": 1.4635109963144175
+    },
+    {
+      "seed": 1632189751,
+      "tacticalColor": "black",
+      "kickoff": "white",
+      "baselineScore": {
+        "white": 0,
+        "black": 1
+      },
+      "c2Score": {
+        "white": 0,
+        "black": 3
+      },
+      "tacticalGoalDifferenceChange": 2,
+      "tacticalShotChange": 13,
+      "tacticalXGChange": 1.9991012634187488
+    },
+    {
+      "seed": 1632189751,
+      "tacticalColor": "white",
+      "kickoff": "black",
+      "baselineScore": {
+        "white": 0,
+        "black": 1
+      },
+      "c2Score": {
+        "white": 3,
+        "black": 0
+      },
+      "tacticalGoalDifferenceChange": 4,
+      "tacticalShotChange": 16,
+      "tacticalXGChange": 2.43909135837953
+    },
+    {
+      "seed": 1632189751,
+      "tacticalColor": "white",
+      "kickoff": "white",
+      "baselineScore": {
+        "white": 2,
+        "black": 0
+      },
+      "c2Score": {
+        "white": 2,
+        "black": 0
+      },
+      "tacticalGoalDifferenceChange": 0,
+      "tacticalShotChange": 13,
+      "tacticalXGChange": 0.5651442703519234
+    },
+    {
+      "seed": 3807295163,
+      "tacticalColor": "black",
+      "kickoff": "black",
+      "baselineScore": {
+        "white": 0,
+        "black": 0
+      },
+      "c2Score": {
+        "white": 0,
+        "black": 2
+      },
+      "tacticalGoalDifferenceChange": 2,
+      "tacticalShotChange": 8,
+      "tacticalXGChange": 0.6350115700661128
+    },
+    {
+      "seed": 3807295163,
+      "tacticalColor": "black",
+      "kickoff": "white",
+      "baselineScore": {
+        "white": 0,
+        "black": 1
+      },
+      "c2Score": {
+        "white": 0,
+        "black": 3
+      },
+      "tacticalGoalDifferenceChange": 2,
+      "tacticalShotChange": 11,
+      "tacticalXGChange": 0.6279409760824193
+    },
+    {
+      "seed": 3807295163,
+      "tacticalColor": "white",
+      "kickoff": "black",
+      "baselineScore": {
+        "white": 1,
+        "black": 1
+      },
+      "c2Score": {
+        "white": 2,
+        "black": 0
+      },
+      "tacticalGoalDifferenceChange": 2,
+      "tacticalShotChange": 10,
+      "tacticalXGChange": 1.2952909956180017
+    },
+    {
+      "seed": 3807295163,
+      "tacticalColor": "white",
+      "kickoff": "white",
+      "baselineScore": {
+        "white": 2,
+        "black": 1
+      },
+      "c2Score": {
+        "white": 2,
+        "black": 0
+      },
+      "tacticalGoalDifferenceChange": 1,
+      "tacticalShotChange": 13,
+      "tacticalXGChange": 0.8477188979282623
+    }
+  ]
+}

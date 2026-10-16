@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
   BOARD_WIDTH, BOARD_HEIGHT, GOAL_FILES, BOX_DEPTH, inOwnBox, canOccupySquare, isBox, createGame, currentTeam,
-  legalMoves, legalKicks, applyMove, applyKick, skipMove, boundaryExit,
+  legalMoves, legalKicks, applyMove, applyKick, skipMove, boundaryExit, cornerTakers, selectCornerTaker,
 } from '../dist/engine.js';
 
 const clone = value => JSON.parse(JSON.stringify(value));
@@ -327,7 +327,10 @@ test('short and long stopped shots distinguish catches from keeper last-touch co
         assert.equal(result.restart.type,'corner');
         assert.equal(result.restart.team,attack,'defending keeper touch awards attacking corner');
         assert.equal(result.lastAction.tippedOut,true);
-        assert.equal(result.phase,'attackMove');
+        assert.equal(result.phase,'cornerSelect');
+        assert.equal(result.restart.takerId,null);
+        const selected=selectCornerTaker(result,cornerTakers(result)[0].id);
+        assert.equal(selected.phase,'attackMove');
       } else {
         assert.equal(result.restart,null);
         assert.equal(result.ball.carrierId,`${defending}-K`);
@@ -398,6 +401,7 @@ test('both teams can use normal and free-pawn positioning before goal kicks, cor
     const positions={'white-P1':[8,8],'black-P1':[8,6],[`${opposing}-B1`]:transform(type==='corner'?[1,13]:type==='goalKick'?[1,1]:[1,7])};
     let {result:state}=forceLongExit({attack,side:type==='throwIn'?'left':'end',ownEnd:type==='corner',positions});
     assert.equal(state.restart.type,type);
+    if(state.phase==='cornerSelect') state=selectCornerTaker(state,cornerTakers(state)[0].id);
     const restart=clone(state.restart), ball=clone(state.ball), randomState=state.randomState;
     for(const expectedPhase of ['attackMove','defendMove']) {
       assert.equal(state.phase,expectedPhase);

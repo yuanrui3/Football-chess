@@ -77,9 +77,11 @@ for (const team of ['white', 'black']) {
         if (index >= 4) {
           assert.equal(next.lastAction.blockerId, `${other(team)}-N1`); assert.equal(next.offside, null);
           if (index === 4) {
-            assert.equal(next.restart.type, 'corner'); assert.equal(next.attack, team); assert.equal(next.phase, 'attackMove');
-            assert.deepEqual(E.legalMoves(next, next.restart.takerId), []); assert.equal(next.ballProgress.rounds, 0);
-            assert.equal(E.skipMove(E.skipMove(next)).phase, 'kick');
+            assert.equal(next.restart.type, 'corner'); assert.equal(next.attack, team); assert.equal(next.phase, 'cornerSelect');
+            assert.equal(next.restart.takerId,null); assert.equal(next.ballProgress.rounds, 0);
+            const selected=E.selectCornerTaker(next,E.cornerTakers(next)[0].id);
+            assert.deepEqual(E.legalMoves(selected,selected.restart.takerId),[]);
+            assert.equal(E.skipMove(E.skipMove(selected)).phase, 'kick');
           } else {
             assert.equal(next.restart, null); assert.equal(next.attack, other(team)); assert.equal(next.ball.carrierId, `${other(team)}-N1`);
             assert.equal(next.phase, 'attackMove'); assert.equal(next.ballProgress.rounds, 0);
