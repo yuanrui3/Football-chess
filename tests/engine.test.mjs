@@ -478,7 +478,7 @@ test('blocked and unreachable knight challenges are rejected before consuming ra
   }
 });
 
-test('only kings and knights can enter either expanded goal area', () => {
+test('knights can enter either goal area; kings can enter only their own', () => {
   for (const [id, from, to] of [
     ['white-B1', [3, 2], [4, 1]], ['white-R1', [6, 2], [6, 1]],
     ['white-P1', [7, 12], [7, 13]],
@@ -487,7 +487,9 @@ test('only kings and knights can enter either expanded goal area', () => {
     assert.equal(hasMove(state, id, ...to), false);
   }
   const state = fixture({ positions: { 'white-K': [3, 2] } });
-  assert.equal(hasMove(state, 'white-K', 4, 1), true);
+  assert.equal(hasMove(state, 'white-K', 4, 1), false);
+  const ownBox = fixture({ positions: { 'white-K': [3, 12] } });
+  assert.equal(hasMove(ownBox, 'white-K', 4, 13), true);
   for (const [attack, carrier, from, to] of [
     ['white', 'white-N1', [3, 3], [4, 1]],
     ['white', 'white-N1', [3, 11], [4, 13]],
@@ -594,7 +596,7 @@ test('goal declarations wait for the defending goalkeeper before resolving the s
   assert.equal(reaction.phase, 'keeperReact');
   assert.equal(currentTeam(reaction), 'black');
   assert.ok(reaction.pendingShot);
-  assert.equal(reaction.rulesVersion, 10);
+  assert.equal(reaction.rulesVersion, 11);
   assert.deepEqual(reaction.pendingShot.from, { x: 4, y: 4 });
   assert.equal(reaction.lastAction.shotModel.modelVersion, 8);
   assert.deepEqual(reaction.lastAction.shotModel, shotModel(state, 4, -1));

@@ -1,4 +1,4 @@
-import {createGame, legalMoves, legalKicks, applyMove, applyKick, skipMove, chooseAIAction, currentTeam, BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, isBox, shotChance, shotModel, offsideInfo, LONG_TACKLE_RANGE, DRIBBLE_RANGE, STALLING_RULE, ACTION_SECONDS, actionTimeout, progressInfo, positionActions, normalizeGame} from './engine.js?v=f033f20e8129';
+import {createGame, legalMoves, legalKicks, applyMove, applyKick, skipMove, chooseAIAction, currentTeam, BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, isBox, shotChance, shotModel, offsideInfo, LONG_TACKLE_RANGE, DRIBBLE_RANGE, STALLING_RULE, ACTION_SECONDS, actionTimeout, progressInfo, positionActions, normalizeGame} from './engine.js?v=773c08c98207';
 import {createMatchClock, restoreMatchClock, tickMatchClock, settleMatchClock, rewindMatchClock} from './match-clock.js?v=73476bff5019';
 
 const $ = id => document.getElementById(id);
@@ -396,7 +396,7 @@ function scheduleAI(){
     aiTimer=null;if(!stillCurrent())return;
     if(aiDifficulty==='tactical'&&typeof window.Worker==='function'){
       try{
-        aiWorker=new window.Worker(new URL('./ai-worker.js?v=dfc742ca4d5c',import.meta.url),{type:'module',name:'football-chess-tactical'});
+        aiWorker=new window.Worker(new URL('./ai-worker.js?v=37b308f712f4',import.meta.url),{type:'module',name:'football-chess-tactical'});
         aiWorker.onmessage=event=>{if(!stillCurrent()||event.data?.requestId!==requestId)return;if(event.data.error)fallback();else receive(event.data.action);};
         aiWorker.onerror=event=>{event.preventDefault?.();fallback();};
         aiWatchdog=setTimeout(()=>fallback('casual'),4000);

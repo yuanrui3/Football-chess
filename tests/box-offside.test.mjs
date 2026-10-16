@@ -153,7 +153,7 @@ for (const team of ['white', 'black']) {
     Object.assign(pending.pieces.find(piece => piece.id === idFor('black-R2', team)), pointFor([8,0], team));
     assert.equal(E.offsideInfo(pending).boxKnightIds.length, 0);
     const before = clone(pending), migrated = E.normalizeGame(clone(pending));
-    assertOffside(migrated, pending, team); assert.equal(migrated.rulesVersion, 10);
+    assertOffside(migrated, pending, team); assert.equal(migrated.rulesVersion, 11);
     assert.deepEqual(pending, before); assert.deepEqual(E.normalizeGame(clone(migrated)), migrated);
     for (const snapshot of [null, {...pending.offside, flaggedIds: []}]) {
       const unflagged = clone(pending); unflagged.offside = snapshot;

@@ -30,7 +30,7 @@ const other = team => team === 'white' ? 'black' : 'white';
 const inside = (x, y) => Number.isInteger(x) && Number.isInteger(y) && x >= 0 && x < BOARD_WIDTH && y >= 0 && y < BOARD_HEIGHT;
 export const isBox = (x, y) => inside(x, y) && GOAL_FILES.includes(x) && (y <= 1 || y >= BOARD_HEIGHT - 2);
 const pieceAt = (state, x, y) => state.pieces.find(p => p.x === x && p.y === y);
-const allowedSquare = (piece, x, y) => inside(x, y) && (!isBox(x, y) || (piece.type === 'K' || piece.type === 'N'));
+const allowedSquare = (piece, x, y) => inside(x, y) && (!isBox(x, y) || piece.type === 'N' || piece.type === 'K' && inOwnBox(piece.team, x, y));
 const square = (x, y) => inside(x, y) ? `${'abcdefghijkl'[x]}${BOARD_HEIGHT - y}` : 'the net';
 const title = team => team === 'white' ? 'White' : 'Black';
 const copy = state => JSON.parse(JSON.stringify(state));
@@ -146,7 +146,7 @@ export function createGame({mode = 'solo', minutes = 10, kickoff = 'white', seed
     score: {white: 0, black: 0}, turn: 1, randomState: normalizeSeed(seed),
     log: [`${title(kickoff)} has kick-off. Kick the ball to begin.`], lastAction: null,
     mode, minutes: Number.isFinite(Number(minutes)) && Number(minutes) > 0 ? Number(minutes) : 10,
-    rulesVersion: 10, restart: null, offside: null, looseBallKickOrigin: null,
+    rulesVersion: 11, restart: null, offside: null, looseBallKickOrigin: null,
     ballProgress: {team: kickoff, anchorY: carrier.y, rounds: 0, pendingRelease: false, excludeRelease: false}
   };
 }
@@ -329,6 +329,25 @@ function awardRestart(state, type, team, requestedSpot, {exit, reason} = {}) {
 // Restore both the live match and individual undo snapshots through this pure
 // migration. Goal kicks belong to the king and give both teams a protected
 // positioning turn. Keep any positioning already spent in older snapshots.
+function repairOpposingBoxKings(state) {
+  for (const king of state.pieces.filter(piece => piece.type === 'K' && inOwnBox(other(piece.team), piece.x, piece.y)).sort((a, b) => a.id.localeCompare(b.id))) {
+    const origin = {x: king.x, y: king.y}, squares = [];
+    for (let y = 0; y < BOARD_HEIGHT; y++) for (let x = 0; x < BOARD_WIDTH; x++) {
+      if (!isBox(x, y) && !pieceAt(state, x, y)) squares.push({x, y});
+    }
+    // Equal-distance repairs favor the team's own end, then its left flank.
+    // These tie breaks rotate with the team, preserving 180-degree symmetry.
+    const orientation = king.team === 'white' ? 1 : -1;
+    squares.sort((a, b) => Math.hypot(a.x - origin.x, a.y - origin.y) - Math.hypot(b.x - origin.x, b.y - origin.y)
+      || orientation * (b.y - a.y) || orientation * (a.x - b.x));
+    const destination = squares[0];
+    if (!destination) continue;
+    Object.assign(king, destination);
+    if (state.ball?.carrierId === king.id) Object.assign(state.ball, destination);
+    if (state.restart?.takerId === king.id) state.restart.spot = {...destination};
+  }
+}
+
 export function normalizeGame(state) {
   if (!state || typeof state !== 'object') return state;
   const next = copy(state);
@@ -344,6 +363,10 @@ export function normalizeGame(state) {
   }
   next.restart ??= null;
   next.offside ??= null;
+  // Earlier versions accidentally allowed a king into the opposing box.
+  // Repair saved games and undo snapshots without displacing players, taking
+  // an action, consuming randomness, or changing a declared shot's origin.
+  repairOpposingBoxKings(next);
   if (!next.restart && next.phase === 'keeperRelease' && next.releaseReason === 'goalKick') {
     const carrier = next.pieces.find(piece => piece.id === next.ball.carrierId);
     const team = carrier?.team || next.attack;
@@ -380,7 +403,7 @@ export function normalizeGame(state) {
     const details = shotModel(next);
     next.lastAction = {...next.lastAction, probability: details.probability, shotModel: details};
   }
-  next.rulesVersion = 10;
+  next.rulesVersion = 11;
   return next;
 }
 

@@ -478,7 +478,7 @@ test('v8 migration gives older saves a fresh full window and preserves current s
     const before=clone(state),seed=state.randomState;
     const normalized=normalizeGame(state);
     assert.deepEqual(state,before);
-    assert.equal(normalized.rulesVersion,10);
+    assert.equal(normalized.rulesVersion,11);
     assert.deepEqual(normalized.ballProgress,state.ballProgress,'in-progress windows survive save restoration and Undo');
     assert.equal(normalized.randomState,seed);
     assert.deepEqual(normalizeGame(normalized),normalized,'migration is idempotent');
@@ -487,7 +487,7 @@ test('v8 migration gives older saves a fresh full window and preserves current s
     delete legacy.ballProgress;
     const legacyBefore=clone(legacy),upgraded=normalizeGame(legacy);
     assert.deepEqual(legacy,legacyBefore);
-    assert.equal(upgraded.rulesVersion,10);
+    assert.equal(upgraded.rulesVersion,11);
     assert.equal(upgraded.randomState,seed);
     assert.equal(engine.progressInfo(upgraded).roundsRemaining,3,'old snapshots cannot receive an immediate historical penalty');
     assert.equal(upgraded.ballProgress.rounds,0);
