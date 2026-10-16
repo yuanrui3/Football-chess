@@ -12,7 +12,7 @@ function shot({team = 'white', type = 'Q', blocker = false} = {}) {
   const aim = point([6, -1], team), pending = E.applyKick(before, aim.x, aim.y);
   return {before, pending, model: E.shotModel(pending)};
 }
-function clockHarness({supported = true, fail = false, enabled = true, voices, AudioCtor, clips, onPlaybackChanged} = {}) {
+function clockHarness({supported = true, fail = false, enabled = true, voices, AudioCtor, clips, localSpeech, onPlaybackChanged} = {}) {
   let time = 0, serial = 0;
   const timers = new Map(), captions = [], spoken = [];
   const speech = {cancelled: 0, speak(value) {if (fail) throw Error('Speech unavailable'); spoken.push(value);}, cancel() {this.cancelled++;}};
@@ -20,7 +20,7 @@ function clockHarness({supported = true, fail = false, enabled = true, voices, A
   if (voices !== undefined) Object.assign(speech, {getVoices: () => voices, addEventListener: (name, fn) => listeners.set(name, fn), removeEventListener: name => listeners.delete(name)});
   class Utterance {constructor(text) {this.text = text;}}
   const controller = createCommentary({speechSynthesis: supported ? speech : null, Utterance: supported ? Utterance : null,
-    AudioCtor, ...(clips ? {clips} : {}), onPlaybackChanged,
+    AudioCtor, ...(clips ? {clips} : {}), localSpeech, onPlaybackChanged,
     onCaption: (text, event) => captions.push({text, event}), now: () => time,
     setTimer(fn, delay) {const id = ++serial; timers.set(id, {at: time + delay, fn}); return id;}, clearTimer: id => timers.delete(id)});
   controller.setPace(3000); if (enabled) controller.setEnabled(true);
@@ -579,4 +579,126 @@ test('the static bank credits the stock voice and every source URL stays within 
     assert.match(clip.src, new RegExp(`/audio/commentary/${key}\\.mp3$`));
     assert.ok(['calm', 'urgent', 'excited'].includes(clip.delivery));
   }
+});
+
+function localHarness({ready = true, ...options} = {}) {
+  const jobs = [];
+  const local = {
+    loads: 0, unlocks: 0, cancels: 0, destroyed: 0,
+    getState: () => ({status: ready ? 'ready' : 'idle', supported: true, ready, progress: ready ? 1 : 0}),
+    load() {this.loads++; return Promise.resolve().then(() => {ready = true;});},
+    unlock() {this.unlocks++; return Promise.resolve(true);},
+    speak(text, settings) {return new Promise((resolve, reject) => jobs.push({text, settings, resolve, reject}));},
+    cancel() {this.cancels++;},
+    destroy() {this.destroyed++;}
+  };
+  const h = audioHarness({...options, localSpeech: local});
+  return {...h, local, jobs};
+}
+const flushLocal = async () => {await Promise.resolve(); await Promise.resolve(); await Promise.resolve();};
+
+test('local analysis is the available adapter default, with no model work until an explicit warmup', async () => {
+  const h = localHarness({ready: false, enabled: false});
+  assert.equal(h.controller.getState().playback, 'local');
+  assert.equal(h.local.loads, 0); assert.equal(h.local.unlocks, 0);
+  assert.equal(await h.controller.warmLocal(), false); assert.equal(await h.controller.unlockLocal(), false);
+  h.controller.setEnabled(true);
+  assert.equal(h.local.loads, 0, 'enabling itself never starts a download');
+  assert.equal(h.controller.testVoice(), false, 'an unloaded model cannot be misrepresented by the Tom test clip');
+  h.controller.confirmEnabled(); assert.match(h.audios[0].src, /enable\.mp3$/);
+  assert.equal(h.captions.at(-1).text, COMMENTARY_CLIPS.enable.text);
+  assert.equal(await h.controller.unlockLocal(), true); assert.equal(h.local.unlocks, 1);
+  const first = h.controller.warmLocal(), second = h.controller.warmLocal();
+  assert.equal(first, second); assert.equal(h.local.loads, 1, 'concurrent gestures share model initialization');
+  assert.equal(await first, true); assert.equal(h.controller.getState().localState.ready, true);
+  h.controller.setPlayback('recorded'); assert.equal(await h.controller.warmLocal(), false);
+  h.controller.setPlayback('local'); h.controller.setPace(1200);
+  assert.equal(await h.controller.unlockLocal(), false); assert.equal(await h.controller.warmLocal(), false);
+  assert.equal(h.local.loads, 1);
+});
+
+test('Paradee speaks current analysis text while Tom keeps immediate attempts, results and goals', async () => {
+  const h = localHarness(), dynamic = {...recordedLine('trend', 'leader'), text: 'Obsidian lead. Ivory 1, Obsidian 2.'};
+  assert.equal(h.controller.reveal(dynamic), true);
+  assert.equal(h.jobs.length, 1); assert.equal(h.jobs[0].text, dynamic.text);
+  assert.equal(h.audios.length, 0); assert.equal(h.spoken.length, 0);
+  assert.equal(h.captions.at(-1).text, dynamic.text); assert.equal(h.controller.getState().audioStatus, 'generating');
+  assert.equal(h.jobs[0].settings.expiresAt, 5500);
+  h.advance(1500); h.jobs[0].settings.onPlaying();
+  assert.equal(h.controller.getState().audioStatus, 'playing');
+  h.jobs[0].resolve({spoken: true}); await flushLocal();
+  assert.equal(h.controller.getState().speaking, false);
+  h.controller.reveal(recordedLine('attempt', 'shot_long'));
+  h.controller.reveal(recordedLine('outcome', 'save_hold'));
+  h.controller.reveal(recordedLine('goal', 'goal_equalizer'));
+  assert.equal(h.jobs.length, 1); assert.equal(h.audios.length, 3);
+  assert.equal(h.captions.at(-1).text, COMMENTARY_CLIPS.goal_equalizer.text);
+});
+
+test('loading Paradee falls back to saved lines, and ready Test voice auditions the local model', async () => {
+  const h = localHarness({ready: false});
+  h.controller.reveal({...recordedLine('trend', 'build_back'), text: 'Ivory build through their keeper.'});
+  assert.equal(h.jobs.length, 0); assert.equal(h.local.loads, 0);
+  assert.equal(h.captions.at(-1).text, COMMENTARY_CLIPS.build_back.text);
+  h.audios[0].onended(); await h.controller.warmLocal();
+  assert.equal(h.controller.testVoice(), true); assert.equal(h.jobs.length, 1);
+  assert.match(h.jobs[0].text, /This is Paradee/); assert.doesNotMatch(h.jobs[0].text, /selected voice/);
+  assert.equal(h.audios.length, 1, 'the Tom voice test is not passed off as a Paradee audition');
+  h.jobs[0].settings.onPlaying(); h.jobs[0].resolve({spoken: true}); await flushLocal();
+  assert.equal(h.controller.getState().speaking, false);
+});
+
+test('a failed local audition never substitutes Tom or a device voice', async () => {
+  const h = localHarness(); h.controller.testVoice();
+  h.jobs[0].resolve({spoken: false, reason: 'busy'}); await flushLocal();
+  assert.equal(h.audios.length, 0); assert.equal(h.spoken.length, 0);
+  assert.equal(h.controller.getState().speaking, false); assert.equal(h.controller.getState().audioStatus, 'unavailable');
+  assert.equal(h.captions.at(-1).text, ''); assert.equal(h.timers.size, 0);
+});
+
+test('cancelled local generation never returns after OFF, reset, pause, a new mode or a goal', async () => {
+  for (const stop of ['off', 'reset', 'pause', 'mode', 'pace', 'goal']) {
+    const h = localHarness(); h.controller.reveal(recordedLine('trend', 'midfield'));
+    assert.equal(h.controller.reveal({...recordedLine('trend', 'wide_possession'), id: 'no-backlog'}), false);
+    const old = h.jobs[0];
+    if (stop === 'off') h.controller.setEnabled(false);
+    else if (stop === 'reset') h.controller.reset();
+    else if (stop === 'pause') h.controller.suspend();
+    else if (stop === 'mode') h.controller.setPlayback('recorded');
+    else if (stop === 'pace') h.controller.setPace(1200);
+    else h.controller.reveal(recordedLine('goal', 'goal_generic'));
+    const caption = h.captions.at(-1).text;
+    assert.equal(h.local.cancels, 1, stop);
+    old.settings.onPlaying(); old.resolve({spoken: true}); await flushLocal();
+    assert.equal(h.captions.at(-1).text, caption, stop); assert.equal(h.jobs.length, 1);
+    assert.equal(h.audios.length, stop === 'goal' ? 1 : 0);
+    assert.equal(h.controller.getState().speaking, stop === 'goal');
+  }
+});
+
+test('slow or failed local generation falls back once, with captions matching the actual Tom recording', async () => {
+  for (const failure of ['timeout', 'reject', 'busy']) {
+    const h = localHarness(); h.controller.reveal({...recordedLine('trend', 'leader'), text: 'Ivory lead. Ivory 2, Obsidian 0.'});
+    const old = h.jobs[0];
+    if (failure === 'timeout') h.advance(5500);
+    else if (failure === 'reject') {old.reject(Error('Model unavailable')); await flushLocal();}
+    else {old.resolve({spoken: false, reason: 'busy'}); await flushLocal();}
+    assert.equal(h.local.cancels, 1); assert.equal(h.audios.length, 1);
+    assert.equal(h.captions.at(-1).text, COMMENTARY_CLIPS.leader.text);
+    assert.doesNotMatch(h.captions.at(-1).text, /Ivory 2/);
+    old.settings.onPlaying(); old.resolve({spoken: true}); await flushLocal();
+    assert.equal(h.audios.length, 1); assert.equal(h.controller.getState().audioStatus, 'playing');
+    h.audios[0].onended(); assert.equal(h.controller.getState().speaking, false);
+    assert.equal(h.timers.size, 0);
+  }
+});
+
+test('local playback clears its generation timer and remains bounded by the speech watchdog', async () => {
+  const h = localHarness(); h.controller.reveal(recordedLine('trend', 'midfield'));
+  h.advance(5000); h.jobs[0].settings.onPlaying(); h.advance(1000);
+  assert.equal(h.audios.length, 0, 'a started local call cannot time out into overlapping Tom audio');
+  assert.equal(h.controller.getState().speaking, true);
+  h.advance(20000); assert.equal(h.local.cancels, 1); assert.equal(h.controller.getState().speaking, false);
+  h.jobs[0].reject(Error('Late worker error')); await flushLocal(); assert.equal(h.audios.length, 0);
+  h.controller.destroy(); assert.equal(h.local.destroyed, 1); assert.equal(h.timers.size, 0);
 });

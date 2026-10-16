@@ -8,6 +8,7 @@ export const COMMENTARY_PRIORITY = Object.freeze({trend: 1, attempt: 2, outcome:
 export const COMMENTARY_PACE = 3000;
 export const COMMENTARY_HEARTBEAT_MS = 12000;
 export const COMMENTARY_ROUTINE_MS = 10000;
+export const COMMENTARY_LOCAL_DEADLINE_MS = 5500;
 const voiceId = voice => `${voice.voiceURI || voice.name || ''}|${voice.lang || ''}`;
 const voiceRank = voice => (/natural|neural/i.test(voice.name) ? 100 : /google.*english|microsoft.*online/i.test(voice.name) ? 70 : 0)
   + (/^en[-_]US$/i.test(voice.lang) ? 15 : 0) + (voice.default ? 1 : 0);
@@ -266,6 +267,7 @@ export const COMMENTARY_DEMO = Object.freeze([
  */
 export function createCommentary({speechSynthesis = globalThis.speechSynthesis,
   Utterance = globalThis.SpeechSynthesisUtterance, AudioCtor = globalThis.Audio, clips = COMMENTARY_CLIPS,
+  localSpeech = null,
   onCaption = () => {}, onVoicesChanged = () => {}, onPlaybackChanged = () => {}, now = () => Date.now(),
   setTimer = (fn, delay) => setTimeout(fn, delay), clearTimer = id => clearTimeout(id)} = {}) {
   let enabled = false, destroyed = false, epoch = 0, pace = 1200, active = null, watchdog = null;
@@ -273,7 +275,8 @@ export function createCommentary({speechSynthesis = globalThis.speechSynthesis,
   const samples = [], seen = new Set(), spoken = new Set(), demoTimers = new Set();
   const speechSupported = !!(speechSynthesis && typeof speechSynthesis.speak === 'function' && typeof Utterance === 'function');
   const recordedSupported = typeof AudioCtor === 'function' && Object.values(clips).some(clip => clip?.src && clip?.text);
-  let playback = recordedSupported ? 'recorded' : 'device', audioStatus = 'idle';
+  const localSupported = !!(localSpeech && typeof localSpeech.speak === 'function' && typeof localSpeech.load === 'function');
+  let playback = localSupported ? 'local' : recordedSupported ? 'recorded' : 'device', audioStatus = 'idle', warming = null;
   let availableVoices = [], voiceOptions = [], chosenVoiceId = null, selectedVoice = null;
   function refreshVoices() {
     try {availableVoices = typeof speechSynthesis?.getVoices === 'function' ? Array.from(speechSynthesis.getVoices()) : [];} catch {availableVoices = [];}
@@ -289,6 +292,10 @@ export function createCommentary({speechSynthesis = globalThis.speechSynthesis,
   const caption = (text, line) => {try {onCaption(text, line);} catch { /* UI callback cannot alter a match. */ }};
   const deviceSupported = () => speechSupported && (typeof speechSynthesis.getVoices !== 'function' || !!selectedVoice);
   const status = value => {if (audioStatus !== value) {audioStatus = value; try {onPlaybackChanged(value);} catch {}}};
+  function localState() {
+    if (!localSupported) return {status: 'unavailable', supported: false, ready: false, progress: 0};
+    try {return {supported: true, ...localSpeech.getState?.()};} catch {return {status: 'error', supported: true, ready: false, progress: 0};}
+  }
   function stopAudio(audio) {
     if (!audio) return;
     audio.onended = audio.onerror = audio.onplaying = null;
@@ -307,6 +314,7 @@ export function createCommentary({speechSynthesis = globalThis.speechSynthesis,
     const previous = active; active = null;
     clearActiveTimers(previous); stopAudio(previous?.audio);
     if (previous?.transport === 'device' && speechSupported) {try {speechSynthesis.cancel();} catch { /* Captions remain available. */ }}
+    if (previous?.transport === 'local') {try {localSpeech.cancel();} catch {}}
     status('idle');
     caption('', null);
   }
@@ -329,8 +337,10 @@ export function createCommentary({speechSynthesis = globalThis.speechSynthesis,
     if (active && line.priority <= active.event.priority && line.kind !== 'goal') return false;
     if (!demoCall && !explicit && line.kind === 'trend' && (at - lastTrend < COMMENTARY_ROUTINE_MS || at - lastSpoken < COMMENTARY_ROUTINE_MS)) return false;
     if (!demoCall && line.kind === 'attempt' && at - lastAttempt < (pace < 700 ? 3000 : 1200)) return false;
-    const clip = playback === 'recorded' ? clips[line.clipKey] : null;
-    const text = clip?.text || (pace < 700 && line.kind === 'trend' && line.shortText ? line.shortText : line.text);
+    const useLocal = playback === 'local' && line.kind === 'trend' && line.clipKey !== 'enable'
+      && localSupported && localState().ready;
+    const clip = playback === 'recorded' || playback === 'local' ? clips[line.clipKey] : null;
+    let text = useLocal ? line.text : clip?.text || (pace < 700 && line.kind === 'trend' && line.shortText ? line.shortText : line.text);
     if (!demoCall && !explicit && line.kind === 'trend' && text === lastText) return false;
     cancelActive();
     const token = {}, spokenEvent = {...line, text};
@@ -339,13 +349,17 @@ export function createCommentary({speechSynthesis = globalThis.speechSynthesis,
     if (line.kind === 'trend') lastTrend = at;
     if (line.kind === 'attempt') lastAttempt = at;
     caption(text, spokenEvent);
-    const duration = Math.min(18000, Math.max(2200, text.split(/\s+/).length * 430 + 1200));
-    watchdog = setTimer(() => {
-      if (active?.token !== token) return;
-      // Some browsers never fire end/error after switching tabs.
-      if (active.transport === 'device' && speechSupported) {try {speechSynthesis.cancel();} catch {}}
-      finish(token);
-    }, clip && recordedSupported ? Math.max(12000, duration) : duration);
+    function armWatchdog() {
+      if (watchdog !== null) clearTimer(watchdog);
+      const duration = Math.min(18000, Math.max(2200, text.split(/\s+/).length * 430 + 1200));
+      watchdog = setTimer(() => {
+        if (active?.token !== token) return;
+        // Some browsers never fire end/error after switching tabs.
+        if (active.transport === 'device' && speechSupported) {try {speechSynthesis.cancel();} catch {}}
+        if (active.transport === 'local') {try {localSpeech.cancel();} catch {}}
+        finish(token);
+      }, active?.transport === 'recorded' ? Math.max(12000, duration) : duration);
+    }
     function device(fallback = false) {
       if (active?.token !== token) return;
       if (!deviceSupported()) {status('unavailable'); return;}
@@ -363,7 +377,13 @@ export function createCommentary({speechSynthesis = globalThis.speechSynthesis,
         speechSynthesis.speak(utterance);
       } catch {if (active?.token === token) status('unavailable');}
     }
-    if (playback === 'recorded' && clip && recordedSupported) {
+    function recorded(fallbackFromLocal = false) {
+      if (active?.token !== token) return;
+      if (fallbackFromLocal && clip?.text) {
+        // Generic recordings cannot announce the live names or score from the proposed line.
+        text = clip.text; lastText = text; active.event = {...line, text}; caption(text, active.event);
+      }
+      if (!clip || !recordedSupported) {armWatchdog(); device(playback !== 'device'); return;}
       let audio;
       function fallback() {
         if (active?.token !== token || active.transport !== 'recorded') return;
@@ -375,6 +395,7 @@ export function createCommentary({speechSynthesis = globalThis.speechSynthesis,
       try {
         audio = new AudioCtor(clip.src);
         active.audio = audio; active.transport = 'recorded'; audio.preload = 'auto'; audio.volume = 1;
+        armWatchdog();
         status('loading');
         const playing = () => {
           if (active?.token !== token || active.transport !== 'recorded') {stopAudio(audio); return;}
@@ -386,9 +407,31 @@ export function createCommentary({speechSynthesis = globalThis.speechSynthesis,
         if (started && typeof started.then === 'function') started.then(playing, fallback);
         else playing();
       } catch {if (active?.token === token) {active.transport = 'recorded'; fallback();}}
-    } else {
-      device(playback === 'recorded');
     }
+    if (useLocal) {
+      active.transport = 'local'; status('generating');
+      const deadline = Math.min(at + COMMENTARY_LOCAL_DEADLINE_MS, finite(line.createdAt) ? line.createdAt + ttl : Infinity);
+      function fallbackLocal() {
+        if (active?.token !== token || active.transport !== 'local') return;
+        clearTimer(active.loadTimer); active.loadTimer = undefined;
+        try {localSpeech.cancel();} catch {}
+        active.transport = 'caption';
+        if (line.localOnly) {finish(token); status('unavailable'); return;}
+        if (!demoCall && finite(line.createdAt) && now() - line.createdAt > ttl) {finish(token); return;}
+        recorded(true);
+      }
+      active.loadTimer = setTimer(fallbackLocal, Math.max(0, deadline - at));
+      try {
+        Promise.resolve(localSpeech.speak(text, {expiresAt: deadline, onPlaying() {
+          if (active?.token !== token || active.transport !== 'local') return;
+          clearTimer(active.loadTimer); active.loadTimer = undefined; status('playing'); armWatchdog();
+        }})).then(result => {
+          if (active?.token !== token || active.transport !== 'local') return;
+          if (result?.spoken) finish(token); else fallbackLocal();
+        }, fallbackLocal);
+      } catch {fallbackLocal();}
+    } else if (playback === 'recorded' || playback === 'local') recorded();
+    else {armWatchdog(); device();}
     return true;
   }
   function observe(before, after, options = {}) {
@@ -436,12 +479,29 @@ export function createCommentary({speechSynthesis = globalThis.speechSynthesis,
       return false;
     },
     confirmEnabled() {return speak({kind: 'trend', priority: 1, text: 'Commentary is on. I will follow the match.', clipKey: 'enable', id: `confirmation:${epoch}:${++cueSequence}`}, {explicit: true});},
-    testVoice() {return speak({kind: 'trend', priority: 1, text: 'Football Chess commentary. This is your selected voice.', clipKey: 'test', id: `voice-test:${epoch}:${++cueSequence}`}, {explicit: true});},
+    testVoice() {
+      if (playback === 'local' && !localState().ready) return false;
+      return speak({kind: 'trend', priority: 1, text: playback === 'local'
+        ? 'Ivory build through midfield. The queen switches play, and Obsidian must shift across. This is Paradee, your local match analyst.'
+        : 'Football Chess commentary. This is your selected voice.', clipKey: 'test', localOnly: playback === 'local', id: `voice-test:${epoch}:${++cueSequence}`}, {explicit: true});
+    },
     reveal: line => speak(line?.deferred ? {...line, createdAt: now(), deferred: false} : line),
     setEnabled(value) {enabled = !!value && !destroyed && pace === COMMENTARY_PACE; if (!enabled) reset(); return enabled;},
     setPace,
+    unlockLocal() {
+      if (!localSupported || !enabled || pace !== COMMENTARY_PACE || playback !== 'local' || destroyed) return Promise.resolve(false);
+      try {return Promise.resolve(localSpeech.unlock?.()).catch(() => false);} catch {return Promise.resolve(false);}
+    },
+    warmLocal() {
+      if (!localSupported || !enabled || pace !== COMMENTARY_PACE || playback !== 'local' || destroyed) return Promise.resolve(false);
+      if (!warming) {
+        try {warming = Promise.resolve(localSpeech.load()).then(() => !!localState().ready, () => false)
+          .finally(() => {warming = null; try {onPlaybackChanged(audioStatus);} catch {}});} catch {return Promise.resolve(false);}
+      }
+      return warming;
+    },
     setPlayback(value) {
-      if (!['recorded', 'device'].includes(value)) return false;
+      if (!['recorded', 'device', 'local'].includes(value)) return false;
       if (playback !== value) {stopDemo(); cancelActive(); playback = value; status('idle');}
       return true;
     },
@@ -463,12 +523,13 @@ export function createCommentary({speechSynthesis = globalThis.speechSynthesis,
       const end = setTimer(() => {demoTimers.delete(end); demo = false;}, 25000);
       demoTimers.add(end); return true;
     },
-    getState: () => ({enabled, supported: playback === 'recorded' ? recordedSupported || deviceSupported() : deviceSupported(),
-      playback, recordedSupported, audioStatus, speaking: !!active, demo, pace, allowed: pace === COMMENTARY_PACE,
+    getState: () => ({enabled, supported: playback === 'local' ? localSupported || recordedSupported || deviceSupported() : playback === 'recorded' ? recordedSupported || deviceSupported() : deviceSupported(),
+      playback, recordedSupported, localSupported: localSupported && localState().supported !== false, localState: localState(), audioStatus, speaking: !!active, demo, pace, allowed: pace === COMMENTARY_PACE,
       voices: voiceOptions.map(voice => ({...voice})), voiceId: selectedVoice ? voiceId(selectedVoice) : null,
       voiceName: selectedVoice?.name || null,
       quality: selectedVoice ? /natural|neural/i.test(selectedVoice.name) ? 'natural' : voiceRank(selectedVoice) >= 70 ? 'enhanced' : 'standard' : 'unavailable'}),
     destroy() {reset(); enabled = false; destroyed = true;
+      try {localSpeech?.destroy?.();} catch {}
       if (typeof speechSynthesis?.removeEventListener === 'function') speechSynthesis.removeEventListener('voiceschanged', voiceListener);
     }
   };

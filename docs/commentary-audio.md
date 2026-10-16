@@ -8,4 +8,4 @@ Runway’s published [commercial-use guidance](https://help.runwayml.com/hc/en-u
 
 `commentary-audio-provenance.json` records each original script, generation task ID, file size, duration and SHA-256 hash. It contains no authentication tokens or private download URLs.
 
-The Match commentary control offers recorded calls by default and an optional device voice. Recorded calls use generic football language so the same clip can serve both teams; names, precise scores and assists remain available in the match display. Each result is revealed only with the visible shot outcome. The existing three-second pace restriction, immediate mute and speech priority rules apply to both playback choices.
+The Match commentary control offers local Paradee analysis with these recorded reactions by default; recorded-only and device voices remain available. Recorded calls use generic football language so the same clip can serve both teams; names, precise scores and assists remain available in the match display. Each result is revealed only with the visible shot outcome. The existing three-second pace restriction, immediate mute and speech priority rules apply to both playback choices.

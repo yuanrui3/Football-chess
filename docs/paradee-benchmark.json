@@ -1,0 +1,104 @@
+{
+  "environment": {
+    "runtime": "Node.js",
+    "version": "v24.19.0",
+    "platform": "linux",
+    "arch": "x64",
+    "backend": "Deployed onnxruntime-web 1.24.3 WASM, one thread",
+    "frontend": "Deployed paradee-worker.js exports, phonemizer 1.2.1 plus upstream misaki converter",
+    "note": "This is the deployed browser inference path under Node; these CPU timings are not a browser performance guarantee."
+  },
+  "initializationIncludingFrontendAndWarmupMs": 2395.55246,
+  "progress": [
+    {
+      "value": 0.01,
+      "ms": 0.3001570000000058
+    },
+    {
+      "value": 0.83,
+      "ms": 72.55368399999999
+    },
+    {
+      "value": 0.93,
+      "ms": 1984.302864
+    },
+    {
+      "value": 1,
+      "ms": 2395.538649
+    }
+  ],
+  "measurements": [
+    {
+      "text": "Obsidian win it back, and the counterattack is on.",
+      "filename": "paradee-commentary-1.wav",
+      "sampleRate": 24000,
+      "durationSeconds": 3.5,
+      "inferenceMs": 1112.3631329999998,
+      "realTimeFactor": 0.31781803799999997,
+      "peak": 0.3687310218811035,
+      "rms": 0.04992327327225031,
+      "nonFinite": 0,
+      "clipped": 0
+    },
+    {
+      "text": "Ivory's queen drives forward, with a knight making the run.",
+      "filename": "paradee-commentary-2.wav",
+      "sampleRate": 24000,
+      "durationSeconds": 3.75,
+      "inferenceMs": 1217.2514109999997,
+      "realTimeFactor": 0.3246003762666666,
+      "peak": 0.42943045496940613,
+      "rms": 0.05157242056800267,
+      "nonFinite": 0,
+      "clipped": 0
+    },
+    {
+      "text": "The pawns protect the centre. Can they switch the play?",
+      "filename": "paradee-commentary-3.wav",
+      "sampleRate": 24000,
+      "durationSeconds": 3.2,
+      "inferenceMs": 889.6135000000004,
+      "realTimeFactor": 0.2780042187500001,
+      "peak": 0.29514873027801514,
+      "rms": 0.0475546899569953,
+      "nonFinite": 0,
+      "clipped": 0
+    },
+    {
+      "text": "Two goals to one, and this match is still alive.",
+      "filename": "paradee-commentary-4.wav",
+      "sampleRate": 24000,
+      "durationSeconds": 3.1,
+      "inferenceMs": 849.7531319999998,
+      "realTimeFactor": 0.27411391354838704,
+      "peak": 0.3281787931919098,
+      "rms": 0.05212918068685402,
+      "nonFinite": 0,
+      "clipped": 0
+    }
+  ],
+  "memoryBytes": {
+    "before": {
+      "rss": 38928384,
+      "heapTotal": 12054528,
+      "heapUsed": 7810144,
+      "external": 3762815,
+      "arrayBuffers": 146803
+    },
+    "afterInitialization": {
+      "rss": 389214208,
+      "heapTotal": 23240704,
+      "heapUsed": 15879928,
+      "external": 59616222,
+      "arrayBuffers": 55954387
+    },
+    "afterFourCalls": {
+      "rss": 380698624,
+      "heapTotal": 27844608,
+      "heapUsed": 21035856,
+      "external": 39201132,
+      "arrayBuffers": 35539297
+    }
+  },
+  "combinedDurationSeconds": 15.15
+}

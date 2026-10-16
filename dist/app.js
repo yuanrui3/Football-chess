@@ -2,7 +2,8 @@ import {createGame, legalMoves, legalKicks, disguisedShotTargets, applyMove, app
 import {createMatchClock, restoreMatchClock, tickMatchClock, settleMatchClock, rewindMatchClock} from './match-clock.js?v=1fa32f5eed6c';
 import {buildGoalReplay, restoreGoalReplay, createReplayPlayer} from './goal-replay.js?v=79837985ace2';
 import {createMatchStats, restoreMatchStats, recordMatchTransition, addPossessionTime, matchStatsSummary, shortPieceId} from './match-stats.js?v=ed082e4db7ee';
-import {createCommentary} from './commentary.js?v=f88aa7c0dc84';
+import {createCommentary} from './commentary.js?v=d5928ab2fb24';
+import {createParadeeSpeech} from './paradee-speech.js?v=7cfce4bc8f63';
 
 const $ = id => document.getElementById(id);
 const normalShotLegend = document.querySelector('.shot-legend').textContent;
@@ -43,8 +44,8 @@ let aiWorker=null,aiWatchdog=null,aiGeneration=0;
 let lastGoalReplay=null,replayAutoContinue=false,replayPendingResult=false;
 let matchStats=createMatchStats();
 let shotFlight=null,shotFlightGeneration=0;
-let voiceEnabled=false,voiceActivated=false,voiceLastCaption='',voiceCaptionDemo=false,voiceLifecycle=null,voicePreferredId='',voicePlayback='recorded',voiceOptionsKey='',commentary=null;
-try{const preference=JSON.parse(localStorage.getItem(VOICE_STORE)||'null');voiceEnabled=preference?.enabled===true;voicePreferredId=typeof preference?.voiceId==='string'?preference.voiceId:'';voicePlayback=preference?.playback==='device'?'device':'recorded';}catch{}
+let voiceEnabled=false,voiceActivated=false,voiceLastCaption='',voiceCaptionDemo=false,voiceLifecycle=null,voicePreferredId='',voicePlayback='local',voiceOptionsKey='',commentary=null;
+try{const preference=JSON.parse(localStorage.getItem(VOICE_STORE)||'null');voiceEnabled=preference?.enabled===true;voicePreferredId=typeof preference?.voiceId==='string'?preference.voiceId:'';voicePlayback=preference?.playback==='device'?'device':preference?.playbackVersion===2&&['local','recorded'].includes(preference.playback)?preference.playback:'local';}catch{}
 try {
   const saved=JSON.parse(localStorage.getItem(STORE)||'null');
   const geometryMatches=saved?.version===4&&Object.entries(SAVE_GEOMETRY).every(([key,value])=>saved.geometry?.[key]===value)
@@ -96,7 +97,8 @@ const replayPlayer=createReplayPlayer({
   onComplete(){if(replayAutoContinue&&$('replayDialog').hasAttribute('open'))$('replayDialog').close();},
   onInteract(){replayAutoContinue=false;commentary?.suspend();renderVoiceover();}
 });
-commentary=createCommentary({speechSynthesis:window.speechSynthesis,Utterance:window.SpeechSynthesisUtterance,
+const localSpeech=createParadeeSpeech({onState(){if(commentary)renderVoiceover();}});
+commentary=createCommentary({speechSynthesis:window.speechSynthesis,Utterance:window.SpeechSynthesisUtterance,localSpeech,
   onCaption(text,event){voiceLastCaption=text||'';voiceCaptionDemo=!!event?.demo;renderVoiceover();},
   onPlaybackChanged(){if(commentary)renderVoiceover();},
   onVoicesChanged(){if(commentary){applyVoicePreference();renderVoiceover();}}});
@@ -106,7 +108,9 @@ applyVoicePreference();
 function applyVoicePreference(){const state=commentary.getState();if(voicePreferredId&&state.voices.some(voice=>voice.id===voicePreferredId)&&state.voiceId!==voicePreferredId)commentary.setVoice(voicePreferredId);}
 
 function renderVoiceover(){
-  const state=commentary?.getState()||{supported:false,speaking:false,demo:false,voices:[]},allowed=aiPace===3000,voices=state.voices||[],recorded=voicePlayback==='recorded',audioAvailable=!!state.supported;
+  const state=commentary?.getState()||{supported:false,speaking:false,demo:false,voices:[]},allowed=aiPace===3000,voices=state.voices||[],local=voicePlayback==='local',recorded=voicePlayback==='recorded',device=voicePlayback==='device',audioAvailable=!!state.supported;
+  const localState=state.localState||{},localReady=localState.ready===true||['ready','generating','speaking'].includes(localState.status),localLoading=localState.status==='loading',localLocked=localReady&&localState.unlocked===false,localFailed=localState.status==='error'||localState.supported===false||!!localState.error;
+  const localProgress=Number.isFinite(localState.progress)&&localState.progress>0?` ${Math.min(100,Math.round(localState.progress*100))}%`:'';
   $('voiceToggle').textContent=voiceEnabled?'On':'Off';$('voiceToggle').setAttribute('aria-pressed',String(voiceEnabled));
   $('voiceToggle').disabled=!allowed;$('voiceToggle').setAttribute('aria-label',allowed?`Turn match commentary ${voiceEnabled?'off':'on'}`:'Match commentary is available at Relaxed, three-second pace');
   $('voicePanel').dataset.speaking=String(voiceEnabled&&state.speaking);
@@ -114,14 +118,15 @@ function renderVoiceover(){
   const optionsKey=JSON.stringify(voices.map(voice=>[voice.id,voice.name,voice.lang,voice.preferred]));
   if(optionsKey!==voiceOptionsKey){voiceOptionsKey=optionsKey;const options=[];const auto=document.createElement('option');auto.value='';auto.textContent=voices.length?'Auto · best available English voice':'No English speech voices available';options.push(auto);for(const voice of voices){const option=document.createElement('option');option.value=voice.id;option.textContent=`${voice.name} · ${voice.lang}${voice.preferred?' · Suggested':''}`;options.push(option);}$('voiceSelect').replaceChildren(...options);}
   $('voicePlayback').value=voicePlayback;$('voicePlayback').disabled=!allowed;
-  $('voiceDeviceControls').hidden=recorded;
-  $('voiceSelect').value=voices.some(voice=>voice.id===voicePreferredId)?voicePreferredId:'';$('voiceSelect').disabled=!allowed||recorded||!voices.length;
-  $('voiceNote').textContent=recorded?(state.audioStatus==='fallback'?'Saved audio unavailable for this call · using your device voice.':state.audioStatus==='unavailable'?'Audio is unavailable. Check sound or choose a device voice.':'British match commentary · saved audio.')
+  $('voiceDeviceControls').hidden=!device;
+  $('voiceSelect').value=voices.some(voice=>voice.id===voicePreferredId)?voicePreferredId:'';$('voiceSelect').disabled=!allowed||!device||!voices.length;
+  $('voiceNote').textContent=local?(localLoading?`Loading Paradee${localProgress} for fresh analysis. Tom still calls shots and goals.`:localLocked?'Paradee needs audio permission. Test voice retries; saved match calls remain available.':localFailed?(localState.supported===false?'Local speech is unavailable in this browser · saved match calls remain available.':localReady?'Paradee could not speak this call · saved match calls remain available.':'Paradee could not load · saved match calls remain available.'):localReady?'Paradee speaks fresh match analysis on your device; Tom calls shots and goals.':'Turn commentary On for live analysis · about 23 MB on first load. Tom supplies recorded reactions.')
+    :recorded?(state.audioStatus==='fallback'?'Saved audio unavailable for this call · using your device voice.':state.audioStatus==='unavailable'?'Audio is unavailable. Check sound or choose a device voice.':'British match commentary · saved audio.')
     :state.voiceName?`Selected: ${state.voiceName}.`:'English speech voices load from your browser or device. Captions are available while no voice is ready.';
   const demoAvailable=allowed&&audioAvailable&&(stage==='setup'||stage==='playing'&&paused)&&!anyDialog()&&!shotFlight;
   $('voiceDemo').disabled=!demoAvailable;$('voiceDemo').title=!allowed?'Available at Relaxed · 3 seconds.':!audioAvailable?'Commentary audio must be available to hear a sample.':demoAvailable?'Hear example match commentary without changing your match.':'Pause the match to hear the match sample.';
-  $('voiceTest').disabled=!allowed||!audioAvailable||anyDialog();$('voiceTest').title=allowed?'Hear one short call. This does not pause or change your match.':'Available at Relaxed · 3 seconds.';
-  $('voiceStatus').textContent=!allowed?'Available at Relaxed · 3 seconds.':!voiceEnabled?'Off · Football commentary at Relaxed pace.':!voiceActivated?'On · Start or resume the match to activate sound.':voiceCaptionDemo&&state.demo?'Demo · Match sample; your match is unchanged.':!audioAvailable?'On · Captions only; commentary audio is unavailable.':state.audioStatus==='loading'?'On · Loading the next commentary call…':paused?'On · Paused. Resume for fresh commentary.':anyDialog()?(replayAutoContinue?'On · Goal replay.':'On · Commentary paused while this panel is open.'):stage==='setup'?'On · Ready for kickoff.':stage==='finished'?'On · Full time.':'On · Match calls and analysis about every 10–15 seconds of live play.';
+  $('voiceTest').disabled=!allowed||!audioAvailable||anyDialog()||local&&!localReady;$('voiceTest').title=!allowed?'Available at Relaxed · 3 seconds.':local&&!localReady?'Turn commentary On and wait for Paradee to finish loading.':local&&localLocked?'Retry audio permission and hear Paradee speak a fresh line.':local?'Hear Paradee speak a fresh line. This does not change your match.':'Hear one short call. This does not pause or change your match.';
+  $('voiceStatus').textContent=!allowed?'Available at Relaxed · 3 seconds.':!voiceEnabled?'Off · Football commentary at Relaxed pace.':!voiceActivated?'On · Start or resume the match to activate sound.':voiceCaptionDemo&&state.demo?'Demo · Match sample; your match is unchanged.':!audioAvailable?'On · Captions only; commentary audio is unavailable.':local&&localLoading?`On · Loading Paradee${localProgress}…`:state.audioStatus==='loading'?'On · Preparing the next commentary call…':paused?'On · Paused. Resume for fresh commentary.':anyDialog()?(replayAutoContinue?'On · Goal replay.':'On · Commentary paused while this panel is open.'):stage==='setup'?'On · Ready for kickoff.':stage==='finished'?'On · Full time.':local&&(localLocked||localFailed)?'On · Saved match calls; local analysis is unavailable.':'On · Match calls and analysis about every 10–15 seconds of live play.';
 }
 function syncVoiceover(){
   if(aiPace!==3000&&voiceEnabled){voiceEnabled=false;voiceActivated=false;saveVoicePreference();}
@@ -133,9 +138,10 @@ function syncVoiceover(){
   }
   renderVoiceover();
 }
-function activateVoiceover(){if(voiceEnabled&&aiPace===3000){voiceActivated=true;commentary.setEnabled(!document.hidden);}}
+function prepareLocalVoice(){if(voicePlayback!=='local'||!voiceEnabled||aiPace!==3000||document.hidden)return;try{Promise.resolve(commentary.unlockLocal()).catch(()=>{});Promise.resolve(commentary.warmLocal()).catch(()=>{});}catch{}}
+function activateVoiceover(){if(voiceEnabled&&aiPace===3000){voiceActivated=true;commentary.setEnabled(!document.hidden);prepareLocalVoice();}}
 function resetVoiceover(){commentary.reset();voiceLastCaption='';voiceCaptionDemo=false;voiceLifecycle=null;renderVoiceover();}
-function saveVoicePreference(){try{localStorage.setItem(VOICE_STORE,JSON.stringify({enabled:voiceEnabled,voiceId:voicePreferredId,playback:voicePlayback}));}catch{}}
+function saveVoicePreference(){try{localStorage.setItem(VOICE_STORE,JSON.stringify({enabled:voiceEnabled,voiceId:voicePreferredId,playback:voicePlayback,playbackVersion:2}));}catch{}}
 
 function clockSnapshot(){return {remaining,actionRemaining,fullTimePending,finalChance:finalChance?{...finalChance}:null};}
 function restoreClock(clock){({remaining,actionRemaining,fullTimePending,finalChance}=clock);}
@@ -773,10 +779,10 @@ for(const id of ['goalTop','goalBottom']){
 }
 function refreshSetup(){if(stage!=='setup')return;resetVoiceover();cancelAI();replayPlayer.stop();lastGoalReplay=null;replayAutoContinue=false;replayPendingResult=false;game=createGame({foulsEnabled,mode:$('mode').value,minutes:Number($('duration').value)||10,kickoff:$('kickoff').value});duration=Number($('duration').value);resetClock();selectedId=null;lastComputerAction=null;freePawnMode=false;dribbleMode=false;passRunSelected=false;history=[];matchStats=createMatchStats();render();save();}
 $('aiPace').addEventListener('change',()=>{const value=Number($('aiPace').value);aiPace=AI_PACES.includes(value)?value:3000;render();save();});
-$('voiceToggle').addEventListener('click',()=>{if(aiPace!==3000)return;voiceEnabled=!voiceEnabled;voiceActivated=voiceEnabled;commentary.setPace(aiPace);commentary.setEnabled(voiceEnabled);saveVoicePreference();syncVoiceover();if(voiceEnabled)commentary.confirmEnabled();});
-$('voicePlayback').addEventListener('change',()=>{if(aiPace!==3000||$('voicePlayback').disabled)return;const mode=$('voicePlayback').value;if(!['recorded','device'].includes(mode))return;commentary.suspend();voicePlayback=mode;commentary.setPlayback(mode);voiceLastCaption='';voiceCaptionDemo=false;saveVoicePreference();renderVoiceover();});
+$('voiceToggle').addEventListener('click',()=>{if(aiPace!==3000)return;voiceEnabled=!voiceEnabled;voiceActivated=voiceEnabled;commentary.setPace(aiPace);commentary.setEnabled(voiceEnabled);saveVoicePreference();syncVoiceover();if(voiceEnabled){prepareLocalVoice();commentary.confirmEnabled();}});
+$('voicePlayback').addEventListener('change',()=>{if(aiPace!==3000||$('voicePlayback').disabled)return;const mode=$('voicePlayback').value;if(!['local','recorded','device'].includes(mode))return;commentary.suspend();voicePlayback=mode;commentary.setPlayback(mode);voiceLastCaption='';voiceCaptionDemo=false;if(voiceEnabled)activateVoiceover();saveVoicePreference();renderVoiceover();});
 $('voiceSelect').addEventListener('change',()=>{if(aiPace!==3000||$('voiceSelect').disabled)return;const id=$('voiceSelect').value;if(id&&!commentary.getState().voices.some(voice=>voice.id===id))return;commentary.suspend();voicePreferredId=id;commentary.setVoice(id||null);saveVoicePreference();renderVoiceover();});
-$('voiceTest').addEventListener('click',()=>{if(aiPace!==3000||!commentary.getState().supported||anyDialog())return;voiceEnabled=true;saveVoicePreference();activateVoiceover();commentary.testVoice();renderVoiceover();});
+$('voiceTest').addEventListener('click',()=>{if($('voiceTest').disabled||aiPace!==3000||!commentary.getState().supported||anyDialog())return;voiceEnabled=true;saveVoicePreference();activateVoiceover();commentary.testVoice();renderVoiceover();});
 $('voiceDemo').addEventListener('click',()=>{if(aiPace!==3000||!commentary.getState().supported||!(stage==='setup'||stage==='playing'&&paused)||anyDialog()||shotFlight)return;voiceEnabled=true;saveVoicePreference();activateVoiceover();resetVoiceover();voiceLifecycle=paused?'paused':stage;commentary.demo();renderVoiceover();});
 $('aiDifficulty').addEventListener('change',()=>{aiDifficulty=$('aiDifficulty').value==='tactical'?'tactical':'casual';$('aiDifficulty').value=aiDifficulty;render();save();});
 $('whiteDifficulty').addEventListener('change',()=>{whiteDifficulty=$('whiteDifficulty').value==='tactical'?'tactical':'casual';$('whiteDifficulty').value=whiteDifficulty;render();save();});

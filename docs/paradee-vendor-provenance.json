@@ -1,0 +1,83 @@
+{
+  "generated": "2026-10-16",
+  "model": "sahilmahendrakar/Paradee-8M-v1.0",
+  "modelSHA256": "60e8f8a1bc7c546488154e9d99ecac6e9c50baf3f4b684c5b0de48ea03b698eb",
+  "paradeeSourceCommit": "9c8b4d7504cbee7e64de2d0341bb690f0b0ab708",
+  "onnxRuntimeWeb": "1.24.3",
+  "phonemizer": "1.2.1",
+  "modelVoice": "af_heart",
+  "modelLicense": "Apache-2.0",
+  "pronunciationEngineLicense": "GPL-3.0-or-later",
+  "files": [
+    {
+      "file": "vendor/paradee/NOTICE.html",
+      "bytes": 1761,
+      "sha256": "c6027a7cfda0ed1597f5097d0edb7f5fdff6188c4afe1f103957bb0ca51a1a0b"
+    },
+    {
+      "file": "vendor/paradee/config.json",
+      "bytes": 1774,
+      "sha256": "f24046974a3a8c747affefb45c7c504263a99d5081787908b16abe8f5ac94fcd"
+    },
+    {
+      "file": "vendor/paradee/licenses/ESPEAK-GPL-3.0.txt",
+      "bytes": 35147,
+      "sha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903"
+    },
+    {
+      "file": "vendor/paradee/licenses/ONNXRUNTIME-MIT.txt",
+      "bytes": 1073,
+      "sha256": "2f07c72751aed99790b8a4869cf2311df85a860b22ded05fa22803587a48922c"
+    },
+    {
+      "file": "vendor/paradee/licenses/ONNXRUNTIME-THIRD-PARTY-NOTICES.txt",
+      "bytes": 325054,
+      "sha256": "0e07b95f3a8d6230037707c5c4a2b554d12c4cb67369669ac255635528ffcee2"
+    },
+    {
+      "file": "vendor/paradee/licenses/PARADEE-APACHE-2.0.txt",
+      "bytes": 11358,
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    {
+      "file": "vendor/paradee/licenses/PHONEMIZER-APACHE-2.0.txt",
+      "bytes": 11357,
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "file": "vendor/paradee/misaki.js",
+      "bytes": 1568,
+      "sha256": "84072f9db03f1139448044ca2549271de1e29d9e7b43da09607cd2cc413a5e39"
+    },
+    {
+      "file": "vendor/paradee/ort-wasm-simd-threaded.mjs",
+      "bytes": 24274,
+      "sha256": "5687566b1bc1c8cf628d76c2ddb16b2a3b81a7997273d4666564880495088e57"
+    },
+    {
+      "file": "vendor/paradee/ort-wasm-simd-threaded.wasm",
+      "bytes": 12361745,
+      "sha256": "be0e129949062ad50290ef94683fac8be5bb6156f709e030b7a5f1661a2f6c17"
+    },
+    {
+      "file": "vendor/paradee/ort.wasm.min.mjs",
+      "bytes": 49997,
+      "sha256": "d5a6d7bc8ee587648fb3742dde8c0094d17cbd3822a68bbec8ddfcd4f2adb88e"
+    },
+    {
+      "file": "vendor/paradee/paradee.onnx",
+      "bytes": 9037971,
+      "sha256": "60e8f8a1bc7c546488154e9d99ecac6e9c50baf3f4b684c5b0de48ea03b698eb"
+    },
+    {
+      "file": "vendor/paradee/phonemizer.js",
+      "bytes": 1322380,
+      "sha256": "193481f474f7c1ea81df3195d18b45df8ef7254dbdccb3f193d60215c4897bec"
+    },
+    {
+      "file": "vendor/paradee/source/paradee-pronunciation-source.zip",
+      "bytes": 18869006,
+      "sha256": "562ee192d496f4885070fd6f7ab64fb99d288eb33f42245df9c47fdb53c8c97b"
+    }
+  ]
+}

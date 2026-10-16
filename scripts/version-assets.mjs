@@ -28,6 +28,11 @@ let commentary=await readFile(asset('commentary.js'),'utf8');
 commentary=commentary.replace(/from ['"]\.\/commentary-clips\.js(?:\?v=[^'"]+)?['"]/,`from './commentary-clips.js?v=${commentaryClipsVersion}'`);
 await writeFile(asset('commentary.js'),commentary);
 const commentaryVersion=hash(commentary);
+const paradeeWorkerVersion=hash(await readFile(asset('paradee-worker.js'),'utf8'));
+let paradeeSpeech=await readFile(asset('paradee-speech.js'),'utf8');
+paradeeSpeech=paradeeSpeech.replace(/['"]\.\/paradee-worker\.js(?:\?v=[^'"]+)?['"]/,`'./paradee-worker.js?v=${paradeeWorkerVersion}'`);
+await writeFile(asset('paradee-speech.js'),paradeeSpeech);
+const paradeeSpeechVersion=hash(paradeeSpeech);
 let app=await readFile(asset('app.js'),'utf8');
 app=app.replace(/from ['"]\.\/engine\.js(?:\?v=[^'"]+)?['"]/,`from './engine.js?v=${engineVersion}'`);
 app=app.replace(/['"]\.\/ai-worker\.js(?:\?v=[^'"]+)?['"]/,`'./ai-worker.js?v=${workerVersion}'`);
@@ -35,10 +40,11 @@ app=app.replace(/from ['"]\.\/match-clock\.js(?:\?v=[^'"]+)?['"]/,`from './match
 app=app.replace(/from ['"]\.\/goal-replay\.js(?:\?v=[^'"]+)?['"]/,`from './goal-replay.js?v=${replayVersion}'`);
 app=app.replace(/from ['"]\.\/match-stats\.js(?:\?v=[^'"]+)?['"]/,`from './match-stats.js?v=${statsVersion}'`);
 app=app.replace(/from ['"]\.\/commentary\.js(?:\?v=[^'"]+)?['"]/,`from './commentary.js?v=${commentaryVersion}'`);
+app=app.replace(/from ['"]\.\/paradee-speech\.js(?:\?v=[^'"]+)?['"]/,`from './paradee-speech.js?v=${paradeeSpeechVersion}'`);
 await writeFile(asset('app.js'),app);
 const appVersion=hash(app),cssVersion=hash(await readFile(asset('style.css'),'utf8'));
 let html=await readFile(asset('index.html'),'utf8');
 html=html.replace(/href="style\.css(?:\?v=[^"]+)?"/,`href="style.css?v=${cssVersion}"`)
   .replace(/src="app\.js(?:\?v=[^"]+)?"/,`src="app.js?v=${appVersion}"`);
 await writeFile(asset('index.html'),html);
-console.log('Versioned game assets:',{app:appVersion,engine:engineVersion,worker:workerVersion,replay:replayVersion,stats:statsVersion,commentary:commentaryVersion,commentaryClips:commentaryClipsVersion,clock:clockVersion,css:cssVersion});
+console.log('Versioned game assets:',{app:appVersion,engine:engineVersion,worker:workerVersion,replay:replayVersion,stats:statsVersion,commentary:commentaryVersion,commentaryClips:commentaryClipsVersion,paradeeWorker:paradeeWorkerVersion,paradeeSpeech:paradeeSpeechVersion,clock:clockVersion,css:cssVersion});
