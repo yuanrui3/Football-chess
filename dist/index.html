@@ -6,7 +6,7 @@
   <meta name="description" content="Football tactics meet chess. Play an eleven-a-side tactical match on a 12 by 15 pitch, with goalkeeper reactions, shot odds, and chess-inspired football.">
   <title>Football Chess · The beautiful game, one move at a time</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23214f3b'/%3E%3Ctext x='32' y='48' font-size='47' text-anchor='middle' fill='%23dbef84'%3E♞%3C/text%3E%3C/svg%3E">
-  <link rel="stylesheet" href="style.css?v=3364b7bf3798">
+  <link rel="stylesheet" href="style.css?v=ff28c2a8423e">
 </head>
 <body>
 <header class="masthead">
@@ -65,7 +65,7 @@
       <section class="quick-rule"><span class="quote-mark">“</span><p>No captures.<br>Just clever football.</p><small>Tackle the ball carrier, pass between your pieces, and find a route to the net.</small><button class="text-button compact" id="detailsBtn">Explore the rules ↗</button></section>
     </aside>
   </div>
-  <div class="match-toolbar"><div><button class="utility-button" id="undoBtn" disabled>↶ Undo</button><button class="utility-button" id="pauseBtn" disabled>Ⅱ Pause</button><button class="utility-button" id="finishBtn" disabled>Finish match</button></div><button class="utility-button" id="newBtn">↻ New match</button><span class="saved-note" id="saveNote">Your match saves on this device.</span></div>
+  <div class="match-toolbar"><div><button class="utility-button" id="undoBtn" disabled>↶ Undo</button><button class="utility-button" id="pauseBtn" disabled>Ⅱ Pause</button><button class="utility-button" id="finishBtn" disabled>Finish match</button><button class="utility-button" id="replayBtn" disabled>↻ Last goal</button></div><button class="utility-button" id="newBtn">↻ New match</button><span class="saved-note" id="saveNote">Your match saves on this device.</span></div>
 </main>
 <footer><span>FOOTBALL × CHESS</span><p>Custom variation inspired by the game by Serrano Saunders · <a href="https://pdfhost.io/v/bWV1pmicf_Football_Chess_Handbook.pdf" target="_blank" rel="noopener">Original handbook ↗</a></p><span>PLAY WITH YOUR HEAD.</span></footer>
 <div id="toast" class="toast" role="status"></div>
@@ -127,8 +127,25 @@
   <p class="rule-assumption">The shot-model coefficients, goal-box dimensions, and long-pass accuracy curve are playable defaults for this custom variation and can be revised.</p>
   <a class="source-link" href="https://pdfhost.io/v/bWV1pmicf_Football_Chess_Handbook.pdf" target="_blank" rel="noopener">Inspired by the original handbook ↗</a>
 </dialog>
+<dialog id="replayDialog" aria-labelledby="replayTitle" aria-describedby="replayCaption">
+  <div class="dialog-heading"><p class="eyebrow">GOAL REPLAY</p><button class="icon-button" data-close="replayDialog" aria-label="Close goal replay">×</button></div>
+  <div class="replay-heading"><h2 id="replayTitle">The goal</h2><b id="replayScore" class="replay-score">0 : 0</b></div>
+  <p class="replay-details" id="replayDetails"></p>
+  <div class="replay-controls"><button type="button" class="utility-button" id="replayPrevBtn" aria-label="Previous replay step">←</button><button type="button" class="primary" id="replayPlayBtn" aria-pressed="false">▶ Play</button><button type="button" class="utility-button" id="replayNextBtn" aria-label="Next replay step">→</button><button type="button" class="utility-button" id="replayRestartBtn">↶ Restart</button><span id="replayStep">0 / 0</span></div>
+  <label class="replay-timeline" for="replayScrub"><span>Replay timeline</span><input type="range" id="replayScrub" min="0" max="1" value="0" step="1"></label>
+  <p class="replay-caption" id="replayCaption" aria-live="polite"></p>
+  <div class="replay-field" aria-label="Recorded goal and build-up">
+    <div class="replay-goal replay-goal-top" aria-hidden="true"></div>
+    <div class="replay-pitch" id="replayPitch"><div class="replay-board" id="replayBoard" role="grid" aria-label="Goal replay pitch, Ivory attacks upward"></div><span class="replay-ball" id="replayBall" role="img">⚽</span></div>
+    <div class="replay-goal replay-goal-bottom" aria-hidden="true"></div>
+    <svg class="replay-overlay" id="replayOverlay" viewBox="0 0 1200 1700" aria-hidden="true"><rect x="3" y="103" width="1194" height="1494"/><path d="M0 850H1200M400 100V300H800V100M400 1600V1400H800V1600"/><circle cx="600" cy="850" r="110"/></svg>
+    <span class="replay-moment" id="replayMoment">BUILD-UP</span>
+  </div>
+  <p class="replay-legend"><span><i></i> Recorded action path</span><span><i class="keeper"></i> Keeper reaction</span></p>
+  <div class="replay-footer"><small>The match and its clocks are paused during the replay.</small><button class="primary" data-close="replayDialog">Continue match <span>→</span></button></div>
+</dialog>
 <dialog id="resultDialog"><div class="dialog-heading"><p class="eyebrow">THE FINAL WHISTLE</p><button class="icon-button" data-close="resultDialog" aria-label="Close result">×</button></div><div class="result-ball">⚽</div><h2 id="resultTitle">Honours even.</h2><p id="resultScore" class="result-score">0 : 0</p><p id="resultText"></p><button class="primary wide" id="rematchBtn">Play another match <span>↗</span></button></dialog>
 <dialog id="confirmDialog"><div class="dialog-heading"><p class="eyebrow">START FRESH</p><button class="icon-button" data-close="confirmDialog" aria-label="Cancel">×</button></div><h2>A new game?</h2><p>Your current match will be replaced.</p><div class="dialog-actions"><button class="utility-button" data-close="confirmDialog">Keep playing</button><button class="primary" id="confirmNewBtn">New match ↗</button></div></dialog>
-<script type="module" src="app.js?v=ba857aedaf3c"></script>
+<script type="module" src="app.js?v=2f7f6e198ece"></script>
 </body>
 </html>

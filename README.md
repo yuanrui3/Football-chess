@@ -9,6 +9,8 @@ Choose a computer opponent, two players on one device, or **Watch · computer vs
 
 In Watch mode, choose Casual or Tactical independently for Ivory and Obsidian, choose an action pace, then click **Start watching**. Both teams take every action automatically, including keeper reactions and restarts. You may arrange either side before starting. Once play begins, the board is read-only; Pause/Resume, Rotate, the match journal, and team-labelled action recaps let you follow the game. Undo rewinds one computer action and pauses. Reloading restores the match paused, with both difficulty settings and pace retained. New matches and rematches retain the selected mode and settings. Timed games use the normal full-time rules; untimed games have a Finish match control.
 
+Goals automatically open a replay of the recorded build-up, shot, and actual keeper response. The match and its clocks wait while the replay plays, then continue automatically. Pause, step, scrub, or restart the replay to keep it open for inspection; Continue match closes it. **Last goal** opens the latest saved goal again without changing the live position or random state. A goal at full time replays before the result appears. Replays use recorded positions rather than the reset kickoff formation, retain at most twelve frames, and persist with the match. New matches clear the replay; Undo clears it when rewinding across that goal.
+
 The default formation uses a box screen, wide rooks, opposite-colour bishops, and an advanced knight. White starts K f2, Q f5, R b4/k4, B c5/j5, N d7/i6, and P e3/g3/i3; Black is the exact 180° rotation. The kickoff queen alone moves to f8 or g8. King f2 covers the f3 gap, bishop j5 covers h3, and pawn i3 guards the wide approach. Both rooks have a clear nine-square crossfield link. The queen can feed knight d7 from f5; moving knight i6 opens bishop j5's forward crossing lane. The shape is used for new matches and goal resets, while saved or custom positions stay intact.
 
 An ordinary attacking positioning turn provides one carrier dribble, one separate move by a player without the ball, and an optional one-square pawn action, in any order. The defender then has one regular move or tackle plus a free pawn action, before the attacker kicks. The controls show each allowance independently; End positioning forfeits unused actions. Knights jump while dribbling. Tackles against a knight succeed 50% of the time; other legal tackles remain certain. The challenger moves to the selected adjacent square on either outcome. A failed attempt leaves the knight in possession and uses the challenger’s regular move while preserving any unused free pawn action. Pieces are never captured.
@@ -147,6 +149,8 @@ Both levels use the same legal moves, scoring odds, and optimal immediate keeper
 - `dist/match-clock.js`: action deadlines, final decisions, protected final attacks, and clock restoration
 - `dist/engine.js`: immutable rules, seeded outcomes, computer decisions
 - `dist/ai-worker.js`: background Tactical planning
+- `dist/goal-replay.js`: bounded goal recordings and independent playback controls
+- `tests/goal-replay.test.mjs`: actual goal geometry, keeper responses, own goals, recording bounds, and stored replay validation
 - `tests/engine.test.mjs`: deterministic rule scenarios and extended AI play
 - `tests/ai.test.mjs`: both policies, legal play, fair randomness, and tactical scenarios
 - `tests/ai-development.test.mjs`: safe collections, real passing support, offside, keeper anchoring, edited snapshots and throw coverage
