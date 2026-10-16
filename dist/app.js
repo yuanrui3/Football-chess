@@ -2,7 +2,7 @@ import {createGame, legalMoves, legalKicks, disguisedShotTargets, applyMove, app
 import {createMatchClock, restoreMatchClock, tickMatchClock, settleMatchClock, rewindMatchClock} from './match-clock.js?v=1fa32f5eed6c';
 import {buildGoalReplay, restoreGoalReplay, createReplayPlayer} from './goal-replay.js?v=79837985ace2';
 import {createMatchStats, restoreMatchStats, recordMatchTransition, addPossessionTime, matchStatsSummary, shortPieceId} from './match-stats.js?v=ed082e4db7ee';
-import {createCommentary} from './commentary.js?v=38c470880433';
+import {createCommentary} from './commentary.js?v=61d21b924bfc';
 
 const $ = id => document.getElementById(id);
 const normalShotLegend = document.querySelector('.shot-legend').textContent;
@@ -106,7 +106,7 @@ function applyVoicePreference(){const state=commentary.getState();if(voicePrefer
 function renderVoiceover(){
   const state=commentary?.getState()||{supported:!!window.speechSynthesis,speaking:false,demo:false,voices:[]},allowed=aiPace===3000,voices=state.voices||[];
   $('voiceToggle').textContent=voiceEnabled?'On':'Off';$('voiceToggle').setAttribute('aria-pressed',String(voiceEnabled));
-  $('voiceToggle').disabled=!allowed;$('voiceToggle').setAttribute('aria-label',allowed?`Turn match voiceover ${voiceEnabled?'off':'on'}`:'Match voiceover is available at Relaxed, three-second pace');
+  $('voiceToggle').disabled=!allowed;$('voiceToggle').setAttribute('aria-label',allowed?`Turn match commentary ${voiceEnabled?'off':'on'}`:'Match commentary is available at Relaxed, three-second pace');
   $('voicePanel').dataset.speaking=String(voiceEnabled&&state.speaking);
   $('voiceCaption').hidden=!voiceEnabled||!voiceLastCaption;$('voiceCaption').textContent=voiceCaptionDemo&&voiceLastCaption?`DEMO · ${voiceLastCaption}`:voiceLastCaption;
   const optionsKey=JSON.stringify(voices.map(voice=>[voice.id,voice.name,voice.lang,voice.preferred]));
@@ -115,7 +115,8 @@ function renderVoiceover(){
   $('voiceNote').textContent=state.voiceName?`Selected: ${state.voiceName}.`:'English speech voices load from your browser or device. Captions are available while no voice is ready.';
   const demoAvailable=allowed&&voices.length>0&&(stage==='setup'||stage==='playing'&&paused)&&!anyDialog()&&!shotFlight;
   $('voiceDemo').disabled=!demoAvailable;$('voiceDemo').title=!allowed?'Available at Relaxed · 3 seconds.':!voices.length?'An English speech voice must be available to hear a sample.':demoAvailable?'Hear example commentary in the selected voice without changing your match.':'Pause the match to sample the selected voice.';
-  $('voiceStatus').textContent=!allowed?'Available at Relaxed · 3 seconds.':!voiceEnabled?'Off · Brief match analysis at Relaxed pace.':!voiceActivated?'On · Start or resume the match to activate sound.':voiceCaptionDemo&&state.demo?'Demo · Selected voice sample; your match is unchanged.':!state.supported||!voices.length?'On · Captions only; no English speech voice is ready.':paused?'On · Paused. Resume for fresh commentary.':anyDialog()?(replayAutoContinue?'On · Goal replay.':'On · Commentary paused while this panel is open.'):stage==='setup'?'On · Ready for kickoff.':stage==='finished'?'On · Full time.':'On · Relaxed · 3 seconds.';
+  $('voiceTest').disabled=!allowed||!voices.length||anyDialog();$('voiceTest').title=allowed?'Hear one short line in the selected voice. This does not pause or change your match.':'Available at Relaxed · 3 seconds.';
+  $('voiceStatus').textContent=!allowed?'Available at Relaxed · 3 seconds.':!voiceEnabled?'Off · Football commentary at Relaxed pace.':!voiceActivated?'On · Start or resume the match to activate sound.':voiceCaptionDemo&&state.demo?'Demo · Selected voice sample; your match is unchanged.':!state.supported||!voices.length?'On · Captions only; no English speech voice is ready.':paused?'On · Paused. Resume for fresh commentary.':anyDialog()?(replayAutoContinue?'On · Goal replay.':'On · Commentary paused while this panel is open.'):stage==='setup'?'On · Ready for kickoff.':stage==='finished'?'On · Full time.':'On · Match calls and analysis about every 10–15 seconds of live play.';
 }
 function syncVoiceover(){
   if(aiPace!==3000&&voiceEnabled){voiceEnabled=false;voiceActivated=false;saveVoicePreference();}
@@ -596,7 +597,7 @@ function revealShotFlight(){
   flight.toastOutcome();paintShotFlight();updateClock();
   announceShotImpact(flight);
 }
-function announceShotImpact(flight){const transition=flight.voiceTransition;if(!transition)return;flight.voiceTransition=null;commentary.observe(transition.before,transition.after,{stats:transition.stats,pace:transition.pace});}
+function announceShotImpact(flight){const transition=flight.voiceTransition;if(!transition)return;flight.voiceTransition=null;commentary.observe(transition.before,transition.after,{stats:transition.stats,pace:aiPace});}
 function paintShotFlight(){
   const flight=shotFlight;if(!flight)return;
   for(const el of squares){
@@ -767,8 +768,9 @@ for(const id of ['goalTop','goalBottom']){
 }
 function refreshSetup(){if(stage!=='setup')return;resetVoiceover();cancelAI();replayPlayer.stop();lastGoalReplay=null;replayAutoContinue=false;replayPendingResult=false;game=createGame({foulsEnabled,mode:$('mode').value,minutes:Number($('duration').value)||10,kickoff:$('kickoff').value});duration=Number($('duration').value);resetClock();selectedId=null;lastComputerAction=null;freePawnMode=false;dribbleMode=false;passRunSelected=false;history=[];matchStats=createMatchStats();render();save();}
 $('aiPace').addEventListener('change',()=>{const value=Number($('aiPace').value);aiPace=AI_PACES.includes(value)?value:3000;render();save();});
-$('voiceToggle').addEventListener('click',()=>{if(aiPace!==3000)return;voiceEnabled=!voiceEnabled;voiceActivated=voiceEnabled;commentary.setPace(aiPace);commentary.setEnabled(voiceEnabled);saveVoicePreference();syncVoiceover();});
+$('voiceToggle').addEventListener('click',()=>{if(aiPace!==3000)return;voiceEnabled=!voiceEnabled;voiceActivated=voiceEnabled;commentary.setPace(aiPace);commentary.setEnabled(voiceEnabled);saveVoicePreference();syncVoiceover();if(voiceEnabled)commentary.confirmEnabled();});
 $('voiceSelect').addEventListener('change',()=>{if(aiPace!==3000||$('voiceSelect').disabled)return;const id=$('voiceSelect').value;if(id&&!commentary.getState().voices.some(voice=>voice.id===id))return;commentary.suspend();voicePreferredId=id;commentary.setVoice(id||null);saveVoicePreference();renderVoiceover();});
+$('voiceTest').addEventListener('click',()=>{if(aiPace!==3000||!commentary.getState().voices.length||anyDialog())return;voiceEnabled=true;saveVoicePreference();activateVoiceover();commentary.testVoice();renderVoiceover();});
 $('voiceDemo').addEventListener('click',()=>{if(aiPace!==3000||!commentary.getState().voices.length||!(stage==='setup'||stage==='playing'&&paused)||anyDialog()||shotFlight)return;voiceEnabled=true;saveVoicePreference();activateVoiceover();resetVoiceover();voiceLifecycle=paused?'paused':stage;commentary.demo();renderVoiceover();});
 $('aiDifficulty').addEventListener('change',()=>{aiDifficulty=$('aiDifficulty').value==='tactical'?'tactical':'casual';$('aiDifficulty').value=aiDifficulty;render();save();});
 $('whiteDifficulty').addEventListener('change',()=>{whiteDifficulty=$('whiteDifficulty').value==='tactical'?'tactical':'casual';$('whiteDifficulty').value=whiteDifficulty;render();save();});
@@ -780,9 +782,9 @@ $('duration').addEventListener('change',()=>{if(stage!=='setup')return;duration=
 $('normalMoveBtn').addEventListener('click',()=>{if(blocked()||!positionActions(game).normalAvailable)return;setMoveMode('normal');selectedId=null;render();});
 $('dribbleBtn').addEventListener('click',()=>{if(blocked()||!positionActions(game).dribbleAvailable)return;setMoveMode('dribble');selectedId=game.ball.carrierId;render();});
 $('pawnMoveBtn').addEventListener('click',()=>{if(blocked()||!positionActions(game).pawnAvailable)return;setMoveMode('pawn');selectedId=null;render();});
-$('startBtn').addEventListener('click',()=>{if(stage!=='setup')return;resetVoiceover();activateVoiceover();resetClock();stage='playing';paused=false;selectedId=null;render();save();});
+$('startBtn').addEventListener('click',()=>{if(stage!=='setup')return;resetVoiceover();activateVoiceover();resetClock();stage='playing';paused=false;selectedId=null;render();save();if(voiceEnabled&&voiceActivated)commentary.confirmEnabled();});
 $('skipBtn').addEventListener('click',()=>{if(!blocked())commit(skipMove(game));});
-$('pauseBtn').addEventListener('click',()=>{if(stage!=='playing'&&!shotFlight||advanceClockNow())return;if(paused){if(commentary.getState().demo)resetVoiceover();activateVoiceover();}paused=!paused;lastTick=Date.now();render();save();});
+$('pauseBtn').addEventListener('click',()=>{if(stage!=='playing'&&!shotFlight||advanceClockNow())return;const resuming=paused;if(resuming){if(commentary.getState().demo)resetVoiceover();activateVoiceover();}paused=!paused;lastTick=Date.now();render();save();if(resuming&&voiceEnabled&&voiceActivated)commentary.confirmEnabled();});
 $('undoBtn').addEventListener('click',()=>{if(!history.length||stage!=='playing'||anyDialog()||advanceClockNow())return;resetVoiceover();cancelShotFlight();cancelAI();let entry=history.pop();if(game.mode==='solo')while(entry.actor!=='white'&&history.length)entry=history.pop();game=upgradeSavedGame(entry.game);passRunSelected=!!entry.passRunSelected&&['kick','kickoff','keeperRelease'].includes(game.phase);disguiseSelected=entry.disguiseSelected!==false;foulsEnabled=game.foulsEnabled===true;matchStats=restoreMatchStats(entry.matchStats,game,{partial:true});if(lastGoalReplay&&(game.score.white<lastGoalReplay.score.white||game.score.black<lastGoalReplay.score.black))lastGoalReplay=null;if(game.mode==='watch')paused=true;restoreClock(rewindMatchClock(clockSnapshot(),entry.clock,{actionSeconds:ACTION_SECONDS}));selectedId=null;lastComputerAction=null;freePawnMode=false;dribbleMode=false;lastTick=Date.now();render();save();toast(game.mode==='watch'?'Last computer action undone. Press Resume to continue.':'Last move undone.');});
 $('flipBtn').addEventListener('click',()=>{flipped=!flipped;render();save();});
 $('replayBtn').addEventListener('click',()=>openGoalReplay());
@@ -857,6 +859,7 @@ $('rulesBtn').addEventListener('click',openRules);$('detailsBtn').addEventListen
 for(const el of document.querySelectorAll('[data-close]'))el.addEventListener('click',()=>$(el.dataset.close).close());
 for(const dialog of document.querySelectorAll('dialog')){dialog.addEventListener('close',()=>{if(dialog.id==='replayDialog'){replayPlayer.stop();replayAutoContinue=false;const showFinalResult=replayPendingResult;replayPendingResult=false;if(showFinalResult&&stage==='finished')showResult();}lastTick=Date.now();render();});dialog.addEventListener('click',event=>{if(event.target===dialog){const r=dialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)dialog.close();}});}
 setInterval(()=>{advanceClockNow();},250);
+setInterval(()=>{if(stage==='playing'&&voiceEnabled&&voiceActivated&&aiPace===3000&&!paused&&!anyDialog()&&!shotFlight&&!document.hidden)commentary.tick(game,{stats:matchStatsSummary(matchStats)});},1000);
 setInterval(()=>{if(stage==='playing')save();},5000);window.addEventListener('pagehide',()=>{commentary.suspend();advanceClockNow();save();});
 document.addEventListener('visibilitychange',()=>{if(document.hidden)commentary.suspend();syncVoiceover();});
 render();

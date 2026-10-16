@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {createCommentary, commentaryEvent, commentaryPiece, commentaryVoices, analyseCommentaryTrend, completedCommentaryRound, COMMENTARY_DEMO} from '../dist/commentary.js';
+import {createCommentary, commentaryEvent, commentaryPiece, commentaryVoices, commentarySituation, analyseCommentaryTrend, completedCommentaryRound, COMMENTARY_DEMO} from '../dist/commentary.js';
 import {E, fixture, point} from './helpers/shot-fixture.mjs';
 import {createMatchStats, recordMatchTransition} from '../dist/match-stats.js';
 
@@ -41,7 +41,7 @@ test('piece names preserve stable player numbers and team names are football nam
   assert.equal(commentaryPiece('black-K'), 'keeper');
   assert.equal(commentaryPiece('<script>'), 'player');
   const {before, pending} = shot({team: 'black'});
-  assert.match(commentaryEvent(before, pending).text, /Obsidian's queen shoots/);
+  assert.match(commentaryEvent(before, pending).text, /Obsidian's queen (shoots|goes for goal|has a go)/);
 });
 
 for (const team of ['white', 'black']) {
@@ -52,11 +52,11 @@ for (const team of ['white', 'black']) {
     assert.doesNotMatch(commentaryEvent(before, pending).text, /goal for|saved|blocked|wide/i);
     const branches = [
       ['goalProbability', 'goal', /GOAL for/],
-      ['keeperCornerProbability', 'outcome', /keeper turns it behind.*Corner/],
-      ['caughtSaveProbability', 'outcome', /Saved.*holds it/],
-      ['missProbability', 'outcome', /shoot wide.*Goal kick/],
-      ['blockOutProbability', 'outcome', /Blocked.*Corner/],
-      ['blockPossessionProbability', 'outcome', /Blocked.*takes possession/]
+      ['keeperCornerProbability', 'outcome', /(turns it behind|behind!.*keeps it out).*Corner/],
+      ['caughtSaveProbability', 'outcome', /(Saved.*holds it|keeps it out.*holds on|Denied.*ball is safe)/],
+      ['missProbability', 'outcome', /(shoot wide|Wide!).*Goal kick/],
+      ['blockOutProbability', 'outcome', /[Bb]locked.*Corner/],
+      ['blockPossessionProbability', 'outcome', /[Bb]locked.*takes possession/]
     ];
     let start = 0;
     for (const [key, kind, message] of branches) {
@@ -75,7 +75,7 @@ test('a disguised shot never announces the chosen target or future result', () =
   const before = fixture({type: 'N', origin: [6, 1]});
   const options = E.disguisedShotTargets(before), pending = E.applyKick(before, options[0].x, options[0].y, {disguise: true});
   const event = commentaryEvent(before, pending);
-  assert.match(event.text, /knight one shoots!/); assert.doesNotMatch(event.text, /[a-n]\d|50|left|right|goal for/i);
+  assert.match(event.text, /knight one (shoots|goes for goal|has a go)/); assert.doesNotMatch(event.text, /[a-n]\d|50|left|right|goal for/i);
   assert.equal(pending.pendingShot.chosenTargetIndex, undefined);
 });
 
@@ -95,7 +95,7 @@ test('goal credits a verified scorer and assist from match statistics, never gue
   const initial = createMatchStats(); initial.lastPass = {team: 'white', providerId: 'white-B2', receiverId: 'white-Q'};
   const attempted = recordMatchTransition(initial, before, pending), after = E.skipMove(pending, {roll: 0});
   const stats = recordMatchTransition(attempted, pending, after);
-  assert.match(commentaryEvent(pending, after, {stats}).text, /Queen scores! Assisted by bishop two/);
+  assert.match(commentaryEvent(pending, after, {stats}).text, /Queen (scores|finds the net|finishes it)!.*Assisted by bishop two/);
   assert.doesNotMatch(commentaryEvent(pending, after).text, /Assisted/);
   stats.goals[0].assistId = 'black-B2';
   assert.doesNotMatch(commentaryEvent(pending, after, {stats}).text, /Assisted/);
@@ -249,7 +249,7 @@ test('trend language follows observed ball progress, territory and possession sw
   assert.match(analyseCommentaryTrend(samples('white', [3, 3, 3])).text, /attacking third/);
   assert.match(analyseCommentaryTrend(samples('black', [6, 6, 6, 6])).text, /gaining little ground/);
   const counter = [...samples('white', [8]), ...samples('black', [5, 7, 10])];
-  assert.match(analyseCommentaryTrend(counter).text, /won it back and broken forward/);
+  assert.match(analyseCommentaryTrend(counter).text, /win it back.*away on the break/);
   assert.equal(analyseCommentaryTrend(samples('black', [5, 5])), null, 'a turnover alone does not invent a counterattack');
 });
 
@@ -264,7 +264,7 @@ test('three-second pace retains the full explanation and other paces cannot spea
   assert.equal(normal.captions.at(-1).text, event.text, 'captions match what is spoken');
 });
 
-test('English voice ranking chooses an available natural voice and uses neutral delivery for goals', () => {
+test('English voice ranking chooses a natural voice and gives goals modest pace without raised pitch', () => {
   const legacy = {voiceURI: 'legacy', name: 'Microsoft David Desktop', lang: 'en-US', default: true};
   const natural = {voiceURI: 'natural', name: 'Microsoft Aria Online Natural', lang: 'en-US'};
   const foreign = {voiceURI: 'foreign', name: 'French Neural', lang: 'fr-FR'};
@@ -273,7 +273,7 @@ test('English voice ranking chooses an available natural voice and uses neutral 
   assert.equal(h.controller.getState().voiceName, natural.name);
   assert.equal(h.controller.getState().quality, 'natural');
   h.controller.reveal(line('goal'));
-  assert.equal(h.spoken[0].voice, natural); assert.equal(h.spoken[0].pitch, 1); assert.equal(h.spoken[0].rate, 1);
+  assert.equal(h.spoken[0].voice, natural); assert.equal(h.spoken[0].pitch, 1); assert.equal(h.spoken[0].rate, 1.06);
   assert.equal(h.controller.setVoice(commentaryVoices([legacy])[0].id), true);
   assert.equal(h.controller.getState().voiceName, legacy.name); assert.equal(h.controller.getState().quality, 'standard');
   assert.equal(h.controller.setVoice('missing'), false);
@@ -300,4 +300,140 @@ test('a goal clears old territorial history before the next kickoff', () => {
   const {pending} = shot(); h.controller.observe(pending, E.skipMove(pending, {roll: 0}));
   const next = {phase: 'kick', attack: 'white', turn: 20, ball: {x: 6, y: 2, carrierId: 'white-Q'}};
   assert.equal(h.controller.observe(next, {...next, phase: 'attackMove', turn: 21, lastAction: {type: 'kick'}}), null);
+});
+
+test('enabling confirmation is immediate and a quiet match receives a factual update every twelve seconds', () => {
+  const h = clockHarness(), state = fixture({origin: [6, 8]});
+  assert.equal(h.controller.confirmEnabled(), true); assert.match(h.spoken[0].text, /Commentary is on/);
+  h.advance(11999); assert.equal(h.controller.tick(state), false);
+  h.advance(1); assert.equal(h.controller.tick(state), true); assert.match(h.spoken.at(-1).text, /Ivory have possession in midfield/);
+  h.advance(12000); assert.equal(h.controller.tick(state), true);
+  assert.match(h.spoken.at(-1).text, /attack runs through the queen in midfield/);
+  assert.notEqual(h.spoken.at(-1).text, h.spoken.at(-2).text);
+  assert.equal(h.controller.tick(state), false, 'a one-second UI tick never produces a backlog');
+});
+
+test('heartbeat rejects blocked or unresolved states and cannot interrupt a goal call', () => {
+  const h = clockHarness(), {before, pending} = shot();
+  assert.equal(h.controller.tick(before, {blocked: true}), false);
+  assert.equal(h.controller.tick(pending), false); assert.equal(commentarySituation(pending), null);
+  assert.equal(h.controller.tick({...before, phase: 'finished'}), false);
+  h.controller.reveal(line('goal')); h.advance(12000);
+  // A fresh goal may be longer than a routine call and always retains priority.
+  h.controller.reveal({...line('goal', 'second-goal'), text: Array(40).fill('Goal').join(' ')});
+  h.advance(12000); assert.equal(h.controller.tick(before), false);
+  assert.equal(h.captions.at(-1).event.kind, 'goal');
+  h.controller.setPace(1200); assert.equal(h.controller.tick(before), false); assert.equal(h.controller.confirmEnabled(), false);
+});
+
+test('situation updates rotate supported facts and describe loose balls without claiming a carrier', () => {
+  const state = fixture({type: 'B', origin: [2, 5]});
+  const texts = Array.from({length: 5}, (_, index) => commentarySituation(state, {index}).text);
+  assert.match(texts[0], /final third/); assert.match(texts[1], /attack runs through the bishop/);
+  assert.match(texts[2], /out wide/); assert.match(texts[3], /final third.*close to goal/);
+  assert.match(Array.from({length: 7}, (_, index) => commentarySituation(state, {index}).text).join(' '), /score is level/);
+  const loose = {...state, ball: {...state.ball, carrierId: null}};
+  assert.match(commentarySituation(loose).text, /ball is loose/);
+  assert.doesNotMatch(commentarySituation(loose, {index: 1}).text, /bishop.*possession/i);
+});
+
+test('real turnovers, progressive passes and restarts have factual routine calls', () => {
+  const before = fixture({origin: [6, 8]});
+  const moved = {...before, attack: 'black', lastAction: {type: 'tackle', pieceId: 'black-R1', team: 'black'}};
+  assert.match(commentaryEvent(before, moved).text, /Obsidian (win it back|regain possession)/);
+  const passed = {...before, lastAction: {type: 'kick', outcome: 'complete', team: 'white', from: {x: 6, y: 8}, to: {x: 6, y: 4}}};
+  assert.match(commentaryEvent(before, passed).text, /send the ball forward through the centre/);
+  for (const type of ['corner', 'throwIn', 'freeKick', 'stalling', 'goalKick', 'offside', 'timeout']) {
+    const after = {...before, restart: {type, team: 'white'}, lastAction: {type: 'out'}};
+    assert.match(commentaryEvent(before, after).text, /Ivory have/);
+    assert.equal(commentaryEvent({...before, restart: after.restart}, after), null, 'the same restart is not re-announced on every repositioning action');
+  }
+});
+
+test('routine event calls obey ten-second cooldown and never delay a shot or goal', () => {
+  const h = clockHarness(); h.controller.reveal({...line('trend', 'r1'), text: 'Ivory win possession.'}); h.advance(6000);
+  assert.equal(h.controller.reveal({...line('trend', 'r2'), text: 'Obsidian win possession.'}), false);
+  assert.equal(h.controller.reveal(line('attempt')), true);
+  assert.equal(h.controller.reveal(line('goal')), true); assert.equal(h.captions.at(-1).event.kind, 'goal');
+  h.advance(12000); assert.equal(h.controller.reveal({...line('trend', 'r3'), text: 'Ivory have a corner.'}), true);
+});
+
+test('short voice test uses the chosen natural voice and changes no match state', () => {
+  const natural = {name: 'English Natural', voiceURI: 'natural', lang: 'en-US'}, h = clockHarness({voices: [natural]});
+  assert.equal(h.controller.testVoice(), true); assert.equal(h.spoken[0].voice, natural);
+  assert.match(h.spoken[0].text, /selected voice/);
+  h.controller.setEnabled(false); assert.equal(h.controller.testVoice(), false);
+});
+
+test('goal celebrations distinguish breaking the deadlock, equalising, taking the lead and chasing', () => {
+  const {pending} = shot(), scored = E.skipMove(pending, {roll: 0});
+  const cases = [
+    [{white: 0, black: 0}, {white: 1, black: 0}, /deadlock is broken/],
+    [{white: 1, black: 1}, {white: 2, black: 1}, /take the lead/],
+    [{white: 0, black: 1}, {white: 1, black: 1}, /They're level/],
+    [{white: 0, black: 2}, {white: 1, black: 2}, /pull one back/],
+    [{white: 1, black: 0}, {white: 2, black: 0}, /extend the lead/]
+  ];
+  for (const [beforeScore, afterScore, context] of cases) {
+    const line = commentaryEvent({...pending, score: beforeScore}, {...scored, score: afterScore});
+    assert.match(line.text, context); assert.match(line.text, /GOAL for Ivory/);
+    assert.ok(line.text.split(/\s+/).length <= 25, 'goal call fits the commentary rhythm');
+  }
+});
+
+test('shot vocabulary varies deterministically and never calls a short effort a long shot', () => {
+  const {before, pending} = shot(), lines = new Set();
+  for (let turn = 1; turn <= 12; turn++) {
+    const state = {...pending, turn}, line = commentaryEvent(before, state);
+    assert.deepEqual(commentaryEvent(before, state), line);
+    assert.doesNotMatch(line.text, /from (distance|range)/); lines.add(line.text);
+  }
+  assert.ok(lines.size >= 3);
+  const long = shot(); long.pending.lastAction = {...long.pending.lastAction, from: {x: 6, y: 10}};
+  assert.match(commentaryEvent(long.before, long.pending).text, /from (distance|range)/);
+});
+
+test('football descriptions of queen lines, wide rook channels and bishop diagonals require board evidence', () => {
+  const before = fixture({origin: [6, 10]});
+  const pass = {type: 'kick', team: 'white', pieceId: 'white-Q', outcome: 'complete', from: {x: 6, y: 10}, to: {x: 6, y: 4}};
+  const after = {...before, lastAction: pass};
+  Object.assign(before.pieces.find(p => p.id === 'black-P1'), {x: 5, y: 8});
+  Object.assign(before.pieces.find(p => p.id === 'black-P2'), {x: 7, y: 6});
+  assert.match(commentaryEvent(before, after).text, /queen breaks the lines/);
+  Object.assign(before.pieces.find(p => p.id === 'black-P1'), {x: 0, y: 8});
+  Object.assign(before.pieces.find(p => p.id === 'black-P2'), {x: 13, y: 6});
+  assert.doesNotMatch(commentaryEvent(before, after).text, /breaks the lines/);
+  const rookPass = {...pass, pieceId: 'white-R1', from: {x: 1, y: 10}, to: {x: 1, y: 5}};
+  assert.match(commentaryEvent(before, {...after, lastAction: rookPass}).text, /rook.*wide channel/);
+  const bishopPass = {...pass, pieceId: 'white-B1', from: {x: 2, y: 10}, to: {x: 6, y: 6}};
+  assert.match(commentaryEvent(before, {...after, lastAction: bishopPass}).text, /bishop.*diagonal pass/);
+  assert.doesNotMatch(commentaryEvent(before, {...after, lastAction: {...bishopPass, to: {x: 5, y: 6}}}).text, /diagonal pass/);
+});
+
+test('knight pockets and close defenders are described only when their visible positions support it', () => {
+  const open = fixture({type: 'N', origin: [6, 3]});
+  assert.match(commentarySituation(open, {index: 3}).text, /knight.*pocket of space/);
+  Object.assign(open.pieces.find(p => p.id === 'black-P1'), {x: 5, y: 3});
+  assert.doesNotMatch(commentarySituation(open, {index: 3}).text, /pocket/);
+  Object.assign(open.pieces.find(p => p.id === 'black-P2'), {x: 7, y: 3});
+  assert.match(commentarySituation(open, {index: 4}).text, /Defenders are close.*Space is tight/);
+});
+
+test('a fresh measured buildup leads the heartbeat, while stale or opposing samples cannot', () => {
+  function buildup() {
+    const h = clockHarness(); h.controller.confirmEnabled();
+    for (const [turn, y] of [[1, 8], [2, 6], [3, 4]]) {
+      const before = {phase: 'defendMove', attack: 'white', turn, ball: {x: 6, y: y + 1, carrierId: null}};
+      h.controller.observe(before, {...before, phase: 'attackMove', turn: turn + 1, ball: {x: 6, y, carrierId: null}, lastAction: {type: 'skip'}});
+    }
+    h.advance(12000); return h;
+  }
+  const state = {phase: 'attackMove', attack: 'white', turn: 4, ball: {x: 6, y: 4, carrierId: null}};
+  const fresh = buildup(); assert.equal(fresh.controller.tick(state), true);
+  assert.match(fresh.spoken.at(-1).text, /advancing through the centre/);
+  const stale = buildup(); stale.controller.tick({...state, turn: 20});
+  assert.doesNotMatch(stale.spoken.at(-1).text, /advancing through/);
+  const other = buildup(); other.controller.tick({...state, attack: 'black'});
+  assert.doesNotMatch(other.spoken.at(-1).text, /Ivory are advancing/);
+  const hidden = buildup(); assert.equal(hidden.controller.tick({...state, phase: 'keeperReact', pendingShot: {}}), false);
 });
