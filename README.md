@@ -7,6 +7,8 @@ Original handbook: https://pdfhost.io/v/bWV1pmicf_Football_Chess_Handbook.pdf
 
 Choose a computer opponent or two players on one device. Each team has one king, one queen, two rooks, two bishops, two knights, and three pawns on a 12×15 pitch. Goals occupy files e–h. Arrange your starting half if desired; move a teammate onto the kickoff carrier to change the taker. Click Kick off, then select a highlighted kick destination.
 
+The default formation uses a box screen, wide rooks, opposite-colour bishops, and an advanced knight. White starts K f2, Q f5, R b4/k4, B c5/j5, N d7/i6, and P e3/g3/i3; Black is the exact 180° rotation. The kickoff queen alone moves to f8 or g8. King f2 covers the f3 gap, bishop j5 covers h3, and pawn i3 guards the wide approach. Both rooks have a clear nine-square crossfield link. The queen can feed knight d7 from f5; moving knight i6 opens bishop j5's forward crossing lane. The shape is used for new matches and goal resets, while saved or custom positions stay intact.
+
 An ordinary attacking positioning turn provides one carrier dribble, one separate move by a player without the ball, and an optional one-square pawn action, in any order. The defender then has one regular move or tackle plus a free pawn action, before the attacker kicks. The controls show each allowance independently; End positioning forfeits unused actions. Knights jump while dribbling. Tackles against a knight succeed 50% of the time; other legal tackles remain certain. The challenger moves to the selected adjacent square on either outcome. A failed attempt leaves the knight in possession and uses the challenger’s regular move while preserving any unused free pawn action. Pieces are never captured.
 
 A shot commits a specific goal cell and gives the defending king one extra one-square reaction move or a hold. Continuous goal odds then use shooting distance and angle, the keeper's shortest distance to the finite shot path, and the flight time available for reaching that path. A longer shot allows a larger saving reach. A keeper in their own box has full saving reach and readiness; outside their own box, blocking reach and readiness are reduced.
@@ -152,6 +154,7 @@ Both levels use the same legal moves, scoring odds, and optimal immediate keeper
 - `tests/stalling.test.mjs`: three-round net progress, indirect free-kick awards, round boundaries, resets, saved state, and AI urgency
 - `tests/fairness.test.mjs`: self-pass collection costs, pass identity, timeout awards, and equal shot odds
 - `tests/action-clock.test.mjs`: deadline accounting, full-time safeguards, final attacking chances, and saved clocks
+- `tests/formation.test.mjs`: mirrored starting shape, legal setup, defensive screen, passing links, goal resets, and saved boards
 
 No build or runtime dependencies. Serve `dist/` using a static HTTP server. Run `npm test` with Node.js. Before each deployment, run `node scripts/version-assets.mjs` so the HTML, controller, engine, worker, and stylesheet use matching content versions instead of stale browser caches.
 

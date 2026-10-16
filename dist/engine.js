@@ -113,7 +113,9 @@ function finishKickProgress(state, source, backPass, interception) {
 }
 
 function formation(kickoff) {
-  const white = {K: [5, 14], Q: [5, 10], R1: [1, 11], R2: [10, 11], B1: [3, 11], B2: [8, 11], N1: [2, 12], N2: [9, 12], P1: [4, 9], P2: [6, 9], P3: [8, 9]};
+  // A box screen, wide rooks, opposite-colour bishops and a forward knight.
+  // Rotate the complete shape for the other side; only the kickoff queen moves.
+  const white = {K: [5, 13], Q: [5, 10], R1: [1, 11], R2: [10, 11], B1: [2, 10], B2: [9, 10], N1: [3, 8], N2: [8, 9], P1: [4, 12], P2: [6, 12], P3: [8, 12]};
   const locations = {white, black: Object.fromEntries(Object.entries(white).map(([id, [x, y]]) => [id, [BOARD_WIDTH - 1 - x, BOARD_HEIGHT - 1 - y]]))};
   locations[kickoff].Q = kickoff === 'white' ? [5, 7] : [6, 7];
   return TEAMS.flatMap(team => SQUAD.map(id => ({id: `${team}-${id}`, team, type: id[0], x: locations[team][id][0], y: locations[team][id][1]})));
