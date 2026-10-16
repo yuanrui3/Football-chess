@@ -594,9 +594,9 @@ test('goal declarations wait for the defending goalkeeper before resolving the s
   assert.equal(reaction.phase, 'keeperReact');
   assert.equal(currentTeam(reaction), 'black');
   assert.ok(reaction.pendingShot);
-  assert.equal(reaction.rulesVersion, 8);
+  assert.equal(reaction.rulesVersion, 9);
   assert.deepEqual(reaction.pendingShot.from, { x: 4, y: 4 });
-  assert.equal(reaction.lastAction.shotModel.modelVersion, 6);
+  assert.equal(reaction.lastAction.shotModel.modelVersion, 7);
   assert.deepEqual(reaction.lastAction.shotModel, shotModel(state, 4, -1));
   assert.deepEqual(reaction.score, { white: 0, black: 0 });
   assert.deepEqual(legalKicks(reaction), []);
@@ -643,7 +643,7 @@ test('outfield players still intercept a shot before the net', () => {
 test('the shot preview exposes Euclidean distance, goal-plane geometry and complete probabilities', () => {
   const state = fixture({ phase: 'kick', positions: { 'white-R1': [4, 6], 'black-K': [5, 0] } });
   const model = shotModel(state, 4, -1);
-  assert.equal(model.modelVersion, 6);
+  assert.equal(model.modelVersion, 7);
   assert.deepEqual(model.origin, { x: 4, y: 6 });
   assert.deepEqual(model.target, { x: 4, y: -.5 });
   assert.equal(model.distance, 6.5);
@@ -679,7 +679,7 @@ test('close shots are more dangerous while longer flight gives a fixed keeper mo
 });
 
 test('extra distance pressure starts beyond three squares and preserves close-shot accuracy', () => {
-  assert.equal(SHOT_MODEL.version, 6);
+  assert.equal(SHOT_MODEL.version, 7);
   assert.equal(SHOT_MODEL.distancePenaltyStart, 3);
   assert.equal(SHOT_MODEL.longShotDecay, .06);
   assert.equal(SHOT_MODEL.minOnTarget, .01);
@@ -788,26 +788,18 @@ test('parry rates stay capped and absent keepers cannot generate saves or corner
   for (const key of ['arrivalSpeed', 'parryGivenSave', 'cornerProbability', 'caughtSaveProbability']) assert.equal(invalid[key], 0, key);
 });
 
-test('knight chip boosts retain the same conditional parry model and normalize capped outcomes', () => {
-  let sawCap = false, sawUncapped = false;
+test('knight shots use the same conditional parry model and probability mass as other shooters', () => {
   for (const keeper of [[4, 0], [7, 0]]) {
     const knight = fixture({ phase: 'kick', carrier: 'white-N1', positions: { 'white-N1': [3, 1], 'black-K': keeper } });
     const ordinary = clone(knight);
     ordinary.pieces.find(piece => piece.id === 'white-N1').type = 'Q';
-    const base = shotModel(ordinary, 4, -1), boosted = shotModel(knight, 4, -1);
-    almostEqual(boosted.goalProbability, Math.min(1, base.goalProbability * 2));
-    almostEqual(boosted.arrivalSpeed, base.arrivalSpeed);
-    almostEqual(boosted.parryGivenSave, boosted.saveProbability > 0 ? base.parryGivenSave : 0);
-    almostEqual(boosted.cornerProbability, boosted.saveProbability * boosted.parryGivenSave);
-    almostEqual(boosted.goalProbability + boosted.cornerProbability + boosted.caughtSaveProbability + boosted.missProbability, 1);
-    if (boosted.goalProbability === 1) {
-      sawCap = true;
-      assert.equal(boosted.cornerProbability, 0);
-      assert.equal(boosted.caughtSaveProbability, 0);
-      assert.equal(boosted.missProbability, 0);
-    } else sawUncapped = true;
+    const base = shotModel(ordinary, 4, -1), model = shotModel(knight, 4, -1);
+    assert.equal(model.scoringMultiplier, 1);
+    for (const key of ['goalProbability', 'saveProbability', 'missProbability', 'arrivalSpeed', 'parryGivenSave', 'cornerProbability', 'caughtSaveProbability']) almostEqual(model[key], base[key], key);
+    almostEqual(model.cornerProbability, model.saveProbability * model.parryGivenSave);
+    almostEqual(model.goalProbability + model.cornerProbability + model.caughtSaveProbability + model.missProbability, 1);
+    assert.ok(model.goalProbability < 1, 'removing the chip boost removes the artificial certainty of these finishes');
   }
-  assert.ok(sawCap && sawUncapped);
 });
 
 test('a shot farther from the keeper is more likely to score without probability tiers', () => {

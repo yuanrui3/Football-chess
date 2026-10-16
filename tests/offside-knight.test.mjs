@@ -101,27 +101,20 @@ test('a knight in either box can receive and carry a legal pass', () => {
   }
 });
 
-test('knight chips double the final goal probability, cap at one, and preserve a normalized outcome distribution', () => {
-  let sawCap = false, sawUncapped = false;
+test('knight shots use the ordinary distance and keeper probability model for either side', () => {
   for (const team of ['white', 'black']) for (const keeper of [[4, 0], [7, 0]]) {
     const knight = fixture({team, carrier: 'white-N1', positions: {'white-N1': [3, 1], 'black-K': keeper}});
     const ordinary = clone(knight);
     ordinary.pieces.find(piece => piece.id === idFor('white-N1', team)).type = 'Q';
     const target = pointFor([4, -1], team);
-    const base = shotModel(ordinary, target.x, target.y), boosted = shotModel(knight, target.x, target.y);
-    const expected = Math.min(1, base.goalProbability * 2);
-    assert.ok(Math.abs(boosted.goalProbability - expected) < 1e-12);
-    assert.equal(boosted.probability, boosted.goalProbability);
-    assert.equal(boosted.scoringMultiplier, 2);
-    assert.ok(Math.abs(boosted.baseGoalProbability - base.goalProbability) < 1e-12);
-    assert.ok(Math.abs(boosted.goalProbability + boosted.saveProbability + boosted.missProbability - 1) < 1e-12);
-    assert.ok(boosted.saveProbability >= 0 && boosted.missProbability >= 0);
-    if (expected < 1) {
-      sawUncapped = true;
-      if (base.saveProbability > 0 && base.missProbability > 0) assert.ok(Math.abs(boosted.saveProbability / boosted.missProbability - base.saveProbability / base.missProbability) < 1e-10);
-    } else sawCap = true;
+    const base = shotModel(ordinary, target.x, target.y), model = shotModel(knight, target.x, target.y);
+    assert.deepEqual(model, base, 'identical geometry means identical complete outcome distributions');
+    assert.equal(model.scoringMultiplier, 1);
+    assert.equal(model.probability, model.goalProbability);
+    assert.equal(model.baseGoalProbability, model.goalProbability);
+    assert.ok(model.goalProbability < 1);
+    assert.ok(Math.abs(model.goalProbability + model.saveProbability + model.missProbability - 1) < 1e-12);
   }
-  assert.ok(sawCap && sawUncapped, 'both the doubled and capped cases are exercised');
 });
 
 test('the declared knight shooter type survives goalkeeper reactions and serialization', () => {
@@ -131,10 +124,10 @@ test('the declared knight shooter type survives goalkeeper reactions and seriali
     assert.equal(pending.pendingShot.shooterType, 'N');
     const restored = clone(pending);
     const model = shotModel(restored);
-    assert.equal(model.scoringMultiplier, 2);
+    assert.equal(model.scoringMultiplier, 1);
     const next = skipMove(restored, {roll: Math.max(0, model.goalProbability - 1e-8)});
     assert.equal(next.lastAction.type, 'goal');
-    assert.equal(next.lastAction.shotModel.scoringMultiplier, 2);
+    assert.equal(next.lastAction.shotModel.scoringMultiplier, 1);
     assert.equal(next.score[team], 1);
     assert.equal(next.pieces.length, 22);
   }

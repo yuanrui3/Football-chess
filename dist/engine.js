@@ -5,11 +5,12 @@ export const BOARD_HEIGHT = 15;
 export const GOAL_FILES = Object.freeze([4, 5, 6, 7]);
 export const LONG_TACKLE_RANGE = 5;
 export const DRIBBLE_RANGE = 8;
+export const ACTION_SECONDS = 30;
 export const STALLING_RULE = Object.freeze({rounds: 3, minProgress: 4});
 // Tunable board-game parameters, not fitted football statistics. Distance is in
 // board squares and time is in abstract units set by ballSpeed.
 export const SHOT_MODEL = Object.freeze({
-  version: 6, ballSpeed: 6,
+  version: 7, ballSpeed: 6,
   targetBase: 0.98, distanceDecay: 0.018, distancePenaltyStart: 3, longShotDecay: 0.06, minOnTarget: 0.01, maxOnTarget: 0.98,
   angleFloor: 0.65, angleWeight: 0.35,
   boxRadius: 0.4, boxDiveSpeed: 1.3, boxReactionDelay: 0.15, boxMaxSave: 0.94,
@@ -44,6 +45,20 @@ const budgetFor = state => ({normalUsed: !!state.positionBudget?.normalUsed, paw
 const attackingCarrier = (state, piece) => state.phase === 'attackMove' && !state.restart && piece?.id === state.ball.carrierId && piece.team === state.attack;
 const clamp = (number, minimum, maximum) => Math.max(minimum, Math.min(maximum, number));
 const inOwnBox = (team, x, y) => inside(x, y) && GOAL_FILES.includes(x) && (team === 'black' ? y <= 1 : team === 'white' ? y >= BOARD_HEIGHT - 2 : false);
+
+// A loose pass can survive several positioning actions, which overwrite
+// lastAction. Keep its kicker separately until somebody controls the ball.
+function looseKickOrigin(state) {
+  if (state.ball.carrierId) return null;
+  const saved = state.looseBallKickOrigin;
+  const previous = state.lastAction;
+  const legacy = (Number(state.rulesVersion) || 0) < 9 && ['kick', 'miss'].includes(previous?.type)
+    && !previous.receiverId && previous.to?.x === state.ball.x && previous.to?.y === state.ball.y
+    ? {team: previous.team, pieceId: previous.pieceId} : null;
+  const origin = saved || legacy;
+  const kicker = state.pieces.find(piece => piece.id === origin?.pieceId && piece.team === origin?.team);
+  return kicker && kicker.team === state.attack ? {team: kicker.team, pieceId: kicker.id} : null;
+}
 
 const freshProgress = state => ({team: state.attack, anchorY: state.ball.y, rounds: 0, pendingRelease: false, excludeRelease: false});
 const netProgress = (team, anchorY, y) => ((team === 'white' ? -1 : 1) * (y - anchorY)) || 0;
@@ -129,7 +144,7 @@ export function createGame({mode = 'solo', minutes = 10, kickoff = 'white', seed
     score: {white: 0, black: 0}, turn: 1, randomState: normalizeSeed(seed),
     log: [`${title(kickoff)} has kick-off. Kick the ball to begin.`], lastAction: null,
     mode, minutes: Number.isFinite(Number(minutes)) && Number(minutes) > 0 ? Number(minutes) : 10,
-    rulesVersion: 8, restart: null, offside: null,
+    rulesVersion: 9, restart: null, offside: null, looseBallKickOrigin: null,
     ballProgress: {team: kickoff, anchorY: carrier.y, rounds: 0, pendingRelease: false, excludeRelease: false}
   };
 }
@@ -282,8 +297,9 @@ function awardRestart(state, type, team, requestedSpot, {exit, reason} = {}) {
   if (taker) { taker.x = spot.x; taker.y = spot.y; }
   else spot = origin;
   state.ball = {...spot, carrierId: taker?.id || null}; state.attack = team;
+  state.looseBallKickOrigin = null;
   beginPosition(state); state.offside = null;
-  state.restart = {type, team, takerId: taker?.id || null, spot: {...spot}, indirect: ['offside', 'stalling'].includes(type), ...(exit ? {exit} : {}), ...(reason ? {reason} : {})};
+  state.restart = {type, team, takerId: taker?.id || null, spot: {...spot}, indirect: ['offside', 'stalling', 'timeout'].includes(type), ...(exit ? {exit} : {}), ...(reason ? {reason} : {})};
   resetProgress(state);
   return state.restart;
 }
@@ -326,7 +342,14 @@ export function normalizeGame(state) {
     next.releaseReason = null;
   }
   next.ballProgress = progressFor(next);
-  next.rulesVersion = 8;
+  next.looseBallKickOrigin = looseKickOrigin(next);
+  // A shot already declared under older rules keeps its origin and random
+  // seed, but its displayed and eventual odds use the current shared model.
+  if (next.phase === 'keeperReact' && next.pendingShot && next.lastAction?.type === 'shotAttempt') {
+    const details = shotModel(next);
+    next.lastAction = {...next.lastAction, probability: details.probability, shotModel: details};
+  }
+  next.rulesVersion = 9;
   return next;
 }
 
@@ -394,11 +417,10 @@ export function shotModel(state, x = state?.pendingShot?.x, y = state?.pendingSh
   const readiness = maxSave * (1 - Math.exp(-(SHOT_MODEL.readinessBase + timeToKeeper) / SHOT_MODEL.readinessTime));
   const saveGivenOnTarget = keeper && rawProjection >= 0 ? clamp(readiness * Math.exp(-((clearance / reach) ** 2)), 0, 1) : 0;
   const baseGoalProbability = onTarget * (1 - saveGivenOnTarget);
-  const shooterType = state?.pendingShot?.shooterType || pieces.find(p => p.id === state?.pendingShot?.shooterId)?.type || carrier?.type;
-  const scoringMultiplier = keeper && shooterType === 'N' ? 2 : 1;
-  const goalProbability = Math.min(1, baseGoalProbability * scoringMultiplier);
-  const remainingScale = baseGoalProbability < 1 ? (1 - goalProbability) / (1 - baseGoalProbability) : 0;
-  const saveProbability = onTarget * saveGivenOnTarget * remainingScale, missProbability = (1 - onTarget) * remainingScale;
+  // Every piece uses the same geometry-based finishing model. Knights keep
+  // their jumping kick pattern but no longer receive a scoring multiplier.
+  const scoringMultiplier = 1, goalProbability = baseGoalProbability;
+  const saveProbability = onTarget * saveGivenOnTarget, missProbability = 1 - onTarget;
   // All shots currently share launch power. Travel to the keeper reduces the
   // arrival pace; a fast arrival or a stretched block is harder to hold.
   // This splits already-stopped shots without changing goal or wide odds.
@@ -503,6 +525,7 @@ function advancePosition(state, previousPhase) {
 function resolveShot(next, {roll, keeperMove, landing} = {}) {
   const shot = next.pendingShot;
   if (!shot || next.phase !== 'keeperReact') throw new Error('There is no shot awaiting a goalkeeper reaction.');
+  next.looseBallKickOrigin = null;
   const keeper = next.pieces.find(p => p.type === 'K' && p.team === shot.defendingTeam);
   const details = shotModel(next, shot.x, shot.y), probability = details.probability;
   const outcomeRoll = nextRoll(next, roll);
@@ -579,7 +602,10 @@ export function applyMove(state, pieceId, x, y, {freePawn = false, roll, landing
   const outcomeRoll = tackling && probability < 1 ? nextRoll(next, roll) : undefined;
   const tackleSuccess = tackling && (probability === 1 || outcomeRoll < probability);
   const collection = !next.ball.carrierId && next.ball.x === x && next.ball.y === y;
+  const kickOrigin = looseKickOrigin(state);
+  const selfPassCollection = collection && kickOrigin?.pieceId === piece.id && kickOrigin.team === piece.team;
   if (tackleSuccess || collection || wasCarrier) next.ball = {x, y, carrierId: piece.id};
+  next.looseBallKickOrigin = tackleSuccess || collection || wasCarrier ? null : kickOrigin;
   const turnover = (tackleSuccess || collection) && piece.team !== previousAttack;
   if ((tackleSuccess || collection || wasCarrier) && state.offside && piece.team !== state.offside.team) next.offside = null;
   if (turnover) {
@@ -590,6 +616,7 @@ export function applyMove(state, pieceId, x, y, {freePawn = false, roll, landing
   } else {
     const usedBudget = freePawn ? 'pawnUsed' : wasCarrier && attackingCarrier(state, piece) ? 'dribbleUsed' : 'normalUsed';
     next.positionBudget = {...budgetFor(state), [usedBudget]: true};
+    if (selfPassCollection) next.positionBudget.dribbleUsed = true;
     if (next.positionBudget.normalUsed && next.positionBudget.pawnUsed && !positionActions(next).dribbleAvailable) advancePosition(next, state.phase);
   }
   const target = state.pieces.find(p => p.id === move.targetId);
@@ -597,13 +624,14 @@ export function applyMove(state, pieceId, x, y, {freePawn = false, roll, landing
     type: tackling ? tackleSuccess ? 'tackle' : 'tackleMiss' : 'move', team: piece.team, pieceId, from, to: {x, y},
     path: target ? [from, {x: target.x, y: target.y}, {x, y}] : [from, {x, y}], freePawn,
     ...(move.targetId ? {targetId: move.targetId} : {}), ...(collection ? {collection: true} : {}),
+    ...(selfPassCollection ? {selfPassCollection: true} : {}),
     ...(tackling ? {probability, tackleSuccess, outcome: tackleSuccess ? 'won' : 'evaded', ...(outcomeRoll !== undefined ? {roll: outcomeRoll} : {})} : {})
   };
   addLog(next, tackling
     ? tackleSuccess
       ? `${title(piece.team)} ${NAMES[piece.type]} wins the tackle (${Math.round(probability * 100)}% chance) and takes possession at ${square(x, y)}.`
       : `${title(piece.team)} ${NAMES[piece.type]} moves to ${square(x, y)}, but the knight evades the tackle (50% chance). The knight keeps the ball; the regular move is used.`
-    : `${title(piece.team)} ${NAMES[piece.type]} ${wasCarrier ? 'dribbles' : 'moves'} to ${square(x, y)}${collection ? ' and collects the ball' : ''}${freePawn ? ' (free pawn move)' : ''}.`);
+    : `${title(piece.team)} ${NAMES[piece.type]} ${wasCarrier ? 'dribbles' : 'moves'} to ${square(x, y)}${collection ? ' and collects the ball' : ''}${freePawn ? ' (free pawn move)' : ''}${selfPassCollection ? '; collecting its own pass uses the dribble allowance' : ''}.`);
   if (!turnover && !state.restart && state.phase === 'defendMove' && next.phase === 'attackMove' && !next.ball.carrierId) completeProgressRound(next, state);
   return next;
 }
@@ -636,6 +664,27 @@ export function skipMove(state, {roll, landing} = {}) {
 }
 export const endPositionTurn = skipMove;
 
+// The UI owns elapsed wall-clock time; applying the consequence here keeps it
+// deterministic across local play, AI play, restoration and undo. A goalkeeper
+// timing out may not erase a declared shot, so it holds and resolves normally.
+export function actionTimeout(state) {
+  const team = currentTeam(state);
+  if (!TEAMS.includes(team)) return copy(state);
+  if (state.phase === 'keeperReact') {
+    const next = skipMove(state);
+    next.lastAction = {...next.lastAction, timedOutTeam: team};
+    addLog(next, `${title(team)} runs out of action time; the goalkeeper holds position and the shot resolves.`);
+    return next;
+  }
+  const next = copy(state), offence = {x: state.ball.x, y: state.ball.y};
+  const restart = awardRestart(next, 'timeout', other(team), offence, {reason: 'actionTimeout'});
+  next.turn++;
+  next.lastAction = {type: 'timeout', team, timedOutTeam: team, offence,
+    to: {...next.ball}, restart: copy(restart), outcome: 'timeout'};
+  addLog(next, `${title(team)} runs out of action time. ${title(restart.team)} has an indirect free kick near ${square(offence.x, offence.y)}. Both teams may reposition.`);
+  return next;
+}
+
 function landingOverride(landing) {
   if (landing === undefined) return null;
   if (!landing || !Number.isInteger(landing.x) || !Number.isInteger(landing.y)) throw new Error('A test landing must contain integer x and y.');
@@ -656,6 +705,7 @@ export function applyKick(state, x, y, {roll, landing} = {}) {
   next.ballProgress = progressFor(state);
   const restart = state.restart;
   next.offside = offsideSnapshot(state, carrier, restart); next.restart = null;
+  next.looseBallKickOrigin = null;
   if (kick.goal) {
     next.pendingShot = {x, y, shooterId: carrier.id, shooterType: carrier.type, shootingTeam: carrier.team, scoringTeam: kick.goal, defendingTeam: other(kick.goal), from, path: kick.path, distance: kick.distance};
     next.phase = 'keeperReact'; next.releaseReason = null;
@@ -682,6 +732,7 @@ export function applyKick(state, x, y, {roll, landing} = {}) {
   if (receiver && flagged(next, receiver)) return callOffside(next, receiver, {...common, path: [...kick.path.slice(0, -1), destination]});
   next.turn++;
   next.ball = {...destination, carrierId: receiver?.id || null}; next.attack = receiver?.team || carrier.team;
+  next.looseBallKickOrigin = receiver ? null : {team: carrier.team, pieceId: carrier.id};
   if (interception) next.offside = null;
   beginPosition(next);
   const backPass = receiver && receiver.type === 'K' && receiver.team === carrier.team && receiver.id !== carrier.id;
