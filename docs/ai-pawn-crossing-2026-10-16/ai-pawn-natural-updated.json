@@ -1,0 +1,48 @@
+[
+  {
+    "attack": "white",
+    "action": {
+      "type": "move",
+      "pieceId": "white-Q",
+      "x": 3,
+      "y": 7,
+      "freePawn": false
+    },
+    "stats": {
+      "nodes": 1400,
+      "completedDepth": 6,
+      "cacheHits": 123,
+      "extensions": 545,
+      "cutoffs": 320,
+      "aborted": true
+    },
+    "exposure": {
+      "direct": 0,
+      "setupCount": 0,
+      "example": null
+    }
+  },
+  {
+    "attack": "black",
+    "action": {
+      "type": "move",
+      "pieceId": "black-Q",
+      "x": 10,
+      "y": 9,
+      "freePawn": false
+    },
+    "stats": {
+      "nodes": 1400,
+      "completedDepth": 6,
+      "cacheHits": 129,
+      "extensions": 542,
+      "cutoffs": 319,
+      "aborted": true
+    },
+    "exposure": {
+      "direct": 0,
+      "setupCount": 0,
+      "example": null
+    }
+  }
+]

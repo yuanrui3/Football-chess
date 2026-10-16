@@ -1496,7 +1496,7 @@ function receiverValue(state, receiver, canDribble = true) {
   return 75 + tacticalShots(projected, receiver.team, true) * 320
     + ({Q: 20, R: 13, B: 12, N: 26, P: 0, K: -30})[receiver.type]
     - Math.max(0, Math.abs(receiver.x - BOARD_CENTER_X) - 2) * 18
-    - risk * (canDribble ? 45 : 460);
+    - risk * (canDribble ? 45 : 460) + wideAttackValue(projected, receiver) * 0.6;
 }
 
 function passLane(state, carrier, target) {
@@ -1637,6 +1637,7 @@ function moveValue(state, projected, piece, move, team, beforeThreat) {
     } else {
       const originalCarrier = state.pieces.find(p => p.id === state.ball.carrierId);
       value += supportPotential(projected, afterPiece, carrier) - supportPotential(state, piece, originalCarrier);
+      value += (wideCrossingSupport(projected, carrier).best - wideCrossingSupport(state, originalCarrier).best) * 240;
       value += (tacticalTackleRisk(state, originalCarrier) - tacticalTackleRisk(projected, carrier)) * 450;
       value += forward * 0.6 + (distance(piece, carrier) - distance(afterPiece, carrier)) * 0.4;
       if (piece.type === 'K') value += keeperHomeValue(afterPiece) - keeperHomeValue(piece);
@@ -1747,9 +1748,53 @@ function tacticalShots(state, team, react = false) {
   return best;
 }
 
+// A positioning reply has one ordinary challenge and one shared pawn/king
+// reposition. The latter cannot tackle, but the same piece may use it to set
+// up its ordinary tackle. Attacking moves face the defender's fresh budgets;
+// defensive moves must respect the budgets already spent in this reply.
+function tacticalChallengeBudget(state, carrier) {
+  if (!carrier || state.restart) return null;
+  if (state.phase === 'attackMove' || state.phase === 'passRun') return freshBudget();
+  if (state.phase === 'defendMove' && currentTeam(state) !== carrier.team) return budgetFor(state);
+  return null;
+}
+
+function tacticalTackleLanding(state, piece, carrier) {
+  if (!canTackle(state, piece, carrier) || flagged(state, piece)) return false;
+  return DIRECTIONS.some(([dx, dy]) => {
+    const x = carrier.x + dx, y = carrier.y + dy;
+    const occupant = pieceAt(state, x, y);
+    // A reposition vacates the piece's original square. Its old occupancy may
+    // therefore be ignored, just as its actual square is legal for a tackle.
+    return distance(piece, {x, y}) <= 10 && allowedSquare(piece, x, y) && (!occupant || occupant.id === piece.id);
+  });
+}
+
+function tacticalTackleSetup(state, piece, move, carrier, budget = tacticalChallengeBudget(state, carrier)) {
+  if (!budget || budget.normalUsed || budget.pawnUsed || !['P', 'K'].includes(piece.type)
+    || piece.team === carrier.team || flagged(state, piece) || distance(piece, carrier) > 2) return false;
+  const dx = Math.abs(move.x - piece.x), dy = Math.abs(move.y - piece.y);
+  if (piece.type === 'P' ? dx + dy !== 1 : Math.max(dx, dy) !== 1) return false;
+  const moved = {...piece, x: move.x, y: move.y};
+  if (!canTackle(state, moved, carrier) || pieceAt(state, move.x, move.y) || !allowedSquare(piece, move.x, move.y)) return false;
+  return tacticalTackleLanding(state, moved, carrier);
+}
+
 function tacticalTackleRisk(state, carrier) {
-  if (!carrier) return 0;
-  return state.pieces.some(piece => piece.team !== carrier.team && canTackle(state, piece, carrier)) ? (carrier.type === 'N' ? 0.5 : 1) * (state.foulsEnabled ? FOUL_RULE.clean : 1) : 0;
+  const budget = tacticalChallengeBudget(state, carrier);
+  if (!budget || budget.normalUsed) return 0;
+  for (const piece of state.pieces) {
+    if (piece.team === carrier.team || flagged(state, piece)) continue;
+    if (tacticalTackleLanding(state, piece, carrier)) return (carrier.type === 'N' ? 0.5 : 1) * (state.foulsEnabled ? FOUL_RULE.clean : 1);
+    // One bonus step plus one adjacent tackle cannot reach beyond two squares.
+    if (!budget.pawnUsed && ['P', 'K'].includes(piece.type) && distance(piece, carrier) <= 2) {
+      const vectors = piece.type === 'P' ? STRAIGHTS : DIRECTIONS;
+      if (vectors.some(([dx, dy]) => tacticalTackleSetup(state, piece, {x: piece.x + dx, y: piece.y + dy}, carrier, budget))) {
+        return (carrier.type === 'N' ? 0.5 : 1) * (state.foulsEnabled ? FOUL_RULE.clean : 1);
+      }
+    }
+  }
+  return 0;
 }
 
 // Off-ball box runs provide receiving chances alongside direct carrying entry.
@@ -1777,6 +1822,43 @@ function tacticalOutlets(state, carrier) {
   const result = {best: chances[0] || 0, second: chances[1] || 0};
   tacticalOutletCache.set(state, result);
   return result;
+}
+
+// A wide attack needs a real central delivery, not merely a teammate close to
+// the touchline. Only onside receivers reachable by this carrier's own passing
+// pattern count, and their finish includes accuracy, keeper reaction and the
+// defensive reply. This is a soft preference: a useful direct shot can still
+// justify an isolated wing position.
+const crossingSupportCache = new WeakMap();
+function wideCrossingSupport(state, carrier) {
+  if (!carrier || carrier.type === 'K' || Math.abs(carrier.x - BOARD_CENTER_X) < 3.5
+    || goalDistance(carrier.team, carrier.y) > 8) return {wide: false, best: 0, second: 0, direct: 0};
+  const cached = crossingSupportCache.get(state);
+  if (cached) return cached;
+  const chances = [];
+  for (const receiver of state.pieces) {
+    if (receiver.team !== carrier.team || receiver.id === carrier.id || receiver.type === 'K'
+      || Math.abs(receiver.x - BOARD_CENTER_X) > 2.5 || goalDistance(receiver.team, receiver.y) > 7
+      || !allowedSquare(receiver, receiver.x, receiver.y) || !onsideAtKick(state, receiver, carrier)
+      || !passLane(state, carrier, receiver)) continue;
+    const received = receivingState(state, receiver);
+    const accuracy = state.restart?.type === 'throwIn' ? throwAccuracy(distance(carrier, receiver)) : passAccuracy(distance(carrier, receiver));
+    const chance = tacticalShots(received, carrier.team, true) * accuracy
+      * (1 - tacticalTackleRisk(received, receiver) * 0.8);
+    if (chance > 0) chances.push(chance);
+  }
+  chances.sort((a, b) => b - a);
+  const result = {wide: true, best: chances[0] || 0, second: chances[1] || 0, direct: tacticalShots(state, carrier.team, true)};
+  crossingSupportCache.set(state, result);
+  return result;
+}
+
+function wideAttackValue(state, carrier) {
+  const support = wideCrossingSupport(state, carrier);
+  if (!support.wide) return 0;
+  const isolation = 1 - Math.min(1, Math.max(support.best, support.direct) / 0.2);
+  return support.best * 160 + support.second * 35
+    - isolation * (18 + Math.max(0, 6 - goalDistance(carrier.team, carrier.y)) * 5);
 }
 
 function canCollect(state, piece, target) {
@@ -1864,6 +1946,7 @@ function tacticalPositionValue(state, team) {
   if (outlets.some(piece => piece.x < carrier.x) && outlets.some(piece => piece.x > carrier.x)) possession += 10;
   const finishingOutlets = tacticalOutlets(state, carrier);
   possession += finishingOutlets.best * 250 + finishingOutlets.second * 60;
+  possession += wideAttackValue(state, carrier);
   // An end-line run needs a finish or a central outlet. Reaching the deepest
   // row alone should not outweigh an attack that can actually reach the goal.
   const centralOutlet = outlets.some(piece => Math.abs(piece.x - BOARD_CENTER_X) <= 2.5 && goalDistance(piece.team, piece.y) <= 6);
@@ -1908,6 +1991,7 @@ function tacticalMoveRank(state, piece, move, beforeThreat, fast = false, threat
       + (tacticalTackleRisk(state, piece) - tacticalTackleRisk(projected, carrier)) * 680 + progressRank(state, piece.team, move.y);
     const original = state.pieces.find(p => p.id === carrier.id);
     return supportPotential(projected, moved, carrier) - supportPotential(state, piece, original)
+      + (wideCrossingSupport(projected, carrier).best - wideCrossingSupport(state, original).best) * 240
       + (tacticalOutlets(projected, carrier).best - tacticalOutlets(state, original).best) * 850
       + (tacticalTackleRisk(state, original) - tacticalTackleRisk(projected, carrier)) * 450
       + home;
@@ -1957,7 +2041,8 @@ function rankedTacticalActions(state, width, root = false) {
         const carrying = piece.id === carrier?.id;
         const safeDribble = carrying && !tacticalTackleRisk(projectedMove(state, piece, move), {...piece, x: move.x, y: move.y});
         const boxRun = !carrying && carrier?.team === team && isBox(move.x, move.y) && !inOwnBox(team, move.x, move.y);
-        candidates.push({action: {type: 'move', pieceId: piece.id, x: move.x, y: move.y, freePawn}, rank: tacticalMoveRank(state, piece, move, beforeThreat, !root, threats) + (freePawn ? 0.01 : 0), category: freePawn ? 'pawn' : move.type === 'tackle' ? 'tackle' : carrying ? safeDribble ? 'safeDribble' : 'dribble' : boxRun ? 'boxRun' : 'support'});
+        const tackleSetup = freePawn && carrier && carrier.team !== team && tacticalTackleSetup(state, piece, move, carrier);
+        candidates.push({action: {type: 'move', pieceId: piece.id, x: move.x, y: move.y, freePawn}, rank: tacticalMoveRank(state, piece, move, beforeThreat, !root, threats) + (freePawn ? 0.01 : 0), category: tackleSetup ? 'tackleSetup' : freePawn ? 'pawn' : move.type === 'tackle' ? 'tackle' : carrying ? safeDribble ? 'safeDribble' : 'dribble' : boxRun ? 'boxRun' : 'support'});
       }
     }
   }
@@ -1966,7 +2051,7 @@ function rankedTacticalActions(state, width, root = false) {
   // A greedy shot-blocking rank must never prune every possession-winning
   // reply. Likewise, consider an actual shot alongside a pass in kicking turns.
   if (!root && width > 1) {
-    const categories = positionalTurn(state) ? ['tackle', 'safeDribble', 'boxRun', 'support'] : ['shot', 'pass'];
+    const categories = positionalTurn(state) ? ['tackle', 'tackleSetup', 'safeDribble', 'boxRun', 'support'] : ['shot', 'pass'];
     shortlist = [];
     for (const category of categories) {
       const candidate = candidates.find(entry => entry.category === category);
@@ -1978,7 +2063,7 @@ function rankedTacticalActions(state, width, root = false) {
   // Root diversity gives both a safe pass and a shot, or a supporting move and
   // a dribble, a chance to survive the inexpensive first-stage ranking.
   if (root) {
-    const wanted = positionalTurn(state) ? ['pawn', 'boxRun', 'support', 'safeDribble', 'dribble', 'tackle'] : ['shot', 'pass', 'space'];
+    const wanted = positionalTurn(state) ? ['tackleSetup', 'pawn', 'boxRun', 'support', 'safeDribble', 'dribble', 'tackle'] : ['shot', 'pass', 'space'];
     shortlist = [];
     for (const category of wanted) {
       const candidate = candidates.find(entry => entry.category === category);
@@ -2223,6 +2308,6 @@ function chooseTacticalAction(state) {
 export function chooseAIAction(state, {difficulty = 'casual'} = {}) {
   // Keep geometry reuse within a decision, while allowing custom setups or
   // API callers to edit an existing state object between decisions.
-  if (state && typeof state === 'object') { passThreatCache.delete(state); tacticalOutletCache.delete(state); }
+  if (state && typeof state === 'object') { passThreatCache.delete(state); tacticalOutletCache.delete(state); crossingSupportCache.delete(state); }
   return difficulty === 'tactical' ? chooseTacticalAction(state) : chooseCasualAction(state);
 }

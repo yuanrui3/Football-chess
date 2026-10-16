@@ -1,0 +1,63 @@
+{
+  "scope": "120 Tactical-vs-Tactical actions, seed 31029, full default 1,400-node cap; partial match; comparison is descriptive, not a win-rate/scoring estimate",
+  "baseline_hash": "db24debe7605f7c12f0734a4e4024553da2cd5acdeadcc420541a436789570d4",
+  "updated_hash": "0efe76a2b98ee0b00aa2e74a8507b80222885f527cdbf53a5ecd0e1886e50bd9",
+  "legality": "All 120 selected actions in both compared runs passed public-API legality, no input mutation, valid occupied squares, distinct piece IDs/squares, carrier-ball alignment, finite analysis values, and <=1,400 nodes",
+  "baseline": {
+    "actions": 120,
+    "score": {
+      "white": 0,
+      "black": 0
+    },
+    "turns": 24,
+    "shots": 1,
+    "turnovers": 1,
+    "exposureSummary": {
+      "checked": 16,
+      "direct": 0,
+      "freeThreat": 3,
+      "addedThreat": 3
+    },
+    "wideSummary": {
+      "checked": 8,
+      "centralReceiver": 0,
+      "centralPasses": 0
+    },
+    "timingSummary": {
+      "median": 554.6734350000006,
+      "p95": 1257.333175000007,
+      "max": 2428.832934000002,
+      "total": 77038.30629800001
+    }
+  },
+  "updated": {
+    "actions": 120,
+    "score": {
+      "white": 0,
+      "black": 0
+    },
+    "turns": 23,
+    "shots": 3,
+    "turnovers": 1,
+    "exposureSummary": {
+      "checked": 15,
+      "direct": 0,
+      "freeThreat": 0,
+      "addedThreat": 0
+    },
+    "wideSummary": {
+      "checked": 4,
+      "centralReceiver": 0,
+      "centralPasses": 0
+    },
+    "timingSummary": {
+      "median": 966.2164640000046,
+      "p95": 1945.484313,
+      "max": 3159.850489000004,
+      "total": 123414.88343100005
+    }
+  },
+  "timing_note": "Shared CPU with concurrent full regression suite during updated run; wall-clock increase cannot be attributed to patch. No search-budget increase.",
+  "sampling_note": "Second baseline seed reproduced matching aggregate behavior; duplicate updated second seed intentionally stopped. These are deterministic opening smoke checks, not independent statistical trials.",
+  "cross_caveat": "Short updated sample contains fewer wide kicks and no central receiving options; cannot claim cross frequency improved from this sample. Focused full-squad diagram verifies useful central run in both engines and defender can close its lane."
+}

@@ -1,0 +1,74 @@
+[
+  {
+    "attack": "white",
+    "action": {
+      "type": "move",
+      "pieceId": "white-Q",
+      "x": 5,
+      "y": 3,
+      "freePawn": false
+    },
+    "stats": {
+      "nodes": 1400,
+      "completedDepth": 6,
+      "cacheHits": 146,
+      "extensions": 562,
+      "cutoffs": 293,
+      "aborted": true
+    },
+    "exposure": {
+      "direct": 0,
+      "setupCount": 28,
+      "example": {
+        "id": "black-P2",
+        "step": {
+          "x": 6,
+          "y": 4
+        },
+        "tackle": {
+          "x": 5,
+          "y": 4
+        },
+        "previousOwner": "white-Q",
+        "newOwner": "black-P2",
+        "probability": 1
+      }
+    }
+  },
+  {
+    "attack": "black",
+    "action": {
+      "type": "move",
+      "pieceId": "black-Q",
+      "x": 8,
+      "y": 13,
+      "freePawn": false
+    },
+    "stats": {
+      "nodes": 1400,
+      "completedDepth": 6,
+      "cacheHits": 136,
+      "extensions": 561,
+      "cutoffs": 290,
+      "aborted": true
+    },
+    "exposure": {
+      "direct": 0,
+      "setupCount": 28,
+      "example": {
+        "id": "white-P2",
+        "step": {
+          "x": 7,
+          "y": 14
+        },
+        "tackle": {
+          "x": 8,
+          "y": 14
+        },
+        "previousOwner": "black-Q",
+        "newOwner": "white-P2",
+        "probability": 1
+      }
+    }
+  }
+]

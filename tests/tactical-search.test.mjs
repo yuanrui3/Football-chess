@@ -152,13 +152,19 @@ test('a cutoff bound tied with the best score cannot replace a proven stronger d
   state.ballProgress = {team: 'black', anchorY: 4, rounds: 0, pendingRelease: false, excludeRelease: false};
   const expected = {type: 'move', pieceId: 'white-B2', x: 5, y: 6, freePawn: false};
   const options = {maxDepth: 5, nodeLimit: 50000, extensions: false};
+  const reports = [];
   for (const useCache of [true, false]) {
     const report = analysis(state, {...options, useCache});
     assert.equal(report.stats.completedDepth, options.maxDepth);
     assert.equal(report.stats.aborted, false);
     assert.deepEqual(report.action, expected, 'preserve the genuinely best defensive continuation when another branch only ties its bound');
-    assert.equal(report.value, -93.8, 'the verified defensive continuation retains its value after non-goal utility is scaled by 0.35');
+    reports.push(report);
   }
+  // Heuristic scores can change when legal reply threats are corrected. The
+  // invariant is the proven defensive action and agreement with an uncached
+  // completed search, rather than an old position-evaluation constant.
+  assert.ok(Math.abs(reports[0].value - reports[1].value) < 1e-8,
+    'cutoff/cache bounds preserve the exact value of the uncached search');
 });
 
 test('Tactical horizon extensions resolve a close finish instead of valuing an unresolved shot as possession, either color', () => {
