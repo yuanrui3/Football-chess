@@ -1,0 +1,104 @@
+{
+  "environment": {
+    "runtime": "Node.js",
+    "version": "v24.19.0",
+    "platform": "linux",
+    "arch": "x64",
+    "backend": "Deployed onnxruntime-web 1.24.3 WASM, one thread",
+    "frontend": "Deployed paradee-worker.js exports, official KittenML CEPhonemizer + native IPA TextCleaner + Hugo male embedding",
+    "note": "This is the deployed browser inference path under Node; these CPU timings are not a browser performance guarantee."
+  },
+  "initializationIncludingFrontendAndWarmupMs": 1854.628321,
+  "progress": [
+    {
+      "value": 0.01,
+      "ms": 0.290970999999999
+    },
+    {
+      "value": 0.83,
+      "ms": 282.245183
+    },
+    {
+      "value": 0.93,
+      "ms": 1537.196745
+    },
+    {
+      "value": 1,
+      "ms": 1854.61882
+    }
+  ],
+  "measurements": [
+    {
+      "text": "Ivory surge forward! The queen switches play, and Obsidian scramble across.",
+      "filename": "hugo-commentary-1.wav",
+      "sampleRate": 24000,
+      "durationSeconds": 4.505625,
+      "inferenceMs": 3184.3439879999996,
+      "realTimeFactor": 0.7067485616312941,
+      "peak": 0.8369688391685486,
+      "rms": 0.10545287816180358,
+      "nonFinite": 0,
+      "clipped": 0
+    },
+    {
+      "text": "Obsidian settle the ball in their own half. The pawns protect the centre.",
+      "filename": "hugo-commentary-2.wav",
+      "sampleRate": 24000,
+      "durationSeconds": 4.034208333333333,
+      "inferenceMs": 2953.594884,
+      "realTimeFactor": 0.7321374207661562,
+      "peak": 0.8502274751663208,
+      "rms": 0.11003538368900809,
+      "nonFinite": 0,
+      "clipped": 0
+    },
+    {
+      "text": "What a counterattack! A knight races through the gap, with the queen in support.",
+      "filename": "hugo-commentary-3.wav",
+      "sampleRate": 24000,
+      "durationSeconds": 4.225,
+      "inferenceMs": 3299.2104209999998,
+      "realTimeFactor": 0.7808782061538462,
+      "peak": 0.8788585662841797,
+      "rms": 0.10115654630685496,
+      "nonFinite": 0,
+      "clipped": 0
+    },
+    {
+      "text": "Two goals to one, and this match is still alive!",
+      "filename": "hugo-commentary-4.wav",
+      "sampleRate": 24000,
+      "durationSeconds": 3.061125,
+      "inferenceMs": 2111.3293139999987,
+      "realTimeFactor": 0.6897233252480702,
+      "peak": 0.8195409178733826,
+      "rms": 0.10954035944052189,
+      "nonFinite": 0,
+      "clipped": 0
+    }
+  ],
+  "memoryBytes": {
+    "before": {
+      "rss": 38797312,
+      "heapTotal": 12054528,
+      "heapUsed": 7908144,
+      "external": 3762607,
+      "arrayBuffers": 146595
+    },
+    "afterInitialization": {
+      "rss": 423247872,
+      "heapTotal": 23937024,
+      "heapUsed": 16258112,
+      "external": 70954166,
+      "arrayBuffers": 67320892
+    },
+    "afterFourCalls": {
+      "rss": 424873984,
+      "heapTotal": 27648000,
+      "heapUsed": 18195904,
+      "external": 38271882,
+      "arrayBuffers": 34638608
+    }
+  },
+  "combinedDurationSeconds": 17.425958333333334
+}

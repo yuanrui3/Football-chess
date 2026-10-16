@@ -617,7 +617,7 @@ test('local analysis is the available adapter default, with no model work until 
   assert.equal(h.local.loads, 1);
 });
 
-test('Paradee speaks current analysis text while Tom keeps immediate attempts, results and goals', async () => {
+test('the local male voice speaks current analysis while Tom keeps attempts, results and goals', async () => {
   const h = localHarness(), dynamic = {...recordedLine('trend', 'leader'), text: 'Obsidian lead. Ivory 1, Obsidian 2.'};
   assert.equal(h.controller.reveal(dynamic), true);
   assert.equal(h.jobs.length, 1); assert.equal(h.jobs[0].text, dynamic.text);
@@ -635,17 +635,36 @@ test('Paradee speaks current analysis text while Tom keeps immediate attempts, r
   assert.equal(h.captions.at(-1).text, COMMENTARY_CLIPS.goal_equalizer.text);
 });
 
-test('loading Paradee falls back to saved lines, and ready Test voice auditions the local model', async () => {
+test('loading the local voice falls back to saved lines, and ready Test voice auditions the male model', async () => {
   const h = localHarness({ready: false});
   h.controller.reveal({...recordedLine('trend', 'build_back'), text: 'Ivory build through their keeper.'});
   assert.equal(h.jobs.length, 0); assert.equal(h.local.loads, 0);
   assert.equal(h.captions.at(-1).text, COMMENTARY_CLIPS.build_back.text);
   h.audios[0].onended(); await h.controller.warmLocal();
   assert.equal(h.controller.testVoice(), true); assert.equal(h.jobs.length, 1);
-  assert.match(h.jobs[0].text, /This is Paradee/); assert.doesNotMatch(h.jobs[0].text, /selected voice/);
-  assert.equal(h.audios.length, 1, 'the Tom voice test is not passed off as a Paradee audition');
+  assert.match(h.jobs[0].text, /Ivory surge forward!/); assert.doesNotMatch(h.jobs[0].text, /Paradee|selected voice/);
+  assert.equal(h.audios.length, 1, 'the Tom voice test is not passed off as a local male audition');
   h.jobs[0].settings.onPlaying(); h.jobs[0].resolve({spoken: true}); await flushLocal();
   assert.equal(h.controller.getState().speaking, false);
+});
+
+test('local analysis quickens for counters and pressure, while measured buildup stays normal', async () => {
+  for (const [clipKey, delivery] of [['counter', 'urgent'], ['pressure', 'urgent'], ['build_back', 'normal']]) {
+    const h = localHarness();
+    h.controller.reveal(recordedLine('trend', clipKey));
+    assert.equal(h.jobs[0].settings.delivery, delivery);
+    h.controller.destroy();
+  }
+});
+
+test('male local commentary never substitutes an arbitrary device voice after audio failure', async () => {
+  const h = localHarness({ready: false});
+  h.controller.confirmEnabled();
+  h.audios[0].onerror();
+  assert.equal(h.spoken.length, 0);
+  assert.equal(h.controller.getState().audioStatus, 'unavailable');
+  assert.equal(h.captions.at(-1).text, COMMENTARY_CLIPS.enable.text);
+  h.controller.destroy();
 });
 
 test('a failed local audition never substitutes Tom or a device voice', async () => {

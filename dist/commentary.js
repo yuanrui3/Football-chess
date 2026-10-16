@@ -362,6 +362,9 @@ export function createCommentary({speechSynthesis = globalThis.speechSynthesis,
     }
     function device(fallback = false) {
       if (active?.token !== token) return;
+      // The male commentary mode must not silently substitute an arbitrary
+      // browser voice when both local synthesis and the saved call fail.
+      if (playback === 'local') {status('unavailable'); return;}
       if (!deviceSupported()) {status('unavailable'); return;}
       active.transport = 'device';
       status(fallback ? 'fallback' : 'playing');
@@ -422,7 +425,8 @@ export function createCommentary({speechSynthesis = globalThis.speechSynthesis,
       }
       active.loadTimer = setTimer(fallbackLocal, Math.max(0, deadline - at));
       try {
-        Promise.resolve(localSpeech.speak(text, {expiresAt: deadline, onPlaying() {
+        const delivery = ['counter', 'pressure', 'queen_linebreak', 'final_third', 'knight_pocket', 'advance_centre', 'advance_wide', 'test'].includes(line.clipKey) ? 'urgent' : 'normal';
+        Promise.resolve(localSpeech.speak(text, {expiresAt: deadline, delivery, onPlaying() {
           if (active?.token !== token || active.transport !== 'local') return;
           clearTimer(active.loadTimer); active.loadTimer = undefined; status('playing'); armWatchdog();
         }})).then(result => {
@@ -482,7 +486,7 @@ export function createCommentary({speechSynthesis = globalThis.speechSynthesis,
     testVoice() {
       if (playback === 'local' && !localState().ready) return false;
       return speak({kind: 'trend', priority: 1, text: playback === 'local'
-        ? 'Ivory build through midfield. The queen switches play, and Obsidian must shift across. This is Paradee, your local match analyst.'
+        ? 'Ivory surge forward! The queen switches play, and Obsidian scramble across.'
         : 'Football Chess commentary. This is your selected voice.', clipKey: 'test', localOnly: playback === 'local', id: `voice-test:${epoch}:${++cueSequence}`}, {explicit: true});
     },
     reveal: line => speak(line?.deferred ? {...line, createdAt: now(), deferred: false} : line),
@@ -523,7 +527,7 @@ export function createCommentary({speechSynthesis = globalThis.speechSynthesis,
       const end = setTimer(() => {demoTimers.delete(end); demo = false;}, 25000);
       demoTimers.add(end); return true;
     },
-    getState: () => ({enabled, supported: playback === 'local' ? localSupported || recordedSupported || deviceSupported() : playback === 'recorded' ? recordedSupported || deviceSupported() : deviceSupported(),
+    getState: () => ({enabled, supported: playback === 'local' ? (localSupported && localState().supported !== false) || recordedSupported : playback === 'recorded' ? recordedSupported || deviceSupported() : deviceSupported(),
       playback, recordedSupported, localSupported: localSupported && localState().supported !== false, localState: localState(), audioStatus, speaking: !!active, demo, pace, allowed: pace === COMMENTARY_PACE,
       voices: voiceOptions.map(voice => ({...voice})), voiceId: selectedVoice ? voiceId(selectedVoice) : null,
       voiceName: selectedVoice?.name || null,

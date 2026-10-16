@@ -1,0 +1,131 @@
+{
+  "feature": "Local male match analysis: Hugo with KittenTTS Nano 0.8 int8",
+  "model": {
+    "repository": "https://huggingface.co/KittenML/kitten-tts-nano-0.8-int8",
+    "revision": "84781d74e29ee25217551556398b42f80593a813",
+    "original_file": "kitten_tts_nano_v0_8.onnx",
+    "local_file": "dist/vendor/kitten/kitten-nano-int8.onnx",
+    "license": "Apache-2.0",
+    "source_sha256": "f7b0afcbee92870b32b8e0276d855b954dc25470c9f051b376ac7eee537c76fc"
+  },
+  "voice": {
+    "name": "Hugo",
+    "gender": "male",
+    "source_file": "voices.npz",
+    "source_sha256": "8aa7cee235abb0739cb51e6559685f65a4dacd95568833d05699b1633f519b3f",
+    "key": "expr-voice-4-m",
+    "source_shape": [
+      400,
+      256
+    ],
+    "local_file": "dist/vendor/kitten/hugo.bin",
+    "derivation": "Extracted the exact expr-voice-4-m NumPy array into C-order little-endian float32 bytes; no modification of voice values.",
+    "speed_prior": 0.9
+  },
+  "frontend": {
+    "frontend_upstream": "https://github.com/KittenML/KittenTTS-web",
+    "frontend_commit": "c846fe92858f3447f4912226471f5a63983b3f94",
+    "dictionary_upstream": "https://github.com/espeak-ng/espeak-ng",
+    "dictionary_commit": "59eb19938f12e30881c81d86ce4a7de25414c9f4",
+    "transpiler": "typescript5.8.3",
+    "generated_factory": "Unmodified _L factory and generic bundle helpers extracted from upstream checked-in examples/html/assets/kittentts-web.js; ES module default export added."
+  },
+  "inference": {
+    "backend": "onnxruntime-web",
+    "version": "1.24.3",
+    "execution_providers": [
+      "wasm"
+    ],
+    "threads": 1,
+    "proxy": false,
+    "cross_origin_isolation_required": false,
+    "inputs": {
+      "input_ids": "int64 [1,T], native Kitten IPA alphabet with [0,...tokens,10,0] wrappers, max400 tokens/chunk",
+      "style": "float32 [1,256], row min(number of chunk phoneme tokens,399) from Hugo embedding",
+      "speed": "float32 [1], normal1.04\u00d7Hugo0.9=.936; urgent1.10\u00d70.9=.99"
+    },
+    "output": "float32 waveform at24000Hz; maximum250ms trailing silence trimmed",
+    "emotion_control": "No emotion prompts or voice cloning. Energetic text/cadence and modest real synthesis speed only.",
+    "telemetry": "No KittenSDK analytics code is included; inference runs locally."
+  },
+  "runtime_files": [
+    "vendor/kitten/TextCleaner.js",
+    "vendor/kitten/TextPreprocessor.js",
+    "vendor/kitten/cephonemizer-runtime.js",
+    "vendor/kitten/en_rules",
+    "vendor/kitten/en_list",
+    "vendor/kitten/kitten-nano-int8.onnx",
+    "vendor/kitten/hugo.bin",
+    "vendor/paradee/ort.wasm.min.mjs",
+    "vendor/paradee/ort-wasm-simd-threaded.mjs",
+    "vendor/paradee/ort-wasm-simd-threaded.wasm"
+  ],
+  "runtime_download_bytes": 38387736,
+  "licenses": {
+    "model_voice_frontend": "Apache-2.0",
+    "english_rules_dictionary": "GPL-3.0; exact plaintext source bundled",
+    "onnxruntime": "MIT with third-party notices in vendor/paradee/licenses"
+  },
+  "files": {
+    "vendor/kitten/NOTICE.html": {
+      "bytes": 1497,
+      "sha256": "4d0546bd17be2dc0b7855d86879d8e4936b5572477e96d611e2ffd5bffcdbbdb"
+    },
+    "vendor/kitten/TextCleaner.js": {
+      "bytes": 2472,
+      "sha256": "2ef135a9c00c3aacf327bbb974e36e1c7bec21f423ddc04a9b49c00d0e33eb82"
+    },
+    "vendor/kitten/TextPreprocessor.js": {
+      "bytes": 9708,
+      "sha256": "ea9ea8999fd60e3617de49d0e3c037a57f0f71aeaa3e40921c14136dae773fd2"
+    },
+    "vendor/kitten/cephonemizer-runtime.js": {
+      "bytes": 895490,
+      "sha256": "445387b4ba77e009a0adc0d4204587a36a2ac2f56419d6e565a588773b7a6d72"
+    },
+    "vendor/kitten/en_list": {
+      "bytes": 102788,
+      "sha256": "24eb79018ed6253c10682096de672ce9265c1fe15c3e19e7f754d57a0fcd9790"
+    },
+    "vendor/kitten/en_rules": {
+      "bytes": 161691,
+      "sha256": "8e75e9341ea735cc514b29a7d3a95c6c241c1cc176ad43e5699b8f7f66ab3194"
+    },
+    "vendor/kitten/hugo.bin": {
+      "bytes": 409600,
+      "sha256": "1e036f1166acf869ba42d20a6f77ee13433f3959b44600af210e67b332cb53ca"
+    },
+    "vendor/kitten/kitten-nano-int8.onnx": {
+      "bytes": 24369971,
+      "sha256": "f7b0afcbee92870b32b8e0276d855b954dc25470c9f051b376ac7eee537c76fc"
+    },
+    "vendor/kitten/licenses/ESPEAK-GPL-3.0.txt": {
+      "bytes": 35147,
+      "sha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903"
+    },
+    "vendor/kitten/licenses/KITTENTTS-APACHE-2.0.txt": {
+      "bytes": 10706,
+      "sha256": "ca47d208e3861e3e83166fa7ce6849802d8941a15ae49452eebec84325bcc527"
+    },
+    "vendor/kitten/model-config.json": {
+      "bytes": 688,
+      "sha256": "b66006ccbeccd4de5fc3c9272059c47f5725df7215fd889785c03602652fab64"
+    },
+    "vendor/kitten/source/kitten-pronunciation-source.zip": {
+      "bytes": 592324,
+      "sha256": "4d32d8df605bf6389c8dab57e1948247c4e2d25bf309abd269dce2d43c243d8b"
+    },
+    "vendor/paradee/ort.wasm.min.mjs": {
+      "bytes": 49997,
+      "sha256": "d5a6d7bc8ee587648fb3742dde8c0094d17cbd3822a68bbec8ddfcd4f2adb88e"
+    },
+    "vendor/paradee/ort-wasm-simd-threaded.mjs": {
+      "bytes": 24274,
+      "sha256": "5687566b1bc1c8cf628d76c2ddb16b2a3b81a7997273d4666564880495088e57"
+    },
+    "vendor/paradee/ort-wasm-simd-threaded.wasm": {
+      "bytes": 12361745,
+      "sha256": "be0e129949062ad50290ef94683fac8be5bb6156f709e030b7a5f1661a2f6c17"
+    }
+  }
+}

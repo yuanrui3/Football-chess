@@ -1,4 +1,4 @@
-// Local Paradee speech transport. Inference stays in a worker; playback begins
+// Local speech transport (legacy filename). Inference stays in a worker; playback begins
 // only after the current request, deadline and user audio permission are checked.
 export const PARADEE_SAMPLE_RATE = 24000;
 
@@ -11,7 +11,7 @@ function speechError(message, code) {
 export function createParadeeSpeech({
   WorkerCtor = globalThis.Worker,
   AudioContextCtor = globalThis.AudioContext || globalThis.webkitAudioContext,
-  workerUrl = new URL('./paradee-worker.js?v=38b1bbd2f3b5', import.meta.url),
+  workerUrl = new URL('./paradee-worker.js?v=7b278aba28ef', import.meta.url),
   assets = {},
   onState = () => {},
   now = () => Date.now(),
@@ -129,7 +129,7 @@ export function createParadeeSpeech({
     loading = new Promise((resolve, reject) => { loadResolve = resolve; loadReject = reject; });
     const promise = loading;
     try {
-      const created = new WorkerCtor(workerUrl, { type: 'module', name: 'paradee-commentary' });
+      const created = new WorkerCtor(workerUrl, { type: 'module', name: 'male-match-commentary' });
       worker = created;
       created.onmessage = (event) => { if (worker === created) receive(event); };
       created.onerror = (event) => {
@@ -182,13 +182,14 @@ export function createParadeeSpeech({
     return promise;
   }
   function expired(options) { return Number.isFinite(options.expiresAt) && now() >= options.expiresAt; }
-  async function generate(text, job) {
+  async function generate(text, job, options = {}) {
     await load();
     if (job.finished || disposed) throw speechError('Speech cancelled.', 'CANCELLED');
     return new Promise((resolve, reject) => {
       generation = { id: job.id, resolve, reject };
       publish({ status: 'generating', error: null });
-      try { worker.postMessage({ type: 'synthesize', id: job.id, text }); }
+      try { worker.postMessage({ type: 'synthesize', id: job.id, text,
+        delivery: options.delivery === 'urgent' ? 'urgent' : 'normal' }); }
       catch (error) { generation = null; reject(error); }
     });
   }
@@ -237,14 +238,14 @@ export function createParadeeSpeech({
     if (!line) return Promise.resolve({ spoken: false, reason: 'empty' });
     return begin('speak', options, async (job) => {
       if (expired(options)) return { spoken: false, reason: 'expired' };
-      const audio = await generate(line, job);
+      const audio = await generate(line, job, options);
       return playBuffer(audio, options, job);
     });
   }
   function synthesize(text, options = {}) {
     const line = String(text || '').trim().slice(0, 600);
     if (!line) return Promise.reject(speechError('Speech text is empty.', 'EMPTY_TEXT'));
-    return begin('synthesize', options, (job) => generate(line, job));
+    return begin('synthesize', options, (job) => generate(line, job, options));
   }
   function play(audio, options = {}) { return begin('play', options, (job) => playBuffer(audio, options, job)); }
   function destroy() {

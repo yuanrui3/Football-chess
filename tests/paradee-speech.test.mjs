@@ -75,6 +75,16 @@ test('no queue accumulates while an inference is in progress', async () => {
   assert.equal(r.voice.getState().busy, false); r.voice.destroy();
 });
 
+test('urgent match delivery reaches synthesis while unknown delivery stays normal', async () => {
+  for (const [delivery, expected] of [['urgent', 'urgent'], ['shout-forever', 'normal']]) {
+    const r = rig(); await r.loaded();
+    const pending = r.voice.synthesize('Ivory break forward!', {delivery});
+    await flush();
+    assert.equal(r.workers[0].messages.at(-1).delivery, expected);
+    r.result(); await pending; r.voice.destroy();
+  }
+});
+
 test('Off during inference immediately resolves cancelled and stale audio never plays', async () => {
   const r = rig(); await r.loaded(); await r.voice.unlock();
   let called = 0; const first = r.voice.speak('Obsidian build from the back.', { onPlaying: () => called++ });
