@@ -63,7 +63,7 @@ test('both modes and kickoff choices use the selected asymmetric formation with 
     assert.equal(currentTeam(state), kickoff);
     assert.deepEqual(state.ball, {x: queen.x, y: queen.y, carrierId: queen.id});
     assert.deepEqual(state.positionBudget, freshBudget());
-    assert.equal(state.rulesVersion, 12, 'changing a default formation does not rewrite live rules');
+    assert.equal(state.rulesVersion, 13, 'changing a default formation does not rewrite live rules');
   }
 });
 
@@ -201,7 +201,7 @@ test('loading or undoing an active custom position preserves every coordinate an
       assert.deepEqual(snapshot, before);
       assert.deepEqual(restored, before, `${mode} ${phase}: changing defaults must never rearrange a saved or undone match`);
       assert.deepEqual(normalizeGame(clone(restored)), restored);
-      assert.equal(restored.rulesVersion, 12);
+      assert.equal(restored.rulesVersion, 13);
     }
     const legacy = clone(state);
     legacy.rulesVersion = 8;

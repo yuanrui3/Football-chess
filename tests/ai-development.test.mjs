@@ -99,14 +99,43 @@ function afterReceiverShotThreat(state,target,receiverId){
  if(!kick)return 0;
  const received=e.applyKick(kicking,target.x,target.y);
  if(received.ball.carrierId!==receiverId)return 0;
+ return bestReactedShotThreat(received);
+}
+function bestReactedShotThreat(state){
  let best=0;
- for(const shot of e.legalKicks({...received,phase:'kick'}).filter(k=>k.goal===received.attack)){
-  const pending=e.applyKick({...received,phase:'kick'},shot.x,shot.y);
-  const keeper=pending.pieces.find(p=>p.type==='K'&&p.team!==received.attack);
+ for(const shot of e.legalKicks({...state,phase:'kick'}).filter(k=>k.goal===state.attack)){
+  const pending=e.applyKick({...state,phase:'kick'},shot.x,shot.y);
+  const keeper=pending.pieces.find(p=>p.type==='K'&&p.team!==state.attack);
   const reactions=[undefined,...e.legalMoves(pending,keeper.id)];
   best=Math.max(best,Math.min(...reactions.map(move=>e.shotChance(pending,shot.x,shot.y,move))));
  }
  return best;
+}
+function verifyReceiverPress(state,target,receiverId){
+ // A press may leave the geometric shot ray clear: the receiver still has an
+ // attacking positioning turn and the defence gets a reply before any shot.
+ const kicking=state.phase==='defendMove'?e.skipMove(state):state;
+ assert.equal(kicking.phase,'kick');
+ const received=e.applyKick(kicking,target.x,target.y);
+ assert.equal(received.ball.carrierId,receiverId);
+ const held=e.skipMove(received),defendingTeam=e.currentTeam(held);
+ const replies=position=>position.pieces.filter(p=>p.team===e.currentTeam(position)).flatMap(piece=>
+  e.legalMoves(position,piece.id).map(move=>({...move,pieceId:piece.id})));
+ assert.ok(replies(held).some(move=>move.type==='tackle'&&move.targetId===receiverId&&move.tackleProbability===1),
+  'an uncovered receiving ray is acceptable only with a real guaranteed tackle on the receiver');
+ const carries=[null,...e.legalMoves(received,receiverId)];
+ for(const carry of carries){
+  let attackPosition=carry?e.applyMove(received,receiverId,carry.x,carry.y):received;
+  if(attackPosition.phase==='attackMove')attackPosition=e.skipMove(attackPosition);
+  assert.equal(attackPosition.phase,'defendMove');
+  const answers=[null,...replies(attackPosition)];
+  assert.ok(answers.some(answer=>{
+   let defended=answer?e.applyMove(attackPosition,answer.pieceId,answer.x,answer.y,{roll:0}):attackPosition;
+   if(defended.attack===defendingTeam)return true;
+   if(defended.phase==='defendMove')defended=e.skipMove(defended);
+   return bestReactedShotThreat(defended)===0;
+  }),`holding or carrying to ${carry?`${carry.x},${carry.y}`:'the receiving square'} must have a legal reply that removes the shot`);
+ }
 }
 for(const difficulty of ['casual','tactical'])test(`${difficulty}: covers a straight throw from a bishop as a real receiving threat, either color`,()=>{
  const original=throwFixture();
@@ -115,6 +144,6 @@ for(const difficulty of ['casual','tactical'])test(`${difficulty}: covers a stra
   const before=afterReceiverShotThreat(s,target,receiverId);assert.ok(before>0.4,'the legal straight throw feeds a dangerous rook');
   const a=candidate.chooseAIAction(s,{difficulty});legalChoice(s,a);
   const next=act(s,a),after=afterReceiverShotThreat(next,target,receiverId);
-  assert.ok(after<before-0.05,'cover the receiving lane or the resulting shot rather than overlook the bishop straight throw');
+  if(!(after<before-0.05))verifyReceiverPress(next,target,receiverId);
  }
 });

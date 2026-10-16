@@ -114,8 +114,8 @@ for(const team of ['white','black']){
   });
 }
 
-test('version 12 normalization keeps already valid saved positions and declared shots intact',()=>{
+test('current normalization keeps already valid saved positions and declared shots intact',()=>{
   const state=fixture({type:'corner',origin:[4,4]});state.restart=null;const pending=E.applyKick(state,4,-1);pending.rulesVersion=11;
-  const before=clone(pending),normalized=E.normalizeGame(pending);assert.equal(normalized.rulesVersion,12);
+  const before=clone(pending),normalized=E.normalizeGame(pending);assert.equal(normalized.rulesVersion,13);
   assert.deepEqual(normalized.pendingShot,before.pendingShot);assert.deepEqual(normalized.pieces,before.pieces);assert.equal(normalized.randomState,before.randomState);assert.deepEqual(pending,before);
 });

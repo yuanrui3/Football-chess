@@ -227,7 +227,7 @@ test('version-nine migration infers an old loose pass only when the immediately 
     delete old.looseBallKickOrigin;
     const before = clone(old), migrated = normalizeGame(old);
     assert.deepEqual(old, before);
-    assert.equal(migrated.rulesVersion, 12);
+    assert.equal(migrated.rulesVersion, 13);
     assert.deepEqual(migrated.looseBallKickOrigin, {team, pieceId: id(team, 'Q')});
     assert.equal(migrated.randomState, old.randomState);
     assert.deepEqual(normalizeGame(migrated), migrated);
@@ -347,11 +347,11 @@ test('saved pending knight shots discard the old multiplier and use the shared m
     legacy.lastAction.shotModel = {...legacy.lastAction.shotModel, probability: 1, goalProbability: 1, scoringMultiplier: 2, modelVersion: 6};
     const before = clone(legacy), restored = normalizeGame(legacy);
     assert.deepEqual(legacy, before);
-    assert.equal(restored.rulesVersion, 12);
+    assert.equal(restored.rulesVersion, 13);
     assert.equal(restored.randomState, legacy.randomState);
     assert.equal(restored.pendingShot.shooterType, 'N', 'movement identity is retained independently of scoring strength');
     const details = shotModel(restored);
-    assert.equal(details.modelVersion, 8);
+    assert.equal(details.modelVersion, 9);
     assert.equal(details.scoringMultiplier, 1);
     assert.ok(details.goalProbability < 1);
     assert.deepEqual(restored.lastAction.shotModel, details);
@@ -361,7 +361,7 @@ test('saved pending knight shots discard the old multiplier and use the shared m
   }
 });
 
-test('shooting probability depends on geometry equally for all six piece types', () => {
+test('close-range shooting probabilities share the same curve for all six piece types', () => {
   for (const team of ['white', 'black']) for (const keeper of [[4, 0], [7, 0]]) {
     const state = fixture({team, suffix: 'N1', positions: {'white-N1': [3, 1], 'black-K': keeper}});
     const [x, y] = point(team, [4, -1]);
@@ -369,7 +369,10 @@ test('shooting probability depends on geometry equally for all six piece types',
     for (const type of ['K', 'Q', 'R', 'B', 'N', 'P']) {
       const changed = clone(state);
       changed.pieces.find(piece => piece.id === id(team, 'N1')).type = type;
-      assert.deepEqual(shotModel(changed, x, y), reference, `${type}: the shared physical scoring model grants no identity multiplier`);
+      const model = shotModel(changed, x, y);
+      assert.equal(model.shooterType, type);
+      assert.equal(model.distancePenaltyRate, type === 'R' ? .03 : .06);
+      assert.deepEqual({...model, shooterType: reference.shooterType, distancePenaltyRate: reference.distancePenaltyRate}, reference, `${type}: close-range probabilities share the same curve without an identity multiplier`);
     }
   }
 });

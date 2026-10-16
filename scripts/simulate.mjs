@@ -58,7 +58,13 @@ export function runMatch({rules=baseline,whitePolicy=rules,blackPolicy=rules,whi
     }
     if(action.type==='kick'&&carrier){
       const kick=rules.legalKicks(before).find(k=>k.x===action.x&&k.y===action.y);
-      if(kick?.goal){s.shots++;role.shots++;pendingShotRound=!before.restart&&before.phase!=='kickoff'&&!before.ballProgress?.excludeRelease;}
+      if(kick?.goal){
+        // An offside attacker in the box can stop the kick before a shot is
+        // declared. Count the actual attempt, rather than the submitted target.
+        if(state.phase==='keeperReact'&&result.type==='shotAttempt'){
+          s.shots++;role.shots++;pendingShotRound=!before.restart&&before.phase!=='kickoff'&&!before.ballProgress?.excludeRelease;
+        }
+      }
       else{
         s.passes++;role.passes++;
         if((kick?.distance||0)>10)s.longPasses++;

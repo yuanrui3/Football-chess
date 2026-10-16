@@ -10,9 +10,9 @@ export const STALLING_RULE = Object.freeze({rounds: 3, minProgress: 4});
 // Tunable board-game parameters, not fitted football statistics. Distance is in
 // board squares and time is in abstract units set by ballSpeed.
 export const SHOT_MODEL = Object.freeze({
-  version: 8, ballSpeed: 6,
-  targetBase: 0.98, distanceDecay: 0.018, distancePenaltyStart: 3, longShotDecay: 0.06, minOnTarget: 0.01, maxOnTarget: 0.98,
-  angleFloor: 0.65, angleWeight: 0.35,
+  version: 9, ballSpeed: 6,
+  targetBase: 0.98, distanceDecay: 0.018, distancePenaltyStart: 3, longShotDecay: 0.06, rookLongShotDecay: 0.03, minOnTarget: 0.01, maxOnTarget: 0.98,
+  angleFloor: 0.65, angleWeight: 0.35, postAngleFloor: 0.25, postAngleWeight: 0.75,
   boxRadius: 0.4, boxDiveSpeed: 1.3, boxReactionDelay: 0.15, boxMaxSave: 0.94,
   outsideRadius: 0, outsideDiveSpeed: 0, outsideReactionDelay: 0, outsideMaxSave: 0,
   readinessBase: 0.35, readinessTime: 0.45,
@@ -61,6 +61,8 @@ function looseKickOrigin(state) {
 }
 
 const freshProgress = state => ({team: state.attack, anchorY: state.ball.y, rounds: 0, pendingRelease: false, excludeRelease: false});
+export const isOwnHalf = (team, y) => Number.isInteger(y) && y >= 0 && y < BOARD_HEIGHT
+  && (team === 'white' ? y > 7 : team === 'black' && y < 7);
 const netProgress = (team, anchorY, y) => ((team === 'white' ? -1 : 1) * (y - anchorY)) || 0;
 function progressFor(state) {
   const tracker = state.ballProgress;
@@ -74,9 +76,10 @@ function progressFor(state) {
 // forward and passing back does not manufacture progress. The preview remains
 // useful during positioning without committing a new checkpoint too early.
 export function progressInfo(state) {
-  const tracker = progressFor(state);
+  const saved = progressFor(state);
+  const tracker = isOwnHalf(saved.team, saved.anchorY) ? saved : {...saved, anchorY: state.ball.y, rounds: 0};
   const progress = netProgress(tracker.team, tracker.anchorY, state.ball.y);
-  const active = !state.restart && !['kickoff', 'keeperReact', 'finished'].includes(state.phase) && !tracker.excludeRelease;
+  const active = isOwnHalf(tracker.team, state.ball.y) && !state.restart && !['kickoff', 'keeperReact', 'finished'].includes(state.phase) && !tracker.excludeRelease;
   const needed = Math.max(0, STALLING_RULE.minProgress - progress);
   return {team: tracker.team, rounds: tracker.rounds, roundsRemaining: STALLING_RULE.rounds - tracker.rounds,
     anchorY: tracker.anchorY, progress, needed, active, warning: active && tracker.rounds >= STALLING_RULE.rounds - 1 && needed > 0};
@@ -88,6 +91,10 @@ function completeProgressRound(state, source) {
   if (source.restart || source.phase === 'kickoff') { resetProgress(state); return; }
   const tracker = progressFor(source);
   if (tracker.team !== state.attack || tracker.excludeRelease) { resetProgress(state); return; }
+  // Only a completed round whose checkpoint and final ball are both in the
+  // possessing team's own half spends its allowance. Crossing midfield and
+  // passing back within that same round therefore cannot erase old rounds.
+  if (!isOwnHalf(tracker.team, tracker.anchorY) || !isOwnHalf(tracker.team, state.ball.y)) { resetProgress(state); return; }
   const progress = netProgress(tracker.team, tracker.anchorY, state.ball.y);
   if (progress >= STALLING_RULE.minProgress) { resetProgress(state); return; }
   const rounds = tracker.rounds + 1;
@@ -146,7 +153,7 @@ export function createGame({mode = 'solo', minutes = 10, kickoff = 'white', seed
     score: {white: 0, black: 0}, turn: 1, randomState: normalizeSeed(seed),
     log: [`${title(kickoff)} has kick-off. Kick the ball to begin.`], lastAction: null,
     mode, minutes: Number.isFinite(Number(minutes)) && Number(minutes) > 0 ? Number(minutes) : 10,
-    rulesVersion: 12, restart: null, offside: null, looseBallKickOrigin: null,
+    rulesVersion: 13, restart: null, offside: null, looseBallKickOrigin: null,
     ballProgress: {team: kickoff, anchorY: carrier.y, rounds: 0, pendingRelease: false, excludeRelease: false}
   };
 }
@@ -390,7 +397,14 @@ export function normalizeGame(state) {
     }
     next.releaseReason = null;
   }
-  next.ballProgress = progressFor(next);
+  const savedProgress = progressFor(next);
+  // Field-wide progress counters from older saves cannot distinguish a
+  // completed attacking-half round from a temporary dribble across halfway.
+  // Give that old ruleset one fresh checkpoint; current saves/Undo keep theirs.
+  // An in-flight forced release still retains its restart/kickoff exclusion.
+  next.ballProgress = (Number(state.rulesVersion) || 0) < 13
+    ? {...freshProgress(next), pendingRelease: savedProgress.pendingRelease, excludeRelease: savedProgress.excludeRelease}
+    : savedProgress;
   next.looseBallKickOrigin = looseKickOrigin(next);
   // Old pending shots already have their kick-time snapshot. Knights cannot
   // move during keeper reaction, so their saved box squares are still exact.
@@ -407,7 +421,7 @@ export function normalizeGame(state) {
     const details = shotModel(next);
     next.lastAction = {...next.lastAction, probability: details.probability, shotModel: details};
   }
-  next.rulesVersion = 12;
+  next.rulesVersion = 13;
   return next;
 }
 
@@ -439,6 +453,8 @@ export function shotModel(state, x = state?.pendingShot?.x, y = state?.pendingSh
   const scoringTeam = goalAt(x, y) || (GOAL_FILES.includes(x) && y === 0 ? 'white' : GOAL_FILES.includes(x) && y === BOARD_HEIGHT - 1 ? 'black' : null);
   const pieces = Array.isArray(state?.pieces) ? state.pieces : [];
   const carrier = pieces.find(p => p.id === state?.ball?.carrierId);
+  const declaredShooter = pieces.find(p => p.id === state?.pendingShot?.shooterId);
+  const shooterType = [state?.pendingShot?.shooterType, declaredShooter?.type, carrier?.type].find(type => TYPES.includes(type)) || null;
   // A reaction moves only the keeper; the declared shot's origin stays fixed.
   const source = state?.pendingShot?.from || carrier || state?.ball;
   const validOrigin = source && inside(source.x, source.y);
@@ -447,6 +463,7 @@ export function shotModel(state, x = state?.pendingShot?.x, y = state?.pendingSh
   const invalid = {
     probability: 0, goalProbability: 0, baseGoalProbability: 0, scoringMultiplier: 1, saveProbability: 0, missProbability: 1,
     onTargetProbability: 0, baseOnTargetProbability: 0, saveGivenOnTarget: 0, cornerProbability: 0, caughtSaveProbability: 0, arrivalSpeed: 0, keeperStretch: 0, parryGivenSave: 0, distance: 0, shotAngleDegrees: 0,
+    goalDepth: 0, goalOpeningDegrees: 0, centralGoalOpeningDegrees: 0, goalOpeningRatio: 0, postAngleFactor: 0, shooterType, distancePenaltyRate: 0,
     keeperPathDistance: 0, timeToKeeper: 0, reach: 0, keeperInBox: false,
     closestPoint: {...origin}, keeperPosition: null, origin, target, modelVersion: SHOT_MODEL.version
   };
@@ -459,9 +476,19 @@ export function shotModel(state, x = state?.pendingShot?.x, y = state?.pendingSh
   if (!Number.isFinite(length) || length <= 0) return invalid;
   const ux = dx / length, uy = dy / length;
   const angleCos = clamp(Math.abs(dy) / length, 0, 1);
-  // Preserve close finishes, then penalize longer shots increasingly strongly.
+  // Compare the visible goal opening with a central shooter at the same
+  // perpendicular depth. This penalizes tight post-side angles without
+  // imposing another range penalty on central midfield attempts.
+  const goalDepth = Math.abs(dy), leftPost = GOAL_FILES[0] - 0.5, rightPost = GOAL_FILES.at(-1) + 0.5;
+  const goalOpening = Math.atan2((rightPost - leftPost) * goalDepth, goalDepth ** 2 + (leftPost - origin.x) * (rightPost - origin.x));
+  const centralGoalOpening = 2 * Math.atan2((rightPost - leftPost) / 2, goalDepth);
+  const goalOpeningRatio = clamp(centralGoalOpening > 0 ? goalOpening / centralGoalOpening : 0, 0, 1);
+  const postAngleFactor = SHOT_MODEL.postAngleFloor + SHOT_MODEL.postAngleWeight * goalOpeningRatio;
+  const distancePenaltyRate = shooterType === 'R' ? SHOT_MODEL.rookLongShotDecay : SHOT_MODEL.longShotDecay;
+  // Rooks lose less accuracy beyond three squares; their close-shot curve is
+  // shared with every other piece. There is no flat scoring multiplier.
   const excessDistance = Math.max(0, length - SHOT_MODEL.distancePenaltyStart);
-  const onTarget = clamp(SHOT_MODEL.targetBase * Math.exp(-SHOT_MODEL.distanceDecay * length - SHOT_MODEL.longShotDecay * excessDistance ** 2) * (SHOT_MODEL.angleFloor + SHOT_MODEL.angleWeight * angleCos), SHOT_MODEL.minOnTarget, SHOT_MODEL.maxOnTarget);
+  const onTarget = clamp(SHOT_MODEL.targetBase * Math.exp(-SHOT_MODEL.distanceDecay * length - distancePenaltyRate * excessDistance ** 2) * (SHOT_MODEL.angleFloor + SHOT_MODEL.angleWeight * angleCos) * postAngleFactor, SHOT_MODEL.minOnTarget, SHOT_MODEL.maxOnTarget);
   const rawProjection = keeper ? (keeper.x - origin.x) * ux + (keeper.y - origin.y) * uy : 0;
   const projection = clamp(rawProjection, 0, length);
   const closestPoint = {x: origin.x + projection * ux, y: origin.y + projection * uy};
@@ -478,8 +505,7 @@ export function shotModel(state, x = state?.pendingShot?.x, y = state?.pendingSh
   const readiness = maxSave * (1 - Math.exp(-(SHOT_MODEL.readinessBase + timeToKeeper) / SHOT_MODEL.readinessTime));
   const saveGivenOnTarget = keeperInBox && reach > 0 && rawProjection >= 0 ? clamp(readiness * Math.exp(-((clearance / reach) ** 2)), 0, 1) : 0;
   const baseGoalProbability = onTarget * (1 - saveGivenOnTarget);
-  // Every piece uses the same geometry-based finishing model. Knights keep
-  // their jumping kick pattern but no longer receive a scoring multiplier.
+  // Knights keep their jumping kick pattern without a scoring multiplier.
   const scoringMultiplier = 1, goalProbability = baseGoalProbability;
   const saveProbability = onTarget * saveGivenOnTarget, missProbability = 1 - onTarget;
   // All shots currently share launch power. Travel to the keeper reduces the
@@ -493,6 +519,7 @@ export function shotModel(state, x = state?.pendingShot?.x, y = state?.pendingSh
     probability: goalProbability, goalProbability, baseGoalProbability, scoringMultiplier, saveProbability,
     missProbability, baseOnTargetProbability: onTarget, cornerProbability, caughtSaveProbability: saveProbability - cornerProbability, arrivalSpeed, keeperStretch, parryGivenSave, onTargetProbability: goalProbability + saveProbability, saveGivenOnTarget: goalProbability + saveProbability > 0 ? saveProbability / (goalProbability + saveProbability) : 0,
     distance: length, shotAngleDegrees: Math.acos(angleCos) * 180 / Math.PI,
+    goalDepth, goalOpeningDegrees: goalOpening * 180 / Math.PI, centralGoalOpeningDegrees: centralGoalOpening * 180 / Math.PI, goalOpeningRatio, postAngleFactor, shooterType, distancePenaltyRate,
     keeperPathDistance: clearance, timeToKeeper, reach, keeperInBox,
     closestPoint, keeperPosition: keeper, origin, target, modelVersion: SHOT_MODEL.version
   };
@@ -841,7 +868,8 @@ function reactedShotChance(state, kick) {
 
 function progressRank(state, team, y, completesRound = false) {
   const tracker = progressFor(state);
-  if (tracker.team !== team || state.restart || state.phase === 'kickoff' || tracker.excludeRelease) return 0;
+  if (tracker.team !== team || state.restart || state.phase === 'kickoff' || tracker.excludeRelease
+    || !isOwnHalf(team, y) || !isOwnHalf(team, tracker.anchorY)) return 0;
   const direction = team === 'white' ? -1 : 1;
   const net = direction * (y - tracker.anchorY), advance = direction * (y - state.ball.y);
   const urgency = tracker.rounds + 1;
@@ -856,7 +884,7 @@ function attackingShotRank(state, kick, team) {
   const chance = reactedShotChance(state, kick);
   // A token attempt from the other end of the pitch is usually a giveaway,
   // even when it clears the progress clock. Keep genuine finishes attractive.
-  return chance * 1400 - (chance < 0.04 ? 850 : 90);
+  return chance * 2000 - (chance < 0.04 ? 850 : 90);
 }
 
 // Public geometry, rather than geometric proximity alone, decides who can
@@ -1004,9 +1032,10 @@ function moveValue(state, projected, piece, move, team, beforeThreat) {
     value += (distance(piece, state.ball) - distance(afterPiece, state.ball)) * (piece.type === 'K' ? 1 : 16);
   } else if (carrier?.team === team) {
     if (carrier.id === piece.id) {
-      value += forward * 11 + tacticalShots(projected, team, true) * 650;
+      const originalCarrier = state.pieces.find(p => p.id === piece.id);
+      value += forward * 11 + (tacticalShots(projected, team, true) - tacticalShots(state, team, true)) * 650;
       value += progressRank(state, team, move.y);
-      value -= tacticalTackleRisk(projected, carrier) * 680;
+      value += (tacticalTackleRisk(state, originalCarrier) - tacticalTackleRisk(projected, carrier)) * 680;
     } else {
       const originalCarrier = state.pieces.find(p => p.id === state.ball.carrierId);
       value += supportPotential(projected, afterPiece, carrier) - supportPotential(state, piece, originalCarrier);
@@ -1042,11 +1071,18 @@ function chooseCasualAction(state) {
     return best;
   }
   if (['kick', 'kickoff', 'keeperRelease'].includes(state.phase)) {
-    let best = null, value = -Infinity;
+    let best = null, value = -Infinity, finish = null, finishChance = 0.45;
     for (const kick of legalKicks(state)) {
       const candidateValue = kickValue(state, kick, team);
       if (candidateValue > value) { best = kick; value = candidateValue; }
+      // A strong legal finish is the purpose of the build-up. Do not pass it
+      // up for a positional reward; the keeper's best reaction is included.
+      if (kick.goal === team && !kick.offside) {
+        const chance = reactedShotChance(state, kick);
+        if (chance >= finishChance) { finish = kick; finishChance = chance; }
+      }
     }
+    if (finish) best = finish;
     return best ? {type: 'kick', x: best.x, y: best.y} : {type: 'skip'};
   }
   if (!positionalTurn(state)) return {type: 'skip'};
@@ -1068,11 +1104,10 @@ function chooseCasualAction(state) {
 
 export const AI_DIFFICULTIES = Object.freeze(['casual', 'tactical']);
 
-// Tactical uses a small expectiminimax tree, with the real phase machine and
-// movement budgets. A reply belongs to the team whose turn it actually is;
-// spending a free pawn move never pretends to end that team's normal move.
-// These fixed limits make a replay independent of CPU speed or worker timing.
-const AI_SEARCH = Object.freeze({depth: 6, roots: 9, budgetPerRoot: 90});
+// Tactical searches the real phase machine, including consecutive actions by
+// one side and public chance outcomes. Work is bounded by deterministic nodes,
+// not elapsed time or the live random seed.
+const AI_SEARCH = Object.freeze({depth: 8, roots: 9, nodes: 1400, extensions: 3});
 
 // Inspect only goal rays when ranking positions. Building every ordinary pass
 // (and its complete animation path) here would dominate the search cost.
@@ -1122,7 +1157,7 @@ function looseBallValue(state, team) {
   const sides = Object.fromEntries(TEAMS.map(side => {
     const players = state.pieces.filter(piece => piece.team === side && allowedSquare(piece, state.ball.x, state.ball.y));
     const nearest = players.length ? Math.min(...players.map(piece => distance(piece, state.ball))) : 30;
-    const collectors = players.filter(piece => canCollect(state, piece, state.ball));
+    const collectors = players.filter(piece => !flagged(state, piece) && canCollect(state, piece, state.ball));
     return [side, {nearest, collectors}];
   }));
   const actor = currentTeam(state), budget = budgetFor(state);
@@ -1146,13 +1181,13 @@ function tacticalPositionValue(state, team) {
   const kickNow = ['kick', 'kickoff', 'keeperRelease', 'keeperReact'].includes(state.phase);
   const canEscape = state.phase === 'attackMove' && !budgetFor(state).dribbleUsed && !state.restart;
   const challengePending = state.phase === 'attackMove' || state.phase === 'defendMove' && !budgetFor(state).normalUsed;
-  let possession = 215 + (BOARD_HEIGHT - goalDistance(carrier.team, carrier.y)) * 7;
+  let possession = 215 + (BOARD_HEIGHT - Math.max(3, goalDistance(carrier.team, carrier.y))) * 7;
   possession += threat * 650 - risk * (kickNow || !challengePending ? 0 : canEscape ? 65 : 520);
   possession += carrier.type === 'N' ? 24 : carrier.type === 'K' ? -20 : 0;
   possession += (5.5 - Math.abs(carrier.x - 5.5)) * 2;
-  if (!state.restart && state.phase !== 'kickoff') {
+  if (!state.restart && state.phase !== 'kickoff' && isOwnHalf(carrier.team, carrier.y)) {
     const tracker = progressFor(state);
-    if (tracker.team === carrier.team && !tracker.excludeRelease) {
+    if (tracker.team === carrier.team && !tracker.excludeRelease && isOwnHalf(carrier.team, tracker.anchorY)) {
       const net = (carrier.team === 'white' ? -1 : 1) * (carrier.y - tracker.anchorY);
       possession += Math.min(STALLING_RULE.minProgress, net) * (3 + tracker.rounds * 3);
       if (net < STALLING_RULE.minProgress) possession -= tracker.rounds * 40;
@@ -1161,6 +1196,25 @@ function tacticalPositionValue(state, team) {
   const support = state.pieces.filter(piece => piece.team === carrier.team && piece.id !== carrier.id && piece.type !== 'K')
     .map(piece => distance(piece, carrier)).sort((a, b) => a - b).slice(0, 2);
   possession += support.reduce((sum, length) => sum + Math.max(0, 5 - length) * 3, 0);
+  // A nearby teammate only helps if the ball can actually reach them. Reward
+  // several onside outlets and support on both flanks, with diminishing returns.
+  const outlets = state.pieces.filter(piece => piece.team === carrier.team && piece.id !== carrier.id && piece.type !== 'K'
+    && onsideAtKick(state, piece, carrier) && passLane(state, carrier, piece));
+  const outletAccuracy = length => state.restart?.type === 'throwIn' ? throwAccuracy(length) : passAccuracy(length);
+  possession += Math.min(3, outlets.reduce((sum, piece) => sum + outletAccuracy(distance(piece, carrier)), 0)) * 12;
+  if (outlets.some(piece => piece.x < carrier.x) && outlets.some(piece => piece.x > carrier.x)) possession += 10;
+  // An end-line run needs a finish or a central outlet. Reaching the deepest
+  // row alone should not outweigh an attack that can actually reach the goal.
+  const centralOutlet = outlets.some(piece => Math.abs(piece.x - 5.5) <= 2.5 && goalDistance(piece.team, piece.y) <= 6);
+  possession -= Math.max(0, Math.abs(carrier.x - 5.5) - 2) * Math.max(0, 5 - goalDistance(carrier.team, carrier.y))
+    * (threat > 0.08 || centralOutlet ? 1 : 4);
+  // Defenders between a central carrier and their own goal provide cover even
+  // before an immediate shot exists. This also values a screen behind a press.
+  const cover = state.pieces.filter(piece => piece.team !== carrier.team && piece.type !== 'K'
+    && Math.abs(piece.x - carrier.x) <= 2
+    && (carrier.team === 'white' ? piece.y < carrier.y : piece.y > carrier.y)
+    && distance(piece, carrier) <= 5).length;
+  possession -= Math.min(2, cover) * 12;
   value += sign * possession;
   for (const keeper of state.pieces.filter(piece => piece.type === 'K')) {
     const positioning = keeperHomeValue(keeper);
@@ -1169,8 +1223,38 @@ function tacticalPositionValue(state, team) {
   return value;
 }
 
-function tacticalMoveRank(state, piece, move, beforeThreat) {
-  return moveValue(state, projectedMove(state, piece, move), piece, move, piece.team, beforeThreat);
+function tacticalMoveRank(state, piece, move, beforeThreat, fast = false, threats = []) {
+  const projected = projectedMove(state, piece, move);
+  if (!fast) return moveValue(state, projected, piece, move, piece.team, beforeThreat);
+  const carrier = projected.pieces.find(p => p.id === projected.ball.carrierId), moved = projected.pieces.find(p => p.id === piece.id);
+  if (flagged(state, piece) && (move.type === 'tackle' || !state.ball.carrierId && state.ball.x === move.x && state.ball.y === move.y)) return -12000;
+  const home = piece.type === 'K' ? keeperHomeValue(moved) - keeperHomeValue(piece) : 0;
+  if (move.type === 'tackle') return 12000 * (move.tackleProbability ?? 1) - tacticalTackleRisk(projected, carrier) * 120;
+  if (!state.ball.carrierId) return projected.ball.carrierId === piece.id
+    ? 1000 + tacticalShots(projected, piece.team, true) * 600 - tacticalTackleRisk(projected, moved) * 160
+    : (distance(piece, state.ball) - distance(moved, state.ball)) * 12 + home;
+  if (carrier?.team === piece.team) {
+    if (carrier.id === piece.id) return (Math.max(3, goalDistance(piece.team, piece.y)) - Math.max(3, goalDistance(piece.team, move.y))) * 10
+      + (tacticalShots(projected, piece.team, true) - tacticalShots(state, piece.team, true)) * 700
+      + (tacticalTackleRisk(state, piece) - tacticalTackleRisk(projected, carrier)) * 680 + progressRank(state, piece.team, move.y);
+    const original = state.pieces.find(p => p.id === carrier.id);
+    return supportPotential(projected, moved, carrier) - supportPotential(state, piece, original)
+      + (tacticalTackleRisk(state, original) - tacticalTackleRisk(projected, carrier)) * 450
+      + home;
+  }
+  if (!carrier) return 0;
+  // Inner search orders defensive moves with the same public threats, using
+  // lane geometry instead of recomputing every receiving shot for every move.
+  let covered = 0;
+  for (const threat of threats) {
+    const receiver = projected.pieces.find(p => p.id === threat.pieceId);
+    const occupant = pieceAt(projected, threat.x, threat.y);
+    if (!receiver || occupant && occupant.id !== receiver.id || !onsideAtKick(projected, receiver, carrier) || !passLane(projected, carrier, threat)
+      || threat.collect && !canCollect(projected, receiver, threat)) covered += threat.probability * threat.accuracy;
+  }
+  return (beforeThreat - tacticalShots(projected, carrier.team, true)) * 1300 + covered * 650
+    + (distance(piece, carrier) - distance(moved, carrier)) * 3
+    + (canTackle(projected, moved, carrier) ? 15 : 0) + home;
 }
 
 function tacticalKickRank(state, kick, team) {
@@ -1189,12 +1273,13 @@ function rankedTacticalActions(state, width, root = false) {
   } else if (positionalTurn(state)) {
     const carrier = state.pieces.find(piece => piece.id === state.ball.carrierId);
     const beforeThreat = carrier && carrier.team !== team ? tacticalShots(state, carrier.team, true) : 0;
+    const threats = !root && carrier && carrier.team !== team ? passThreats(state, carrier).slice(0, 3) : [];
     candidates.push({action: {type: 'skip'}, rank: -0.5, category: 'skip'});
     for (const piece of state.pieces) if (piece.team === team) {
       for (const freePawn of [false, true]) for (const move of legalMoves(state, piece.id, {freePawn})) {
         const carrying = piece.id === carrier?.id;
         const safeDribble = carrying && !tacticalTackleRisk(projectedMove(state, piece, move), {...piece, x: move.x, y: move.y});
-        candidates.push({action: {type: 'move', pieceId: piece.id, x: move.x, y: move.y, freePawn}, rank: tacticalMoveRank(state, piece, move, beforeThreat) + (freePawn ? 0.01 : 0), category: freePawn ? 'pawn' : move.type === 'tackle' ? 'tackle' : carrying ? safeDribble ? 'safeDribble' : 'dribble' : 'support'});
+        candidates.push({action: {type: 'move', pieceId: piece.id, x: move.x, y: move.y, freePawn}, rank: tacticalMoveRank(state, piece, move, beforeThreat, !root, threats) + (freePawn ? 0.01 : 0), category: freePawn ? 'pawn' : move.type === 'tackle' ? 'tackle' : carrying ? safeDribble ? 'safeDribble' : 'dribble' : 'support'});
       }
     }
   }
@@ -1203,7 +1288,7 @@ function rankedTacticalActions(state, width, root = false) {
   // A greedy shot-blocking rank must never prune every possession-winning
   // reply. Likewise, consider an actual shot alongside a pass in kicking turns.
   if (!root && width > 1) {
-    const categories = positionalTurn(state) ? ['tackle'] : ['shot', 'pass'];
+    const categories = positionalTurn(state) ? ['tackle', 'safeDribble', 'support'] : ['shot', 'pass'];
     shortlist = [];
     for (const category of categories) {
       const candidate = candidates.find(entry => entry.category === category);
@@ -1283,48 +1368,164 @@ function tacticalSuccessors(state, action) {
   return [success, ...misses];
 }
 
-function tacticalSearch(state, team, depth, budget) {
-  if (depth <= 0 || budget <= 0 || state.phase === 'finished') {
-    // Never leave a declared shot valued as if its shooter still possessed the
-    // ball. Resolve the best keeper response even at a horizon boundary.
-    if (state.phase === 'keeperReact') {
-      const reaction = chooseCasualAction(state);
-      return tacticalSuccessors(state, reaction).reduce((sum, outcome) => sum + outcome.probability * tacticalPositionValue(outcome.state, team), 0);
+// The table belongs to one decision. Include every rule-relevant field: two
+// identical boards can have different legal futures because of spent actions,
+// offside, self-pass collection, an indirect restart, or the progress deadline.
+function tacticalStateKey(state) {
+  return JSON.stringify([state.pieces.map(p => [p.id, p.team, p.type, p.x, p.y]), state.ball, state.attack, state.phase,
+    budgetFor(state), state.score, state.restart, state.offside, state.pendingShot, state.ballProgress,
+    state.looseBallKickOrigin, state.releaseReason, state.rulesVersion, state.turn]);
+}
+const tacticalActionKey = action => JSON.stringify([action.type, action.pieceId, action.x, action.y, !!action.freePawn]);
+const SEARCH_ABORT = Symbol('Tactical search allowance exhausted');
+
+function tacticalUnsettled(state) {
+  if (state.phase === 'keeperReact' || state.phase === 'keeperRelease' || state.phase === 'kick') return true;
+  const carrier = state.pieces.find(p => p.id === state.ball.carrierId);
+  if (!carrier) return positionalTurn(state) && state.pieces.some(piece => piece.team === currentTeam(state) && !flagged(state, piece)
+    && canCollect(state, piece, state.ball) && (!budgetFor(state).normalUsed || piece.type === 'P' && !budgetFor(state).pawnUsed));
+  if (state.restart || state.phase === 'kickoff') return false;
+  // Complete a live defensive turn through its pending kick, rather than
+  // compare an advanced carrier with an attack whose kick has already settled.
+  if (state.phase === 'defendMove') return true;
+  if (state.phase === 'attackMove' && Object.values(budgetFor(state)).some(Boolean)) return true;
+  if (positionalTurn(state) && tacticalTackleRisk(state, carrier)) {
+    if (state.phase === 'defendMove' && !budgetFor(state).normalUsed) return true;
+    if (state.phase === 'attackMove' && (!budgetFor(state).dribbleUsed || !budgetFor(state).normalUsed)) return true;
+  }
+  return tacticalShots(state, carrier.team, true) > 0.08;
+}
+
+// Public diagnostics make budgets, completed iterations and cache equivalence
+// reproducible in tests and simulations. The controller still receives just an
+// action through chooseAIAction; no analysis state enters a saved match.
+export function analyzeTacticalAction(state, {maxDepth = AI_SEARCH.depth, nodeLimit = AI_SEARCH.nodes, useCache = true, extensions = true} = {}) {
+  maxDepth = clamp(Math.floor(Number(maxDepth) || 1), 1, 12);
+  nodeLimit = clamp(Math.floor(Number(nodeLimit) || 1), 1, 50000);
+  const stats = {nodes: 0, completedDepth: 0, cacheHits: 0, extensions: 0, cutoffs: 0, aborted: false};
+  if (!state || state.phase === 'finished') return {action: {type: 'skip'}, value: 0, stats, line: []};
+  const source = planningState(state), team = currentTeam(source);
+  const table = new Map(), ordering = new Map(), actionsCache = new Map(), values = new Map(), successors = new Map(), keys = new WeakMap();
+  let cachedSuccessorCount = 0;
+  const keyFor = position => {
+    if (!keys.has(position)) keys.set(position, tacticalStateKey(position));
+    return keys.get(position);
+  };
+  const evaluate = position => {
+    const key = keyFor(position);
+    if (useCache && values.has(key)) return values.get(key);
+    const value = tacticalPositionValue(position, team);
+    if (useCache) values.set(key, value);
+    return value;
+  };
+  const actionsFor = (position, root = false) => {
+    const budget = budgetFor(position), owner = position.pieces.find(p => p.id === position.ball.carrierId);
+    const pawnOnly = positionalTurn(position) && budget.normalUsed
+      && (position.phase !== 'attackMove' || !!position.restart || !owner || budget.dribbleUsed);
+    const width = root ? AI_SEARCH.roots : position.phase === 'keeperReact' || pawnOnly ? 1
+      : ['kick', 'kickoff', 'keeperRelease'].includes(position.phase) ? 2 : 3;
+    const key = `${keyFor(position)}|${root ? 'root' : 'inner'}`;
+    if (useCache && actionsCache.has(key)) return actionsCache.get(key);
+    const actions = rankedTacticalActions(position, width, root);
+    if (useCache) actionsCache.set(key, actions);
+    return actions;
+  };
+  const outcomesFor = (position, action) => {
+    const key = `${keyFor(position)}|${tacticalActionKey(action)}`;
+    if (useCache && successors.has(key)) return successors.get(key);
+    const outcomes = tacticalSuccessors(position, action);
+    if (useCache && cachedSuccessorCount + outcomes.length <= 2000) {
+      successors.set(key, outcomes); cachedSuccessorCount += outcomes.length;
     }
-    return tacticalPositionValue(state, team);
+    return outcomes;
+  };
+  const expand = () => {
+    if (stats.nodes >= nodeLimit) throw SEARCH_ABORT;
+    stats.nodes++;
+  };
+  function search(position, depth, extra, alpha = -Infinity, beta = Infinity, root = false) {
+    const positionKey = keyFor(position), cacheKey = `${positionKey}|${Math.max(0, depth)}|${extra}|${root ? 'root' : 'inner'}`;
+    const originalAlpha = alpha, originalBeta = beta;
+    const cached = useCache ? table.get(cacheKey) : null;
+    if (cached) {
+      stats.cacheHits++;
+      if (cached.flag === 'exact') return cached;
+      if (cached.flag === 'lower') alpha = Math.max(alpha, cached.value);
+      else beta = Math.min(beta, cached.value);
+      if (alpha >= beta) return cached;
+    }
+    expand();
+    const forcedShot = position.phase === 'keeperReact';
+    const extending = depth <= 0 && (forcedShot || extra > 0 && tacticalUnsettled(position));
+    if (position.phase === 'finished' || depth <= 0 && !extending) {
+      const result = {value: evaluate(position), action: null, line: [], flag: 'exact'};
+      if (useCache) table.set(cacheKey, result);
+      return result;
+    }
+    if (extending) stats.extensions++;
+    const candidates = actionsFor(position, root);
+    if (!candidates.length) return {value: evaluate(position), action: null, line: [], flag: 'exact'};
+    // Ordering changes the order searched, never which moves survive the beam.
+    // Preserve the original rank index for equal-score tie breaks.
+    const preferred = ordering.get(positionKey);
+    const ordered = candidates.map((entry, index) => ({...entry, index}));
+    ordered.sort((a, b) => Number(tacticalActionKey(b.action) === preferred) - Number(tacticalActionKey(a.action) === preferred) || a.index - b.index);
+    const maximizing = currentTeam(position) === team;
+    let bestValue = maximizing ? -Infinity : Infinity, bestIndex = Infinity, bestAction = null, bestLine = [];
+    for (const {action, index} of ordered) {
+      const outcomes = outcomesFor(position, action);
+      let value = 0, likely = null, continuation = [], deterministicChild = null;
+      for (const outcome of outcomes) {
+        // A weighted chance result must average exact children. An ordinary
+        // alpha/beta bound on one random outcome is not an expectation bound.
+        const child = search(outcome.state, depth - 1, extending ? Math.max(0, extra - 1) : extra,
+          outcomes.length === 1 ? alpha : -Infinity, outcomes.length === 1 ? beta : Infinity);
+        value += outcome.probability * child.value;
+        if (outcomes.length === 1) deterministicChild = child;
+        if (!likely || outcome.probability > likely.probability) { likely = outcome; continuation = child.line; }
+      }
+      // A fail-low/high bound equal to the incumbent is not proof of a tie.
+      // Resolve it before a canonical earlier move can replace that incumbent.
+      if (index < bestIndex && Math.abs(value - bestValue) <= 1e-8 && deterministicChild && deterministicChild.flag !== 'exact') {
+        const child = search(outcomes[0].state, depth - 1, extending ? Math.max(0, extra - 1) : extra);
+        value = child.value; continuation = child.line;
+      }
+      if (bestAction === null || (maximizing ? value > bestValue + 1e-8 : value < bestValue - 1e-8)
+        || Math.abs(value - bestValue) <= 1e-8 && index < bestIndex) {
+        bestValue = value; bestIndex = index; bestAction = action;
+        bestLine = [{action, team: currentTeam(position), phase: position.phase}, ...continuation];
+      }
+      if (maximizing) alpha = Math.max(alpha, bestValue); else beta = Math.min(beta, bestValue);
+      if (alpha >= beta) { stats.cutoffs++; break; }
+    }
+    const flag = bestValue <= originalAlpha ? 'upper' : bestValue >= originalBeta ? 'lower' : 'exact';
+    const result = {value: bestValue, action: bestAction, line: bestLine, flag};
+    if (useCache) table.set(cacheKey, result);
+    ordering.set(positionKey, tacticalActionKey(bestAction));
+    return result;
   }
-  const pawnOnly = positionalTurn(state) && budgetFor(state).normalUsed && !positionActions(state).dribbleAvailable;
-  // Keep a principal continuation when the remaining budget is small, so the
-  // tree still reaches replies, forced keeper releases, and shot resolution.
-  const width = state.phase === 'keeperReact' || pawnOnly || budget < depth * 3 ? 1 : ['kick', 'kickoff', 'keeperRelease'].includes(state.phase) ? 2 : 3;
-  const actions = rankedTacticalActions(state, width);
-  if (!actions.length) return tacticalPositionValue(state, team);
-  const childrenBudget = Math.max(0, Math.floor((budget - 1) / actions.length) - 1);
-  const maximizing = currentTeam(state) === team;
-  let best = maximizing ? -Infinity : Infinity;
-  for (const {action} of actions) {
-    const outcomes = tacticalSuccessors(state, action);
-    const value = outcomes.reduce((sum, outcome) => {
-      const outcomeBudget = Math.max(0, Math.floor(childrenBudget * outcome.probability) - (outcomes.length > 1 ? 1 : 0));
-      return sum + outcome.probability * tacticalSearch(outcome.state, team, depth - 1, outcomeBudget);
-    }, 0);
-    best = maximizing ? Math.max(best, value) : Math.min(best, value);
+  const candidates = actionsFor(source, true);
+  let completed = {action: candidates[0]?.action || {type: 'skip'}, value: evaluate(source), line: []};
+  // Keep the actual goalkeeper policy common to both levels.
+  if (source.phase === 'keeperReact') {
+    const action = chooseCasualAction(source);
+    return {action, value: outcomesFor(source, action).reduce((sum, outcome) => sum + outcome.probability * evaluate(outcome.state), 0),
+      stats, line: [{action, team, phase: source.phase}]};
   }
-  return best;
+  for (let depth = 1; depth <= maxDepth; depth++) {
+    try {
+      const result = search(source, depth, extensions ? AI_SEARCH.extensions : 0, -Infinity, Infinity, true);
+      completed = result; stats.completedDepth = depth;
+    } catch (error) {
+      if (error !== SEARCH_ABORT) throw error;
+      stats.aborted = true; break;
+    }
+  }
+  return {action: completed.action, value: completed.value, stats, line: completed.line};
 }
 
 function chooseTacticalAction(state) {
-  if (!state || state.phase === 'finished') return {type: 'skip'};
-  if (state.phase === 'keeperReact') return chooseCasualAction(state);
-  const source = planningState(state), team = currentTeam(source);
-  const actions = rankedTacticalActions(source, AI_SEARCH.roots, true);
-  let best = {type: 'skip'}, bestValue = -Infinity;
-  for (const {action} of actions) {
-    const outcomes = tacticalSuccessors(source, action);
-    const value = outcomes.reduce((sum, outcome) => sum + outcome.probability * tacticalSearch(outcome.state, team, AI_SEARCH.depth - 1, Math.floor(AI_SEARCH.budgetPerRoot * outcome.probability)), 0);
-    if (value > bestValue + 1e-8) { best = action; bestValue = value; }
-  }
-  return best;
+  return analyzeTacticalAction(state).action;
 }
 
 export function chooseAIAction(state, {difficulty = 'casual'} = {}) {

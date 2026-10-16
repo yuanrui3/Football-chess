@@ -136,8 +136,8 @@ test('sideways possession is allowed twice and called only on the third complete
 test('three rows fails at the deadline while four rows succeeds and starts a new window, mirrored', () => {
   for (const team of ['white','black']) for (const rows of [3,4]) {
     const transform = pair => team === 'white' ? pair : mirror(pair);
-    const target = transform([2,10 - rows]);
-    const initial = fixture({team,phase:'kick',rounds:2,positions:{[`${team}-R2`]:target}});
+    const target = transform([2,12 - rows]);
+    const initial = fixture({team,phase:'kick',rounds:2,positions:{[`${team}-R1`]:transform([2,12]),[`${team}-R2`]:target}});
     const result = kick(initial,...target);
     if (rows === 3) assertStall(result,team);
     else {
@@ -152,19 +152,19 @@ test('small advances accumulate over three rounds, and reaching four early refre
   for (const team of ['white','black']) {
     const transform = pair => team === 'white' ? pair : mirror(pair);
     let state = fixture({team, positions:{
-      [`${team}-R2`]:transform([2,9]),[`${team}-Q`]:transform([2,8]),[`${team}-N1`]:transform([2,6]),
+      [`${team}-R1`]:transform([2,13]),[`${team}-R2`]:transform([2,12]),[`${team}-Q`]:transform([2,11]),[`${team}-N1`]:transform([2,9]),
     }});
-    for (const [round,target] of [[1,[2,9]],[2,[2,8]]]) {
+    for (const [round,target] of [[1,[2,12]],[2,[2,11]]]) {
       state = complete(state,...transform(target));
       assert.equal(state.ballProgress.rounds,round);
-      assert.equal(state.ballProgress.anchorY,transform([2,10])[1]);
+      assert.equal(state.ballProgress.anchorY,transform([2,13])[1]);
       assert.equal(engine.progressInfo(state).progress,round);
     }
-    state = complete(state,...transform([2,6]));
+    state = complete(state,...transform([2,9]));
     assert.equal(state.restart,null);
     freshProgress(state);
-    const early = fixture({team,phase:'kick',positions:{[`${team}-R2`]:transform([2,6])}});
-    const progressed = kick(early,...transform([2,6]));
+    const early = fixture({team,phase:'kick',positions:{[`${team}-R1`]:transform([2,13]),[`${team}-R2`]:transform([2,9])}});
+    const progressed = kick(early,...transform([2,9]));
     freshProgress(progressed);
   }
 });
@@ -466,7 +466,7 @@ test('out-of-bounds and offside calls supersede the countdown and award fresh re
   }
 });
 
-test('v8 migration gives older saves a fresh full window and preserves current saved/undo windows without RNG use', () => {
+test('legacy migration gives older saves a fresh full window and preserves current saved/undo windows without RNG use', () => {
   for(const team of ['white','black']) for(const phase of ['attackMove','defendMove','kick','keeperRelease']) {
     let state=fixture({team,phase,rounds:2});
     if(phase==='keeperRelease') {
@@ -478,7 +478,7 @@ test('v8 migration gives older saves a fresh full window and preserves current s
     const before=clone(state),seed=state.randomState;
     const normalized=normalizeGame(state);
     assert.deepEqual(state,before);
-    assert.equal(normalized.rulesVersion,12);
+    assert.equal(normalized.rulesVersion,13);
     assert.deepEqual(normalized.ballProgress,state.ballProgress,'in-progress windows survive save restoration and Undo');
     assert.equal(normalized.randomState,seed);
     assert.deepEqual(normalizeGame(normalized),normalized,'migration is idempotent');
@@ -487,7 +487,7 @@ test('v8 migration gives older saves a fresh full window and preserves current s
     delete legacy.ballProgress;
     const legacyBefore=clone(legacy),upgraded=normalizeGame(legacy);
     assert.deepEqual(legacy,legacyBefore);
-    assert.equal(upgraded.rulesVersion,12);
+    assert.equal(upgraded.rulesVersion,13);
     assert.equal(upgraded.randomState,seed);
     assert.equal(engine.progressInfo(upgraded).roundsRemaining,3,'old snapshots cannot receive an immediate historical penalty');
     assert.equal(upgraded.ballProgress.rounds,0);
@@ -509,7 +509,7 @@ function applyAction(state,action) {
 test('both AI levels obey the same mirrored anti-stalling deadline and choose a safe forward pass when it is available', () => {
   for(const difficulty of ['casual','tactical']) for(const team of ['white','black']) {
     const transform=pair=>team==='white'?pair:mirror(pair);
-    const state=fixture({team,phase:'kick',rounds:2,positions:{[`${team}-R2`]:transform([2,6])}});
+    const state=fixture({team,phase:'kick',rounds:2,positions:{[`${team}-R1`]:transform([2,12]),[`${team}-R2`]:transform([2,8])}});
     const before=clone(state),action=chooseAIAction(state,{difficulty});
     assert.deepEqual(state,before,`${difficulty} planning preserves tracker, position and future random sequence`);
     const next=applyAction(state,action);

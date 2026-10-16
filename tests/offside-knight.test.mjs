@@ -108,7 +108,9 @@ test('knight shots use the ordinary distance and keeper probability model for ei
     ordinary.pieces.find(piece => piece.id === idFor('white-N1', team)).type = 'Q';
     const target = pointFor([4, -1], team);
     const base = shotModel(ordinary, target.x, target.y), model = shotModel(knight, target.x, target.y);
-    assert.deepEqual(model, base, 'identical geometry means identical complete outcome distributions');
+    assert.equal(model.shooterType, 'N');
+    assert.equal(base.shooterType, 'Q');
+    assert.deepEqual({...model, shooterType: base.shooterType}, base, 'knights and queens retain identical complete outcome distributions');
     assert.equal(model.scoringMultiplier, 1);
     assert.equal(model.probability, model.goalProbability);
     assert.equal(model.baseGoalProbability, model.goalProbability);

@@ -596,9 +596,9 @@ test('goal declarations wait for the defending goalkeeper before resolving the s
   assert.equal(reaction.phase, 'keeperReact');
   assert.equal(currentTeam(reaction), 'black');
   assert.ok(reaction.pendingShot);
-  assert.equal(reaction.rulesVersion, 12);
+  assert.equal(reaction.rulesVersion, 13);
   assert.deepEqual(reaction.pendingShot.from, { x: 4, y: 4 });
-  assert.equal(reaction.lastAction.shotModel.modelVersion, 8);
+  assert.equal(reaction.lastAction.shotModel.modelVersion, 9);
   assert.deepEqual(reaction.lastAction.shotModel, shotModel(state, 4, -1));
   assert.deepEqual(reaction.score, { white: 0, black: 0 });
   assert.deepEqual(legalKicks(reaction), []);
@@ -645,7 +645,7 @@ test('outfield players still intercept a shot before the net', () => {
 test('the shot preview exposes Euclidean distance, goal-plane geometry and complete probabilities', () => {
   const state = fixture({ phase: 'kick', positions: { 'white-R1': [4, 6], 'black-K': [5, 0] } });
   const model = shotModel(state, 4, -1);
-  assert.equal(model.modelVersion, 8);
+  assert.equal(model.modelVersion, 9);
   assert.deepEqual(model.origin, { x: 4, y: 6 });
   assert.deepEqual(model.target, { x: 4, y: -.5 });
   assert.equal(model.distance, 6.5);
@@ -656,7 +656,7 @@ test('the shot preview exposes Euclidean distance, goal-plane geometry and compl
   assert.equal(model.timeToKeeper, 1);
   assert.equal(model.keeperInBox, true);
   almostEqual(model.reach, .4 + 1.3 * (1 - .15));
-  almostEqual(model.onTargetProbability, .98 * Math.exp(-.018 * 6.5 - .06 * (6.5 - 3) ** 2));
+  almostEqual(model.onTargetProbability, .98 * Math.exp(-.018 * 6.5 - .03 * (6.5 - 3) ** 2) * model.postAngleFactor);
   almostEqual(model.goalProbability, model.onTargetProbability * (1 - model.saveGivenOnTarget));
   almostEqual(model.saveProbability, model.onTargetProbability * model.saveGivenOnTarget);
   almostEqual(model.missProbability, 1 - model.onTargetProbability);
@@ -680,8 +680,8 @@ test('close shots are more dangerous while longer flight gives a fixed keeper mo
   assert.ok(a.saveGivenOnTarget < b.saveGivenOnTarget);
 });
 
-test('extra distance pressure starts beyond three squares and preserves close-shot accuracy', () => {
-  assert.equal(SHOT_MODEL.version, 8);
+test('extra distance pressure starts beyond three squares with a shared close-shot distance curve', () => {
+  assert.equal(SHOT_MODEL.version, 9);
   assert.equal(SHOT_MODEL.distancePenaltyStart, 3);
   assert.equal(SHOT_MODEL.longShotDecay, .06);
   assert.equal(SHOT_MODEL.minOnTarget, .01);
@@ -692,18 +692,18 @@ test('extra distance pressure starts beyond three squares and preserves close-sh
     const model = shotModel(state, 4, -1);
     assert.ok(model.distance <= 3, 'short-range fixture stays inside the protected range');
     const angleCos = Math.cos(model.shotAngleDegrees * Math.PI / 180);
-    const previousAccuracy = .98 * Math.exp(-.018 * model.distance) * (.65 + .35 * angleCos);
-    almostEqual(model.baseOnTargetProbability, previousAccuracy, 'close-shot distance and angle accuracy is unchanged before the knight chip multiplier');
+    const expectedAccuracy = .98 * Math.exp(-.018 * model.distance) * (.65 + .35 * angleCos) * model.postAngleFactor;
+    almostEqual(model.baseOnTargetProbability, expectedAccuracy, 'close shots retain the shared distance curve and receive the goal-opening penalty');
   }
 });
 
-test('straight shots lose accuracy progressively with range and settle at the one-percent floor', () => {
+test('central straight shots lose accuracy progressively with range and settle at the one-percent floor', () => {
   let previous = 1;
   for (let y = 2; y <= 12; y++) {
-    const state = fixture({ phase: 'kick', positions: { 'white-R1': [4, y] } });
-    const model = shotModel(state, 4, -1);
+    const state = fixture({ phase: 'kick', carrier: 'white-Q', positions: { 'white-Q': [5, y] } });
+    const model = shotModel(state, 5, -1);
     assert.ok(model.onTargetProbability <= previous, `accuracy cannot rise at distance ${model.distance}`);
-    const expected = Math.max(.01, .98 * Math.exp(-.018 * model.distance - .06 * Math.max(0, model.distance - 3) ** 2));
+    const expected = Math.max(.01, .98 * Math.exp(-.018 * model.distance - .06 * Math.max(0, model.distance - 3) ** 2) * model.postAngleFactor);
     almostEqual(model.onTargetProbability, expected);
     if (y <= 10) assert.ok(model.onTargetProbability < previous, 'accuracy strictly decreases before reaching its floor');
     previous = model.onTargetProbability;
@@ -711,8 +711,8 @@ test('straight shots lose accuracy progressively with range and settle at the on
   assert.equal(previous, .01, 'very long shots retain a one-percent on-target floor');
 });
 
-test('the midfield example is substantially less likely to score before and after keeper reaction', () => {
-  const state = fixture({ phase: 'kick', positions: { 'white-R1': [4, 7], 'black-K': [6, 0] } });
+test('an ordinary midfield shot retains strong range pressure before and after keeper reaction', () => {
+  const state = fixture({ phase: 'kick', carrier: 'white-Q', positions: { 'white-Q': [4, 7], 'black-K': [6, 0] } });
   const held = shotModel(state, 4, -1);
   const reaction = applyKick(state, 4, -1);
   const after = [held, ...legalMoves(reaction, 'black-K').map(move => shotModel(reaction, 4, -1, move))];
@@ -721,8 +721,8 @@ test('the midfield example is substantially less likely to score before and afte
   const previousHoldChance = previousAccuracy * (1 - held.saveGivenOnTarget);
   almostEqual(held.distance, 7.5);
   assert.ok(previousHoldChance > .65 && previousHoldChance < .66, 'fixture reproduces the former midfield example');
-  assert.ok(held.goalProbability > .19 && held.goalProbability < .20, 'holding keeper now concedes about 19.4%');
-  assert.ok(bestReaction > .08 && bestReaction < .10, 'best keeper reaction lowers the chance to about 8.9%');
+  assert.ok(held.goalProbability > .18 && held.goalProbability < .20, 'holding keeper still concedes less than 20%');
+  assert.ok(bestReaction > .08 && bestReaction < .10, 'best keeper reaction keeps the chance below 10%');
   assert.ok(held.goalProbability < previousHoldChance / 3, 'range penalty cuts midfield scoring chance by more than two thirds');
 });
 
@@ -762,7 +762,7 @@ test('parry splitting preserves the established goal, total-save and miss probab
   for (const [origin, keeper] of [[[4, 3], [5, 0]], [[4, 7], [6, 0]], [[4, 12], [4, 1]]]) {
     const state = fixture({ phase: 'kick', positions: { 'white-R1': origin, 'black-K': keeper } });
     const model = shotModel(state, 4, -1);
-    const onTarget = Math.max(.01, .98 * Math.exp(-.018 * model.distance - .06 * Math.max(0, model.distance - 3) ** 2));
+    const onTarget = Math.max(.01, .98 * Math.exp(-.018 * model.distance - .03 * Math.max(0, model.distance - 3) ** 2) * model.postAngleFactor);
     const time = (origin[1] - keeper[1]) / 6;
     const reach = .4 + 1.3 * Math.max(0, time - .15);
     const saveGivenTarget = .94 * (1 - Math.exp(-(.35 + time) / .45)) * Math.exp(-((Math.abs(keeper[0] - origin[0]) / reach) ** 2));
@@ -839,7 +839,7 @@ test('angled shots have a lower on-target probability than straight shots', () =
   almostEqual(angled.distance, Math.hypot(2, 7.5));
   almostEqual(angled.shotAngleDegrees, Math.atan2(2, 7.5) * 180 / Math.PI);
   assert.ok(angled.onTargetProbability < straight.onTargetProbability);
-  almostEqual(angled.onTargetProbability, .98 * Math.exp(-.018 * angled.distance - .06 * (angled.distance - 3) ** 2) * (.65 + .35 * Math.cos(angled.shotAngleDegrees * Math.PI / 180)));
+  almostEqual(angled.onTargetProbability, .98 * Math.exp(-.018 * angled.distance - .03 * (angled.distance - 3) ** 2) * (.65 + .35 * Math.cos(angled.shotAngleDegrees * Math.PI / 180)) * angled.postAngleFactor);
 });
 
 test('the keeper is compared with the finite shot segment and cannot save from behind the shooter', () => {
