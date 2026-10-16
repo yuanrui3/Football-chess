@@ -55,7 +55,9 @@ function nextChance(chance, before, next) {
 export function settleMatchClock(clock, before, next, {timedOut = false, timed = true, actionSeconds = 30} = {}) {
   if (!timed) return {clock: {...clock, actionRemaining: actionSeconds, fullTimePending: false, finalChance: null}, finish: false};
   const protectedAward = timedOut && next.lastAction?.type === 'timeout' && next.restart?.type === 'timeout'
-    || next.lastAction?.type === 'foul' && ['freeKick', 'penalty'].includes(next.restart?.type);
+    || next.lastAction?.type === 'foul' && ['freeKick', 'penalty'].includes(next.restart?.type)
+    || next.lastAction?.type === 'stalling' && next.restart?.type === 'stalling'
+      && ['repetition', 'dribbleLimit'].includes(next.lastAction.reason || next.restart.reason);
   const finalChance = protectedAward
     ? {team: next.restart.team, phase: 'restart'}
     : nextChance(clock.finalChance, before, next);
