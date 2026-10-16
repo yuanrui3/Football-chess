@@ -3,7 +3,7 @@
 A playable custom variation inspired by Football Chess by Serrano Saunders. Original handbook: https://pdfhost.io/v/bWV1pmicf_Football_Chess_Handbook.pdf
 
 ## Play
-
+https://yuanrui3.github.io/Football-chess/dist/
 Choose a computer opponent, two players on one device, or **Watch · computer vs computer**. The pitch is **14×17**, with four-file goals **f–i** and **6×3 boxes in files e–j**. Each side has K, Q, R1/R2, B1/B2, N1/N2 and P1/P2/P3. Ivory attacks the upper goal; Obsidian attacks the lower goal. Both teams use the same rules and a formation rotated 180°.
 
 Before kickoff, rearrange your own half and move a teammate onto the kickoff carrier to change the taker. The default Ivory formation is K g2; Q g5; rooks b4/m4; bishops c5/l5; knights d8/j7; pawns f4/h4/j4. The pawns screen immediately in front of the box. Wide rooks initially pass inward to the nearest screening pawn. Clearing that rank opens an eleven-square passing switch, subject to long-pass accuracy. The advanced knight can receive from the queen. The kickoff queen alone moves to g9 (Ivory) or h9 (Obsidian). Goal resets restore this shape.
