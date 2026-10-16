@@ -24,17 +24,18 @@ let game = createGame();
 let stage='setup',paused=false,remaining=600,duration=10,flipped=false;
 let actionRemaining=ACTION_SECONDS,fullTimePending=false,finalChance=null;
 let selectedId=null,history=[],aiTimer=null,toastTimer=null,lastTick=Date.now();
-let storageOK=true,aiPace=3000,aiDifficulty='casual',lastComputerAction=null,freePawnMode=false,dribbleMode=false,legacyMatch=false;
+let storageOK=true,aiPace=3000,aiDifficulty='casual',whiteDifficulty='casual',lastComputerAction=null,freePawnMode=false,dribbleMode=false,legacyMatch=false;
 let aiWorker=null,aiWatchdog=null,aiGeneration=0;
 try {
   const saved=JSON.parse(localStorage.getItem(STORE)||'null');
   if(saved?.version===2&&saved.game?.pieces?.length===22&&['setup','playing','finished'].includes(saved.stage)) {
-    game=upgradeSavedGame(saved.game);stage=saved.stage;remaining=saved.remaining;duration=saved.duration;flipped=!!saved.flipped;
+    game=upgradeSavedGame(saved.game);game.mode=['solo','local','watch'].includes(game.mode)?game.mode:'solo';stage=saved.stage;remaining=saved.remaining;duration=saved.duration;flipped=!!saved.flipped;
     restoreClock(restoreMatchClock(saved,{remaining,actionSeconds:ACTION_SECONDS}));
     if(duration===0){fullTimePending=false;finalChance=null;}
     paused=stage==='playing';history=Array.isArray(saved.history)?saved.history.slice(-80):[];
     aiPace=AI_PACES.includes(saved.aiPace)?saved.aiPace:3000;lastComputerAction=saved.lastComputerAction||null;
     aiDifficulty=saved.aiDifficulty==='tactical'?'tactical':'casual';
+    whiteDifficulty=saved.whiteDifficulty==='tactical'?'tactical':'casual';
   } else {
     const old=JSON.parse(localStorage.getItem('football-chess-match-v1')||'null');
     if(old?.game){legacyMatch=true;aiPace=AI_PACES.includes(old.aiPace)?old.aiPace:3000;duration=[0,5,10,15].includes(old.duration)?old.duration:10;remaining=duration*60;flipped=!!old.flipped;game=createGame({mode:old.game.mode,minutes:duration||10});}
@@ -47,15 +48,17 @@ for(let y=0;y<H;y++)for(let x=0;x<W;x++) {
   $('board').append(button);squares.push(button);
 }
 $('ranks').innerHTML=Array.from({length:H},(_,i)=>`<span>${H-i}</span>`).join('');
-$('mode').value=game.mode==='local'?'local':'solo';$('duration').value=String(duration);$('kickoff').value=game.attack;$('aiPace').value=String(aiPace);
+$('mode').value=game.mode;$('duration').value=String(duration);$('kickoff').value=game.attack;$('aiPace').value=String(aiPace);
 $('aiDifficulty').value=aiDifficulty;
+$('whiteDifficulty').value=whiteDifficulty;
 
 function clockSnapshot(){return {remaining,actionRemaining,fullTimePending,finalChance:finalChance?{...finalChance}:null};}
 function restoreClock(clock){({remaining,actionRemaining,fullTimePending,finalChance}=clock);}
 function resetClock(){restoreClock(createMatchClock({remaining:duration*60,actionSeconds:ACTION_SECONDS}));lastTick=Date.now();}
-function save(){flushClockElapsed();try{localStorage.setItem(STORE,JSON.stringify({version:2,game,stage,paused,remaining,duration,actionRemaining,fullTimePending,finalChance,flipped,aiPace,aiDifficulty,lastComputerAction,history:history.slice(-80)}));}catch{storageOK=false;$('saveNote').textContent='Match saving is unavailable in this browser.';}}
+function save(){flushClockElapsed();try{localStorage.setItem(STORE,JSON.stringify({version:2,game,stage,paused,remaining,duration,actionRemaining,fullTimePending,finalChance,flipped,aiPace,aiDifficulty,whiteDifficulty,lastComputerAction,history:history.slice(-80)}));}catch{storageOK=false;$('saveNote').textContent='Match saving is unavailable in this browser.';}}
 function toast(text){clearTimeout(toastTimer);$('toast').textContent=text;$('toast').classList.add('visible');toastTimer=setTimeout(()=>$('toast').classList.remove('visible'),3800);}
-function isComputer(){return game.mode==='solo'&&currentTeam(game)==='black';}
+function isComputer(team=currentTeam(game)){return game.mode==='watch'||game.mode==='solo'&&team==='black';}
+function computerDifficulty(team=currentTeam(game)){return game.mode==='watch'&&team==='white'?whiteDifficulty:aiDifficulty;}
 function anyDialog(){return !!document.querySelector('dialog[open]');}
 function blocked(){return stage!=='playing'||paused||anyDialog()||isComputer();}
 function stopAIWorker(){clearTimeout(aiWatchdog);aiWatchdog=null;if(aiWorker){aiWorker.terminate();aiWorker=null;}}
@@ -160,7 +163,8 @@ function renderActionContext(selected){
   else if(stage==='setup'){
     kind='setup';title=selected?'Arrange the formation':'Three ways to play';
     rule=selected?`Without the ball: ${MOVE_PATTERNS[selected.type]}. Dribble: ${DRIBBLE_PATTERNS[selected.type]}. ${KICK_PATTERNS[selected.type]}. Setup placement follows the starting-formation rules.`:'Move without the ball to find space. Dribble to carry it. Pass or shoot to send the ball while the player stays.';
-  }else if(reacting){kind='keeper';title=keeperCanReact()?'Keeper reaction':'Resolve shot';rule=keeperCanReact()?'The shot is already in flight. Move only the defending king one square, or hold. This extra reaction is separate from ordinary positioning.':'The king is outside its own box and has no saving reach or extra reaction. Resolve the committed shot; ordinary re-entry into the box restores goalkeeper abilities.';}
+  }else if(game.mode==='watch'){kind=reacting?'keeper':kicking?'pass':'offball';title='Computer vs computer';rule='Both teams play automatically. Pause to study the position, or change either team’s difficulty and the pace beside the pitch.';}
+  else if(reacting){kind='keeper';title=keeperCanReact()?'Keeper reaction':'Resolve shot';rule=keeperCanReact()?'The shot is already in flight. Move only the defending king one square, or hold. This extra reaction is separate from ordinary positioning.':'The king is outside its own box and has no saving reach or extra reaction. Resolve the committed shot; ordinary re-entry into the box restores goalkeeper abilities.';}
   else if(game.restart){kind='pass';title=selected?.id===game.restart.takerId&&!kicking?'Restart taker · locked':RESTART_NAMES[game.restart.type];rule=restartGuide();}
   else if(kicking&&selected){kind='pass';title='Pass / shoot';rule=`${pieceLabel(selected)} stays at ${coord(selected.x,selected.y)}; only the ball travels. ${KICK_PATTERNS[selected.type]}.${selected.type==='N'?' A goal cell must be one L-shaped jump away to shoot. Knights enter both boxes and use the same scoring model as every other piece.':' Kicks can travel beyond 10 squares with reduced pass accuracy.'}`;}
   else if(positionPhase()&&freePawnMode){kind='offball';title='Free pawn · off ball';rule='Reposition one pawn that does not carry the ball by one square forward, back, left, or right. It may collect a loose ball, but cannot dribble or tackle. A carrying pawn uses the single Dribble action.';}
@@ -267,12 +271,12 @@ function renderBoard(){
 function resetKickDetails(){
   if(game.phase==='keeperReact'&&game.pendingShot){
     const shot=game.pendingShot;showShotModel(shotModel(game,shot.x,shot.y));
-    $('kickDetails').textContent=keeperCanReact()?'Select a lit square to move the keeper, or hold position to resolve the shot.':'The king is outside its own box. Resolve the shot; no goalkeeper move or save is available.';
-  }else{clearKeeperOverlay();$('kickDetails').textContent=game.restart&&stage==='playing'?restartGuide():stage==='setup'?'Move a player to find space · Dribble to carry the ball · Pass / shoot to send it.':kickPhase()&&stage==='playing'?'Pass / shoot: the player stays. OFF marks offside involvement. Long inaccurate balls may cross a boundary. Hover or focus to preview odds.':game.phase==='attackMove'?'Attack: one dribble + one off-ball move + one optional free pawn action, in any order. The dashed line previews offside.':'Defence: one regular move or tackle + one optional free pawn action. The dashed line previews offside.';}
+    $('kickDetails').textContent=game.mode==='watch'?`${TEAM[currentTeam(game)]} will ${keeperCanReact()?'choose a keeper reaction':'resolve the shot without a goalkeeper save'}. The shot’s scoring chance updates after that decision.`:keeperCanReact()?'Select a lit square to move the keeper, or hold position to resolve the shot.':'The king is outside its own box. Resolve the shot; no goalkeeper move or save is available.';
+  }else{clearKeeperOverlay();$('kickDetails').textContent=game.mode==='watch'&&stage==='playing'?'Watching both computer teams. Each action plays at the selected pace; Pause holds the position.':game.restart&&stage==='playing'?restartGuide():stage==='setup'?'Move a player to find space · Dribble to carry the ball · Pass / shoot to send it.':kickPhase()&&stage==='playing'?'Pass / shoot: the player stays. OFF marks offside involvement. Long inaccurate balls may cross a boundary. Hover or focus to preview odds.':game.phase==='attackMove'?'Attack: one dribble + one off-ball move + one optional free pawn action, in any order. The dashed line previews offside.':'Defence: one regular move or tackle + one optional free pawn action. The dashed line previews offside.';}
 }
 function render(){
   if(stage!=='playing'||paused||anyDialog()||!isComputer())cancelAI();
-  const acting=currentTeam(game),kicking=kickPhase(),positioning=positionPhase(),reacting=game.phase==='keeperReact',actions=positionActions(game),budget=actions.budget;
+  const acting=currentTeam(game),kicking=kickPhase(),positioning=positionPhase(),reacting=game.phase==='keeperReact',actions=positionActions(game),budget=actions.budget,watching=game.mode==='watch';
   if(stage==='playing'&&kicking)selectedId=game.ball.carrierId;
   if(stage==='playing'&&reacting)selectedId=game.pieces.find(p=>p.team===acting&&p.type==='K')?.id||null;
   if(positioning){
@@ -282,15 +286,19 @@ function render(){
   }
   $('setupPanel').hidden=stage!=='setup';$('turnPanel').hidden=stage==='setup';
   renderRestart();renderProgress();
-  $('opponentControls').hidden=game.mode!=='solo';$('computerRecap').hidden=!lastComputerAction||game.mode!=='solo';$('computerActionText').textContent=lastComputerAction?.summary||'';
-  $('difficultyHelp').textContent=aiDifficulty==='tactical'?'Plans ahead against your replies and weighs risky outcomes.':'Builds passing lanes, protects the ball, and covers likely receivers.';
+  $('opponentControls').hidden=game.mode==='local';$('whiteComputerControls').hidden=!watching;$('computerRecap').hidden=!lastComputerAction||game.mode==='local';$('computerActionText').textContent=lastComputerAction?.summary||'';
+  $('computerActionLabel').textContent=watching?`${TEAM[lastComputerAction?.actor]||'COMPUTER'} · LAST ACTION`:'COMPUTER’S LAST ACTION';
+  $('aiDifficultyLabel').textContent=watching?'OBSIDIAN COMPUTER':'COMPUTER DIFFICULTY';$('aiPaceLabel').textContent=watching?'ACTION PACE':'OPPONENT PACE';
+  $('difficultyHelp').textContent=watching?'Choose each team’s level. Casual reacts to the position; Tactical plans ahead. Level changes apply to the next decision.':aiDifficulty==='tactical'?'Plans ahead against your replies and weighs risky outcomes.':'Builds passing lanes, protects the ball, and covers likely receivers.';
+  $('setupHint').textContent=watching?'Both computer teams play automatically. Use the starting formation, or arrange either side before watching.':'Use the starting formation, or select a piece and a square to arrange your half.';
+  $('startBtn').innerHTML=`${watching?'Start watching':'Kick off'} <span>↗</span>`;
   $('whiteScore').textContent=game.score.white;$('blackScore').textContent=game.score.black;
-  $('whiteSub').textContent=(game.mode==='solo'?'YOU':'PLAYER 1')+' · ATTACKING '+(flipped?'↓':'↑');$('blackSub').textContent=(game.mode==='solo'?'COMPUTER':'PLAYER 2')+' · ATTACKING '+(flipped?'↑':'↓');
+  $('whiteSub').textContent=watching?`COMPUTER · ${whiteDifficulty==='tactical'?'TACTICAL':'CASUAL'} ${flipped?'↓':'↑'}`:(game.mode==='solo'?'YOU':'PLAYER 1')+' · ATTACKING '+(flipped?'↓':'↑');$('blackSub').textContent=watching?`COMPUTER · ${aiDifficulty==='tactical'?'TACTICAL':'CASUAL'} ${flipped?'↑':'↓'}`:(game.mode==='solo'?'COMPUTER':'PLAYER 2')+' · ATTACKING '+(flipped?'↑':'↓');
   $('turnNumber').textContent=`POSSESSION ${String(game.turn).padStart(2,'0')}`;
   let heading,help,status;
   if(stage==='finished'){heading='Full time.';help='The final whistle has sounded. Start a new match to play again.';status='Full time. Thanks for playing.';}
   else if(paused){heading='Take a breath.';help='The match is paused. Resume when you’re ready.';status='Match paused.';}
-  else if(isComputer()&&stage==='playing'){heading=reacting?'Computer’s keeper.':'Computer’s turn.';help=reacting?(keeperCanReact()?'Obsidian can move its keeper once before the shot is resolved.':'Obsidian’s king is outside its own box. The shot resolves without a goalkeeper reaction.'):game.restart?restartGuide():aiDifficulty==='tactical'?'Obsidian is planning ahead and considering your replies.':kicking?'Obsidian is choosing a pass or shot.':'Obsidian is choosing its remaining positioning actions.';status=`Obsidian · ${aiDifficulty==='tactical'?'Tactical':'Casual'} · thinking…`;}
+  else if(isComputer()&&stage==='playing'){const name=watching?TEAM[acting]:'Obsidian',difficulty=computerDifficulty(acting);heading=watching?`${name} · ${reacting?'keeper reaction':'computer turn'}.`:reacting?'Computer’s keeper.':'Computer’s turn.';help=reacting?(keeperCanReact()?`${name} can move its keeper once before the shot is resolved.`:`${name}’s king is outside its own box. The shot resolves without a goalkeeper reaction.`):game.restart?restartGuide():difficulty==='tactical'?`${name} is planning ahead and considering ${watching?'its opponent’s':'your'} replies.`:kicking?`${name} is choosing a pass or shot.`:`${name} is choosing its remaining positioning actions.`;status=`${name} · ${difficulty==='tactical'?'Tactical':'Casual'} · thinking…`;}
   else if(reacting){heading=keeperCanReact()?'Position your keeper.':'Resolve the shot.';help=keeperCanReact()?'The shot is committed. Move your king one square, or hold position. The displayed scoring chance is then rolled.':'Your king is outside its own box, so it has no extra reaction or saving reach. Resolve the shot using the displayed chance.';status=`${TEAM[acting]} · ${keeperCanReact()?'keeper reaction':'shot resolution'}`;}
   else if(game.restart){heading=RESTART_NAMES[game.restart.type]+'.';help=restartGuide();status=`${TEAM[acting]} · ${RESTART_NAMES[game.restart.type]} · ${kicking?'take the restart':'positioning'}`;}
   else if(game.phase==='keeperRelease'){heading='King must release.';help='A teammate passed to the king. Choose an immediate kick; the king cannot move or hold this back-pass.';status=`${TEAM[acting]} · immediate keeper kick`;}
@@ -298,12 +306,12 @@ function render(){
   else if(kicking){heading='Pass or shoot.';help='Only the carrier kicks; the player stays in place. Choose a blue pass / kick target or a gold goal cell. Shooting gives the defending king one reaction.';status=`${TEAM[acting]} · pass / shoot`;}
   else if(freePawnMode){heading=teamLabel(acting)+' free pawn.';help='Move one pawn that does not carry the ball, or collect a loose ball. One cardinal square; no dribble, tackle, or kick. You may skip it.';status=`${TEAM[acting]} · free pawn action`;}
   else {const ownCarrier=game.pieces.some(piece=>piece.id===game.ball.carrierId&&piece.team===acting);heading=teamLabel(acting)+(game.phase==='defendMove'?' response.':dribbleMode?' dribble.':' positioning.');help=ownCarrier?'Dribble once and move another player without the ball once, in either order. You also have a free pawn action for a pawn without the ball. End positioning to skip remaining actions.':game.ball.carrierId?'Move without the ball to defend, or attempt a highlighted tackle. Win possession before you can dribble; the opponent is carrying the ball.':'Move to collect the loose ball. After collecting, the attacking carrier can use a separate dribble if it remains available.';status=`${TEAM[acting]} · ${ownCarrier?'dribble + off-ball move':'off-ball positioning'}`;}
-  if(stage==='setup')status='Arrange 11 footballers or kick off.';
+  if(stage==='setup')status=watching?'Computer vs computer · choose levels and start watching.':'Arrange 11 footballers or kick off.';
   $('turnTitle').textContent=heading;$('actionHelp').textContent=help;$('boardStatus').textContent=status;
   const activePhase=kicking?'kick':reacting?'defendMove':game.phase;
   for(const el of document.querySelectorAll('[data-phase]'))el.classList.toggle('active',el.dataset.phase===activePhase);
   $('attackPhaseText').innerHTML=game.restart?'Restart team positions<small>Off-ball move + free pawn</small>':'Dribble + off-ball move<small>Plus one free pawn action</small>';
-  document.querySelector('.move-modes').hidden=!positioning||stage!=='playing';
+  document.querySelector('.move-modes').hidden=watching||!positioning||stage!=='playing';
   const attackingRound=positioning&&game.phase==='attackMove'&&!game.restart;
   $('moveBudget').hidden=!positioning||stage!=='playing';$('moveBudget').textContent=`${attackingRound?'Off-ball move':'Regular action'}: ${budget.normalUsed?'used':'ready'}${attackingRound?` · Dribble: ${budget.dribbleUsed?'used':actions.dribbleAvailable?'ready':'unavailable'}`:''} · Free pawn: ${budget.pawnUsed?'used':'ready'}`;
   $('normalMoveBtn').disabled=blocked()||!actions.normalAvailable;$('pawnMoveBtn').disabled=blocked()||!actions.pawnAvailable;
@@ -312,14 +320,14 @@ function render(){
   $('normalMoveBtn').setAttribute('aria-pressed',String(!freePawnMode&&!dribbleMode));$('dribbleBtn').setAttribute('aria-pressed',String(dribbleMode));$('pawnMoveBtn').setAttribute('aria-pressed',String(freePawnMode));
   $('shotPanel').hidden=!reacting||stage!=='playing';
   if(reacting&&game.pendingShot)$('shotSummary').textContent=`Shot aimed at column ${FILES[game.pendingShot.x].toUpperCase()}. ${keeperCanReact()?`${TEAM[acting]} may move its king one square before resolution.`:'The defending king is outside its own box and has no goalkeeper reaction.'}`;
-  $('skipBtn').hidden=kicking||stage==='finished';$('skipBtn').disabled=blocked();$('skipBtn').textContent=reacting?(keeperCanReact()?'Hold keeper · resolve shot':'Resolve shot · king outside box'):'End positioning · skip unused →';
+  $('skipBtn').hidden=watching||kicking||stage==='finished';$('skipBtn').disabled=blocked();$('skipBtn').textContent=reacting?(keeperCanReact()?'Hold keeper · resolve shot':'Resolve shot · king outside box'):'End positioning · skip unused →';
   $('pauseBtn').disabled=stage!=='playing';$('pauseBtn').textContent=paused?'▶ Resume':'Ⅱ Pause';$('finishBtn').disabled=stage!=='playing'||duration>0;$('finishBtn').title=duration>0?'Timed matches end after the clock and final chance settle.':'Finish this untimed match.';$('undoBtn').disabled=!history.length||stage!=='playing'||anyDialog();
   document.body.classList.toggle('thinking',stage==='playing'&&isComputer()&&!paused);document.body.classList.toggle('paused',paused&&stage==='playing');
   const carrier=game.pieces.find(p=>p.id===game.ball.carrierId);
   $('possessionTeam').textContent=reacting?'Shot in flight':carrier?TEAM[carrier.team]:'Loose ball';
   $('possessionDetail').textContent=reacting?`${TEAM[game.pendingShot.shootingTeam]} · keeper may respond`:carrier?`${pieceLabel(carrier)} · ${coord(carrier.x,carrier.y)}`:`Available to collect · ${coord(game.ball.x,game.ball.y)}`;
   const selected=game.pieces.find(p=>p.id===selectedId);
-  $('selectionInfo').innerHTML=selected?`<span class="selection-icon">${SYMBOLS[selected.type]}</span><div><b>${pieceLabel(selected)} · ${coord(selected.x,selected.y)}</b><small>${stage==='setup'?'Choose a starting square.':reacting?'Keeper reaction':kicking?'Pass / shoot · player stays':selected.id===game.restart?.takerId?'Restart taker · stays put':`${selected.id===game.ball.carrierId?'Dribble':'Move without ball'} · ${legalMoves(game,selected.id,{freePawn:positioning&&freePawnMode}).length} destinations`}</small></div>`:'<span class="selection-icon">♞</span><div><b>Select a footballer</b><small>Move off the ball, or select the carrier to dribble.</small></div>';
+  $('selectionInfo').innerHTML=selected?`<span class="selection-icon">${SYMBOLS[selected.type]}</span><div><b>${pieceLabel(selected)} · ${coord(selected.x,selected.y)}</b><small>${stage==='setup'?'Choose a starting square.':reacting?'Keeper reaction':kicking?'Pass / shoot · player stays':selected.id===game.restart?.takerId?'Restart taker · stays put':`${selected.id===game.ball.carrierId?'Dribble':'Move without ball'} · ${legalMoves(game,selected.id,{freePawn:positioning&&freePawnMode}).length} destinations`}</small></div>`:watching&&stage==='playing'?`<span class="selection-icon">♞</span><div><b>Watching ${TEAM[acting]}</b><small>Both teams are controlled by the computer.</small></div>`:'<span class="selection-icon">♞</span><div><b>Select a footballer</b><small>Move off the ball, or select the carrier to dribble.</small></div>';
   renderActionContext(selected);
   $('journal').replaceChildren(...game.log.slice(-12).reverse().map(line=>{const li=document.createElement('li');li.textContent=line.replaceAll('White','Ivory').replaceAll('Black','Obsidian');return li;}));$('feedCount').textContent=String(game.log.length).padStart(2,'0');
   if(!storageOK)$('saveNote').textContent='Match saving is unavailable in this browser.';
@@ -363,7 +371,7 @@ function commit(next,{timedOut=false,clockAdvanced=false}={}){
   const before=game,actor=currentTeam(game),settled=settleMatchClock(clockSnapshot(),before,next,{timedOut,timed:duration>0,actionSeconds:ACTION_SECONDS});
   history.push({game:structuredClone(game),actor,clock:clockSnapshot()});if(history.length>80)history.shift();const oldScore=game.score.white+game.score.black;
   game=next;restoreClock(settled.clock);selectedId=null;freePawnMode=false;dribbleMode=false;lastTick=Date.now();
-  lastComputerAction=actor==='black'&&game.mode==='solo'?{action:game.lastAction,summary:game.log.at(-1).replaceAll('White','Ivory').replaceAll('Black','Obsidian')}:null;
+  lastComputerAction=isComputer(actor)?{actor,action:game.lastAction,summary:game.log.at(-1).replaceAll('White','Ivory').replaceAll('Black','Obsidian')}:null;
   if(game.score.white+game.score.black>oldScore)toast(`${TEAM[game.lastAction.team]} scores! ${game.score.white} : ${game.score.black}${game.lastAction.ownGoal?' · Own goal':''}`);
   else if(game.lastAction?.type==='stalling')toast(`Stalling: ${TEAM[game.restart.team]} wins an indirect free kick near the ball.`);
   else if(game.lastAction?.type==='timeout')toast(`Time wasting: ${TEAM[game.restart.team]} wins an indirect free kick near the ball.`);
@@ -384,23 +392,23 @@ function animateComputerMove(action){
 }
 function scheduleAI(){
   if(stage!=='playing'||paused||anyDialog()||!isComputer()||aiTimer!==null||aiWorker)return;
-  const requestId=aiGeneration;
-  const stillCurrent=()=>requestId===aiGeneration&&stage==='playing'&&!paused&&!anyDialog()&&isComputer();
+  const requestId=aiGeneration,actor=currentTeam(game),difficulty=computerDifficulty(actor);
+  const stillCurrent=()=>requestId===aiGeneration&&actor===currentTeam(game)&&stage==='playing'&&!paused&&!anyDialog()&&isComputer();
   const fail=err=>{if(!stillCurrent())return;stopAIWorker();paused=true;render();toast('Play paused: '+err.message);};
   const receive=action=>{
     if(!stillCurrent())return;stopAIWorker();
     try{if(!action)throw new Error('No legal action found.');if(action.type==='move')commit(applyMove(game,action.pieceId,action.x,action.y,{freePawn:!!action.freePawn}));else if(action.type==='kick')commit(applyKick(game,action.x,action.y));else commit(skipMove(game));}catch(err){fail(err);}
   };
-  const fallback=(difficulty=aiDifficulty)=>{if(!stillCurrent())return;stopAIWorker();try{receive(chooseAIAction(game,{difficulty}));}catch(err){fail(err);}};
+  const fallback=(level=difficulty)=>{if(!stillCurrent())return;stopAIWorker();try{receive(chooseAIAction(game,{difficulty:level}));}catch(err){fail(err);}};
   aiTimer=setTimeout(()=>{
     aiTimer=null;if(!stillCurrent())return;
-    if(aiDifficulty==='tactical'&&typeof window.Worker==='function'){
+    if(difficulty==='tactical'&&typeof window.Worker==='function'){
       try{
         aiWorker=new window.Worker(new URL('./ai-worker.js?v=37b308f712f4',import.meta.url),{type:'module',name:'football-chess-tactical'});
         aiWorker.onmessage=event=>{if(!stillCurrent()||event.data?.requestId!==requestId)return;if(event.data.error)fallback();else receive(event.data.action);};
         aiWorker.onerror=event=>{event.preventDefault?.();fallback();};
         aiWatchdog=setTimeout(()=>fallback('casual'),4000);
-        aiWorker.postMessage({requestId,state:game,difficulty:aiDifficulty});
+        aiWorker.postMessage({requestId,state:game,difficulty});
       }catch{fallback();}
     }else fallback();
   },aiPace);
@@ -425,7 +433,7 @@ $('board').addEventListener('click',event=>{
     if(target&&selectedId){const selected=game.pieces.find(p=>p.id===selectedId);if(piece&&piece.id!==selected.id){piece.x=selected.x;piece.y=selected.y;}selected.x=x;selected.y=y;if(selected.id===game.ball.carrierId||piece?.id===game.ball.carrierId)game.ball={x,y,carrierId:selected.id};selectedId=null;save();render();return;}
     if(piece){selectedId=piece.id;if(game.mode==='solo'&&piece.team==='black')toast('Arrange Ivory FC, or choose two players to arrange both teams.');render();}return;
   }
-  if(blocked()){if(paused)toast('Resume the match to play.');return;}
+  if(blocked()){if(paused)toast(game.mode==='watch'?'Resume the match to continue watching.':'Resume the match to play.');return;}
   try{
     if(target){if(kickPhase())commit(applyKick(game,x,y));else commit(applyMove(game,selectedId,x,y,{freePawn:positionPhase()&&freePawnMode}));return;}
     if(kickPhase()){toast(game.restart?.type==='throwIn'?'Choose a highlighted throw target within 10 squares. Throws cannot score directly.':'Choose a highlighted pass destination or a lit goal cell.');return;}
@@ -456,6 +464,7 @@ for(const id of ['goalTop','goalBottom']){
 function refreshSetup(){if(stage!=='setup')return;cancelAI();game=createGame({mode:$('mode').value,minutes:Number($('duration').value)||10,kickoff:$('kickoff').value});duration=Number($('duration').value);resetClock();selectedId=null;lastComputerAction=null;freePawnMode=false;dribbleMode=false;history=[];render();save();}
 $('aiPace').addEventListener('change',()=>{const value=Number($('aiPace').value);aiPace=AI_PACES.includes(value)?value:3000;render();save();});
 $('aiDifficulty').addEventListener('change',()=>{aiDifficulty=$('aiDifficulty').value==='tactical'?'tactical':'casual';$('aiDifficulty').value=aiDifficulty;render();save();});
+$('whiteDifficulty').addEventListener('change',()=>{whiteDifficulty=$('whiteDifficulty').value==='tactical'?'tactical':'casual';$('whiteDifficulty').value=whiteDifficulty;render();save();});
 for(const id of ['mode','kickoff'])$(id).addEventListener('change',refreshSetup);
 $('duration').addEventListener('change',()=>{if(stage!=='setup')return;duration=Number($('duration').value);resetClock();game.minutes=duration||10;render();save();});
 $('normalMoveBtn').addEventListener('click',()=>{if(blocked()||!positionActions(game).normalAvailable)return;setMoveMode('normal');selectedId=null;render();});
@@ -464,7 +473,7 @@ $('pawnMoveBtn').addEventListener('click',()=>{if(blocked()||!positionActions(ga
 $('startBtn').addEventListener('click',()=>{if(stage!=='setup')return;resetClock();stage='playing';paused=false;selectedId=null;render();save();});
 $('skipBtn').addEventListener('click',()=>{if(!blocked())commit(skipMove(game));});
 $('pauseBtn').addEventListener('click',()=>{if(stage!=='playing'||advanceClockNow())return;paused=!paused;lastTick=Date.now();render();save();});
-$('undoBtn').addEventListener('click',()=>{if(!history.length||stage!=='playing'||anyDialog()||advanceClockNow())return;cancelAI();let entry=history.pop();if(game.mode==='solo')while(entry.actor!=='white'&&history.length)entry=history.pop();game=upgradeSavedGame(entry.game);restoreClock(rewindMatchClock(clockSnapshot(),entry.clock,{actionSeconds:ACTION_SECONDS}));selectedId=null;lastComputerAction=null;freePawnMode=false;dribbleMode=false;lastTick=Date.now();render();save();toast('Last move undone.');});
+$('undoBtn').addEventListener('click',()=>{if(!history.length||stage!=='playing'||anyDialog()||advanceClockNow())return;cancelAI();let entry=history.pop();if(game.mode==='solo')while(entry.actor!=='white'&&history.length)entry=history.pop();game=upgradeSavedGame(entry.game);if(game.mode==='watch')paused=true;restoreClock(rewindMatchClock(clockSnapshot(),entry.clock,{actionSeconds:ACTION_SECONDS}));selectedId=null;lastComputerAction=null;freePawnMode=false;dribbleMode=false;lastTick=Date.now();render();save();toast(game.mode==='watch'?'Last computer action undone. Press Resume to continue.':'Last move undone.');});
 $('flipBtn').addEventListener('click',()=>{flipped=!flipped;render();save();});
 function finishMatch(){if(stage!=='playing')return;cancelAI();stage='finished';paused=false;game.phase='finished';selectedId=null;render();save();showResult();}
 function showResult(){const winner=game.score.white===game.score.black?null:game.score.white>game.score.black?'white':'black';$('resultTitle').textContent=winner?TEAM[winner]+' wins.':'Honours even.';$('resultScore').textContent=`${game.score.white} : ${game.score.black}`;$('resultText').textContent=winner?'A well-played match. The next move is a fresh start.':'Nothing between the sides. Settle it in a rematch.';$('resultDialog').showModal();}
