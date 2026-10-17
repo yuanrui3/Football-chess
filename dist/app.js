@@ -1,7 +1,7 @@
-import {createGame, legalMoves, legalKicks, disguisedShotTargets, applyMove, applyKick, skipMove, chooseAIAction, currentTeam, cornerTakers, selectCornerTaker, BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, BOX_FILES, BOX_DEPTH, CENTRAL_GOAL_FILES, MIDFIELD_RANK, inOwnBox, canOccupySquare, isBox, isGoalMouth, shotChance, shotModel, offsideInfo, LONG_TACKLE_RANGE, DRIBBLE_RANGE, FOUL_RULE, STALLING_RULE, PACE_RULE, ACTION_SECONDS, actionTimeout, progressInfo, paceInfo, positionActions, normalizeGame, RL_VALUE_MODEL} from './engine.js?v=eeba82274585';
+import {createGame, legalMoves, legalKicks, disguisedShotTargets, applyMove, applyKick, skipMove, chooseAIAction, currentTeam, cornerTakers, selectCornerTaker, BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, BOX_FILES, BOX_DEPTH, CENTRAL_GOAL_FILES, MIDFIELD_RANK, inOwnBox, canOccupySquare, isBox, isGoalMouth, shotChance, shotModel, offsideInfo, offsideFlaggedIds, LONG_TACKLE_RANGE, DRIBBLE_RANGE, FOUL_RULE, STALLING_RULE, PACE_RULE, ACTION_SECONDS, actionTimeout, progressInfo, paceInfo, positionActions, normalizeGame, RL_VALUE_MODEL} from './engine.js?v=e0fe3413090d';
 import {createMatchClock, restoreMatchClock, tickMatchClock, settleMatchClock, rewindMatchClock} from './match-clock.js?v=1fa32f5eed6c';
-import {buildGoalReplay, restoreGoalReplay, createReplayPlayer} from './goal-replay.js?v=3f1a1ad99411';
-import {createMatchStats, restoreMatchStats, recordMatchTransition, addPossessionTime, matchStatsSummary, shortPieceId} from './match-stats.js?v=7e163e95f799';
+import {buildGoalReplay, restoreGoalReplay, createReplayPlayer} from './goal-replay.js?v=5cfa35067aa6';
+import {createMatchStats, restoreMatchStats, recordMatchTransition, addPossessionTime, matchStatsSummary, shortPieceId} from './match-stats.js?v=2f80e1451673';
 import {createCommentary} from './commentary.js?v=128601a455c4';
 import {createParadeeSpeech} from './paradee-speech.js?v=ebf05af105ad';
 
@@ -195,9 +195,19 @@ function getTargets(){
 }
 function upgradeSavedGame(state){return normalizeGame(state);}
 function setMoveMode(mode){freePawnMode=mode==='pawn';dribbleMode=mode==='dribble';}
+function offsideWarnings(){
+  const offside=offsideInfo(game),exempt=['throwIn','corner','goalKick','penalty'].includes(game.restart?.type);
+  const carrier=game.pieces.find(piece=>piece.id===game.ball.carrierId),shot=game.phase==='keeperReact';
+  const controlledBySnapshotTeam=!!carrier&&carrier.team===game.offside?.team&&!shot;
+  // Loose balls and pending shots retain the kick-time snapshot. A live
+  // positional preview applies only when a player can make the next kick.
+  const activeFlags=new Set(exempt||controlledBySnapshotTeam?[]:offsideFlaggedIds(game));
+  const positionFlags=new Set(exempt||!carrier||shot?[]:offside.flaggedIds);
+  return {offside,exempt,activeFlags,positionFlags};
+}
 function isOffsideTarget(target){
   if(target.offside)return true;
-  return (game.offside?.flaggedIds||[]).includes(selectedId)&&(target.type==='tackle'||(!game.ball.carrierId&&target.x===game.ball.x&&target.y===game.ball.y));
+  return offsideFlaggedIds(game).includes(selectedId)&&(target.type==='tackle'||(!game.ball.carrierId&&target.x===game.ball.x&&target.y===game.ball.y));
 }
 function accuracyLabel(){return game.restart?.type==='throwIn'?'throw':'pass';}
 function disguiseChoices(){return kickPhase()&&game.restart?.type!=='penalty'?disguisedShotTargets(game):[];}
@@ -358,11 +368,7 @@ function renderBoard(){
   const showTrace=action&&!['goal','shotAttempt'].includes(action.type);
   const shot=game.phase==='keeperReact'?game.pendingShot:null,disguiseTargets=!shot&&disguiseSelected?disguiseChoices():[];
   const previewShots=shot?[]:legalKicks({...game,phase:'kick'}).filter(kick=>kick.goal);
-  const offside=offsideInfo(game),exempt=['throwIn','corner','goalKick','penalty'].includes(game.restart?.type);
-  const controlledBySnapshotTeam=game.ball.carrierId?.startsWith(`${game.offside?.team}-`)&&game.phase!=='keeperReact';
-  // With a teammate in control, the next pass takes a fresh snapshot. Current
-  // position warnings must not inherit flags from the pass that reached them.
-  const activeFlags=new Set(exempt||controlledBySnapshotTeam?[]:game.offside?.flaggedIds||[]),positionFlags=new Set(exempt?[]:offside.flaggedIds||[]);
+  const {offside,exempt,activeFlags,positionFlags}=offsideWarnings();
   for(const el of squares){
     const x=Number(el.dataset.x),y=Number(el.dataset.y),piece=game.pieces.find(p=>p.x===x&&p.y===y),target=targets.find(t=>t.x===x&&t.y===y);
     const last=game.lastAction?.to,isSelected=piece?.id===selectedId,hasBall=game.ball.x===x&&game.ball.y===y;
@@ -411,8 +417,9 @@ function renderBoard(){
   const showOffside=stage==='playing'&&!shot&&game.ball.carrierId&&!exempt;
   $('offsideStatus').hidden=stage!=='playing';
   if(exempt)$('offsideStatus').textContent='No offside directly from this restart.';
-  else if(offside.boxAttackerIds?.length)$('offsideStatus').textContent=`Offside attacker${offside.boxAttackerIds.length===1?'':'s'} in the opponent’s box: any teammate kick immediately awards an indirect free kick. Move the attacker onside or out of the box before kicking.`;
+  else if(showOffside&&offside.boxAttackerIds?.length)$('offsideStatus').textContent=`Offside attacker${offside.boxAttackerIds.length===1?'':'s'} in the opponent’s box: any teammate kick immediately awards an indirect free kick. Move the attacker onside or out of the box before kicking.`;
   else if(activeFlags.size)$('offsideStatus').textContent=`${activeFlags.size} player${activeFlags.size===1?' was':'s were'} offside at the previous kick. Returning onside does not clear that snapshot.`;
+  else if(!game.ball.carrierId||shot)$('offsideStatus').textContent='Offside is fixed at the previous kick. The kicker and teammates who were onside may chase the ball.';
   else $('offsideStatus').textContent=`${positionFlags.size} player${positionFlags.size===1?' is':'s are'} beyond the current offside line. Level or behind the ball is onside.`;
   if(showOffside&&Number.isFinite(offside.secondLastY)){
     const lineY=game.attack==='white'?Math.min(game.ball.y,offside.secondLastY,MIDFIELD_RANK):Math.max(game.ball.y,offside.secondLastY,MIDFIELD_RANK);
@@ -721,7 +728,7 @@ function scheduleAI(){
     aiTimer=null;if(!stillCurrent())return;
     if(difficulty==='tactical'&&typeof window.Worker==='function'){
       try{
-        aiWorker=new window.Worker(new URL('./ai-worker.js?v=03ed5b98e5cb',import.meta.url),{type:'module',name:'football-chess-tactical'});
+        aiWorker=new window.Worker(new URL('./ai-worker.js?v=9aa570241d02',import.meta.url),{type:'module',name:'football-chess-tactical'});
         aiWorker.onmessage=event=>{if(!stillCurrent()||event.data?.requestId!==requestId)return;if(event.data.error)fallback();else receive(event.data.action);};
         aiWorker.onerror=event=>{event.preventDefault?.();fallback();};
         aiWatchdog=setTimeout(()=>fallback('casual'),4000);

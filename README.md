@@ -70,6 +70,8 @@ For a shot parried or blocked out, the aimed goal file selects the corner: f/g g
 
 At each teammate kick, flag attackers in the opponents' half strictly nearer the goal line than **both the ball and the second-last opponent**. All opponents count; the King need not be last. Level with the ball/defender or on the halfway row (y=8) is onside. A player behind the dribbler is not flagged merely for being beyond the defenders.
 
+A kicker may chase and collect its own loose kick across the offside line; teammates who were onside at the kick may run beyond it afterward. Loose-ball warnings retain the kick-time snapshot instead of recalculating from later positions. Self-collection still spends the normal movement and dribble allowances, including the existing carrying limit and self-pass box-entry restrictions.
+
 Every offside attacking outfield piece inside the opponents' box counts as involved immediately at a teammate's kick, even when the ball is aimed elsewhere. The kicker is excluded. This custom grid rule prevents offside attackers occupying keeper reaction squares. Own-box defenders are unaffected. Other flagged players are penalized when receiving, collecting or challenging for that ball; returning onside later does not erase the snapshot. A save preserves it; controlled opponent play clears it. Direct receipt from a goal kick, corner or throw is exempt, including automatic box involvement. Offside free kicks are indirect.
 
 ## Restarts and progress

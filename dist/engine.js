@@ -519,7 +519,7 @@ export function offsideInfo(state, team = state?.pieces?.find(p => p.id === stat
   const flaggedIds = players.filter(p => p.offside).map(p => p.id);
   const boxAttackerIds = pieces.filter(p => p.team === team && p.type !== 'K' && (ALLOW_OUTFIELD_BOXES || p.type === 'N') && flaggedIds.includes(p.id) && inOwnBox(other(team), p.x, p.y)).map(p => p.id).sort();
   const boxKnightIds = boxAttackerIds.filter(id => pieces.find(p => p.id === id)?.type === 'N');
-  return {team, ball: {x: ball.x, y: ball.y}, secondLastY, players, flaggedIds, boxKnightIds, boxAttackerIds, activeFlaggedIds: state?.offside?.team === team ? [...(state.offside.flaggedIds || [])] : []};
+  return {team, ball: {x: ball.x, y: ball.y}, secondLastY, players, flaggedIds, boxKnightIds, boxAttackerIds, activeFlaggedIds: state?.offside?.team === team ? offsideFlaggedIds(state) : []};
 }
 
 const offsideExempt = restart => ['goalKick', 'corner', 'throwIn', 'penalty'].includes(restart?.type);
@@ -546,7 +546,16 @@ function offsideSnapshot(state, kicker, restart) {
   const info = offsideInfo(state, kicker.team);
   return {team: kicker.team, kickerId: kicker.id, ball: info.ball, secondLastY: info.secondLastY, flaggedIds: info.flaggedIds.filter(id => id !== kicker.id)};
 }
-const flagged = (state, piece) => !!piece && state.offside?.team === piece.team && (state.offside.flaggedIds || []).includes(piece.id);
+// Only teammates can offend at a kick. Keep that invariant even when loading
+// a stale snapshot; never reconstruct flags from a later defensive line.
+export function offsideFlaggedIds(state) {
+  const snapshot = state?.offside;
+  if (!snapshot) return [];
+  return (snapshot.flaggedIds || []).filter(id => id !== snapshot.kickerId
+    && state.pieces.some(piece => piece.id === id && piece.team === snapshot.team));
+}
+const flagged = (state, piece) => !!piece && state.offside?.team === piece.team
+  && piece.id !== state.offside.kickerId && (state.offside.flaggedIds || []).includes(piece.id);
 
 // Coordinates describe square centres; the ball is out only after the whole
 // centre trajectory crosses the outer half-square. The first line wins.
@@ -675,6 +684,7 @@ export function normalizeGame(state) {
   }
   next.restart ??= null;
   next.offside ??= null;
+  if (next.offside) next.offside.flaggedIds = offsideFlaggedIds(next);
   if (next.phase === 'cornerSelect') {
     if (next.restart?.type === 'corner' && TEAMS.includes(next.restart.team)) {
       next.attack = next.restart.team;

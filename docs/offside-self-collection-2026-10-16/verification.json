@@ -1,0 +1,15 @@
+{
+  "focusedReleaseTests": {
+    "passed": 121,
+    "failed": 0,
+    "includesNewSelfCollectionCases": 16
+  },
+  "existingOffsideFairnessPaceAIRegressionTests": {
+    "passed": 102,
+    "failed": 0,
+    "note": "Overlaps the focused suite; do not add these counts as unique tests."
+  },
+  "actualVersionedWorkerRoundTrips": 4,
+  "visualBrowserQA": "unavailable in managed environment",
+  "ruleConclusion": "A kicker may collect its own kick across the offside line. The fifth carrying round still awards an indirect carrying-limit free kick; current-round movement budgets remain enforced."
+}
