@@ -1,0 +1,42 @@
+{
+  "createdBeforeEvaluation": true,
+  "candidateSelection": "maximum development paired goal difference, then WDL score, then earlier checkpoint; invalid candidates excluded",
+  "development": {
+    "seeds": [
+      300017,
+      300041
+    ],
+    "actions": 96,
+    "nodes": 128,
+    "depth": 8,
+    "warmup": 80,
+    "fouls": true
+  },
+  "heldOut": {
+    "seeds": [
+      400031,
+      400079,
+      400121,
+      400171
+    ],
+    "actions": 120,
+    "nodes": 1400,
+    "depth": 8,
+    "warmup": 80,
+    "fouls": true
+  },
+  "candidates": {
+    "early": {
+      "path": "/workspace/scratch/43be99f43c82/selfplay-rl-20261016/train-stage1-forced-shot/checkpoint-0004.json",
+      "sha256": "54f0fb11d6879e04cbcf76a9c8115ba05ba4bc520be4fb19335dea33c52de9c3"
+    },
+    "mid": {
+      "path": "/workspace/scratch/43be99f43c82/selfplay-rl-20261016/train-stage2/checkpoint-0032.json",
+      "sha256": "e256b47a88546e9f8bde9f54eca28c669ba2cde1305e2eaf2d777037d009be11"
+    },
+    "late": {
+      "path": "/workspace/scratch/43be99f43c82/selfplay-rl-20261016/train-stage2/model.json",
+      "sha256": "023bb6629df00eafcd1935ac3b5c79560b12e4d6a5f6c23878219e4ee2d6c44f"
+    }
+  }
+}

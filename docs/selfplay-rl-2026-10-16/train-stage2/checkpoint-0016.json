@@ -1,0 +1,143 @@
+{
+  "format": "football-chess-td-lambda-v1",
+  "algorithm": "TD(lambda)",
+  "implementation": "online semi-gradient TD(lambda) with accumulating eligibility traces",
+  "featureNames": [
+    "possession",
+    "ballProgress",
+    "material",
+    "centerControl",
+    "openFiles",
+    "defensiveCover",
+    "centralReceivers"
+  ],
+  "perspective": "fixed white; color-relative, score-excluded features",
+  "scale": 80,
+  "residualScale": 80,
+  "weights": [
+    -0.00018377446737279977,
+    -0.0014365260073587243,
+    0.04578400374844102,
+    0.030824827405549992,
+    -0.007441034098193637,
+    0.007522695286162527,
+    0.03886376855529421
+  ],
+  "initialWeights": [
+    -0.002230326486076533,
+    0.025675663138183518,
+    0.04465593513913752,
+    0.008682633701603232,
+    -0.029420905505565153,
+    -0.0005176003106523657,
+    -0.016565562197689798
+  ],
+  "updates": 15360,
+  "completedEpisodes": 32,
+  "training": {
+    "seed": 100000,
+    "seeds": [
+      100000,
+      100001,
+      100002,
+      100003,
+      100004,
+      100005,
+      100006,
+      100007,
+      100008,
+      100009,
+      100010,
+      100011,
+      100012,
+      100013,
+      100014,
+      100015,
+      110000,
+      110001,
+      110002,
+      110003,
+      110004,
+      110005,
+      110006,
+      110007,
+      110008,
+      110009,
+      110010,
+      110011,
+      110012,
+      110013,
+      110014,
+      110015
+    ],
+    "seedRange": [
+      100000,
+      110015
+    ],
+    "episodes": 32,
+    "actionsPerEpisode": 480,
+    "totalTransitions": 15360,
+    "goalEvents": 23,
+    "whiteGoals": 9,
+    "blackGoals": 14,
+    "originInitialWeights": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "runs": [
+      {
+        "seed": 100000,
+        "episodes": 16,
+        "actionsPerEpisode": 480
+      },
+      {
+        "seed": 110000,
+        "episodes": 16,
+        "actionsPerEpisode": 480,
+        "policy": "beam",
+        "epsilon": 0.12
+      }
+    ]
+  },
+  "parentCheckpoint": {
+    "weights": [
+      -0.002230326486076533,
+      0.025675663138183518,
+      0.04465593513913752,
+      0.008682633701603232,
+      -0.029420905505565153,
+      -0.0005176003106523657,
+      -0.016565562197689798
+    ],
+    "engineSha256": "0c58acf47dd28a3ccf5c67dc7ef297867f787bb9d18ca88274af5fb6831c8d9b",
+    "episodes": 16,
+    "transitions": 7680
+  },
+  "engineSha256": "0c58acf47dd28a3ccf5c67dc7ef297867f787bb9d18ca88274af5fb6831c8d9b",
+  "reward": "change in white goals minus black goals; no center, possession, passing, or movement reward",
+  "truncation": "action limits bootstrap the last nonterminal position; only real finished states use zero",
+  "config": {
+    "episodes": 64,
+    "actions": 480,
+    "seed": 110000,
+    "out": "/workspace/scratch/43be99f43c82/selfplay-rl-20261016/train-stage2",
+    "policy": "beam",
+    "baselinePolicy": "tactical",
+    "candidateWidth": 6,
+    "nodeLimit": 96,
+    "epsilon": 0.12,
+    "alpha": 0.015,
+    "gamma": 0.995,
+    "lambda": 0.85,
+    "maxWeight": 4,
+    "checkpointEvery": 16,
+    "foulsEnabled": true,
+    "evaluate": false,
+    "initialModel": "/workspace/scratch/43be99f43c82/selfplay-rl-20261016/train-stage1-forced-shot/model.json"
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "format": "football-chess-td-lambda-v1",
+  "algorithm": "TD(lambda)",
+  "implementation": "online semi-gradient TD(lambda) with accumulating eligibility traces",
+  "featureNames": [
+    "possession",
+    "ballProgress",
+    "material",
+    "centerControl",
+    "openFiles",
+    "defensiveCover",
+    "centralReceivers"
+  ],
+  "perspective": "fixed white; color-relative, score-excluded features",
+  "scale": 80,
+  "residualScale": 80,
+  "weights": [
+    -0.011885372006885062,
+    0.024964322413064413,
+    0.00017836948353374633,
+    -0.00269627337634473,
+    -0.04454817535276594,
+    -0.004295058950961223,
+    0.009656246970992032
+  ],
+  "initialWeights": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "updates": 5760,
+  "completedEpisodes": 12,
+  "training": {
+    "seed": 100000,
+    "seeds": [
+      100000,
+      100001,
+      100002,
+      100003,
+      100004,
+      100005,
+      100006,
+      100007,
+      100008,
+      100009,
+      100010,
+      100011
+    ],
+    "seedRange": [
+      100000,
+      100011
+    ],
+    "episodes": 12,
+    "actionsPerEpisode": 480,
+    "totalTransitions": 5760,
+    "goalEvents": 9,
+    "whiteGoals": 5,
+    "blackGoals": 4
+  },
+  "engineSha256": "0c58acf47dd28a3ccf5c67dc7ef297867f787bb9d18ca88274af5fb6831c8d9b",
+  "reward": "change in white goals minus black goals; no center, possession, passing, or movement reward",
+  "truncation": "action limits bootstrap the last nonterminal position; only real finished states use zero",
+  "config": {
+    "episodes": 16,
+    "actions": 480,
+    "seed": 100000,
+    "out": "/workspace/scratch/43be99f43c82/selfplay-rl-20261016/train-stage1-forced-shot",
+    "policy": "beam",
+    "baselinePolicy": "tactical",
+    "candidateWidth": 6,
+    "nodeLimit": 96,
+    "epsilon": 0.12,
+    "alpha": 0.035,
+    "gamma": 0.995,
+    "lambda": 0.85,
+    "maxWeight": 4,
+    "checkpointEvery": 4,
+    "foulsEnabled": true,
+    "evaluate": false
+  }
+}

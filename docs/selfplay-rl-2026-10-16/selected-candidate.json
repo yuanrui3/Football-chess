@@ -1,0 +1,34 @@
+{
+  "selected": "early",
+  "checkpoint": {
+    "path": "/workspace/scratch/43be99f43c82/selfplay-rl-20261016/train-stage1-forced-shot/checkpoint-0004.json",
+    "sha256": "54f0fb11d6879e04cbcf76a9c8115ba05ba4bc520be4fb19335dea33c52de9c3"
+  },
+  "developmentSummary": {
+    "early": {
+      "wins": 0,
+      "draws": 8,
+      "losses": 0,
+      "goalDifference": 0,
+      "wdlScore": 0.5,
+      "errors": []
+    },
+    "mid": {
+      "wins": 1,
+      "draws": 5,
+      "losses": 2,
+      "goalDifference": -1,
+      "wdlScore": 0.4375,
+      "errors": []
+    },
+    "late": {
+      "wins": 0,
+      "draws": 8,
+      "losses": 0,
+      "goalDifference": 0,
+      "wdlScore": 0.5,
+      "errors": []
+    }
+  },
+  "lockedBeforeHeldOut": true
+}

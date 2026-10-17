@@ -1,0 +1,8 @@
+{
+  "siteVersion": 37,
+  "sourceCommit": "0b1eca1374447cea786023ec8cdcc1834e868936",
+  "engineSha256": "0efe76a2b98ee0b00aa2e74a8507b80222885f527cdbf53a5ecd0e1886e50bd9",
+  "rulesVersion": 18,
+  "shotModelVersion": 14,
+  "searchNodeLimit": 1400
+}

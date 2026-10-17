@@ -1,0 +1,37 @@
+{
+  "fullSuite": {
+    "tests": 1015,
+    "passed": 1015,
+    "failed": 0,
+    "durationMs": 368139.092122,
+    "engineSha256": "0c58acf47dd28a3ccf5c67dc7ef297867f787bb9d18ca88274af5fb6831c8d9b",
+    "defaultModelEnabled": false
+  },
+  "focusedLearningAndUI": {
+    "tests": 70,
+    "passed": 70,
+    "failed": 0
+  },
+  "additionalUI": {
+    "tests": 16,
+    "passed": 16,
+    "failed": 0,
+    "includedInFullSuite": false
+  },
+  "browserVerification": "Controlled VM/DOM/worker tests only; no supported browser-control skill available in this environment.",
+  "releaseChecks": {
+    "tests": 94,
+    "passed": 94,
+    "failed": 0,
+    "afterEmbeddingCheckpoint": true
+  },
+  "versionedWorkerRoundtrips": {
+    "tests": 2,
+    "passed": 2,
+    "learnedEvaluation": [
+      false,
+      true
+    ]
+  },
+  "releaseEngineSha256": "fc646d86a8b8e20715af5f15324362b269317f6032e6d1a27e7396754e871c29"
+}

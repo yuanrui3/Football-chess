@@ -1,0 +1,77 @@
+{
+  "format": "football-chess-td-lambda-v1",
+  "algorithm": "TD(lambda)",
+  "implementation": "online semi-gradient TD(lambda) with accumulating eligibility traces",
+  "featureNames": [
+    "possession",
+    "ballProgress",
+    "material",
+    "centerControl",
+    "openFiles",
+    "defensiveCover",
+    "centralReceivers"
+  ],
+  "perspective": "fixed white; color-relative, score-excluded features",
+  "scale": 80,
+  "residualScale": 80,
+  "weights": [
+    0.023407175221251054,
+    0.018647497291587795,
+    0,
+    -0.01654074618987482,
+    0.04421147832680915,
+    0.016411871167004627,
+    0.14018551939679075
+  ],
+  "initialWeights": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "updates": 1920,
+  "completedEpisodes": 4,
+  "training": {
+    "seed": 100000,
+    "seeds": [
+      100000,
+      100001,
+      100002,
+      100003
+    ],
+    "seedRange": [
+      100000,
+      100003
+    ],
+    "episodes": 4,
+    "actionsPerEpisode": 480,
+    "totalTransitions": 1920,
+    "goalEvents": 4,
+    "whiteGoals": 3,
+    "blackGoals": 1
+  },
+  "engineSha256": "0c58acf47dd28a3ccf5c67dc7ef297867f787bb9d18ca88274af5fb6831c8d9b",
+  "reward": "change in white goals minus black goals; no center, possession, passing, or movement reward",
+  "truncation": "action limits bootstrap the last nonterminal position; only real finished states use zero",
+  "config": {
+    "episodes": 16,
+    "actions": 480,
+    "seed": 100000,
+    "out": "/workspace/scratch/43be99f43c82/selfplay-rl-20261016/train-stage1-forced-shot",
+    "policy": "beam",
+    "baselinePolicy": "tactical",
+    "candidateWidth": 6,
+    "nodeLimit": 96,
+    "epsilon": 0.12,
+    "alpha": 0.035,
+    "gamma": 0.995,
+    "lambda": 0.85,
+    "maxWeight": 4,
+    "checkpointEvery": 4,
+    "foulsEnabled": true,
+    "evaluate": false
+  }
+}

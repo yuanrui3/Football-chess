@@ -1,0 +1,16 @@
+{
+  "engineSha256": "0c58acf47dd28a3ccf5c67dc7ef297867f787bb9d18ca88274af5fb6831c8d9b",
+  "seed": 100000,
+  "actions": 480,
+  "checks": {
+    "score": true,
+    "goalEvents": true,
+    "trace": true,
+    "finalWeights": true,
+    "actions": true,
+    "exploredActions": true,
+    "nonzeroDeltaUpdates": true,
+    "finalBootstrap": true
+  },
+  "passed": true
+}

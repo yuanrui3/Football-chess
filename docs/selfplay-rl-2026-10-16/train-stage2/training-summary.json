@@ -1,0 +1,50 @@
+{
+  "engineSha256": "0c58acf47dd28a3ccf5c67dc7ef297867f787bb9d18ca88274af5fb6831c8d9b",
+  "config": {
+    "episodes": 64,
+    "actions": 480,
+    "seed": 110000,
+    "out": "/workspace/scratch/43be99f43c82/selfplay-rl-20261016/train-stage2",
+    "policy": "beam",
+    "baselinePolicy": "tactical",
+    "candidateWidth": 6,
+    "nodeLimit": 96,
+    "epsilon": 0.12,
+    "alpha": 0.015,
+    "gamma": 0.995,
+    "lambda": 0.85,
+    "maxWeight": 4,
+    "checkpointEvery": 16,
+    "foulsEnabled": true,
+    "evaluate": false,
+    "initialModel": "/workspace/scratch/43be99f43c82/selfplay-rl-20261016/train-stage1-forced-shot/model.json"
+  },
+  "episodes": 64,
+  "actions": 30720,
+  "goalRewardEvents": 45,
+  "whiteGoals": 14,
+  "blackGoals": 31,
+  "nonzeroDeltaUpdates": 30720,
+  "updateL1": 49.9605252455779,
+  "initialWeights": [
+    -0.002230326486076533,
+    0.025675663138183518,
+    0.04465593513913752,
+    0.008682633701603232,
+    -0.029420905505565153,
+    -0.0005176003106523657,
+    -0.016565562197689798
+  ],
+  "finalWeights": [
+    -0.017037205695739067,
+    0.03896355993093529,
+    0.06725453102144376,
+    0.013453301124116863,
+    -0.026285321777879594,
+    0.029777617298381773,
+    0.016163178455716656
+  ],
+  "elapsedSeconds": 110.455734589,
+  "behaviorPolicy": "6 handcrafted-ranked legal candidates; one-ply expected public chance outcomes; epsilon exploration",
+  "limitation": "A small goal-trained residual over the existing evaluator, not a neural policy or from-scratch soccer system. Training uses fixed-action segments with nonterminal bootstrapping."
+}

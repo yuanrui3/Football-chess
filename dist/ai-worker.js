@@ -1,7 +1,9 @@
-import {chooseAIAction} from './engine.js?v=0efe76a2b98e';
+import {chooseAIAction,RL_VALUE_MODEL} from './engine.js?v=fc646d86a8b8';
 
 if(typeof self!=='undefined')self.onmessage=({data})=>{
-  const {requestId,state,difficulty}=data;
-  try{self.postMessage({requestId,action:chooseAIAction(state,{difficulty})});}
+  const {requestId,state,difficulty,learnedEvaluation}=data;
+  const options={difficulty};
+  if(typeof learnedEvaluation==='boolean')options.modelWeights=learnedEvaluation&&RL_VALUE_MODEL.trained?RL_VALUE_MODEL.weights:null;
+  try{self.postMessage({requestId,action:chooseAIAction(state,options)});}
   catch(error){self.postMessage({requestId,error:error instanceof Error?error.message:String(error)});}
 };

@@ -1,0 +1,26 @@
+{
+  "checkpoint": "td-lambda-2026-10-16-early-0004",
+  "checkpointSha256": "54f0fb11d6879e04cbcf76a9c8115ba05ba4bc520be4fb19335dea33c52de9c3",
+  "trainingSegments": 4,
+  "trainingTransitions": 1920,
+  "trainingGoalEvents": 4,
+  "experimentSegments": 80,
+  "experimentTransitions": 38400,
+  "experimentGoalEvents": 57,
+  "defaultEnabled": false,
+  "promotionGatePassed": false,
+  "heldOutWDL": [
+    1,
+    10,
+    5
+  ],
+  "heldOutGoals": [
+    1,
+    5
+  ],
+  "heldOutXG": [
+    2.286003237027518,
+    4.014964056890038
+  ],
+  "reason": "Held-out paired goal difference and WDL score did not improve. Keep baseline Tactical as default; trained candidate is optional and experimental."
+}

@@ -1,7 +1,7 @@
-import {createGame, legalMoves, legalKicks, disguisedShotTargets, applyMove, applyKick, skipMove, chooseAIAction, currentTeam, cornerTakers, selectCornerTaker, BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, BOX_FILES, BOX_DEPTH, CENTRAL_GOAL_FILES, MIDFIELD_RANK, inOwnBox, canOccupySquare, isBox, isGoalMouth, shotChance, shotModel, offsideInfo, LONG_TACKLE_RANGE, DRIBBLE_RANGE, FOUL_RULE, STALLING_RULE, PACE_RULE, ACTION_SECONDS, actionTimeout, progressInfo, paceInfo, positionActions, normalizeGame} from './engine.js?v=0efe76a2b98e';
+import {createGame, legalMoves, legalKicks, disguisedShotTargets, applyMove, applyKick, skipMove, chooseAIAction, currentTeam, cornerTakers, selectCornerTaker, BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, BOX_FILES, BOX_DEPTH, CENTRAL_GOAL_FILES, MIDFIELD_RANK, inOwnBox, canOccupySquare, isBox, isGoalMouth, shotChance, shotModel, offsideInfo, LONG_TACKLE_RANGE, DRIBBLE_RANGE, FOUL_RULE, STALLING_RULE, PACE_RULE, ACTION_SECONDS, actionTimeout, progressInfo, paceInfo, positionActions, normalizeGame, RL_VALUE_MODEL} from './engine.js?v=fc646d86a8b8';
 import {createMatchClock, restoreMatchClock, tickMatchClock, settleMatchClock, rewindMatchClock} from './match-clock.js?v=1fa32f5eed6c';
-import {buildGoalReplay, restoreGoalReplay, createReplayPlayer} from './goal-replay.js?v=ce10532e9612';
-import {createMatchStats, restoreMatchStats, recordMatchTransition, addPossessionTime, matchStatsSummary, shortPieceId} from './match-stats.js?v=9a37fe8f9ce5';
+import {buildGoalReplay, restoreGoalReplay, createReplayPlayer} from './goal-replay.js?v=94966bcb7609';
+import {createMatchStats, restoreMatchStats, recordMatchTransition, addPossessionTime, matchStatsSummary, shortPieceId} from './match-stats.js?v=ad2ad282be3b';
 import {createCommentary} from './commentary.js?v=128601a455c4';
 import {createParadeeSpeech} from './paradee-speech.js?v=ebf05af105ad';
 
@@ -12,6 +12,7 @@ const SYMBOLS = {K:'♚',Q:'♛',R:'♜',B:'♝',N:'♞',P:'♟'};
 const TEAM = {white:'Ivory FC',black:'Obsidian FC'};
 const STORE = 'football-chess-match-v4';
 const VOICE_STORE = 'football-chess-voiceover-v1';
+const RL_STORE = 'football-chess-self-play-v1';
 const SAVE_GEOMETRY = {width:W,height:H,boxWidth:BOX_FILES.length,boxDepth:BOX_DEPTH};
 const AI_PACES = [3000,1800,600];
 const MOVE_PATTERNS={K:'One square in any direction',Q:'Up to 10 movement points straight or diagonally',R:'Up to 10 movement points horizontally or vertically',B:'Up to 10 movement points diagonally',N:'One L-shaped jump over other pieces',P:'One square forward, back, left, or right'};
@@ -41,6 +42,8 @@ let disguiseSelected=true;
 let selectedId=null,history=[],aiTimer=null,toastTimer=null,lastTick=Date.now();
 let storageOK=true,aiPace=3000,aiDifficulty='casual',whiteDifficulty='casual',lastComputerAction=null,freePawnMode=false,dribbleMode=false,legacyMatch=false;
 let aiWorker=null,aiWatchdog=null,aiGeneration=0;
+let rlEnabled=RL_VALUE_MODEL.trained&&RL_VALUE_MODEL.enabled;
+try{const preference=JSON.parse(localStorage.getItem(RL_STORE)||'null');if(typeof preference?.enabled==='boolean')rlEnabled=RL_VALUE_MODEL.trained&&preference.enabled;}catch{}
 let lastGoalReplay=null,replayAutoContinue=false,replayPendingResult=false;
 let matchStats=createMatchStats();
 let shotFlight=null,shotFlightGeneration=0;
@@ -453,6 +456,11 @@ function render(){
   $('computerActionLabel').textContent=watching?`${TEAM[lastComputerAction?.actor]||'COMPUTER'} · LAST ACTION`:'COMPUTER’S LAST ACTION';
   $('aiDifficultyLabel').textContent=watching?'OBSIDIAN COMPUTER':'COMPUTER DIFFICULTY';$('aiPaceLabel').textContent=watching?'ACTION PACE':'OPPONENT PACE';
   $('difficultyHelp').textContent=watching?'Choose each team’s level. Casual reacts to the position; Tactical plans ahead. Level changes apply to the next decision.':aiDifficulty==='tactical'?'Plans ahead against your replies and weighs risky outcomes.':'Builds passing lanes, protects the ball, and covers likely receivers.';
+  const tacticalSelected=aiDifficulty==='tactical'||watching&&whiteDifficulty==='tactical';
+  $('selfPlayChoice').hidden=!RL_VALUE_MODEL.trained;
+  $('selfPlayEnabled').checked=rlEnabled;
+  $('selfPlayEnabled').disabled=!RL_VALUE_MODEL.trained||!tacticalSelected;
+  $('selfPlayNote').textContent=RL_VALUE_MODEL.enabled?'Self-play-trained evaluation passed its held-out match check. Applies to Tactical; uncheck for the baseline.':'Experimental self-play evaluation. Applies to Tactical; the baseline remains available by leaving this off.';
   $('setupHint').textContent=watching?'Both computer teams play automatically. Use the starting formation, or arrange either side before watching.':'Use the starting formation, or select a piece and a square to arrange your half.';
   $('startBtn').innerHTML=`${watching?'Start watching':'Kick off'} <span>↗</span>`;
   $('whiteScore').textContent=game.score.white;$('blackScore').textContent=game.score.black;
@@ -701,23 +709,23 @@ function animateComputerMove(action){
 }
 function scheduleAI(){
   if(shotFlight||stage!=='playing'||paused||anyDialog()||!isComputer()||aiTimer!==null||aiWorker)return;
-  const requestId=aiGeneration,actor=currentTeam(game),difficulty=computerDifficulty(actor);
+  const requestId=aiGeneration,actor=currentTeam(game),difficulty=computerDifficulty(actor),learnedEvaluation=RL_VALUE_MODEL.trained&&rlEnabled;
   const stillCurrent=()=>requestId===aiGeneration&&actor===currentTeam(game)&&stage==='playing'&&!paused&&!anyDialog()&&!shotFlight&&isComputer();
   const fail=err=>{if(!stillCurrent())return;stopAIWorker();paused=true;render();toast('Play paused: '+err.message);};
   const receive=action=>{
     if(!stillCurrent())return;stopAIWorker();
     try{if(!action)throw new Error('No legal action found.');if(action.type==='cornerTaker')commit(selectCornerTaker(game,action.pieceId));else if(action.type==='move')commit(applyMove(game,action.pieceId,action.x,action.y,{freePawn:!!action.freePawn}));else if(action.type==='kick')commit(applyKick(game,action.x,action.y,{passRun:!!action.passRun,disguise:!!action.disguise}));else commit(skipMove(game));}catch(err){fail(err);}
   };
-  const fallback=(level=difficulty)=>{if(!stillCurrent())return;stopAIWorker();try{receive(chooseAIAction(game,{difficulty:level}));}catch(err){fail(err);}};
+  const fallback=(level=difficulty)=>{if(!stillCurrent())return;stopAIWorker();try{receive(chooseAIAction(game,{difficulty:level,modelWeights:learnedEvaluation?RL_VALUE_MODEL.weights:null}));}catch(err){fail(err);}};
   aiTimer=setTimeout(()=>{
     aiTimer=null;if(!stillCurrent())return;
     if(difficulty==='tactical'&&typeof window.Worker==='function'){
       try{
-        aiWorker=new window.Worker(new URL('./ai-worker.js?v=1996fb9cf095',import.meta.url),{type:'module',name:'football-chess-tactical'});
+        aiWorker=new window.Worker(new URL('./ai-worker.js?v=1ab354059824',import.meta.url),{type:'module',name:'football-chess-tactical'});
         aiWorker.onmessage=event=>{if(!stillCurrent()||event.data?.requestId!==requestId)return;if(event.data.error)fallback();else receive(event.data.action);};
         aiWorker.onerror=event=>{event.preventDefault?.();fallback();};
         aiWatchdog=setTimeout(()=>fallback('casual'),4000);
-        aiWorker.postMessage({requestId,state:game,difficulty});
+        aiWorker.postMessage({requestId,state:game,difficulty,learnedEvaluation});
       }catch{fallback();}
     }else fallback();
   },aiPace);
@@ -786,6 +794,7 @@ $('voiceTest').addEventListener('click',()=>{if($('voiceTest').disabled||aiPace!
 $('voiceDemo').addEventListener('click',()=>{if(aiPace!==3000||!commentary.getState().supported||!(stage==='setup'||stage==='playing'&&paused)||anyDialog()||shotFlight)return;voiceEnabled=true;saveVoicePreference();activateVoiceover();resetVoiceover();voiceLifecycle=paused?'paused':stage;commentary.demo();renderVoiceover();});
 $('aiDifficulty').addEventListener('change',()=>{aiDifficulty=$('aiDifficulty').value==='tactical'?'tactical':'casual';$('aiDifficulty').value=aiDifficulty;render();save();});
 $('whiteDifficulty').addEventListener('change',()=>{whiteDifficulty=$('whiteDifficulty').value==='tactical'?'tactical':'casual';$('whiteDifficulty').value=whiteDifficulty;render();save();});
+$('selfPlayEnabled').addEventListener('change',()=>{cancelAI();rlEnabled=RL_VALUE_MODEL.trained&&$('selfPlayEnabled').checked;try{localStorage.setItem(RL_STORE,JSON.stringify({enabled:rlEnabled}));}catch{}render();save();});
 for(const id of ['mode','kickoff'])$(id).addEventListener('change',refreshSetup);
 $('passRunEnabled').addEventListener('change',()=>{if(!kickPhase()||blocked()){$('passRunEnabled').checked=passRunSelected;return;}passRunSelected=!!$('passRunEnabled').checked;render();save();});
 $('disguisedShotEnabled').addEventListener('change',()=>{if(disguiseChoices().length!==2||blocked()){$('disguisedShotEnabled').checked=disguiseSelected;return;}disguiseSelected=!!$('disguisedShotEnabled').checked;render();save();});

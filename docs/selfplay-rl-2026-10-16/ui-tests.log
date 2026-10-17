@@ -1,0 +1,24 @@
+✔ self-play UI: untrained has safe availability and default (4.815645ms)
+✔ self-play UI: unpromoted has safe availability and default (1.908605ms)
+✔ self-play UI: promoted has safe availability and default (1.325358ms)
+✔ self-play UI: explicit opt-in has safe availability and default (1.330215ms)
+✔ self-play UI: explicit opt-out has safe availability and default (1.307444ms)
+✔ self-play UI: malformed preference has safe availability and default (2.450718ms)
+✔ self-play UI: untrained opt-in has safe availability and default (1.332026ms)
+✔ self-play UI: either Tactical team activates the option in Watch mode (3.911478ms)
+✔ self-play UI: an explicit preference is separately persisted and restored (7.163077ms)
+✔ self-play AI scheduling: worker uses explicit false and toggle cancels stale results (3.721684ms)
+✔ self-play AI scheduling: main-thread fallback uses explicit false (2.116045ms)
+✔ self-play AI scheduling: worker uses explicit true and toggle cancels stale results (1.775519ms)
+✔ self-play AI scheduling: main-thread fallback uses explicit true (1.33121ms)
+✔ self-play UI: changing choice before a pending action discards its old pace timer (1.386841ms)
+✔ self-play worker: legacy requests retain defaults and explicit booleans respect training availability (5.91267ms)
+✔ self-play controls keep the two difficulties and describe offline evaluation accurately (0.651128ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 213.917697
