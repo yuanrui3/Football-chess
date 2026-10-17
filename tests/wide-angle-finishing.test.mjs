@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {E,fixture,model,point,pieceId,clone,rawAccuracy,clampAccuracy} from './helpers/shot-fixture.mjs';
 const close=(a,b,label='')=>assert.ok(Math.abs(a-b)<1e-10,`${label}: ${a} != ${b}`);
 const bonus=degrees=>{const t=Math.max(0,Math.min(1,(degrees-45)/45));return 1+.25*t*t*(3-2*t);};
-function mass(m){close(m.goalProbability+m.saveProbability+m.missProbability+m.blockProbability,1);close(m.onTargetProbability,m.goalProbability+m.saveProbability);close(m.keeperCornerProbability+m.caughtSaveProbability,m.saveProbability);}
+function mass(m){close(m.goalProbability+m.saveProbability+m.missProbability+m.blockProbability,1);close(m.onTargetProbability,m.goalProbability+m.saveProbability);close(m.keeperCornerProbability + m.keeperReboundProbability + m.caughtSaveProbability,m.saveProbability);}
 test('wide-opening bonus is monotonic through both plateaus across the expanded pitch',()=>{
  const models=[];for(let x=0;x<E.BOARD_WIDTH;x++)for(let y=0;y<E.BOARD_HEIGHT;y++)models.push(model(fixture({type:'N',origin:[x,y],keeper:[10,5]}),5));models.sort((a,b)=>a.goalOpeningDegrees-b.goalOpeningDegrees);
  let previous=1,narrow=0,middle=0,wide=0;for(const m of models){close(m.wideAngleFactor,bonus(m.goalOpeningDegrees));assert.ok(m.wideAngleFactor>=previous-1e-12);previous=m.wideAngleFactor;if(m.goalOpeningDegrees<=45){assert.equal(m.wideAngleFactor,1);narrow++;}else if(m.goalOpeningDegrees>=90){assert.equal(m.wideAngleFactor,1.25);wide++;}else middle++;close(m.baseOnTargetProbability,clampAccuracy(rawAccuracy(m)));mass(m);}assert.ok(narrow&&middle&&wide);

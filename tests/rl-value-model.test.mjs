@@ -6,6 +6,8 @@ import * as B from '../training/frozen/engine-v37.mjs';
 
 const source = await readFile(new URL('../dist/engine.js', import.meta.url), 'utf8');
 const I = await import(`data:text/javascript;base64,${Buffer.from(source + '\nexport {tacticalBasePositionValue,tacticalPositionValue};').toString('base64')}`);
+const previousSource = await readFile(new URL('../training/frozen/engine-v37.mjs', import.meta.url), 'utf8');
+const Previous = await import(`data:text/javascript;base64,${Buffer.from(previousSource + '\nexport {tacticalPositionValue as originalBasePositionValue};').toString('base64')}`);
 const weights = [.2, .3, -.1, .4, .3, .2, .25];
 
 test('playable checkpoint matches the selected training artifact and honors its release gate', async () => {
@@ -36,13 +38,17 @@ test('seven bounded value features exclude the score ledger and hidden random st
   assert.deepEqual(s, before);
 });
 
-test('null and all-zero weights preserve the frozen baseline completed search exactly', () => {
+test('zero weights preserve current-rule search and the original handcrafted position value', () => {
   const opening = E.createGame({seed: 100002});
   const first = B.chooseAIAction(opening, {difficulty: 'casual'});
   const received = E.applyKick(opening, first.x, first.y, {roll: 0});
   const options = {maxDepth: 2, nodeLimit: 120, extensions: false};
   for (const s of [opening, received]) {
-    const baseline = B.analyzeTacticalAction(s, options);
+    // New live-parry rules legitimately add chance nodes to the search tree.
+    // Compare zero/null learners under the same rules and verify the old
+    // handcrafted position score independently against the frozen engine.
+    for (const team of ['white', 'black']) assert.equal(I.tacticalBasePositionValue(s, team), Previous.originalBasePositionValue(s, team));
+    const baseline = E.analyzeTacticalAction(s, {...options, modelWeights: null});
     assert.deepEqual(E.analyzeTacticalAction(s, {...options, modelWeights: null}), baseline);
     assert.deepEqual(E.analyzeTacticalAction(s, {...options, modelWeights: Array(7).fill(0)}), baseline);
   }

@@ -554,3 +554,14 @@ test('stored disguised replay rejects revealed declarations, invalid target pair
   ];
   for(const mutate of mutations){const invalid=clone(replay);mutate(invalid);assert.equal(restoreGoalReplay(invalid),null);}
 });
+
+test('a keeper spill in a later goal build-up preserves its live landing and validates recording',()=>{
+  const {before,after,history}=recordedGoal(),spill=clone(history[0].game);
+  const keeper=spill.pieces.find(piece=>piece.id==='black-K'),landing={x:6,y:3};
+  spill.ball={...landing,carrierId:null};spill.lastAction={type:'save',team:'black',shootingTeam:'white',pieceId:'white-R1',keeperId:keeper.id,from:{x:5,y:4},to:landing,reboundLanding:landing,reboundRoll:.25,keeperRebound:true,outcome:'loose',path:[{x:5,y:4},{x:keeper.x,y:keeper.y},landing],shotModel:{keeperReboundProbability:.02}};
+  const replay=buildGoalReplay([{game:spill},...history],before,after);assert.ok(replay);
+  const frame=replay.frames.find(frame=>frame.action?.outcome==='loose');assert.ok(frame);
+  assert.equal(frame.action.keeperReboundProbability,.02);assert.deepEqual(frame.action.reboundLanding,landing);assert.equal(frame.ball.carrierId,null);assert.match(frame.caption,/loose/);
+  assert.deepEqual(restoreGoalReplay(clone(replay)),replay);
+  for(const mutate of [a=>a.reboundLanding={x:5,y:0},a=>a.keeperReboundProbability=2,a=>a.keeperRebound=false,a=>a.reboundRoll=1]){const invalid=clone(replay);mutate(invalid.frames.find(frame=>frame.action?.outcome==='loose').action);assert.equal(restoreGoalReplay(invalid),null);}
+});

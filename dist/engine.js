@@ -9,7 +9,7 @@ export const CENTRAL_GOAL_FILES = Object.freeze([6, 7]);
 export const MIDFIELD_RANK = Math.floor(BOARD_HEIGHT / 2);
 export const BOARD_CENTER_X = (BOARD_WIDTH - 1) / 2;
 export const FILE_LABELS = 'abcdefghijklmn';
-export const RULES_VERSION = 18;
+export const RULES_VERSION = 19;
 export const ALLOW_OUTFIELD_BOXES = true;
 export const LONG_TACKLE_RANGE = 5;
 export const MOVE_RANGE = 10;
@@ -21,7 +21,8 @@ export const PACE_RULE = Object.freeze({maxDribbleRounds: 4, repetitionOccurrenc
 // Tunable board-game parameters, not fitted football statistics. Distance is in
 // board squares and time is in abstract units set by ballSpeed.
 export const SHOT_MODEL = Object.freeze({
-  version: 14, ballSpeed: 6, blockPerDefender: 0.45, blockCornerShare: 0.85, knightGoalMultiplier: 1, finishingAccuracyMultiplier: 1.15,
+  version: 15, ballSpeed: 6, blockPerDefender: 0.45, blockCornerShare: 0.85, knightGoalMultiplier: 1, finishingAccuracyMultiplier: 1.15,
+  parryInPlayShare: 0.20, reboundBoxMargin: 2,
   targetBase: 0.98, distanceDecay: 0.018, distancePenaltyStart: 3, longShotDecay: 0.06, rookLongShotDecay: 0.03, minOnTarget: 0.01, maxOnTarget: 0.98,
   angleFloor: 0.65, angleWeight: 0.35, postAngleFloor: 0.10, postAngleWeight: 0.90, postAngleExponent: 1.5,
   wideAngleStartDegrees: 45, wideAngleFullDegrees: 90, wideAngleAccuracyBonus: 0.25,
@@ -819,6 +820,24 @@ function friendlyStopsShot(state, carrier, x, y) {
   return shotBodies(state.pieces, carrier, target, carrier.id).some(piece => piece.team === carrier.team);
 }
 
+// A goalkeeper spill is a loose ball, never an automatic touch by a nearby
+// piece. The stable, public list is shared by live play and chance search.
+export function keeperReboundTargets(state, shot = state?.pendingShot) {
+  const scoringTeam = shot?.scoringTeam || shotScoringTeam(shot?.x, shot?.y);
+  const defendingTeam = shot?.defendingTeam || (scoringTeam ? other(scoringTeam) : null);
+  if (!TEAMS.includes(defendingTeam)) return [];
+  const margin = SHOT_MODEL.reboundBoxMargin;
+  const minX = Math.max(0, BOX_FILES[0] - margin), maxX = Math.min(BOARD_WIDTH - 1, BOX_FILES.at(-1) + margin);
+  const minY = defendingTeam === 'black' ? 0 : Math.max(0, BOARD_HEIGHT - BOX_DEPTH - margin);
+  const maxY = defendingTeam === 'black' ? Math.min(BOARD_HEIGHT - 1, BOX_DEPTH - 1 + margin) : BOARD_HEIGHT - 1;
+  const occupied = new Set((state?.pieces || []).map(piece => `${piece.x},${piece.y}`));
+  const targets = [];
+  for (let y = minY; y <= maxY; y++) for (let x = minX; x <= maxX; x++) {
+    if (!isGoalMouth(x, y) && !occupied.has(`${x},${y}`)) targets.push({x, y});
+  }
+  return targets;
+}
+
 function singleShotModel(state, x = state?.pendingShot?.x, y = state?.pendingShot?.y, keeperPosition) {
   const scoringTeam = shotScoringTeam(x, y);
   const pieces = Array.isArray(state?.pieces) ? state.pieces : [];
@@ -835,7 +854,7 @@ function singleShotModel(state, x = state?.pendingShot?.x, y = state?.pendingSho
   const target = scoringTeam ? {x, y: scoringTeam === 'white' ? -0.5 : BOARD_HEIGHT - 0.5} : {x: 0, y: 0};
   const invalid = {
     probability: 0, goalProbability: 0, baseGoalProbability: 0, scoringMultiplier: 1, saveProbability: 0, missProbability: 1, penalty,
-    onTargetProbability: 0, baseOnTargetProbability: 0, saveGivenOnTarget: 0, cornerProbability: 0, keeperCornerProbability: 0, caughtSaveProbability: 0, blockerIds: [], blockerPositions: [], blockProbability: 0, blockOutProbability: 0, blockCornerProbability: 0, blockPossessionProbability: 0, arrivalSpeed: 0, keeperStretch: 0, parryGivenSave: 0, distance: 0, shotAngleDegrees: 0,
+    onTargetProbability: 0, baseOnTargetProbability: 0, saveGivenOnTarget: 0, cornerProbability: 0, keeperCornerProbability: 0, keeperReboundProbability: 0, caughtSaveProbability: 0, blockerIds: [], blockerPositions: [], blockProbability: 0, blockOutProbability: 0, blockCornerProbability: 0, blockPossessionProbability: 0, arrivalSpeed: 0, keeperStretch: 0, parryGivenSave: 0, distance: 0, shotAngleDegrees: 0,
     goalDepth: 0, goalOpeningDegrees: 0, centralGoalOpeningDegrees: 0, goalOpeningRatio: 0, postAngleFactor: 0, wideAngleFactor: 1, centralLaneFactor: 1, finishingAccuracyMultiplier: SHOT_MODEL.finishingAccuracyMultiplier, shooterType, distancePenaltyRate: 0,
     keeperPathDistance: 0, timeToKeeper: 0, reach: 0, keeperInBox: false,
     closestPoint: {...origin}, keeperPosition: null, origin, target, modelVersion: SHOT_MODEL.version
@@ -903,14 +922,18 @@ function singleShotModel(state, x = state?.pendingShot?.x, y = state?.pendingSho
   const arrivalSpeed = keeper ? SHOT_MODEL.ballSpeed * Math.exp(-SHOT_MODEL.impactSpeedDecay * projection) : 0;
   const keeperStretch = keeper && reach > 0 ? clamp(clearance / reach, 0, 1) : 0;
   const parryGivenSave = saveProbability > 0 ? clamp(SHOT_MODEL.parryMin + SHOT_MODEL.parrySpeedWeight * (arrivalSpeed / SHOT_MODEL.ballSpeed) ** 2 + SHOT_MODEL.parryStretchWeight * keeperStretch, SHOT_MODEL.parryMin, SHOT_MODEL.parryMax) : 0;
-  const keeperCornerProbability = saveProbability * parryGivenSave;
+  const parryProbability = saveProbability * parryGivenSave;
+  // Teammate backward kicks keep their compulsory-release pipeline; live
+  // goalkeeper spills are saves of an opponent's shot.
+  const keeperReboundProbability = shootingTeam !== defendingTeam ? parryProbability * SHOT_MODEL.parryInPlayShare : 0;
+  const keeperCornerProbability = parryProbability - keeperReboundProbability;
   const blockOutProbability = blockProbability * SHOT_MODEL.blockCornerShare;
   const blockCornerProbability = shootingTeam === scoringTeam ? blockOutProbability : 0;
   const blockPossessionProbability = blockProbability - blockOutProbability;
   const cornerProbability = keeperCornerProbability + blockCornerProbability;
   const result = {
     probability: goalProbability, goalProbability, baseGoalProbability, scoringMultiplier, saveProbability,
-    missProbability, baseOnTargetProbability: onTarget, cornerProbability, keeperCornerProbability, caughtSaveProbability: saveProbability - keeperCornerProbability,
+    missProbability, baseOnTargetProbability: onTarget, cornerProbability, keeperCornerProbability, keeperReboundProbability, caughtSaveProbability: saveProbability - parryProbability,
     blockerIds: blockers.map(piece => piece.id), blockerPositions: blockers.map(({id, x, y}) => ({id, x, y})), blockProbability, blockOutProbability, blockCornerProbability, blockPossessionProbability,
     arrivalSpeed, keeperStretch, parryGivenSave, onTargetProbability: goalProbability + saveProbability, saveGivenOnTarget: goalProbability + saveProbability > 0 ? saveProbability / (goalProbability + saveProbability) : 0,
     distance: length, shotAngleDegrees: Math.acos(angleCos) * 180 / Math.PI,
@@ -923,7 +946,7 @@ function singleShotModel(state, x = state?.pendingShot?.x, y = state?.pendingSho
   return {...result, probability: FOUL_RULE.penaltyGoal, goalProbability: FOUL_RULE.penaltyGoal, baseGoalProbability: FOUL_RULE.penaltyGoal, scoringMultiplier: 1,
     saveProbability: penaltySave, caughtSaveProbability: penaltySave, missProbability: keeperInBox ? 0 : FOUL_RULE.penaltyFailure,
     baseOnTargetProbability: FOUL_RULE.penaltyGoal + penaltySave, onTargetProbability: FOUL_RULE.penaltyGoal + penaltySave, saveGivenOnTarget: penaltySave / (FOUL_RULE.penaltyGoal + penaltySave),
-    cornerProbability: 0, keeperCornerProbability: 0, parryGivenSave: 0, blockerIds: [], blockerPositions: [], blockProbability: 0, blockOutProbability: 0, blockCornerProbability: 0, blockPossessionProbability: 0};
+    cornerProbability: 0, keeperCornerProbability: 0, keeperReboundProbability: 0, parryGivenSave: 0, blockerIds: [], blockerPositions: [], blockProbability: 0, blockOutProbability: 0, blockCornerProbability: 0, blockPossessionProbability: 0};
 }
 
 // A disguised declaration contains two public possibilities, never a selected
@@ -935,7 +958,7 @@ export function shotModel(state, x = state?.pendingShot?.x, y = state?.pendingSh
   const result = {...targetModels[0]};
   for (const key of Object.keys(result)) if (typeof result[key] === 'number') result[key] = (targetModels[0][key] + targetModels[1][key]) / 2;
   result.saveGivenOnTarget = result.onTargetProbability > 0 ? result.saveProbability / result.onTargetProbability : 0;
-  result.parryGivenSave = result.saveProbability > 0 ? result.keeperCornerProbability / result.saveProbability : 0;
+  result.parryGivenSave = result.saveProbability > 0 ? (result.keeperCornerProbability + result.keeperReboundProbability) / result.saveProbability : 0;
   result.blockerIds = [...new Set(targetModels.flatMap(model => model.blockerIds))];
   result.blockerPositions = result.blockerIds.map(id => targetModels.flatMap(model => model.blockerPositions).find(piece => piece.id === id));
   return {...result, disguised: true, targetOptions: options, targetModels};
@@ -1109,11 +1132,13 @@ function resolveShot(next, {roll, targetRoll, keeperMove, landing} = {}) {
   const details = singleShotModel({...next, pendingShot: shot}, shot.x, shot.y), probability = details.probability;
   const outcomeRoll = nextRoll(next, roll);
   const keeperCornerEnd = probability + details.keeperCornerProbability;
+  const keeperReboundEnd = keeperCornerEnd + details.keeperReboundProbability;
   const caughtEnd = probability + details.saveProbability;
   const wideEnd = 1 - details.blockProbability;
   const blockOutEnd = 1 - details.blockPossessionProbability;
   const outcome = outcomeRoll < probability ? 'goal' : outcomeRoll < keeperCornerEnd ? 'keeperCorner'
-    : outcomeRoll < caughtEnd ? 'saved' : outcomeRoll < wideEnd ? 'wide' : outcomeRoll < blockOutEnd ? 'blockOut' : 'blocked';
+    : outcomeRoll < keeperReboundEnd ? 'keeperRebound' : outcomeRoll < caughtEnd ? 'saved'
+      : outcomeRoll < wideEnd ? 'wide' : outcomeRoll < blockOutEnd ? 'blockOut' : 'blocked';
   const common = {pieceId: shot.shooterId, shooterId: shot.shooterId, shootingTeam: shot.shootingTeam, from: shot.from, goalTarget: {x: shot.x, y: shot.y}, probability, accuracy: probability, roll: outcomeRoll, shotModel: details, shotPath: shot.path,
     ...(chosenTargetIndex === null ? {} : {disguised: true, targetOptions, chosenTargetIndex, targetProbability: 0.5, combinedProbability}), ...(keeperMove ? {keeperMove} : {})};
   if (outcome === 'goal') {
@@ -1130,6 +1155,25 @@ function resolveShot(next, {roll, targetRoll, keeperMove, landing} = {}) {
     next.turn++;
     next.lastAction = {...common, type: 'goal', team: shot.scoringTeam, to: {x: shot.x, y: shot.y}, path: shot.path, outcome: 'goal', ownGoal: shot.scoringTeam !== shot.shootingTeam};
     addLog(next, `${title(shot.scoringTeam)} scores (${Math.round(probability * 100)}% chance)${shot.scoringTeam !== shot.shootingTeam ? ' — an own goal!' : '!'} ${next.score.white}–${next.score.black}. ${title(conceded)} kicks off.`);
+  } else if (outcome === 'keeperRebound') {
+    const targets = keeperReboundTargets(next, shot);
+    if (!targets.length) throw new Error('A goalkeeper rebound requires an empty landing square near the box.');
+    const reboundRoll = nextRoll(next);
+    const destination = landingOverride(landing) || targets[Math.floor(reboundRoll * targets.length)];
+    if (!targets.some(target => target.x === destination.x && target.y === destination.y)) {
+      throw new Error('A rebound landing must be an empty square near the defending box, outside the goal mouth.');
+    }
+    const parryPoint = keeper ? {x: keeper.x, y: keeper.y} : details.closestPoint;
+    const path = [shot.from, parryPoint, destination].filter((point, index, points) => !index || point.x !== points[index - 1].x || point.y !== points[index - 1].y);
+    next.ball = {...destination, carrierId: null}; next.attack = shot.shootingTeam; next.restart = null;
+    next.releaseReason = null;
+    // A save cannot put an offside attacker back onside. The loose ball is
+    // contested through the normal positioning phases with the old snapshot.
+    beginPosition(next); next.turn++;
+    next.lastAction = {...common, type: 'save', team: shot.defendingTeam, keeperId: keeper?.id,
+      to: {...destination}, path, outcome: 'loose', keeperRebound: true,
+      reboundLanding: {...destination}, reboundRoll};
+    addLog(next, `${title(shot.defendingTeam)} goalkeeper parries the ball loose at ${square(destination.x, destination.y)}. Play continues; the shot-time offside flags still apply.`);
   } else if (outcome === 'keeperCorner' || outcome === 'saved') {
     if (outcome === 'keeperCorner') {
       const endY = shot.scoringTeam === 'white' ? -1 : BOARD_HEIGHT;
@@ -1173,7 +1217,8 @@ function resolveShot(next, {roll, targetRoll, keeperMove, landing} = {}) {
     const blocker = next.pieces.find(piece => piece.id === details.blockerIds[0]);
     if (!blocker) throw new Error('A blocked shot requires a defending piece on its path.');
     const blockedAt = {x: blocker.x, y: blocker.y};
-    next.offside = null;
+    // A reflex body block, like a keeper save, retains the kick-time snapshot.
+    // A boundary restart or the defender's next deliberate play clears it.
     if (outcome === 'blockOut') {
       const restart = restartForExit(next, shot.from, {x: shot.x, y: shot.y}, blocker.team, {cornerTargetX: shot.x});
       next.turn++;
@@ -2536,11 +2581,16 @@ function tacticalSuccessors(state, action) {
       const model = singleShotModel({...state, pendingShot: shot}, shot.x, shot.y, action.type === 'move' ? action : undefined);
       const targetRoll = options.length === 2 ? (targetIndex + 0.5) / 2 : undefined;
       let start = 0;
-      return [model.goalProbability, model.keeperCornerProbability, model.caughtSaveProbability, model.missProbability, model.blockOutProbability, model.blockPossessionProbability].flatMap((conditionalProbability, index) => {
+      return [model.goalProbability, model.keeperCornerProbability, model.keeperReboundProbability, model.caughtSaveProbability, model.missProbability, model.blockOutProbability, model.blockPossessionProbability].flatMap((conditionalProbability, index) => {
         const roll = Math.min(1 - Number.EPSILON, start + conditionalProbability / 2); start += conditionalProbability;
         const probability = conditionalProbability / shots.length;
         if (probability <= 0) return [];
-        if (index !== 3 || shot.distance <= 10 || shot.penalty) return [{probability, state: apply(roll, undefined, targetRoll)}];
+        if (index === 2) {
+          const reboundState = action.type === 'move' ? {...state, pieces: state.pieces.map(piece => piece.id === action.pieceId ? {...piece, x: action.x, y: action.y} : piece)} : state;
+          const targets = keeperReboundTargets(reboundState, shot);
+          return targets.map(landing => ({probability: probability / targets.length, state: apply(roll, landing, targetRoll)}));
+        }
+        if (index !== 4 || shot.distance <= 10 || shot.penalty) return [{probability, state: apply(roll, undefined, targetRoll)}];
         // A bounded, symmetric quadrature covers side-line and end-line risk.
         // Each disguised target retains its own physical scatter distribution.
         const radius = Math.max(1, Math.ceil((shot.distance - 10) / 2) + 1);

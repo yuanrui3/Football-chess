@@ -7,7 +7,7 @@ import path from 'node:path';
 const TEAMS = ['white','black'];
 const other = team => team === 'white' ? 'black' : 'white';
 const zeroRole = () => Object.fromEntries(['K','Q','R','B','N','P'].map(type=>[type,{actions:0,moves:0,dribbles:0,passes:0,shots:0,goals:0,tackles:0,tackleWins:0,collections:0,fouls:0,yellowCards:0,redCards:0}]));
-const sideStats = () => ({actions:0,thinkMs:0,goals:0,shots:0,opponentGoalAttempts:0,ownGoalAttempts:0,resolvedShots:0,resolvedOpponentGoalAttempts:0,resolvedOwnGoalAttempts:0,xG:0,opponentGoalXG:0,ownGoalXG:0,shotDistance:0,shotXG:[],catches:0,cornersWon:0,wideShots:0,blockedShots:0,blocks:0,blockPossessions:0,passes:0,passRunsOffered:0,passRuns:0,passRunsSkipped:0,teammatePasses:0,spacePasses:0,interceptedPasses:0,inaccuratePasses:0,longPasses:0,selfCollections:0,collections:0,dribbles:0,dribbleDistance:0,tackles:0,tackleWins:0,fouls:0,foulsWon:0,yellowCards:0,redCards:0,secondYellows:0,penaltiesWon:0,penaltiesTaken:0,penaltyGoals:0,penaltyFailures:0,penaltiesSaved:0,turnoversWon:0,turnoversLost:0,stalls:0,offsides:0,restartsAwarded:0,restartsTaken:0,restartTypes:{},completedOrdinaryRounds:0,attackingThirdEntries:0,attackActions:0,role:zeroRole()});
+const sideStats = () => ({actions:0,thinkMs:0,goals:0,shots:0,opponentGoalAttempts:0,ownGoalAttempts:0,resolvedShots:0,resolvedOpponentGoalAttempts:0,resolvedOwnGoalAttempts:0,xG:0,opponentGoalXG:0,ownGoalXG:0,shotDistance:0,shotXG:[],catches:0,keeperRebounds:0,cornersWon:0,wideShots:0,blockedShots:0,blocks:0,blockPossessions:0,passes:0,passRunsOffered:0,passRuns:0,passRunsSkipped:0,teammatePasses:0,spacePasses:0,interceptedPasses:0,inaccuratePasses:0,longPasses:0,selfCollections:0,collections:0,dribbles:0,dribbleDistance:0,tackles:0,tackleWins:0,fouls:0,foulsWon:0,yellowCards:0,redCards:0,secondYellows:0,penaltiesWon:0,penaltiesTaken:0,penaltyGoals:0,penaltyFailures:0,penaltiesSaved:0,turnoversWon:0,turnoversLost:0,stalls:0,offsides:0,restartsAwarded:0,restartsTaken:0,restartTypes:{},completedOrdinaryRounds:0,attackingThirdEntries:0,attackActions:0,role:zeroRole()});
 function inc(obj,key,n=1){obj[key]=(obj[key]||0)+n;}
 function entryZone(team,y,height=baseline.BOARD_HEIGHT){const depth=Math.floor(height/3);return team==='white'?y<depth:y>=height-depth;}
 function positional(phase){return ['attackMove','defendMove'].includes(phase);}
@@ -90,6 +90,7 @@ export function runMatch({rules=baseline,whitePolicy=rules,blackPolicy=rules,whi
       shooting[ownGoalAttempt?'resolvedOwnGoalAttempts':'resolvedOpponentGoalAttempts']++;
       shooting[ownGoalAttempt?'ownGoalXG':'opponentGoalXG']+=details.probability;
       if(shotResult.type==='save'&&shotResult.outcome==='saved')stats[shot.defendingTeam].catches++;
+      if(shotResult.type==='save'&&shotResult.outcome==='loose')stats[shot.defendingTeam].keeperRebounds++;
       if(shotResult.outcome==='corner')stats[shotResult.restart?.team||state.restart?.team||shot.scoringTeam].cornersWon++;
       if(shotResult.type==='blockedShot'){shooting.blockedShots++;stats[shotResult.team].blocks++;if(shotResult.outcome==='blocked')stats[shotResult.team].blockPossessions++;}
       if(shotResult.outcome==='wide')shooting.wideShots++;

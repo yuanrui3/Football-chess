@@ -316,7 +316,7 @@ test('short and long stopped shots distinguish catches from keeper last-touch co
     const reaction=applyKick(state,...transform([GOAL_FILES[0],-1]));
     const model=reaction.lastAction.shotModel;
     assert.ok(model.saveProbability>0&&model.cornerProbability>0&&model.caughtSaveProbability>0);
-    const caughtRoll=model.goalProbability+model.cornerProbability+model.caughtSaveProbability/2;
+    const caughtRoll=model.goalProbability+model.cornerProbability + model.keeperReboundProbability + model.caughtSaveProbability/2;
     for(const [roll,outcome] of [[model.goalProbability+model.cornerProbability/2,'corner'],[caughtRoll,'saved']]) {
       const before=clone(reaction);
       const result=skipMove(reaction,{roll});

@@ -370,7 +370,7 @@ test('opponent-goal shots reset on declaration, and goal, catch, corner and wide
     const choices=[
       [0,'goal'],
       [model.goalProbability+model.cornerProbability/2,'save'],
-      [model.goalProbability+model.cornerProbability+model.caughtSaveProbability/2,'save'],
+      [model.goalProbability+model.cornerProbability + model.keeperReboundProbability + model.caughtSaveProbability/2,'save'],
       [.999999,'shotMiss'],
     ];
     for(const [roll,type] of choices) {
@@ -403,7 +403,7 @@ test('a same-team catch of an own-goal attempt cannot erase the deadline, while 
     assert.equal(pending.ballProgress.rounds,phase==='kick'?2:0);
     const model=engine.shotModel(pending,...target);
     assert.ok(model.caughtSaveProbability>0,'the keeper has a caught-save outcome at its own goal');
-    const caughtRoll=model.goalProbability+model.cornerProbability+model.caughtSaveProbability/2;
+    const caughtRoll=model.goalProbability+model.cornerProbability + model.keeperReboundProbability + model.caughtSaveProbability/2;
     const caught=skipMove(pending,{roll:caughtRoll});
     if(phase==='kick') {
       assertStall(caught,team);
@@ -432,7 +432,7 @@ test('a corner back-pass keeps the forced own-goal shot excluded while an outsid
     assert.equal(pending.ballProgress.excludeRelease,true,'declaration preserves the restart exclusion through the keeper reaction');
     const model=engine.shotModel(pending,...target);
     assert.equal(model.keeperInBox,false,'the corner can reach this king at midfield, outside its own box');
-    for(const key of ['saveProbability','cornerProbability','caughtSaveProbability']) assert.equal(model[key],0,key);
+    for(const key of ['saveProbability','cornerProbability','keeperReboundProbability','caughtSaveProbability']) assert.equal(model[key],0,key);
     assert.deepEqual(legalMoves(pending,`${team}-K`),[],'the outside king gets no extra keeper move');
     for(const [roll,outcome] of [[0,'goal'],[.999999,'shotMiss']]) {
       const resolved=skipMove(pending,{roll});

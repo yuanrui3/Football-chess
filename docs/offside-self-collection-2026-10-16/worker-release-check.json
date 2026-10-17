@@ -22,8 +22,8 @@
       "learnedEvaluation": true,
       "action": {
         "type": "kick",
-        "x": 2,
-        "y": 12
+        "x": 5,
+        "y": 8
       },
       "passed": true
     },
@@ -46,8 +46,8 @@
       "learnedEvaluation": true,
       "action": {
         "type": "move",
-        "pieceId": "white-B1",
-        "x": 5,
+        "pieceId": "white-N2",
+        "x": 7,
         "y": 9,
         "freePawn": false
       },

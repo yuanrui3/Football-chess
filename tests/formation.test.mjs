@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {
   BOARD_WIDTH, BOARD_HEIGHT, createGame, currentTeam, isBox,
   legalKicks, applyKick, skipMove, normalizeGame,
+  RULES_VERSION,
 } from '../dist/engine.js';
 
 const WHITE_HOME = {
@@ -63,7 +64,7 @@ test('both modes and kickoff choices use the selected asymmetric formation with 
     assert.equal(currentTeam(state), kickoff);
     assert.deepEqual(state.ball, {x: queen.x, y: queen.y, carrierId: queen.id});
     assert.deepEqual(state.positionBudget, freshBudget());
-    assert.equal(state.rulesVersion, 18, 'the larger pitch uses the current rules version');
+    assert.equal(state.rulesVersion, RULES_VERSION, 'the larger pitch uses the current rules version');
   }
 });
 
@@ -201,7 +202,7 @@ test('loading or undoing an active custom position preserves every coordinate an
       assert.deepEqual(snapshot, before);
       assert.deepEqual(restored, before, `${mode} ${phase}: changing defaults must never rearrange a saved or undone match`);
       assert.deepEqual(normalizeGame(clone(restored)), restored);
-      assert.equal(restored.rulesVersion, 18);
+      assert.equal(restored.rulesVersion, RULES_VERSION);
     }
     const legacy = clone(state);
     legacy.rulesVersion = 13;
@@ -209,7 +210,7 @@ test('loading or undoing an active custom position preserves every coordinate an
     const migrated = normalizeGame(legacy);
     assert.deepEqual(migrated.pieces, legacy.pieces, 'an older rule tag with current board dimensions preserves valid custom positions');
     assert.deepEqual(migrated.ball, legacy.ball);
-    assert.equal(migrated.rulesVersion, 18);
+    assert.equal(migrated.rulesVersion, RULES_VERSION);
     assert.equal(migrated.randomState, legacy.randomState);
   }
 });

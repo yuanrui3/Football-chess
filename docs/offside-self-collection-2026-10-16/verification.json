@@ -1,15 +1,34 @@
 {
-  "focusedReleaseTests": {
-    "passed": 121,
-    "failed": 0,
-    "includesNewSelfCollectionCases": 16
+  "rulesVersion": 19,
+  "shotModelVersion": 15,
+  "fullRegressionSuite": {
+    "command": "node --test --test-concurrency=4 tests/*.test.mjs",
+    "tests": 1132,
+    "pass": 1132,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0,
+    "durationMs": 270982.686824,
+    "log": "release-tests.log"
   },
-  "existingOffsideFairnessPaceAIRegressionTests": {
-    "passed": 102,
+  "actualVersionedWorkerRoundTrips": {
+    "passed": 4,
     "failed": 0,
-    "note": "Overlaps the focused suite; do not add these counts as unique tests."
+    "learnedEvaluation": "both enabled and disabled"
   },
-  "actualVersionedWorkerRoundTrips": 4,
+  "staticAssets": {
+    "localReferencesChecked": 15,
+    "issues": 0
+  },
   "visualBrowserQA": "unavailable in managed environment",
-  "ruleConclusion": "A kicker may collect its own kick across the offside line. The fifth carrying round still awards an indirect carrying-limit free kick; current-round movement budgets remain enforced."
+  "offsideConclusion": "Kick-time flags persist through keeper saves and reflex shot blocks. The kicker may collect its own kick; a later teammate kick creates a new snapshot. Carrying limits and action budgets still apply.",
+  "reboundRule": {
+    "opponentShotParriesInPlayShare": 0.2,
+    "distribution": "uniform over empty defending-box cells plus a two-square margin, clipped to pitch and excluding the four goal-mouth cells",
+    "automaticPossession": false,
+    "goalCatchWideBodyBlockOdds": "unchanged",
+    "penaltiesAndTeammateBackwardShots": "prior handling retained"
+  },
+  "training": "Chance-outcome integration tested; no new model training or strength claim."
 }

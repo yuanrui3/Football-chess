@@ -1,8 +1,8 @@
-import {createGame, legalMoves, legalKicks, disguisedShotTargets, applyMove, applyKick, skipMove, chooseAIAction, currentTeam, cornerTakers, selectCornerTaker, BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, BOX_FILES, BOX_DEPTH, CENTRAL_GOAL_FILES, MIDFIELD_RANK, inOwnBox, canOccupySquare, isBox, isGoalMouth, shotChance, shotModel, offsideInfo, offsideFlaggedIds, LONG_TACKLE_RANGE, DRIBBLE_RANGE, FOUL_RULE, STALLING_RULE, PACE_RULE, ACTION_SECONDS, actionTimeout, progressInfo, paceInfo, positionActions, normalizeGame, RL_VALUE_MODEL} from './engine.js?v=e0fe3413090d';
+import {createGame, legalMoves, legalKicks, disguisedShotTargets, applyMove, applyKick, skipMove, chooseAIAction, currentTeam, cornerTakers, selectCornerTaker, BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, BOX_FILES, BOX_DEPTH, CENTRAL_GOAL_FILES, MIDFIELD_RANK, inOwnBox, canOccupySquare, isBox, isGoalMouth, shotChance, shotModel, offsideInfo, offsideFlaggedIds, LONG_TACKLE_RANGE, DRIBBLE_RANGE, FOUL_RULE, STALLING_RULE, PACE_RULE, ACTION_SECONDS, actionTimeout, progressInfo, paceInfo, positionActions, normalizeGame, RL_VALUE_MODEL} from './engine.js?v=584b1dffb37d';
 import {createMatchClock, restoreMatchClock, tickMatchClock, settleMatchClock, rewindMatchClock} from './match-clock.js?v=1fa32f5eed6c';
-import {buildGoalReplay, restoreGoalReplay, createReplayPlayer} from './goal-replay.js?v=5cfa35067aa6';
-import {createMatchStats, restoreMatchStats, recordMatchTransition, addPossessionTime, matchStatsSummary, shortPieceId} from './match-stats.js?v=2f80e1451673';
-import {createCommentary} from './commentary.js?v=128601a455c4';
+import {buildGoalReplay, restoreGoalReplay, createReplayPlayer} from './goal-replay.js?v=95cefefefe22';
+import {createMatchStats, restoreMatchStats, recordMatchTransition, addPossessionTime, matchStatsSummary, shortPieceId} from './match-stats.js?v=5706f8b85a46';
+import {createCommentary} from './commentary.js?v=48b3e3eed498';
 import {createParadeeSpeech} from './paradee-speech.js?v=ebf05af105ad';
 
 const $ = id => document.getElementById(id);
@@ -350,7 +350,7 @@ function drawKeeperOverlay(model){
   }
 }
 function outcomeBreakdown(model){
-  const outcomes=[['Goal',model.goalProbability],['Catch',model.caughtSaveProbability],['Corner',model.cornerProbability],['Defender possession',model.blockPossessionProbability],['Goal kick after block',Math.max(0,model.blockOutProbability-model.blockCornerProbability)],['Wide',model.missProbability]];
+  const outcomes=[['Goal',model.goalProbability],['Catch',model.caughtSaveProbability],['Loose rebound',model.keeperReboundProbability||0],['Corner',model.cornerProbability],['Defender possession',model.blockPossessionProbability],['Goal kick after block',Math.max(0,model.blockOutProbability-model.blockCornerProbability)],['Wide',model.missProbability]];
   return outcomes.filter(([label,p])=>label==='Goal'||p>0).map(([label,p])=>`${label} ${(p*100).toFixed(1)}%`).join(' · ');
 }
 function shotGeometry(model){if(model.penalty)return 'Penalty · fixed 80% conversion · keeper holds position · no piece or geometry bonuses';if(model.disguised)return `Disguised shot · ${goalChoiceNames(model.targetOptions)}, each 50% · Target chosen after the keeper reacts · Displayed outcomes average both paths${model.keeperInBox?' · Full box reach':' · No saving reach outside own box'}`;return `Shot ${model.distance.toFixed(1)} squares${model.keeperPosition?` · Keeper ${model.keeperPathDistance.toFixed(1)} squares off path`:''}${model.postAngleFactor<0.99?` · Tight-angle penalty: ${percent(1-model.postAngleFactor)}`:''}${model.wideAngleFactor>1.005?` · Wide-opening accuracy bonus: +${percent(model.wideAngleFactor-1)}`:''}${model.centralLaneFactor>1?` · Central-file accuracy bonus: +${percent(model.centralLaneFactor-1)}`:''}${model.shooterType==='R'&&model.distance>3?' · Rook long-range accuracy':''}${model.scoringMultiplier>1?` · Knight finishing ×${model.scoringMultiplier}, capped at 100%`:''}${model.blockProbability>0?` · ${model.blockerIds.length} defender${model.blockerIds.length===1?'':'s'} on path: ${shotPercent(model.blockProbability)} block chance`:''} · ${model.keeperInBox?'Full box reach':'No saving reach outside own box'}${model.saveProbability>0?` · Keeper parry if stopped: ${percent(model.parryGivenSave)}`:''}`;}
@@ -567,7 +567,7 @@ function commit(next,{timedOut=false,clockAdvanced=false}={}){
   else if(game.lastAction?.type==='timeout')toast(`Time wasting: ${TEAM[game.restart.team]} wins an indirect free kick near the ball.`);
   else if(game.lastAction?.type==='blockedShot'){const blocker=game.pieces.find(piece=>piece.id===game.lastAction.blockerId);toast(`Shot blocked${blocker?` by ${TEAM[blocker.team]} ${pieceLabel(blocker)}`:''}. ${game.restart?`${RESTART_NAMES[game.restart.type]||'Restart'} for ${TEAM[game.restart.team]}.`:`${TEAM[game.attack]} takes possession.`}`);}
   else if(game.restart)toast(`${RESTART_NAMES[game.restart.type]} for ${TEAM[game.restart.team]}. Position the teams, then restart.`);
-  else if(game.lastAction?.type==='save')toast(`${TEAM[game.attack]} saves the shot and takes possession.`);
+  else if(game.lastAction?.type==='save')toast(game.lastAction.outcome==='loose'?'Keeper parries it back into play — loose ball!':game.lastAction.outcome==='corner'?'Keeper turns the shot behind for a corner.':`${TEAM[game.attack]} saves the shot and takes possession.`);
   else if(game.lastAction?.type==='miss')toast('The long pass missed its target. The ball is loose.');
   else if(game.lastAction?.type==='tackleMiss')toast('The knight evades the tackle and keeps the ball; the regular move is used.');
   else if(game.lastAction?.type==='shotMiss')toast(`Shot wide. ${TEAM[game.attack]} has a goal kick.`);
@@ -666,7 +666,8 @@ function beginShotFlight(before,after,complete,toastOutcome,priorComputerAction,
     caption=action.outcome==='blocked'?'Defender blocks the shot and takes possession.':action.outcome==='corner'?'Defender blocks the shot out for a corner.':'Defender blocks the shot out for a goal kick.';
   }else if(action.type==='save'){
     points.push(valid(model.closestPoint)?model.closestPoint:plane);
-    if(action.outcome==='corner'){caption='Keeper parries the shot out for a corner.';fade=true;}
+    if(action.outcome==='loose'){points.push(model.keeperPosition||before.pieces.find(p=>p.id===action.keeperId),action.reboundLanding||action.to);caption='Keeper parries it back into play — loose ball!';}
+    else if(action.outcome==='corner'){caption='Keeper parries the shot out for a corner.';fade=true;}
     else{points.push(model.keeperPosition||action.to);caption='Keeper catches the shot.';}
   }else{
     const short=before.pendingShot.distance<=10;
@@ -728,7 +729,7 @@ function scheduleAI(){
     aiTimer=null;if(!stillCurrent())return;
     if(difficulty==='tactical'&&typeof window.Worker==='function'){
       try{
-        aiWorker=new window.Worker(new URL('./ai-worker.js?v=9aa570241d02',import.meta.url),{type:'module',name:'football-chess-tactical'});
+        aiWorker=new window.Worker(new URL('./ai-worker.js?v=3042f5067151',import.meta.url),{type:'module',name:'football-chess-tactical'});
         aiWorker.onmessage=event=>{if(!stillCurrent()||event.data?.requestId!==requestId)return;if(event.data.error)fallback();else receive(event.data.action);};
         aiWorker.onerror=event=>{event.preventDefault?.();fallback();};
         aiWatchdog=setTimeout(()=>fallback('casual'),4000);

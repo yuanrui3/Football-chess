@@ -150,3 +150,15 @@ test('a counted loose back-pass released into another own-goal shot cannot add a
   assert.equal(match.stats.white.ownGoalAttempts,1);assert.equal(match.stats.white.resolvedOwnGoalAttempts,1);
   assert.equal(match.stats.white.completedOrdinaryRounds,0,'the inherited loose-pass round was already counted before this release');
 });
+
+for(const team of ['white','black'])test(`${team} simulator records keeper spill without catch or corner`,()=>{
+  const {state,goal}=fixture(team),transform=pair=>team==='white'?pair:mirror(pair),keeper=state.pieces.find(piece=>piece.id===`${other(team)}-K`);
+  [keeper.x,keeper.y]=transform([8,0]);
+  const forcedRules={...rules,skipMove:game=>{const m=rules.shotModel(game);return rules.skipMove(game,{roll:m.goalProbability+m.keeperCornerProbability+m.keeperReboundProbability/2,reboundRoll:.25});}};
+  const policy=game=>game.phase==='keeperReact'?{type:'skip'}:{type:'kick',x:goal[0],y:goal[1]};
+  const match=runMatch({rules:forcedRules,initialState:state,whitePolicy:policy,blackPolicy:policy,actionLimit:2,record:true,validate:true});
+  assert.equal(match.error,null);assert.equal(match.events[1].result.outcome,'loose');
+  assert.equal(match.stats[team].shots,1);assert.equal(match.stats[team].resolvedShots,1);
+  assert.equal(match.stats[team].cornersWon,0);assert.equal(match.stats[other(team)].catches,0);assert.equal(match.stats[other(team)].keeperRebounds,1);
+  assert.equal(match.finalState.ball.carrierId,null);assert.equal(match.finalState.restart,null);
+});

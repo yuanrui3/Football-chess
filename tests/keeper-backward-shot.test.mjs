@@ -74,6 +74,6 @@ for(const team of ['white','black']){
 test('a king catching its own attempted own goal keeps the existing self-kick accounting',()=>{
  const s=recordedPosition('white',{rounds:0}),king=s.pieces.find(p=>p.id==='white-K');s.ball={x:king.x,y:king.y,carrierId:king.id};
  const pending=E.applyKick(s,king.x,E.BOARD_HEIGHT),m=E.shotModel(pending);assert.ok(m.caughtSaveProbability>0);
- const caught=E.skipMove(pending,{roll:m.goalProbability+m.keeperCornerProbability+m.caughtSaveProbability/2});
+ const caught=E.skipMove(pending,{roll:m.goalProbability+m.keeperCornerProbability + m.keeperReboundProbability + m.caughtSaveProbability/2});
  assert.equal(caught.lastAction.type,'save');assert.equal(caught.phase,'attackMove');assert.equal(caught.releaseReason,null);assert.equal(caught.lastAction.backPass,undefined);assert.equal(caught.ballProgress.rounds,1);
 });

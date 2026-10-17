@@ -8,7 +8,7 @@ const clone = value => structuredClone(value);
 const close = (actual, expected, message = '') => assert.ok(Math.abs(actual - expected) < 1e-10, `${message}: ${actual} ≈ ${expected}`);
 const xy = p => ({x: p.x, y: p.y});
 const stepSeed = seed => (Math.imul(1664525, seed >>> 0) + 1013904223) >>> 0;
-const probabilityKeys = ['goalProbability', 'keeperCornerProbability', 'caughtSaveProbability', 'missProbability', 'blockOutProbability', 'blockPossessionProbability'];
+const probabilityKeys = ['goalProbability', 'keeperCornerProbability', 'keeperReboundProbability', 'caughtSaveProbability', 'missProbability', 'blockOutProbability', 'blockPossessionProbability'];
 const mass = model => probabilityKeys.map(key => model[key]);
 const total = values => values.reduce((a, b) => a + b, 0);
 
@@ -56,7 +56,7 @@ for (const team of ['white', 'black']) for (const type of ['Q', 'N']) {
         close(model[key], (ordinary[0][key] + ordinary[1][key]) / 2, key);
       }
       close(E.shotChance(pending, pending.pendingShot.x, pending.pendingShot.y, keeper), model.goalProbability);
-      close(total(mass(model)), 1, 'all six disjoint outcome masses sum to one');
+      close(total(mass(model)), 1, 'all seven disjoint outcome masses sum to one');
     }
     assert.deepEqual(pending, before, 'keeper previews reveal no target or advance of randomness');
   });
@@ -144,6 +144,7 @@ test('disguise requires two legal opponent-goal targets and cannot create moveme
   assert.throws(() => E.applyKick(penalty, 6, -1, {disguise: true}));
   const pending = E.applyKick(penalty, 6, -1);
   close(E.shotChance(pending), .8);
+  assert.equal(E.shotModel(pending).keeperReboundProbability, 0, 'penalties retain the established goal/catch outcome model');
   assert.equal(E.skipMove(pending, {roll: .79999}).lastAction.type, 'goal');
   assert.equal(E.skipMove(pending, {roll: .8}).lastAction.type, 'save');
 });

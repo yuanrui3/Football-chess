@@ -156,6 +156,32 @@ for (const team of ['white', 'black']) {
     assert.equal(next.lastAction.type, 'offside'); assert.equal(next.lastAction.offenderId, oldKicker);
     assert.equal(next.restart.team, other(team));
   });
+
+  test(`${team}: a defender saving a shot retains offside until a later deliberate controlled action`, () => {
+    let s = fixture(team);
+    const shooter = idFor('white-R1', team), blocker = idFor('black-R1', team), runner = idFor('white-N1', team);
+    Object.assign(s.pieces.find(p => p.id === shooter), pointFor([5, 6], team));
+    Object.assign(s.pieces.find(p => p.id === blocker), pointFor([5, 4], team));
+    Object.assign(s.pieces.find(p => p.id === runner), pointFor([3, 3], team));
+    s.ball = {...pointFor([5, 6], team), carrierId: shooter};
+    const aim = team === 'white' ? {x: 5, y: -1} : {x: E.BOARD_WIDTH - 1 - 5, y: E.BOARD_HEIGHT};
+    s = E.applyKick(s, aim.x, aim.y);
+    assert.ok(E.offsideFlaggedIds(s).includes(runner));
+    const snapshot = structuredClone(s.offside), model = E.shotModel(s);
+    assert.ok(model.blockPossessionProbability > 0);
+    assert.equal(model.blockerIds[0], blocker);
+    const saved = E.skipMove(s, {roll: 1 - model.blockPossessionProbability / 2});
+    assert.equal(saved.lastAction.type, 'blockedShot'); assert.equal(saved.lastAction.outcome, 'blocked');
+    assert.equal(saved.ball.carrierId, blocker);
+    assert.deepEqual(saved.offside, snapshot, 'a reflex shot block/save does not reset kick-time flags');
+    const challenge = E.skipMove(saved), tackle = E.legalMoves(challenge, runner).find(move => move.type === 'tackle');
+    assert.ok(tackle, 'the flagged knight can geometrically challenge the saved ball');
+    const penalized = E.applyMove(challenge, runner, tackle.x, tackle.y, {roll: 0});
+    assert.equal(penalized.lastAction.type, 'offside'); assert.equal(penalized.restart.team, other(team));
+    const controlledTarget = pointFor([6, 4], team);
+    const controlled = E.applyMove(saved, blocker, controlledTarget.x, controlledTarget.y);
+    assert.equal(controlled.offside, null, 'the defender subsequently controlling and playing the ball resets offside');
+  });
 }
 
 const app = readFileSync(new URL('../dist/app.js', import.meta.url), 'utf8');

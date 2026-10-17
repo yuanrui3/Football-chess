@@ -113,7 +113,7 @@ test('a caught save is one shot on target and no corner or goal',()=>{
   const run=tracked(fixture({positions:{'black-K':[6,0]}}));run.kick(6,-1);
   const model=run.state.lastAction.shotModel;
   assert.ok(model.caughtSaveProbability>0);
-  run.step(skipMove(run.state,{roll:model.probability+model.cornerProbability+model.caughtSaveProbability/2}));
+  run.step(skipMove(run.state,{roll:model.probability+model.cornerProbability+(model.keeperReboundProbability||0)+model.caughtSaveProbability/2}));
   assert.equal(run.state.lastAction.type,'save');assert.equal(run.state.lastAction.outcome,'saved');
   assert.equal(run.stats.teams.white.shots,1);assert.equal(run.stats.teams.white.onTarget,1);
   assert.equal(run.stats.teams.white.corners,0);assert.equal(run.stats.goals.length,0);
@@ -211,7 +211,7 @@ test('a saved shot clears the previous assist, so a later regained ball is a new
   assert.ok(king.y<=1);run.ready();run.kick(6,-1);
   const model=run.state.lastAction.shotModel;
   assert.ok(model.caughtSaveProbability>0);
-  run.step(skipMove(run.state,{roll:model.probability+model.cornerProbability+model.caughtSaveProbability/2}));
+  run.step(skipMove(run.state,{roll:model.probability+model.cornerProbability+(model.keeperReboundProbability||0)+model.caughtSaveProbability/2}));
   assert.equal(run.state.lastAction.outcome,'saved');assert.equal(run.stats.lastPass,null);assert.equal(run.stats.pendingShot,null);
 });
 
@@ -317,7 +317,7 @@ test('goal and assist summary aggregates counts by individual stable IDs',()=>{
 
 for(const outcome of ['goal','saved','wide'])test(`a legacy save during keeper reaction remains internally valid after ${outcome}`,()=>{
   const state=fixture({positions:{'black-K':[6,0]}}),pending=applyKick(state,6,-1),model=pending.lastAction.shotModel;
-  const roll=outcome==='goal'?0:outcome==='saved'?model.probability+model.cornerProbability+model.caughtSaveProbability/2:.999999;
+  const roll=outcome==='goal'?0:outcome==='saved'?model.probability+model.cornerProbability+(model.keeperReboundProbability||0)+model.caughtSaveProbability/2:.999999;
   const partial=restoreMatchStats(null,pending),run=tracked(pending,partial);
   run.step(skipMove(pending,{roll}));
   assert.equal(run.stats.partial,true);
@@ -556,7 +556,7 @@ for(const team of ['white','black'])test(`${team} a stalling-wrapped same-team o
   const state=fixture({team,carrier,positions:{[carrier]:origin}});
   state.ballProgress={team,anchorY:transform([0,10])[1],rounds:2,pendingRelease:false,excludeRelease:false};
   const run=tracked(state);run.kick(...transform([6,BOARD_HEIGHT]));assert.ok(run.stats.pendingShot);
-  const model=run.state.lastAction.shotModel;run.step(skipMove(run.state,{roll:model.probability+model.keeperCornerProbability+model.caughtSaveProbability/2}));
+  const model=run.state.lastAction.shotModel;run.step(skipMove(run.state,{roll:model.probability+model.keeperCornerProbability+(model.keeperReboundProbability||0)+model.caughtSaveProbability/2}));
   assert.equal(run.state.lastAction.type,'stalling');assert.equal(run.state.lastAction.triggeringAction.type,'save');
   assert.equal(run.stats.teams[team].shots,0);assert.equal(run.stats.teams[team].onTarget,0);assert.equal(run.stats.teams[team].corners,0);
   assert.equal(run.stats.pendingShot,null);assert.equal(run.stats.lastPass,null);assert.equal(run.stats.goals.length,0);
@@ -718,4 +718,15 @@ for(const team of ['white','black'])for(const suffix of ['Q','N1'])test(`${team}
  assert.equal(goal.distance,Math.hypot(goal.target.x-goal.origin.x,(goal.target.y<0?-.5:BOARD_HEIGHT-.5)-goal.origin.y));
  assert.equal(goal.scorerId,carrier);assert.equal(goal.ownGoal,false);assert.equal(goal.assistId,null);
  assert.deepEqual(restoreMatchStats(clone(run.stats),run.state),run.stats);
+});
+
+for(const team of ['white','black'])test(`${team} keeper spill is one on-target shot without corner or possession award`,()=>{
+  const transform=pair=>team==='white'?pair:mirror(pair),run=tracked(fixture({team,positions:{[`${other(team)}-K`]:transform([8,0])}}));
+  run.kick(...transform([6,-1]));const pending=run.state,model=pending.lastAction.shotModel;
+  run.step(skipMove(pending,{roll:model.goalProbability+model.keeperCornerProbability+model.keeperReboundProbability/2,reboundRoll:.25}));
+  assert.equal(run.state.lastAction.outcome,'loose');assert.equal(run.state.ball.carrierId,null);assert.equal(run.state.restart,null);
+  assert.equal(run.stats.teams[team].shots,1);assert.equal(run.stats.teams[team].onTarget,1);
+  assert.equal(run.stats.teams[team].corners,0);assert.equal(run.stats.teams[other(team)].corners,0);
+  assert.equal(run.stats.pendingShot,null);assert.equal(run.stats.lastPass,null);
+  assert.deepEqual(restoreMatchStats(clone(run.stats),run.state),run.stats);
 });

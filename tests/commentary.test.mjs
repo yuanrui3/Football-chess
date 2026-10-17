@@ -47,7 +47,7 @@ test('piece names preserve stable player numbers and team names are football nam
 });
 
 for (const team of ['white', 'black']) {
-  test(`${team}: engine-generated attempt and all six shooting outcomes describe public facts`, () => {
+  test(`${team}: engine-generated attempt and all seven shooting outcomes describe public facts`, () => {
     const {before, pending, model} = shot({team, blocker: true});
     const untouched = clone({before, pending});
     assert.equal(commentaryEvent(before, pending).kind, 'attempt');
@@ -55,6 +55,7 @@ for (const team of ['white', 'black']) {
     const branches = [
       ['goalProbability', 'goal', /GOAL for/],
       ['keeperCornerProbability', 'outcome', /(turns it behind|behind!.*keeps it out).*Corner/],
+      ['keeperReboundProbability', 'outcome', /[Ss]aved|[Ss]top/],
       ['caughtSaveProbability', 'outcome', /(Saved.*holds it|keeps it out.*holds on|Denied.*ball is safe)/],
       ['missProbability', 'outcome', /(shoot wide|Wide!).*Goal kick/],
       ['blockOutProbability', 'outcome', /[Bb]locked.*Corner/],
@@ -487,7 +488,7 @@ test('recorded shot outcomes and goal contexts map to factually matching clips',
   const {before, pending, model} = shot({blocker: true});
   let start = 0;
   for (const [branch, key] of [['goalProbability', 'goal_opening'], ['keeperCornerProbability', 'save_corner'],
-    ['caughtSaveProbability', 'save_hold'], ['missProbability', 'miss'], ['blockOutProbability', 'block_corner'],
+    ['keeperReboundProbability', null], ['caughtSaveProbability', 'save_hold'], ['missProbability', 'miss'], ['blockOutProbability', 'block_corner'],
     ['blockPossessionProbability', 'block_possession']]) {
     const after = E.skipMove(pending, {roll: start + model[branch] / 2});
     assert.equal(commentaryEvent(pending, after).clipKey, key); start += model[branch];
@@ -720,4 +721,21 @@ test('local playback clears its generation timer and remains bounded by the spee
   h.advance(20000); assert.equal(h.local.cancels, 1); assert.equal(h.controller.getState().speaking, false);
   h.jobs[0].reject(Error('Late worker error')); await flushLocal(); assert.equal(h.audios.length, 0);
   h.controller.destroy(); assert.equal(h.local.destroyed, 1); assert.equal(h.timers.size, 0);
+});
+
+for (const team of ['white', 'black']) test(`${team} live goalkeeper rebound commentary never promises a catch or corner`, () => {
+  const {pending,model} = shot({team});
+  const after = E.skipMove(pending, {roll:model.goalProbability+model.keeperCornerProbability+model.keeperReboundProbability/2,reboundRoll:.25});
+  assert.equal(after.lastAction.outcome,'loose');
+  const line=commentaryEvent(pending,after);
+  assert.match(line.text,/loose|rebound/i);assert.doesNotMatch(line.text,/corner|holds|safe|behind/i);
+  assert.equal(line.clipKey,null);assert.equal(line.keeperRebound,true);
+});
+
+test('Hugo delivers the live keeper-spill call urgently without substituting a catch recording',async()=>{
+  const h=localHarness(),{pending,model}=shot(),after=E.skipMove(pending,{roll:model.goalProbability+model.keeperCornerProbability+model.keeperReboundProbability/2,reboundRoll:.25});
+  const line=commentaryEvent(pending,after);h.controller.reveal(line);
+  assert.equal(h.jobs.length,1);assert.equal(h.jobs[0].settings.delivery,'urgent');
+  assert.match(h.jobs[0].text,/loose|rebound/i);assert.equal(h.audios.length,0);
+  h.jobs[0].resolve({spoken:true});await flushLocal();
 });

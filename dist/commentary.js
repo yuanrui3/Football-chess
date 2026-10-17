@@ -125,9 +125,10 @@ export function commentaryEvent(before, after, {stats} = {}) {
     if (action.type === 'save') {
       const keeperTeam = teamOf(action.keeperId) || action.team || shot.defendingTeam;
       const text = action.backPass ? `${teamName(keeperTeam)}'s keeper gathers the backward ball and must release it.`
+        : action.outcome === 'loose' ? variant([`Saved! ${teamName(keeperTeam)}'s keeper palms it away — the ball is loose! Who can get there first?`, `What a stop by ${teamName(keeperTeam)}'s keeper! It spills back into play — the rebound is alive!`], after.turn, shooterId)
         : action.outcome === 'corner' ? `${variant([`${teamName(keeperTeam)}'s keeper turns it behind!`, `Saved, and behind! ${teamName(keeperTeam)}'s keeper keeps it out!`], after.turn, shooterId)}${restartLine(action.restart)}`
           : variant([`Saved by ${teamName(keeperTeam)}'s keeper! The keeper holds it.`, `${teamName(keeperTeam)}'s keeper keeps it out, and holds on!`, `Denied by ${teamName(keeperTeam)}'s keeper! The ball is safe.`], after.turn, shooterId);
-      return event('outcome', text, before, after, action, {shot: true, clipKey: action.backPass ? 'keeper_release' : action.outcome === 'corner' ? 'save_corner' : 'save_hold'});
+      return event('outcome', text, before, after, action, {shot: true, keeperRebound: action.outcome === 'loose', clipKey: action.backPass ? 'keeper_release' : action.outcome === 'loose' ? null : action.outcome === 'corner' ? 'save_corner' : 'save_hold'});
     }
     if (action.type === 'blockedShot') {
       const blocker = action.blockerId ? ownedPiece(action.blockerId) : `${teamName(action.team)}'s defender`;
@@ -337,7 +338,7 @@ export function createCommentary({speechSynthesis = globalThis.speechSynthesis,
     if (active && line.priority <= active.event.priority && line.kind !== 'goal') return false;
     if (!demoCall && !explicit && line.kind === 'trend' && (at - lastTrend < COMMENTARY_ROUTINE_MS || at - lastSpoken < COMMENTARY_ROUTINE_MS)) return false;
     if (!demoCall && line.kind === 'attempt' && at - lastAttempt < (pace < 700 ? 3000 : 1200)) return false;
-    const useLocal = playback === 'local' && line.kind === 'trend' && line.clipKey !== 'enable'
+    const useLocal = playback === 'local' && (line.kind === 'trend' || line.keeperRebound === true) && line.clipKey !== 'enable'
       && localSupported && localState().ready;
     const clip = playback === 'recorded' || playback === 'local' ? clips[line.clipKey] : null;
     let text = useLocal ? line.text : clip?.text || (pace < 700 && line.kind === 'trend' && line.shortText ? line.shortText : line.text);
@@ -425,7 +426,7 @@ export function createCommentary({speechSynthesis = globalThis.speechSynthesis,
       }
       active.loadTimer = setTimer(fallbackLocal, Math.max(0, deadline - at));
       try {
-        const delivery = ['counter', 'pressure', 'queen_linebreak', 'final_third', 'knight_pocket', 'advance_centre', 'advance_wide', 'test'].includes(line.clipKey) ? 'urgent' : 'normal';
+        const delivery = line.keeperRebound === true || ['counter', 'pressure', 'queen_linebreak', 'final_third', 'knight_pocket', 'advance_centre', 'advance_wide', 'test'].includes(line.clipKey) ? 'urgent' : 'normal';
         Promise.resolve(localSpeech.speak(text, {expiresAt: deadline, delivery, onPlaying() {
           if (active?.token !== token || active.transport !== 'local') return;
           clearTimer(active.loadTimer); active.loadTimer = undefined; status('playing'); armWatchdog();

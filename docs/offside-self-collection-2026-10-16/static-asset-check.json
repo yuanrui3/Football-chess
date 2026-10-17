@@ -1,0 +1,6 @@
+{
+  "passed": true,
+  "localReferencesChecked": 15,
+  "issues": [],
+  "scope": "static local imports and page references; not visual browser QA"
+}

@@ -119,6 +119,6 @@ for(const team of ['white','black']){
 
 test('current normalization keeps already valid saved positions and declared shots intact',()=>{
   const state=fixture({type:'corner',origin:[5,6]});state.restart=null;const pending=E.applyKick(state,5,-1);pending.rulesVersion=14;
-  const before=clone(pending),normalized=E.normalizeGame(pending);assert.equal(normalized.rulesVersion,18);
+  const before=clone(pending),normalized=E.normalizeGame(pending);assert.equal(normalized.rulesVersion,E.RULES_VERSION);
   assert.deepEqual(normalized.pendingShot,before.pendingShot);assert.deepEqual(normalized.pieces,before.pieces);assert.equal(normalized.randomState,before.randomState);assert.deepEqual(pending,before);
 });

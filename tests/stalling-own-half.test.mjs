@@ -82,7 +82,7 @@ for(const team of ['white','black']){
     const target=point([5,E.BOARD_HEIGHT],team),pending=E.applyKick(s,target.x,target.y,{roll:0});pending.rulesVersion=12;
     const before=clone(pending),migrated=E.normalizeGame(pending);assert.equal(migrated.phase,'keeperReact');assert.equal(migrated.ballProgress.excludeRelease,true);assert.equal(migrated.ballProgress.rounds,0);
     assert.deepEqual(migrated.pendingShot,before.pendingShot);assert.equal(migrated.randomState,before.randomState);assert.deepEqual(pending,before);
-    const m=E.shotModel(migrated),caught=E.skipMove(migrated,{roll:m.goalProbability+m.cornerProbability+m.caughtSaveProbability/2});assert.equal(caught.lastAction.type,'save');assertFresh(caught);
+    const m=E.shotModel(migrated),caught=E.skipMove(migrated,{roll:m.goalProbability+m.cornerProbability + m.keeperReboundProbability + m.caughtSaveProbability/2});assert.equal(caught.lastAction.type,'save');assertFresh(caught);
   });
 
   test(`${team}: progress warnings apply only to a current own-half ball, without mutating retained round accounting`,()=>{

@@ -35,7 +35,7 @@ function declare(s, p = target(s.attack)) {
   assert.deepEqual(s, before); assert.equal(pending.phase, 'keeperReact'); assert.equal(pending.randomState, s.randomState);
   return pending;
 }
-function masses(m) { return [m.goalProbability, m.keeperCornerProbability, m.caughtSaveProbability, m.missProbability, m.blockOutProbability, m.blockPossessionProbability]; }
+function masses(m) { return [m.goalProbability, m.keeperCornerProbability, m.keeperReboundProbability, m.caughtSaveProbability, m.missProbability, m.blockOutProbability, m.blockPossessionProbability]; }
 function integrity(s) {
   assert.equal(s.pieces.length, 22); assert.equal(new Set(s.pieces.map(p => `${p.x},${p.y}`)).size, 22);
   for (const p of s.pieces) assert.ok(E.canOccupySquare(p, p.x, p.y));
@@ -43,9 +43,9 @@ function integrity(s) {
 }
 
 test('shot blocking has an explicit tunable model and safe invalid metadata', () => {
-  assert.equal(E.SHOT_MODEL.version, 14); assert.equal(E.SHOT_MODEL.blockPerDefender, .45); assert.equal(E.SHOT_MODEL.blockCornerShare, .85);
+  assert.equal(E.SHOT_MODEL.version, 15); assert.equal(E.SHOT_MODEL.blockPerDefender, .45); assert.equal(E.SHOT_MODEL.blockCornerShare, .85);
   const m = E.shotModel(null); assert.deepEqual(m.blockerIds, []); assert.deepEqual(m.blockerPositions, []);
-  for (const key of ['blockProbability', 'blockOutProbability', 'blockCornerProbability', 'blockPossessionProbability', 'keeperCornerProbability']) assert.equal(m[key], 0);
+  for (const key of ['blockProbability', 'blockOutProbability', 'blockCornerProbability', 'blockPossessionProbability', 'keeperCornerProbability', 'keeperReboundProbability']) assert.equal(m[key], 0);
   close(masses(m).reduce((a, b) => a + b, 0), 1);
 });
 
@@ -56,7 +56,7 @@ for (const team of ['white', 'black']) {
       close(m.blockProbability, 1 - .55 ** n); close(m.blockOutProbability, m.blockProbability * .85);
       close(m.blockPossessionProbability, m.blockProbability * .15); close(m.cornerProbability, m.keeperCornerProbability + m.blockCornerProbability);
       close(masses(m).reduce((a, b) => a + b, 0), 1); close(m.goalProbability + m.saveProbability + m.missProbability + m.blockProbability, 1);
-      close(m.onTargetProbability, m.goalProbability + m.saveProbability); close(m.saveProbability, m.keeperCornerProbability + m.caughtSaveProbability);
+      close(m.onTargetProbability, m.goalProbability + m.saveProbability); close(m.saveProbability, m.keeperCornerProbability + m.keeperReboundProbability + m.caughtSaveProbability);
       for (const key of ['goalProbability', 'saveProbability', 'missProbability']) close(m[key], models[0][key] * .55 ** n, key);
       for (const key of ['distance', 'goalOpeningDegrees', 'baseOnTargetProbability', 'reach', 'keeperPathDistance']) close(m[key], models[0][key], key);
       assert.equal(m.blockerIds.length, n); assert.ok(masses(m).every(p => p >= 0 && p <= 1));
@@ -64,25 +64,28 @@ for (const team of ['white', 'black']) {
     assert.deepEqual(models[2].blockerIds, [`${other(team)}-N1`, `${other(team)}-N2`]);
   });
 
-  test(`${team}: six real outcomes use exact disjoint probability boundaries and the same one RNG draw`, () => {
+  test(`${team}: seven real outcomes use exact disjoint probability boundaries and deterministic draws`, () => {
     const pending = declare(fixture({team, blockers: 2})), m = E.shotModel(pending), before = clone(pending);
-    const expected = [['goal', 'goal'], ['save', 'corner'], ['save', 'saved'], ['shotMiss', 'wide'], ['blockedShot', 'corner'], ['blockedShot', 'blocked']];
+    const expected = [['goal', 'goal'], ['save', 'corner'], ['save', 'loose'], ['save', 'saved'], ['shotMiss', 'wide'], ['blockedShot', 'corner'], ['blockedShot', 'blocked']];
     let boundary = 0, randomState;
     for (const [index, mass] of masses(m).entries()) {
       assert.ok(mass > 0);
       for (const roll of [boundary, boundary + mass / 2, boundary + mass - 1e-12]) {
         const next = E.skipMove(pending, {roll});
         assert.deepEqual([next.lastAction.type, next.lastAction.outcome], expected[index]); integrity(next);
-        randomState ??= next.randomState; assert.equal(next.randomState, randomState);
-        if (index >= 4) {
-          assert.equal(next.lastAction.blockerId, `${other(team)}-N1`); assert.equal(next.offside, null);
-          if (index === 4) {
+        if (index !== 2) {randomState ??= next.randomState; assert.equal(next.randomState, randomState);}
+        else assert.deepEqual(next, E.skipMove(pending, {roll}), 'the extra rebound-location draw is repeatable');
+        if (index >= 5) {
+          assert.equal(next.lastAction.blockerId, `${other(team)}-N1`);
+          if (index === 5) {
+            assert.equal(next.offside, null);
             assert.equal(next.restart.type, 'corner'); assert.equal(next.attack, team); assert.equal(next.phase, 'cornerSelect');
             assert.equal(next.restart.takerId,null); assert.equal(next.ballProgress.rounds, 0);
             const selected=E.selectCornerTaker(next,E.cornerTakers(next)[0].id);
             assert.deepEqual(E.legalMoves(selected,selected.restart.takerId),[]);
             assert.equal(E.skipMove(E.skipMove(selected)).phase, 'kick');
           } else {
+            assert.deepEqual(next.offside, pending.offside, 'a defender saving a shot retains its kick-time flags');
             assert.equal(next.restart, null); assert.equal(next.attack, other(team)); assert.equal(next.ball.carrierId, `${other(team)}-N1`);
             assert.equal(next.phase, 'attackMove'); assert.equal(next.ballProgress.rounds, 0);
             assert.deepEqual(next.lastAction.path, [pending.pendingShot.from, next.lastAction.blockedAt], 'a retained block stops its visible path at the first defender');

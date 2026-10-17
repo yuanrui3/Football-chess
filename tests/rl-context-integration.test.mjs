@@ -2,7 +2,6 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import * as E from '../dist/engine.js';
-import * as Frozen from '../training/frozen/engine-v37.mjs';
 import {rlContextValueFeatures, RL_CONTEXT_FEATURE_NAMES} from '../scripts/rl-context-features.mjs';
 import {rlShotValueFeatures, RL_SHOT_FEATURE_NAMES} from '../scripts/rl-shot-features.mjs';
 
@@ -14,10 +13,10 @@ test('browser context encoder is the exact source used for offline learning', as
   assert.deepEqual(E.RL_CONTEXT_FEATURE_NAMES, RL_CONTEXT_FEATURE_NAMES);
 });
 
-test('all model families preserve baseline search when their weights are zero', () => {
+test('all model families preserve current-rule baseline search when their weights are zero', () => {
   const state = E.createGame({seed: 120000});
   const options = {maxDepth: 2, nodeLimit: 120, extensions: false};
-  const expected = Frozen.analyzeTacticalAction(state, options);
+  const expected = E.analyzeTacticalAction(state, {...options, modelWeights: null});
   for (const length of [7, 28, 37]) {
     assert.deepEqual(E.analyzeTacticalAction(state, {...options, modelWeights: Array(length).fill(0)}), expected);
   }
@@ -85,6 +84,6 @@ test('80 and 320 scales change only the learned residual and preserve terminal a
   assert.ok(Math.abs(large) <= 320);
   assert.equal(internal.tacticalPositionValue({...state, phase: 'finished', winner: 'white'}, 'white', weights, 320), 1000000);
   const options = {nodeLimit: 120, maxDepth: 2, extensions: false};
-  assert.deepEqual(E.analyzeTacticalAction(state, {...options, modelWeights: Array(28).fill(0), modelScale: 320}), Frozen.analyzeTacticalAction(state, options));
+  assert.deepEqual(E.analyzeTacticalAction(state, {...options, modelWeights: Array(28).fill(0), modelScale: 320}), E.analyzeTacticalAction(state, {...options, modelWeights: null}));
   for (const scale of [0, -80, 81, NaN, Infinity, '320']) assert.throws(() => E.analyzeTacticalAction(state, {...options, modelWeights: weights, modelScale: scale}), /80 or 320/);
 });
