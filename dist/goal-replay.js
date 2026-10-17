@@ -1,5 +1,5 @@
 // A replay is a bounded recording of the match, never another engine run.
-import {BOARD_WIDTH as W,BOARD_HEIGHT as H,GOAL_FILES,BOX_FILES,BOX_DEPTH,FILE_LABELS as FILES,RULES_VERSION,canOccupySquare} from './engine.js?v=db24debe7605';
+import {BOARD_WIDTH as W,BOARD_HEIGHT as H,GOAL_FILES,BOX_FILES,BOX_DEPTH,FILE_LABELS as FILES,RULES_VERSION,canOccupySquare} from './engine.js?v=df962903a48e';
 const TEAMS=['white','black'];
 const REPLAY_VERSION=2;
 const geometry=()=>({width:W,height:H,goalFiles:[...GOAL_FILES],boxFiles:[...BOX_FILES],boxDepth:BOX_DEPTH});
@@ -68,7 +68,7 @@ function recordAction(action){
   if(!action||!ACTIONS.has(action.type))return null;
   const result={type:action.type};
   for(const key of ['team','shootingTeam','pieceId','shooterId'])if(action[key]!==undefined)result[key]=action[key];
-  for(const key of ['from','to','goalTarget'])if(point(action[key]))result[key]={x:action[key].x,y:action[key].y};
+  for(const key of ['from','to','goalTarget','reboundLanding'])if(point(action[key]))result[key]={x:action[key].x,y:action[key].y};
   const declaredDisguise=action.disguised===true&&action.type==='shotAttempt';
   if(Array.isArray(action.path)&&!declaredDisguise)result.path=action.path.slice(0,32).map(p=>({x:p.x,y:p.y}));
   if(action.disguised===true){
@@ -88,6 +88,11 @@ function recordAction(action){
     for(const key of ['contactSpot','intendedTo'])if(point(action[key]))result[key]={x:action[key].x,y:action[key].y};
     if(action.keeperReplacement){const r=action.keeperReplacement;result.keeperReplacement={pieceId:r.pieceId,originalType:r.originalType,from:{...r.from},to:{...r.to}};}
   }
+  if(action.type==='save'){
+    for(const key of ['outcome','keeperId','keeperRebound','reboundRoll'])if(action[key]!==undefined)result[key]=action[key];
+    const reboundProbability=action.shotModel?.keeperReboundProbability??action.keeperReboundProbability;
+    if(Number.isFinite(reboundProbability))result.keeperReboundProbability=reboundProbability;
+  }
   if(action.type==='blockedShot'){result.blockerId=action.blockerId;result.outcome=action.outcome;}
   if(action.lofted){result.lofted=true;result.bypassedPieceId=action.bypassedPieceId;result.bypassedSquare={...action.bypassedSquare};}
   return result;
@@ -97,8 +102,8 @@ function validAction(action){
   if(action===null)return true;
   if(!action||!ACTIONS.has(action.type))return false;
   for(const key of ['team','shootingTeam'])if(action[key]!==undefined&&!TEAMS.includes(action[key]))return false;
-  for(const key of ['pieceId','shooterId','offenderId','targetId','sentOffId'])if(action[key]!==undefined&&!IDS.has(action[key]))return false;
-  for(const key of ['from','to','goalTarget'])if(action[key]!==undefined&&!point(action[key]))return false;
+  for(const key of ['pieceId','shooterId','offenderId','targetId','sentOffId','keeperId'])if(action[key]!==undefined&&!IDS.has(action[key]))return false;
+  for(const key of ['from','to','goalTarget','reboundLanding'])if(action[key]!==undefined&&!point(action[key]))return false;
   if(action.path!==undefined&&(!Array.isArray(action.path)||action.path.length<1||action.path.length>32||!action.path.every(point)))return false;
   if(action.probability!==undefined&&(!Number.isFinite(action.probability)||action.probability<0||action.probability>1))return false;
   if(action.ownGoal!==undefined&&typeof action.ownGoal!=='boolean')return false;
@@ -121,6 +126,10 @@ function validAction(action){
     const replacement=action.keeperReplacement;
     if(replacement&&(!IDS.has(replacement.pieceId)||replacement.pieceId.split('-')[1][0]==='K'||replacement.originalType!==replacement.pieceId.split('-')[1][0]||!pitchPoint(replacement.from)||!pitchPoint(replacement.to)||replacement.pieceId.split('-')[0]!==action.offenderId.split('-')[0]))return false;
   }
+  if(action.keeperReboundProbability!==undefined&&(action.type!=='save'||!Number.isFinite(action.keeperReboundProbability)||action.keeperReboundProbability<0||action.keeperReboundProbability>1))return false;
+  if(action.type==='save'&&action.outcome!==undefined&&!['saved','corner','loose'].includes(action.outcome))return false;
+  if(action.outcome==='loose'&&(action.type!=='save'||action.keeperRebound!==true||!IDS.has(action.keeperId)||action.penalty||!pitchPoint(action.reboundLanding)||!samePoint(action.to,action.reboundLanding)||GOAL_FILES.includes(action.to.x)&&[0,H-1].includes(action.to.y)||!Number.isFinite(action.reboundRoll)||action.reboundRoll<0||action.reboundRoll>=1||action.path&&!samePoint(action.path.at(-1),action.reboundLanding)))return false;
+  if(action.outcome!=='loose'&&(action.keeperRebound!==undefined||action.reboundLanding!==undefined||action.reboundRoll!==undefined))return false;
   if(action.type==='blockedShot'&&(!IDS.has(action.blockerId)||!['corner','blocked','out'].includes(action.outcome)))return false;
   if(action.lofted!==undefined){
     if(action.lofted!==true||!['kick','miss','interception','out','offside'].includes(action.type)||!IDS.has(action.bypassedPieceId)||!pitchPoint(action.bypassedSquare))return false;
@@ -147,7 +156,7 @@ function frameCaption(state){
   if(action.type==='tackleMiss')return `${side} attempts a tackle; the knight keeps the ball.`;
   if(['kick','miss','interception'].includes(action.type))return `${side} ${action.lofted?'lofts a pass over one player toward':'plays the ball toward'} ${coordinate(action.to)}${action.type==='miss'?' — inaccurate pass':action.type==='interception'?' — intercepted':''}.`;
   if(action.type==='skip')return `${side} ends positioning.`;
-  if(action.type==='save')return `${side} makes the save.`;
+  if(action.type==='save')return action.outcome==='loose'?`${side} keeper parries the shot back into play. The ball is loose at ${coordinate(action.to)}.`:action.outcome==='corner'?`${side} keeper turns the shot behind for a corner.`:`${side} makes the save.`;
   if(action.type==='blockedShot'){
     const blocker=state.pieces.find(piece=>piece.id===action.blockerId);
     return `${blocker?`${TEAM[blocker.team]} ${NAMES[blocker.type].toLowerCase()}`:'A defender'} blocks the shot${action.outcome==='corner'?', conceding a corner.':action.outcome==='out'?' out for a goal kick.':'; the defending side recovers possession.'}`;
@@ -163,6 +172,7 @@ function recordFrame(state){
 
 function validFrame(frame,isGoal){
   if(!frame||!validPieces(frame.pieces,frame.sentOff)||!score(frame.score)||!validAction(frame.action)||typeof frame.caption!=='string'||frame.caption.length>280)return false;
+  if(frame.action?.outcome==='loose'&&(frame.ball?.carrierId!==null||!samePoint(frame.ball,frame.action.reboundLanding)||frame.pieces.some(piece=>samePoint(piece,frame.ball))||frame.pieces.find(piece=>piece.id===frame.action.keeperId)?.type!=='K'))return false;
   if(frame.action?.keeperMove&&frame.pieces.find(piece=>piece.id===frame.action.keeperMove.pieceId)?.type!=='K')return false;
   if(frame.action?.disguised&&!['Q','N'].includes(frame.pieces.find(piece=>piece.id===(frame.action.shooterId||frame.action.pieceId))?.type))return false;
   if(frame.action?.type==='foul'){

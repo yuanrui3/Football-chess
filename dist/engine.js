@@ -9,7 +9,7 @@ export const CENTRAL_GOAL_FILES = Object.freeze([6, 7]);
 export const MIDFIELD_RANK = Math.floor(BOARD_HEIGHT / 2);
 export const BOARD_CENTER_X = (BOARD_WIDTH - 1) / 2;
 export const FILE_LABELS = 'abcdefghijklmn';
-export const RULES_VERSION = 18;
+export const RULES_VERSION = 19;
 export const ALLOW_OUTFIELD_BOXES = true;
 export const LONG_TACKLE_RANGE = 5;
 export const MOVE_RANGE = 10;
@@ -21,7 +21,8 @@ export const PACE_RULE = Object.freeze({maxDribbleRounds: 4, repetitionOccurrenc
 // Tunable board-game parameters, not fitted football statistics. Distance is in
 // board squares and time is in abstract units set by ballSpeed.
 export const SHOT_MODEL = Object.freeze({
-  version: 14, ballSpeed: 6, blockPerDefender: 0.45, blockCornerShare: 0.85, knightGoalMultiplier: 1, finishingAccuracyMultiplier: 1.15,
+  version: 15, ballSpeed: 6, blockPerDefender: 0.45, blockCornerShare: 0.85, knightGoalMultiplier: 1, finishingAccuracyMultiplier: 1.15,
+  parryInPlayShare: 0.20, reboundBoxMargin: 2,
   targetBase: 0.98, distanceDecay: 0.018, distancePenaltyStart: 3, longShotDecay: 0.06, rookLongShotDecay: 0.03, minOnTarget: 0.01, maxOnTarget: 0.98,
   angleFloor: 0.65, angleWeight: 0.35, postAngleFloor: 0.10, postAngleWeight: 0.90, postAngleExponent: 1.5,
   wideAngleStartDegrees: 45, wideAngleFullDegrees: 90, wideAngleAccuracyBonus: 0.25,
@@ -519,7 +520,7 @@ export function offsideInfo(state, team = state?.pieces?.find(p => p.id === stat
   const flaggedIds = players.filter(p => p.offside).map(p => p.id);
   const boxAttackerIds = pieces.filter(p => p.team === team && p.type !== 'K' && (ALLOW_OUTFIELD_BOXES || p.type === 'N') && flaggedIds.includes(p.id) && inOwnBox(other(team), p.x, p.y)).map(p => p.id).sort();
   const boxKnightIds = boxAttackerIds.filter(id => pieces.find(p => p.id === id)?.type === 'N');
-  return {team, ball: {x: ball.x, y: ball.y}, secondLastY, players, flaggedIds, boxKnightIds, boxAttackerIds, activeFlaggedIds: state?.offside?.team === team ? [...(state.offside.flaggedIds || [])] : []};
+  return {team, ball: {x: ball.x, y: ball.y}, secondLastY, players, flaggedIds, boxKnightIds, boxAttackerIds, activeFlaggedIds: state?.offside?.team === team ? offsideFlaggedIds(state) : []};
 }
 
 const offsideExempt = restart => ['goalKick', 'corner', 'throwIn', 'penalty'].includes(restart?.type);
@@ -546,7 +547,16 @@ function offsideSnapshot(state, kicker, restart) {
   const info = offsideInfo(state, kicker.team);
   return {team: kicker.team, kickerId: kicker.id, ball: info.ball, secondLastY: info.secondLastY, flaggedIds: info.flaggedIds.filter(id => id !== kicker.id)};
 }
-const flagged = (state, piece) => !!piece && state.offside?.team === piece.team && (state.offside.flaggedIds || []).includes(piece.id);
+// Only teammates can offend at a kick. Keep that invariant even when loading
+// a stale snapshot; never reconstruct flags from a later defensive line.
+export function offsideFlaggedIds(state) {
+  const snapshot = state?.offside;
+  if (!snapshot) return [];
+  return (snapshot.flaggedIds || []).filter(id => id !== snapshot.kickerId
+    && state.pieces.some(piece => piece.id === id && piece.team === snapshot.team));
+}
+const flagged = (state, piece) => !!piece && state.offside?.team === piece.team
+  && piece.id !== state.offside.kickerId && (state.offside.flaggedIds || []).includes(piece.id);
 
 // Coordinates describe square centres; the ball is out only after the whole
 // centre trajectory crosses the outer half-square. The first line wins.
@@ -675,6 +685,7 @@ export function normalizeGame(state) {
   }
   next.restart ??= null;
   next.offside ??= null;
+  if (next.offside) next.offside.flaggedIds = offsideFlaggedIds(next);
   if (next.phase === 'cornerSelect') {
     if (next.restart?.type === 'corner' && TEAMS.includes(next.restart.team)) {
       next.attack = next.restart.team;
@@ -809,6 +820,24 @@ function friendlyStopsShot(state, carrier, x, y) {
   return shotBodies(state.pieces, carrier, target, carrier.id).some(piece => piece.team === carrier.team);
 }
 
+// A goalkeeper spill is a loose ball, never an automatic touch by a nearby
+// piece. The stable, public list is shared by live play and chance search.
+export function keeperReboundTargets(state, shot = state?.pendingShot) {
+  const scoringTeam = shot?.scoringTeam || shotScoringTeam(shot?.x, shot?.y);
+  const defendingTeam = shot?.defendingTeam || (scoringTeam ? other(scoringTeam) : null);
+  if (!TEAMS.includes(defendingTeam)) return [];
+  const margin = SHOT_MODEL.reboundBoxMargin;
+  const minX = Math.max(0, BOX_FILES[0] - margin), maxX = Math.min(BOARD_WIDTH - 1, BOX_FILES.at(-1) + margin);
+  const minY = defendingTeam === 'black' ? 0 : Math.max(0, BOARD_HEIGHT - BOX_DEPTH - margin);
+  const maxY = defendingTeam === 'black' ? Math.min(BOARD_HEIGHT - 1, BOX_DEPTH - 1 + margin) : BOARD_HEIGHT - 1;
+  const occupied = new Set((state?.pieces || []).map(piece => `${piece.x},${piece.y}`));
+  const targets = [];
+  for (let y = minY; y <= maxY; y++) for (let x = minX; x <= maxX; x++) {
+    if (!isGoalMouth(x, y) && !occupied.has(`${x},${y}`)) targets.push({x, y});
+  }
+  return targets;
+}
+
 function singleShotModel(state, x = state?.pendingShot?.x, y = state?.pendingShot?.y, keeperPosition) {
   const scoringTeam = shotScoringTeam(x, y);
   const pieces = Array.isArray(state?.pieces) ? state.pieces : [];
@@ -825,7 +854,7 @@ function singleShotModel(state, x = state?.pendingShot?.x, y = state?.pendingSho
   const target = scoringTeam ? {x, y: scoringTeam === 'white' ? -0.5 : BOARD_HEIGHT - 0.5} : {x: 0, y: 0};
   const invalid = {
     probability: 0, goalProbability: 0, baseGoalProbability: 0, scoringMultiplier: 1, saveProbability: 0, missProbability: 1, penalty,
-    onTargetProbability: 0, baseOnTargetProbability: 0, saveGivenOnTarget: 0, cornerProbability: 0, keeperCornerProbability: 0, caughtSaveProbability: 0, blockerIds: [], blockerPositions: [], blockProbability: 0, blockOutProbability: 0, blockCornerProbability: 0, blockPossessionProbability: 0, arrivalSpeed: 0, keeperStretch: 0, parryGivenSave: 0, distance: 0, shotAngleDegrees: 0,
+    onTargetProbability: 0, baseOnTargetProbability: 0, saveGivenOnTarget: 0, cornerProbability: 0, keeperCornerProbability: 0, keeperReboundProbability: 0, caughtSaveProbability: 0, blockerIds: [], blockerPositions: [], blockProbability: 0, blockOutProbability: 0, blockCornerProbability: 0, blockPossessionProbability: 0, arrivalSpeed: 0, keeperStretch: 0, parryGivenSave: 0, distance: 0, shotAngleDegrees: 0,
     goalDepth: 0, goalOpeningDegrees: 0, centralGoalOpeningDegrees: 0, goalOpeningRatio: 0, postAngleFactor: 0, wideAngleFactor: 1, centralLaneFactor: 1, finishingAccuracyMultiplier: SHOT_MODEL.finishingAccuracyMultiplier, shooterType, distancePenaltyRate: 0,
     keeperPathDistance: 0, timeToKeeper: 0, reach: 0, keeperInBox: false,
     closestPoint: {...origin}, keeperPosition: null, origin, target, modelVersion: SHOT_MODEL.version
@@ -893,14 +922,18 @@ function singleShotModel(state, x = state?.pendingShot?.x, y = state?.pendingSho
   const arrivalSpeed = keeper ? SHOT_MODEL.ballSpeed * Math.exp(-SHOT_MODEL.impactSpeedDecay * projection) : 0;
   const keeperStretch = keeper && reach > 0 ? clamp(clearance / reach, 0, 1) : 0;
   const parryGivenSave = saveProbability > 0 ? clamp(SHOT_MODEL.parryMin + SHOT_MODEL.parrySpeedWeight * (arrivalSpeed / SHOT_MODEL.ballSpeed) ** 2 + SHOT_MODEL.parryStretchWeight * keeperStretch, SHOT_MODEL.parryMin, SHOT_MODEL.parryMax) : 0;
-  const keeperCornerProbability = saveProbability * parryGivenSave;
+  const parryProbability = saveProbability * parryGivenSave;
+  // Teammate backward kicks keep their compulsory-release pipeline; live
+  // goalkeeper spills are saves of an opponent's shot.
+  const keeperReboundProbability = shootingTeam !== defendingTeam ? parryProbability * SHOT_MODEL.parryInPlayShare : 0;
+  const keeperCornerProbability = parryProbability - keeperReboundProbability;
   const blockOutProbability = blockProbability * SHOT_MODEL.blockCornerShare;
   const blockCornerProbability = shootingTeam === scoringTeam ? blockOutProbability : 0;
   const blockPossessionProbability = blockProbability - blockOutProbability;
   const cornerProbability = keeperCornerProbability + blockCornerProbability;
   const result = {
     probability: goalProbability, goalProbability, baseGoalProbability, scoringMultiplier, saveProbability,
-    missProbability, baseOnTargetProbability: onTarget, cornerProbability, keeperCornerProbability, caughtSaveProbability: saveProbability - keeperCornerProbability,
+    missProbability, baseOnTargetProbability: onTarget, cornerProbability, keeperCornerProbability, keeperReboundProbability, caughtSaveProbability: saveProbability - parryProbability,
     blockerIds: blockers.map(piece => piece.id), blockerPositions: blockers.map(({id, x, y}) => ({id, x, y})), blockProbability, blockOutProbability, blockCornerProbability, blockPossessionProbability,
     arrivalSpeed, keeperStretch, parryGivenSave, onTargetProbability: goalProbability + saveProbability, saveGivenOnTarget: goalProbability + saveProbability > 0 ? saveProbability / (goalProbability + saveProbability) : 0,
     distance: length, shotAngleDegrees: Math.acos(angleCos) * 180 / Math.PI,
@@ -913,7 +946,7 @@ function singleShotModel(state, x = state?.pendingShot?.x, y = state?.pendingSho
   return {...result, probability: FOUL_RULE.penaltyGoal, goalProbability: FOUL_RULE.penaltyGoal, baseGoalProbability: FOUL_RULE.penaltyGoal, scoringMultiplier: 1,
     saveProbability: penaltySave, caughtSaveProbability: penaltySave, missProbability: keeperInBox ? 0 : FOUL_RULE.penaltyFailure,
     baseOnTargetProbability: FOUL_RULE.penaltyGoal + penaltySave, onTargetProbability: FOUL_RULE.penaltyGoal + penaltySave, saveGivenOnTarget: penaltySave / (FOUL_RULE.penaltyGoal + penaltySave),
-    cornerProbability: 0, keeperCornerProbability: 0, parryGivenSave: 0, blockerIds: [], blockerPositions: [], blockProbability: 0, blockOutProbability: 0, blockCornerProbability: 0, blockPossessionProbability: 0};
+    cornerProbability: 0, keeperCornerProbability: 0, keeperReboundProbability: 0, parryGivenSave: 0, blockerIds: [], blockerPositions: [], blockProbability: 0, blockOutProbability: 0, blockCornerProbability: 0, blockPossessionProbability: 0};
 }
 
 // A disguised declaration contains two public possibilities, never a selected
@@ -925,7 +958,7 @@ export function shotModel(state, x = state?.pendingShot?.x, y = state?.pendingSh
   const result = {...targetModels[0]};
   for (const key of Object.keys(result)) if (typeof result[key] === 'number') result[key] = (targetModels[0][key] + targetModels[1][key]) / 2;
   result.saveGivenOnTarget = result.onTargetProbability > 0 ? result.saveProbability / result.onTargetProbability : 0;
-  result.parryGivenSave = result.saveProbability > 0 ? result.keeperCornerProbability / result.saveProbability : 0;
+  result.parryGivenSave = result.saveProbability > 0 ? (result.keeperCornerProbability + result.keeperReboundProbability) / result.saveProbability : 0;
   result.blockerIds = [...new Set(targetModels.flatMap(model => model.blockerIds))];
   result.blockerPositions = result.blockerIds.map(id => targetModels.flatMap(model => model.blockerPositions).find(piece => piece.id === id));
   return {...result, disguised: true, targetOptions: options, targetModels};
@@ -1099,11 +1132,13 @@ function resolveShot(next, {roll, targetRoll, keeperMove, landing} = {}) {
   const details = singleShotModel({...next, pendingShot: shot}, shot.x, shot.y), probability = details.probability;
   const outcomeRoll = nextRoll(next, roll);
   const keeperCornerEnd = probability + details.keeperCornerProbability;
+  const keeperReboundEnd = keeperCornerEnd + details.keeperReboundProbability;
   const caughtEnd = probability + details.saveProbability;
   const wideEnd = 1 - details.blockProbability;
   const blockOutEnd = 1 - details.blockPossessionProbability;
   const outcome = outcomeRoll < probability ? 'goal' : outcomeRoll < keeperCornerEnd ? 'keeperCorner'
-    : outcomeRoll < caughtEnd ? 'saved' : outcomeRoll < wideEnd ? 'wide' : outcomeRoll < blockOutEnd ? 'blockOut' : 'blocked';
+    : outcomeRoll < keeperReboundEnd ? 'keeperRebound' : outcomeRoll < caughtEnd ? 'saved'
+      : outcomeRoll < wideEnd ? 'wide' : outcomeRoll < blockOutEnd ? 'blockOut' : 'blocked';
   const common = {pieceId: shot.shooterId, shooterId: shot.shooterId, shootingTeam: shot.shootingTeam, from: shot.from, goalTarget: {x: shot.x, y: shot.y}, probability, accuracy: probability, roll: outcomeRoll, shotModel: details, shotPath: shot.path,
     ...(chosenTargetIndex === null ? {} : {disguised: true, targetOptions, chosenTargetIndex, targetProbability: 0.5, combinedProbability}), ...(keeperMove ? {keeperMove} : {})};
   if (outcome === 'goal') {
@@ -1120,6 +1155,25 @@ function resolveShot(next, {roll, targetRoll, keeperMove, landing} = {}) {
     next.turn++;
     next.lastAction = {...common, type: 'goal', team: shot.scoringTeam, to: {x: shot.x, y: shot.y}, path: shot.path, outcome: 'goal', ownGoal: shot.scoringTeam !== shot.shootingTeam};
     addLog(next, `${title(shot.scoringTeam)} scores (${Math.round(probability * 100)}% chance)${shot.scoringTeam !== shot.shootingTeam ? ' — an own goal!' : '!'} ${next.score.white}–${next.score.black}. ${title(conceded)} kicks off.`);
+  } else if (outcome === 'keeperRebound') {
+    const targets = keeperReboundTargets(next, shot);
+    if (!targets.length) throw new Error('A goalkeeper rebound requires an empty landing square near the box.');
+    const reboundRoll = nextRoll(next);
+    const destination = landingOverride(landing) || targets[Math.floor(reboundRoll * targets.length)];
+    if (!targets.some(target => target.x === destination.x && target.y === destination.y)) {
+      throw new Error('A rebound landing must be an empty square near the defending box, outside the goal mouth.');
+    }
+    const parryPoint = keeper ? {x: keeper.x, y: keeper.y} : details.closestPoint;
+    const path = [shot.from, parryPoint, destination].filter((point, index, points) => !index || point.x !== points[index - 1].x || point.y !== points[index - 1].y);
+    next.ball = {...destination, carrierId: null}; next.attack = shot.shootingTeam; next.restart = null;
+    next.releaseReason = null;
+    // A save cannot put an offside attacker back onside. The loose ball is
+    // contested through the normal positioning phases with the old snapshot.
+    beginPosition(next); next.turn++;
+    next.lastAction = {...common, type: 'save', team: shot.defendingTeam, keeperId: keeper?.id,
+      to: {...destination}, path, outcome: 'loose', keeperRebound: true,
+      reboundLanding: {...destination}, reboundRoll};
+    addLog(next, `${title(shot.defendingTeam)} goalkeeper parries the ball loose at ${square(destination.x, destination.y)}. Play continues; the shot-time offside flags still apply.`);
   } else if (outcome === 'keeperCorner' || outcome === 'saved') {
     if (outcome === 'keeperCorner') {
       const endY = shot.scoringTeam === 'white' ? -1 : BOARD_HEIGHT;
@@ -1163,7 +1217,8 @@ function resolveShot(next, {roll, targetRoll, keeperMove, landing} = {}) {
     const blocker = next.pieces.find(piece => piece.id === details.blockerIds[0]);
     if (!blocker) throw new Error('A blocked shot requires a defending piece on its path.');
     const blockedAt = {x: blocker.x, y: blocker.y};
-    next.offside = null;
+    // A reflex body block, like a keeper save, retains the kick-time snapshot.
+    // A boundary restart or the defender's next deliberate play clears it.
     if (outcome === 'blockOut') {
       const restart = restartForExit(next, shot.from, {x: shot.x, y: shot.y}, blocker.team, {cornerTargetX: shot.x});
       next.turn++;
@@ -1496,7 +1551,7 @@ function receiverValue(state, receiver, canDribble = true) {
   return 75 + tacticalShots(projected, receiver.team, true) * 320
     + ({Q: 20, R: 13, B: 12, N: 26, P: 0, K: -30})[receiver.type]
     - Math.max(0, Math.abs(receiver.x - BOARD_CENTER_X) - 2) * 18
-    - risk * (canDribble ? 45 : 460);
+    - risk * (canDribble ? 45 : 460) + wideAttackValue(projected, receiver) * 0.6;
 }
 
 function passLane(state, carrier, target) {
@@ -1637,6 +1692,7 @@ function moveValue(state, projected, piece, move, team, beforeThreat) {
     } else {
       const originalCarrier = state.pieces.find(p => p.id === state.ball.carrierId);
       value += supportPotential(projected, afterPiece, carrier) - supportPotential(state, piece, originalCarrier);
+      value += (wideCrossingSupport(projected, carrier).best - wideCrossingSupport(state, originalCarrier).best) * 240;
       value += (tacticalTackleRisk(state, originalCarrier) - tacticalTackleRisk(projected, carrier)) * 450;
       value += forward * 0.6 + (distance(piece, carrier) - distance(afterPiece, carrier)) * 0.4;
       if (piece.type === 'K') value += keeperHomeValue(afterPiece) - keeperHomeValue(piece);
@@ -1747,9 +1803,53 @@ function tacticalShots(state, team, react = false) {
   return best;
 }
 
+// A positioning reply has one ordinary challenge and one shared pawn/king
+// reposition. The latter cannot tackle, but the same piece may use it to set
+// up its ordinary tackle. Attacking moves face the defender's fresh budgets;
+// defensive moves must respect the budgets already spent in this reply.
+function tacticalChallengeBudget(state, carrier) {
+  if (!carrier || state.restart) return null;
+  if (state.phase === 'attackMove' || state.phase === 'passRun') return freshBudget();
+  if (state.phase === 'defendMove' && currentTeam(state) !== carrier.team) return budgetFor(state);
+  return null;
+}
+
+function tacticalTackleLanding(state, piece, carrier) {
+  if (!canTackle(state, piece, carrier) || flagged(state, piece)) return false;
+  return DIRECTIONS.some(([dx, dy]) => {
+    const x = carrier.x + dx, y = carrier.y + dy;
+    const occupant = pieceAt(state, x, y);
+    // A reposition vacates the piece's original square. Its old occupancy may
+    // therefore be ignored, just as its actual square is legal for a tackle.
+    return distance(piece, {x, y}) <= 10 && allowedSquare(piece, x, y) && (!occupant || occupant.id === piece.id);
+  });
+}
+
+function tacticalTackleSetup(state, piece, move, carrier, budget = tacticalChallengeBudget(state, carrier)) {
+  if (!budget || budget.normalUsed || budget.pawnUsed || !['P', 'K'].includes(piece.type)
+    || piece.team === carrier.team || flagged(state, piece) || distance(piece, carrier) > 2) return false;
+  const dx = Math.abs(move.x - piece.x), dy = Math.abs(move.y - piece.y);
+  if (piece.type === 'P' ? dx + dy !== 1 : Math.max(dx, dy) !== 1) return false;
+  const moved = {...piece, x: move.x, y: move.y};
+  if (!canTackle(state, moved, carrier) || pieceAt(state, move.x, move.y) || !allowedSquare(piece, move.x, move.y)) return false;
+  return tacticalTackleLanding(state, moved, carrier);
+}
+
 function tacticalTackleRisk(state, carrier) {
-  if (!carrier) return 0;
-  return state.pieces.some(piece => piece.team !== carrier.team && canTackle(state, piece, carrier)) ? (carrier.type === 'N' ? 0.5 : 1) * (state.foulsEnabled ? FOUL_RULE.clean : 1) : 0;
+  const budget = tacticalChallengeBudget(state, carrier);
+  if (!budget || budget.normalUsed) return 0;
+  for (const piece of state.pieces) {
+    if (piece.team === carrier.team || flagged(state, piece)) continue;
+    if (tacticalTackleLanding(state, piece, carrier)) return (carrier.type === 'N' ? 0.5 : 1) * (state.foulsEnabled ? FOUL_RULE.clean : 1);
+    // One bonus step plus one adjacent tackle cannot reach beyond two squares.
+    if (!budget.pawnUsed && ['P', 'K'].includes(piece.type) && distance(piece, carrier) <= 2) {
+      const vectors = piece.type === 'P' ? STRAIGHTS : DIRECTIONS;
+      if (vectors.some(([dx, dy]) => tacticalTackleSetup(state, piece, {x: piece.x + dx, y: piece.y + dy}, carrier, budget))) {
+        return (carrier.type === 'N' ? 0.5 : 1) * (state.foulsEnabled ? FOUL_RULE.clean : 1);
+      }
+    }
+  }
+  return 0;
 }
 
 // Off-ball box runs provide receiving chances alongside direct carrying entry.
@@ -1777,6 +1877,43 @@ function tacticalOutlets(state, carrier) {
   const result = {best: chances[0] || 0, second: chances[1] || 0};
   tacticalOutletCache.set(state, result);
   return result;
+}
+
+// A wide attack needs a real central delivery, not merely a teammate close to
+// the touchline. Only onside receivers reachable by this carrier's own passing
+// pattern count, and their finish includes accuracy, keeper reaction and the
+// defensive reply. This is a soft preference: a useful direct shot can still
+// justify an isolated wing position.
+const crossingSupportCache = new WeakMap();
+function wideCrossingSupport(state, carrier) {
+  if (!carrier || carrier.type === 'K' || Math.abs(carrier.x - BOARD_CENTER_X) < 3.5
+    || goalDistance(carrier.team, carrier.y) > 8) return {wide: false, best: 0, second: 0, direct: 0};
+  const cached = crossingSupportCache.get(state);
+  if (cached) return cached;
+  const chances = [];
+  for (const receiver of state.pieces) {
+    if (receiver.team !== carrier.team || receiver.id === carrier.id || receiver.type === 'K'
+      || Math.abs(receiver.x - BOARD_CENTER_X) > 2.5 || goalDistance(receiver.team, receiver.y) > 7
+      || !allowedSquare(receiver, receiver.x, receiver.y) || !onsideAtKick(state, receiver, carrier)
+      || !passLane(state, carrier, receiver)) continue;
+    const received = receivingState(state, receiver);
+    const accuracy = state.restart?.type === 'throwIn' ? throwAccuracy(distance(carrier, receiver)) : passAccuracy(distance(carrier, receiver));
+    const chance = tacticalShots(received, carrier.team, true) * accuracy
+      * (1 - tacticalTackleRisk(received, receiver) * 0.8);
+    if (chance > 0) chances.push(chance);
+  }
+  chances.sort((a, b) => b - a);
+  const result = {wide: true, best: chances[0] || 0, second: chances[1] || 0, direct: tacticalShots(state, carrier.team, true)};
+  crossingSupportCache.set(state, result);
+  return result;
+}
+
+function wideAttackValue(state, carrier) {
+  const support = wideCrossingSupport(state, carrier);
+  if (!support.wide) return 0;
+  const isolation = 1 - Math.min(1, Math.max(support.best, support.direct) / 0.2);
+  return support.best * 160 + support.second * 35
+    - isolation * (18 + Math.max(0, 6 - goalDistance(carrier.team, carrier.y)) * 5);
 }
 
 function canCollect(state, piece, target) {
@@ -1813,7 +1950,436 @@ function looseBallValue(state, team) {
   return race * 28 + (sides[team].collectors.length ? 22 : 0) - (sides[other(team)].collectors.length ? 22 : 0);
 }
 
-function tacticalPositionValue(state, team) {
+// BEGIN GENERATED RL BOARD FEATURES — source: scripts/rl-features.mjs
+/**
+ * Small public-board features for the self-play value learner.
+ *
+ * These describe strategic potential with a fresh ordinary move and one shared
+ * pawn/keeper bonus for either side. They deliberately do not toggle when an
+ * action budget is spent. The engine's phase-aware tactical risk remains the
+ * authority for an actual challenge. No feature consults the hidden RNG.
+ *
+ * Keep these two functions self-contained: the trainer copies them into the
+ * deployed evaluator, so training and browser inference use identical math.
+ */
+export function rlBoardGeometry(state) {
+  const rlWidth = 14, rlHeight = 17, rlMiddle = 8;
+  const rlPieces = state.pieces || [];
+  const rlBoard = Array(rlWidth * rlHeight).fill(null);
+  for (const rlPiece of rlPieces) rlBoard[rlPiece.y * rlWidth + rlPiece.x] = rlPiece;
+  const rlStraight = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+  const rlDirections = [...rlStraight, [1, 1], [1, -1], [-1, 1], [-1, -1]];
+  const rlInside = (rlX, rlY) => Number.isInteger(rlX) && Number.isInteger(rlY) && rlX >= 0 && rlX < rlWidth && rlY >= 0 && rlY < rlHeight;
+  const rlBox = (rlX, rlY) => rlX >= 4 && rlX <= 9 && (rlY < 3 || rlY >= 14);
+  const rlOwnBox = (rlPiece, rlX, rlY) => rlBox(rlX, rlY) && (rlPiece.team === 'white' ? rlY >= 14 : rlY < 3);
+  const rlAllowed = (rlPiece, rlX, rlY) => rlInside(rlX, rlY)
+    && (!(rlX >= 5 && rlX <= 8 && (rlY === 0 || rlY === 16)) || rlPiece.type === 'K' && rlOwnBox(rlPiece, rlX, rlY))
+    && (rlPiece.type !== 'K' || !rlBox(rlX, rlY) || rlOwnBox(rlPiece, rlX, rlY));
+  const rlAt = (rlX, rlY) => rlInside(rlX, rlY) ? rlBoard[rlY * rlWidth + rlX] : null;
+  const rlFlagged = rlPiece => state.offside?.team === rlPiece.team && (state.offside.flaggedIds || []).includes(rlPiece.id);
+  const rlDistance = (rlA, rlB) => Math.max(Math.abs(rlA.x - rlB.x), Math.abs(rlA.y - rlB.y));
+  const rlCarrier = rlPieces.find(rlPiece => rlPiece.id === state.ball?.carrierId);
+  const rlDefenceLine = {};
+  for (const rlTeam of ['white', 'black']) {
+    const rlRanks = rlPieces.filter(rlPiece => rlPiece.team !== rlTeam).map(rlPiece => rlPiece.y)
+      .sort((rlA, rlB) => rlTeam === 'white' ? rlA - rlB : rlB - rlA);
+    rlDefenceLine[rlTeam] = rlRanks[1] ?? (rlTeam === 'white' ? rlHeight : -1);
+  }
+  function rlOnside(rlPiece, rlFrom = rlCarrier, rlRestart = state.restart) {
+    if (!rlFrom || rlPiece.id === rlFrom.id || ['goalKick', 'corner', 'throwIn'].includes(rlRestart?.type)) return true;
+    return rlPiece.team === 'white'
+      ? rlPiece.y >= rlMiddle || rlPiece.y >= rlFrom.y || rlPiece.y >= rlDefenceLine.white
+      : rlPiece.y <= rlMiddle || rlPiece.y <= rlFrom.y || rlPiece.y <= rlDefenceLine.black;
+  }
+  function rlShape(rlPiece, rlDx, rlDy, rlPassing = false, rlThrowing = false) {
+    if (!rlDx && !rlDy) return false;
+    if (rlThrowing) return !rlDx || !rlDy || Math.abs(rlDx) === Math.abs(rlDy);
+    if (rlPiece.type === 'N') return Math.abs(rlDx) * Math.abs(rlDy) === 2;
+    if (rlPiece.type === 'P') return (!rlDx || !rlDy) && (rlPassing || Math.abs(rlDx) + Math.abs(rlDy) === 1);
+    if (rlPiece.type === 'K' && !rlPassing) return Math.max(Math.abs(rlDx), Math.abs(rlDy)) === 1;
+    const rlStraightRay = !rlDx || !rlDy, rlDiagonalRay = Math.abs(rlDx) === Math.abs(rlDy);
+    return rlPiece.type === 'R' ? rlStraightRay : rlPiece.type === 'B' ? rlDiagonalRay : rlStraightRay || rlDiagonalRay;
+  }
+  function rlCanMove(rlPiece, rlTarget, {carrying = rlPiece.id === rlCarrier?.id, passRun = false} = {}) {
+    const rlDx = rlTarget.x - rlPiece.x, rlDy = rlTarget.y - rlPiece.y;
+    if (!rlAllowed(rlPiece, rlTarget.x, rlTarget.y) || rlAt(rlTarget.x, rlTarget.y) || !rlShape(rlPiece, rlDx, rlDy)) return false;
+    const rlJumping = rlPiece.type === 'N', rlSteps = rlJumping ? 1 : Math.max(Math.abs(rlDx), Math.abs(rlDy));
+    let rlCost = 0, rlPreviousBox = rlBox(rlPiece.x, rlPiece.y);
+    for (let rlStep = 1; rlStep <= rlSteps; rlStep++) {
+      const rlX = rlPiece.x + (rlJumping ? rlDx : Math.sign(rlDx) * rlStep);
+      const rlY = rlPiece.y + (rlJumping ? rlDy : Math.sign(rlDy) * rlStep);
+      const rlInBox = rlBox(rlX, rlY);
+      if (!rlAllowed(rlPiece, rlX, rlY) || rlAt(rlX, rlY) || passRun && !rlPreviousBox && rlInBox) return false;
+      rlCost += rlInBox ? 2 : 1;
+      if (rlCost > (carrying ? 8 : 10)) return false;
+      rlPreviousBox = rlInBox;
+    }
+    // A passer cannot bypass the pass-and-run box-entry rule by collecting its
+    // own loose pass after the run phase. Teammates may receive normally.
+    const rlOrigin = state.looseBallKickOrigin;
+    if (!rlCarrier && state.ball?.x === rlTarget.x && state.ball?.y === rlTarget.y && rlInTargetBox(rlTarget)
+      && rlOrigin?.pieceId === rlPiece.id && !rlBox(rlOrigin.from?.x ?? rlPiece.x, rlOrigin.from?.y ?? rlPiece.y)) return false;
+    return true;
+  }
+  const rlInTargetBox = rlTarget => rlBox(rlTarget.x, rlTarget.y);
+  function rlCanPass(rlFrom, rlTarget, rlRestart = state.restart) {
+    const rlDx = rlTarget.x - rlFrom.x, rlDy = rlTarget.y - rlFrom.y;
+    const rlThrowing = rlRestart?.type === 'throwIn', rlJumping = rlFrom.type === 'N' && !rlThrowing;
+    if (!rlInside(rlTarget.x, rlTarget.y) || !rlShape(rlFrom, rlDx, rlDy, true, rlThrowing)) return false;
+    const rlSteps = Math.max(Math.abs(rlDx), Math.abs(rlDy));
+    if (rlThrowing && rlSteps > 10) return false;
+    if (rlJumping) return true;
+    const rlBypass = ['goalKick', 'corner', 'offside', 'stalling', 'timeout', 'freeKick'].includes(rlRestart?.type) ? 1 : 0;
+    let rlBlocked = 0;
+    for (let rlStep = 1; rlStep < rlSteps; rlStep++) if (rlAt(rlFrom.x + Math.sign(rlDx) * rlStep, rlFrom.y + Math.sign(rlDy) * rlStep) && ++rlBlocked > rlBypass) return false;
+    return true;
+  }
+  function rlDirectControl(rlPiece, rlTarget) {
+    const rlDx = rlTarget.x - rlPiece.x, rlDy = rlTarget.y - rlPiece.y, rlReach = Math.max(Math.abs(rlDx), Math.abs(rlDy));
+    if (!rlReach || rlReach > 10) return false;
+    if (rlPiece.type === 'N') {
+      if (Math.abs(rlDx) * Math.abs(rlDy) !== 2) return false;
+    } else if (rlPiece.type === 'P') {
+      if (Math.abs(rlDx) !== 1 || Math.abs(rlDy) !== 1) return false;
+    } else if (rlPiece.type === 'K') {
+      if (rlReach !== 1) return false;
+    } else {
+      if (rlReach > 5 || !rlShape(rlPiece, rlDx, rlDy)) return false;
+      for (let rlStep = 1; rlStep < rlReach; rlStep++) {
+        const rlX = rlPiece.x + Math.sign(rlDx) * rlStep, rlY = rlPiece.y + Math.sign(rlDy) * rlStep;
+        if (!rlAllowed(rlPiece, rlX, rlY) || rlAt(rlX, rlY)) return false;
+      }
+    }
+    return rlDirections.some(([rlX, rlY]) => {
+      const rlLanding = {x: rlTarget.x + rlX, y: rlTarget.y + rlY};
+      const rlOccupant = rlAt(rlLanding.x, rlLanding.y);
+      return rlDistance(rlPiece, rlLanding) <= 10 && rlAllowed(rlPiece, rlLanding.x, rlLanding.y)
+        && (!rlOccupant || rlOccupant.id === rlPiece.id);
+    });
+  }
+  function rlControl(rlPiece, rlTarget, {bonus = true} = {}) {
+    if (rlFlagged(rlPiece)) return 0;
+    if (rlDirectControl(rlPiece, rlTarget)) return 1;
+    if (!bonus || !['P', 'K'].includes(rlPiece.type) || rlPiece.id === rlCarrier?.id || rlDistance(rlPiece, rlTarget) > 2) return 0;
+    const rlVectors = rlPiece.type === 'P' ? rlStraight : rlDirections;
+    for (const [rlDx, rlDy] of rlVectors) {
+      const rlMoved = {...rlPiece, x: rlPiece.x + rlDx, y: rlPiece.y + rlDy};
+      if (!rlAllowed(rlPiece, rlMoved.x, rlMoved.y) || rlAt(rlMoved.x, rlMoved.y)) continue;
+      // Temporarily vacate the origin for the ordinary tackle's landing check.
+      rlBoard[rlPiece.y * rlWidth + rlPiece.x] = null;
+      const rlControls = rlDirectControl(rlMoved, rlTarget);
+      rlBoard[rlPiece.y * rlWidth + rlPiece.x] = rlPiece;
+      if (rlControls) return 0.65;
+    }
+    return 0;
+  }
+  return {pieces: rlPieces, carrier: rlCarrier, at: rlAt, allowed: rlAllowed, onside: rlOnside,
+    canMove: rlCanMove, canPass: rlCanPass, controls: rlControl, flagged: rlFlagged};
+}
+
+export function rlBoardFeatures(state, team) {
+  const rlGeometry = rlBoardGeometry(state), rlPieces = rlGeometry.pieces;
+  const rlClamp = rlValue => Math.max(0, Math.min(1, rlValue));
+  const rlRaw = {white: {centerControl: 0, openFiles: 0, defensiveCover: 0, centralReceivers: 0},
+    black: {centerControl: 0, openFiles: 0, defensiveCover: 0, centralReceivers: 0}};
+  const rlDistance = (rlA, rlB) => Math.max(Math.abs(rlA.x - rlB.x), Math.abs(rlA.y - rlB.y));
+  const rlAccuracy = rlLength => Math.max(0.25, 1 - Math.max(0, rlLength - 10) * 0.1);
+  const rlProgress = (rlTeam, rlY) => rlTeam === 'white' ? 16 - rlY : rlY;
+  for (const rlSide of ['white', 'black']) {
+    const rlOwn = rlPieces.filter(rlPiece => rlPiece.team === rlSide);
+    let rlCenterWeight = 0;
+    for (let rlY = 5; rlY <= 11; rlY++) for (let rlX = 4; rlX <= 9; rlX++) {
+      const rlTarget = {x: rlX, y: rlY}, rlWeight = 1 - Math.abs(rlX - 6.5) * 0.12 - Math.abs(rlY - 8) * 0.06;
+      let rlBest = 0, rlSecond = 0;
+      for (const rlPiece of rlOwn) {
+        const rlControl = rlGeometry.flagged(rlPiece) ? 0 : rlPiece.x === rlX && rlPiece.y === rlY ? 0.4 : rlGeometry.controls(rlPiece, rlTarget);
+        if (rlControl > rlBest) { rlSecond = rlBest; rlBest = rlControl; } else if (rlControl > rlSecond) rlSecond = rlControl;
+      }
+      // Max plus a small supporting defender bonus; a crowd cannot farm the
+      // feature simply by attacking the same square with many pieces.
+      rlRaw[rlSide].centerControl += (rlBest + rlSecond * 0.2) * rlWeight;
+      rlCenterWeight += 1.2 * rlWeight;
+    }
+    rlRaw[rlSide].centerControl /= rlCenterWeight;
+    let rlFiles = 0;
+    for (const rlPiece of rlOwn) {
+      if (!['Q', 'R'].includes(rlPiece.type) || rlGeometry.flagged(rlPiece)) continue;
+      const rlForward = rlSide === 'white' ? -1 : 1;
+      let rlCost = 0, rlLane = 0;
+      for (let rlStep = 1; rlStep <= 10; rlStep++) {
+        const rlTarget = {x: rlPiece.x, y: rlPiece.y + rlForward * rlStep};
+        if (!rlGeometry.allowed(rlPiece, rlTarget.x, rlTarget.y)) break;
+        const rlOccupant = rlGeometry.at(rlTarget.x, rlTarget.y);
+        if (rlOccupant) {
+          if (rlOccupant.team === rlSide && rlOccupant.type !== 'K' && rlGeometry.onside(rlOccupant, rlPiece, null)) {
+            rlLane += 2 * rlAccuracy(rlStep) * (Math.abs(rlOccupant.x - 6.5) <= 2.5 ? 1 : 0.5);
+          }
+          break;
+        }
+        rlCost += rlTarget.x >= 4 && rlTarget.x <= 9 && (rlTarget.y < 3 || rlTarget.y >= 14) ? 2 : 1;
+        if (rlCost > (rlPiece.id === rlGeometry.carrier?.id ? 8 : 10)) break;
+        const rlCentrality = 0.55 + (1 - Math.abs(rlPiece.x - 6.5) / 6.5) * 0.45;
+        rlLane += (0.5 + rlProgress(rlSide, rlTarget.y) / 16 * 0.5) * rlCentrality;
+      }
+      rlFiles += rlClamp(rlLane / 10);
+    }
+    // At most the three original major pieces can contribute a full file.
+    rlRaw[rlSide].openFiles = rlClamp(rlFiles / 3);
+    const rlBall = state.ball || {x: 6.5, y: 8};
+    const rlBallHome = rlProgress(rlSide, rlBall.y);
+    let rlCover = 0;
+    for (const rlPiece of rlOwn) {
+      if (rlPiece.type === 'K' || rlGeometry.flagged(rlPiece) || !rlGeometry.allowed(rlPiece, rlPiece.x, rlPiece.y)) continue;
+      const rlHome = rlProgress(rlSide, rlPiece.y);
+      if (rlHome >= rlBallHome || rlDistance(rlPiece, rlBall) > 7 || rlBallHome <= 0) continue;
+      const rlAxis = 6.5 + (rlBall.x - 6.5) * rlHome / rlBallHome;
+      const rlOffset = Math.abs(rlPiece.x - rlAxis);
+      if (rlOffset <= 3) rlCover += 1 - rlOffset / 6;
+    }
+    rlRaw[rlSide].defensiveCover = rlClamp(rlCover / 3);
+  }
+  const rlCarrier = rlGeometry.carrier;
+  if (rlCarrier) {
+    const rlSide = rlCarrier.team, rlOpponents = rlPieces.filter(rlPiece => rlPiece.team !== rlSide);
+    const rlReceiving = [];
+    for (const rlReceiver of rlPieces) {
+      if (rlReceiver.team !== rlSide || rlReceiver.id === rlCarrier.id || rlReceiver.type === 'K'
+        || Math.abs(rlReceiver.x - 6.5) > 2.5 || rlProgress(rlSide, rlReceiver.y) < 8
+        || !rlGeometry.allowed(rlReceiver, rlReceiver.x, rlReceiver.y) || rlGeometry.flagged(rlReceiver)
+        || !rlGeometry.onside(rlReceiver, rlCarrier) || !rlGeometry.canPass(rlCarrier, rlReceiver)) continue;
+      let rlRisk = 0;
+      for (const rlDefender of rlOpponents) rlRisk = Math.max(rlRisk, rlGeometry.controls(rlDefender, rlReceiver));
+      if (rlReceiver.type === 'N') rlRisk *= 0.5;
+      const rlLength = rlDistance(rlCarrier, rlReceiver);
+      const rlAccuracyValue = state.restart?.type === 'throwIn'
+        ? Math.max(0.25, 1 - Math.max(0, rlLength - 5) * 0.15) : rlAccuracy(rlLength);
+      rlReceiving.push(rlAccuracyValue * (1 - rlRisk * 0.75) * (0.5 + rlProgress(rlSide, rlReceiver.y) / 32));
+    }
+    rlReceiving.sort((rlA, rlB) => rlB - rlA);
+    rlRaw[rlSide].centralReceivers = rlClamp(((rlReceiving[0] || 0) + (rlReceiving[1] || 0) * 0.5) / 1.5);
+  }
+  const rlSign = team === 'black' ? -1 : 1;
+  return Object.fromEntries(Object.keys(rlRaw.white).map(rlName => [rlName,
+    (rlRaw.white[rlName] - rlRaw.black[rlName]) * rlSign || 0]));
+}
+
+// END GENERATED RL BOARD FEATURES
+
+// BEGIN GENERATED RL CONTEXT FEATURES — source: scripts/rl-context-features.mjs
+// Public state features for the second, contextual TD value family. The first
+// seven retain the original feature meaning. All values are in White's frame;
+// Black receives their exact negative. baseVector, when supplied, is always the
+// original seven-component WHITE vector, regardless of requested team.
+// The browser embeds this file after removing only the import above.
+export const RL_CONTEXT_FEATURE_NAMES = Object.freeze([
+  'possession', 'ballProgress', 'material', 'centerControl', 'openFiles', 'defensiveCover', 'centralReceivers',
+  'actor', 'ordinaryMoveTempo', 'bonusMoveTempo', 'dribbleTempo', 'kickNowPossession',
+  'carrierDepthSquared', 'carrierCentrality', 'carrierGoalOpening', 'carrierInGoalBox',
+  'directTackleExposure', 'bonusTackleExposure', 'safePassOptions', 'safeForwardOptions',
+  'centralPassQuality', 'finishingPassQuality', 'nearbyDefenderPressure', 'keeperDisplacement',
+  'dribbleLimitPressure', 'ownHalfStallPressure', 'advancedCenterControl', 'advancedOpenFiles'
+]);
+
+export function rlContextValueFeatures(state, team = 'white', baseVector = null) {
+  const clamp01 = value => Math.max(0, Math.min(1, Number(value) || 0));
+  const sign = side => side === 'white' ? 1 : side === 'black' ? -1 : 0;
+  const distance = (a, b) => Math.max(Math.abs(a.x - b.x), Math.abs(a.y - b.y));
+  const progress = piece => clamp01((piece.team === 'white' ? 16 - piece.y : piece.y) / 16);
+  const geometry = rlBoardGeometry(state), pieces = geometry.pieces, carrier = geometry.carrier;
+  const owner = carrier?.team || state.restart?.team, possession = sign(owner);
+  let original;
+  if (baseVector) {
+    if (baseVector.length !== 7 || !Array.from(baseVector).every(value => Number.isFinite(value) && Math.abs(value) <= 1)) {
+      throw new TypeError('Context baseVector must contain seven finite normalized White features.');
+    }
+    original = Array.from(baseVector);
+  } else {
+    const material = {Q: 150, R: 105, B: 100, N: 90, P: 55, K: 0};
+    const board = rlBoardFeatures(state, 'white');
+    original = [possession, carrier ? possession * progress(carrier) : 0,
+      Math.max(-1, Math.min(1, pieces.reduce((sum, piece) => sum + sign(piece.team) * (material[piece.type] || 0), 0) / 905)),
+      board.centerControl, board.openFiles, board.defensiveCover, board.centralReceivers];
+  }
+  const phase = state.phase, positional = phase === 'attackMove' || phase === 'defendMove';
+  const actorTeam = phase === 'finished' ? null : phase === 'keeperReact'
+    ? state.pendingShot?.defendingTeam || (state.attack === 'white' ? 'black' : 'white')
+    : phase === 'defendMove' ? (state.attack === 'white' ? 'black' : 'white') : state.attack;
+  const actor = sign(actorTeam), budget = state.positionBudget || {};
+  const normalUsed = !!budget.normalUsed, pawnUsed = !!budget.pawnUsed;
+  const dribbleUsed = budget.dribbleUsed === undefined ? normalUsed : !!budget.dribbleUsed;
+  const ordinaryTempo = positional && !normalUsed ? actor : 0;
+  const bonusTempo = positional && !pawnUsed ? actor : 0;
+  const dribbleTempo = phase === 'attackMove' && !state.restart && carrier?.team === state.attack && !dribbleUsed ? actor : 0;
+  const kickNow = ['kick', 'kickoff', 'keeperRelease'].includes(phase) ? possession : 0;
+  let depthSquared = 0, centrality = 0, opening = 0, inGoalBox = 0, directExposure = 0, bonusExposure = 0;
+  let safeOptions = 0, forwardOptions = 0, centralQuality = 0, finishingQuality = 0, pressure = 0, keeperDisplacement = 0;
+  let dribblePressure = 0, stallPressure = 0;
+  if (carrier) {
+    const side = carrier.team, ownSign = sign(side), opponents = pieces.filter(piece => piece.team !== side);
+    const depth = progress(carrier), goalY = side === 'white' ? -0.5 : 16.5;
+    const angleAt = piece => {
+      const perpendicular = Math.abs(goalY - piece.y);
+      return clamp01(Math.atan2(4 * perpendicular, perpendicular * perpendicular + (4.5 - piece.x) * (8.5 - piece.x)) / Math.PI);
+    };
+    depthSquared = ownSign * depth * depth;
+    centrality = ownSign * clamp01(1 - Math.abs(carrier.x - 6.5) / 6.5);
+    opening = ownSign * angleAt(carrier);
+    inGoalBox = carrier.x >= 4 && carrier.x <= 9 && (side === 'white' ? carrier.y < 3 : carrier.y >= 14) ? ownSign : 0;
+    // A fresh defensive response follows attack positioning/pass-and-run;
+    // during a defensive response, honor the actual remaining action budget.
+    const challenge = !state.restart && (phase === 'attackMove' || phase === 'passRun' || phase === 'defendMove' && !normalUsed);
+    if (challenge) {
+      const allowBonus = phase !== 'defendMove' || !pawnUsed;
+      let direct = false, setup = false;
+      for (const piece of opponents) {
+        direct ||= geometry.controls(piece, carrier, {bonus: false}) > 0;
+        if (allowBonus && ['P', 'K'].includes(piece.type)) setup ||= geometry.controls(piece, carrier) > 0;
+      }
+      const clean = (state.foulsEnabled ? 0.9 : 1) * (carrier.type === 'N' ? 0.5 : 1);
+      directExposure = ownSign * (direct ? clean : 0);
+      bonusExposure = ownSign * (!direct && setup ? clean : 0);
+    }
+    // Receiving potential uses a fresh subsequent challenge, matching the
+    // strategic seven-feature family, rather than the current spent budgets.
+    const accuracy = length => state.restart?.type === 'throwIn'
+      ? Math.max(0.25, 1 - Math.max(0, length - 5) * 0.15)
+      : Math.max(0.25, 1 - Math.max(0, length - 10) * 0.1);
+    for (const receiver of pieces) {
+      if (receiver.team !== side || receiver.id === carrier.id || receiver.type === 'K' || geometry.flagged(receiver)
+        || !geometry.onside(receiver, carrier) || !geometry.canPass(carrier, receiver)) continue;
+      let risk = 0;
+      for (const defender of opponents) risk = Math.max(risk, geometry.controls(defender, receiver));
+      if (receiver.type === 'N') risk *= 0.5;
+      const quality = accuracy(distance(carrier, receiver)) * (1 - risk * 0.9);
+      safeOptions += quality;
+      if (progress(receiver) > depth) forwardOptions += quality;
+      if (Math.abs(receiver.x - 6.5) <= 2.5 && progress(receiver) >= 0.5) centralQuality = Math.max(centralQuality, quality * progress(receiver));
+      finishingQuality = Math.max(finishingQuality, quality * angleAt(receiver) * progress(receiver));
+    }
+    safeOptions = ownSign * clamp01(safeOptions / 3);
+    forwardOptions = ownSign * clamp01(forwardOptions / 3);
+    centralQuality *= ownSign; finishingQuality *= ownSign;
+    const nearest = opponents.filter(piece => !geometry.flagged(piece)).reduce((minimum, piece) => Math.min(minimum, distance(carrier, piece)), 5);
+    pressure = ownSign * clamp01(1 - nearest / 5);
+    const keeper = opponents.find(piece => piece.type === 'K');
+    keeperDisplacement = ownSign * (keeper ? clamp01(Math.hypot(keeper.x - 6.5, keeper.y - (side === 'white' ? 0 : 16)) / 8) : 1);
+    const pace = state.paceControl;
+    if (!state.restart && phase !== 'kickoff' && pace?.team === side && pace.carrierId === carrier.id) {
+      dribblePressure = ownSign * clamp01((Number(pace.dribbleRounds) + (pace.dribbledThisRound ? 1 : 0)) / 4);
+    }
+    const tracker = state.ballProgress, ownHalf = side === 'white' ? carrier.y > 8 : carrier.y < 8;
+    const anchorOwnHalf = tracker && (side === 'white' ? tracker.anchorY > 8 : tracker.anchorY < 8);
+    if (ownHalf && anchorOwnHalf && tracker.team === side && !tracker.excludeRelease && !state.restart && !['kickoff', 'keeperReact', 'finished'].includes(phase)) {
+      const advance = (side === 'white' ? -1 : 1) * (carrier.y - tracker.anchorY);
+      stallPressure = ownSign * clamp01(Number(tracker.rounds) / 3) * clamp01((4 - advance) / 4);
+    }
+  }
+  const ballZone = clamp01(Math.abs((state.ball?.y ?? 8) - 8) / 8);
+  const vector = [...original, actor, ordinaryTempo, bonusTempo, dribbleTempo, kickNow,
+    depthSquared, centrality, opening, inGoalBox, directExposure, bonusExposure, safeOptions, forwardOptions,
+    centralQuality, finishingQuality, pressure, keeperDisplacement, dribblePressure, stallPressure,
+    original[3] * ballZone, original[4] * ballZone];
+  // Canonicalize signed zero before perspective conversion for stable hashes.
+  return vector.map(value => team === 'black' ? -(value || 0) : value || 0);
+}
+// END GENERATED RL CONTEXT FEATURES
+
+// BEGIN GENERATED RL SHOT FEATURES — source: scripts/rl-shot-features.mjs
+
+// Exact public shooting/outlet metrics are supplied by the engine's existing
+// tactical calculations. This encoder never approximates the shot model.
+// contextWhite is always the normalized 28-feature WHITE vector.
+export const RL_SHOT_FEATURE_NAMES = Object.freeze([
+  ...RL_CONTEXT_FEATURE_NAMES,
+  'carrierKing', 'carrierQueen', 'carrierRook', 'carrierBishop', 'carrierKnight', 'carrierPawn',
+  'bestShot', 'bestOutlet', 'secondOutlet'
+]);
+
+export function rlShotValueFeatures(state, team = 'white', contextWhite, metrics = {}) {
+  if (!contextWhite || contextWhite.length !== 28
+    || !Array.from(contextWhite).every(value => Number.isFinite(value) && Math.abs(value) <= 1)) {
+    throw new TypeError('Shot contextWhite must contain 28 finite normalized White features.');
+  }
+  const carrier = (state.pieces || []).find(piece => piece.id === state.ball?.carrierId);
+  const carrierSign = carrier?.team === 'white' ? 1 : carrier?.team === 'black' ? -1 : 0;
+  const probability = name => {
+    const value = metrics[name] ?? 0;
+    if (!Number.isFinite(value)) throw new TypeError(`Shot metric ${name} must be finite.`);
+    return carrierSign * Math.max(0, Math.min(1, value));
+  };
+  const oneHot = ['K', 'Q', 'R', 'B', 'N', 'P'].map(type => carrier?.type === type ? carrierSign : 0);
+  const vector = [...contextWhite, ...oneHot,
+    probability('bestShot'), probability('bestOutlet'), probability('secondOutlet')];
+  return vector.map(value => team === 'black' ? -(value || 0) : value || 0);
+}
+// END GENERATED RL SHOT FEATURES
+
+// The shipped checkpoint is changed only after a separate self-play evaluation.
+// Training is offline; the browser runs the selected bounded value residual.
+export const RL_VALUE_MODEL = Object.freeze({
+  version: 3, algorithm: 'TD(lambda)', trained: true, enabled: false, scale: 320,
+  featureNames: Object.freeze(["possession", "ballProgress", "material", "centerControl", "openFiles", "defensiveCover", "centralReceivers", "actor", "ordinaryMoveTempo", "bonusMoveTempo", "dribbleTempo", "kickNowPossession", "carrierDepthSquared", "carrierCentrality", "carrierGoalOpening", "carrierInGoalBox", "directTackleExposure", "bonusTackleExposure", "safePassOptions", "safeForwardOptions", "centralPassQuality", "finishingPassQuality", "nearbyDefenderPressure", "keeperDisplacement", "dribbleLimitPressure", "ownHalfStallPressure", "advancedCenterControl", "advancedOpenFiles", "carrierKing", "carrierQueen", "carrierRook", "carrierBishop", "carrierKnight", "carrierPawn", "bestShot", "bestOutlet", "secondOutlet"]),
+  weights: Object.freeze([-0.01425146961320564, 0.07040803333568386, 0, -0.002730327691800118, -0.0310497311658628, 0.025475191748680355, 0.027416743955999974, 0.004114277046353949, 0.040913160668107955, 0.04325215651664718, 0.007962721968753975, 0.013533691710675543, 0.10801807740412118, 0.0811998987399577, 0.0851675181581559, 0.21534015212939853, 0.009985636627395973, 0.015943580577194385, -0.010962197326639493, -0.005232734520152212, 0.04409023319851366, 0.01848264921865399, -0.0011036237304129163, 0.006893377213235784, -0.08284384634253265, -0.025062788215518092, -0.0014397247653857523, -0.019941044057763636, 0.002508275084385383, 0.01249400651340931, 0.014678665963848286, 0.0022959060227724236, 0.01494628667754824, -0.00038388463317953156, 0.014095916605158059, 0.0011177251985286334, -3.6201392114262285e-05]),
+  checkpoint: "counterplay-2026-10-16-shot-0032", checkpointSha256: "18c42fe6a0ed25b567dcb31a2acc45c18bc1c4bcfc56d0a727196c7d4b0fd869", trainingSegments: 32, trainingTransitions: 10241,
+});
+
+export function rlValidateWeights(weights) {
+  if (weights === null) return null;
+  if ((!Array.isArray(weights) && !ArrayBuffer.isView(weights)) || ![7, RL_CONTEXT_FEATURE_NAMES.length, RL_SHOT_FEATURE_NAMES.length].includes(weights.length)
+    || !Array.from(weights).every(value => Number.isFinite(value) && Math.abs(value) <= 4)) {
+    throw new Error('The learned value model requires 7, 28 or 37 finite weights, each between -4 and 4.');
+  }
+  return Array.from(weights);
+}
+
+export function rlValueFeatures(state, team = 'white') {
+  const owner = state.pieces.find(piece => piece.id === state.ball.carrierId);
+  const possessionTeam = owner?.team || state.restart?.team;
+  const possession = possessionTeam === 'white' ? 1 : possessionTeam === 'black' ? -1 : 0;
+  const progress = owner ? possession * clamp((owner.team === 'white' ? BOARD_HEIGHT - 1 - owner.y : owner.y) / (BOARD_HEIGHT - 1), 0, 1) : 0;
+  const values = {Q: 150, R: 105, B: 100, N: 90, P: 55, K: 0};
+  const material = clamp(state.pieces.reduce((sum, piece) => sum + (piece.team === 'white' ? 1 : -1) * (values[piece.type] || 0), 0) / 905, -1, 1);
+  const board = rlBoardFeatures(state, 'white');
+  const vector = [possession, progress, material, board.centerControl, board.openFiles, board.defensiveCover, board.centralReceivers];
+  return team === 'black' ? vector.map(value => -value) : vector;
+}
+
+export function rlContextFeatures(state, team = 'white') {
+  return rlContextValueFeatures(state, team, rlValueFeatures(state, 'white'));
+}
+
+export function rlShotFeatures(state, team = 'white') {
+  const carrier = state.pieces.find(piece => piece.id === state.ball.carrierId);
+  const outlets = carrier ? tacticalOutlets(state, carrier) : {best: 0, second: 0};
+  return rlShotValueFeatures(state, team, rlContextFeatures(state, 'white'), {
+    bestShot: carrier ? tacticalShots(state, carrier.team, true) : 0,
+    bestOutlet: outlets.best, secondOutlet: outlets.second,
+  });
+}
+
+export function rlValuePrediction(state, team = 'white', weights = RL_VALUE_MODEL.weights) {
+  const checked = rlValidateWeights(weights);
+  if (!checked || checked.every(value => value === 0)) return 0;
+  const features = checked.length === RL_SHOT_FEATURE_NAMES.length ? rlShotFeatures(state, team) : checked.length === RL_CONTEXT_FEATURE_NAMES.length ? rlContextFeatures(state, team) : rlValueFeatures(state, team);
+  return Math.tanh(features.reduce((sum, feature, index) => sum + feature * checked[index], 0));
+}
+
+export function rlValidateScale(scale) {
+  if (![80, 320].includes(scale)) throw new Error('The learned residual scale must be 80 or 320.');
+  return scale;
+}
+
+function rlDefaultScale(weights) {
+  return weights?.length === 7 ? 80 : RL_VALUE_MODEL.scale;
+}
+
+function tacticalPositionValue(state, team, modelWeights = RL_VALUE_MODEL.enabled ? RL_VALUE_MODEL.weights : null, modelScale = rlDefaultScale(modelWeights)) {
+  const base = tacticalBasePositionValue(state, team);
+  if (!modelWeights || state.phase === 'finished') return base;
+  return base + modelScale * rlValuePrediction(state, team, modelWeights);
+}
+
+function tacticalBasePositionValue(state, team) {
   if (state.phase === 'finished' && state.winner) return state.winner === team ? 1000000 : -1000000;
   let value = (state.score[team] - state.score[other(team)]) * 2000;
   // Losing a player removes an attacking outlet and a defensive reply for the
@@ -1864,6 +2430,7 @@ function tacticalPositionValue(state, team) {
   if (outlets.some(piece => piece.x < carrier.x) && outlets.some(piece => piece.x > carrier.x)) possession += 10;
   const finishingOutlets = tacticalOutlets(state, carrier);
   possession += finishingOutlets.best * 250 + finishingOutlets.second * 60;
+  possession += wideAttackValue(state, carrier);
   // An end-line run needs a finish or a central outlet. Reaching the deepest
   // row alone should not outweigh an attack that can actually reach the goal.
   const centralOutlet = outlets.some(piece => Math.abs(piece.x - BOARD_CENTER_X) <= 2.5 && goalDistance(piece.team, piece.y) <= 6);
@@ -1908,6 +2475,7 @@ function tacticalMoveRank(state, piece, move, beforeThreat, fast = false, threat
       + (tacticalTackleRisk(state, piece) - tacticalTackleRisk(projected, carrier)) * 680 + progressRank(state, piece.team, move.y);
     const original = state.pieces.find(p => p.id === carrier.id);
     return supportPotential(projected, moved, carrier) - supportPotential(state, piece, original)
+      + (wideCrossingSupport(projected, carrier).best - wideCrossingSupport(state, original).best) * 240
       + (tacticalOutlets(projected, carrier).best - tacticalOutlets(state, original).best) * 850
       + (tacticalTackleRisk(state, original) - tacticalTackleRisk(projected, carrier)) * 450
       + home;
@@ -1957,7 +2525,8 @@ function rankedTacticalActions(state, width, root = false) {
         const carrying = piece.id === carrier?.id;
         const safeDribble = carrying && !tacticalTackleRisk(projectedMove(state, piece, move), {...piece, x: move.x, y: move.y});
         const boxRun = !carrying && carrier?.team === team && isBox(move.x, move.y) && !inOwnBox(team, move.x, move.y);
-        candidates.push({action: {type: 'move', pieceId: piece.id, x: move.x, y: move.y, freePawn}, rank: tacticalMoveRank(state, piece, move, beforeThreat, !root, threats) + (freePawn ? 0.01 : 0), category: freePawn ? 'pawn' : move.type === 'tackle' ? 'tackle' : carrying ? safeDribble ? 'safeDribble' : 'dribble' : boxRun ? 'boxRun' : 'support'});
+        const tackleSetup = freePawn && carrier && carrier.team !== team && tacticalTackleSetup(state, piece, move, carrier);
+        candidates.push({action: {type: 'move', pieceId: piece.id, x: move.x, y: move.y, freePawn}, rank: tacticalMoveRank(state, piece, move, beforeThreat, !root, threats) + (freePawn ? 0.01 : 0), category: tackleSetup ? 'tackleSetup' : freePawn ? 'pawn' : move.type === 'tackle' ? 'tackle' : carrying ? safeDribble ? 'safeDribble' : 'dribble' : boxRun ? 'boxRun' : 'support'});
       }
     }
   }
@@ -1966,7 +2535,7 @@ function rankedTacticalActions(state, width, root = false) {
   // A greedy shot-blocking rank must never prune every possession-winning
   // reply. Likewise, consider an actual shot alongside a pass in kicking turns.
   if (!root && width > 1) {
-    const categories = positionalTurn(state) ? ['tackle', 'safeDribble', 'boxRun', 'support'] : ['shot', 'pass'];
+    const categories = positionalTurn(state) ? ['tackle', 'tackleSetup', 'safeDribble', 'boxRun', 'support'] : ['shot', 'pass'];
     shortlist = [];
     for (const category of categories) {
       const candidate = candidates.find(entry => entry.category === category);
@@ -1978,7 +2547,7 @@ function rankedTacticalActions(state, width, root = false) {
   // Root diversity gives both a safe pass and a shot, or a supporting move and
   // a dribble, a chance to survive the inexpensive first-stage ranking.
   if (root) {
-    const wanted = positionalTurn(state) ? ['pawn', 'boxRun', 'support', 'safeDribble', 'dribble', 'tackle'] : ['shot', 'pass', 'space'];
+    const wanted = positionalTurn(state) ? ['tackleSetup', 'pawn', 'boxRun', 'support', 'safeDribble', 'dribble', 'tackle'] : ['shot', 'pass', 'space'];
     shortlist = [];
     for (const category of wanted) {
       const candidate = candidates.find(entry => entry.category === category);
@@ -2012,11 +2581,16 @@ function tacticalSuccessors(state, action) {
       const model = singleShotModel({...state, pendingShot: shot}, shot.x, shot.y, action.type === 'move' ? action : undefined);
       const targetRoll = options.length === 2 ? (targetIndex + 0.5) / 2 : undefined;
       let start = 0;
-      return [model.goalProbability, model.keeperCornerProbability, model.caughtSaveProbability, model.missProbability, model.blockOutProbability, model.blockPossessionProbability].flatMap((conditionalProbability, index) => {
+      return [model.goalProbability, model.keeperCornerProbability, model.keeperReboundProbability, model.caughtSaveProbability, model.missProbability, model.blockOutProbability, model.blockPossessionProbability].flatMap((conditionalProbability, index) => {
         const roll = Math.min(1 - Number.EPSILON, start + conditionalProbability / 2); start += conditionalProbability;
         const probability = conditionalProbability / shots.length;
         if (probability <= 0) return [];
-        if (index !== 3 || shot.distance <= 10 || shot.penalty) return [{probability, state: apply(roll, undefined, targetRoll)}];
+        if (index === 2) {
+          const reboundState = action.type === 'move' ? {...state, pieces: state.pieces.map(piece => piece.id === action.pieceId ? {...piece, x: action.x, y: action.y} : piece)} : state;
+          const targets = keeperReboundTargets(reboundState, shot);
+          return targets.map(landing => ({probability: probability / targets.length, state: apply(roll, landing, targetRoll)}));
+        }
+        if (index !== 4 || shot.distance <= 10 || shot.penalty) return [{probability, state: apply(roll, undefined, targetRoll)}];
         // A bounded, symmetric quadrature covers side-line and end-line risk.
         // Each disguised target retains its own physical scatter distribution.
         const radius = Math.max(1, Math.ceil((shot.distance - 10) / 2) + 1);
@@ -2091,7 +2665,10 @@ function tacticalUnsettled(state) {
 // Public diagnostics make budgets, completed iterations and cache equivalence
 // reproducible in tests and simulations. The controller still receives just an
 // action through chooseAIAction; no analysis state enters a saved match.
-export function analyzeTacticalAction(state, {maxDepth = AI_SEARCH.depth, nodeLimit = AI_SEARCH.nodes, useCache = true, extensions = true} = {}) {
+export function analyzeTacticalAction(state, {maxDepth = AI_SEARCH.depth, nodeLimit = AI_SEARCH.nodes, useCache = true, extensions = true, onIteration,
+  modelWeights = RL_VALUE_MODEL.enabled ? RL_VALUE_MODEL.weights : null, modelScale = rlDefaultScale(modelWeights)} = {}) {
+  modelWeights = rlValidateWeights(modelWeights);
+  modelScale = rlValidateScale(modelScale);
   maxDepth = clamp(Math.floor(Number(maxDepth) || 1), 1, 12);
   nodeLimit = clamp(Math.floor(Number(nodeLimit) || 1), 1, 50000);
   const stats = {nodes: 0, completedDepth: 0, cacheHits: 0, extensions: 0, cutoffs: 0, aborted: false};
@@ -2106,7 +2683,7 @@ export function analyzeTacticalAction(state, {maxDepth = AI_SEARCH.depth, nodeLi
   const evaluate = position => {
     const key = keyFor(position);
     if (useCache && values.has(key)) return values.get(key);
-    const value = tacticalPositionValue(position, team);
+    const value = tacticalPositionValue(position, team, modelWeights, modelScale);
     if (useCache) values.set(key, value);
     return value;
   };
@@ -2208,6 +2785,11 @@ export function analyzeTacticalAction(state, {maxDepth = AI_SEARCH.depth, nodeLi
     try {
       const result = search(source, depth, extensions ? AI_SEARCH.extensions : 0, -Infinity, Infinity, true);
       completed = result; stats.completedDepth = depth;
+      // A worker may deliver completed iterations while the next one searches.
+      // Isolate the callback's snapshot so a consumer cannot mutate search
+      // actions, cached principal variations or diagnostic counters.
+      if (typeof onIteration === 'function') onIteration({action: copy(completed.action), value: completed.value,
+        stats: {...stats}, line: copy(completed.line)});
     } catch (error) {
       if (error !== SEARCH_ABORT) throw error;
       stats.aborted = true; break;
@@ -2216,13 +2798,13 @@ export function analyzeTacticalAction(state, {maxDepth = AI_SEARCH.depth, nodeLi
   return {action: completed.action, value: completed.value, stats, line: completed.line};
 }
 
-function chooseTacticalAction(state) {
-  return analyzeTacticalAction(state).action;
+function chooseTacticalAction(state, modelWeights, modelScale) {
+  return analyzeTacticalAction(state, {modelWeights, modelScale}).action;
 }
 
-export function chooseAIAction(state, {difficulty = 'casual'} = {}) {
+export function chooseAIAction(state, {difficulty = 'casual', modelWeights = RL_VALUE_MODEL.enabled ? RL_VALUE_MODEL.weights : null, modelScale = rlDefaultScale(modelWeights)} = {}) {
   // Keep geometry reuse within a decision, while allowing custom setups or
   // API callers to edit an existing state object between decisions.
-  if (state && typeof state === 'object') { passThreatCache.delete(state); tacticalOutletCache.delete(state); }
-  return difficulty === 'tactical' ? chooseTacticalAction(state) : chooseCasualAction(state);
+  if (state && typeof state === 'object') { passThreatCache.delete(state); tacticalOutletCache.delete(state); crossingSupportCache.delete(state); }
+  return difficulty === 'tactical' ? chooseTacticalAction(state, modelWeights, modelScale) : chooseCasualAction(state);
 }
