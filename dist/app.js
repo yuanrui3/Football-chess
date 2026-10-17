@@ -652,7 +652,12 @@ function beginShotFlight(before,after,complete,toastOutcome,priorComputerAction,
   const origin=action.from||model.origin||before.pendingShot.from;if(!valid(origin))return false;
   const plane=valid(model.target)?model.target:{x:goalTarget.x,y:goalTarget.y<0?-.5:H-.5};
   let points=[origin],caption='',fade=false;
-  if(action.type==='goal'){points.push(plane,goalTarget);caption=action.ownGoal?'Own goal.':'Goal!';}
+  if(action.type==='goal'){
+    // The engine records the native kick to the resolved goal cell, including
+    // a disguised shot's actual file. The keeper model's goal-line point is
+    // not an extra waypoint in that trajectory (most visible on knight lobs).
+    points=Array.isArray(action.path)&&action.path.length>1?[...action.path,goalTarget]:[origin,goalTarget];caption=action.ownGoal?'Own goal.':'Goal!';
+  }
   else if(action.type==='blockedShot'){
     points.push(action.blockedAt||before.pieces.find(p=>p.id===action.blockerId)||plane);fade=action.outcome!=='blocked';
     caption=action.outcome==='blocked'?'Defender blocks the shot and takes possession.':action.outcome==='corner'?'Defender blocks the shot out for a corner.':'Defender blocks the shot out for a goal kick.';

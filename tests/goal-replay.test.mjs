@@ -432,7 +432,7 @@ test('stored card replays reject missing ledgers, resurrected players and invent
 // A small DOM surface exercises playback state, independently of app rendering.
 function replayDOM(){
   class Element{
-    constructor(tag='div'){this.tagName=tag;this.children=[];this.style={};this.dataset={};this.attributes=new Map();this.listeners=new Map();this.className='';this.hidden=false;this.textContent='';}
+    constructor(tag='div'){this.tagName=tag;this.children=[];this.style={};this.dataset={};this.attributes=new Map();this.listeners=new Map();this.className='';this.hidden=false;this.textContent='';this.animations=[];}
     append(...nodes){for(const node of nodes){node.remove();node.parentElement=this;this.children.push(node);}}
     replaceChildren(...nodes){for(const child of [...this.children])child.remove();this.append(...nodes);}
     remove(){if(this.parentElement){const siblings=this.parentElement.children;siblings.splice(siblings.indexOf(this),1);this.parentElement=null;}}
@@ -440,6 +440,7 @@ function replayDOM(){
     getAttribute(name){return this.attributes.get(name)??null;}
     get firstElementChild(){return this.children[0]??null;}
     getBoundingClientRect(){return {width:350};}
+    animate(frames,options){this.animations.push({frames,options});return {finished:Promise.resolve(),cancel(){}};}
     querySelectorAll(selector){const classes=selector.split(',').map(value=>value.trim().slice(1)),result=[];for(const child of this.children){if(classes.some(name=>child.className.split(' ').includes(name)))result.push(child);result.push(...child.querySelectorAll(selector));}return result;}
     addEventListener(type,handler){if(!this.listeners.has(type))this.listeners.set(type,[]);this.listeners.get(type).push(handler);}
     fire(type){for(const handler of this.listeners.get(type)||[])handler({target:this});}
@@ -564,4 +565,23 @@ test('a keeper spill in a later goal build-up preserves its live landing and val
   assert.equal(frame.action.keeperReboundProbability,.02);assert.deepEqual(frame.action.reboundLanding,landing);assert.equal(frame.ball.carrierId,null);assert.match(frame.caption,/loose/);
   assert.deepEqual(restoreGoalReplay(clone(replay)),replay);
   for(const mutate of [a=>a.reboundLanding={x:5,y:0},a=>a.keeperReboundProbability=2,a=>a.keeperRebound=false,a=>a.reboundRoll=1]){const invalid=clone(replay);mutate(invalid.frames.find(frame=>frame.action?.outcome==='loose').action);assert.equal(restoreGoalReplay(invalid),null);}
+});
+
+for(const team of ['white','black'])for(const kind of ['native','disguised','own goal'])test(`${team} knight ${kind} replay animation lands at the actual engine goal file`,()=>{
+  const {after,replay}=kind==='disguised'?recordedDisguisedGoal({team,knight:true}):recordedGoal({team,knight:true,ownGoal:kind==='own goal'});
+  const dom=replayDOM(),previous={document:globalThis.document,window:globalThis.window,setTimeout:globalThis.setTimeout,clearTimeout:globalThis.clearTimeout};
+  let tick=null;
+  globalThis.document=dom.document;globalThis.window={matchMedia:()=>({matches:false})};
+  globalThis.setTimeout=callback=>{tick=callback;return 1;};globalThis.clearTimeout=()=>{tick=null;};
+  try{
+    const player=createReplayPlayer();assert.equal(player.load(replay,{autoplay:true}),true);
+    for(let index=1;index<replay.frames.length;index++){assert.ok(tick);const next=tick;tick=null;next();}
+    const ball=dom.nodes.replayBall,goal=after.lastAction.goalTarget,animation=ball.animations.at(-1);
+    assert.equal(ball.style.left,`${(goal.x+.5)/W*100}%`);assert.equal(ball.style.top,`${(goal.y+.5)/H*100}%`);
+    assert.equal(ball.getAttribute('aria-label'),'Ball in the goal');
+    assert.deepEqual(animation.frames,after.lastAction.path.map(point=>({transform:`translate(calc(-50% + ${(point.x-goal.x)*350/W}px),calc(-50% + ${(point.y-goal.y)*350/W}px))`})));
+    assert.equal(dom.nodes.replayOverlay.querySelectorAll('.replay-action-line').length,1);
+    assert.equal(dom.nodes.replayOverlay.querySelectorAll('.replay-action-line')[0].getAttribute('points'),after.lastAction.path.map(point=>`${point.x*100+50},${point.y*100+150}`).join(' '));
+    player.stop();
+  }finally{for(const [name,value] of Object.entries(previous)){if(value===undefined)delete globalThis[name];else globalThis[name]=value;}}
 });
