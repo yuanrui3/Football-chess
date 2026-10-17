@@ -1,4 +1,4 @@
-import {chooseAIAction,RL_VALUE_MODEL} from './engine.js?v=fc646d86a8b8';
+import {chooseAIAction,RL_VALUE_MODEL} from './engine.js?v=eeba82274585';
 
 if(typeof self!=='undefined')self.onmessage=({data})=>{
   const {requestId,state,difficulty,learnedEvaluation}=data;

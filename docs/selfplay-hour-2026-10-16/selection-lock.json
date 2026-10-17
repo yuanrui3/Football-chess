@@ -1,0 +1,54 @@
+{
+  "lockedAt": "2026-10-17T00:45:39.605353+00:00",
+  "checkpoint": "/workspace/scratch/43be99f43c82/rl-hour-20261016/train37-shot/model.json",
+  "checkpointSha256": "18c42fe6a0ed25b567dcb31a2acc45c18bc1c4bcfc56d0a727196c7d4b0fd869",
+  "engine": "/workspace/scratch/43be99f43c82/rl-hour-20261016/engine-shot-training.mjs",
+  "engineSha256": "cebd6fa0cc52bddc0ee03bb05aa703645ba3a6c63a417883d2cda694a0cc87fb",
+  "featureCount": 37,
+  "residualScale": 320,
+  "selection": "Highest production DEV WDL, then goal difference, then xG difference; common seeds320083,320123. No held-out results observed.",
+  "developmentCandidates": [
+    {
+      "report": "dev-production-full80.json",
+      "WDL": [
+        0,
+        5,
+        3
+      ],
+      "goalDifference": -3,
+      "xGDifference": -0.2914544749290062
+    },
+    {
+      "report": "dev-production-search8.json",
+      "WDL": [
+        0,
+        7,
+        1
+      ],
+      "goalDifference": -1,
+      "xGDifference": 0.5113888650885066
+    },
+    {
+      "report": "dev-production-shot37.json",
+      "WDL": [
+        1,
+        7,
+        0
+      ],
+      "goalDifference": 1,
+      "xGDifference": 0.6600744908093235
+    }
+  ],
+  "finalSeedsUntouchedBeforeLock": [
+    450017,
+    450043,
+    450089,
+    450131,
+    450173,
+    450211,
+    450257,
+    450293
+  ],
+  "testProtocol": "protocol.json; strictGate=true; sixworkers,1400nodes,depth8,120actions,80warmup,foulsON",
+  "noRetuningOrCandidateSwapAfterFinal": true
+}

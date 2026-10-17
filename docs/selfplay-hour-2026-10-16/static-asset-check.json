@@ -1,0 +1,6 @@
+{
+  "passed": true,
+  "localReferencesChecked": 15,
+  "issues": [],
+  "scope": "top-level page and JavaScript static imports; directory links resolve their index.html; not a visual browser test"
+}

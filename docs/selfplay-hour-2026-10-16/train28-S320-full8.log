@@ -1,0 +1,4 @@
+{"stage":"counterplay","episode":1,"total":8,"learnerTeam":"white","opponent":"baseline","score":{"white":0,"black":0},"actions":160,"goals":0,"goalDifference":0,"batchSeconds":403.745}
+{"stage":"counterplay","episode":2,"total":8,"learnerTeam":"black","opponent":"baseline","score":{"white":1,"black":0},"actions":160,"goals":1,"goalDifference":-1,"batchSeconds":403.767}
+{"stage":"counterplay","episode":3,"total":8,"learnerTeam":"white","opponent":"baseline","score":{"white":1,"black":0},"actions":160,"goals":1,"goalDifference":1,"batchSeconds":403.788}
+{"stage":"counterplay","episode":4,"total":8,"learnerTeam":"black","opponent":"baseline","score":{"white":0,"black":0},"actions":160,"goals":0,"goalDifference":0,"batchSeconds":403.792}

@@ -1,0 +1,49 @@
+✔ Tactical completes a real central supporting run for an isolated wide carrier, either colour (16228.739037ms)
+✔ cross support respects rook, bishop and knight passing geometry instead of mere central proximity (30.554124ms)
+✔ friendly and opposing intervening pieces invalidate a ray cross (1.474281ms)
+✔ offside forward receivers do not count; an onside central cutback behind the ball does (6.314541ms)
+✔ a long pass wide values an existing central delivery while retaining its accuracy penalty (10.459189ms)
+✔ a free orthogonal pawn step followed by its ordinary diagonal tackle is a real threat, either color (51.868071ms)
+✔ pawn setup risk respects current defensive budgets, but attacking moves face fresh defender budgets (9.070689ms)
+✔ occupied setup squares, distant pawns, and offside involvement do not create imaginary tackles (9.276703ms)
+✔ an existing diagonal tackle still works after the bonus has been spent, either color (18.34304ms)
+✔ risk uses the real knight resistance and clean-tackle probability, either color (26.726303ms)
+✔ the existing shared king bonus also permits a legal setup without inventing extra moves (1.237921ms)
+✔ a geometrical knight attack with every tackle landing occupied is not a real challenge (0.711197ms)
+✔ the bounded inner reply retains a pawn setup that the previous beam pruned, either color (472.234942ms)
+✖ Tactical avoids the reproducible free-pawn trap when a safe productive carry exists, either color (6676.107905ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 13
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 17001.188744
+
+✖ failing tests:
+
+test at ../../../tmp/football-model-safety-BD4R0a/pawn-tactical-awareness.test.mjs:154:1
+✖ Tactical avoids the reproducible free-pawn trap when a safe productive carry exists, either color (6676.107905ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'white-P1'
+  - 'white-Q'
+           ^
+  
+      at TestContext.<anonymous> (file:///tmp/football-model-safety-BD4R0a/pawn-tactical-awareness.test.mjs:157:54)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'white-P1',
+    expected: 'white-Q',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+{"checkpoint":"/workspace/scratch/43be99f43c82/rl-hour-20261016/train28-full-from8/model-metadata-v2.json","checkpointSha256":"b7985e95cc38b5ac03579554b467ab510934e8661d597c7d3ee82440923e20fc","engineSha256":"5e36cb83bdfa22712689540026c1556aeb66203cfe37cf622c882cf40c717156","modelEnabledDuringChecks":true,"modelScale":80,"regressions":["pawn-tactical-awareness.test.mjs","crossing-support-ai.test.mjs"],"passed":false,"exitCode":1,"elapsedMs":17600}

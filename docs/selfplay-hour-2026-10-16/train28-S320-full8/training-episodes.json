@@ -1,0 +1,1288 @@
+[
+  {
+    "episode": 0,
+    "environmentSeed": 160000,
+    "behaviorSeed": 3609214656,
+    "learnerTeam": "white",
+    "opponent": "baseline",
+    "kickoff": "black",
+    "warmup": 80,
+    "actions": 160,
+    "learnerActions": 85,
+    "opponentActions": 75,
+    "exploredActions": 1,
+    "publicExpectedGoalMass": 0.8700054600551909,
+    "publicExpectedSignedReward": -0.8700054600551909,
+    "goalEvents": [],
+    "trace": [
+      {
+        "step": 0,
+        "team": "white",
+        "phase": "defendMove",
+        "learnerTurn": true,
+        "action": {
+          "type": "move",
+          "pieceId": "white-P3",
+          "x": 9,
+          "y": 12,
+          "freePawn": true
+        },
+        "explored": false,
+        "reward": 0
+      },
+      {
+        "step": 1,
+        "team": "black",
+        "phase": "kick",
+        "learnerTurn": false,
+        "action": {
+          "type": "kick",
+          "x": 11,
+          "y": 16
+        },
+        "explored": false,
+        "reward": 0
+      },
+      {
+        "step": 2,
+        "team": "black",
+        "phase": "attackMove",
+        "learnerTurn": false,
+        "action": {
+          "type": "move",
+          "pieceId": "black-Q",
+          "x": 10,
+          "y": 9,
+          "freePawn": false
+        },
+        "explored": false,
+        "reward": 0
+      },
+      {
+        "step": 3,
+        "team": "black",
+        "phase": "attackMove",
+        "learnerTurn": false,
+        "action": {
+          "type": "move",
+          "pieceId": "black-P3",
+          "x": 6,
+          "y": 6,
+          "freePawn": true
+        },
+        "explored": false,
+        "reward": 0
+      },
+      {
+        "step": 4,
+        "team": "white",
+        "phase": "defendMove",
+        "learnerTurn": true,
+        "action": {
+          "type": "move",
+          "pieceId": "white-R1",
+          "x": 11,
+          "y": 16,
+          "freePawn": false
+        },
+        "explored": false,
+        "reward": 0
+      },
+      {
+        "step": 5,
+        "team": "white",
+        "phase": "attackMove",
+        "learnerTurn": true,
+        "action": {
+          "type": "move",
+          "pieceId": "white-R1",
+          "x": 9,
+          "y": 16,
+          "freePawn": false
+        },
+        "explored": false,
+        "reward": 0
+      },
+      {
+        "step": 6,
+        "team": "white",
+        "phase": "attackMove",
+        "learnerTurn": true,
+        "action": {
+          "type": "move",
+          "pieceId": "white-B2",
+          "x": 9,
+          "y": 14,
+          "freePawn": false
+        },
+        "explored": false,
+        "reward": 0
+      },
+      {
+        "step": 7,
+        "team": "white",
+        "phase": "attackMove",
+        "learnerTurn": true,
+        "action": {
+          "type": "move",
+          "pieceId": "white-P2",
+          "x": 6,
+          "y": 7,
+          "freePawn": true
+        },
+        "explored": false,
+        "reward": 0
+      },
+      {
+        "step": 8,
+        "team": "black",
+        "phase": "defendMove",
+        "learnerTurn": false,
+        "action": {
+          "type": "move",
+          "pieceId": "black-R2",
+          "x": 5,
+          "y": 8,
+          "freePawn": false
+        },
+        "explored": false,
+        "reward": 0
+      },
+      {
+        "step": 9,
+        "team": "black",
+        "phase": "defendMove",
+        "learnerTurn": false,
+        "action": {
+          "type": "move",
+          "pieceId": "black-P2",
+          "x": 6,
+          "y": 5,
+          "freePawn": true
+        },
+        "explored": false,
+        "reward": 0
+      },
+      {
+        "step": 10,
+        "team": "white",
+        "phase": "kick",
+        "learnerTurn": true,
+        "action": {
+          "type": "kick",
+          "x": 6,
+          "y": 16
+        },
+        "explored": false,
+        "reward": 0
+      },
+      {
+        "step": 11,
+        "team": "white",
+        "phase": "keeperRelease",
+        "learnerTurn": true,
+        "action": {
+          "type": "kick",
+          "x": 12,
+          "y": 10
+        },
+        "explored": false,
+        "reward": 0
+      }
+    ],
+    "initialScore": {
+      "white": 0,
+      "black": 0
+    },
+    "score": {
+      "white": 0,
+      "black": 0
+    },
+    "terminal": false,
+    "truncated": true,
+    "winner": null,
+    "finishReason": null,
+    "learnerGoals": 0,
+    "opponentGoals": 0,
+    "goalDifference": 0,
+    "policyWeights": [
+      -0.01120391413708635,
+      0.047765534086495594,
+      0,
+      -0.01498026112999036,
+      0.02976527337548195,
+      0.04931825302888939,
+      0.01631258022559532,
+      -0.009161511814679812,
+      0.02673938584099612,
+      0.01571704502995302,
+      -0.002424336273896764,
+      -0.0004872139716399536,
+      0.07569427816645496,
+      0.019098226050173528,
+      0.048248316416865444,
+      0.1575188523016569,
+      -0.001986505540199035,
+      0.009694438983779335,
+      -0.0327418262260933,
+      -0.014067228881955876,
+      0.031401667475621696,
+      0.009360818316984718,
+      -0.006945235349321121,
+      0.004651396082197657,
+      -0.04199483257057023,
+      -0.018248724541630575,
+      -0.008013249556856434,
+      0.013117106640577747
+    ],
+    "initialWeights": [
+      -0.01120391413708635,
+      0.047765534086495594,
+      0,
+      -0.01498026112999036,
+      0.02976527337548195,
+      0.04931825302888939,
+      0.01631258022559532,
+      -0.009161511814679812,
+      0.02673938584099612,
+      0.01571704502995302,
+      -0.002424336273896764,
+      -0.0004872139716399536,
+      0.07569427816645496,
+      0.019098226050173528,
+      0.048248316416865444,
+      0.1575188523016569,
+      -0.001986505540199035,
+      0.009694438983779335,
+      -0.0327418262260933,
+      -0.014067228881955876,
+      0.031401667475621696,
+      0.009360818316984718,
+      -0.006945235349321121,
+      0.004651396082197657,
+      -0.04199483257057023,
+      -0.018248724541630575,
+      -0.008013249556856434,
+      0.013117106640577747
+    ],
+    "updateL1": 0.33822720967024184,
+    "deltaL1": 13.54281493849072,
+    "nonzeroDeltaUpdates": 160,
+    "predictionAbsMax": 0.15539097248053618,
+    "finalBootstrap": 0.19197654790185212,
+    "finalWeights": [
+      -0.009886480893373444,
+      0.046312358956615896,
+      0,
+      -0.014882914642393613,
+      0.02785820371036003,
+      0.03584635409333143,
+      0.015948625029239903,
+      -0.011717289207123656,
+      0.02503340324531992,
+      0.02024537241665162,
+      -0.004077442298120739,
+      -0.0014241137482913619,
+      0.07507726019424171,
+      0.02347061486480932,
+      0.0499679150535174,
+      0.1575188523016569,
+      -0.0031375633950449905,
+      0.009694438983779335,
+      -0.032329907496644994,
+      -0.013589658602850052,
+      0.030920935477727462,
+      0.00930028139362451,
+      -0.007544693318557351,
+      0.005164698292480095,
+      -0.0450685280350515,
+      -0.018248724541630575,
+      -0.007848125744009643,
+      0.011725287709076826
+    ]
+  },
+  {
+    "episode": 1,
+    "environmentSeed": 160001,
+    "behaviorSeed": 3625992275,
+    "learnerTeam": "black",
+    "opponent": "baseline",
+    "kickoff": "black",
+    "warmup": 80,
+    "actions": 160,
+    "learnerActions": 75,
+    "opponentActions": 85,
+    "exploredActions": 2,
+    "publicExpectedGoalMass": 0.3335856873485958,
+    "publicExpectedSignedReward": 0.3335856873485958,
+    "goalEvents": [
+      {
+        "step": 41,
+        "team": "black",
+        "phase": "keeperReact",
+        "learnerTurn": true,
+        "action": {
+          "type": "move",
+          "pieceId": "black-K",
+          "x": 6,
+          "y": 0,
+          "freePawn": false
+        },
+        "explored": false,
+        "reward": 1,
+        "score": {
+          "white": 1,
+          "black": 0
+        }
+      }
+    ],
+    "trace": [
+      {
+        "step": 0,
+        "team": "white",
+        "phase": "defendMove",
+        "learnerTurn": false,
+        "action": {
+          "type": "move",
+          "pieceId": "white-P2",
+          "x": 7,
+          "y": 8,
+          "freePawn": true
+        },
+        "explored": false,
+        "reward": 0
+      },
+      {
+        "step": 1,
+        "team": "black",
+        "phase": "kick",
+        "learnerTurn": true,
+        "action": {
+          "type": "kick",
+          "x": 11,
+          "y": 16
+        },
+        "explored": false,
+        "reward": 0
+      },
+      {
+        "step": 2,
+        "team": "black",
+        "phase": "attackMove",
+        "learnerTurn": true,
+        "action": {
+          "type": "move",
+          "pieceId": "black-P3",
+          "x": 6,
+          "y": 6,
+          "freePawn": true
+        },
+        "explored": false,
+        "reward": 0
+      },
+      {
+        "step": 3,
+        "team": "black",
+        "phase": "attackMove",
+        "learnerTurn": true,
+        "action": {
+          "type": "move",
+          "pieceId": "black-R2",
+          "x": 5,
+          "y": 8,
+          "freePawn": false
+        },
+        "explored": false,
+        "reward": 0
+      },
+      {
+        "step": 4,
+        "team": "white",
+        "phase": "defendMove",
+        "learnerTurn": false,
+        "action": {
+          "type": "move",
+          "pieceId": "white-Q",
+          "x": 10,
+          "y": 15,
+          "freePawn": false
+        },
+        "explored": false,
+        "reward": 0
+      },
+      {
+        "step": 5,
+        "team": "white",
+        "phase": "defendMove",
+        "learnerTurn": false,
+        "action": {
+          "type": "move",
+          "pieceId": "white-P2",
+          "x": 7,
+          "y": 9,
+          "freePawn": true
+        },
+        "explored": false,
+        "reward": 0
+      },
+      {
+        "step": 6,
+        "team": "black",
+        "phase": "attackMove",
+        "learnerTurn": true,
+        "action": {
+          "type": "move",
+          "pieceId": "black-Q",
+          "x": 10,
+          "y": 6,
+          "freePawn": false
+        },
+        "explored": false,
+        "reward": 0
+      },
+      {
+        "step": 7,
+        "team": "black",
+        "phase": "attackMove",
+        "learnerTurn": true,
+        "action": {
+          "type": "move",
+          "pieceId": "black-P1",
+          "x": 8,
+          "y": 6,
+          "freePawn": true
+        },
+        "explored": false,
+        "reward": 0
+      },
+      {
+        "step": 8,
+        "team": "white",
+        "phase": "defendMove",
+        "learnerTurn": false,
+        "action": {
+          "type": "move",
+          "pieceId": "white-P2",
+          "x": 7,
+          "y": 10,
+          "freePawn": true
+        },
+        "explored": false,
+        "reward": 0
+      },
+      {
+        "step": 9,
+        "team": "white",
+        "phase": "defendMove",
+        "learnerTurn": false,
+        "action": {
+          "type": "move",
+          "pieceId": "white-Q",
+          "x": 11,
+          "y": 16,
+          "freePawn": false
+        },
+        "explored": false,
+        "reward": 0
+      },
+      {
+        "step": 10,
+        "team": "white",
+        "phase": "attackMove",
+        "learnerTurn": false,
+        "action": {
+          "type": "move",
+          "pieceId": "white-P1",
+          "x": 6,
+          "y": 11,
+          "freePawn": false
+        },
+        "explored": false,
+        "reward": 0
+      },
+      {
+        "step": 11,
+        "team": "white",
+        "phase": "attackMove",
+        "learnerTurn": false,
+        "action": {
+          "type": "move",
+          "pieceId": "white-Q",
+          "x": 7,
+          "y": 12,
+          "freePawn": false
+        },
+        "explored": false,
+        "reward": 0
+      },
+      {
+        "step": 41,
+        "team": "black",
+        "phase": "keeperReact",
+        "learnerTurn": true,
+        "action": {
+          "type": "move",
+          "pieceId": "black-K",
+          "x": 6,
+          "y": 0,
+          "freePawn": false
+        },
+        "explored": false,
+        "reward": 1
+      }
+    ],
+    "initialScore": {
+      "white": 0,
+      "black": 0
+    },
+    "score": {
+      "white": 1,
+      "black": 0
+    },
+    "terminal": false,
+    "truncated": true,
+    "winner": null,
+    "finishReason": null,
+    "learnerGoals": 0,
+    "opponentGoals": 1,
+    "goalDifference": -1,
+    "policyWeights": [
+      -0.01120391413708635,
+      0.047765534086495594,
+      0,
+      -0.01498026112999036,
+      0.02976527337548195,
+      0.04931825302888939,
+      0.01631258022559532,
+      -0.009161511814679812,
+      0.02673938584099612,
+      0.01571704502995302,
+      -0.002424336273896764,
+      -0.0004872139716399536,
+      0.07569427816645496,
+      0.019098226050173528,
+      0.048248316416865444,
+      0.1575188523016569,
+      -0.001986505540199035,
+      0.009694438983779335,
+      -0.0327418262260933,
+      -0.014067228881955876,
+      0.031401667475621696,
+      0.009360818316984718,
+      -0.006945235349321121,
+      0.004651396082197657,
+      -0.04199483257057023,
+      -0.018248724541630575,
+      -0.008013249556856434,
+      0.013117106640577747
+    ],
+    "initialWeights": [
+      -0.009886480893373444,
+      0.046312358956615896,
+      0,
+      -0.014882914642393613,
+      0.02785820371036003,
+      0.03584635409333143,
+      0.015948625029239903,
+      -0.011717289207123656,
+      0.02503340324531992,
+      0.02024537241665162,
+      -0.004077442298120739,
+      -0.0014241137482913619,
+      0.07507726019424171,
+      0.02347061486480932,
+      0.0499679150535174,
+      0.1575188523016569,
+      -0.0031375633950449905,
+      0.009694438983779335,
+      -0.032329907496644994,
+      -0.013589658602850052,
+      0.030920935477727462,
+      0.00930028139362451,
+      -0.007544693318557351,
+      0.005164698292480095,
+      -0.0450685280350515,
+      -0.018248724541630575,
+      -0.007848125744009643,
+      0.011725287709076826
+    ],
+    "updateL1": 0.3274989255052342,
+    "deltaL1": 11.015024267266195,
+    "nonzeroDeltaUpdates": 160,
+    "predictionAbsMax": 0.1629374542456783,
+    "finalBootstrap": 0.1963669024792088,
+    "finalWeights": [
+      -0.0069688818788591535,
+      0.04724889511816053,
+      0,
+      -0.015073450940926995,
+      0.026094653933129677,
+      0.0375115535596268,
+      0.015476171301057991,
+      -0.012192329534870865,
+      0.024163267986142954,
+      0.0199456021184031,
+      -0.002658961425375404,
+      -0.0014147303053374401,
+      0.07578243010647849,
+      0.025154523541251392,
+      0.050570370557017526,
+      0.1575188523016569,
+      -0.0029106403418884003,
+      0.010097376986579962,
+      -0.031709537896223106,
+      -0.012683159351521185,
+      0.030518070904187938,
+      0.009272409622356748,
+      -0.008281702896947317,
+      0.0056117644736164,
+      -0.04663945877604853,
+      -0.01829869799411162,
+      -0.007966214202324606,
+      0.010230004020928886
+    ]
+  },
+  {
+    "episode": 2,
+    "environmentSeed": 160002,
+    "behaviorSeed": 3642769894,
+    "learnerTeam": "white",
+    "opponent": "baseline",
+    "kickoff": "white",
+    "warmup": 80,
+    "actions": 160,
+    "learnerActions": 89,
+    "opponentActions": 71,
+    "exploredActions": 7,
+    "publicExpectedGoalMass": 0.8869987912516683,
+    "publicExpectedSignedReward": 0.42761167497788266,
+    "goalEvents": [
+      {
+        "step": 86,
+        "team": "black",
+        "phase": "keeperReact",
+        "learnerTurn": false,
+        "action": {
+          "type": "move",
+          "pieceId": "black-K",
+          "x": 6,
+          "y": 0,
+          "freePawn": false
+        },
+        "explored": false,
+        "reward": 1,
+        "score": {
+          "white": 1,
+          "black": 0
+        }
+      }
+    ],
+    "trace": [
+      {
+        "step": 0,
+        "team": "black",
+        "phase": "defendMove",
+        "learnerTurn": false,
+        "action": {
+          "type": "move",
+          "pieceId": "black-B1",
+          "x": 0,
+          "y": 13,
+          "freePawn": false
+        },
+        "explored": false,
+        "reward": 0
+      },
+      {
+        "step": 1,
+        "team": "black",
+        "phase": "defendMove",
+        "learnerTurn": false,
+        "action": {
+          "type": "move",
+          "pieceId": "black-P1",
+          "x": 6,
+          "y": 6,
+          "freePawn": true
+        },
+        "explored": false,
+        "reward": 0
+      },
+      {
+        "step": 2,
+        "team": "white",
+        "phase": "kick",
+        "learnerTurn": true,
+        "action": {
+          "type": "kick",
+          "x": 3,
+          "y": 13
+        },
+        "explored": false,
+        "reward": 0
+      },
+      {
+        "step": 3,
+        "team": "white",
+        "phase": "attackMove",
+        "learnerTurn": true,
+        "action": {
+          "type": "move",
+          "pieceId": "white-P1",
+          "x": 5,
+          "y": 11,
+          "freePawn": true
+        },
+        "explored": false,
+        "reward": 0
+      },
+      {
+        "step": 4,
+        "team": "white",
+        "phase": "attackMove",
+        "learnerTurn": true,
+        "action": {
+          "type": "move",
+          "pieceId": "white-N1",
+          "x": 3,
+          "y": 13,
+          "freePawn": false
+        },
+        "explored": false,
+        "reward": 0
+      },
+      {
+        "step": 5,
+        "team": "black",
+        "phase": "defendMove",
+        "learnerTurn": false,
+        "action": {
+          "type": "move",
+          "pieceId": "black-R1",
+          "x": 9,
+          "y": 6,
+          "freePawn": false
+        },
+        "explored": false,
+        "reward": 0
+      },
+      {
+        "step": 6,
+        "team": "black",
+        "phase": "defendMove",
+        "learnerTurn": false,
+        "action": {
+          "type": "move",
+          "pieceId": "black-P2",
+          "x": 5,
+          "y": 10,
+          "freePawn": true
+        },
+        "explored": false,
+        "reward": 0
+      },
+      {
+        "step": 7,
+        "team": "white",
+        "phase": "kick",
+        "learnerTurn": true,
+        "action": {
+          "type": "kick",
+          "x": 2,
+          "y": 11
+        },
+        "explored": false,
+        "reward": 0
+      },
+      {
+        "step": 8,
+        "team": "white",
+        "phase": "attackMove",
+        "learnerTurn": true,
+        "action": {
+          "type": "move",
+          "pieceId": "white-Q",
+          "x": 2,
+          "y": 11,
+          "freePawn": false
+        },
+        "explored": false,
+        "reward": 0
+      },
+      {
+        "step": 9,
+        "team": "white",
+        "phase": "attackMove",
+        "learnerTurn": true,
+        "action": {
+          "type": "move",
+          "pieceId": "white-Q",
+          "x": 2,
+          "y": 8,
+          "freePawn": false
+        },
+        "explored": false,
+        "reward": 0
+      },
+      {
+        "step": 10,
+        "team": "white",
+        "phase": "attackMove",
+        "learnerTurn": true,
+        "action": {
+          "type": "move",
+          "pieceId": "white-K",
+          "x": 7,
+          "y": 16,
+          "freePawn": true
+        },
+        "explored": false,
+        "reward": 0
+      },
+      {
+        "step": 11,
+        "team": "black",
+        "phase": "defendMove",
+        "learnerTurn": false,
+        "action": {
+          "type": "move",
+          "pieceId": "black-Q",
+          "x": 4,
+          "y": 8,
+          "freePawn": false
+        },
+        "explored": false,
+        "reward": 0
+      },
+      {
+        "step": 86,
+        "team": "black",
+        "phase": "keeperReact",
+        "learnerTurn": false,
+        "action": {
+          "type": "move",
+          "pieceId": "black-K",
+          "x": 6,
+          "y": 0,
+          "freePawn": false
+        },
+        "explored": false,
+        "reward": 1
+      }
+    ],
+    "initialScore": {
+      "white": 0,
+      "black": 0
+    },
+    "score": {
+      "white": 1,
+      "black": 0
+    },
+    "terminal": false,
+    "truncated": true,
+    "winner": null,
+    "finishReason": null,
+    "learnerGoals": 1,
+    "opponentGoals": 0,
+    "goalDifference": 1,
+    "policyWeights": [
+      -0.01120391413708635,
+      0.047765534086495594,
+      0,
+      -0.01498026112999036,
+      0.02976527337548195,
+      0.04931825302888939,
+      0.01631258022559532,
+      -0.009161511814679812,
+      0.02673938584099612,
+      0.01571704502995302,
+      -0.002424336273896764,
+      -0.0004872139716399536,
+      0.07569427816645496,
+      0.019098226050173528,
+      0.048248316416865444,
+      0.1575188523016569,
+      -0.001986505540199035,
+      0.009694438983779335,
+      -0.0327418262260933,
+      -0.014067228881955876,
+      0.031401667475621696,
+      0.009360818316984718,
+      -0.006945235349321121,
+      0.004651396082197657,
+      -0.04199483257057023,
+      -0.018248724541630575,
+      -0.008013249556856434,
+      0.013117106640577747
+    ],
+    "initialWeights": [
+      -0.0069688818788591535,
+      0.04724889511816053,
+      0,
+      -0.015073450940926995,
+      0.026094653933129677,
+      0.0375115535596268,
+      0.015476171301057991,
+      -0.012192329534870865,
+      0.024163267986142954,
+      0.0199456021184031,
+      -0.002658961425375404,
+      -0.0014147303053374401,
+      0.07578243010647849,
+      0.025154523541251392,
+      0.050570370557017526,
+      0.1575188523016569,
+      -0.0029106403418884003,
+      0.010097376986579962,
+      -0.031709537896223106,
+      -0.012683159351521185,
+      0.030518070904187938,
+      0.009272409622356748,
+      -0.008281702896947317,
+      0.0056117644736164,
+      -0.04663945877604853,
+      -0.01829869799411162,
+      -0.007966214202324606,
+      0.010230004020928886
+    ],
+    "updateL1": 0.5346635220723075,
+    "deltaL1": 12.607459518361203,
+    "nonzeroDeltaUpdates": 160,
+    "predictionAbsMax": 0.3873750571287793,
+    "finalBootstrap": -0.005756330673972052,
+    "finalWeights": [
+      0.01955032853054414,
+      0.06440084463317788,
+      0,
+      -0.021100737646688808,
+      0.024642605779037385,
+      0.0418840888793041,
+      0.017963726605235694,
+      -0.003982779371573157,
+      0.02419496672839039,
+      0.020651794351121452,
+      0.0020087851590120157,
+      0.0046618709135312205,
+      0.08804304130124094,
+      0.03969458183866441,
+      0.05482122204208634,
+      0.16104219328968133,
+      -0.0009340414436274404,
+      0.010097376986579962,
+      -0.024587742503769536,
+      -0.011184056238962783,
+      0.03247197311821918,
+      0.010219915227018473,
+      0.006697706486249893,
+      0.009866334731698493,
+      -0.036221779865202745,
+      -0.018045267655528014,
+      -0.010324255100829382,
+      0.009204739999742612
+    ]
+  },
+  {
+    "episode": 3,
+    "environmentSeed": 160003,
+    "behaviorSeed": 3659547513,
+    "learnerTeam": "black",
+    "opponent": "baseline",
+    "kickoff": "white",
+    "warmup": 80,
+    "actions": 160,
+    "learnerActions": 67,
+    "opponentActions": 93,
+    "exploredActions": 0,
+    "publicExpectedGoalMass": 0.20033944500394352,
+    "publicExpectedSignedReward": -0.008776416302297474,
+    "goalEvents": [],
+    "trace": [
+      {
+        "step": 0,
+        "team": "black",
+        "phase": "defendMove",
+        "learnerTurn": true,
+        "action": {
+          "type": "move",
+          "pieceId": "black-Q",
+          "x": 0,
+          "y": 9,
+          "freePawn": false
+        },
+        "explored": false,
+        "reward": 0
+      },
+      {
+        "step": 1,
+        "team": "black",
+        "phase": "defendMove",
+        "learnerTurn": true,
+        "action": {
+          "type": "move",
+          "pieceId": "black-P2",
+          "x": 6,
+          "y": 9,
+          "freePawn": true
+        },
+        "explored": false,
+        "reward": 0
+      },
+      {
+        "step": 2,
+        "team": "white",
+        "phase": "kick",
+        "learnerTurn": false,
+        "action": {
+          "type": "kick",
+          "x": 3,
+          "y": 13
+        },
+        "explored": false,
+        "reward": 0
+      },
+      {
+        "step": 3,
+        "team": "white",
+        "phase": "attackMove",
+        "learnerTurn": false,
+        "action": {
+          "type": "move",
+          "pieceId": "white-Q",
+          "x": 3,
+          "y": 13,
+          "freePawn": false
+        },
+        "explored": false,
+        "reward": 0
+      },
+      {
+        "step": 4,
+        "team": "white",
+        "phase": "attackMove",
+        "learnerTurn": false,
+        "action": {
+          "type": "move",
+          "pieceId": "white-Q",
+          "x": 10,
+          "y": 6,
+          "freePawn": false
+        },
+        "explored": false,
+        "reward": 0
+      },
+      {
+        "step": 5,
+        "team": "white",
+        "phase": "attackMove",
+        "learnerTurn": false,
+        "action": {
+          "type": "move",
+          "pieceId": "white-P2",
+          "x": 6,
+          "y": 10,
+          "freePawn": true
+        },
+        "explored": false,
+        "reward": 0
+      },
+      {
+        "step": 6,
+        "team": "black",
+        "phase": "defendMove",
+        "learnerTurn": true,
+        "action": {
+          "type": "move",
+          "pieceId": "black-R1",
+          "x": 10,
+          "y": 3,
+          "freePawn": false
+        },
+        "explored": false,
+        "reward": 0
+      },
+      {
+        "step": 7,
+        "team": "black",
+        "phase": "defendMove",
+        "learnerTurn": true,
+        "action": {
+          "type": "move",
+          "pieceId": "black-P1",
+          "x": 8,
+          "y": 6,
+          "freePawn": true
+        },
+        "explored": false,
+        "reward": 0
+      },
+      {
+        "step": 8,
+        "team": "white",
+        "phase": "kick",
+        "learnerTurn": false,
+        "action": {
+          "type": "kick",
+          "x": 12,
+          "y": 8
+        },
+        "explored": false,
+        "reward": 0
+      },
+      {
+        "step": 9,
+        "team": "white",
+        "phase": "attackMove",
+        "learnerTurn": false,
+        "action": {
+          "type": "move",
+          "pieceId": "white-Q",
+          "x": 12,
+          "y": 8,
+          "freePawn": false
+        },
+        "explored": false,
+        "reward": 0
+      },
+      {
+        "step": 10,
+        "team": "white",
+        "phase": "attackMove",
+        "learnerTurn": false,
+        "action": {
+          "type": "move",
+          "pieceId": "white-P3",
+          "x": 9,
+          "y": 12,
+          "freePawn": true
+        },
+        "explored": false,
+        "reward": 0
+      },
+      {
+        "step": 11,
+        "team": "black",
+        "phase": "defendMove",
+        "learnerTurn": true,
+        "action": {
+          "type": "move",
+          "pieceId": "black-Q",
+          "x": 5,
+          "y": 4,
+          "freePawn": false
+        },
+        "explored": false,
+        "reward": 0
+      }
+    ],
+    "initialScore": {
+      "white": 0,
+      "black": 0
+    },
+    "score": {
+      "white": 0,
+      "black": 0
+    },
+    "terminal": false,
+    "truncated": true,
+    "winner": null,
+    "finishReason": null,
+    "learnerGoals": 0,
+    "opponentGoals": 0,
+    "goalDifference": 0,
+    "policyWeights": [
+      -0.01120391413708635,
+      0.047765534086495594,
+      0,
+      -0.01498026112999036,
+      0.02976527337548195,
+      0.04931825302888939,
+      0.01631258022559532,
+      -0.009161511814679812,
+      0.02673938584099612,
+      0.01571704502995302,
+      -0.002424336273896764,
+      -0.0004872139716399536,
+      0.07569427816645496,
+      0.019098226050173528,
+      0.048248316416865444,
+      0.1575188523016569,
+      -0.001986505540199035,
+      0.009694438983779335,
+      -0.0327418262260933,
+      -0.014067228881955876,
+      0.031401667475621696,
+      0.009360818316984718,
+      -0.006945235349321121,
+      0.004651396082197657,
+      -0.04199483257057023,
+      -0.018248724541630575,
+      -0.008013249556856434,
+      0.013117106640577747
+    ],
+    "initialWeights": [
+      0.01955032853054414,
+      0.06440084463317788,
+      0,
+      -0.021100737646688808,
+      0.024642605779037385,
+      0.0418840888793041,
+      0.017963726605235694,
+      -0.003982779371573157,
+      0.02419496672839039,
+      0.020651794351121452,
+      0.0020087851590120157,
+      0.0046618709135312205,
+      0.08804304130124094,
+      0.03969458183866441,
+      0.05482122204208634,
+      0.16104219328968133,
+      -0.0009340414436274404,
+      0.010097376986579962,
+      -0.024587742503769536,
+      -0.011184056238962783,
+      0.03247197311821918,
+      0.010219915227018473,
+      0.006697706486249893,
+      0.009866334731698493,
+      -0.036221779865202745,
+      -0.018045267655528014,
+      -0.010324255100829382,
+      0.009204739999742612
+    ],
+    "updateL1": 0.5201160128673268,
+    "deltaL1": 13.550526362041403,
+    "nonzeroDeltaUpdates": 160,
+    "predictionAbsMax": 0.35899332587901467,
+    "finalBootstrap": -0.06902271538724888,
+    "finalWeights": [
+      0.005948720464701056,
+      0.05654392948533771,
+      0,
+      -0.021778100588934403,
+      0.025777206220616737,
+      0.041696743695968555,
+      0.01717597219133679,
+      -0.007567355160462645,
+      0.02462007238425703,
+      0.021093494967337773,
+      0.00026302698606481316,
+      0.0015516193845582131,
+      0.08294887105192544,
+      0.03216190944890675,
+      0.05285211744318609,
+      0.1604042868794394,
+      -0.001787686035201098,
+      0.009940254530460203,
+      -0.027386715343450795,
+      -0.011740478402802451,
+      0.031842414478904485,
+      0.009815028217077863,
+      -0.0017927704939283866,
+      0.00901184012365837,
+      -0.040533545898738706,
+      -0.018543676730826446,
+      -0.01051414353314118,
+      0.009509412069216683
+    ]
+  }
+]

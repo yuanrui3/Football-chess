@@ -1,0 +1,22 @@
+✔ counterplay alternates learner colors, keeps consecutive actions, and uses fixed-white goal rewards (5.949673ms)
+✔ 7/28/37 encoders dispatch independently and zero-extension preserves predictions without inventing experience (1.539062ms)
+✔ rollouts are deterministic, do not update weights, and TD replay truly updates them (3.286661ms)
+✔ a constant zero prior and zero-reward trajectory from zero has no fabricated update (0.407397ms)
+✔ the expected target preserves the deployed handcrafted prior and integrates public chance (2.351043ms)
+✔ the potential correction telescopes, leaving only discounted goals and a fixed initial offset (0.309445ms)
+✔ generic contextual models retain dimensions and terminal continuation is zero (0.355277ms)
+✔ S320 scales the prior, goal reward, beam behavior, and Tactical request consistently (2.366937ms)
+✔ search-backup target uses actor perspective, cancels the score ledger, and ignores incomplete or extreme searches (0.525322ms)
+✔ search-backup fitting has the exact tanh gradient, is optional, and excludes frozen baseline reports (1.400504ms)
+✔ color-reflected expected TD updates are identical and do not depend on a sampled goal (0.37279ms)
+✔ real-engine worker rollout reproduces the same one-episode weights as serial rollout (2480.624998ms)
+✔ opponent pools and CLI configurations are deterministic and validated (1.384037ms)
+✔ checkpoint goal counts exclude warmup and run lineage retains training hyperparameters (0.944387ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2826.936998

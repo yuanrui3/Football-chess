@@ -152,11 +152,38 @@ test('the bounded inner reply retains a pawn setup that the previous beam pruned
 });
 
 test('Tactical avoids the reproducible free-pawn trap when a safe productive carry exists, either color', () => {
-  for (const s of [naturalTrap(), mirror(naturalTrap())]) {
-    const before = structuredClone(s), report = E.analyzeTacticalAction(s);
-    assert.equal(report.action.type, 'move'); assert.equal(report.action.pieceId, s.ball.carrierId);
-    const after = E.applyMove(s, report.action.pieceId, report.action.x, report.action.y, {freePawn: !!report.action.freePawn});
-    assert.equal(risk(after), 0, 'the selected carrier square survives the upcoming pawn reposition and tackle');
-    assert.ok(report.stats.nodes <= 1400); assert.deepEqual(s, before);
+  for (let s of [naturalTrap(), mirror(naturalTrap())]) {
+    const initial = structuredClone(s), initialCarrier = carrier(s);
+    const forward = initialCarrier.team === 'white' ? -1 : 1;
+    // Keep the original bad carry as a positive control: ending positioning
+    // there still gives the opponent the reproducible pawn setup and tackle.
+    const oldCarry = E.applyMove(initial, initialCarrier.id, initialCarrier.x, initialCarrier.team === 'white' ? 3 : 13);
+    assert.equal(risk(E.skipMove(oldCarry)), 1, 'the former unsafe carry remains a real pawn trap');
+    // The independent bonus and dribble budgets allow either action order.
+    // Evaluate exposure when the defender can act, rather than requiring the
+    // carrier to move before a harmless bonus reposition by another piece.
+    let actions = 0;
+    while (s.phase === 'attackMove' && actions < 4) {
+      const before = structuredClone(s), report = E.analyzeTacticalAction(s), action = report.action;
+      assert.ok(report.stats.nodes <= 1400); assert.deepEqual(s, before);
+      assert.ok(['move', 'skip'].includes(action.type), 'attack positioning selects a legal movement or skip');
+      if (action.type === 'move') {
+        assert.ok(E.legalMoves(s, action.pieceId, {freePawn: !!action.freePawn})
+          .some(move => move.x === action.x && move.y === action.y), 'the selected movement respects its action budget');
+        s = E.applyMove(s, action.pieceId, action.x, action.y, {freePawn: !!action.freePawn});
+      } else s = E.skipMove(s);
+      actions++;
+    }
+    assert.equal(s.phase, 'defendMove', 'the remaining attack positioning finishes within four legal actions');
+    assert.equal(carrier(s)?.id, initialCarrier.id);
+    assert.ok(forward * (carrier(s).y - initialCarrier.y) > 0, 'the carrier actually advances productively');
+    assert.equal(risk(s), 0, 'the final carrier square survives the upcoming pawn reposition and tackle');
+    assert.equal(direct(s).length, 0, 'no defender has an immediate legal tackle');
+    for (const piece of s.pieces.filter(piece => piece.team === E.currentTeam(s) && ['P', 'K'].includes(piece.type))) {
+      for (const setup of E.legalMoves(s, piece.id, {freePawn: true})) {
+        const afterSetup = E.applyMove(s, piece.id, setup.x, setup.y, {freePawn: true});
+        assert.equal(direct(afterSetup).length, 0, 'no legal bonus setup exposes the carrier to any ordinary tackle');
+      }
+    }
   }
 });

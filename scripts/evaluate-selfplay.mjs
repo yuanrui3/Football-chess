@@ -6,10 +6,12 @@
 import * as engine from '../dist/engine.js';
 import {performance} from 'node:perf_hooks';
 import {readFile, writeFile, mkdir} from 'node:fs/promises';
-import {pathToFileURL} from 'node:url';
+import {pathToFileURL, fileURLToPath} from 'node:url';
 import {createHash} from 'node:crypto';
 import {Worker} from 'node:worker_threads';
 import path from 'node:path';
+import {RL_CONTEXT_FEATURE_NAMES} from './rl-context-features.mjs';
+import {RL_SHOT_FEATURE_NAMES} from './rl-shot-features.mjs';
 
 const TEAMS = ['white', 'black'];
 const other = team => team === 'white' ? 'black' : 'white';
@@ -18,6 +20,11 @@ export const SEED_PARTITIONS = Object.freeze({train: [100000, 199999], dev: [300
 export const EVALUATION_GATE = Object.freeze({minimumSeeds: 4, minimumScenarios: 16, minimumResolvedShots: 16,
   minimumActionsPerScenario: 120, minimumRoundsPerScenario: 24, requiredNodes: 1400, requiredDepth: 8,
   maximumOffenceIncreasePer100Actions: 0.5});
+// The hour-long training experiment pre-registers this stronger gate. Retaining
+// the original default makes the earlier experiment's report reproducible.
+export const STRICT_EVALUATION_GATE = Object.freeze({...EVALUATION_GATE, minimumSeeds: 8,
+  minimumScenarios: 32, minimumResolvedShots: 32, minimumWdlScore: 0.6,
+  minimumWdlLower95: 0.5, minimumGoalDifferenceLower95: 0});
 
 function sideStats() {
   return {actions: 0, thinkMs: 0, nodes: 0, maxNodes: 0, completedDepthTotal: 0,
@@ -43,9 +50,11 @@ export function validateSeeds(seeds, split = 'test', trainingSeeds = []) {
 }
 
 export function validateCheckpoint(checkpoint) {
-  const expected = ['possession', 'ballProgress', 'material', 'centerControl', 'openFiles', 'defensiveCover', 'centralReceivers'];
-  if (!checkpoint || checkpoint.algorithm !== 'TD(lambda)' || checkpoint.scale !== 80
-    || JSON.stringify(checkpoint.featureNames) !== JSON.stringify(expected)
+  const legacyNames = ['possession', 'ballProgress', 'material', 'centerControl', 'openFiles', 'defensiveCover', 'centralReceivers'];
+  const expected = [legacyNames, RL_CONTEXT_FEATURE_NAMES, RL_SHOT_FEATURE_NAMES].find(names => JSON.stringify(checkpoint?.featureNames) === JSON.stringify(names));
+  const validScale = checkpoint?.scale === 80 || checkpoint?.scale === 320 && [RL_CONTEXT_FEATURE_NAMES, RL_SHOT_FEATURE_NAMES].includes(expected);
+  if (!checkpoint || checkpoint.algorithm !== 'TD(lambda)' || !validScale
+    || !expected
     || !Array.isArray(checkpoint.weights) || checkpoint.weights.length !== expected.length
     || checkpoint.weights.some(weight => !Number.isFinite(weight))) throw new Error('Unsupported TD checkpoint schema');
   return [...checkpoint.weights];
@@ -114,9 +123,11 @@ function apply(rules, state, action) {
   return rules.skipMove(state);
 }
 
-export function makeSearchPolicy(module, {modelWeights = null, nodeLimit = 1400, maxDepth = 8, extensions = true} = {}) {
+export function makeSearchPolicy(module, {modelWeights = null, modelScale, nodeLimit = 1400, maxDepth = 8, extensions = true} = {}) {
   if (typeof module.analyzeTacticalAction !== 'function') throw new Error('Policy module needs analyzeTacticalAction');
-  return state => module.analyzeTacticalAction(state, {modelWeights, nodeLimit, maxDepth, extensions});
+  if (modelScale !== undefined && ![80, 320].includes(modelScale)) throw new Error('Unsupported model scale');
+  return state => module.analyzeTacticalAction(state, {modelWeights, nodeLimit, maxDepth, extensions,
+    ...(modelScale === undefined ? {} : {modelScale})});
 }
 
 // A legal Casual rollout creates identical warm starting positions for both
@@ -274,38 +285,49 @@ export function summarizeEvaluation(matches, config = {}) {
   });
   const score = matches.length ? (wins + draws / 2) / matches.length : 0;
   const errors = matches.filter(match => match.error || match.safetyLimitReached || match.pendingShot);
+  const uncertainty = seedBootstrap(paired), preset = config.strictGate ? STRICT_EVALUATION_GATE : EVALUATION_GATE;
   const gates = {
     heldOutTestSplit: config.split === 'test',
-    enoughSeeds: paired.length >= EVALUATION_GATE.minimumSeeds,
+    enoughSeeds: paired.length >= preset.minimumSeeds,
     completePairing: paired.every(pair => pair.scenarios === 4 && new Set(matches.filter(match => match.seed === pair.seed).map(match => `${match.candidateColor}:${match.kickoff}`)).size === 4),
-    enoughScenarios: matches.length >= EVALUATION_GATE.minimumScenarios,
-    enoughShotEvidence: candidate.resolvedShots + baseline.resolvedShots >= EVALUATION_GATE.minimumResolvedShots,
-    meaningfulHorizon: config.roundLimit ? config.roundLimit >= EVALUATION_GATE.minimumRoundsPerScenario : config.actionLimit >= EVALUATION_GATE.minimumActionsPerScenario,
-    productionSearch: config.nodeLimit === EVALUATION_GATE.requiredNodes && config.maxDepth === EVALUATION_GATE.requiredDepth && config.extensions !== false,
+    enoughScenarios: matches.length >= preset.minimumScenarios,
+    enoughShotEvidence: candidate.resolvedShots + baseline.resolvedShots >= preset.minimumResolvedShots,
+    meaningfulHorizon: config.roundLimit ? config.roundLimit >= preset.minimumRoundsPerScenario : config.actionLimit >= preset.minimumActionsPerScenario,
+    productionSearch: config.nodeLimit === preset.requiredNodes && config.maxDepth === preset.requiredDepth && config.extensions !== false,
     intact: errors.length === 0,
     positivePairedGoalDifference: sum(paired, 'goalDifference') > 0,
     positiveWdlScore: score > 0.5,
-    offencesAcceptable: candidate.offencePer100Actions <= baseline.offencePer100Actions + EVALUATION_GATE.maximumOffenceIncreasePer100Actions
+    offencesAcceptable: candidate.offencePer100Actions <= baseline.offencePer100Actions + preset.maximumOffenceIncreasePer100Actions
   };
+  if (config.strictGate) Object.assign(gates, {
+    practicallyUsefulWdlScore: score >= preset.minimumWdlScore,
+    wdlUncertaintyClearOfBaseline: uncertainty.wdlScore95 !== null && uncertainty.wdlScore95[0] > preset.minimumWdlLower95,
+    goalDifferenceUncertaintyPositive: uncertainty.meanGoalDifferencePerScenario95 !== null
+      && uncertainty.meanGoalDifferencePerScenario95[0] > preset.minimumGoalDifferenceLower95,
+    observedNodeCaps: candidate.maxNodes <= preset.requiredNodes && baseline.maxNodes <= preset.requiredNodes
+  });
   return {scenarioCount: matches.length, distinctSeeds: paired.length, wins, draws, losses, wdlScore: score,
-    goalDifference: candidate.goals - baseline.goals, candidate, baseline, paired, uncertainty: seedBootstrap(paired),
+    goalDifference: candidate.goals - baseline.goals, candidate, baseline, paired, uncertainty,
     errors: errors.map(match => ({seed: match.seed, kickoff: match.kickoff, candidateColor: match.candidateColor, error: match.error, safetyLimitReached: match.safetyLimitReached, pendingShot: match.pendingShot})),
-    promotionGate: {preset: EVALUATION_GATE, checks: gates, passed: Object.values(gates).every(Boolean),
-      note: 'A fixed screening gate, not a statistical proof of strength. Short-horizon or reduced-budget development runs cannot promote a model.'},
+    promotionGate: {preset, checks: gates, passed: Object.values(gates).every(Boolean),
+      note: config.strictGate ? 'Pre-registered strict screening gate: at least eight complete seed clusters, a useful score advantage and seed-cluster 95% intervals above parity. This finite set of fixed-horizon scenarios does not establish universal playing strength.'
+        : 'A fixed screening gate, not a statistical proof of strength. Short-horizon or reduced-budget development runs cannot promote a model.'},
     note: 'Four scenarios per seed swap candidate color and kickoff. Goals/shots exclude any legal Casual warmup. Artificial horizons are not full timed matches; pending shots always resolve. Policies see a constant hidden RNG state.'};
 }
 
-export async function evaluatePaired({rules = engine, candidateModule = engine, baselineModule, modelWeights = null,
+export async function evaluatePaired({rules = engine, candidateModule = engine, baselineModule, modelWeights = null, modelScale = 80,
   seeds = [400000, 400001, 400002, 400003], split = 'test', trainingSeeds = [], nodeLimit = 1400,
   maxDepth = 8, extensions = true, actionLimit = 160, roundLimit = null, warmup = 0,
-  foulsEnabled = false, record = false, onScenario = null} = {}) {
+  foulsEnabled = false, record = false, strictGate = false, onScenario = null} = {}) {
   validateSeeds(seeds, split, trainingSeeds);
   integer(nodeLimit, 'nodeLimit'); integer(maxDepth, 'maxDepth');
   if (!baselineModule) throw new Error('A frozen baseline module is required');
   const common = {nodeLimit, maxDepth, extensions};
-  const candidate = makeSearchPolicy(candidateModule, {...common, modelWeights});
+  const candidate = makeSearchPolicy(candidateModule, {...common, modelWeights, modelScale});
   const baseline = makeSearchPolicy(baselineModule, {...common, modelWeights: null});
-  const config = {split, seeds: [...seeds], nodeLimit, maxDepth, extensions, actionLimit, roundLimit, warmup, foulsEnabled};
+  const config = {split, seeds: [...seeds], nodeLimit, maxDepth, extensions, actionLimit, roundLimit, warmup, foulsEnabled,
+    modelScale,
+    ...(strictGate ? {strictGate: true} : {})};
   const matches = [];
   for (const seed of seeds) for (const kickoff of TEAMS) {
     const initialState = createWarmStart({rules, seed, kickoff, warmup, foulsEnabled});
@@ -338,10 +360,10 @@ function workerResponse(worker, expectedType, message = null) {
 // Workers receive preassigned immutable scenario inputs and import each policy
 // once. Only completion order varies; stored results retain the serial order.
 export async function evaluatePairedParallel({candidatePath = new URL('../dist/engine.js', import.meta.url), baselinePath,
-  rulesPath = new URL('../dist/engine.js', import.meta.url), modelWeights = null,
+  rulesPath = new URL('../dist/engine.js', import.meta.url), modelWeights = null, modelScale = 80,
   seeds = [400000, 400001, 400002, 400003], split = 'test', trainingSeeds = [], nodeLimit = 1400,
   maxDepth = 8, extensions = true, actionLimit = 160, roundLimit = null, warmup = 0,
-  foulsEnabled = false, record = false, workers = 1, onScenario = null} = {}) {
+  foulsEnabled = false, record = false, workers = 1, strictGate = false, onScenario = null} = {}) {
   validateSeeds(seeds, split, trainingSeeds); integer(nodeLimit, 'nodeLimit'); integer(maxDepth, 'maxDepth');
   integer(workers, 'workers'); if (workers > 32) throw new Error('workers must be <= 32');
   if (!baselinePath) throw new Error('A frozen baseline path is required');
@@ -354,12 +376,14 @@ export async function evaluatePairedParallel({candidatePath = new URL('../dist/e
   }
   const workerCount = Math.min(workers, jobs.length), pool = [], matches = Array(jobs.length);
   const config = {split, seeds: [...seeds], nodeLimit, maxDepth, extensions, actionLimit, roundLimit, warmup, foulsEnabled,
-    workers: workerCount, resultOrder: 'seed, kickoff white/black, candidate color white/black'};
+    modelScale,
+    workers: workerCount, resultOrder: 'seed, kickoff white/black, candidate color white/black',
+    ...(strictGate ? {strictGate: true} : {})};
   let nextIndex = 0, completed = 0, failed = false;
   try {
     const runners = Array.from({length: workerCount}, async () => {
       const worker = new Worker(new URL('./evaluate-selfplay-worker.mjs', import.meta.url), {workerData: {
-        rulesUrl, candidateUrl, baselineUrl, modelWeights, nodeLimit, maxDepth, extensions, actionLimit, roundLimit, record}});
+        rulesUrl, candidateUrl, baselineUrl, modelWeights, modelScale, nodeLimit, maxDepth, extensions, actionLimit, roundLimit, record}});
       pool.push(worker);
       await workerResponse(worker, 'ready');
       while (!failed && nextIndex < jobs.length) {
@@ -389,24 +413,41 @@ function parseArguments(args) {
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
   try {
     const args = parseArguments(process.argv.slice(2));
-    if (!args.checkpoint || !args.baseline) throw new Error('Usage: node scripts/evaluate-selfplay.mjs --checkpoint file.json --baseline training/frozen/engine-v37.mjs [--split dev|test --seeds 400000,400001 --actions 160 --nodes 1400 --depth 8 --warmup 0 --workers 1 --out evaluation.json]');
+    if (!args.checkpoint || !args.baseline) throw new Error('Usage: node scripts/evaluate-selfplay.mjs --checkpoint file.json --baseline training/frozen/engine-v37.mjs [--engine immutable-engine-snapshot.mjs --split dev|test --seeds 400000,400001 --actions 160 --nodes 1400 --depth 8 --warmup 0 --workers 1 --strict-gate --out evaluation.json]');
     if (args.actions && args.rounds) throw new Error('Choose --actions or --rounds, not both');
-    const checkpoint = JSON.parse(await readFile(path.resolve(args.checkpoint), 'utf8')), weights = validateCheckpoint(checkpoint);
+    const checkpointPath = path.resolve(args.checkpoint), checkpointBytes = await readFile(checkpointPath);
+    const checkpoint = JSON.parse(checkpointBytes.toString('utf8')), weights = validateCheckpoint(checkpoint);
     const split = args.split || 'test', start = SEED_PARTITIONS[split]?.[0];
     const seeds = args.seeds ? String(args.seeds).split(',').map(Number) : Array.from({length: 4}, (_, index) => start + index);
-    const baselinePath = path.resolve(args.baseline), workerCount = Number(args.workers || 1);
+    const baselinePath = path.resolve(args.baseline), enginePath = args.engine ? path.resolve(args.engine)
+      : fileURLToPath(new URL('../dist/engine.js', import.meta.url)), workerCount = Number(args.workers || 1);
     integer(workerCount, 'workers');
+    const hashBytes = bytes => createHash('sha256').update(bytes).digest('hex');
+    const hashFile = async filename => hashBytes(await readFile(filename));
+    // Capture hashes before loading either policy or producing any results.
+    // A query string avoids reusing the evaluator's default engine import.
+    const [baselineSha256, currentRulesSha256] = await Promise.all([hashFile(baselinePath), hashFile(enginePath)]);
+    const provenance = {checkpoint: checkpointPath, checkpointSha256: hashBytes(checkpointBytes), baseline: baselinePath,
+      baselineSha256, engine: enginePath, currentRulesSha256, sourceHashesCapturedAt: new Date().toISOString(),
+      checkpointTraining: checkpoint.training || null};
+    const engineUrl = pathToFileURL(enginePath), baselineUrl = pathToFileURL(baselinePath);
+    engineUrl.searchParams.set('evaluationSource', currentRulesSha256); baselineUrl.searchParams.set('evaluationSource', baselineSha256);
     const evaluate = workerCount > 1 ? evaluatePairedParallel : evaluatePaired;
-    const baselineModule = workerCount > 1 ? null : await import(pathToFileURL(baselinePath).href);
-    const result = await evaluate({baselineModule, baselinePath, workers: workerCount, modelWeights: weights, split, seeds,
+    const [rules, baselineModule] = workerCount > 1 ? [null, null] : await Promise.all([import(engineUrl.href), import(baselineUrl.href)]);
+    const result = await evaluate({rules, candidateModule: rules, baselineModule, baselinePath: baselineUrl,
+      rulesPath: engineUrl, candidatePath: engineUrl, workers: workerCount, modelWeights: weights, modelScale: checkpoint.scale, split, seeds,
       trainingSeeds: checkpoint.training?.seeds || [], nodeLimit: Number(args.nodes || 1400), maxDepth: Number(args.depth || 8),
       actionLimit: Number(args.actions || 160), roundLimit: args.rounds ? Number(args.rounds) : null, warmup: Number(args.warmup || 0),
       foulsEnabled: args.fouls === true || args.fouls === 'true', record: args.record === true || args.record === 'true',
+      strictGate: args['strict-gate'] === true || args['strict-gate'] === 'true',
       onScenario: match => process.stdout.write(`${JSON.stringify({seed: match.seed, kickoff: match.kickoff, candidateColor: match.candidateColor, score: match.score, actions: match.actions, error: match.error, elapsedMs: Math.round(match.elapsedMs)})}\n`)});
-    const hashFile = async filename => createHash('sha256').update(await readFile(filename)).digest('hex');
-    result.provenance = {checkpoint: path.resolve(args.checkpoint), checkpointSha256: await hashFile(path.resolve(args.checkpoint)),
-      baseline: baselinePath, baselineSha256: await hashFile(baselinePath), currentRulesSha256: await hashFile(new URL('../dist/engine.js', import.meta.url)),
-      checkpointTraining: checkpoint.training || null};
+    const [checkpointAfter, baselineAfter, engineAfter] = await Promise.all([hashFile(checkpointPath), hashFile(baselinePath), hashFile(enginePath)]);
+    result.provenance = {...provenance, sourceFilesUnchanged: checkpointAfter === provenance.checkpointSha256
+      && baselineAfter === baselineSha256 && engineAfter === currentRulesSha256};
+    if (!result.provenance.sourceFilesUnchanged) {
+      result.summary.promotionGate.checks.immutableSources = false; result.summary.promotionGate.passed = false;
+      process.stderr.write('Evaluation source files changed during the run; promotion rejected.\n'); process.exitCode = 1;
+    }
     const output = path.resolve(args.out || `training/evaluation-${split}.json`);
     await mkdir(path.dirname(output), {recursive: true}); await writeFile(output, `${JSON.stringify(result, null, 2)}\n`);
     process.stdout.write(`${JSON.stringify({output, summary: result.summary})}\n`);

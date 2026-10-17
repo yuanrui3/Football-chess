@@ -1,0 +1,13 @@
+{"seed":450043,"kickoff":"white","candidateColor":"black","score":{"white":0,"black":0},"actions":120,"error":null,"elapsedMs":116606}
+{"seed":450017,"kickoff":"white","candidateColor":"black","score":{"white":0,"black":0},"actions":120,"error":null,"elapsedMs":146431}
+{"seed":450017,"kickoff":"black","candidateColor":"black","score":{"white":0,"black":0},"actions":120,"error":null,"elapsedMs":177337}
+{"seed":450017,"kickoff":"black","candidateColor":"white","score":{"white":0,"black":0},"actions":120,"error":null,"elapsedMs":182379}
+{"seed":450043,"kickoff":"white","candidateColor":"white","score":{"white":0,"black":0},"actions":120,"error":null,"elapsedMs":195234}
+{"seed":450017,"kickoff":"white","candidateColor":"white","score":{"white":0,"black":1},"actions":120,"error":null,"elapsedMs":203249}
+{"seed":450043,"kickoff":"black","candidateColor":"black","score":{"white":0,"black":0},"actions":120,"error":null,"elapsedMs":151260}
+{"seed":450043,"kickoff":"black","candidateColor":"white","score":{"white":0,"black":0},"actions":120,"error":null,"elapsedMs":197609}
+{"seed":450089,"kickoff":"white","candidateColor":"white","score":{"white":0,"black":0},"actions":120,"error":null,"elapsedMs":168994}
+{"seed":450089,"kickoff":"black","candidateColor":"black","score":{"white":0,"black":0},"actions":120,"error":null,"elapsedMs":155639}
+{"seed":450089,"kickoff":"white","candidateColor":"black","score":{"white":0,"black":0},"actions":120,"error":null,"elapsedMs":188388}
+{"seed":450089,"kickoff":"black","candidateColor":"white","score":{"white":0,"black":0},"actions":120,"error":null,"elapsedMs":182576}
+{"seed":450131,"kickoff":"white","candidateColor":"white","score":{"white":0,"black":0},"actions":120,"error":null,"elapsedMs":158458}

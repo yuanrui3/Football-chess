@@ -10,7 +10,7 @@ const weights = [.2, .3, -.1, .4, .3, .2, .25];
 
 test('playable checkpoint matches the selected training artifact and honors its release gate', async () => {
   const checkpoint = JSON.parse(await readFile(new URL('../training/selected-model.json', import.meta.url), 'utf8'));
-  const release = JSON.parse(await readFile(new URL('../docs/selfplay-rl-2026-10-16/release.json', import.meta.url), 'utf8'));
+  const release = JSON.parse(await readFile(new URL('../training/selected-model-release.json', import.meta.url), 'utf8'));
   assert.deepEqual(E.RL_VALUE_MODEL.featureNames, checkpoint.featureNames);
   assert.deepEqual(E.RL_VALUE_MODEL.weights, checkpoint.weights);
   assert.equal(E.RL_VALUE_MODEL.trained, true);
@@ -60,8 +60,8 @@ test('learned residual stays bounded, changes perspective correctly and cannot o
 
 test('invalid checkpoints fail clearly instead of introducing NaN evaluations', () => {
   for (const bad of [[1], Array(7).fill(NaN), Array(7).fill(Infinity), Array(7).fill(5), 'weights', {}]) {
-    assert.throws(() => E.rlValidateWeights(bad), /seven finite weights/);
-    assert.throws(() => E.analyzeTacticalAction(E.createGame(), {modelWeights: bad}), /seven finite weights/);
+    assert.throws(() => E.rlValidateWeights(bad), /7, 28 or 37 finite weights/);
+    assert.throws(() => E.analyzeTacticalAction(E.createGame(), {modelWeights: bad}), /7, 28 or 37 finite weights/);
   }
   assert.deepEqual(E.rlValidateWeights(new Float32Array(7)), Array(7).fill(0));
 });

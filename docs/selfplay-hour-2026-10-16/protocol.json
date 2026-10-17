@@ -1,0 +1,124 @@
+{
+  "startedAt": "2026-10-17T00:08:10Z",
+  "deadlineApproximate": "2026-10-17T01:08:10Z",
+  "rulesFrozen": true,
+  "baseline": "training/frozen/engine-v37.mjs",
+  "baselineSha256": "0efe76a2b98ee0b00aa2e74a8507b80222885f527cdbf53a5ecd0e1886e50bd9",
+  "trainSeedRange": [
+    120000,
+    199999
+  ],
+  "developmentSeeds": [
+    320017,
+    320041,
+    320083,
+    320123
+  ],
+  "heldOutSeeds": [
+    450017,
+    450043,
+    450089,
+    450131,
+    450173,
+    450211,
+    450257,
+    450293
+  ],
+  "candidateSelection": "only development results; lock one checkpoint SHA256 before any held-out result; no swap after final evaluation",
+  "heldOut": {
+    "actions": 120,
+    "warmup": 80,
+    "nodeLimit": 1400,
+    "maxDepth": 8,
+    "extensions": true,
+    "foulsEnabled": true,
+    "workers": 6,
+    "strictGate": true,
+    "minimumScenarioCount": 32,
+    "minimumWdlScore": 0.6,
+    "wdl95LowerGreaterThan": 0.5,
+    "goalDifference95LowerGreaterThan": 0,
+    "minimumResolvedShots": 32,
+    "maximumOffenceIncreasePer100Actions": 0.5
+  },
+  "development": {
+    "actions": 120,
+    "warmup": 80,
+    "nodeLimit": 256,
+    "maxDepth": 8,
+    "foulsEnabled": true
+  },
+  "baselinePolicyVisibleRandomState": 0,
+  "developmentCandidates": {
+    "families": [
+      {
+        "features": 7,
+        "residualScale": 80,
+        "alpha": 0.003,
+        "seed": 120000,
+        "episodes": 64
+      },
+      {
+        "features": 28,
+        "residualScale": 80,
+        "alpha": 0.001,
+        "seed": 130000,
+        "episodes": 64
+      },
+      {
+        "features": 28,
+        "residualScale": 80,
+        "alpha": 0.0005,
+        "seed": 140000,
+        "episodes": 4,
+        "parent": "context checkpoint8",
+        "bothPoliciesNodes": 1400,
+        "warmup": 80,
+        "actions": 160
+      },
+      {
+        "features": 28,
+        "residualScale": 320,
+        "alpha": 0.001,
+        "seed": 150000,
+        "episodes": 32,
+        "initialWeights": "zero"
+      },
+      {
+        "features": 28,
+        "residualScale": 320,
+        "alpha": 0.0005,
+        "seed": 170000,
+        "episodes": 32,
+        "actions": 160,
+        "warmup": 80,
+        "parent": "scale320 checkpoint16",
+        "learnerNodes": 512,
+        "baselineNodes": 256,
+        "searchBackupAlpha": 0.0003,
+        "objective": "prior-consistent expected goal TD plus small fitted search-backup auxiliary; candidate public completed search reports only",
+        "declaredBeforeAnyHeldOut": true,
+        "declaredAt": "2026-10-17T00:24:00Z"
+      },
+      {
+        "features": 37,
+        "residualScale": 320,
+        "parent": "28-feature S320 search-backup checkpoint8; append9zeros",
+        "alpha": 0.0005,
+        "searchBackupAlpha": 0.0003,
+        "seed": 190000,
+        "episodes": 8,
+        "actions": 160,
+        "warmup": 80,
+        "learnerNodes": 512,
+        "baselineNodes": 256,
+        "reason": "Separate carrier type and exact native shot/outlet probabilities; keep existing28 prefix and unchanged rules",
+        "declaredBeforeAnyHeldOut": true,
+        "declaredAt": "2026-10-17T00:40:07.176140+00:00"
+      }
+    ],
+    "selection": "development WDL/goal difference, then xG difference as tie-break; candidate hash locked before untouched final test",
+    "scaleAblationDeclaredAt": "2026-10-17T00:17:52Z",
+    "scaleAblationReason": "representation capacity: 80 evaluation points equals 0.04 goals; test320 with matching prior/target/behavior scaling, before any final test"
+  }
+}

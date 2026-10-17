@@ -4,10 +4,10 @@ import {makeSearchPolicy, runEvaluationScenario} from './evaluate-selfplay.mjs';
 
 if (!parentPort || !workerData) throw new Error('Use evaluate-selfplay.mjs --workers N');
 try {
-  const {rulesUrl, candidateUrl, baselineUrl, modelWeights, nodeLimit, maxDepth, extensions, actionLimit, roundLimit, record} = workerData;
+  const {rulesUrl, candidateUrl, baselineUrl, modelWeights, modelScale, nodeLimit, maxDepth, extensions, actionLimit, roundLimit, record} = workerData;
   const [rules, candidateModule, baselineModule] = await Promise.all([import(rulesUrl), import(candidateUrl), import(baselineUrl)]);
   const common = {nodeLimit, maxDepth, extensions};
-  const candidate = makeSearchPolicy(candidateModule, {...common, modelWeights});
+  const candidate = makeSearchPolicy(candidateModule, {...common, modelWeights, modelScale});
   const baseline = makeSearchPolicy(baselineModule, {...common, modelWeights: null});
   parentPort.on('message', message => {
     try {

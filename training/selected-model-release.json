@@ -1,0 +1,27 @@
+{
+  "checkpoint": "counterplay-2026-10-16-shot-0032",
+  "checkpointSha256": "18c42fe6a0ed25b567dcb31a2acc45c18bc1c4bcfc56d0a727196c7d4b0fd869",
+  "featureCount": 37,
+  "residualScale": 320,
+  "trainingSegments": 32,
+  "trainingTransitions": 10241,
+  "trainingGoalEvents": 20,
+  "experimentSegments": 170,
+  "experimentTransitions": 72644,
+  "experimentGoalEvents": 157,
+  "defaultEnabled": false,
+  "promotionGatePassed": false,
+  "heldOutStatus": "incomplete:13of32scenarios",
+  "reason": "The locked candidate had promising DEV results, but the final benchmark stopped before completion and its 13 recorded scenarios contain zero wins, twelve draws and one loss. No safe advantage established; baseline Tactical stays default.",
+  "heldOutWDL": [
+    0,
+    12,
+    1
+  ],
+  "heldOutGoals": [
+    0,
+    1
+  ],
+  "heldOutCompletedScenarios": 13,
+  "heldOutPlannedScenarios": 32
+}

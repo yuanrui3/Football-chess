@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "evaluatedEngineSha256": "cebd6fa0cc52bddc0ee03bb05aa703645ba3a6c63a417883d2cda694a0cc87fb",
+  "installedEngineSha256": "eeba82274585cff0aa3178fb270309f34e3af0cc2004931502c962e081204d32",
+  "onlyDifferences": [
+    "selected model export (weights, feature names, default scale, metadata and default enabled status)",
+    "model explanatory comment"
+  ],
+  "equivalence": "Exact identical function source; evaluator passes the locked37weights andscale320 explicitly, installed AI uses the same37weights and defaultscale320 when opted in. Baseline passesnull."
+}

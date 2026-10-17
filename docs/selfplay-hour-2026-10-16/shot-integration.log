@@ -1,0 +1,18 @@
+✔ browser context encoder is the exact source used for offline learning (12.155273ms)
+✔ both model families preserve baseline search when their weights are zero (264.911559ms)
+✔ context inference matches training, remains antisymmetric, seed blind and score excluded (13.363075ms)
+✔ 80 and 320 scales change only the learned residual and preserve terminal and zero-model values (127.453337ms)
+✔ 37-feature shooting family keeps the exact normalized contextual prefix (10.948381ms)
+✔ all supplied metrics and carrier features reverse requested perspective exactly (3.34008ms)
+✔ native carrier piece identities are distinct signed one-hot features (5.103447ms)
+✔ encoder is pure, ignores score and hidden RNG, and consumes the supplied public metrics (1.826915ms)
+✔ probabilities are bounded and invalid inputs fail without NaN propagation (1.798053ms)
+✔ loose-ball states do not invent carrier identity or shooting values (2.961616ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 575.151584

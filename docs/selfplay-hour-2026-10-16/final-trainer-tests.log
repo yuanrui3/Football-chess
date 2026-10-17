@@ -1,0 +1,41 @@
+✔ counterplay alternates learner colors, keeps consecutive actions, and uses fixed-white goal rewards (6.665748ms)
+✔ 7/28/37 encoders dispatch independently and zero-extension preserves predictions without inventing experience (0.924956ms)
+✔ rollouts are deterministic, do not update weights, and TD replay truly updates them (1.95363ms)
+✔ a constant zero prior and zero-reward trajectory from zero has no fabricated update (0.246604ms)
+✔ the expected target preserves the deployed handcrafted prior and integrates public chance (0.435876ms)
+✔ the potential correction telescopes, leaving only discounted goals and a fixed initial offset (1.874307ms)
+✔ generic contextual models retain dimensions and terminal continuation is zero (0.313737ms)
+✔ S320 scales the prior, goal reward, beam behavior, and Tactical request consistently (0.764708ms)
+✔ search-backup target uses actor perspective, cancels the score ledger, and ignores incomplete or extreme searches (0.405491ms)
+✔ search-backup fitting has the exact tanh gradient, is optional, and excludes frozen baseline reports (1.212113ms)
+✔ color-reflected expected TD updates are identical and do not depend on a sampled goal (0.371309ms)
+✔ real-engine worker rollout reproduces the same one-episode weights as serial rollout (1745.338304ms)
+✔ opponent pools and CLI configurations are deterministic and validated (0.615055ms)
+✔ checkpoint goal counts exclude warmup and run lineage retains training hyperparameters (0.396349ms)
+✔ TD(lambda) uses the exact tanh semi-gradient and accumulating trace (3.196813ms)
+✔ the tanh gradient agrees with a finite difference (0.377503ms)
+✔ fixed-white values do not flip sign just because the next actor changes (0.442625ms)
+✔ color-reflected vectors and rewards produce identical weight updates (1.477372ms)
+✔ research truncations bootstrap; only actual terminal states use zero (0.461335ms)
+✔ goal reward is the signed change in score and never rewards style features (0.40176ms)
+✔ eligibility resets for a new game and learned weights remain finite and bounded (0.779186ms)
+✔ behavior RNG is seeded independently and reproducible (1.004329ms)
+✔ planning cannot read the live PRNG or mutate the supplied game (2.061635ms)
+✔ the behavior beam only explores legal shortlisted candidates (1.140355ms)
+✔ a forced certain goal beats recycling before the next keeper action (0.654754ms)
+✔ the real engine beam and TD transitions obey the same legal phase machine (781.48907ms)
+✔ real reward events change weights; the episode uses fixed-white consecutive actions (6.684287ms)
+✔ zero initial weights cannot learn merely by farming central or possession moves (0.627939ms)
+✔ a truncated episode keeps a nonzero bootstrap and resets old eligibility (2.844306ms)
+✔ self-play is exactly reproducible under a fixed environment and behavior seed (1.279427ms)
+✔ evaluation swaps learner colors with the same paired outcome seed and never changes weights (1.860621ms)
+✔ the reproducible CLI rejects ambiguous or invalid configurations (1.369625ms)
+✔ resumed checkpoints retain all prior training seeds and goal events for holdout exclusion (1.713893ms)
+ℹ tests 33
+ℹ suites 0
+ℹ pass 33
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1915.148664

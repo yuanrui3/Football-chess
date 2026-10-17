@@ -1,0 +1,57 @@
+{
+  "passed": true,
+  "checkpointSha256": "18c42fe6a0ed25b567dcb31a2acc45c18bc1c4bcfc56d0a727196c7d4b0fd869",
+  "featureCount": 37,
+  "scale": 320,
+  "actualVersionedWorker": true,
+  "checks": [
+    {
+      "state": 0,
+      "phase": "kickoff",
+      "learnedEvaluation": false,
+      "action": {
+        "type": "kick",
+        "x": 2,
+        "y": 12
+      },
+      "passed": true
+    },
+    {
+      "state": 0,
+      "phase": "kickoff",
+      "learnedEvaluation": true,
+      "action": {
+        "type": "kick",
+        "x": 2,
+        "y": 12
+      },
+      "passed": true
+    },
+    {
+      "state": 1,
+      "phase": "attackMove",
+      "learnedEvaluation": false,
+      "action": {
+        "type": "move",
+        "pieceId": "white-R1",
+        "x": 1,
+        "y": 7,
+        "freePawn": false
+      },
+      "passed": true
+    },
+    {
+      "state": 1,
+      "phase": "attackMove",
+      "learnedEvaluation": true,
+      "action": {
+        "type": "move",
+        "pieceId": "white-B1",
+        "x": 5,
+        "y": 9,
+        "freePawn": false
+      },
+      "passed": true
+    }
+  ]
+}

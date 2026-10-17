@@ -85,7 +85,7 @@ export function assertLegalAction(rules, state, action) {
   throw new Error(`Policy returned an illegal action in ${state.phase}: ${JSON.stringify(action)}`);
 }
 
-export function expectedTrainingLeaf(rules, state, weights) {
+export function expectedTrainingLeaf(rules, state, weights, residualScale = RESIDUAL_SCALE) {
   // A shot declaration is not a settled possession position. Complete the
   // forced public keeper reply and every goal/save/miss branch before judging
   // it, without consulting the real match's hidden random stream.
@@ -95,12 +95,13 @@ export function expectedTrainingLeaf(rules, state, weights) {
     const outcomes = rules.tacticalSuccessors(source, reply);
     const mass = outcomes.reduce((sum, item) => sum + item.probability, 0);
     if (!outcomes.length || !Number.isFinite(mass) || Math.abs(mass - 1) > 1e-7 || outcomes.some(item => !Number.isFinite(item.probability) || item.probability < 0 || item.state.phase === 'keeperReact')) throw new Error('A keeper reply must resolve the shot with normalized public chance outcomes.');
-    return outcomes.reduce((sum, item) => sum + item.probability * expectedTrainingLeaf(rules, item.state, weights), 0);
+    return outcomes.reduce((sum, item) => sum + item.probability * expectedTrainingLeaf(rules, item.state, weights, residualScale), 0);
   }
-  return rules.tacticalBasePositionValue(state, 'white') + (state.phase === 'finished' || !weights ? 0 : RESIDUAL_SCALE * rules.rlValuePrediction(state, 'white', weights));
+  return rules.tacticalBasePositionValue(state, 'white') + (state.phase === 'finished' || !weights ? 0 : residualScale * rules.rlValuePrediction(state, 'white', weights));
 }
 
-export function chooseTrainingAction(rules, state, weights, {random = seededRandom(1), epsilon = 0, candidateWidth = 6, policy = 'beam', nodeLimit = 96} = {}) {
+export function chooseTrainingAction(rules, state, weights, {random = seededRandom(1), epsilon = 0, candidateWidth = 6, policy = 'beam', nodeLimit = 96, residualScale = RESIDUAL_SCALE} = {}) {
+  if (![80,320].includes(residualScale)) throw new RangeError('The residual scale must be 80 or 320.');
   const source = planningView(state);
   const candidates = rules.rankedTacticalActions(source, candidateWidth, false);
   if (!candidates.length) return {action: rules.chooseAIAction(source, {difficulty: 'casual'}), explored: false, candidates: 0};
@@ -108,7 +109,10 @@ export function chooseTrainingAction(rules, state, weights, {random = seededRand
     const index = Math.min(candidates.length - 1, Math.floor(random() * candidates.length));
     return {action: candidates[index].action, explored: true, candidates: candidates.length};
   }
-  if (policy === 'tactical') return {action: rules.analyzeTacticalAction(source, {nodeLimit, modelWeights: weights}).action, explored: false, candidates: candidates.length};
+  if (policy === 'tactical') {
+    const report=rules.analyzeTacticalAction(source, {nodeLimit, modelWeights: weights, modelScale: residualScale});
+    return {action:report.action,explored:false,candidates:candidates.length,searchValue:report.value,completedDepth:report.stats?.completedDepth??0,searchNodes:report.stats?.nodes??0};
+  }
   if (policy === 'casual') return {action: rules.chooseAIAction(source, {difficulty: 'casual'}), explored: false, candidates: candidates.length};
   if (policy !== 'beam') throw new RangeError(`Unknown behavior policy ${policy}.`);
   const sign = rules.currentTeam(source) === 'white' ? 1 : -1;
@@ -117,7 +121,7 @@ export function chooseTrainingAction(rules, state, weights, {random = seededRand
     const successors = rules.tacticalSuccessors(source, candidate.action);
     const probability = successors.reduce((sum, item) => sum + item.probability, 0);
     if (!successors.length || !Number.isFinite(probability) || Math.abs(probability - 1) > 1e-7 || successors.some(item => !Number.isFinite(item.probability) || item.probability < 0)) throw new Error('Chance successors must sum to one.');
-    const expected = successors.reduce((sum, item) => sum + item.probability * expectedTrainingLeaf(rules, item.state, weights), 0);
+    const expected = successors.reduce((sum, item) => sum + item.probability * expectedTrainingLeaf(rules, item.state, weights, residualScale), 0);
     const value = sign * expected;
     if (value > best + 1e-10) {best = value; action = candidate.action;}
   }

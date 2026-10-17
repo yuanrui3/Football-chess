@@ -1,0 +1,19 @@
+{
+  "regressionTests": {
+    "passed": 1074,
+    "failed": 0,
+    "log": "release-full-suite.log"
+  },
+  "focusedReleaseTests": {
+    "passed": 53,
+    "failed": 0
+  },
+  "selectedModelEnabledSafetyChecks": {
+    "passed": 14,
+    "failed": 0
+  },
+  "actualVersionedWorkerRoundTrips": 4,
+  "staticAssetReferences": 15,
+  "visualBrowserQA": "unavailable in managed environment",
+  "strengthConclusion": "not established; held-out run incomplete; baseline remains default"
+}

@@ -1,0 +1,42 @@
+✔ counterplay alternates learner colors, keeps consecutive actions, and uses fixed-white goal rewards (18.217333ms)
+✔ rollouts are deterministic, do not update weights, and TD replay truly updates them (14.081707ms)
+✔ a constant zero prior and zero-reward trajectory from zero has no fabricated update (0.367956ms)
+✔ the expected target preserves the deployed handcrafted prior and integrates public chance (0.878383ms)
+✔ the potential correction telescopes, leaving only discounted goals and a fixed initial offset (0.365129ms)
+✔ generic contextual models retain dimensions and terminal continuation is zero (0.339549ms)
+✔ S320 scales the prior, goal reward, beam behavior, and Tactical request consistently (12.839311ms)
+✔ color-reflected expected TD updates are identical and do not depend on a sampled goal (0.765498ms)
+✔ real-engine worker rollout reproduces the same one-episode weights as serial rollout (5004.41521ms)
+✔ opponent pools and CLI configurations are deterministic and validated (1.38387ms)
+✔ checkpoint goal counts exclude warmup and run lineage retains training hyperparameters (0.907174ms)
+✔ 28 normalized public features are pure and preserve the seven-feature prefix (46.548564ms)
+✔ requested perspective, rotation and color swap preserve antisymmetry (38.683255ms)
+✔ reusing a White base vector avoids changing perspective twice (7.129275ms)
+✔ actual phase and spent budgets distinguish action opportunities (12.081851ms)
+✔ a free pawn setup is exposed until its bonus or ordinary move has been spent (1.838763ms)
+✔ direct pawn exposure is separate from a setup and vanishes in the kick phase (1.33842ms)
+✔ offside receivers do not create safe forward passes (15.015118ms)
+✔ central close carrier geometry beats a tight post-side view (5.779104ms)
+✔ dribble and own-half stall pressure reflect the possessing player only (15.952111ms)
+✔ a loose ball has no invented carrier geometry or exposure (2.617692ms)
+✔ keeper bonus setups correspond to legal reposition-then-tackle actions (18.754604ms)
+✔ a king cannot use its bonus setup to enter the opponent box (0.775539ms)
+✔ real back-pass, pass-and-run and shot declarations encode their acting side correctly (53.43424ms)
+✔ browser context encoder is the exact source used for offline learning (36.424283ms)
+✔ both model families preserve baseline search when their weights are zero (1194.791952ms)
+✔ context inference matches training, remains antisymmetric, seed blind and score excluded (38.380501ms)
+✔ playable checkpoint matches the selected training artifact and honors its release gate (48.94804ms)
+✔ training and playable engine use the exact same generated board features (24.436899ms)
+✔ seven bounded value features exclude the score ledger and hidden random state (57.978666ms)
+✔ null and all-zero weights preserve the frozen baseline completed search exactly (2790.018406ms)
+✔ learned residual stays bounded, changes perspective correctly and cannot override a terminal result (97.576471ms)
+✔ invalid checkpoints fail clearly instead of introducing NaN evaluations (4.328888ms)
+✔ learned search stays bounded, seed blind and pure; Casual remains unchanged (436.509882ms)
+ℹ tests 34
+ℹ suites 0
+ℹ pass 34
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5674.699984

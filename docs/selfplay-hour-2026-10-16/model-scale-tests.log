@@ -1,0 +1,12 @@
+✔ browser context encoder is the exact source used for offline learning (48.433775ms)
+✔ both model families preserve baseline search when their weights are zero (840.931801ms)
+✔ context inference matches training, remains antisymmetric, seed blind and score excluded (53.199112ms)
+✔ 80 and 320 scales change only the learned residual and preserve terminal and zero-model values (439.865123ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1873.746254

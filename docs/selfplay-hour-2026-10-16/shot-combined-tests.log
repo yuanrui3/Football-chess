@@ -1,0 +1,76 @@
+✔ browser context encoder is the exact source used for offline learning (44.34438ms)
+✔ both model families preserve baseline search when their weights are zero (664.485378ms)
+✔ context inference matches training, remains antisymmetric, seed blind and score excluded (32.862992ms)
+✔ 80 and 320 scales change only the learned residual and preserve terminal and zero-model values (307.675125ms)
+✔ 37-feature shooting family keeps the exact normalized contextual prefix (20.307017ms)
+✔ all supplied metrics and carrier features reverse requested perspective exactly (33.021047ms)
+✔ native carrier piece identities are distinct signed one-hot features (20.692062ms)
+✔ encoder is pure, ignores score and hidden RNG, and consumes the supplied public metrics (8.440465ms)
+✔ probabilities are bounded and invalid inputs fail without NaN propagation (3.11245ms)
+✔ loose-ball states do not invent carrier identity or shooting values (4.878947ms)
+✔ playable checkpoint matches the selected training artifact and honors its release gate (20.796224ms)
+✔ training and playable engine use the exact same generated board features (7.453636ms)
+✔ seven bounded value features exclude the score ledger and hidden random state (25.687147ms)
+✔ null and all-zero weights preserve the frozen baseline completed search exactly (823.43561ms)
+✔ learned residual stays bounded, changes perspective correctly and cannot override a terminal result (28.688138ms)
+✖ invalid checkpoints fail clearly instead of introducing NaN evaluations (2.480814ms)
+✔ learned search stays bounded, seed blind and pure; Casual remains unchanged (260.191831ms)
+✔ heldout evaluation has disjoint, explicit train/dev/test partitions (5.30166ms)
+✔ checkpoint must match a supported seven-, contextual- or shot-feature tanh evaluator (1.516025ms)
+✔ decision boards hide the outcome PRNG without mutating the true state (3.945788ms)
+✔ both search policies receive exactly the declared allowance (6.640282ms)
+✔ context model scale reaches the candidate but baseline has no residual (44.903446ms)
+✔ worker receives context scale and CLI uses the selected immutable source snapshot (2684.41837ms)
+✔ paired scenarios swap candidate color and kickoff from identical legal warm starts (122.729566ms)
+✔ legal Casual warmup is reproducible and input scores remain separate (1088.723396ms)
+✔ shot launched on the final action is resolved and its xG counted (5.345035ms)
+✔ ordinary-round horizon stops only after a completed round (2.253489ms)
+✔ illegal actions, input mutation, excessive nodes and safety cutoffs are reported (2.884711ms)
+✔ roster, ball and goalkeeper integrity are enforced before play (0.992336ms)
+✔ promotion requires paired goal and WDL advantage plus held-out production evidence (14.047081ms)
+✔ two real shallow Tactical decisions obey the independent evaluation checks (155.646586ms)
+✔ uncertainty resamples complete seed groups reproducibly (0.516081ms)
+✔ strict promotion requires useful and seed-cluster-robust held-out advantage (57.130839ms)
+✔ parallel workers retain serial scenario order, choices and true outcomes (828.922817ms)
+✔ worker protocol rejects malformed jobs and can be terminated cleanly (432.266028ms)
+ℹ tests 35
+ℹ suites 0
+ℹ pass 34
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 6146.436342
+
+✖ failing tests:
+
+test at tests/rl-value-model.test.mjs:61:1
+✖ invalid checkpoints fail clearly instead of introducing NaN evaluations (2.480814ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /seven finite weights/. Input:
+  
+  'Error: The learned value model requires 7, 28 or 37 finite weights, each between -4 and 4.'
+  
+      at TestContext.<anonymous> (file:///workspace/github/football-chess-pace/tests/rl-value-model.test.mjs:63:12)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: Error: The learned value model requires 7, 28 or 37 finite weights, each between -4 and 4.
+        at Module.rlValidateWeights (file:///workspace/github/football-chess-pace/dist/engine.js:2275:11)
+        at file:///workspace/github/football-chess-pace/tests/rl-value-model.test.mjs:63:27
+        at getActual (node:assert:611:5)
+        at strict.throws (node:assert:759:24)
+        at TestContext.<anonymous> (file:///workspace/github/football-chess-pace/tests/rl-value-model.test.mjs:63:12)
+        at Test.runInAsyncScope (node:async_hooks:227:14)
+        at Test.run (node:internal/test_runner/test:1382:25)
+        at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+        at Test.postRun (node:internal/test_runner/test:1522:19)
+        at Test.run (node:internal/test_runner/test:1447:12),
+    expected: /seven finite weights/,
+    operator: 'throws',
+    diff: 'simple'
+  }

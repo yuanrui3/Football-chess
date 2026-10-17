@@ -1,0 +1,14 @@
+{
+  "checkpoint": "/workspace/scratch/43be99f43c82/rl-hour-20261016/train37-shot/model.json",
+  "checkpointSha256": "18c42fe6a0ed25b567dcb31a2acc45c18bc1c4bcfc56d0a727196c7d4b0fd869",
+  "engineSha256": "cebd6fa0cc52bddc0ee03bb05aa703645ba3a6c63a417883d2cda694a0cc87fb",
+  "modelEnabledDuringChecks": true,
+  "modelScale": 320,
+  "regressions": [
+    "pawn-tactical-awareness.test.mjs",
+    "crossing-support-ai.test.mjs"
+  ],
+  "passed": true,
+  "exitCode": 0,
+  "elapsedMs": 4940
+}

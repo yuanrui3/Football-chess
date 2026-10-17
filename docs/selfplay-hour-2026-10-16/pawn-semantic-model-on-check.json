@@ -1,0 +1,14 @@
+{
+  "checkpoint": "/workspace/scratch/43be99f43c82/rl-hour-20261016/train28-full-from8/model-metadata-v2.json",
+  "checkpointSha256": "b7985e95cc38b5ac03579554b467ab510934e8661d597c7d3ee82440923e20fc",
+  "engineSha256": "5e36cb83bdfa22712689540026c1556aeb66203cfe37cf622c882cf40c717156",
+  "modelEnabledDuringChecks": true,
+  "modelScale": 80,
+  "regressions": [
+    "pawn-tactical-awareness.test.mjs",
+    "crossing-support-ai.test.mjs"
+  ],
+  "passed": true,
+  "exitCode": 0,
+  "elapsedMs": 27257
+}

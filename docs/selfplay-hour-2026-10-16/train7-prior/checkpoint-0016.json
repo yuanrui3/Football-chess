@@ -1,0 +1,123 @@
+{
+  "format": "football-chess-td-lambda-v1",
+  "algorithm": "TD(lambda)",
+  "implementation": "batch-frozen behavior rollouts with deterministic ordered prior-consistent expected semi-gradient TD(lambda) replay",
+  "featureNames": [
+    "possession",
+    "ballProgress",
+    "material",
+    "centerControl",
+    "openFiles",
+    "defensiveCover",
+    "centralReceivers"
+  ],
+  "perspective": "fixed white; color-relative, score-excluded features",
+  "scale": 80,
+  "residualScale": 80,
+  "weights": [
+    -1.315261048906536,
+    0.6271739389183505,
+    -0.05135611339088813,
+    0.14911596336583344,
+    -0.3758798332749877,
+    0.3721866894553129,
+    0.14129268117117502
+  ],
+  "initialWeights": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "updates": 7680,
+  "completedEpisodes": 16,
+  "training": {
+    "seed": 120000,
+    "seeds": [
+      120000,
+      120001,
+      120002,
+      120003,
+      120004,
+      120005,
+      120006,
+      120007,
+      120008,
+      120009,
+      120010,
+      120011,
+      120012,
+      120013,
+      120014,
+      120015
+    ],
+    "seedRange": [
+      120000,
+      120015
+    ],
+    "episodes": 16,
+    "actionsPerEpisode": 480,
+    "totalTransitions": 7680,
+    "goalEvents": 14,
+    "whiteGoals": 4,
+    "blackGoals": 10,
+    "originInitialWeights": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "runs": [
+      {
+        "seed": 120000,
+        "episodes": 16,
+        "actionsPerEpisode": 480,
+        "policy": "beam",
+        "epsilon": 0.1
+      }
+    ]
+  },
+  "parentCheckpoint": null,
+  "engineSha256": "fc646d86a8b8e20715af5f15324362b269317f6032e6d1a27e7396754e871c29",
+  "reward": "goal reward in baseline/80 units (25 per goal) plus the exact potential difference of the deployed score-excluded handcrafted prior; all public chance outcomes and opponent actions",
+  "truncation": "action limits bootstrap the last nonterminal position; only real finished states use zero",
+  "config": {
+    "episodes": 64,
+    "actions": 480,
+    "seed": 120000,
+    "out": "/workspace/scratch/43be99f43c82/rl-hour-20261016/train7-prior",
+    "workers": 2,
+    "candidateWidth": 8,
+    "policy": "beam",
+    "nodeLimit": 128,
+    "baselineNodes": 128,
+    "baselineDepth": 8,
+    "baselinePolicy": "tactical",
+    "baselineFraction": 0.5,
+    "epsilon": 0.1,
+    "alpha": 0.003,
+    "gamma": 0.995,
+    "lambda": 0.97,
+    "maxWeight": 4,
+    "checkpointEvery": 8,
+    "warmup": 0,
+    "foulsEnabled": true,
+    "baseline": "/workspace/github/football-chess-pace/training/frozen/engine-v37.mjs",
+    "enginePath": "/workspace/scratch/43be99f43c82/rl-hour-20261016/engine-v38-before-hour.mjs"
+  },
+  "baselineSha256": "0efe76a2b98ee0b00aa2e74a8507b80222885f527cdbf53a5ecd0e1886e50bd9",
+  "baseline": "/workspace/github/football-chess-pace/training/frozen/engine-v37.mjs",
+  "opponentMix": {
+    "baselineFraction": 0.5,
+    "poolWeights": null
+  },
+  "batchSize": 2,
+  "target": "H=(handcraftedValue-2000*scoreDifference)/80, H(terminal)=0; delta=E[25*goalReward+gamma*(Hnext+tanh(w*phiNext))]-(H+tanh(w*phi)); terminal continuation zero",
+  "behaviorLimitation": "Rollout policies remain frozen within each batch. This is approximate policy iteration with TD replay, not importance-corrected off-policy evaluation."
+}

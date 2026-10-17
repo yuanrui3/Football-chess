@@ -1,0 +1,142 @@
+[
+  {
+    "initialTeam": "white",
+    "trace": [
+      {
+        "action": {
+          "type": "move",
+          "pieceId": "white-P1",
+          "x": 5,
+          "y": 11,
+          "freePawn": true
+        },
+        "stats": {
+          "nodes": 1400,
+          "completedDepth": 6,
+          "cacheHits": 135,
+          "extensions": 562,
+          "cutoffs": 296,
+          "aborted": true
+        },
+        "phase": "attackMove",
+        "budget": {
+          "normalUsed": true,
+          "pawnUsed": true,
+          "dribbleUsed": false
+        },
+        "carrier": {
+          "id": "white-Q",
+          "team": "white",
+          "type": "Q",
+          "x": 5,
+          "y": 9
+        },
+        "risk": 1
+      },
+      {
+        "action": {
+          "type": "move",
+          "pieceId": "white-Q",
+          "x": 3,
+          "y": 7,
+          "freePawn": false
+        },
+        "stats": {
+          "nodes": 1400,
+          "completedDepth": 6,
+          "cacheHits": 106,
+          "extensions": 576,
+          "cutoffs": 341,
+          "aborted": true
+        },
+        "phase": "defendMove",
+        "budget": {
+          "normalUsed": false,
+          "pawnUsed": false,
+          "dribbleUsed": false
+        },
+        "carrier": {
+          "id": "white-Q",
+          "team": "white",
+          "type": "Q",
+          "x": 3,
+          "y": 7
+        },
+        "risk": 0
+      }
+    ],
+    "endPhase": "defendMove",
+    "direct": [],
+    "setups": []
+  },
+  {
+    "initialTeam": "black",
+    "trace": [
+      {
+        "action": {
+          "type": "move",
+          "pieceId": "black-P1",
+          "x": 8,
+          "y": 5,
+          "freePawn": true
+        },
+        "stats": {
+          "nodes": 1400,
+          "completedDepth": 6,
+          "cacheHits": 139,
+          "extensions": 562,
+          "cutoffs": 300,
+          "aborted": true
+        },
+        "phase": "attackMove",
+        "budget": {
+          "normalUsed": true,
+          "pawnUsed": true,
+          "dribbleUsed": false
+        },
+        "carrier": {
+          "id": "black-Q",
+          "team": "black",
+          "type": "Q",
+          "x": 8,
+          "y": 7
+        },
+        "risk": 1
+      },
+      {
+        "action": {
+          "type": "move",
+          "pieceId": "black-Q",
+          "x": 10,
+          "y": 9,
+          "freePawn": false
+        },
+        "stats": {
+          "nodes": 1400,
+          "completedDepth": 6,
+          "cacheHits": 105,
+          "extensions": 567,
+          "cutoffs": 342,
+          "aborted": true
+        },
+        "phase": "defendMove",
+        "budget": {
+          "normalUsed": false,
+          "pawnUsed": false,
+          "dribbleUsed": false
+        },
+        "carrier": {
+          "id": "black-Q",
+          "team": "black",
+          "type": "Q",
+          "x": 10,
+          "y": 9
+        },
+        "risk": 0
+      }
+    ],
+    "endPhase": "defendMove",
+    "direct": [],
+    "setups": []
+  }
+]

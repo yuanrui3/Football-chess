@@ -1,0 +1,27 @@
+{
+  "format": "football-chess-selection-lock-static-audit-v1",
+  "checkedAt": "2026-10-17T00:46:55.184Z",
+  "scope": "Static checkpoint, source, lock, protocol and completed DEV evidence only. No held-out reports or results read.",
+  "checks": {
+    "modelHashMatchesLockAndDev": true,
+    "engineHashMatchesLockAndDev": true,
+    "baselineHashMatchesProtocolAndDev": true,
+    "schema37Scale320": true,
+    "trainingSeedsInPartition": true,
+    "trainingEvalSeedsDisjoint": true,
+    "finalSeedDeclarationMatchesLock": true,
+    "lockAfterCompletedDev": true,
+    "devSplitOnly": true,
+    "devSourcesImmutable": true,
+    "productionSearchBudgetMatchesProtocol": true,
+    "devHorizonAndFoulsMatchFinalProtocol": true,
+    "completeDevPairing": true,
+    "selectionRecordedWdlMatchesDev": true
+  },
+  "allPassed": true,
+  "lockedAt": "2026-10-17T00:45:39.605353+00:00",
+  "checkpointSha256": "18c42fe6a0ed25b567dcb31a2acc45c18bc1c4bcfc56d0a727196c7d4b0fd869",
+  "engineSha256": "cebd6fa0cc52bddc0ee03bb05aa703645ba3a6c63a417883d2cda694a0cc87fb",
+  "baselineSha256": "0efe76a2b98ee0b00aa2e74a8507b80222885f527cdbf53a5ecd0e1886e50bd9",
+  "sourceDiffNote": "Diff against frozen v37 is confined to generated learned features/evaluation, residual validation and search option plumbing; legal-action and rule-transition functions are unchanged."
+}

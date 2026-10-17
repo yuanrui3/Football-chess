@@ -1,0 +1,31 @@
+✔ counterplay alternates learner colors, keeps consecutive actions, and uses fixed-white goal rewards (16.644857ms)
+✔ rollouts are deterministic, do not update weights, and TD replay truly updates them (6.732235ms)
+✔ a constant zero prior and zero-reward trajectory from zero has no fabricated update (1.776851ms)
+✔ the expected target preserves the deployed handcrafted prior and integrates public chance (4.504658ms)
+✔ generic contextual models retain dimensions and terminal continuation is zero (0.2893ms)
+✔ opponent pools and CLI configurations are deterministic and validated (1.016806ms)
+✔ 28 normalized public features are pure and preserve the seven-feature prefix (28.645768ms)
+✔ requested perspective, rotation and color swap preserve antisymmetry (49.777159ms)
+✔ reusing a White base vector avoids changing perspective twice (6.19688ms)
+✔ actual phase and spent budgets distinguish action opportunities (7.939995ms)
+✔ a free pawn setup is exposed until its bonus or ordinary move has been spent (6.551238ms)
+✔ direct pawn exposure is separate from a setup and vanishes in the kick phase (1.377619ms)
+✔ offside receivers do not create safe forward passes (8.068098ms)
+✔ central close carrier geometry beats a tight post-side view (1.292639ms)
+✔ dribble and own-half stall pressure reflect the possessing player only (8.212705ms)
+✔ a loose ball has no invented carrier geometry or exposure (2.987304ms)
+✔ playable checkpoint matches the selected training artifact and honors its release gate (19.756271ms)
+✔ training and playable engine use the exact same generated board features (3.870306ms)
+✔ seven bounded value features exclude the score ledger and hidden random state (12.759139ms)
+✔ null and all-zero weights preserve the frozen baseline completed search exactly (743.89371ms)
+✔ learned residual stays bounded, changes perspective correctly and cannot override a terminal result (18.532223ms)
+✔ invalid checkpoints fail clearly instead of introducing NaN evaluations (5.007396ms)
+✔ learned search stays bounded, seed blind and pure; Casual remains unchanged (224.505126ms)
+ℹ tests 23
+ℹ suites 0
+ℹ pass 23
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1384.113

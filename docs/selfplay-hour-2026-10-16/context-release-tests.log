@@ -1,0 +1,27 @@
+✔ browser context encoder is the exact source used for offline learning (17.518387ms)
+✔ both model families preserve baseline search when their weights are zero (383.02241ms)
+✔ context inference matches training, remains antisymmetric, seed blind and score excluded (165.711668ms)
+✔ heldout evaluation has disjoint, explicit train/dev/test partitions (4.627128ms)
+✔ checkpoint must match a supported seven- or contextual-feature tanh evaluator (0.544484ms)
+✔ decision boards hide the outcome PRNG without mutating the true state (1.257439ms)
+✔ both search policies receive exactly the declared allowance (5.706377ms)
+✔ paired scenarios swap candidate color and kickoff from identical legal warm starts (62.340525ms)
+✔ legal Casual warmup is reproducible and input scores remain separate (969.612078ms)
+✔ shot launched on the final action is resolved and its xG counted (3.190018ms)
+✔ ordinary-round horizon stops only after a completed round (1.745624ms)
+✔ illegal actions, input mutation, excessive nodes and safety cutoffs are reported (3.646208ms)
+✔ roster, ball and goalkeeper integrity are enforced before play (0.96699ms)
+✔ promotion requires paired goal and WDL advantage plus held-out production evidence (20.532352ms)
+✔ two real shallow Tactical decisions obey the independent evaluation checks (30.614928ms)
+✔ uncertainty resamples complete seed groups reproducibly (0.836194ms)
+✔ strict promotion requires useful and seed-cluster-robust held-out advantage (25.614189ms)
+✔ parallel workers retain serial scenario order, choices and true outcomes (422.370074ms)
+✔ worker protocol rejects malformed jobs and can be terminated cleanly (106.610992ms)
+ℹ tests 19
+ℹ suites 0
+ℹ pass 19
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1872.327627
