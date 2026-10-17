@@ -1,0 +1,16 @@
+✔ loose-ball fixture0 white: real native collection lane displaces impossible bishop pursuit (11.762686ms)
+✔ loose-ball fixture0 black: real native collection lane displaces impossible bishop pursuit (3.16895ms)
+✔ loose-ball fixture1 white: real native collection lane displaces impossible bishop pursuit (4.123914ms)
+✔ loose-ball fixture1 black: real native collection lane displaces impossible bishop pursuit (2.94448ms)
+✔ loose-ball fixture2 white: real native collection lane displaces impossible bishop pursuit (2.355143ms)
+✔ loose-ball fixture2 black: real native collection lane displaces impossible bishop pursuit (2.789632ms)
+✔ loose-ball fixture3 white: real native collection lane displaces impossible bishop pursuit (2.608756ms)
+✔ loose-ball fixture3 black: real native collection lane displaces impossible bishop pursuit (2.168919ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 186.748303

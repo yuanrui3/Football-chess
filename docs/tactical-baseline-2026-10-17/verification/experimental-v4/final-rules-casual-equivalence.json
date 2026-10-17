@@ -1,0 +1,11 @@
+{
+  "candidateSha256": "4388dc612b14feb2b266dc5389e1f95228c68e994bcabbcfd39c21a5e4d880f3",
+  "states": 640,
+  "legalMoveQueries": 28160,
+  "kickQueries": 640,
+  "normalizations": 640,
+  "casualExactMatches": 640,
+  "fullTransitionMatches": 640,
+  "tacticalChecks": 16,
+  "errors": []
+}

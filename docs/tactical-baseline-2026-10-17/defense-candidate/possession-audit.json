@@ -1,0 +1,2528 @@
+{
+  "createdAt": "2026-10-17T06:22:47.410Z",
+  "method": "Completed DEV scenarios only, seed610017; frozen v40 shared rules19/shot15. 80 evenly spaced ordinary attacking decision states with a carrier and an available dribble. A safe destination has zero immediate clean-tackle risk according to the tested tacticalTackleRisk geometry, including one full normal challenge plus a shared pawn/king bonus setup. This is a geometric immediate-reply audit, not exhaustive adversarial multi-round search. Pass safety is measured on receipt before exploiting the receiver’s own available dribble; keeper back-passes are separate because release is mandatory. No hidden seed was used in calculating move safety.",
+  "matches": [
+    {
+      "directory": "baseline-v40",
+      "file": "match-000-610017-fouls-white-white.json",
+      "actions": 480
+    },
+    {
+      "directory": "baseline-v40",
+      "file": "match-001-610017-fouls-white-black.json",
+      "actions": 480
+    },
+    {
+      "directory": "baseline-v40",
+      "file": "match-002-610017-fouls-black-white.json",
+      "actions": 480
+    },
+    {
+      "directory": "baseline-v40",
+      "file": "match-003-610017-fouls-black-black.json",
+      "actions": 480
+    },
+    {
+      "directory": "complete-v5",
+      "file": "match-000-610017-fouls-white-white.json",
+      "actions": 480
+    },
+    {
+      "directory": "complete-v5",
+      "file": "match-001-610017-fouls-white-black.json",
+      "actions": 480
+    },
+    {
+      "directory": "complete-v5",
+      "file": "match-002-610017-fouls-black-white.json",
+      "actions": 480
+    }
+  ],
+  "eligibleStates": 462,
+  "sampledStates": 80,
+  "summary": {
+    "meanLegalDribbleDestinations": 10.9,
+    "medianLegalDribbleDestinations": 7,
+    "meanSafeDribbleDestinations": 4.775,
+    "medianSafeDribbleDestinations": 4,
+    "safeDribbleFraction": 0.4380733944954128,
+    "statesWithAtLeastOneSafeDribble": 68,
+    "statesWithAtLeastFiveSafeDribbles": 28,
+    "meanSafeOutfieldPasses": 0.4875,
+    "meanKeeperBackPasses": 0.0875,
+    "statesWithSafeDribbleOrSafeOutfieldPass": 72,
+    "meanTeammatePassesWithin10": 1.225,
+    "forcedPaceLossDestinations": 0
+  },
+  "replay": {
+    "completedPossessionSegments": 118,
+    "censoredPossessionSegments": 7,
+    "meanOwnActionsPerCompletedSegment": 16.991525423728813,
+    "medianOwnActionsPerCompletedSegment": 14,
+    "turnoverReasons": {
+      "shotMiss": 26,
+      "tackle": 30,
+      "offside": 12,
+      "goal": 9,
+      "stalling": 10,
+      "save": 24,
+      "move": 7
+    },
+    "actualTackleAttempts": 37,
+    "actualTackleWins": 30,
+    "actualPasses": 469,
+    "actualInterceptedPasses": 0,
+    "actualSelfCollections": 154
+  },
+  "rows": [
+    {
+      "source": "baseline-v40/match-000-610017-fouls-white-white.json",
+      "step": 2,
+      "team": "white",
+      "pieceType": "B",
+      "position": {
+        "x": 2,
+        "y": 12
+      },
+      "legalDribbleDestinations": 8,
+      "safeDribbleDestinations": 8,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 2,
+      "safeOutfieldPasses": 2,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 0
+    },
+    {
+      "source": "baseline-v40/match-000-610017-fouls-white-white.json",
+      "step": 57,
+      "team": "white",
+      "pieceType": "Q",
+      "position": {
+        "x": 4,
+        "y": 14
+      },
+      "legalDribbleDestinations": 28,
+      "safeDribbleDestinations": 16,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 1,
+      "safeOutfieldPasses": 0,
+      "keeperPasses": 1,
+      "challengedOutfieldPasses": 0
+    },
+    {
+      "source": "baseline-v40/match-000-610017-fouls-white-white.json",
+      "step": 96,
+      "team": "white",
+      "pieceType": "B",
+      "position": {
+        "x": 1,
+        "y": 5
+      },
+      "legalDribbleDestinations": 8,
+      "safeDribbleDestinations": 2,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 2,
+      "safeOutfieldPasses": 1,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 1
+    },
+    {
+      "source": "baseline-v40/match-000-610017-fouls-white-white.json",
+      "step": 143,
+      "team": "black",
+      "pieceType": "P",
+      "position": {
+        "x": 5,
+        "y": 10
+      },
+      "legalDribbleDestinations": 4,
+      "safeDribbleDestinations": 0,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 0,
+      "safeOutfieldPasses": 0,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 0
+    },
+    {
+      "source": "baseline-v40/match-000-610017-fouls-white-white.json",
+      "step": 177,
+      "team": "black",
+      "pieceType": "N",
+      "position": {
+        "x": 8,
+        "y": 6
+      },
+      "legalDribbleDestinations": 8,
+      "safeDribbleDestinations": 2,
+      "knightResistedDestinations": 6,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 0,
+      "safeOutfieldPasses": 0,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 0
+    },
+    {
+      "source": "baseline-v40/match-000-610017-fouls-white-white.json",
+      "step": 206,
+      "team": "black",
+      "pieceType": "P",
+      "position": {
+        "x": 5,
+        "y": 4
+      },
+      "legalDribbleDestinations": 2,
+      "safeDribbleDestinations": 0,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 0,
+      "safeOutfieldPasses": 0,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 0
+    },
+    {
+      "source": "baseline-v40/match-000-610017-fouls-white-white.json",
+      "step": 251,
+      "team": "black",
+      "pieceType": "N",
+      "position": {
+        "x": 9,
+        "y": 9
+      },
+      "legalDribbleDestinations": 7,
+      "safeDribbleDestinations": 1,
+      "knightResistedDestinations": 6,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 0,
+      "safeOutfieldPasses": 0,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 0
+    },
+    {
+      "source": "baseline-v40/match-000-610017-fouls-white-white.json",
+      "step": 307,
+      "team": "white",
+      "pieceType": "P",
+      "position": {
+        "x": 3,
+        "y": 12
+      },
+      "legalDribbleDestinations": 3,
+      "safeDribbleDestinations": 1,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 2,
+      "safeOutfieldPasses": 1,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 1
+    },
+    {
+      "source": "baseline-v40/match-000-610017-fouls-white-white.json",
+      "step": 337,
+      "team": "black",
+      "pieceType": "P",
+      "position": {
+        "x": 5,
+        "y": 5
+      },
+      "legalDribbleDestinations": 3,
+      "safeDribbleDestinations": 0,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 2,
+      "safeOutfieldPasses": 1,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 1
+    },
+    {
+      "source": "baseline-v40/match-000-610017-fouls-white-white.json",
+      "step": 383,
+      "team": "black",
+      "pieceType": "N",
+      "position": {
+        "x": 10,
+        "y": 7
+      },
+      "legalDribbleDestinations": 7,
+      "safeDribbleDestinations": 2,
+      "knightResistedDestinations": 5,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 1,
+      "safeOutfieldPasses": 0,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 1
+    },
+    {
+      "source": "baseline-v40/match-000-610017-fouls-white-white.json",
+      "step": 417,
+      "team": "black",
+      "pieceType": "P",
+      "position": {
+        "x": 5,
+        "y": 6
+      },
+      "legalDribbleDestinations": 3,
+      "safeDribbleDestinations": 1,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 2,
+      "safeOutfieldPasses": 1,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 1
+    },
+    {
+      "source": "baseline-v40/match-000-610017-fouls-white-white.json",
+      "step": 445,
+      "team": "white",
+      "pieceType": "P",
+      "position": {
+        "x": 6,
+        "y": 12
+      },
+      "legalDribbleDestinations": 3,
+      "safeDribbleDestinations": 1,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 2,
+      "safeOutfieldPasses": 1,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 1
+    },
+    {
+      "source": "baseline-v40/match-001-610017-fouls-white-black.json",
+      "step": 19,
+      "team": "black",
+      "pieceType": "N",
+      "position": {
+        "x": 4,
+        "y": 6
+      },
+      "legalDribbleDestinations": 6,
+      "safeDribbleDestinations": 2,
+      "knightResistedDestinations": 4,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 2,
+      "safeOutfieldPasses": 2,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 0
+    },
+    {
+      "source": "baseline-v40/match-001-610017-fouls-white-black.json",
+      "step": 79,
+      "team": "white",
+      "pieceType": "B",
+      "position": {
+        "x": 5,
+        "y": 13
+      },
+      "legalDribbleDestinations": 8,
+      "safeDribbleDestinations": 3,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 1,
+      "safeOutfieldPasses": 1,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 0
+    },
+    {
+      "source": "baseline-v40/match-001-610017-fouls-white-black.json",
+      "step": 117,
+      "team": "black",
+      "pieceType": "K",
+      "position": {
+        "x": 8,
+        "y": 0
+      },
+      "legalDribbleDestinations": 5,
+      "safeDribbleDestinations": 3,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 1,
+      "safeOutfieldPasses": 1,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 0
+    },
+    {
+      "source": "baseline-v40/match-001-610017-fouls-white-black.json",
+      "step": 157,
+      "team": "white",
+      "pieceType": "Q",
+      "position": {
+        "x": 9,
+        "y": 5
+      },
+      "legalDribbleDestinations": 38,
+      "safeDribbleDestinations": 22,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 0,
+      "safeOutfieldPasses": 0,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 0
+    },
+    {
+      "source": "baseline-v40/match-001-610017-fouls-white-black.json",
+      "step": 198,
+      "team": "black",
+      "pieceType": "N",
+      "position": {
+        "x": 4,
+        "y": 6
+      },
+      "legalDribbleDestinations": 6,
+      "safeDribbleDestinations": 2,
+      "knightResistedDestinations": 4,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 2,
+      "safeOutfieldPasses": 2,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 0
+    },
+    {
+      "source": "baseline-v40/match-001-610017-fouls-white-black.json",
+      "step": 227,
+      "team": "black",
+      "pieceType": "Q",
+      "position": {
+        "x": 8,
+        "y": 11
+      },
+      "legalDribbleDestinations": 26,
+      "safeDribbleDestinations": 5,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 1,
+      "safeOutfieldPasses": 0,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 1
+    },
+    {
+      "source": "baseline-v40/match-001-610017-fouls-white-black.json",
+      "step": 283,
+      "team": "black",
+      "pieceType": "B",
+      "position": {
+        "x": 8,
+        "y": 7
+      },
+      "legalDribbleDestinations": 25,
+      "safeDribbleDestinations": 16,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 0,
+      "safeOutfieldPasses": 0,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 0
+    },
+    {
+      "source": "baseline-v40/match-001-610017-fouls-white-black.json",
+      "step": 329,
+      "team": "black",
+      "pieceType": "K",
+      "position": {
+        "x": 6,
+        "y": 0
+      },
+      "legalDribbleDestinations": 5,
+      "safeDribbleDestinations": 4,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 0,
+      "safeOutfieldPasses": 0,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 0
+    },
+    {
+      "source": "baseline-v40/match-001-610017-fouls-white-black.json",
+      "step": 376,
+      "team": "white",
+      "pieceType": "Q",
+      "position": {
+        "x": 3,
+        "y": 0
+      },
+      "legalDribbleDestinations": 20,
+      "safeDribbleDestinations": 15,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 1,
+      "safeOutfieldPasses": 0,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 1
+    },
+    {
+      "source": "baseline-v40/match-001-610017-fouls-white-black.json",
+      "step": 411,
+      "team": "black",
+      "pieceType": "N",
+      "position": {
+        "x": 3,
+        "y": 7
+      },
+      "legalDribbleDestinations": 8,
+      "safeDribbleDestinations": 6,
+      "knightResistedDestinations": 2,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 0,
+      "safeOutfieldPasses": 0,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 0
+    },
+    {
+      "source": "baseline-v40/match-001-610017-fouls-white-black.json",
+      "step": 457,
+      "team": "black",
+      "pieceType": "P",
+      "position": {
+        "x": 6,
+        "y": 6
+      },
+      "legalDribbleDestinations": 4,
+      "safeDribbleDestinations": 0,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 2,
+      "safeOutfieldPasses": 0,
+      "keeperPasses": 1,
+      "challengedOutfieldPasses": 1
+    },
+    {
+      "source": "baseline-v40/match-001-610017-fouls-white-black.json",
+      "step": 472,
+      "team": "white",
+      "pieceType": "P",
+      "position": {
+        "x": 7,
+        "y": 7
+      },
+      "legalDribbleDestinations": 3,
+      "safeDribbleDestinations": 1,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 1,
+      "safeOutfieldPasses": 1,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 0
+    },
+    {
+      "source": "baseline-v40/match-002-610017-fouls-black-white.json",
+      "step": 78,
+      "team": "white",
+      "pieceType": "B",
+      "position": {
+        "x": 11,
+        "y": 12
+      },
+      "legalDribbleDestinations": 7,
+      "safeDribbleDestinations": 4,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 3,
+      "safeOutfieldPasses": 2,
+      "keeperPasses": 1,
+      "challengedOutfieldPasses": 0
+    },
+    {
+      "source": "baseline-v40/match-002-610017-fouls-black-white.json",
+      "step": 118,
+      "team": "black",
+      "pieceType": "Q",
+      "position": {
+        "x": 11,
+        "y": 1
+      },
+      "legalDribbleDestinations": 19,
+      "safeDribbleDestinations": 8,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 2,
+      "safeOutfieldPasses": 1,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 1
+    },
+    {
+      "source": "baseline-v40/match-002-610017-fouls-black-white.json",
+      "step": 150,
+      "team": "white",
+      "pieceType": "P",
+      "position": {
+        "x": 8,
+        "y": 3
+      },
+      "legalDribbleDestinations": 3,
+      "safeDribbleDestinations": 0,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 1,
+      "safeOutfieldPasses": 0,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 1
+    },
+    {
+      "source": "baseline-v40/match-002-610017-fouls-black-white.json",
+      "step": 167,
+      "team": "white",
+      "pieceType": "B",
+      "position": {
+        "x": 4,
+        "y": 10
+      },
+      "legalDribbleDestinations": 18,
+      "safeDribbleDestinations": 7,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 2,
+      "safeOutfieldPasses": 0,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 2
+    },
+    {
+      "source": "baseline-v40/match-002-610017-fouls-black-white.json",
+      "step": 201,
+      "team": "white",
+      "pieceType": "P",
+      "position": {
+        "x": 7,
+        "y": 6
+      },
+      "legalDribbleDestinations": 2,
+      "safeDribbleDestinations": 0,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 1,
+      "safeOutfieldPasses": 0,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 1
+    },
+    {
+      "source": "baseline-v40/match-002-610017-fouls-black-white.json",
+      "step": 257,
+      "team": "white",
+      "pieceType": "Q",
+      "position": {
+        "x": 7,
+        "y": 13
+      },
+      "legalDribbleDestinations": 24,
+      "safeDribbleDestinations": 8,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 3,
+      "safeOutfieldPasses": 0,
+      "keeperPasses": 1,
+      "challengedOutfieldPasses": 2
+    },
+    {
+      "source": "baseline-v40/match-002-610017-fouls-black-white.json",
+      "step": 303,
+      "team": "black",
+      "pieceType": "K",
+      "position": {
+        "x": 7,
+        "y": 0
+      },
+      "legalDribbleDestinations": 4,
+      "safeDribbleDestinations": 3,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 2,
+      "safeOutfieldPasses": 0,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 2
+    },
+    {
+      "source": "baseline-v40/match-002-610017-fouls-black-white.json",
+      "step": 339,
+      "team": "black",
+      "pieceType": "B",
+      "position": {
+        "x": 5,
+        "y": 11
+      },
+      "legalDribbleDestinations": 19,
+      "safeDribbleDestinations": 9,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 0,
+      "safeOutfieldPasses": 0,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 0
+    },
+    {
+      "source": "baseline-v40/match-002-610017-fouls-black-white.json",
+      "step": 428,
+      "team": "white",
+      "pieceType": "K",
+      "position": {
+        "x": 7,
+        "y": 16
+      },
+      "legalDribbleDestinations": 5,
+      "safeDribbleDestinations": 4,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 1,
+      "safeOutfieldPasses": 1,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 0
+    },
+    {
+      "source": "baseline-v40/match-002-610017-fouls-black-white.json",
+      "step": 472,
+      "team": "white",
+      "pieceType": "N",
+      "position": {
+        "x": 10,
+        "y": 1
+      },
+      "legalDribbleDestinations": 3,
+      "safeDribbleDestinations": 0,
+      "knightResistedDestinations": 3,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 0,
+      "safeOutfieldPasses": 0,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 0
+    },
+    {
+      "source": "baseline-v40/match-003-610017-fouls-black-black.json",
+      "step": 26,
+      "team": "black",
+      "pieceType": "R",
+      "position": {
+        "x": 7,
+        "y": 10
+      },
+      "legalDribbleDestinations": 11,
+      "safeDribbleDestinations": 2,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 1,
+      "safeOutfieldPasses": 0,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 1
+    },
+    {
+      "source": "baseline-v40/match-003-610017-fouls-black-black.json",
+      "step": 40,
+      "team": "black",
+      "pieceType": "N",
+      "position": {
+        "x": 7,
+        "y": 8
+      },
+      "legalDribbleDestinations": 6,
+      "safeDribbleDestinations": 4,
+      "knightResistedDestinations": 2,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 1,
+      "safeOutfieldPasses": 0,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 1
+    },
+    {
+      "source": "baseline-v40/match-003-610017-fouls-black-black.json",
+      "step": 62,
+      "team": "black",
+      "pieceType": "Q",
+      "position": {
+        "x": 7,
+        "y": 9
+      },
+      "legalDribbleDestinations": 26,
+      "safeDribbleDestinations": 9,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 3,
+      "safeOutfieldPasses": 1,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 2
+    },
+    {
+      "source": "baseline-v40/match-003-610017-fouls-black-black.json",
+      "step": 124,
+      "team": "black",
+      "pieceType": "Q",
+      "position": {
+        "x": 6,
+        "y": 7
+      },
+      "legalDribbleDestinations": 30,
+      "safeDribbleDestinations": 16,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 3,
+      "safeOutfieldPasses": 1,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 2
+    },
+    {
+      "source": "baseline-v40/match-003-610017-fouls-black-black.json",
+      "step": 151,
+      "team": "white",
+      "pieceType": "P",
+      "position": {
+        "x": 6,
+        "y": 10
+      },
+      "legalDribbleDestinations": 4,
+      "safeDribbleDestinations": 0,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 1,
+      "safeOutfieldPasses": 0,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 1
+    },
+    {
+      "source": "baseline-v40/match-003-610017-fouls-black-black.json",
+      "step": 191,
+      "team": "white",
+      "pieceType": "N",
+      "position": {
+        "x": 9,
+        "y": 10
+      },
+      "legalDribbleDestinations": 8,
+      "safeDribbleDestinations": 5,
+      "knightResistedDestinations": 3,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 0,
+      "safeOutfieldPasses": 0,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 0
+    },
+    {
+      "source": "baseline-v40/match-003-610017-fouls-black-black.json",
+      "step": 258,
+      "team": "white",
+      "pieceType": "N",
+      "position": {
+        "x": 8,
+        "y": 9
+      },
+      "legalDribbleDestinations": 5,
+      "safeDribbleDestinations": 3,
+      "knightResistedDestinations": 2,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 2,
+      "safeOutfieldPasses": 0,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 2
+    },
+    {
+      "source": "baseline-v40/match-003-610017-fouls-black-black.json",
+      "step": 316,
+      "team": "white",
+      "pieceType": "N",
+      "position": {
+        "x": 6,
+        "y": 10
+      },
+      "legalDribbleDestinations": 7,
+      "safeDribbleDestinations": 2,
+      "knightResistedDestinations": 5,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 1,
+      "safeOutfieldPasses": 0,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 1
+    },
+    {
+      "source": "baseline-v40/match-003-610017-fouls-black-black.json",
+      "step": 358,
+      "team": "black",
+      "pieceType": "Q",
+      "position": {
+        "x": 8,
+        "y": 11
+      },
+      "legalDribbleDestinations": 30,
+      "safeDribbleDestinations": 11,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 1,
+      "safeOutfieldPasses": 0,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 1
+    },
+    {
+      "source": "baseline-v40/match-003-610017-fouls-black-black.json",
+      "step": 455,
+      "team": "white",
+      "pieceType": "B",
+      "position": {
+        "x": 11,
+        "y": 12
+      },
+      "legalDribbleDestinations": 7,
+      "safeDribbleDestinations": 4,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 3,
+      "safeOutfieldPasses": 2,
+      "keeperPasses": 1,
+      "challengedOutfieldPasses": 0
+    },
+    {
+      "source": "complete-v5/match-000-610017-fouls-white-white.json",
+      "step": 23,
+      "team": "white",
+      "pieceType": "R",
+      "position": {
+        "x": 5,
+        "y": 5
+      },
+      "legalDribbleDestinations": 17,
+      "safeDribbleDestinations": 7,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 0,
+      "safeOutfieldPasses": 0,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 0
+    },
+    {
+      "source": "complete-v5/match-000-610017-fouls-white-white.json",
+      "step": 65,
+      "team": "white",
+      "pieceType": "B",
+      "position": {
+        "x": 12,
+        "y": 16
+      },
+      "legalDribbleDestinations": 5,
+      "safeDribbleDestinations": 5,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 1,
+      "safeOutfieldPasses": 0,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 1
+    },
+    {
+      "source": "complete-v5/match-000-610017-fouls-white-white.json",
+      "step": 101,
+      "team": "black",
+      "pieceType": "B",
+      "position": {
+        "x": 2,
+        "y": 4
+      },
+      "legalDribbleDestinations": 7,
+      "safeDribbleDestinations": 3,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 1,
+      "safeOutfieldPasses": 0,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 1
+    },
+    {
+      "source": "complete-v5/match-000-610017-fouls-white-white.json",
+      "step": 136,
+      "team": "black",
+      "pieceType": "P",
+      "position": {
+        "x": 5,
+        "y": 4
+      },
+      "legalDribbleDestinations": 3,
+      "safeDribbleDestinations": 2,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 1,
+      "safeOutfieldPasses": 0,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 1
+    },
+    {
+      "source": "complete-v5/match-000-610017-fouls-white-white.json",
+      "step": 165,
+      "team": "black",
+      "pieceType": "P",
+      "position": {
+        "x": 6,
+        "y": 5
+      },
+      "legalDribbleDestinations": 3,
+      "safeDribbleDestinations": 0,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 1,
+      "safeOutfieldPasses": 1,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 0
+    },
+    {
+      "source": "complete-v5/match-000-610017-fouls-white-white.json",
+      "step": 183,
+      "team": "white",
+      "pieceType": "P",
+      "position": {
+        "x": 8,
+        "y": 10
+      },
+      "legalDribbleDestinations": 3,
+      "safeDribbleDestinations": 1,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 0,
+      "safeOutfieldPasses": 0,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 0
+    },
+    {
+      "source": "complete-v5/match-000-610017-fouls-white-white.json",
+      "step": 221,
+      "team": "black",
+      "pieceType": "K",
+      "position": {
+        "x": 7,
+        "y": 0
+      },
+      "legalDribbleDestinations": 5,
+      "safeDribbleDestinations": 4,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 1,
+      "safeOutfieldPasses": 1,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 0
+    },
+    {
+      "source": "complete-v5/match-000-610017-fouls-white-white.json",
+      "step": 246,
+      "team": "white",
+      "pieceType": "R",
+      "position": {
+        "x": 5,
+        "y": 5
+      },
+      "legalDribbleDestinations": 11,
+      "safeDribbleDestinations": 2,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 1,
+      "safeOutfieldPasses": 0,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 1
+    },
+    {
+      "source": "complete-v5/match-000-610017-fouls-white-white.json",
+      "step": 295,
+      "team": "black",
+      "pieceType": "N",
+      "position": {
+        "x": 5,
+        "y": 8
+      },
+      "legalDribbleDestinations": 8,
+      "safeDribbleDestinations": 2,
+      "knightResistedDestinations": 6,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 0,
+      "safeOutfieldPasses": 0,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 0
+    },
+    {
+      "source": "complete-v5/match-000-610017-fouls-white-white.json",
+      "step": 329,
+      "team": "black",
+      "pieceType": "N",
+      "position": {
+        "x": 8,
+        "y": 6
+      },
+      "legalDribbleDestinations": 7,
+      "safeDribbleDestinations": 4,
+      "knightResistedDestinations": 3,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 1,
+      "safeOutfieldPasses": 1,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 0
+    },
+    {
+      "source": "complete-v5/match-000-610017-fouls-white-white.json",
+      "step": 380,
+      "team": "black",
+      "pieceType": "P",
+      "position": {
+        "x": 7,
+        "y": 5
+      },
+      "legalDribbleDestinations": 4,
+      "safeDribbleDestinations": 1,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 0,
+      "safeOutfieldPasses": 0,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 0
+    },
+    {
+      "source": "complete-v5/match-000-610017-fouls-white-white.json",
+      "step": 396,
+      "team": "white",
+      "pieceType": "Q",
+      "position": {
+        "x": 6,
+        "y": 5
+      },
+      "legalDribbleDestinations": 17,
+      "safeDribbleDestinations": 9,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 3,
+      "safeOutfieldPasses": 0,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 3
+    },
+    {
+      "source": "complete-v5/match-000-610017-fouls-white-white.json",
+      "step": 432,
+      "team": "black",
+      "pieceType": "P",
+      "position": {
+        "x": 6,
+        "y": 6
+      },
+      "legalDribbleDestinations": 2,
+      "safeDribbleDestinations": 0,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 2,
+      "safeOutfieldPasses": 2,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 0
+    },
+    {
+      "source": "complete-v5/match-000-610017-fouls-white-white.json",
+      "step": 445,
+      "team": "black",
+      "pieceType": "K",
+      "position": {
+        "x": 5,
+        "y": 0
+      },
+      "legalDribbleDestinations": 5,
+      "safeDribbleDestinations": 5,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 1,
+      "safeOutfieldPasses": 0,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 1
+    },
+    {
+      "source": "complete-v5/match-001-610017-fouls-white-black.json",
+      "step": 18,
+      "team": "black",
+      "pieceType": "N",
+      "position": {
+        "x": 4,
+        "y": 6
+      },
+      "legalDribbleDestinations": 6,
+      "safeDribbleDestinations": 2,
+      "knightResistedDestinations": 4,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 2,
+      "safeOutfieldPasses": 2,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 0
+    },
+    {
+      "source": "complete-v5/match-001-610017-fouls-white-black.json",
+      "step": 47,
+      "team": "black",
+      "pieceType": "Q",
+      "position": {
+        "x": 8,
+        "y": 11
+      },
+      "legalDribbleDestinations": 26,
+      "safeDribbleDestinations": 5,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 1,
+      "safeOutfieldPasses": 0,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 1
+    },
+    {
+      "source": "complete-v5/match-001-610017-fouls-white-black.json",
+      "step": 85,
+      "team": "black",
+      "pieceType": "P",
+      "position": {
+        "x": 6,
+        "y": 6
+      },
+      "legalDribbleDestinations": 4,
+      "safeDribbleDestinations": 2,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 0,
+      "safeOutfieldPasses": 0,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 0
+    },
+    {
+      "source": "complete-v5/match-001-610017-fouls-white-black.json",
+      "step": 133,
+      "team": "white",
+      "pieceType": "Q",
+      "position": {
+        "x": 5,
+        "y": 6
+      },
+      "legalDribbleDestinations": 32,
+      "safeDribbleDestinations": 12,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 1,
+      "safeOutfieldPasses": 0,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 1
+    },
+    {
+      "source": "complete-v5/match-001-610017-fouls-white-black.json",
+      "step": 186,
+      "team": "white",
+      "pieceType": "Q",
+      "position": {
+        "x": 9,
+        "y": 2
+      },
+      "legalDribbleDestinations": 19,
+      "safeDribbleDestinations": 8,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 2,
+      "safeOutfieldPasses": 0,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 2
+    },
+    {
+      "source": "complete-v5/match-001-610017-fouls-white-black.json",
+      "step": 233,
+      "team": "black",
+      "pieceType": "P",
+      "position": {
+        "x": 6,
+        "y": 5
+      },
+      "legalDribbleDestinations": 4,
+      "safeDribbleDestinations": 4,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 3,
+      "safeOutfieldPasses": 1,
+      "keeperPasses": 1,
+      "challengedOutfieldPasses": 1
+    },
+    {
+      "source": "complete-v5/match-001-610017-fouls-white-black.json",
+      "step": 276,
+      "team": "white",
+      "pieceType": "N",
+      "position": {
+        "x": 8,
+        "y": 8
+      },
+      "legalDribbleDestinations": 6,
+      "safeDribbleDestinations": 3,
+      "knightResistedDestinations": 3,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 0,
+      "safeOutfieldPasses": 0,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 0
+    },
+    {
+      "source": "complete-v5/match-001-610017-fouls-white-black.json",
+      "step": 319,
+      "team": "black",
+      "pieceType": "P",
+      "position": {
+        "x": 8,
+        "y": 7
+      },
+      "legalDribbleDestinations": 3,
+      "safeDribbleDestinations": 1,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 1,
+      "safeOutfieldPasses": 1,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 0
+    },
+    {
+      "source": "complete-v5/match-001-610017-fouls-white-black.json",
+      "step": 345,
+      "team": "white",
+      "pieceType": "Q",
+      "position": {
+        "x": 9,
+        "y": 11
+      },
+      "legalDribbleDestinations": 32,
+      "safeDribbleDestinations": 17,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 1,
+      "safeOutfieldPasses": 0,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 1
+    },
+    {
+      "source": "complete-v5/match-001-610017-fouls-white-black.json",
+      "step": 393,
+      "team": "white",
+      "pieceType": "Q",
+      "position": {
+        "x": 9,
+        "y": 11
+      },
+      "legalDribbleDestinations": 27,
+      "safeDribbleDestinations": 11,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 1,
+      "safeOutfieldPasses": 0,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 1
+    },
+    {
+      "source": "complete-v5/match-001-610017-fouls-white-black.json",
+      "step": 438,
+      "team": "white",
+      "pieceType": "K",
+      "position": {
+        "x": 7,
+        "y": 14
+      },
+      "legalDribbleDestinations": 7,
+      "safeDribbleDestinations": 4,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 3,
+      "safeOutfieldPasses": 1,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 2
+    },
+    {
+      "source": "complete-v5/match-002-610017-fouls-black-white.json",
+      "step": 42,
+      "team": "black",
+      "pieceType": "K",
+      "position": {
+        "x": 5,
+        "y": 0
+      },
+      "legalDribbleDestinations": 5,
+      "safeDribbleDestinations": 3,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 1,
+      "safeOutfieldPasses": 1,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 0
+    },
+    {
+      "source": "complete-v5/match-002-610017-fouls-black-white.json",
+      "step": 67,
+      "team": "white",
+      "pieceType": "K",
+      "position": {
+        "x": 5,
+        "y": 16
+      },
+      "legalDribbleDestinations": 5,
+      "safeDribbleDestinations": 4,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 1,
+      "safeOutfieldPasses": 1,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 0
+    },
+    {
+      "source": "complete-v5/match-002-610017-fouls-black-white.json",
+      "step": 115,
+      "team": "white",
+      "pieceType": "P",
+      "position": {
+        "x": 6,
+        "y": 9
+      },
+      "legalDribbleDestinations": 4,
+      "safeDribbleDestinations": 1,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 1,
+      "safeOutfieldPasses": 0,
+      "keeperPasses": 1,
+      "challengedOutfieldPasses": 0
+    },
+    {
+      "source": "complete-v5/match-002-610017-fouls-black-white.json",
+      "step": 144,
+      "team": "white",
+      "pieceType": "K",
+      "position": {
+        "x": 5,
+        "y": 16
+      },
+      "legalDribbleDestinations": 5,
+      "safeDribbleDestinations": 4,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 0,
+      "safeOutfieldPasses": 0,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 0
+    },
+    {
+      "source": "complete-v5/match-002-610017-fouls-black-white.json",
+      "step": 185,
+      "team": "white",
+      "pieceType": "Q",
+      "position": {
+        "x": 5,
+        "y": 4
+      },
+      "legalDribbleDestinations": 37,
+      "safeDribbleDestinations": 12,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 1,
+      "safeOutfieldPasses": 1,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 0
+    },
+    {
+      "source": "complete-v5/match-002-610017-fouls-black-white.json",
+      "step": 236,
+      "team": "white",
+      "pieceType": "R",
+      "position": {
+        "x": 3,
+        "y": 10
+      },
+      "legalDribbleDestinations": 25,
+      "safeDribbleDestinations": 12,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 0,
+      "safeOutfieldPasses": 0,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 0
+    },
+    {
+      "source": "complete-v5/match-002-610017-fouls-black-white.json",
+      "step": 281,
+      "team": "white",
+      "pieceType": "R",
+      "position": {
+        "x": 2,
+        "y": 9
+      },
+      "legalDribbleDestinations": 9,
+      "safeDribbleDestinations": 5,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 2,
+      "safeOutfieldPasses": 1,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 1
+    },
+    {
+      "source": "complete-v5/match-002-610017-fouls-black-white.json",
+      "step": 316,
+      "team": "black",
+      "pieceType": "N",
+      "position": {
+        "x": 9,
+        "y": 9
+      },
+      "legalDribbleDestinations": 6,
+      "safeDribbleDestinations": 4,
+      "knightResistedDestinations": 2,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 2,
+      "safeOutfieldPasses": 0,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 2
+    },
+    {
+      "source": "complete-v5/match-002-610017-fouls-black-white.json",
+      "step": 362,
+      "team": "black",
+      "pieceType": "Q",
+      "position": {
+        "x": 8,
+        "y": 10
+      },
+      "legalDribbleDestinations": 30,
+      "safeDribbleDestinations": 11,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 3,
+      "safeOutfieldPasses": 2,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 1
+    },
+    {
+      "source": "complete-v5/match-002-610017-fouls-black-white.json",
+      "step": 398,
+      "team": "white",
+      "pieceType": "P",
+      "position": {
+        "x": 5,
+        "y": 7
+      },
+      "legalDribbleDestinations": 4,
+      "safeDribbleDestinations": 0,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 1,
+      "safeOutfieldPasses": 0,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 1
+    },
+    {
+      "source": "complete-v5/match-002-610017-fouls-black-white.json",
+      "step": 440,
+      "team": "white",
+      "pieceType": "P",
+      "position": {
+        "x": 5,
+        "y": 6
+      },
+      "legalDribbleDestinations": 3,
+      "safeDribbleDestinations": 0,
+      "knightResistedDestinations": 0,
+      "forcedPaceLoss": 0,
+      "teammatePassesWithin10": 2,
+      "safeOutfieldPasses": 1,
+      "keeperPasses": 0,
+      "challengedOutfieldPasses": 1
+    }
+  ],
+  "segments": [
+    {
+      "source": "baseline-v40/match-000-610017-fouls-white-white.json",
+      "team": "white",
+      "start": 0,
+      "end": 14,
+      "ownActions": 9,
+      "reason": "shotMiss"
+    },
+    {
+      "source": "baseline-v40/match-000-610017-fouls-white-white.json",
+      "team": "black",
+      "start": 15,
+      "end": 56,
+      "ownActions": 26,
+      "reason": "tackle"
+    },
+    {
+      "source": "baseline-v40/match-000-610017-fouls-white-white.json",
+      "team": "white",
+      "start": 57,
+      "end": 106,
+      "ownActions": 31,
+      "reason": "shotMiss"
+    },
+    {
+      "source": "baseline-v40/match-000-610017-fouls-white-white.json",
+      "team": "black",
+      "start": 107,
+      "end": 117,
+      "ownActions": 7,
+      "reason": "offside"
+    },
+    {
+      "source": "baseline-v40/match-000-610017-fouls-white-white.json",
+      "team": "white",
+      "start": 118,
+      "end": 135,
+      "ownActions": 11,
+      "reason": "shotMiss"
+    },
+    {
+      "source": "baseline-v40/match-000-610017-fouls-white-white.json",
+      "team": "black",
+      "start": 136,
+      "end": 146,
+      "ownActions": 7,
+      "reason": "offside"
+    },
+    {
+      "source": "baseline-v40/match-000-610017-fouls-white-white.json",
+      "team": "white",
+      "start": 147,
+      "end": 170,
+      "ownActions": 15,
+      "reason": "shotMiss"
+    },
+    {
+      "source": "baseline-v40/match-000-610017-fouls-white-white.json",
+      "team": "black",
+      "start": 171,
+      "end": 181,
+      "ownActions": 7,
+      "reason": "offside"
+    },
+    {
+      "source": "baseline-v40/match-000-610017-fouls-white-white.json",
+      "team": "white",
+      "start": 182,
+      "end": 199,
+      "ownActions": 11,
+      "reason": "shotMiss"
+    },
+    {
+      "source": "baseline-v40/match-000-610017-fouls-white-white.json",
+      "team": "black",
+      "start": 200,
+      "end": 209,
+      "ownActions": 6,
+      "reason": "tackle"
+    },
+    {
+      "source": "baseline-v40/match-000-610017-fouls-white-white.json",
+      "team": "white",
+      "start": 210,
+      "end": 216,
+      "ownActions": 4,
+      "reason": "goal"
+    },
+    {
+      "source": "baseline-v40/match-000-610017-fouls-white-white.json",
+      "team": "black",
+      "start": 217,
+      "end": 284,
+      "ownActions": 42,
+      "reason": "stalling"
+    },
+    {
+      "source": "baseline-v40/match-000-610017-fouls-white-white.json",
+      "team": "white",
+      "start": 285,
+      "end": 318,
+      "ownActions": 21,
+      "reason": "save"
+    },
+    {
+      "source": "baseline-v40/match-000-610017-fouls-white-white.json",
+      "team": "black",
+      "start": 319,
+      "end": 339,
+      "ownActions": 14,
+      "reason": "tackle"
+    },
+    {
+      "source": "baseline-v40/match-000-610017-fouls-white-white.json",
+      "team": "white",
+      "start": 340,
+      "end": 359,
+      "ownActions": 12,
+      "reason": "goal"
+    },
+    {
+      "source": "baseline-v40/match-000-610017-fouls-white-white.json",
+      "team": "black",
+      "start": 360,
+      "end": 444,
+      "ownActions": 55,
+      "reason": "tackle"
+    },
+    {
+      "source": "baseline-v40/match-000-610017-fouls-white-white.json",
+      "team": "white",
+      "start": 445,
+      "end": 469,
+      "ownActions": 16,
+      "reason": "shotMiss"
+    },
+    {
+      "source": "baseline-v40/match-000-610017-fouls-white-white.json",
+      "team": "black",
+      "start": 470,
+      "end": 479,
+      "ownActions": 7,
+      "reason": "horizon",
+      "censored": true
+    },
+    {
+      "source": "baseline-v40/match-001-610017-fouls-white-black.json",
+      "team": "black",
+      "start": 0,
+      "end": 64,
+      "ownActions": 40,
+      "reason": "stalling"
+    },
+    {
+      "source": "baseline-v40/match-001-610017-fouls-white-black.json",
+      "team": "white",
+      "start": 65,
+      "end": 116,
+      "ownActions": 31,
+      "reason": "save"
+    },
+    {
+      "source": "baseline-v40/match-001-610017-fouls-white-black.json",
+      "team": "black",
+      "start": 117,
+      "end": 143,
+      "ownActions": 17,
+      "reason": "tackle"
+    },
+    {
+      "source": "baseline-v40/match-001-610017-fouls-white-black.json",
+      "team": "white",
+      "start": 144,
+      "end": 162,
+      "ownActions": 12,
+      "reason": "save"
+    },
+    {
+      "source": "baseline-v40/match-001-610017-fouls-white-black.json",
+      "team": "black",
+      "start": 163,
+      "end": 173,
+      "ownActions": 7,
+      "reason": "tackle"
+    },
+    {
+      "source": "baseline-v40/match-001-610017-fouls-white-black.json",
+      "team": "white",
+      "start": 174,
+      "end": 180,
+      "ownActions": 4,
+      "reason": "goal"
+    },
+    {
+      "source": "baseline-v40/match-001-610017-fouls-white-black.json",
+      "team": "black",
+      "start": 181,
+      "end": 244,
+      "ownActions": 40,
+      "reason": "stalling"
+    },
+    {
+      "source": "baseline-v40/match-001-610017-fouls-white-black.json",
+      "team": "white",
+      "start": 245,
+      "end": 276,
+      "ownActions": 19,
+      "reason": "shotMiss"
+    },
+    {
+      "source": "baseline-v40/match-001-610017-fouls-white-black.json",
+      "team": "black",
+      "start": 277,
+      "end": 315,
+      "ownActions": 24,
+      "reason": "move"
+    },
+    {
+      "source": "baseline-v40/match-001-610017-fouls-white-black.json",
+      "team": "white",
+      "start": 316,
+      "end": 328,
+      "ownActions": 8,
+      "reason": "save"
+    },
+    {
+      "source": "baseline-v40/match-001-610017-fouls-white-black.json",
+      "team": "black",
+      "start": 329,
+      "end": 355,
+      "ownActions": 17,
+      "reason": "tackle"
+    },
+    {
+      "source": "baseline-v40/match-001-610017-fouls-white-black.json",
+      "team": "white",
+      "start": 356,
+      "end": 381,
+      "ownActions": 16,
+      "reason": "shotMiss"
+    },
+    {
+      "source": "baseline-v40/match-001-610017-fouls-white-black.json",
+      "team": "black",
+      "start": 382,
+      "end": 397,
+      "ownActions": 10,
+      "reason": "tackle"
+    },
+    {
+      "source": "baseline-v40/match-001-610017-fouls-white-black.json",
+      "team": "white",
+      "start": 398,
+      "end": 403,
+      "ownActions": 4,
+      "reason": "offside"
+    },
+    {
+      "source": "baseline-v40/match-001-610017-fouls-white-black.json",
+      "team": "black",
+      "start": 404,
+      "end": 421,
+      "ownActions": 11,
+      "reason": "shotMiss"
+    },
+    {
+      "source": "baseline-v40/match-001-610017-fouls-white-black.json",
+      "team": "white",
+      "start": 422,
+      "end": 448,
+      "ownActions": 16,
+      "reason": "save"
+    },
+    {
+      "source": "baseline-v40/match-001-610017-fouls-white-black.json",
+      "team": "black",
+      "start": 449,
+      "end": 470,
+      "ownActions": 15,
+      "reason": "tackle"
+    },
+    {
+      "source": "baseline-v40/match-001-610017-fouls-white-black.json",
+      "team": "white",
+      "start": 471,
+      "end": 479,
+      "ownActions": 6,
+      "reason": "horizon",
+      "censored": true
+    },
+    {
+      "source": "baseline-v40/match-002-610017-fouls-black-white.json",
+      "team": "white",
+      "start": 0,
+      "end": 56,
+      "ownActions": 34,
+      "reason": "stalling"
+    },
+    {
+      "source": "baseline-v40/match-002-610017-fouls-black-white.json",
+      "team": "black",
+      "start": 57,
+      "end": 70,
+      "ownActions": 9,
+      "reason": "save"
+    },
+    {
+      "source": "baseline-v40/match-002-610017-fouls-black-white.json",
+      "team": "white",
+      "start": 71,
+      "end": 117,
+      "ownActions": 30,
+      "reason": "tackle"
+    },
+    {
+      "source": "baseline-v40/match-002-610017-fouls-black-white.json",
+      "team": "black",
+      "start": 118,
+      "end": 130,
+      "ownActions": 8,
+      "reason": "shotMiss"
+    },
+    {
+      "source": "baseline-v40/match-002-610017-fouls-black-white.json",
+      "team": "white",
+      "start": 131,
+      "end": 146,
+      "ownActions": 10,
+      "reason": "tackle"
+    },
+    {
+      "source": "baseline-v40/match-002-610017-fouls-black-white.json",
+      "team": "black",
+      "start": 147,
+      "end": 149,
+      "ownActions": 2,
+      "reason": "tackle"
+    },
+    {
+      "source": "baseline-v40/match-002-610017-fouls-black-white.json",
+      "team": "white",
+      "start": 150,
+      "end": 154,
+      "ownActions": 3,
+      "reason": "tackle"
+    },
+    {
+      "source": "baseline-v40/match-002-610017-fouls-black-white.json",
+      "team": "black",
+      "start": 155,
+      "end": 160,
+      "ownActions": 4,
+      "reason": "offside"
+    },
+    {
+      "source": "baseline-v40/match-002-610017-fouls-black-white.json",
+      "team": "white",
+      "start": 161,
+      "end": 204,
+      "ownActions": 28,
+      "reason": "tackle"
+    },
+    {
+      "source": "baseline-v40/match-002-610017-fouls-black-white.json",
+      "team": "black",
+      "start": 205,
+      "end": 224,
+      "ownActions": 12,
+      "reason": "shotMiss"
+    },
+    {
+      "source": "baseline-v40/match-002-610017-fouls-black-white.json",
+      "team": "white",
+      "start": 225,
+      "end": 245,
+      "ownActions": 13,
+      "reason": "stalling"
+    },
+    {
+      "source": "baseline-v40/match-002-610017-fouls-black-white.json",
+      "team": "black",
+      "start": 246,
+      "end": 250,
+      "ownActions": 3,
+      "reason": "offside"
+    },
+    {
+      "source": "baseline-v40/match-002-610017-fouls-black-white.json",
+      "team": "white",
+      "start": 251,
+      "end": 301,
+      "ownActions": 33,
+      "reason": "tackle"
+    },
+    {
+      "source": "baseline-v40/match-002-610017-fouls-black-white.json",
+      "team": "black",
+      "start": 302,
+      "end": 357,
+      "ownActions": 35,
+      "reason": "goal"
+    },
+    {
+      "source": "baseline-v40/match-002-610017-fouls-black-white.json",
+      "team": "white",
+      "start": 358,
+      "end": 413,
+      "ownActions": 34,
+      "reason": "stalling"
+    },
+    {
+      "source": "baseline-v40/match-002-610017-fouls-black-white.json",
+      "team": "black",
+      "start": 414,
+      "end": 427,
+      "ownActions": 9,
+      "reason": "save"
+    },
+    {
+      "source": "baseline-v40/match-002-610017-fouls-black-white.json",
+      "team": "white",
+      "start": 428,
+      "end": 479,
+      "ownActions": 33,
+      "reason": "horizon",
+      "censored": true
+    },
+    {
+      "source": "baseline-v40/match-003-610017-fouls-black-black.json",
+      "team": "black",
+      "start": 0,
+      "end": 72,
+      "ownActions": 47,
+      "reason": "shotMiss"
+    },
+    {
+      "source": "baseline-v40/match-003-610017-fouls-black-black.json",
+      "team": "white",
+      "start": 73,
+      "end": 117,
+      "ownActions": 28,
+      "reason": "tackle"
+    },
+    {
+      "source": "baseline-v40/match-003-610017-fouls-black-black.json",
+      "team": "black",
+      "start": 118,
+      "end": 142,
+      "ownActions": 16,
+      "reason": "save"
+    },
+    {
+      "source": "baseline-v40/match-003-610017-fouls-black-black.json",
+      "team": "white",
+      "start": 143,
+      "end": 160,
+      "ownActions": 12,
+      "reason": "tackle"
+    },
+    {
+      "source": "baseline-v40/match-003-610017-fouls-black-black.json",
+      "team": "black",
+      "start": 161,
+      "end": 173,
+      "ownActions": 8,
+      "reason": "goal"
+    },
+    {
+      "source": "baseline-v40/match-003-610017-fouls-black-black.json",
+      "team": "white",
+      "start": 174,
+      "end": 229,
+      "ownActions": 34,
+      "reason": "stalling"
+    },
+    {
+      "source": "baseline-v40/match-003-610017-fouls-black-black.json",
+      "team": "black",
+      "start": 230,
+      "end": 243,
+      "ownActions": 9,
+      "reason": "save"
+    },
+    {
+      "source": "baseline-v40/match-003-610017-fouls-black-black.json",
+      "team": "white",
+      "start": 244,
+      "end": 292,
+      "ownActions": 31,
+      "reason": "offside"
+    },
+    {
+      "source": "baseline-v40/match-003-610017-fouls-black-black.json",
+      "team": "black",
+      "start": 293,
+      "end": 309,
+      "ownActions": 10,
+      "reason": "shotMiss"
+    },
+    {
+      "source": "baseline-v40/match-003-610017-fouls-black-black.json",
+      "team": "white",
+      "start": 310,
+      "end": 320,
+      "ownActions": 7,
+      "reason": "offside"
+    },
+    {
+      "source": "baseline-v40/match-003-610017-fouls-black-black.json",
+      "team": "black",
+      "start": 321,
+      "end": 332,
+      "ownActions": 7,
+      "reason": "save"
+    },
+    {
+      "source": "baseline-v40/match-003-610017-fouls-black-black.json",
+      "team": "white",
+      "start": 333,
+      "end": 338,
+      "ownActions": 4,
+      "reason": "offside"
+    },
+    {
+      "source": "baseline-v40/match-003-610017-fouls-black-black.json",
+      "team": "black",
+      "start": 339,
+      "end": 377,
+      "ownActions": 24,
+      "reason": "goal"
+    },
+    {
+      "source": "baseline-v40/match-003-610017-fouls-black-black.json",
+      "team": "white",
+      "start": 378,
+      "end": 433,
+      "ownActions": 34,
+      "reason": "stalling"
+    },
+    {
+      "source": "baseline-v40/match-003-610017-fouls-black-black.json",
+      "team": "black",
+      "start": 434,
+      "end": 447,
+      "ownActions": 9,
+      "reason": "save"
+    },
+    {
+      "source": "baseline-v40/match-003-610017-fouls-black-black.json",
+      "team": "white",
+      "start": 448,
+      "end": 479,
+      "ownActions": 21,
+      "reason": "horizon",
+      "censored": true
+    },
+    {
+      "source": "complete-v5/match-000-610017-fouls-white-white.json",
+      "team": "white",
+      "start": 0,
+      "end": 45,
+      "ownActions": 28,
+      "reason": "shotMiss"
+    },
+    {
+      "source": "complete-v5/match-000-610017-fouls-white-white.json",
+      "team": "black",
+      "start": 46,
+      "end": 64,
+      "ownActions": 12,
+      "reason": "tackle"
+    },
+    {
+      "source": "complete-v5/match-000-610017-fouls-white-white.json",
+      "team": "white",
+      "start": 65,
+      "end": 94,
+      "ownActions": 19,
+      "reason": "shotMiss"
+    },
+    {
+      "source": "complete-v5/match-000-610017-fouls-white-white.json",
+      "team": "black",
+      "start": 95,
+      "end": 116,
+      "ownActions": 14,
+      "reason": "stalling"
+    },
+    {
+      "source": "complete-v5/match-000-610017-fouls-white-white.json",
+      "team": "white",
+      "start": 117,
+      "end": 128,
+      "ownActions": 7,
+      "reason": "shotMiss"
+    },
+    {
+      "source": "complete-v5/match-000-610017-fouls-white-white.json",
+      "team": "black",
+      "start": 129,
+      "end": 144,
+      "ownActions": 10,
+      "reason": "tackle"
+    },
+    {
+      "source": "complete-v5/match-000-610017-fouls-white-white.json",
+      "team": "white",
+      "start": 145,
+      "end": 157,
+      "ownActions": 8,
+      "reason": "shotMiss"
+    },
+    {
+      "source": "complete-v5/match-000-610017-fouls-white-white.json",
+      "team": "black",
+      "start": 158,
+      "end": 182,
+      "ownActions": 16,
+      "reason": "tackle"
+    },
+    {
+      "source": "complete-v5/match-000-610017-fouls-white-white.json",
+      "team": "white",
+      "start": 183,
+      "end": 220,
+      "ownActions": 24,
+      "reason": "save"
+    },
+    {
+      "source": "complete-v5/match-000-610017-fouls-white-white.json",
+      "team": "black",
+      "start": 221,
+      "end": 233,
+      "ownActions": 8,
+      "reason": "save"
+    },
+    {
+      "source": "complete-v5/match-000-610017-fouls-white-white.json",
+      "team": "white",
+      "start": 234,
+      "end": 276,
+      "ownActions": 26,
+      "reason": "goal"
+    },
+    {
+      "source": "complete-v5/match-000-610017-fouls-white-white.json",
+      "team": "black",
+      "start": 277,
+      "end": 354,
+      "ownActions": 49,
+      "reason": "move"
+    },
+    {
+      "source": "complete-v5/match-000-610017-fouls-white-white.json",
+      "team": "white",
+      "start": 355,
+      "end": 372,
+      "ownActions": 11,
+      "reason": "save"
+    },
+    {
+      "source": "complete-v5/match-000-610017-fouls-white-white.json",
+      "team": "black",
+      "start": 373,
+      "end": 395,
+      "ownActions": 16,
+      "reason": "tackle"
+    },
+    {
+      "source": "complete-v5/match-000-610017-fouls-white-white.json",
+      "team": "white",
+      "start": 396,
+      "end": 405,
+      "ownActions": 6,
+      "reason": "move"
+    },
+    {
+      "source": "complete-v5/match-000-610017-fouls-white-white.json",
+      "team": "black",
+      "start": 406,
+      "end": 436,
+      "ownActions": 21,
+      "reason": "tackle"
+    },
+    {
+      "source": "complete-v5/match-000-610017-fouls-white-white.json",
+      "team": "white",
+      "start": 437,
+      "end": 443,
+      "ownActions": 4,
+      "reason": "save"
+    },
+    {
+      "source": "complete-v5/match-000-610017-fouls-white-white.json",
+      "team": "black",
+      "start": 444,
+      "end": 466,
+      "ownActions": 15,
+      "reason": "stalling"
+    },
+    {
+      "source": "complete-v5/match-000-610017-fouls-white-white.json",
+      "team": "white",
+      "start": 467,
+      "end": 479,
+      "ownActions": 9,
+      "reason": "horizon",
+      "censored": true
+    },
+    {
+      "source": "complete-v5/match-001-610017-fouls-white-black.json",
+      "team": "black",
+      "start": 0,
+      "end": 59,
+      "ownActions": 38,
+      "reason": "move"
+    },
+    {
+      "source": "complete-v5/match-001-610017-fouls-white-black.json",
+      "team": "white",
+      "start": 60,
+      "end": 78,
+      "ownActions": 12,
+      "reason": "shotMiss"
+    },
+    {
+      "source": "complete-v5/match-001-610017-fouls-white-black.json",
+      "team": "black",
+      "start": 79,
+      "end": 120,
+      "ownActions": 26,
+      "reason": "tackle"
+    },
+    {
+      "source": "complete-v5/match-001-610017-fouls-white-black.json",
+      "team": "white",
+      "start": 121,
+      "end": 139,
+      "ownActions": 12,
+      "reason": "save"
+    },
+    {
+      "source": "complete-v5/match-001-610017-fouls-white-black.json",
+      "team": "black",
+      "start": 140,
+      "end": 145,
+      "ownActions": 4,
+      "reason": "offside"
+    },
+    {
+      "source": "complete-v5/match-001-610017-fouls-white-black.json",
+      "team": "white",
+      "start": 146,
+      "end": 161,
+      "ownActions": 9,
+      "reason": "save"
+    },
+    {
+      "source": "complete-v5/match-001-610017-fouls-white-black.json",
+      "team": "black",
+      "start": 162,
+      "end": 167,
+      "ownActions": 4,
+      "reason": "offside"
+    },
+    {
+      "source": "complete-v5/match-001-610017-fouls-white-black.json",
+      "team": "white",
+      "start": 168,
+      "end": 203,
+      "ownActions": 22,
+      "reason": "goal"
+    },
+    {
+      "source": "complete-v5/match-001-610017-fouls-white-black.json",
+      "team": "black",
+      "start": 204,
+      "end": 262,
+      "ownActions": 38,
+      "reason": "move"
+    },
+    {
+      "source": "complete-v5/match-001-610017-fouls-white-black.json",
+      "team": "white",
+      "start": 263,
+      "end": 311,
+      "ownActions": 31,
+      "reason": "shotMiss"
+    },
+    {
+      "source": "complete-v5/match-001-610017-fouls-white-black.json",
+      "team": "black",
+      "start": 312,
+      "end": 337,
+      "ownActions": 17,
+      "reason": "tackle"
+    },
+    {
+      "source": "complete-v5/match-001-610017-fouls-white-black.json",
+      "team": "white",
+      "start": 338,
+      "end": 356,
+      "ownActions": 12,
+      "reason": "shotMiss"
+    },
+    {
+      "source": "complete-v5/match-001-610017-fouls-white-black.json",
+      "team": "black",
+      "start": 357,
+      "end": 386,
+      "ownActions": 19,
+      "reason": "tackle"
+    },
+    {
+      "source": "complete-v5/match-001-610017-fouls-white-black.json",
+      "team": "white",
+      "start": 387,
+      "end": 405,
+      "ownActions": 12,
+      "reason": "save"
+    },
+    {
+      "source": "complete-v5/match-001-610017-fouls-white-black.json",
+      "team": "black",
+      "start": 406,
+      "end": 437,
+      "ownActions": 20,
+      "reason": "move"
+    },
+    {
+      "source": "complete-v5/match-001-610017-fouls-white-black.json",
+      "team": "white",
+      "start": 438,
+      "end": 450,
+      "ownActions": 8,
+      "reason": "shotMiss"
+    },
+    {
+      "source": "complete-v5/match-001-610017-fouls-white-black.json",
+      "team": "black",
+      "start": 451,
+      "end": 461,
+      "ownActions": 7,
+      "reason": "offside"
+    },
+    {
+      "source": "complete-v5/match-001-610017-fouls-white-black.json",
+      "team": "white",
+      "start": 462,
+      "end": 479,
+      "ownActions": 13,
+      "reason": "horizon",
+      "censored": true
+    },
+    {
+      "source": "complete-v5/match-002-610017-fouls-black-white.json",
+      "team": "white",
+      "start": 0,
+      "end": 41,
+      "ownActions": 26,
+      "reason": "move"
+    },
+    {
+      "source": "complete-v5/match-002-610017-fouls-black-white.json",
+      "team": "black",
+      "start": 42,
+      "end": 66,
+      "ownActions": 16,
+      "reason": "save"
+    },
+    {
+      "source": "complete-v5/match-002-610017-fouls-black-white.json",
+      "team": "white",
+      "start": 67,
+      "end": 95,
+      "ownActions": 18,
+      "reason": "shotMiss"
+    },
+    {
+      "source": "complete-v5/match-002-610017-fouls-black-white.json",
+      "team": "black",
+      "start": 96,
+      "end": 107,
+      "ownActions": 7,
+      "reason": "save"
+    },
+    {
+      "source": "complete-v5/match-002-610017-fouls-black-white.json",
+      "team": "white",
+      "start": 108,
+      "end": 125,
+      "ownActions": 12,
+      "reason": "tackle"
+    },
+    {
+      "source": "complete-v5/match-002-610017-fouls-black-white.json",
+      "team": "black",
+      "start": 126,
+      "end": 143,
+      "ownActions": 11,
+      "reason": "save"
+    },
+    {
+      "source": "complete-v5/match-002-610017-fouls-black-white.json",
+      "team": "white",
+      "start": 144,
+      "end": 205,
+      "ownActions": 40,
+      "reason": "tackle"
+    },
+    {
+      "source": "complete-v5/match-002-610017-fouls-black-white.json",
+      "team": "black",
+      "start": 206,
+      "end": 228,
+      "ownActions": 14,
+      "reason": "save"
+    },
+    {
+      "source": "complete-v5/match-002-610017-fouls-black-white.json",
+      "team": "white",
+      "start": 229,
+      "end": 254,
+      "ownActions": 17,
+      "reason": "tackle"
+    },
+    {
+      "source": "complete-v5/match-002-610017-fouls-black-white.json",
+      "team": "black",
+      "start": 255,
+      "end": 272,
+      "ownActions": 11,
+      "reason": "save"
+    },
+    {
+      "source": "complete-v5/match-002-610017-fouls-black-white.json",
+      "team": "white",
+      "start": 273,
+      "end": 297,
+      "ownActions": 16,
+      "reason": "goal"
+    },
+    {
+      "source": "complete-v5/match-002-610017-fouls-black-white.json",
+      "team": "black",
+      "start": 298,
+      "end": 327,
+      "ownActions": 19,
+      "reason": "shotMiss"
+    },
+    {
+      "source": "complete-v5/match-002-610017-fouls-black-white.json",
+      "team": "white",
+      "start": 328,
+      "end": 355,
+      "ownActions": 17,
+      "reason": "shotMiss"
+    },
+    {
+      "source": "complete-v5/match-002-610017-fouls-black-white.json",
+      "team": "black",
+      "start": 356,
+      "end": 367,
+      "ownActions": 7,
+      "reason": "save"
+    },
+    {
+      "source": "complete-v5/match-002-610017-fouls-black-white.json",
+      "team": "white",
+      "start": 368,
+      "end": 401,
+      "ownActions": 22,
+      "reason": "tackle"
+    },
+    {
+      "source": "complete-v5/match-002-610017-fouls-black-white.json",
+      "team": "black",
+      "start": 402,
+      "end": 427,
+      "ownActions": 16,
+      "reason": "shotMiss"
+    },
+    {
+      "source": "complete-v5/match-002-610017-fouls-black-white.json",
+      "team": "white",
+      "start": 428,
+      "end": 443,
+      "ownActions": 11,
+      "reason": "tackle"
+    },
+    {
+      "source": "complete-v5/match-002-610017-fouls-black-white.json",
+      "team": "black",
+      "start": 444,
+      "end": 456,
+      "ownActions": 8,
+      "reason": "shotMiss"
+    },
+    {
+      "source": "complete-v5/match-002-610017-fouls-black-white.json",
+      "team": "white",
+      "start": 457,
+      "end": 479,
+      "ownActions": 15,
+      "reason": "horizon",
+      "censored": true
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "repo": "/workspace/github/football-chess-pace",
+  "engineSha256": "4388dc612b14feb2b266dc5389e1f95228c68e994bcabbcfd39c21a5e4d880f3",
+  "testFileCount": 63,
+  "node": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+  "concurrency": 2,
+  "startedAt": "2026-10-17T06:38:30.710174+00:00",
+  "finishedAt": "2026-10-17T06:41:56.575378+00:00",
+  "elapsedSeconds": 205.86524322600053,
+  "returncode": 0,
+  "reportBytes": 281159,
+  "counts": {
+    "tests": 1156,
+    "pass": 1156,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "summaryComplete": true,
+  "failedTestNames": [],
+  "verifiedSuccess": true
+}

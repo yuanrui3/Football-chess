@@ -1,0 +1,81 @@
+{
+  "config": {
+    "label": "attack-finish-v2",
+    "split": "dev",
+    "seeds": [
+      610017
+    ],
+    "fouls": [
+      true
+    ],
+    "actions": 160,
+    "nodes": 1400,
+    "depth": 8,
+    "workers": 1,
+    "opponent": "casual",
+    "record": true,
+    "candidate": "/workspace/scratch/43be99f43c82/tactical-half-hour-20261017/attack-finish-v2/candidate-engine.mjs",
+    "rules": "/workspace/scratch/43be99f43c82/tactical-half-hour-20261017/attack-finish-v2/rules-engine.mjs",
+    "modelWeights": null,
+    "candidateSha256": "1b7cbae3f8fdaec3d4f334659fa069e1f3ae4659f4d60eb1092b8fdacfbfef3c",
+    "rulesSha256": "584b1dffb37d222969c80df04eb3b80fc79ef7fb05fc225483fb820efd47a29e",
+    "baselineSha256": "584b1dffb37d222969c80df04eb3b80fc79ef7fb05fc225483fb820efd47a29e",
+    "startedAt": "2026-10-17T06:09:20.682Z"
+  },
+  "completed": 4,
+  "planned": 4,
+  "wdl": {
+    "wins": 0,
+    "draws": 4,
+    "losses": 0
+  },
+  "wdlScore": 0.5,
+  "goalDifference": 0,
+  "xGDifference": 1.513617129747805,
+  "candidate": {
+    "actions": 327,
+    "goals": 0,
+    "shots": 7,
+    "resolvedShots": 7,
+    "xG": 1.589212813280803,
+    "stalls": 0,
+    "repetitions": 0,
+    "dribbleLimit": 0,
+    "offsides": 1,
+    "passes": 44,
+    "dribbles": 40,
+    "tackles": 7,
+    "thinkMs": 238770.73850999965,
+    "nodes": 452061,
+    "maxNodes": 1400,
+    "completedDepthTotal": 1364,
+    "meanThinkMs": 730.185744678898,
+    "p95ThinkMs": 1435.4185400000001,
+    "meanCompletedDepth": 4.17125382262997
+  },
+  "baseline": {
+    "actions": 313,
+    "goals": 0,
+    "shots": 1,
+    "resolvedShots": 1,
+    "xG": 0.07559568353299803,
+    "stalls": 1,
+    "repetitions": 1,
+    "dribbleLimit": 0,
+    "offsides": 0,
+    "passes": 49,
+    "dribbles": 25,
+    "tackles": 1,
+    "thinkMs": 2638.7560060000706,
+    "nodes": 0,
+    "maxNodes": 0,
+    "completedDepthTotal": 0,
+    "meanThinkMs": 8.430530370607254,
+    "p95ThinkMs": 47.36571699997876,
+    "meanCompletedDepth": 0
+  },
+  "errors": [],
+  "wallMs": 241925.511195,
+  "note": "Fixed atomic-action scenarios with launched shots settled; not timed soccer matches. Seeds pair both colors and both kickoffs. All policies mask hidden RNG and learned weights are disabled.",
+  "completedAt": "2026-10-17T06:13:22.609Z"
+}

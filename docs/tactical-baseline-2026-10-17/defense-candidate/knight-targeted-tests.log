@@ -1,0 +1,35 @@
+✔ casual: selects a teammate collector with a carry remaining rather than a self-collection with a guaranteed loss, either color (43.365754ms)
+✔ casual: an offside collector yields to an eligible teammate, either color (8.327178ms)
+✔ casual: the goalkeeper does not leave its box merely to chase an unshootable wide carrier (334.454662ms)
+✔ casual: public-board choices preserve state and ignore future random values (570.406607ms)
+✔ casual: 120 natural decisions remain legal with a complete, non-overlapping squad (1466.888506ms)
+✔ tactical: selects a teammate collector with a carry remaining rather than a self-collection with a guaranteed loss, either color (3121.89848ms)
+✔ tactical: an offside collector yields to an eligible teammate, either color (836.002031ms)
+✔ tactical: the goalkeeper does not leave its box merely to chase an unshootable wide carrier (1567.317162ms)
+✔ tactical: public-board choices preserve state and ignore future random values (7892.392848ms)
+✔ tactical: 120 natural decisions remain legal with a complete, non-overlapping squad (60978.498941ms)
+✔ Casual choices on an edited snapshot equal choices on a fresh identical board (98.106168ms)
+✔ casual: covers a straight throw from a bishop as a real receiving threat, either color (137.685616ms)
+✔ tactical: covers a straight throw from a bishop as a real receiving threat, either color (999.992638ms)
+✔ Tactical completes a real central supporting run for an isolated wide carrier, either colour (3233.893792ms)
+✔ cross support respects rook, bishop and knight passing geometry instead of mere central proximity (9.583769ms)
+✔ friendly and opposing intervening pieces invalidate a ray cross (2.963198ms)
+✔ offside forward receivers do not count; an onside central cutback behind the ball does (1.90132ms)
+✔ a long pass wide values an existing central delivery while retaining its accuracy penalty (3.561976ms)
+✔ a free orthogonal pawn step followed by its ordinary diagonal tackle is a real threat, either color (11.605205ms)
+✔ pawn setup risk respects current defensive budgets, but attacking moves face fresh defender budgets (2.063317ms)
+✔ occupied setup squares, distant pawns, and offside involvement do not create imaginary tackles (2.612132ms)
+✔ an existing diagonal tackle still works after the bonus has been spent, either color (2.244543ms)
+✔ risk uses the real knight resistance and clean-tackle probability, either color (2.60399ms)
+✔ the existing shared king bonus also permits a legal setup without inventing extra moves (1.054607ms)
+✔ a geometrical knight attack with every tackle landing occupied is not a real challenge (0.737191ms)
+✔ the bounded inner reply retains a pawn setup that the previous beam pruned, either color (85.51785ms)
+✔ Tactical avoids the reproducible free-pawn trap when a safe productive carry exists, either color (2518.294774ms)
+ℹ tests 27
+ℹ suites 0
+ℹ pass 27
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 84515.358885

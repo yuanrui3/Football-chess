@@ -1,0 +1,44 @@
+import {readFile,writeFile} from 'node:fs/promises';
+import * as E from '../frozen/dist/engine.js';
+const I=await import('data:text/javascript;base64,'+Buffer.from(await readFile('./engine-full-reply-risk.mjs','utf8')+'\nexport {tacticalFullReplyRisk as tacticalTackleRisk};').toString('base64'));
+const states=JSON.parse(await readFile('possession-audit-states.json','utf8'));
+let replyStates=0,bonusQueries=0;const misses=[];
+function direct(s){
+ const team=E.currentTeam(s),flags=new Set(E.offsideFlaggedIds(s));
+ for(const p of s.pieces)if(p.team===team&&!flags.has(p.id)){
+  const m=E.legalMoves(s,p.id).find(m=>m.type==='tackle');
+  if(m)return{probability:m.tackleProbability,action:{type:'move',pieceId:p.id,x:m.x,y:m.y,freePawn:false}};
+ }
+ return null;
+}
+function full(s){
+ const reply=s.phase==='attackMove'?E.skipMove(s):s;
+ if(reply.phase!=='defendMove')throw Error('Expected fresh defensive reply');
+ replyStates++;const immediate=direct(reply);if(immediate)return{...immediate,bonus:null};
+ for(const p of reply.pieces)if(p.team===E.currentTeam(reply)&&['P','K'].includes(p.type)){
+  for(const move of E.legalMoves(reply,p.id,{freePawn:true})){
+   bonusQueries++;const after=E.applyMove(reply,p.id,move.x,move.y,{freePawn:true});
+   const tackle=direct(after);if(tackle)return{...tackle,bonus:{type:'move',pieceId:p.id,x:move.x,y:move.y,freePawn:true}};
+  }
+ }
+ return{probability:0,bonus:null,action:null};
+}
+const rows=[];
+for(const entry of states){
+ const s=entry.state,c=s.pieces.find(p=>p.id===s.ball.carrierId);let dribbles=0,safe=0,heuristicSafe=0,pass=0,safePass=0,keeperPass=0;
+ for(const m of E.legalMoves(s,c.id)){
+  const after=E.applyMove(s,c.id,m.x,m.y);if(after.ball.carrierId!==c.id||after.attack!==c.team)continue;
+  dribbles++;const approx=I.tacticalTackleRisk(after,after.pieces.find(p=>p.id===c.id));if(!approx)heuristicSafe++;
+  const exact=full(after);if(!exact.probability)safe++;
+  if(!approx&&exact.probability&&misses.length<12)misses.push({source:entry.source,step:entry.step,state:s,carry:{pieceId:c.id,x:m.x,y:m.y},afterCarry:after,...exact});
+ }
+ for(const k of E.legalKicks({...s,phase:'kick'})){
+  if(k.goal||k.offside||k.distance>10||k.accuracy!==1)continue;const receiver=s.pieces.find(p=>p.id===k.receiverId);if(!receiver||receiver.team!==c.team)continue;
+  pass++;const after=E.applyKick({...s,phase:'kick'},k.x,k.y,{roll:0});if(receiver.type==='K'){keeperPass++;continue;}if(!full(after).probability)safePass++;
+ }
+ rows.push({source:entry.source,step:entry.step,team:c.team,pieceType:c.type,dribbles,safeDribbles:safe,heuristicSafe,safeOutfieldPasses:safePass,teammatePasses:pass,keeperPasses:keeperPass});
+}
+for(const miss of misses){let s=miss.afterCarry.phase==='attackMove'?E.skipMove(miss.afterCarry):miss.afterCarry;if(miss.bonus)s=E.applyMove(s,miss.bonus.pieceId,miss.bonus.x,miss.bonus.y,{freePawn:true});const a=miss.action;const won=E.applyMove(s,a.pieceId,a.x,a.y,{roll:.2});if(won.ball.carrierId!==a.pieceId)throw Error('Counterexample did not win possession');miss.provenTurnover=true;}
+const sum=k=>rows.reduce((n,r)=>n+r[k],0),median=k=>[...rows].sort((a,b)=>a[k]-b[k])[Math.floor(rows.length/2)][k];
+const report={createdAt:new Date().toISOString(),method:'Exhaustive immediate clean-tackle availability under one full defensive reply: every legal direct ordinary tackle, then every legal shared pawn/king bonus move followed by any defender’s legal ordinary tackle. Original kick-time offside eligibility is respected. No multi-round prediction; pass safety is measured before the receiver uses its optional carry. Only completed DEV match records were replayed; no held-out files read.',sampledStates:rows.length,summary:{totalDribbleDestinations:sum('dribbles'),totalSafeDribbleDestinations:sum('safeDribbles'),meanLegalDribbleDestinations:sum('dribbles')/rows.length,meanSafeDribbleDestinations:sum('safeDribbles')/rows.length,medianSafeDribbleDestinations:median('safeDribbles'),safeDribbleFraction:sum('safeDribbles')/sum('dribbles'),statesWithAtLeastOneSafeDribble:rows.filter(r=>r.safeDribbles).length,statesWithAtLeastFiveSafeDribbles:rows.filter(r=>r.safeDribbles>=5).length,meanSafeOutfieldPasses:sum('safeOutfieldPasses')/rows.length,meanTeammatePassesWithin10:sum('teammatePasses')/rows.length,meanKeeperBackPasses:sum('keeperPasses')/rows.length,statesWithSafeDribbleOrSafeOutfieldPass:rows.filter(r=>r.safeDribbles||r.safeOutfieldPasses).length,heuristicSafeTotal:sum('heuristicSafe'),heuristicMissedChallenges:sum('heuristicSafe')-sum('safeDribbles')},work:{replyStates,bonusQueries},counterexamples:misses,rows};
+await writeFile('full-risk-exact-audit.json',JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify({sampledStates:rows.length,summary:report.summary,work:report.work,counterexamples:misses.map(m=>({source:m.source,step:m.step,carry:m.carry,bonus:m.bonus,tackle:m.action,probability:m.probability,provenTurnover:m.provenTurnover}))}));

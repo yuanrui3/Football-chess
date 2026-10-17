@@ -1,0 +1,32 @@
+{
+  "generatedAt": "2026-10-17T06:36:13.169182+00:00",
+  "includesHeldout": false,
+  "batches": 13,
+  "completedDevelopmentLegs": 49,
+  "plannedDevelopmentLegs": 52,
+  "actualAtomicActions": 15840,
+  "allDevelopmentFoulsEnabled": true,
+  "modelWeights": null,
+  "completeBatches": [
+    "aggressive-v2",
+    "attack-finish-v2",
+    "attack-opening-v1",
+    "balanced-v4",
+    "baseline-v40",
+    "combined-v1",
+    "complete-v5",
+    "defense-dev",
+    "finish-v3",
+    "knight-attack-v6",
+    "search-dev",
+    "search-tempo-dev"
+  ],
+  "partialBatches": [
+    {
+      "label": "attack-wide-v3",
+      "completed": 1,
+      "planned": 4,
+      "reason": "Partial recording; omitted legs are not claimed complete."
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+✔ white Tactical orders a real shot-lane clearance ahead of unrelated support (2041.498931ms)
+✔ black Tactical orders a real shot-lane clearance ahead of unrelated support (1474.324111ms)
+✔ Casual preserves a strong finish through positioning instead of repeating its former backward dribble, either color (143.712863ms)
+✔ Casual takes a strong open finish at the kick rather than substituting a pass, either color (15.241355ms)
+✔ protecting an existing shot does not freeze a carrier facing a guaranteed defensive challenge, either color (23.228982ms)
+✔ Casual attempts a useful moderate rook shot from midfield when its passes have no safe receiving outlet, either color (6.996973ms)
+✔ the finishing preference retains goal-kick, throw and indirect-free-kick restrictions, either color (94.261855ms)
+✔ Casual clears an offside box knight before choosing a finish, either color (64.653146ms)
+✔ Casual finishing decisions are pure and independent of upcoming random outcomes (191.118558ms)
+✔ Tactical completes a real central supporting run for an isolated wide carrier, either colour (5158.971487ms)
+✔ cross support respects rook, bishop and knight passing geometry instead of mere central proximity (9.209548ms)
+✔ friendly and opposing intervening pieces invalidate a ray cross (1.063664ms)
+✔ offside forward receivers do not count; an onside central cutback behind the ball does (1.61868ms)
+✔ a long pass wide values an existing central delivery while retaining its accuracy penalty (7.603873ms)
+✔ a free orthogonal pawn step followed by its ordinary diagonal tackle is a real threat, either color (16.028862ms)
+✔ pawn setup risk respects current defensive budgets, but attacking moves face fresh defender budgets (13.916911ms)
+✔ occupied setup squares, distant pawns, and offside involvement do not create imaginary tackles (10.617818ms)
+✔ an existing diagonal tackle still works after the bonus has been spent, either color (1.176277ms)
+✔ risk uses the real knight resistance and clean-tackle probability, either color (1.630153ms)
+✔ the existing shared king bonus also permits a legal setup without inventing extra moves (8.892244ms)
+✔ a geometrical knight attack with every tackle landing occupied is not a real challenge (0.714098ms)
+✔ the bounded inner reply retains a pawn setup that the previous beam pruned, either color (164.638193ms)
+✔ Tactical avoids the reproducible free-pawn trap when a safe productive carry exists, either color (4284.810541ms)
+✔ Tactical retains a real off-ball box runner and delivery in its bounded beam, either color (212.056787ms)
+✔ Tactical receiving opportunities reward usable finishes and discard an offside receiver (1.537206ms)
+✔ Tactical card evaluation values a removed teammate even when the current carrier is unchanged (9.730395ms)
+✔ Tactical uses the ordinary post-pass movement phase instead of a redundant opt-in run phase (2671.841913ms)
+✔ Tactical converts a credible finish instead of perpetually valuing a backward recycle, either color (3259.922675ms)
+✔ Tactical still supplies a better receiving finish instead of shooting every legal opportunity (652.22684ms)
+✔ Tactical treats a pending protected corner as owned possession rather than a loose-ball race (1.282074ms)
+ℹ tests 30
+ℹ suites 0
+ℹ pass 30
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7124.20276

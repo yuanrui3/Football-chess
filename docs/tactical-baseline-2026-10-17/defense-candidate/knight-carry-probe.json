@@ -1,0 +1,96 @@
+[
+  {
+    "label": "natural",
+    "threat": {
+      "x": 8,
+      "y": 14,
+      "pieceId": "black-N1",
+      "collect": true,
+      "canDribble": true,
+      "finishAt": {
+        "x": 6,
+        "y": 15
+      },
+      "probability": 0.4757498444150613,
+      "accuracy": 1
+    },
+    "top": {
+      "action": {
+        "type": "move",
+        "pieceId": "white-K",
+        "x": 6,
+        "y": 15,
+        "freePawn": true
+      },
+      "rank": 417.43485997355515,
+      "category": "pawn"
+    },
+    "before": 0.4757498444150613,
+    "after": 0
+  },
+  {
+    "label": "natural",
+    "action": {
+      "type": "move",
+      "pieceId": "white-K",
+      "x": 6,
+      "y": 15,
+      "freePawn": true
+    },
+    "stats": {
+      "nodes": 1400,
+      "completedDepth": 6,
+      "cacheHits": 537,
+      "extensions": 471,
+      "cutoffs": 333,
+      "aborted": true
+    }
+  },
+  {
+    "label": "mirror",
+    "threat": {
+      "x": 5,
+      "y": 2,
+      "pieceId": "white-N1",
+      "collect": true,
+      "canDribble": true,
+      "finishAt": {
+        "x": 7,
+        "y": 1
+      },
+      "probability": 0.4757498444150613,
+      "accuracy": 1
+    },
+    "top": {
+      "action": {
+        "type": "move",
+        "pieceId": "black-K",
+        "x": 7,
+        "y": 1,
+        "freePawn": true
+      },
+      "rank": 417.3948599735551,
+      "category": "pawn"
+    },
+    "before": 0.4757498444150613,
+    "after": 0
+  },
+  {
+    "label": "mirror",
+    "action": {
+      "type": "move",
+      "pieceId": "black-K",
+      "x": 7,
+      "y": 1,
+      "freePawn": true
+    },
+    "stats": {
+      "nodes": 1400,
+      "completedDepth": 6,
+      "cacheHits": 537,
+      "extensions": 471,
+      "cutoffs": 333,
+      "aborted": true
+    }
+  }
+]

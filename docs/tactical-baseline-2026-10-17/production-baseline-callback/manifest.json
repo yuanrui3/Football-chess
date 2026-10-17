@@ -1,0 +1,6 @@
+{
+  "baseSha256": "584b1dffb37d222969c80df04eb3b80fc79ef7fb05fc225483fb820efd47a29e",
+  "candidateSha256": "df962903a48e9853a18ce0a600d498f648ac84fee600ed1ff045cf963d8311f8",
+  "sourcePath": "/workspace/scratch/43be99f43c82/tactical-half-hour-20261017/production-baseline-callback/engine.mjs",
+  "onlyCallbackInstrumentation": true
+}

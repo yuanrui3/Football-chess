@@ -1,0 +1,23 @@
+--- a/dist/engine.js
++++ b/dist/engine.js
+@@ -2665,7 +2665,7 @@
+ // Public diagnostics make budgets, completed iterations and cache equivalence
+ // reproducible in tests and simulations. The controller still receives just an
+ // action through chooseAIAction; no analysis state enters a saved match.
+-export function analyzeTacticalAction(state, {maxDepth = AI_SEARCH.depth, nodeLimit = AI_SEARCH.nodes, useCache = true, extensions = true,
++export function analyzeTacticalAction(state, {maxDepth = AI_SEARCH.depth, nodeLimit = AI_SEARCH.nodes, useCache = true, extensions = true, onIteration,
+   modelWeights = RL_VALUE_MODEL.enabled ? RL_VALUE_MODEL.weights : null, modelScale = rlDefaultScale(modelWeights)} = {}) {
+   modelWeights = rlValidateWeights(modelWeights);
+   modelScale = rlValidateScale(modelScale);
+@@ -2792,6 +2792,11 @@
+     try {
+       const result = search(source, depth, extensions ? AI_SEARCH.extensions : 0, -Infinity, Infinity, true);
+       completed = result; stats.completedDepth = depth;
++      // A worker may deliver completed iterations while the next one searches.
++      // Isolate the callback's snapshot so a consumer cannot mutate search
++      // actions, cached principal variations or diagnostic counters.
++      if (typeof onIteration === 'function') onIteration({action: copy(completed.action), value: completed.value,
++        stats: {...stats}, line: copy(completed.line)});
+     } catch (error) {
+       if (error !== SEARCH_ABORT) throw error;
+       stats.aborted = true; break;

@@ -1,0 +1,142 @@
+{
+  "bestShot": 0.6769517222226621,
+  "baseline": {
+    "action": {
+      "type": "kick",
+      "x": 7,
+      "y": 3
+    },
+    "value": 1500.3846523782136,
+    "stats": {
+      "nodes": 1400,
+      "completedDepth": 3,
+      "cacheHits": 168,
+      "extensions": 255,
+      "cutoffs": 96,
+      "aborted": true
+    },
+    "line": [
+      {
+        "action": {
+          "type": "kick",
+          "x": 7,
+          "y": 3
+        },
+        "team": "white",
+        "phase": "kick"
+      },
+      {
+        "action": {
+          "type": "move",
+          "pieceId": "white-R1",
+          "x": 7,
+          "y": 3,
+          "freePawn": false
+        },
+        "team": "white",
+        "phase": "attackMove"
+      },
+      {
+        "action": {
+          "type": "move",
+          "pieceId": "white-P1",
+          "x": 1,
+          "y": 3,
+          "freePawn": true
+        },
+        "team": "white",
+        "phase": "attackMove"
+      },
+      {
+        "action": {
+          "type": "move",
+          "pieceId": "black-Q",
+          "x": 7,
+          "y": 4,
+          "freePawn": false
+        },
+        "team": "black",
+        "phase": "defendMove"
+      },
+      {
+        "action": {
+          "type": "move",
+          "pieceId": "black-K",
+          "x": 5,
+          "y": 0,
+          "freePawn": true
+        },
+        "team": "black",
+        "phase": "defendMove"
+      },
+      {
+        "action": {
+          "type": "kick",
+          "x": 7,
+          "y": -1
+        },
+        "team": "white",
+        "phase": "kick"
+      },
+      {
+        "action": {
+          "type": "move",
+          "pieceId": "black-K",
+          "x": 6,
+          "y": 0,
+          "freePawn": false
+        },
+        "team": "black",
+        "phase": "keeperReact"
+      }
+    ]
+  },
+  "candidate": {
+    "action": {
+      "type": "kick",
+      "x": 7,
+      "y": -1
+    },
+    "value": 1264.1012497194547,
+    "stats": {
+      "nodes": 1400,
+      "completedDepth": 3,
+      "cacheHits": 44,
+      "extensions": 352,
+      "cutoffs": 111,
+      "aborted": true
+    },
+    "line": [
+      {
+        "action": {
+          "type": "kick",
+          "x": 7,
+          "y": -1
+        },
+        "team": "white",
+        "phase": "kick"
+      },
+      {
+        "action": {
+          "type": "move",
+          "pieceId": "black-K",
+          "x": 5,
+          "y": 0,
+          "freePawn": false
+        },
+        "team": "black",
+        "phase": "keeperReact"
+      },
+      {
+        "action": {
+          "type": "kick",
+          "x": 11,
+          "y": 4
+        },
+        "team": "black",
+        "phase": "kickoff"
+      }
+    ]
+  },
+  "goalChosen": true
+}

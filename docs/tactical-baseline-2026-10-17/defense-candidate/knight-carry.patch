@@ -1,0 +1,98 @@
+--- engine.mjs	2026-10-16 23:05:35.102546965 -0700
++++ engine-knight-carry.mjs	2026-10-16 23:14:58.462611617 -0700
+@@ -1663,6 +1663,61 @@
+   return best;
+ }
+ 
++// Tactical alone recognizes a knight receiving and carrying once before its
++// native finish. Shared Casual pass ranking keeps its existing behavior.
++const tacticalKnightThreatCache = new WeakMap();
++function tacticalKnightCarryThreats(state, carrier) {
++  const cached = tacticalKnightThreatCache.get(state);
++  if (cached) return cached;
++  const threats = [];
++  const knights = state.pieces.filter(piece => piece.team === carrier.team && piece.type === 'N' && piece.id !== carrier.id);
++  if (!knights.length) return threats;
++  for (const kick of rawKicks(state)) {
++    if (kick.goal || kick.offside || kick.accuracy < 0.7 || goalDistance(carrier.team, kick.y) > 4) continue;
++    const occupant = pieceAt(state, kick.x, kick.y);
++    if (occupant && occupant.team !== carrier.team) continue;
++    for (const knight of knights) {
++      if (occupant ? occupant.id !== knight.id : !canCollect(state, knight, kick)) continue;
++      if (!onsideAtKick(state, knight, carrier)) continue;
++      const moved = {...knight, x: kick.x, y: kick.y};
++      const received = {...receivingState({...state, pieces: state.pieces.map(piece => piece.id === knight.id ? moved : piece)}, moved),
++        attack: carrier.team, positionBudget: freshBudget(), offside: null, looseBallKickOrigin: null, paceControl: null};
++      const direct = tacticalShots(received, carrier.team, true);
++      let best = null;
++      for (const move of legalMoves(received, knight.id)) {
++        if (move.type !== 'move') continue;
++        const after = projectedMove(received, moved, move), finisher = after.pieces.find(piece => piece.id === knight.id);
++        const probability = tacticalShots(after, carrier.team, true) * (1 - tacticalTackleRisk(after, finisher) * 0.8);
++        if (probability > Math.max(0.035, direct) && (!best || probability > best.probability)) best = {
++          x: kick.x, y: kick.y, pieceId: knight.id, collect: !occupant, canDribble: true,
++          finishAt: {x: move.x, y: move.y}, probability, accuracy: kick.accuracy};
++      }
++      if (best) threats.push(best);
++    }
++  }
++  threats.sort((a, b) => b.probability * b.accuracy - a.probability * a.accuracy);
++  const result = threats.slice(0, 8);
++  tacticalKnightThreatCache.set(state, result);
++  return result;
++}
++
++function tacticalKnightCarryExposure(state, carrier, threats) {
++  let best = 0;
++  for (const threat of threats) {
++    const receiver = state.pieces.find(piece => piece.id === threat.pieceId), occupant = pieceAt(state, threat.x, threat.y);
++    if (!receiver || receiver.type !== 'N' || occupant && occupant.id !== receiver.id || !passLane(state, carrier, threat)
++      || threat.collect && !canCollect(state, receiver, threat) || !onsideAtKick(state, receiver, carrier)) continue;
++    const moved = {...receiver, x: threat.x, y: threat.y};
++    const received = {...receivingState({...state, pieces: state.pieces.map(piece => piece.id === receiver.id ? moved : piece)}, moved),
++      attack: carrier.team, positionBudget: freshBudget(), offside: null, looseBallKickOrigin: null, paceControl: null};
++    const move = legalMoves(received, receiver.id).find(move => move.type === 'move' && move.x === threat.finishAt.x && move.y === threat.finishAt.y);
++    if (!move) continue;
++    const after = projectedMove(received, moved, move), finisher = after.pieces.find(piece => piece.id === receiver.id);
++    best = Math.max(best, tacticalShots(after, carrier.team, true) * threat.accuracy * (1 - tacticalTackleRisk(after, finisher) * 0.8));
++  }
++  return best;
++}
++
+ function keeperHomeValue(piece) {
+   const goalY = piece.team === 'white' ? BOARD_HEIGHT - 1 : 0;
+   return (inOwnBox(piece.team, piece.x, piece.y) ? 25 : -25)
+@@ -2468,6 +2523,11 @@
+   }
+   if (!fast) {
+     let rank = moveValue(state, projected, piece, move, piece.team, beforeThreat);
++    if (carrier && carrier.team !== piece.team) {
++      const previous = state.pieces.find(p => p.id === state.ball.carrierId);
++      const knightThreats = tacticalKnightCarryThreats(state, previous);
++      rank += (tacticalKnightCarryExposure(state, previous, knightThreats) - tacticalKnightCarryExposure(projected, carrier, knightThreats)) * 900;
++    }
+     if (carrier?.team === piece.team && carrier.id !== piece.id) {
+       const previous = state.pieces.find(p => p.id === state.ball.carrierId);
+       rank += (tacticalOutlets(projected, carrier).best - tacticalOutlets(state, previous).best) * 850;
+@@ -2496,6 +2556,10 @@
+   // lane geometry instead of recomputing every receiving shot for every move.
+   let covered = 0;
+   for (const threat of threats) {
++    if (threat.finishAt) {
++      covered += Math.max(0, threat.probability * threat.accuracy - tacticalKnightCarryExposure(projected, carrier, [threat]));
++      continue;
++    }
+     const receiver = projected.pieces.find(p => p.id === threat.pieceId);
+     const occupant = pieceAt(projected, threat.x, threat.y);
+     if (!receiver || occupant && occupant.id !== receiver.id || !onsideAtKick(projected, receiver, carrier) || !passLane(projected, carrier, threat)
+@@ -2529,7 +2593,9 @@
+   } else if (positionalTurn(state) || state.phase === 'passRun') {
+     const carrier = state.pieces.find(piece => piece.id === state.ball.carrierId);
+     const beforeThreat = carrier && carrier.team !== team ? tacticalShots(state, carrier.team, true) : 0;
+-    const threats = !root && carrier && carrier.team !== team ? passThreats(state, carrier).slice(0, 3) : [];
++    const threats = !root && carrier && carrier.team !== team
++      ? [...passThreats(state, carrier), ...tacticalKnightCarryThreats(state, carrier)]
++        .sort((a, b) => b.probability * b.accuracy - a.probability * a.accuracy).slice(0, 3) : [];
+     candidates.push({action: {type: 'skip'}, rank: -0.5, category: 'skip'});
+     for (const piece of state.pieces) if (piece.team === team) {
+       for (const freePawn of [false, true]) for (const move of legalMoves(state, piece.id, {freePawn})) {

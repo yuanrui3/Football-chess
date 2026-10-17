@@ -1,0 +1,63 @@
+--- full-reply-risk-base.mjs	2026-10-16 23:25:54.923991600 -0700
++++ engine-minimal-reply-risk.mjs	2026-10-16 23:29:35.687271849 -0700
+@@ -1852,6 +1852,48 @@
+   return 0;
+ }
+ 
++// Tactical additionally considers a shared bonus vacating another defender's
++// tackling ray or landing square. The legacy helper remains shared with Casual.
++const tacticalFullRiskCache = new WeakMap();
++function tacticalFullReplyRisk(state, carrier) {
++  const ordinary = tacticalTackleRisk(state, carrier);
++  if (ordinary || !carrier) return ordinary;
++  const budget = tacticalChallengeBudget(state, carrier);
++  if (!budget || budget.normalUsed || budget.pawnUsed) return 0;
++  const cached = tacticalFullRiskCache.get(state);
++  if (cached && cached.id === carrier.id && cached.x === carrier.x && cached.y === carrier.y) return cached.value;
++  const defenders = state.pieces.filter(piece => piece.team !== carrier.team && !flagged(state, piece));
++  // Only a bonus piece within a five-square challenge ray (or an adjacent
++  // tackle landing) can obstruct an otherwise available ordinary challenge.
++  const bonusPieces = defenders.filter(piece => ['P', 'K'].includes(piece.type) && distance(piece, carrier) <= LONG_TACKLE_RANGE);
++  const reply = {...state, phase: 'defendMove', attack: carrier.team, positionBudget: budget};
++  let value = 0;
++  outer: for (const piece of bonusPieces) for (const move of legalMoves(reply, piece.id, {freePawn: true})) {
++    const projected = projectedMove(reply, piece, move);
++    for (const defender of defenders) {
++      const moved = defender.id === piece.id ? {...piece, x: move.x, y: move.y} : defender;
++      if (tacticalTackleLanding(projected, moved, carrier)) {
++        value = (carrier.type === 'N' ? 0.5 : 1) * (state.foulsEnabled ? FOUL_RULE.clean : 1);
++        break outer;
++      }
++    }
++  }
++  tacticalFullRiskCache.set(state, {id: carrier.id, x: carrier.x, y: carrier.y, value});
++  return value;
++}
++
++function tacticalBonusTackleSetup(state, piece, move, carrier) {
++  if (tacticalTackleSetup(state, piece, move, carrier)) return true;
++  const budget = tacticalChallengeBudget(state, carrier);
++  if (!budget || budget.normalUsed || budget.pawnUsed || piece.team === carrier.team || !['P', 'K'].includes(piece.type)
++    || flagged(state, piece) || distance(piece, carrier) > LONG_TACKLE_RANGE) return false;
++  const reply = {...state, phase: 'defendMove', attack: carrier.team, positionBudget: budget};
++  if (!legalMoves(reply, piece.id, {freePawn: true}).some(candidate => candidate.x === move.x && candidate.y === move.y)) return false;
++  const projected = projectedMove(reply, piece, move);
++  return projected.pieces.some(defender => defender.team !== carrier.team && !flagged(projected, defender)
++    && tacticalTackleLanding(projected, defender, carrier));
++}
++
+ // Off-ball box runs provide receiving chances alongside direct carrying entry.
+ // Merely rewarding a nearby teammate cannot distinguish a useful cut-back
+ // receiver from a crowd of pieces that the carrier cannot actually reach.
+@@ -2542,9 +2584,9 @@
+     for (const piece of state.pieces) if (piece.team === team) {
+       for (const freePawn of [false, true]) for (const move of legalMoves(state, piece.id, {freePawn})) {
+         const carrying = piece.id === carrier?.id;
+-        const safeDribble = carrying && !tacticalTackleRisk(projectedMove(state, piece, move), {...piece, x: move.x, y: move.y});
++        const safeDribble = carrying && !tacticalFullReplyRisk(projectedMove(state, piece, move), {...piece, x: move.x, y: move.y});
+         const boxRun = !carrying && carrier?.team === team && isBox(move.x, move.y) && !inOwnBox(team, move.x, move.y);
+-        const tackleSetup = freePawn && carrier && carrier.team !== team && tacticalTackleSetup(state, piece, move, carrier);
++        const tackleSetup = freePawn && carrier && carrier.team !== team && tacticalBonusTackleSetup(state, piece, move, carrier);
+         candidates.push({action: {type: 'move', pieceId: piece.id, x: move.x, y: move.y, freePawn}, rank: tacticalMoveRank(state, piece, move, beforeThreat, !root, threats) + (freePawn ? 0.01 : 0), category: tackleSetup ? 'tackleSetup' : freePawn ? 'pawn' : move.type === 'tackle' ? 'tackle' : carrying ? safeDribble ? 'safeDribble' : 'dribble' : boxRun ? 'boxRun' : 'support'});
+       }
+     }

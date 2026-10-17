@@ -1,0 +1,29 @@
+--- /workspace/github/football-chess-pace/dist/engine.js	2026-10-16 19:14:07.805156521 -0700
++++ /workspace/scratch/43be99f43c82/tactical-half-hour-20261017/defense-candidate/engine.mjs	2026-10-16 23:05:35.102546965 -0700
+@@ -1936,7 +1936,8 @@
+ 
+ function looseBallValue(state, team) {
+   const sides = Object.fromEntries(TEAMS.map(side => {
+-    const players = state.pieces.filter(piece => piece.team === side && allowedSquare(piece, state.ball.x, state.ball.y));
++    const players = state.pieces.filter(piece => piece.team === side && allowedSquare(piece, state.ball.x, state.ball.y)
++      && (piece.type !== 'B' || (piece.x + piece.y - state.ball.x - state.ball.y) % 2 === 0));
+     const nearest = players.length ? Math.min(...players.map(piece => distance(piece, state.ball))) : 30;
+     const collectors = players.filter(piece => !flagged(state, piece) && canCollect(state, piece, state.ball));
+     return [side, {nearest, collectors}];
+@@ -2455,6 +2456,16 @@
+   if (forbiddenPaceCarry(state, piece, move)) return -16000;
+   const projected = projectedMove(state, piece, move);
+   const carrier = projected.pieces.find(p => p.id === projected.ball.carrierId), moved = projected.pieces.find(p => p.id === piece.id);
++  if (!state.ball.carrierId && projected.ball.carrierId !== piece.id) {
++    const home = piece.type === 'K' ? keeperHomeValue(moved) - keeperHomeValue(piece) : 0;
++    // Bishops retain square colour, so proximity to an opposite-colour loose
++    // ball is not collection progress. Prefer a real next-action receiving
++    // lane to a geometrically close square with the wrong movement pattern.
++    if (piece.type === 'B' && (piece.x + piece.y - state.ball.x - state.ball.y) % 2 !== 0) return home;
++    const beforeReach = canCollect(state, piece, state.ball), afterReach = canCollect(projected, moved, state.ball);
++    return (Number(afterReach) - Number(beforeReach)) * 110
++      + (distance(piece, state.ball) - distance(moved, state.ball)) * (piece.type === 'K' ? 1 : 8) + home;
++  }
+   if (!fast) {
+     let rank = moveValue(state, projected, piece, move, piece.team, beforeThreat);
+     if (carrier?.team === piece.team && carrier.id !== piece.id) {

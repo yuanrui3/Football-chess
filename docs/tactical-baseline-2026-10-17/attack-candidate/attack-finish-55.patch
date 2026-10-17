@@ -1,0 +1,21 @@
+--- a/dist/engine.js
++++ b/dist/engine.js
+@@ -2534,6 +2534,18 @@
+       }
+     }
+   }
++  // Cash a genuinely strong legal finish instead of postponing it for an
++  // optimistic leaf. A clearly superior onside receiving chance keeps normal
++  // search available; every chance includes the keeper's best legal reaction.
++  if (root && ['kick', 'kickoff', 'keeperRelease'].includes(state.phase)) {
++    const finish = kickingChoices(state).filter(kick => kick.goal === team && !kick.offside)
++      .map(kick => ({entry: candidates.find(entry => entry.category === 'shot' && entry.action.x === kick.x && entry.action.y === kick.y && !!entry.action.disguise === !!kick.disguise), chance: reactedShotChance(state, kick)}))
++      .sort((a, b) => b.chance - a.chance)[0];
++    const carrier = state.pieces.find(piece => piece.id === state.ball.carrierId);
++    if (finish?.chance >= 0.55 && finish.chance >= tacticalOutlets(state, carrier).best - 0.05) {
++      return [finish.entry];
++    }
++  }
+   candidates.sort((a, b) => b.rank - a.rank);
+   let shortlist = candidates.slice(0, width);
+   // A greedy shot-blocking rank must never prune every possession-winning

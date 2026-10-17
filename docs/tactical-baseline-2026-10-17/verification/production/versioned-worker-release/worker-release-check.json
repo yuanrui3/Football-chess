@@ -1,0 +1,102 @@
+{
+  "passed": true,
+  "actualVersionedWorker": true,
+  "project": "/workspace/github/football-chess-pace",
+  "workerURL": "file:///workspace/github/football-chess-pace/dist/ai-worker.js?v=410f29e715d9",
+  "engineURL": "file:///workspace/github/football-chess-pace/dist/engine.js?v=df962903a48e",
+  "hashes": {
+    "app": "5ecdfd9641a8d485da24183c880362ae4a21abf23f3c8cbbe4848fc84ce28b17",
+    "worker": "410f29e715d9e34b3d19ab8b0073cbdbd2dae888b0929479186e4fe855cde4a1",
+    "engine": "df962903a48e9853a18ce0a600d498f648ac84fee600ed1ff045cf963d8311f8"
+  },
+  "checks": [
+    {
+      "state": 0,
+      "phase": "kickoff",
+      "learnedEvaluation": false,
+      "modelWeightsForcedNull": true,
+      "progressDepths": [
+        1,
+        2,
+        3
+      ],
+      "deepestCompletedDepth": 3,
+      "action": {
+        "type": "kick",
+        "x": 2,
+        "y": 12
+      },
+      "inputPreserved": true,
+      "progressLegal": true,
+      "passed": true
+    },
+    {
+      "state": 0,
+      "phase": "kickoff",
+      "learnedEvaluation": true,
+      "modelWeightsForcedNull": true,
+      "progressDepths": [
+        1,
+        2,
+        3
+      ],
+      "deepestCompletedDepth": 3,
+      "action": {
+        "type": "kick",
+        "x": 2,
+        "y": 12
+      },
+      "inputPreserved": true,
+      "progressLegal": true,
+      "passed": true
+    },
+    {
+      "state": 1,
+      "phase": "attackMove",
+      "learnedEvaluation": false,
+      "modelWeightsForcedNull": true,
+      "progressDepths": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "deepestCompletedDepth": 5,
+      "action": {
+        "type": "move",
+        "pieceId": "white-R1",
+        "x": 1,
+        "y": 7,
+        "freePawn": false
+      },
+      "inputPreserved": true,
+      "progressLegal": true,
+      "passed": true
+    },
+    {
+      "state": 1,
+      "phase": "attackMove",
+      "learnedEvaluation": true,
+      "modelWeightsForcedNull": true,
+      "progressDepths": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "deepestCompletedDepth": 5,
+      "action": {
+        "type": "move",
+        "pieceId": "white-R1",
+        "x": 1,
+        "y": 7,
+        "freePawn": false
+      },
+      "inputPreserved": true,
+      "progressLegal": true,
+      "passed": true
+    }
+  ]
+}

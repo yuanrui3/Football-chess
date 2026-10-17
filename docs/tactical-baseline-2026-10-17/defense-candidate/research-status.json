@@ -1,0 +1,87 @@
+{
+  "status": "Rejected-unresolved",
+  "finalRelease": "Root froze balanced v4 plus completed-iteration callback at 2026-10-17 06:36:52 UTC; supplied hash prefix 4388dc612b14. Broad/full-risk, minimal, retention and signed-retention variants were excluded.",
+  "selectionDiscipline": "No held-out files or results were accessed by this agent. Prototype changes stopped before final held-out results. The original productive-carry assertion remains unchanged.",
+  "cpuJobs": "None running; the unrequested defense-only full-480 launch was stopped immediately with exit130 and produced no completed scenarios.",
+  "variants": {
+    "engine.mjs": {
+      "status": "development-only; bishop/collection-lane changes included in final v4 by root",
+      "validation": "27 existing + 8 native-lane checks passed; 4 paired 160-action DEV draws, 14 shots / 2.152 xG vs Casual 0 / 0",
+      "path": "engine.mjs",
+      "sha256": "1c814ab66418c39ccabbfd345e4233a5f7ff07f0ba589f7c66ebb20903403498"
+    },
+    "engine-pace-guard.mjs": {
+      "status": "development-only; one pace guard included in final v4 by root",
+      "validation": "2 mirrored fifth-self-collection leaf checks passed",
+      "path": "engine-pace-guard.mjs",
+      "sha256": "305c548123fc5b0fd821ade6f8a302b60aa9329f75c57305be6b2dbbf1cffbb3"
+    },
+    "engine-knight-carry.mjs": {
+      "status": "not selected; native-knight receiving-run feature excluded from final",
+      "validation": "4 mirrored receiving/carry checks + 27 existing tests + 640-state rule/Casual equivalence passed; root selected stronger v4 development candidate",
+      "path": "engine-knight-carry.mjs",
+      "sha256": "ef086bf584e45244baa20cd37baef6b7c35555b50d76b7b263d063aab6ea7119"
+    },
+    "engine-full-reply-risk.mjs": {
+      "status": "Rejected-unresolved",
+      "validation": "10 discovered-tackle cases passed; 640-state equivalence passed; exact risk matched 872 destinations; 17/19 old tests passed (callback absent in frozen v4, productive-carry assertion failed); unsafe subsequent self-collection proved",
+      "path": "engine-full-reply-risk.mjs",
+      "sha256": "0a470059ce24b515e00d06451848f2989dd158872c1a9f8a16834e06af24268f"
+    },
+    "engine-minimal-reply-risk.mjs": {
+      "status": "Rejected-unresolved",
+      "validation": "10 discovered-tackle cases passed; 27/29 combined checks passed (same productive-carry and absent-callback failures); 2 natural attacker cases chose safe destinations but original trap still failed",
+      "path": "engine-minimal-reply-risk.mjs",
+      "sha256": "297ed4ae10c70691671d194884c019b07826ca9dcd137b23bdf68a414908a7d4"
+    },
+    "engine-collection-risk.mjs": {
+      "status": "Rejected-unresolved",
+      "validation": "28/29 checks passed with callback; productive-carry assertion failed; full continuation still led to risk-1 self-collection",
+      "path": "engine-collection-risk.mjs",
+      "sha256": "236d44364079b1057772ce0dd03eb36a3456949ce5568b38baab847a7db19c23"
+    },
+    "engine-signed-collection-risk.mjs": {
+      "status": "Rejected-unresolved",
+      "validation": "productive-carry targeted test failed; full continuation still led to risk-1 self-collection; full 29-test suite was not rerun for this variant",
+      "path": "engine-signed-collection-risk.mjs",
+      "sha256": "12b7b800e3d36af8497c3026de38bce38b47da7103044d5a3df0937692288e26"
+    }
+  },
+  "possessionAuditSummary": {
+    "totalDribbleDestinations": 872,
+    "totalSafeDribbleDestinations": 377,
+    "meanLegalDribbleDestinations": 10.9,
+    "meanSafeDribbleDestinations": 4.7125,
+    "medianSafeDribbleDestinations": 4,
+    "safeDribbleFraction": 0.4323394495412844,
+    "statesWithAtLeastOneSafeDribble": 68,
+    "statesWithAtLeastFiveSafeDribbles": 28,
+    "meanSafeOutfieldPasses": 0.4875,
+    "meanTeammatePassesWithin10": 1.225,
+    "meanKeeperBackPasses": 0.0875,
+    "statesWithSafeDribbleOrSafeOutfieldPass": 72,
+    "heuristicSafeTotal": 382,
+    "heuristicMissedChallenges": 5
+  },
+  "possessionReplay": {
+    "completedPossessionSegments": 118,
+    "censoredPossessionSegments": 7,
+    "meanOwnActionsPerCompletedSegment": 16.991525423728813,
+    "medianOwnActionsPerCompletedSegment": 14,
+    "turnoverReasons": {
+      "shotMiss": 26,
+      "tackle": 30,
+      "offside": 12,
+      "goal": 9,
+      "stalling": 10,
+      "save": 24,
+      "move": 7
+    },
+    "actualTackleAttempts": 37,
+    "actualTackleWins": 30,
+    "actualPasses": 469,
+    "actualInterceptedPasses": 0,
+    "actualSelfCollections": 154
+  },
+  "knownLimitation": "The released legacy Tactical tackle-risk helper can miss a pawn/king bonus vacating another defender\u2019s ordinary tackling ray. Five such potential destinations were proven among 872 sampled legal dribble destinations. The attempted fuller opponent model introduced a separate tactical regression, so it was not released."
+}

@@ -1,0 +1,170 @@
+[
+  {
+    "phase": "defendMove",
+    "team": "black",
+    "action": {
+      "type": "move",
+      "pieceId": "black-P2",
+      "x": 6,
+      "y": 4,
+      "freePawn": true
+    },
+    "result": {
+      "type": "move",
+      "team": "black",
+      "pieceId": "black-P2",
+      "from": {
+        "x": 6,
+        "y": 3
+      },
+      "to": {
+        "x": 6,
+        "y": 4
+      },
+      "path": [
+        {
+          "x": 6,
+          "y": 3
+        },
+        {
+          "x": 6,
+          "y": 4
+        }
+      ],
+      "freePawn": true
+    },
+    "ball": {
+      "x": 4,
+      "y": 9,
+      "carrierId": "white-Q"
+    },
+    "progress": {
+      "team": "white",
+      "rounds": 2,
+      "roundsRemaining": 1,
+      "anchorY": 12,
+      "progress": 3,
+      "needed": 1,
+      "active": true,
+      "warning": true
+    }
+  },
+  {
+    "phase": "defendMove",
+    "team": "black",
+    "action": {
+      "type": "move",
+      "pieceId": "black-Q",
+      "x": 3,
+      "y": 8,
+      "freePawn": false
+    },
+    "result": {
+      "type": "move",
+      "team": "black",
+      "pieceId": "black-Q",
+      "from": {
+        "x": 7,
+        "y": 4
+      },
+      "to": {
+        "x": 3,
+        "y": 8
+      },
+      "path": [
+        {
+          "x": 7,
+          "y": 4
+        },
+        {
+          "x": 3,
+          "y": 8
+        }
+      ],
+      "freePawn": false
+    },
+    "ball": {
+      "x": 4,
+      "y": 9,
+      "carrierId": "white-Q"
+    },
+    "progress": {
+      "team": "white",
+      "rounds": 2,
+      "roundsRemaining": 1,
+      "anchorY": 12,
+      "progress": 3,
+      "needed": 1,
+      "active": true,
+      "warning": true
+    }
+  },
+  {
+    "phase": "kick",
+    "team": "white",
+    "action": {
+      "type": "kick",
+      "x": 4,
+      "y": 5
+    },
+    "result": {
+      "team": "white",
+      "pieceId": "white-Q",
+      "from": {
+        "x": 4,
+        "y": 9
+      },
+      "intendedTo": {
+        "x": 4,
+        "y": 5
+      },
+      "distance": 4,
+      "accuracy": 1,
+      "probability": 1,
+      "roll": 0.2573833563365042,
+      "type": "kick",
+      "to": {
+        "x": 4,
+        "y": 5
+      },
+      "path": [
+        {
+          "x": 4,
+          "y": 9
+        },
+        {
+          "x": 4,
+          "y": 8
+        },
+        {
+          "x": 4,
+          "y": 7
+        },
+        {
+          "x": 4,
+          "y": 6
+        },
+        {
+          "x": 4,
+          "y": 5
+        }
+      ],
+      "outcome": "complete"
+    },
+    "ball": {
+      "x": 4,
+      "y": 5,
+      "carrierId": null
+    },
+    "progress": {
+      "team": "white",
+      "rounds": 0,
+      "roundsRemaining": 3,
+      "anchorY": 5,
+      "progress": 0,
+      "needed": 4,
+      "active": false,
+      "warning": false
+    }
+  }
+]

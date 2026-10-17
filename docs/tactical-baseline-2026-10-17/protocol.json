@@ -1,0 +1,53 @@
+{
+  "createdAt": "2026-10-17T06:04:41.257629+00:00",
+  "objective": "Handcrafted Tactical stronger than frozen Casual, no RL; production budget unchanged",
+  "rules": "One shared rules19 shot15 engine; policy modules select actions; chance RNG masked to0 in policy views",
+  "candidateWeights": null,
+  "devSeeds": [
+    610017,
+    610043,
+    610079,
+    610111
+  ],
+  "heldoutSeeds": [
+    720017,
+    720043,
+    720079,
+    720111
+  ],
+  "separateFrozenTacticalSeeds": [
+    830017,
+    830043
+  ],
+  "legs": "Each seed x white/black candidate x white/black kickoff",
+  "fullActions": 480,
+  "fastActions": 160,
+  "nodes": 1400,
+  "depth": 8,
+  "parallelWorkers": 2,
+  "fouls": "Explicit for every run; ONprimary,OFFsensitivity",
+  "metrics": [
+    "WDL",
+    "goals",
+    "xG",
+    "shots",
+    "stalls",
+    "repetitions",
+    "offsides",
+    "mean/p95think",
+    "nodecap",
+    "legalstate/purity"
+  ],
+  "blindBaselineHeldout": {
+    "startedAt": "2026-10-17T06:10:47.127133+00:00",
+    "label": "baseline-heldout-blind",
+    "seeds": [
+      720017,
+      720043
+    ],
+    "legs": 8,
+    "actions": 480,
+    "workers": 2,
+    "visibility": "Do not inspect or aggregate outcomes until root confirms the candidate source hash is frozen."
+  }
+}

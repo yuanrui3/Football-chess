@@ -1,0 +1,18 @@
+✔ counterexample0 original: Tactical sees and preserves a legal discovered tackle without changing Casual (39.298142ms)
+✔ counterexample0 mirror: Tactical sees and preserves a legal discovered tackle without changing Casual (13.925505ms)
+✔ counterexample1 original: Tactical sees and preserves a legal discovered tackle without changing Casual (19.600329ms)
+✔ counterexample1 mirror: Tactical sees and preserves a legal discovered tackle without changing Casual (12.416155ms)
+✔ counterexample2 original: Tactical sees and preserves a legal discovered tackle without changing Casual (12.186268ms)
+✔ counterexample2 mirror: Tactical sees and preserves a legal discovered tackle without changing Casual (8.749865ms)
+✔ counterexample3 original: Tactical sees and preserves a legal discovered tackle without changing Casual (17.910285ms)
+✔ counterexample3 mirror: Tactical sees and preserves a legal discovered tackle without changing Casual (12.052371ms)
+✔ counterexample4 original: Tactical sees and preserves a legal discovered tackle without changing Casual (37.627103ms)
+✔ counterexample4 mirror: Tactical sees and preserves a legal discovered tackle without changing Casual (32.600333ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 352.931379

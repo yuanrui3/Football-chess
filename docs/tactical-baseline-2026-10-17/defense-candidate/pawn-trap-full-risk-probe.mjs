@@ -1,0 +1,10 @@
+import {readFile,writeFile} from 'node:fs/promises';import vm from 'node:vm';
+import * as B from './full-reply-risk-base.mjs';
+const src=await readFile('./engine-full-reply-risk.mjs','utf8'),C=await import('data:text/javascript;base64,'+Buffer.from(src+'\nexport {tacticalFullReplyRisk,tacticalTackleRisk};').toString('base64'));
+const tests=await readFile('/workspace/github/football-chess-pace/tests/pawn-tactical-awareness.test.mjs','utf8');
+const natural=tests.slice(tests.indexOf('function naturalTrap()'),tests.indexOf("test('the bounded inner reply",tests.indexOf('function naturalTrap()')));
+const context=vm.createContext({fixture:positions=>{const s=B.createGame({seed:55});for(const p of s.pieces)Object.assign(p,{x:positions[p.id][0],y:positions[p.id][1]});const c=s.pieces.find(p=>p.id==='white-Q');Object.assign(s,{attack:'white',phase:'defendMove',ball:{x:c.x,y:c.y,carrierId:c.id},restart:null,offside:null,pendingShot:null,paceControl:null,positionBudget:{normalUsed:false,pawnUsed:false,dribbleUsed:false}});return s;}});
+vm.runInContext(natural+'\nglobalThis.state=naturalTrap();',context);const state=context.state,rows=[];
+for(const [label,M]of [['v4',B],['strict',C]]){let s=structuredClone(state),seq=[];for(let i=0;i<4&&s.phase==='attackMove';i++){const r=M.analyzeTacticalAction(s,{nodeLimit:1400,maxDepth:8,modelWeights:null}),a=r.action;seq.push({action:a,stats:r.stats});s=a.type==='move'?M.applyMove(s,a.pieceId,a.x,a.y,{freePawn:a.freePawn}):M.skipMove(s);}const carrier=s.pieces.find(p=>p.id===s.ball.carrierId);rows.push({label,sequence:seq,carrier,phase:s.phase,finalState:s,risk:C.tacticalFullReplyRisk(s,carrier)});}
+const carries=C.legalMoves(state,'white-Q').map(m=>{const s=C.applyMove(state,'white-Q',m.x,m.y);return{to:{x:m.x,y:m.y},forward:state.ball.y-m.y,risk:C.tacticalFullReplyRisk(s,s.pieces.find(p=>p.id==='white-Q'))};});
+await writeFile('pawn-trap-full-risk-probe.json',JSON.stringify({rows,carries},null,2)+'\n');console.log(JSON.stringify({rows,safeForward:carries.filter(m=>m.forward>0&&m.risk===0)}));

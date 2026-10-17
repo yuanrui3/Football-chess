@@ -1,0 +1,16 @@
+{
+  "completionCheck": {
+    "checkedAt": "2026-10-17T06:21:58.677128+00:00",
+    "session": 18706,
+    "exitCode": 0,
+    "outcomesInspected": false,
+    "unblindCondition": "Explicit parent confirmation that the candidate source hash is locked."
+  },
+  "unblind": {
+    "authorizedAt": "2026-10-17T06:36:52Z",
+    "lockedPolicySha256": "4388dc612b14feb2b266dc5389e1f95228c68e994bcabbcfd39c21a5e4d880f3",
+    "sourceSnapshotVerifiedBeforeRead": true,
+    "outcomesReadAfterLock": true,
+    "recordedAt": "2026-10-17T06:38:46.941017+00:00"
+  }
+}

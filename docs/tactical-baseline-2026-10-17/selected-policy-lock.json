@@ -1,0 +1,12 @@
+{
+  "declaredLockAt": "2026-10-17T06:36:52Z",
+  "recordedAt": "2026-10-17T06:37:29.721102+00:00",
+  "source": "/workspace/github/football-chess-pace/dist/engine.js",
+  "snapshot": "/workspace/scratch/43be99f43c82/tactical-half-hour-20261017/evidence/selected-engine-locked.mjs",
+  "sha256": "4388dc612b14feb2b266dc5389e1f95228c68e994bcabbcfd39c21a5e4d880f3",
+  "frozenControlSha256": "584b1dffb37d222969c80df04eb3b80fc79ef7fb05fc225483fb820efd47a29e",
+  "selectedDescription": "Balanced v4:0.25 possession preference, preserved risk, completed-iteration callback; N/q/tempo/broad-risk experiments excluded.",
+  "modelWeights": null,
+  "heldoutOutcomesInspectedBeforeLock": false,
+  "unblindAuthorizedBy": "Explicit parent source-hash lock message06:36:52UTC"
+}

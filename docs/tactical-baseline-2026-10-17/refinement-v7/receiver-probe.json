@@ -1,0 +1,50 @@
+[
+  {
+    "name": "base",
+    "action": {
+      "type": "kick",
+      "x": 8,
+      "y": 4
+    },
+    "kick": {
+      "receiverId": "white-R1"
+    },
+    "immediateXG": 0.07950951829953569,
+    "receiverXG": 0.8503554072812969,
+    "value": 151.9563814103524,
+    "depth": 2,
+    "nodes": 1400
+  },
+  {
+    "name": "020",
+    "action": {
+      "type": "kick",
+      "x": 6,
+      "y": -1
+    },
+    "kick": {
+      "goal": "white"
+    },
+    "immediateXG": 0.07950951829953569,
+    "receiverXG": 0.8503554072812969,
+    "value": 129.37706702548246,
+    "depth": 2,
+    "nodes": 1400
+  },
+  {
+    "name": "015",
+    "action": {
+      "type": "kick",
+      "x": 6,
+      "y": -1
+    },
+    "kick": {
+      "goal": "white"
+    },
+    "immediateXG": 0.07950951829953569,
+    "receiverXG": 0.8503554072812969,
+    "value": 136.74362945374136,
+    "depth": 2,
+    "nodes": 1400
+  }
+]

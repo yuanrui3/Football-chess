@@ -1,0 +1,17 @@
+{
+  "baseSha256": "4388dc612b14feb2b266dc5389e1f95228c68e994bcabbcfd39c21a5e4d880f3",
+  "candidates": [
+    {
+      "scale": 0.2,
+      "sha256": "63d3dc0ed2522e7d7be3babacd0a508349ae25945a07d4db58ff64827af79039",
+      "enginePath": "/workspace/scratch/43be99f43c82/tactical-half-hour-20261017/refinement-v7/possession-020/engine.mjs",
+      "patchPath": "/workspace/scratch/43be99f43c82/tactical-half-hour-20261017/refinement-v7/possession-020/possession-scale.patch"
+    },
+    {
+      "scale": 0.15,
+      "sha256": "513d5e44da321ab6e028fd88f8410b1ddbb3636b26d1a76fea5c6eee27c725af",
+      "enginePath": "/workspace/scratch/43be99f43c82/tactical-half-hour-20261017/refinement-v7/possession-015/engine.mjs",
+      "patchPath": "/workspace/scratch/43be99f43c82/tactical-half-hour-20261017/refinement-v7/possession-015/possession-scale.patch"
+    }
+  ]
+}

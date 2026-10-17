@@ -1,0 +1,121 @@
+--- full-reply-risk-base.mjs	2026-10-16 23:25:54.923991600 -0700
++++ engine-full-reply-risk.mjs	2026-10-16 23:25:54.927431426 -0700
+@@ -1852,6 +1852,48 @@
+   return 0;
+ }
+ 
++// Tactical additionally considers a shared bonus vacating another defender's
++// tackling ray or landing square. The legacy helper remains shared with Casual.
++const tacticalFullRiskCache = new WeakMap();
++function tacticalFullReplyRisk(state, carrier) {
++  const ordinary = tacticalTackleRisk(state, carrier);
++  if (ordinary || !carrier) return ordinary;
++  const budget = tacticalChallengeBudget(state, carrier);
++  if (!budget || budget.normalUsed || budget.pawnUsed) return 0;
++  const cached = tacticalFullRiskCache.get(state);
++  if (cached && cached.id === carrier.id && cached.x === carrier.x && cached.y === carrier.y) return cached.value;
++  const defenders = state.pieces.filter(piece => piece.team !== carrier.team && !flagged(state, piece));
++  // Only a bonus piece within a five-square challenge ray (or an adjacent
++  // tackle landing) can obstruct an otherwise available ordinary challenge.
++  const bonusPieces = defenders.filter(piece => ['P', 'K'].includes(piece.type) && distance(piece, carrier) <= LONG_TACKLE_RANGE);
++  const reply = {...state, phase: 'defendMove', attack: carrier.team, positionBudget: budget};
++  let value = 0;
++  outer: for (const piece of bonusPieces) for (const move of legalMoves(reply, piece.id, {freePawn: true})) {
++    const projected = projectedMove(reply, piece, move);
++    for (const defender of defenders) {
++      const moved = defender.id === piece.id ? {...piece, x: move.x, y: move.y} : defender;
++      if (tacticalTackleLanding(projected, moved, carrier)) {
++        value = (carrier.type === 'N' ? 0.5 : 1) * (state.foulsEnabled ? FOUL_RULE.clean : 1);
++        break outer;
++      }
++    }
++  }
++  tacticalFullRiskCache.set(state, {id: carrier.id, x: carrier.x, y: carrier.y, value});
++  return value;
++}
++
++function tacticalBonusTackleSetup(state, piece, move, carrier) {
++  if (tacticalTackleSetup(state, piece, move, carrier)) return true;
++  const budget = tacticalChallengeBudget(state, carrier);
++  if (!budget || budget.normalUsed || budget.pawnUsed || piece.team === carrier.team || !['P', 'K'].includes(piece.type)
++    || flagged(state, piece) || distance(piece, carrier) > LONG_TACKLE_RANGE) return false;
++  const reply = {...state, phase: 'defendMove', attack: carrier.team, positionBudget: budget};
++  if (!legalMoves(reply, piece.id, {freePawn: true}).some(candidate => candidate.x === move.x && candidate.y === move.y)) return false;
++  const projected = projectedMove(reply, piece, move);
++  return projected.pieces.some(defender => defender.team !== carrier.team && !flagged(projected, defender)
++    && tacticalTackleLanding(projected, defender, carrier));
++}
++
+ // Off-ball box runs provide receiving chances alongside direct carrying entry.
+ // Merely rewarding a nearby teammate cannot distinguish a useful cut-back
+ // receiver from a crowd of pieces that the carrier cannot actually reach.
+@@ -2397,7 +2439,7 @@
+   }
+   if (!carrier) return value + looseBallValue(state, team) * 0.35;
+   const sign = carrier.team === team ? 1 : -1;
+-  const risk = tacticalTackleRisk(state, carrier);
++  const risk = tacticalFullReplyRisk(state, carrier);
+   // A dangerous-looking pass is less valuable when the opponent can win the
+   // receiver immediately. Actual tackles in the tree still use their real odds.
+   const threat = tacticalShots(state, carrier.team, true);
+@@ -2472,6 +2514,14 @@
+   }
+   if (!fast) {
+     let rank = moveValue(state, projected, piece, move, piece.team, beforeThreat);
++    if (carrier?.team === piece.team) {
++      const previous = state.pieces.find(p => p.id === state.ball.carrierId);
++      if (previous) {
++        const beforeExtra = tacticalFullReplyRisk(state, previous) - tacticalTackleRisk(state, previous);
++        const afterExtra = tacticalFullReplyRisk(projected, carrier) - tacticalTackleRisk(projected, carrier);
++        rank += (beforeExtra - afterExtra) * (carrier.id === piece.id ? 680 : 450);
++      }
++    }
+     if (carrier?.team === piece.team && carrier.id !== piece.id) {
+       const previous = state.pieces.find(p => p.id === state.ball.carrierId);
+       rank += (tacticalOutlets(projected, carrier).best - tacticalOutlets(state, previous).best) * 850;
+@@ -2483,20 +2533,20 @@
+   }
+   if (flagged(state, piece) && (move.type === 'tackle' || !state.ball.carrierId && state.ball.x === move.x && state.ball.y === move.y)) return -12000;
+   const home = piece.type === 'K' ? keeperHomeValue(moved) - keeperHomeValue(piece) : 0;
+-  if (move.type === 'tackle') return 12000 * (move.tackleProbability ?? 1) - tacticalTackleRisk(projected, carrier) * 120;
++  if (move.type === 'tackle') return 12000 * (move.tackleProbability ?? 1) - tacticalFullReplyRisk(projected, carrier) * 120;
+   if (!state.ball.carrierId) return projected.ball.carrierId === piece.id
+-    ? 1000 + tacticalShots(projected, piece.team, true) * 600 - tacticalTackleRisk(projected, moved) * 160
++    ? 1000 + tacticalShots(projected, piece.team, true) * 600 - tacticalFullReplyRisk(projected, moved) * 160
+     : (distance(piece, state.ball) - distance(moved, state.ball)) * 12 + home;
+   if (carrier?.team === piece.team) {
+     if (carrier.id === piece.id) return (Math.max(3, goalDistance(piece.team, piece.y)) - Math.max(3, goalDistance(piece.team, move.y))) * 10
+       + (tacticalShots(projected, piece.team, true) - tacticalShots(state, piece.team, true)) * 700
+-      + (tacticalTackleRisk(state, piece) - tacticalTackleRisk(projected, carrier)) * 680 + progressRank(state, piece.team, move.y);
++      + (tacticalFullReplyRisk(state, piece) - tacticalFullReplyRisk(projected, carrier)) * 680 + progressRank(state, piece.team, move.y);
+     const original = state.pieces.find(p => p.id === carrier.id);
+     return supportPotential(projected, moved, carrier) - supportPotential(state, piece, original)
+       + (tacticalShots(projected, carrier.team, true) - tacticalShots(state, carrier.team, true)) * 900
+       + (wideCrossingSupport(projected, carrier).best - wideCrossingSupport(state, original).best) * 240
+       + (tacticalOutlets(projected, carrier).best - tacticalOutlets(state, original).best) * 850
+-      + (tacticalTackleRisk(state, original) - tacticalTackleRisk(projected, carrier)) * 450
++      + (tacticalFullReplyRisk(state, original) - tacticalFullReplyRisk(projected, carrier)) * 450
+       + home;
+   }
+   if (!carrier) return 0;
+@@ -2542,9 +2592,9 @@
+     for (const piece of state.pieces) if (piece.team === team) {
+       for (const freePawn of [false, true]) for (const move of legalMoves(state, piece.id, {freePawn})) {
+         const carrying = piece.id === carrier?.id;
+-        const safeDribble = carrying && !tacticalTackleRisk(projectedMove(state, piece, move), {...piece, x: move.x, y: move.y});
++        const safeDribble = carrying && !tacticalFullReplyRisk(projectedMove(state, piece, move), {...piece, x: move.x, y: move.y});
+         const boxRun = !carrying && carrier?.team === team && isBox(move.x, move.y) && !inOwnBox(team, move.x, move.y);
+-        const tackleSetup = freePawn && carrier && carrier.team !== team && tacticalTackleSetup(state, piece, move, carrier);
++        const tackleSetup = freePawn && carrier && carrier.team !== team && tacticalBonusTackleSetup(state, piece, move, carrier);
+         candidates.push({action: {type: 'move', pieceId: piece.id, x: move.x, y: move.y, freePawn}, rank: tacticalMoveRank(state, piece, move, beforeThreat, !root, threats) + (freePawn ? 0.01 : 0), category: tackleSetup ? 'tackleSetup' : freePawn ? 'pawn' : move.type === 'tackle' ? 'tackle' : carrying ? safeDribble ? 'safeDribble' : 'dribble' : boxRun ? 'boxRun' : 'support'});
+       }
+     }
+@@ -2686,7 +2736,7 @@
+   // compare an advanced carrier with an attack whose kick has already settled.
+   if (state.phase === 'defendMove') return true;
+   if (state.phase === 'attackMove' && Object.values(budgetFor(state)).some(Boolean)) return true;
+-  if (positionalTurn(state) && tacticalTackleRisk(state, carrier)) {
++  if (positionalTurn(state) && tacticalFullReplyRisk(state, carrier)) {
+     if (state.phase === 'defendMove' && !budgetFor(state).normalUsed) return true;
+     if (state.phase === 'attackMove' && (!budgetFor(state).dribbleUsed || !budgetFor(state).normalUsed)) return true;
+   }

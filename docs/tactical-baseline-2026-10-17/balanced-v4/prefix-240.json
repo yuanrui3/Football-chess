@@ -1,0 +1,168 @@
+{
+  "prefixActions": 240,
+  "matches": 4,
+  "wdl": {
+    "wins": 1,
+    "draws": 3,
+    "losses": 0
+  },
+  "candidate": {
+    "goals": 1,
+    "shots": 21,
+    "resolvedShots": 21,
+    "xG": 3.073611412866589,
+    "stalls": 0,
+    "offsides": 0
+  },
+  "baseline": {
+    "goals": 0,
+    "shots": 3,
+    "resolvedShots": 3,
+    "xG": 0.36971940032084166,
+    "stalls": 1,
+    "offsides": 5
+  },
+  "legs": [
+    {
+      "source": "match-000-610017-fouls-white-white.json",
+      "seed": 610017,
+      "kickoff": "white",
+      "candidateColor": "white",
+      "foulsEnabled": true,
+      "actions": 240,
+      "score": {
+        "white": 0,
+        "black": 0
+      },
+      "candidateResult": "draw",
+      "candidate": {
+        "actions": 126,
+        "goals": 0,
+        "shots": 6,
+        "resolvedShots": 6,
+        "xG": 0.8024063630036643,
+        "stalls": 0,
+        "offsides": 0,
+        "meanThinkMs": 636.1718438650789,
+        "p95ThinkMs": 1075.236245
+      },
+      "baseline": {
+        "actions": 114,
+        "goals": 0,
+        "shots": 1,
+        "resolvedShots": 1,
+        "xG": 0.21613597515466254,
+        "stalls": 1,
+        "offsides": 0,
+        "meanThinkMs": 12.507295912280748,
+        "p95ThinkMs": 78.31889599999704
+      }
+    },
+    {
+      "source": "match-001-610017-fouls-white-black.json",
+      "seed": 610017,
+      "kickoff": "black",
+      "candidateColor": "white",
+      "foulsEnabled": true,
+      "actions": 240,
+      "score": {
+        "white": 1,
+        "black": 0
+      },
+      "candidateResult": "win",
+      "candidate": {
+        "actions": 110,
+        "goals": 1,
+        "shots": 5,
+        "resolvedShots": 5,
+        "xG": 0.6879173017487691,
+        "stalls": 0,
+        "offsides": 0,
+        "meanThinkMs": 573.8577406545455,
+        "p95ThinkMs": 973.3951820000002
+      },
+      "baseline": {
+        "actions": 130,
+        "goals": 0,
+        "shots": 0,
+        "resolvedShots": 0,
+        "xG": 0,
+        "stalls": 0,
+        "offsides": 3,
+        "meanThinkMs": 7.6579751000000185,
+        "p95ThinkMs": 66.08393300000171
+      }
+    },
+    {
+      "source": "match-002-610017-fouls-black-white.json",
+      "seed": 610017,
+      "kickoff": "white",
+      "candidateColor": "black",
+      "foulsEnabled": true,
+      "actions": 240,
+      "score": {
+        "white": 0,
+        "black": 0
+      },
+      "candidateResult": "draw",
+      "candidate": {
+        "actions": 114,
+        "goals": 0,
+        "shots": 4,
+        "resolvedShots": 4,
+        "xG": 0.7094119480477179,
+        "stalls": 0,
+        "offsides": 0,
+        "meanThinkMs": 583.4540497894739,
+        "p95ThinkMs": 1037.9892610000097
+      },
+      "baseline": {
+        "actions": 126,
+        "goals": 0,
+        "shots": 1,
+        "resolvedShots": 1,
+        "xG": 0.058482398718648035,
+        "stalls": 0,
+        "offsides": 1,
+        "meanThinkMs": 9.313966111112562,
+        "p95ThinkMs": 78.41156599999522
+      }
+    },
+    {
+      "source": "match-003-610017-fouls-black-black.json",
+      "seed": 610017,
+      "kickoff": "black",
+      "candidateColor": "black",
+      "foulsEnabled": true,
+      "actions": 240,
+      "score": {
+        "white": 0,
+        "black": 0
+      },
+      "candidateResult": "draw",
+      "candidate": {
+        "actions": 119,
+        "goals": 0,
+        "shots": 6,
+        "resolvedShots": 6,
+        "xG": 0.8738758000664376,
+        "stalls": 0,
+        "offsides": 0,
+        "meanThinkMs": 930.5571287647068,
+        "p95ThinkMs": 1691.1227620000136
+      },
+      "baseline": {
+        "actions": 121,
+        "goals": 0,
+        "shots": 1,
+        "resolvedShots": 1,
+        "xG": 0.0951010264475311,
+        "stalls": 0,
+        "offsides": 1,
+        "meanThinkMs": 7.95759625619947,
+        "p95ThinkMs": 57.07293500000378
+      }
+    }
+  ],
+  "note": "Exact prefix of the same deterministic policies and environment trajectory; any launched shot at the prefix boundary is settled."
+}

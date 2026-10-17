@@ -1,0 +1,1026 @@
+[
+  {
+    "name": "Q-6,1",
+    "baseline": {
+      "ms": 884.544672,
+      "action": {
+        "type": "kick",
+        "x": 6,
+        "y": -1,
+        "disguise": true
+      },
+      "value": 1306.0388004730341,
+      "stats": {
+        "nodes": 1400,
+        "completedDepth": 2,
+        "cacheHits": 333,
+        "extensions": 518,
+        "cutoffs": 79,
+        "aborted": true
+      },
+      "line": [
+        {
+          "action": {
+            "type": "kick",
+            "x": 6,
+            "y": -1,
+            "disguise": true
+          },
+          "team": "white",
+          "phase": "kick"
+        },
+        {
+          "action": {
+            "type": "skip"
+          },
+          "team": "black",
+          "phase": "keeperReact"
+        }
+      ]
+    },
+    "candidate": {
+      "ms": 432.813978,
+      "action": {
+        "type": "kick",
+        "x": 6,
+        "y": -1,
+        "disguise": true
+      },
+      "value": 1281.0194187022107,
+      "stats": {
+        "nodes": 1400,
+        "completedDepth": 3,
+        "cacheHits": 473,
+        "extensions": 123,
+        "cutoffs": 87,
+        "aborted": true
+      },
+      "line": [
+        {
+          "action": {
+            "type": "kick",
+            "x": 6,
+            "y": -1,
+            "disguise": true
+          },
+          "team": "white",
+          "phase": "kick"
+        },
+        {
+          "action": {
+            "type": "skip"
+          },
+          "team": "black",
+          "phase": "keeperReact"
+        },
+        {
+          "action": {
+            "type": "kick",
+            "x": 11,
+            "y": 4
+          },
+          "team": "black",
+          "phase": "kickoff"
+        }
+      ]
+    }
+  },
+  {
+    "name": "R-5,3",
+    "baseline": {
+      "ms": 494.634691,
+      "action": {
+        "type": "kick",
+        "x": 5,
+        "y": -1
+      },
+      "value": 1733.9760148288221,
+      "stats": {
+        "nodes": 1400,
+        "completedDepth": 3,
+        "cacheHits": 102,
+        "extensions": 335,
+        "cutoffs": 119,
+        "aborted": true
+      },
+      "line": [
+        {
+          "action": {
+            "type": "kick",
+            "x": 5,
+            "y": -1
+          },
+          "team": "white",
+          "phase": "kick"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "black-K",
+            "x": 7,
+            "y": 0,
+            "freePawn": false
+          },
+          "team": "black",
+          "phase": "keeperReact"
+        },
+        {
+          "action": {
+            "type": "kick",
+            "x": 11,
+            "y": 4
+          },
+          "team": "black",
+          "phase": "kickoff"
+        }
+      ]
+    },
+    "candidate": {
+      "ms": 254.6811520000001,
+      "action": {
+        "type": "kick",
+        "x": 5,
+        "y": -1
+      },
+      "value": 1733.9685224614748,
+      "stats": {
+        "nodes": 1400,
+        "completedDepth": 3,
+        "cacheHits": 485,
+        "extensions": 185,
+        "cutoffs": 144,
+        "aborted": true
+      },
+      "line": [
+        {
+          "action": {
+            "type": "kick",
+            "x": 5,
+            "y": -1
+          },
+          "team": "white",
+          "phase": "kick"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "black-K",
+            "x": 7,
+            "y": 0,
+            "freePawn": false
+          },
+          "team": "black",
+          "phase": "keeperReact"
+        },
+        {
+          "action": {
+            "type": "kick",
+            "x": 11,
+            "y": 4
+          },
+          "team": "black",
+          "phase": "kickoff"
+        }
+      ]
+    }
+  },
+  {
+    "name": "N-6,1",
+    "baseline": {
+      "ms": 461.5599739999998,
+      "action": {
+        "type": "kick",
+        "x": 5,
+        "y": -1
+      },
+      "value": 1854.4645477018862,
+      "stats": {
+        "nodes": 1400,
+        "completedDepth": 3,
+        "cacheHits": 543,
+        "extensions": 455,
+        "cutoffs": 151,
+        "aborted": true
+      },
+      "line": [
+        {
+          "action": {
+            "type": "kick",
+            "x": 5,
+            "y": -1
+          },
+          "team": "white",
+          "phase": "kick"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "black-K",
+            "x": 7,
+            "y": 0,
+            "freePawn": false
+          },
+          "team": "black",
+          "phase": "keeperReact"
+        },
+        {
+          "action": {
+            "type": "kick",
+            "x": 11,
+            "y": 4
+          },
+          "team": "black",
+          "phase": "kickoff"
+        }
+      ]
+    },
+    "candidate": {
+      "ms": 299.4479849999998,
+      "action": {
+        "type": "kick",
+        "x": 5,
+        "y": -1
+      },
+      "value": 1845.2036572679986,
+      "stats": {
+        "nodes": 1400,
+        "completedDepth": 4,
+        "cacheHits": 739,
+        "extensions": 118,
+        "cutoffs": 98,
+        "aborted": true
+      },
+      "line": [
+        {
+          "action": {
+            "type": "kick",
+            "x": 5,
+            "y": -1
+          },
+          "team": "white",
+          "phase": "kick"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "black-K",
+            "x": 7,
+            "y": 0,
+            "freePawn": false
+          },
+          "team": "black",
+          "phase": "keeperReact"
+        },
+        {
+          "action": {
+            "type": "kick",
+            "x": 11,
+            "y": 4
+          },
+          "team": "black",
+          "phase": "kickoff"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "black-B1",
+            "x": 8,
+            "y": 7,
+            "freePawn": false
+          },
+          "team": "black",
+          "phase": "attackMove"
+        }
+      ]
+    }
+  },
+  {
+    "name": "Q-6,6",
+    "baseline": {
+      "ms": 572.7228839999998,
+      "action": {
+        "type": "kick",
+        "x": 6,
+        "y": 15
+      },
+      "value": 142.9915892324845,
+      "stats": {
+        "nodes": 1400,
+        "completedDepth": 2,
+        "cacheHits": 51,
+        "extensions": 304,
+        "cutoffs": 93,
+        "aborted": true
+      },
+      "line": [
+        {
+          "action": {
+            "type": "kick",
+            "x": 6,
+            "y": 15
+          },
+          "team": "white",
+          "phase": "kick"
+        },
+        {
+          "action": {
+            "type": "kick",
+            "x": 6,
+            "y": 7
+          },
+          "team": "white",
+          "phase": "keeperRelease"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-Q",
+            "x": 6,
+            "y": 7,
+            "freePawn": false
+          },
+          "team": "white",
+          "phase": "attackMove"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-Q",
+            "x": 6,
+            "y": 4,
+            "freePawn": false
+          },
+          "team": "white",
+          "phase": "attackMove"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-P3",
+            "x": 1,
+            "y": 4,
+            "freePawn": true
+          },
+          "team": "white",
+          "phase": "attackMove"
+        }
+      ]
+    },
+    "candidate": {
+      "ms": 303.5727499999998,
+      "action": {
+        "type": "kick",
+        "x": 6,
+        "y": 4
+      },
+      "value": 346.41377327461646,
+      "stats": {
+        "nodes": 1400,
+        "completedDepth": 3,
+        "cacheHits": 555,
+        "extensions": 191,
+        "cutoffs": 123,
+        "aborted": true
+      },
+      "line": [
+        {
+          "action": {
+            "type": "kick",
+            "x": 6,
+            "y": 4
+          },
+          "team": "white",
+          "phase": "kick"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-Q",
+            "x": 6,
+            "y": 4,
+            "freePawn": false
+          },
+          "team": "white",
+          "phase": "attackMove"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-P3",
+            "x": 1,
+            "y": 4,
+            "freePawn": true
+          },
+          "team": "white",
+          "phase": "attackMove"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "black-Q",
+            "x": 7,
+            "y": 4,
+            "freePawn": false
+          },
+          "team": "black",
+          "phase": "defendMove"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "black-K",
+            "x": 6,
+            "y": 0,
+            "freePawn": true
+          },
+          "team": "black",
+          "phase": "defendMove"
+        },
+        {
+          "action": {
+            "type": "kick",
+            "x": 6,
+            "y": -1
+          },
+          "team": "white",
+          "phase": "kick"
+        },
+        {
+          "action": {
+            "type": "skip"
+          },
+          "team": "black",
+          "phase": "keeperReact"
+        }
+      ]
+    }
+  },
+  {
+    "name": "kickoff",
+    "baseline": {
+      "ms": 701.0084390000002,
+      "action": {
+        "type": "kick",
+        "x": 2,
+        "y": 12
+      },
+      "value": 115.15325890152894,
+      "stats": {
+        "nodes": 1400,
+        "completedDepth": 3,
+        "cacheHits": 172,
+        "extensions": 445,
+        "cutoffs": 213,
+        "aborted": true
+      },
+      "line": [
+        {
+          "action": {
+            "type": "kick",
+            "x": 2,
+            "y": 12
+          },
+          "team": "white",
+          "phase": "kickoff"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-B1",
+            "x": 5,
+            "y": 9,
+            "freePawn": false
+          },
+          "team": "white",
+          "phase": "attackMove"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-N2",
+            "x": 7,
+            "y": 11,
+            "freePawn": false
+          },
+          "team": "white",
+          "phase": "attackMove"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-K",
+            "x": 6,
+            "y": 16,
+            "freePawn": true
+          },
+          "team": "white",
+          "phase": "attackMove"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "black-Q",
+            "x": 5,
+            "y": 6,
+            "freePawn": false
+          },
+          "team": "black",
+          "phase": "defendMove"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "black-K",
+            "x": 7,
+            "y": 0,
+            "freePawn": true
+          },
+          "team": "black",
+          "phase": "defendMove"
+        }
+      ]
+    },
+    "candidate": {
+      "ms": 393.67534199999955,
+      "action": {
+        "type": "kick",
+        "x": 2,
+        "y": 12
+      },
+      "value": 106.54082929634284,
+      "stats": {
+        "nodes": 1400,
+        "completedDepth": 4,
+        "cacheHits": 259,
+        "extensions": 294,
+        "cutoffs": 181,
+        "aborted": true
+      },
+      "line": [
+        {
+          "action": {
+            "type": "kick",
+            "x": 2,
+            "y": 12
+          },
+          "team": "white",
+          "phase": "kickoff"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-B1",
+            "x": 4,
+            "y": 10,
+            "freePawn": false
+          },
+          "team": "white",
+          "phase": "attackMove"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-K",
+            "x": 6,
+            "y": 16,
+            "freePawn": true
+          },
+          "team": "white",
+          "phase": "attackMove"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-Q",
+            "x": 5,
+            "y": 9,
+            "freePawn": false
+          },
+          "team": "white",
+          "phase": "attackMove"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "black-R2",
+            "x": 1,
+            "y": 10,
+            "freePawn": false
+          },
+          "team": "black",
+          "phase": "defendMove"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "black-K",
+            "x": 7,
+            "y": 0,
+            "freePawn": true
+          },
+          "team": "black",
+          "phase": "defendMove"
+        },
+        {
+          "action": {
+            "type": "kick",
+            "x": 5,
+            "y": 9
+          },
+          "team": "white",
+          "phase": "kick"
+        }
+      ]
+    }
+  },
+  {
+    "name": "attackMove",
+    "baseline": {
+      "ms": 470.50055599999996,
+      "action": {
+        "type": "move",
+        "pieceId": "white-N1",
+        "x": 5,
+        "y": 8,
+        "freePawn": false
+      },
+      "value": 105.77721636449327,
+      "stats": {
+        "nodes": 1400,
+        "completedDepth": 3,
+        "cacheHits": 138,
+        "extensions": 304,
+        "cutoffs": 168,
+        "aborted": true
+      },
+      "line": [
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-N1",
+            "x": 5,
+            "y": 8,
+            "freePawn": false
+          },
+          "team": "white",
+          "phase": "attackMove"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-Q",
+            "x": 6,
+            "y": 6,
+            "freePawn": false
+          },
+          "team": "white",
+          "phase": "attackMove"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-P1",
+            "x": 6,
+            "y": 13,
+            "freePawn": true
+          },
+          "team": "white",
+          "phase": "attackMove"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "black-B2",
+            "x": 3,
+            "y": 3,
+            "freePawn": false
+          },
+          "team": "black",
+          "phase": "defendMove"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "black-K",
+            "x": 7,
+            "y": 0,
+            "freePawn": true
+          },
+          "team": "black",
+          "phase": "defendMove"
+        },
+        {
+          "action": {
+            "type": "kick",
+            "x": 6,
+            "y": 13
+          },
+          "team": "white",
+          "phase": "kick"
+        }
+      ]
+    },
+    "candidate": {
+      "ms": 415.3715919999995,
+      "action": {
+        "type": "move",
+        "pieceId": "white-N1",
+        "x": 5,
+        "y": 8,
+        "freePawn": false
+      },
+      "value": 105.77721636449327,
+      "stats": {
+        "nodes": 1400,
+        "completedDepth": 3,
+        "cacheHits": 138,
+        "extensions": 304,
+        "cutoffs": 168,
+        "aborted": true
+      },
+      "line": [
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-N1",
+            "x": 5,
+            "y": 8,
+            "freePawn": false
+          },
+          "team": "white",
+          "phase": "attackMove"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-Q",
+            "x": 6,
+            "y": 6,
+            "freePawn": false
+          },
+          "team": "white",
+          "phase": "attackMove"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-P1",
+            "x": 6,
+            "y": 13,
+            "freePawn": true
+          },
+          "team": "white",
+          "phase": "attackMove"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "black-B2",
+            "x": 3,
+            "y": 3,
+            "freePawn": false
+          },
+          "team": "black",
+          "phase": "defendMove"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "black-K",
+            "x": 7,
+            "y": 0,
+            "freePawn": true
+          },
+          "team": "black",
+          "phase": "defendMove"
+        },
+        {
+          "action": {
+            "type": "kick",
+            "x": 6,
+            "y": 13
+          },
+          "team": "white",
+          "phase": "kick"
+        }
+      ]
+    }
+  },
+  {
+    "name": "defendMove",
+    "baseline": {
+      "ms": 864.0061599999999,
+      "action": {
+        "type": "move",
+        "pieceId": "black-K",
+        "x": 6,
+        "y": 0,
+        "freePawn": true
+      },
+      "value": -108.89973854525098,
+      "stats": {
+        "nodes": 1400,
+        "completedDepth": 5,
+        "cacheHits": 34,
+        "extensions": 394,
+        "cutoffs": 191,
+        "aborted": true
+      },
+      "line": [
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "black-K",
+            "x": 6,
+            "y": 0,
+            "freePawn": true
+          },
+          "team": "black",
+          "phase": "defendMove"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "black-N2",
+            "x": 6,
+            "y": 7,
+            "freePawn": false
+          },
+          "team": "black",
+          "phase": "defendMove"
+        },
+        {
+          "action": {
+            "type": "kick",
+            "x": 2,
+            "y": 12
+          },
+          "team": "white",
+          "phase": "kick"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-Q",
+            "x": 8,
+            "y": 6,
+            "freePawn": false
+          },
+          "team": "white",
+          "phase": "attackMove"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-B1",
+            "x": 4,
+            "y": 10,
+            "freePawn": false
+          },
+          "team": "white",
+          "phase": "attackMove"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-K",
+            "x": 6,
+            "y": 16,
+            "freePawn": true
+          },
+          "team": "white",
+          "phase": "attackMove"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "black-B2",
+            "x": 6,
+            "y": 8,
+            "freePawn": false
+          },
+          "team": "black",
+          "phase": "defendMove"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "black-P1",
+            "x": 8,
+            "y": 4,
+            "freePawn": true
+          },
+          "team": "black",
+          "phase": "defendMove"
+        }
+      ]
+    },
+    "candidate": {
+      "ms": 480.92028499999924,
+      "action": {
+        "type": "move",
+        "pieceId": "black-K",
+        "x": 6,
+        "y": 0,
+        "freePawn": true
+      },
+      "value": -108.89973854525098,
+      "stats": {
+        "nodes": 1400,
+        "completedDepth": 5,
+        "cacheHits": 215,
+        "extensions": 251,
+        "cutoffs": 174,
+        "aborted": true
+      },
+      "line": [
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "black-K",
+            "x": 6,
+            "y": 0,
+            "freePawn": true
+          },
+          "team": "black",
+          "phase": "defendMove"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "black-N2",
+            "x": 6,
+            "y": 7,
+            "freePawn": false
+          },
+          "team": "black",
+          "phase": "defendMove"
+        },
+        {
+          "action": {
+            "type": "kick",
+            "x": 2,
+            "y": 12
+          },
+          "team": "white",
+          "phase": "kick"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-Q",
+            "x": 8,
+            "y": 6,
+            "freePawn": false
+          },
+          "team": "white",
+          "phase": "attackMove"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-B1",
+            "x": 4,
+            "y": 10,
+            "freePawn": false
+          },
+          "team": "white",
+          "phase": "attackMove"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-K",
+            "x": 6,
+            "y": 16,
+            "freePawn": true
+          },
+          "team": "white",
+          "phase": "attackMove"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "black-B2",
+            "x": 6,
+            "y": 8,
+            "freePawn": false
+          },
+          "team": "black",
+          "phase": "defendMove"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "black-P1",
+            "x": 8,
+            "y": 4,
+            "freePawn": true
+          },
+          "team": "black",
+          "phase": "defendMove"
+        }
+      ]
+    }
+  }
+]

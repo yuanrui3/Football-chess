@@ -1,0 +1,24 @@
+✔ white direct clean: lowering possession preserves the exact defensive-challenge penalty (17.682196ms)
+✔ white direct fouls: lowering possession preserves the exact defensive-challenge penalty (3.237622ms)
+✔ white bonus setup clean: lowering possession preserves the exact defensive-challenge penalty (4.359192ms)
+✔ white bonus setup fouls: lowering possession preserves the exact defensive-challenge penalty (3.514709ms)
+✔ black direct clean: lowering possession preserves the exact defensive-challenge penalty (4.294977ms)
+✔ black direct fouls: lowering possession preserves the exact defensive-challenge penalty (16.506718ms)
+✔ black bonus setup clean: lowering possession preserves the exact defensive-challenge penalty (2.068863ms)
+✔ black bonus setup fouls: lowering possession preserves the exact defensive-challenge penalty (14.105456ms)
+✔ white direct clean: escape availability keeps its original risk discount (1.902518ms)
+✔ white direct fouls: escape availability keeps its original risk discount (11.196768ms)
+✔ white bonus setup clean: escape availability keeps its original risk discount (1.454449ms)
+✔ white bonus setup fouls: escape availability keeps its original risk discount (4.632503ms)
+✔ black direct clean: escape availability keeps its original risk discount (1.936708ms)
+✔ black direct fouls: escape availability keeps its original risk discount (1.194187ms)
+✔ black bonus setup clean: escape availability keeps its original risk discount (5.72453ms)
+✔ black bonus setup fouls: escape availability keeps its original risk discount (6.596141ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 412.589759

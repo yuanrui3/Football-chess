@@ -1,0 +1,1136 @@
+{
+  "examples": [
+    {
+      "trial": 18,
+      "state": {
+        "pieces": [
+          {
+            "id": "white-K",
+            "team": "white",
+            "type": "K",
+            "x": 9,
+            "y": 14
+          },
+          {
+            "id": "white-Q",
+            "team": "white",
+            "type": "Q",
+            "x": 2,
+            "y": 8
+          },
+          {
+            "id": "white-R1",
+            "team": "white",
+            "type": "R",
+            "x": 2,
+            "y": 13
+          },
+          {
+            "id": "white-R2",
+            "team": "white",
+            "type": "R",
+            "x": 2,
+            "y": 16
+          },
+          {
+            "id": "white-B1",
+            "team": "white",
+            "type": "B",
+            "x": 11,
+            "y": 1
+          },
+          {
+            "id": "white-B2",
+            "team": "white",
+            "type": "B",
+            "x": 2,
+            "y": 0
+          },
+          {
+            "id": "white-N1",
+            "team": "white",
+            "type": "N",
+            "x": 4,
+            "y": 5
+          },
+          {
+            "id": "white-N2",
+            "team": "white",
+            "type": "N",
+            "x": 1,
+            "y": 10
+          },
+          {
+            "id": "white-P1",
+            "team": "white",
+            "type": "P",
+            "x": 8,
+            "y": 12
+          },
+          {
+            "id": "white-P2",
+            "team": "white",
+            "type": "P",
+            "x": 12,
+            "y": 13
+          },
+          {
+            "id": "white-P3",
+            "team": "white",
+            "type": "P",
+            "x": 5,
+            "y": 2
+          },
+          {
+            "id": "black-K",
+            "team": "black",
+            "type": "K",
+            "x": 9,
+            "y": 1
+          },
+          {
+            "id": "black-Q",
+            "team": "black",
+            "type": "Q",
+            "x": 1,
+            "y": 12
+          },
+          {
+            "id": "black-R1",
+            "team": "black",
+            "type": "R",
+            "x": 10,
+            "y": 10
+          },
+          {
+            "id": "black-R2",
+            "team": "black",
+            "type": "R",
+            "x": 8,
+            "y": 7
+          },
+          {
+            "id": "black-B1",
+            "team": "black",
+            "type": "B",
+            "x": 3,
+            "y": 8
+          },
+          {
+            "id": "black-B2",
+            "team": "black",
+            "type": "B",
+            "x": 6,
+            "y": 11
+          },
+          {
+            "id": "black-N1",
+            "team": "black",
+            "type": "N",
+            "x": 11,
+            "y": 5
+          },
+          {
+            "id": "black-N2",
+            "team": "black",
+            "type": "N",
+            "x": 8,
+            "y": 6
+          },
+          {
+            "id": "black-P1",
+            "team": "black",
+            "type": "P",
+            "x": 11,
+            "y": 7
+          },
+          {
+            "id": "black-P2",
+            "team": "black",
+            "type": "P",
+            "x": 4,
+            "y": 6
+          },
+          {
+            "id": "black-P3",
+            "team": "black",
+            "type": "P",
+            "x": 3,
+            "y": 14
+          }
+        ],
+        "ball": {
+          "x": 1,
+          "y": 2,
+          "carrierId": null
+        },
+        "attack": "white",
+        "phase": "attackMove",
+        "positionBudget": {
+          "normalUsed": false,
+          "pawnUsed": false,
+          "dribbleUsed": false
+        },
+        "pendingShot": null,
+        "releaseReason": null,
+        "score": {
+          "white": 0,
+          "black": 0
+        },
+        "turn": 1,
+        "randomState": 1,
+        "log": [
+          "White has kick-off. Kick the ball to begin."
+        ],
+        "lastAction": null,
+        "mode": "solo",
+        "minutes": 10,
+        "rulesVersion": 19,
+        "boardDimensions": {
+          "width": 14,
+          "height": 17
+        },
+        "restart": null,
+        "offside": null,
+        "looseBallKickOrigin": null,
+        "passRun": null,
+        "foulsEnabled": false,
+        "discipline": {},
+        "sentOff": [],
+        "winner": null,
+        "finishReason": null,
+        "ballProgress": {
+          "team": "white",
+          "anchorY": 2,
+          "rounds": 0,
+          "pendingRelease": false,
+          "excludeRelease": false
+        },
+        "paceControl": null
+      },
+      "baseline": [
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-B1",
+            "x": 6,
+            "y": 6,
+            "freePawn": false
+          },
+          "rank": 80.71,
+          "category": "support"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-B1",
+            "x": 5,
+            "y": 7,
+            "freePawn": false
+          },
+          "rank": 80.57,
+          "category": "support"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-Q",
+            "x": 2,
+            "y": 3,
+            "freePawn": false
+          },
+          "rank": 80.38000000000001,
+          "category": "support"
+        }
+      ],
+      "candidate": [
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-Q",
+            "x": 2,
+            "y": 3,
+            "freePawn": false
+          },
+          "rank": 150,
+          "category": "support"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-Q",
+            "x": 2,
+            "y": 2,
+            "freePawn": false
+          },
+          "rank": 150,
+          "category": "support"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-Q",
+            "x": 2,
+            "y": 1,
+            "freePawn": false
+          },
+          "rank": 150,
+          "category": "support"
+        }
+      ],
+      "values": [
+        56,
+        28
+      ]
+    },
+    {
+      "trial": 72,
+      "state": {
+        "pieces": [
+          {
+            "id": "white-K",
+            "team": "white",
+            "type": "K",
+            "x": 8,
+            "y": 14
+          },
+          {
+            "id": "white-Q",
+            "team": "white",
+            "type": "Q",
+            "x": 7,
+            "y": 9
+          },
+          {
+            "id": "white-R1",
+            "team": "white",
+            "type": "R",
+            "x": 4,
+            "y": 16
+          },
+          {
+            "id": "white-R2",
+            "team": "white",
+            "type": "R",
+            "x": 9,
+            "y": 1
+          },
+          {
+            "id": "white-B1",
+            "team": "white",
+            "type": "B",
+            "x": 0,
+            "y": 15
+          },
+          {
+            "id": "white-B2",
+            "team": "white",
+            "type": "B",
+            "x": 11,
+            "y": 15
+          },
+          {
+            "id": "white-N1",
+            "team": "white",
+            "type": "N",
+            "x": 1,
+            "y": 4
+          },
+          {
+            "id": "white-N2",
+            "team": "white",
+            "type": "N",
+            "x": 12,
+            "y": 12
+          },
+          {
+            "id": "white-P1",
+            "team": "white",
+            "type": "P",
+            "x": 11,
+            "y": 6
+          },
+          {
+            "id": "white-P2",
+            "team": "white",
+            "type": "P",
+            "x": 2,
+            "y": 4
+          },
+          {
+            "id": "white-P3",
+            "team": "white",
+            "type": "P",
+            "x": 10,
+            "y": 9
+          },
+          {
+            "id": "black-K",
+            "team": "black",
+            "type": "K",
+            "x": 0,
+            "y": 1
+          },
+          {
+            "id": "black-Q",
+            "team": "black",
+            "type": "Q",
+            "x": 13,
+            "y": 8
+          },
+          {
+            "id": "black-R1",
+            "team": "black",
+            "type": "R",
+            "x": 2,
+            "y": 5
+          },
+          {
+            "id": "black-R2",
+            "team": "black",
+            "type": "R",
+            "x": 12,
+            "y": 3
+          },
+          {
+            "id": "black-B1",
+            "team": "black",
+            "type": "B",
+            "x": 5,
+            "y": 13
+          },
+          {
+            "id": "black-B2",
+            "team": "black",
+            "type": "B",
+            "x": 9,
+            "y": 3
+          },
+          {
+            "id": "black-N1",
+            "team": "black",
+            "type": "N",
+            "x": 3,
+            "y": 6
+          },
+          {
+            "id": "black-N2",
+            "team": "black",
+            "type": "N",
+            "x": 10,
+            "y": 12
+          },
+          {
+            "id": "black-P1",
+            "team": "black",
+            "type": "P",
+            "x": 3,
+            "y": 5
+          },
+          {
+            "id": "black-P2",
+            "team": "black",
+            "type": "P",
+            "x": 3,
+            "y": 10
+          },
+          {
+            "id": "black-P3",
+            "team": "black",
+            "type": "P",
+            "x": 6,
+            "y": 1
+          }
+        ],
+        "ball": {
+          "x": 8,
+          "y": 6,
+          "carrierId": null
+        },
+        "attack": "white",
+        "phase": "attackMove",
+        "positionBudget": {
+          "normalUsed": false,
+          "pawnUsed": false,
+          "dribbleUsed": false
+        },
+        "pendingShot": null,
+        "releaseReason": null,
+        "score": {
+          "white": 0,
+          "black": 0
+        },
+        "turn": 1,
+        "randomState": 1,
+        "log": [
+          "White has kick-off. Kick the ball to begin."
+        ],
+        "lastAction": null,
+        "mode": "solo",
+        "minutes": 10,
+        "rulesVersion": 19,
+        "boardDimensions": {
+          "width": 14,
+          "height": 17
+        },
+        "restart": null,
+        "offside": null,
+        "looseBallKickOrigin": null,
+        "passRun": null,
+        "foulsEnabled": false,
+        "discipline": {},
+        "sentOff": [],
+        "winner": null,
+        "finishReason": null,
+        "ballProgress": {
+          "team": "white",
+          "anchorY": 6,
+          "rounds": 0,
+          "pendingRelease": false,
+          "excludeRelease": false
+        },
+        "paceControl": null
+      },
+      "baseline": [
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-B1",
+            "x": 8,
+            "y": 7,
+            "freePawn": false
+          },
+          "rank": 128.62,
+          "category": "support"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-B1",
+            "x": 9,
+            "y": 6,
+            "freePawn": false
+          },
+          "rank": 128.56,
+          "category": "support"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-B1",
+            "x": 7,
+            "y": 8,
+            "freePawn": false
+          },
+          "rank": 112.67999999999999,
+          "category": "support"
+        }
+      ],
+      "candidate": [
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-B2",
+            "x": 5,
+            "y": 9,
+            "freePawn": false
+          },
+          "rank": 158,
+          "category": "support"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-Q",
+            "x": 7,
+            "y": 7,
+            "freePawn": false
+          },
+          "rank": 126,
+          "category": "support"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-Q",
+            "x": 7,
+            "y": 6,
+            "freePawn": false
+          },
+          "rank": 126,
+          "category": "support"
+        }
+      ],
+      "values": [
+        0,
+        0
+      ]
+    },
+    {
+      "trial": 74,
+      "state": {
+        "pieces": [
+          {
+            "id": "white-K",
+            "team": "white",
+            "type": "K",
+            "x": 8,
+            "y": 14
+          },
+          {
+            "id": "white-Q",
+            "team": "white",
+            "type": "Q",
+            "x": 2,
+            "y": 10
+          },
+          {
+            "id": "white-R1",
+            "team": "white",
+            "type": "R",
+            "x": 6,
+            "y": 1
+          },
+          {
+            "id": "white-R2",
+            "team": "white",
+            "type": "R",
+            "x": 10,
+            "y": 16
+          },
+          {
+            "id": "white-B1",
+            "team": "white",
+            "type": "B",
+            "x": 11,
+            "y": 10
+          },
+          {
+            "id": "white-B2",
+            "team": "white",
+            "type": "B",
+            "x": 3,
+            "y": 15
+          },
+          {
+            "id": "white-N1",
+            "team": "white",
+            "type": "N",
+            "x": 0,
+            "y": 3
+          },
+          {
+            "id": "white-N2",
+            "team": "white",
+            "type": "N",
+            "x": 12,
+            "y": 2
+          },
+          {
+            "id": "white-P1",
+            "team": "white",
+            "type": "P",
+            "x": 0,
+            "y": 0
+          },
+          {
+            "id": "white-P2",
+            "team": "white",
+            "type": "P",
+            "x": 13,
+            "y": 12
+          },
+          {
+            "id": "white-P3",
+            "team": "white",
+            "type": "P",
+            "x": 3,
+            "y": 9
+          },
+          {
+            "id": "black-K",
+            "team": "black",
+            "type": "K",
+            "x": 1,
+            "y": 0
+          },
+          {
+            "id": "black-Q",
+            "team": "black",
+            "type": "Q",
+            "x": 13,
+            "y": 3
+          },
+          {
+            "id": "black-R1",
+            "team": "black",
+            "type": "R",
+            "x": 7,
+            "y": 5
+          },
+          {
+            "id": "black-R2",
+            "team": "black",
+            "type": "R",
+            "x": 13,
+            "y": 10
+          },
+          {
+            "id": "black-B1",
+            "team": "black",
+            "type": "B",
+            "x": 6,
+            "y": 13
+          },
+          {
+            "id": "black-B2",
+            "team": "black",
+            "type": "B",
+            "x": 1,
+            "y": 13
+          },
+          {
+            "id": "black-N1",
+            "team": "black",
+            "type": "N",
+            "x": 12,
+            "y": 3
+          },
+          {
+            "id": "black-N2",
+            "team": "black",
+            "type": "N",
+            "x": 12,
+            "y": 1
+          },
+          {
+            "id": "black-P1",
+            "team": "black",
+            "type": "P",
+            "x": 10,
+            "y": 11
+          },
+          {
+            "id": "black-P2",
+            "team": "black",
+            "type": "P",
+            "x": 13,
+            "y": 4
+          },
+          {
+            "id": "black-P3",
+            "team": "black",
+            "type": "P",
+            "x": 11,
+            "y": 4
+          }
+        ],
+        "ball": {
+          "x": 11,
+          "y": 2,
+          "carrierId": null
+        },
+        "attack": "white",
+        "phase": "attackMove",
+        "positionBudget": {
+          "normalUsed": false,
+          "pawnUsed": false,
+          "dribbleUsed": false
+        },
+        "pendingShot": null,
+        "releaseReason": null,
+        "score": {
+          "white": 0,
+          "black": 0
+        },
+        "turn": 1,
+        "randomState": 1,
+        "log": [
+          "White has kick-off. Kick the ball to begin."
+        ],
+        "lastAction": null,
+        "mode": "solo",
+        "minutes": 10,
+        "rulesVersion": 19,
+        "boardDimensions": {
+          "width": 14,
+          "height": 17
+        },
+        "restart": null,
+        "offside": null,
+        "looseBallKickOrigin": null,
+        "passRun": null,
+        "foulsEnabled": false,
+        "discipline": {},
+        "sentOff": [],
+        "winner": null,
+        "finishReason": null,
+        "ballProgress": {
+          "team": "white",
+          "anchorY": 2,
+          "rounds": 0,
+          "pendingRelease": false,
+          "excludeRelease": false
+        },
+        "paceControl": null
+      },
+      "baseline": [
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-B2",
+            "x": 12,
+            "y": 6,
+            "freePawn": false
+          },
+          "rank": 144.31,
+          "category": "support"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-B2",
+            "x": 11,
+            "y": 7,
+            "freePawn": false
+          },
+          "rank": 128.36999999999998,
+          "category": "support"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-B2",
+            "x": 10,
+            "y": 8,
+            "freePawn": false
+          },
+          "rank": 112.42999999999999,
+          "category": "support"
+        }
+      ],
+      "candidate": [
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-R1",
+            "x": 11,
+            "y": 1,
+            "freePawn": false
+          },
+          "rank": 142,
+          "category": "support"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-B1",
+            "x": 7,
+            "y": 6,
+            "freePawn": false
+          },
+          "rank": 142,
+          "category": "support"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-Q",
+            "x": 3,
+            "y": 10,
+            "freePawn": false
+          },
+          "rank": 118,
+          "category": "support"
+        }
+      ],
+      "values": [
+        0,
+        0
+      ]
+    },
+    {
+      "trial": 75,
+      "state": {
+        "pieces": [
+          {
+            "id": "white-K",
+            "team": "white",
+            "type": "K",
+            "x": 9,
+            "y": 15
+          },
+          {
+            "id": "white-Q",
+            "team": "white",
+            "type": "Q",
+            "x": 2,
+            "y": 11
+          },
+          {
+            "id": "white-R1",
+            "team": "white",
+            "type": "R",
+            "x": 5,
+            "y": 7
+          },
+          {
+            "id": "white-R2",
+            "team": "white",
+            "type": "R",
+            "x": 7,
+            "y": 8
+          },
+          {
+            "id": "white-B1",
+            "team": "white",
+            "type": "B",
+            "x": 4,
+            "y": 12
+          },
+          {
+            "id": "white-B2",
+            "team": "white",
+            "type": "B",
+            "x": 11,
+            "y": 13
+          },
+          {
+            "id": "white-N1",
+            "team": "white",
+            "type": "N",
+            "x": 13,
+            "y": 15
+          },
+          {
+            "id": "white-N2",
+            "team": "white",
+            "type": "N",
+            "x": 2,
+            "y": 8
+          },
+          {
+            "id": "white-P1",
+            "team": "white",
+            "type": "P",
+            "x": 4,
+            "y": 5
+          },
+          {
+            "id": "white-P2",
+            "team": "white",
+            "type": "P",
+            "x": 6,
+            "y": 14
+          },
+          {
+            "id": "white-P3",
+            "team": "white",
+            "type": "P",
+            "x": 7,
+            "y": 1
+          },
+          {
+            "id": "black-K",
+            "team": "black",
+            "type": "K",
+            "x": 9,
+            "y": 0
+          },
+          {
+            "id": "black-Q",
+            "team": "black",
+            "type": "Q",
+            "x": 3,
+            "y": 1
+          },
+          {
+            "id": "black-R1",
+            "team": "black",
+            "type": "R",
+            "x": 9,
+            "y": 6
+          },
+          {
+            "id": "black-R2",
+            "team": "black",
+            "type": "R",
+            "x": 6,
+            "y": 7
+          },
+          {
+            "id": "black-B1",
+            "team": "black",
+            "type": "B",
+            "x": 7,
+            "y": 7
+          },
+          {
+            "id": "black-B2",
+            "team": "black",
+            "type": "B",
+            "x": 10,
+            "y": 4
+          },
+          {
+            "id": "black-N1",
+            "team": "black",
+            "type": "N",
+            "x": 5,
+            "y": 10
+          },
+          {
+            "id": "black-N2",
+            "team": "black",
+            "type": "N",
+            "x": 6,
+            "y": 13
+          },
+          {
+            "id": "black-P1",
+            "team": "black",
+            "type": "P",
+            "x": 0,
+            "y": 13
+          },
+          {
+            "id": "black-P2",
+            "team": "black",
+            "type": "P",
+            "x": 11,
+            "y": 8
+          },
+          {
+            "id": "black-P3",
+            "team": "black",
+            "type": "P",
+            "x": 5,
+            "y": 9
+          }
+        ],
+        "ball": {
+          "x": 2,
+          "y": 1,
+          "carrierId": null
+        },
+        "attack": "white",
+        "phase": "attackMove",
+        "positionBudget": {
+          "normalUsed": false,
+          "pawnUsed": false,
+          "dribbleUsed": false
+        },
+        "pendingShot": null,
+        "releaseReason": null,
+        "score": {
+          "white": 0,
+          "black": 0
+        },
+        "turn": 1,
+        "randomState": 1,
+        "log": [
+          "White has kick-off. Kick the ball to begin."
+        ],
+        "lastAction": null,
+        "mode": "solo",
+        "minutes": 10,
+        "rulesVersion": 19,
+        "boardDimensions": {
+          "width": 14,
+          "height": 17
+        },
+        "restart": null,
+        "offside": null,
+        "looseBallKickOrigin": null,
+        "passRun": null,
+        "foulsEnabled": false,
+        "discipline": {},
+        "sentOff": [],
+        "winner": null,
+        "finishReason": null,
+        "ballProgress": {
+          "team": "white",
+          "anchorY": 1,
+          "rounds": 0,
+          "pendingRelease": false,
+          "excludeRelease": false
+        },
+        "paceControl": null
+      },
+      "baseline": [
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-B2",
+            "x": 6,
+            "y": 8,
+            "freePawn": false
+          },
+          "rank": 80.74,
+          "category": "support"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-B2",
+            "x": 7,
+            "y": 9,
+            "freePawn": false
+          },
+          "rank": 64.80999999999999,
+          "category": "support"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-B1",
+            "x": 8,
+            "y": 8,
+            "freePawn": false
+          },
+          "rank": 64.52,
+          "category": "support"
+        }
+      ],
+      "candidate": [
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-Q",
+            "x": 12,
+            "y": 11,
+            "freePawn": false
+          },
+          "rank": 110,
+          "category": "support"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-R1",
+            "x": 2,
+            "y": 7,
+            "freePawn": false
+          },
+          "rank": 110,
+          "category": "support"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-Q",
+            "x": 5,
+            "y": 8,
+            "freePawn": false
+          },
+          "rank": 24,
+          "category": "support"
+        }
+      ],
+      "values": [
+        -106,
+        -106
+      ]
+    }
+  ]
+}

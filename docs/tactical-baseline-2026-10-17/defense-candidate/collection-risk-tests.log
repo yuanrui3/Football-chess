@@ -1,0 +1,57 @@
+✔ counterexample0 original: Tactical sees and preserves a legal discovered tackle without changing Casual (27.915427ms)
+✔ counterexample0 mirror: Tactical sees and preserves a legal discovered tackle without changing Casual (10.718915ms)
+✔ counterexample1 original: Tactical sees and preserves a legal discovered tackle without changing Casual (11.601604ms)
+✔ counterexample1 mirror: Tactical sees and preserves a legal discovered tackle without changing Casual (7.285876ms)
+✔ counterexample2 original: Tactical sees and preserves a legal discovered tackle without changing Casual (7.244154ms)
+✔ counterexample2 mirror: Tactical sees and preserves a legal discovered tackle without changing Casual (5.729197ms)
+✔ counterexample3 original: Tactical sees and preserves a legal discovered tackle without changing Casual (16.475701ms)
+✔ counterexample3 mirror: Tactical sees and preserves a legal discovered tackle without changing Casual (9.086054ms)
+✔ counterexample4 original: Tactical sees and preserves a legal discovered tackle without changing Casual (27.613123ms)
+✔ counterexample4 mirror: Tactical sees and preserves a legal discovered tackle without changing Casual (24.489178ms)
+✔ a free orthogonal pawn step followed by its ordinary diagonal tackle is a real threat, either color (5.27557ms)
+✔ pawn setup risk respects current defensive budgets, but attacking moves face fresh defender budgets (1.075913ms)
+✔ occupied setup squares, distant pawns, and offside involvement do not create imaginary tackles (0.936687ms)
+✔ an existing diagonal tackle still works after the bonus has been spent, either color (0.656565ms)
+✔ risk uses the real knight resistance and clean-tackle probability, either color (1.06767ms)
+✔ the existing shared king bonus also permits a legal setup without inventing extra moves (0.571421ms)
+✔ a geometrical knight attack with every tackle landing occupied is not a real challenge (0.343365ms)
+✔ the bounded inner reply retains a pawn setup that the previous beam pruned, either color (36.408669ms)
+✖ Tactical avoids the reproducible free-pawn trap when a safe productive carry exists, either color (1017.818673ms)
+✔ iterative Tactical analysis retains a legal completed answer when its next iteration is interrupted (451.103249ms)
+✔ bounded Tactical analysis is repeatable and never consults the future outcome seed (1085.151915ms)
+✔ transposition reuse preserves the fully completed result of the uncached search (302.757477ms)
+✔ a cutoff bound tied with the best score cannot replace a proven stronger defensive continuation (162.378251ms)
+✔ Tactical horizon extensions resolve a close finish instead of valuing an unresolved shot as possession, either color (143.292175ms)
+✔ Tactical wins certain possession during its defensive turn, either color (2130.287202ms)
+✔ forced keeper release remains a kick even when deeper search values a future reposition, either color (663.449407ms)
+✔ the principal continuation obeys real phase ownership and independent movement allowances (1326.12147ms)
+✔ editing observable rule state between Tactical decisions never reuses the previous decision cache (3857.255061ms)
+✔ completed-iteration callbacks expose the deepest answer without mutating search or live snapshots (594.172403ms)
+ℹ tests 29
+ℹ suites 0
+ℹ pass 28
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12219.822034
+
+✖ failing tests:
+
+test at retention-full-risk-pawn-tactical-awareness.test.mjs:154:1
+✖ Tactical avoids the reproducible free-pawn trap when a safe productive carry exists, either color (1017.818673ms)
+  AssertionError [ERR_ASSERTION]: the carrier actually advances productively
+      at TestContext.<anonymous> (file:///workspace/scratch/43be99f43c82/tactical-half-hour-20261017/defense-candidate/retention-full-risk-pawn-tactical-awareness.test.mjs:179:12)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

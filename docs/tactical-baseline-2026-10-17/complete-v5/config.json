@@ -1,0 +1,23 @@
+{
+  "label": "complete-v5",
+  "split": "dev",
+  "seeds": [
+    610017
+  ],
+  "fouls": [
+    true
+  ],
+  "actions": 480,
+  "nodes": 1400,
+  "depth": 8,
+  "workers": 2,
+  "opponent": "casual",
+  "record": true,
+  "candidate": "/workspace/scratch/43be99f43c82/tactical-half-hour-20261017/complete-v5/candidate-engine.mjs",
+  "rules": "/workspace/scratch/43be99f43c82/tactical-half-hour-20261017/complete-v5/rules-engine.mjs",
+  "modelWeights": null,
+  "candidateSha256": "b5b2612d1d3599265a29f364d20948d4bb4382029fa7096136269b9df199dd48",
+  "rulesSha256": "584b1dffb37d222969c80df04eb3b80fc79ef7fb05fc225483fb820efd47a29e",
+  "baselineSha256": "584b1dffb37d222969c80df04eb3b80fc79ef7fb05fc225483fb820efd47a29e",
+  "startedAt": "2026-10-17T06:16:56.559Z"
+}

@@ -1,0 +1,34 @@
+--- collection-risk-base.mjs	2026-10-16 23:33:49.051571360 -0700
++++ engine-signed-collection-risk.mjs	2026-10-16 23:35:52.252641872 -0700
+@@ -1987,8 +1987,29 @@
+   }));
+   const actor = currentTeam(state), budget = budgetFor(state);
+   if (positionalTurn(state)) {
+-    const canUse = sides[actor].collectors.some(piece => !budget.normalUsed || (['P', 'K'].includes(piece.type) && !budget.pawnUsed));
+-    if (canUse) return actor === team ? 185 : -185;
++    const retaining = [];
++    for (const piece of sides[actor].collectors) {
++      const freePawn = !!budget.normalUsed;
++      if (freePawn && (!['P', 'K'].includes(piece.type) || budget.pawnUsed)) continue;
++      if (!legalMoves(state, piece.id, {freePawn}).some(move => move.x === state.ball.x && move.y === state.ball.y)) continue;
++      const collected = applyMove(state, piece.id, state.ball.x, state.ball.y, {freePawn});
++      if (collected.ball.carrierId !== piece.id || collected.attack !== piece.team) continue;
++      const carrier = collected.pieces.find(candidate => candidate.id === piece.id);
++      let risk = tacticalFullReplyRisk(collected, carrier);
++      // A teammate collecting can still carry away. A self-pass collection has
++      // spent that allowance and must survive the real full defensive reply.
++      if (risk && collected.phase === 'attackMove' && !budgetFor(collected).dribbleUsed) {
++        for (const move of legalMoves(collected, piece.id)) {
++          const escaped = applyMove(collected, piece.id, move.x, move.y);
++          if (escaped.ball.carrierId === piece.id && escaped.attack === piece.team
++            && !tacticalFullReplyRisk(escaped, escaped.pieces.find(candidate => candidate.id === piece.id))) {
++            risk = 0; break;
++          }
++        }
++      }
++      retaining.push(185 * (1 - 2 * risk));
++    }
++    if (retaining.length) return (actor === team ? 1 : -1) * Math.max(...retaining);
+   }
+   const race = clamp(sides[other(team)].nearest - sides[team].nearest, -4, 4);
+   return race * 28 + (sides[team].collectors.length ? 22 : 0) - (sides[other(team)].collectors.length ? 22 : 0);

@@ -1,0 +1,21 @@
+{
+  "checkedAt": "2026-10-17T06:44:35.248542+00:00",
+  "portableAuditEntrypointsPassed": true,
+  "publishedCountsReproduced": {
+    "dribbles": 872,
+    "safe": 377,
+    "legacyMisses": 5,
+    "rejectedFullRiskMisses": 0
+  },
+  "rawHistoricalResultsPreserved": true,
+  "portableBenchmarkEntrypointPassed": true,
+  "benchmarkSmoke": {
+    "seed": 990001,
+    "legs": 4,
+    "actionsPerLeg": 1,
+    "nodes": 16,
+    "depth": 1,
+    "fouls": false,
+    "scope": "Infrastructure smoke only; excluded from study outcomes"
+  }
+}

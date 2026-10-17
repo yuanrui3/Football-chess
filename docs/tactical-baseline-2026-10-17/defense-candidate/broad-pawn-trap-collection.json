@@ -1,0 +1,374 @@
+{
+  "rows": [
+    {
+      "phase": "defendMove",
+      "team": "black",
+      "action": {
+        "type": "move",
+        "pieceId": "black-P2",
+        "x": 6,
+        "y": 4,
+        "freePawn": true
+      },
+      "result": "move",
+      "ball": {
+        "x": 4,
+        "y": 9,
+        "carrierId": "white-Q"
+      },
+      "progress": {
+        "team": "white",
+        "rounds": 2,
+        "roundsRemaining": 1,
+        "anchorY": 12,
+        "progress": 3,
+        "needed": 1,
+        "active": true,
+        "warning": true
+      }
+    },
+    {
+      "phase": "defendMove",
+      "team": "black",
+      "action": {
+        "type": "move",
+        "pieceId": "black-Q",
+        "x": 3,
+        "y": 8,
+        "freePawn": false
+      },
+      "result": "move",
+      "ball": {
+        "x": 4,
+        "y": 9,
+        "carrierId": "white-Q"
+      },
+      "progress": {
+        "team": "white",
+        "rounds": 2,
+        "roundsRemaining": 1,
+        "anchorY": 12,
+        "progress": 3,
+        "needed": 1,
+        "active": true,
+        "warning": true
+      }
+    },
+    {
+      "phase": "kick",
+      "team": "white",
+      "action": {
+        "type": "kick",
+        "x": 4,
+        "y": 5
+      },
+      "result": "kick",
+      "ball": {
+        "x": 4,
+        "y": 5,
+        "carrierId": null
+      },
+      "progress": {
+        "team": "white",
+        "rounds": 0,
+        "roundsRemaining": 3,
+        "anchorY": 5,
+        "progress": 0,
+        "needed": 4,
+        "active": false,
+        "warning": false
+      }
+    },
+    {
+      "phase": "attackMove",
+      "team": "white",
+      "action": {
+        "type": "move",
+        "pieceId": "white-Q",
+        "x": 4,
+        "y": 5,
+        "freePawn": false
+      },
+      "result": "move",
+      "ball": {
+        "x": 4,
+        "y": 5,
+        "carrierId": "white-Q"
+      },
+      "progress": {
+        "team": "white",
+        "rounds": 0,
+        "roundsRemaining": 3,
+        "anchorY": 5,
+        "progress": 0,
+        "needed": 4,
+        "active": false,
+        "warning": false
+      }
+    }
+  ],
+  "collection": {
+    "risk": 1,
+    "carrier": "white-Q",
+    "position": {
+      "x": 4,
+      "y": 5
+    },
+    "phase": "attackMove"
+  },
+  "finalState": {
+    "pieces": [
+      {
+        "id": "white-K",
+        "team": "white",
+        "type": "K",
+        "x": 6,
+        "y": 16
+      },
+      {
+        "id": "white-Q",
+        "team": "white",
+        "type": "Q",
+        "x": 4,
+        "y": 5
+      },
+      {
+        "id": "white-R1",
+        "team": "white",
+        "type": "R",
+        "x": 1,
+        "y": 13
+      },
+      {
+        "id": "white-R2",
+        "team": "white",
+        "type": "R",
+        "x": 12,
+        "y": 13
+      },
+      {
+        "id": "white-B1",
+        "team": "white",
+        "type": "B",
+        "x": 4,
+        "y": 10
+      },
+      {
+        "id": "white-B2",
+        "team": "white",
+        "type": "B",
+        "x": 11,
+        "y": 12
+      },
+      {
+        "id": "white-N1",
+        "team": "white",
+        "type": "N",
+        "x": 3,
+        "y": 9
+      },
+      {
+        "id": "white-N2",
+        "team": "white",
+        "type": "N",
+        "x": 8,
+        "y": 12
+      },
+      {
+        "id": "white-P1",
+        "team": "white",
+        "type": "P",
+        "x": 5,
+        "y": 12
+      },
+      {
+        "id": "white-P2",
+        "team": "white",
+        "type": "P",
+        "x": 7,
+        "y": 13
+      },
+      {
+        "id": "white-P3",
+        "team": "white",
+        "type": "P",
+        "x": 8,
+        "y": 13
+      },
+      {
+        "id": "black-K",
+        "team": "black",
+        "type": "K",
+        "x": 6,
+        "y": 0
+      },
+      {
+        "id": "black-Q",
+        "team": "black",
+        "type": "Q",
+        "x": 3,
+        "y": 8
+      },
+      {
+        "id": "black-R1",
+        "team": "black",
+        "type": "R",
+        "x": 12,
+        "y": 3
+      },
+      {
+        "id": "black-R2",
+        "team": "black",
+        "type": "R",
+        "x": 1,
+        "y": 10
+      },
+      {
+        "id": "black-B1",
+        "team": "black",
+        "type": "B",
+        "x": 11,
+        "y": 4
+      },
+      {
+        "id": "black-B2",
+        "team": "black",
+        "type": "B",
+        "x": 2,
+        "y": 4
+      },
+      {
+        "id": "black-N1",
+        "team": "black",
+        "type": "N",
+        "x": 10,
+        "y": 7
+      },
+      {
+        "id": "black-N2",
+        "team": "black",
+        "type": "N",
+        "x": 6,
+        "y": 7
+      },
+      {
+        "id": "black-P1",
+        "team": "black",
+        "type": "P",
+        "x": 8,
+        "y": 4
+      },
+      {
+        "id": "black-P2",
+        "team": "black",
+        "type": "P",
+        "x": 6,
+        "y": 4
+      },
+      {
+        "id": "black-P3",
+        "team": "black",
+        "type": "P",
+        "x": 4,
+        "y": 3
+      }
+    ],
+    "ball": {
+      "x": 4,
+      "y": 5,
+      "carrierId": "white-Q"
+    },
+    "attack": "white",
+    "phase": "attackMove",
+    "positionBudget": {
+      "normalUsed": true,
+      "pawnUsed": false,
+      "dribbleUsed": true
+    },
+    "pendingShot": null,
+    "releaseReason": null,
+    "score": {
+      "white": 0,
+      "black": 0
+    },
+    "turn": 5,
+    "randomState": 1105453098,
+    "log": [
+      "White has kick-off. Kick the ball to begin.",
+      "White queen dribbles to e8.",
+      "White pawn moves to i4 (free pawn move).",
+      "Black pawn moves to g13 (free pawn move).",
+      "Black queen moves to d9.",
+      "White kicks to e12 (100% accuracy). The ball is loose.",
+      "White queen moves to e12 and collects the ball; collecting its own pass uses the dribble allowance."
+    ],
+    "lastAction": {
+      "type": "move",
+      "team": "white",
+      "pieceId": "white-Q",
+      "from": {
+        "x": 4,
+        "y": 9
+      },
+      "to": {
+        "x": 4,
+        "y": 5
+      },
+      "path": [
+        {
+          "x": 4,
+          "y": 9
+        },
+        {
+          "x": 4,
+          "y": 5
+        }
+      ],
+      "freePawn": false,
+      "collection": true,
+      "selfPassCollection": true
+    },
+    "mode": "solo",
+    "minutes": 10,
+    "rulesVersion": 19,
+    "boardDimensions": {
+      "width": 14,
+      "height": 17
+    },
+    "restart": null,
+    "offside": {
+      "team": "white",
+      "kickerId": "white-Q",
+      "ball": {
+        "x": 4,
+        "y": 9
+      },
+      "secondLastY": 3,
+      "flaggedIds": []
+    },
+    "looseBallKickOrigin": null,
+    "passRun": null,
+    "foulsEnabled": false,
+    "discipline": {},
+    "sentOff": [],
+    "winner": null,
+    "finishReason": null,
+    "ballProgress": {
+      "team": "white",
+      "anchorY": 5,
+      "rounds": 0,
+      "pendingRelease": false,
+      "excludeRelease": false
+    },
+    "paceControl": {
+      "team": "white",
+      "carrierId": "white-Q",
+      "dribbleRounds": 1,
+      "dribbledThisRound": true,
+      "history": [
+        "4,5:white-Q"
+      ],
+      "furthestAdvance": -5
+    }
+  }
+}

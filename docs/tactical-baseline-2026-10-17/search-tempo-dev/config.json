@@ -1,0 +1,23 @@
+{
+  "label": "search-tempo-dev",
+  "split": "dev",
+  "seeds": [
+    610017
+  ],
+  "fouls": [
+    true
+  ],
+  "actions": 160,
+  "nodes": 1400,
+  "depth": 8,
+  "workers": 1,
+  "opponent": "casual",
+  "record": true,
+  "candidate": "/workspace/scratch/43be99f43c82/tactical-half-hour-20261017/search-tempo-dev/candidate-engine.mjs",
+  "rules": "/workspace/scratch/43be99f43c82/tactical-half-hour-20261017/search-tempo-dev/rules-engine.mjs",
+  "modelWeights": null,
+  "candidateSha256": "8cfa662114122fab1b1771e2f2a9e5b609e8629002a722e45aaca08dfe1f2a2d",
+  "rulesSha256": "584b1dffb37d222969c80df04eb3b80fc79ef7fb05fc225483fb820efd47a29e",
+  "baselineSha256": "584b1dffb37d222969c80df04eb3b80fc79ef7fb05fc225483fb820efd47a29e",
+  "startedAt": "2026-10-17T06:07:18.430Z"
+}

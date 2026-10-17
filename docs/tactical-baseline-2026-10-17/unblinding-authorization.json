@@ -1,0 +1,19 @@
+{
+  "rounds": [
+    {
+      "round": 1,
+      "lockedAt": "2026-10-17T06:36:52Z",
+      "policySha256": "4388dc612b14feb2b266dc5389e1f95228c68e994bcabbcfd39c21a5e4d880f3",
+      "authorizedSeeds": [
+        720017,
+        720043
+      ],
+      "authorizedBy": "Explicit parent source-lock and unblinding message"
+    }
+  ],
+  "stillBlindSeeds": [
+    720079,
+    720111
+  ],
+  "updatedAt": "2026-10-17T06:45:34.990012+00:00"
+}

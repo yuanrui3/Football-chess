@@ -1,0 +1,20 @@
+--- a/dist/engine.js
++++ b/dist/engine.js
+@@ -2460,6 +2460,9 @@
+     if (carrier?.team === piece.team && carrier.id !== piece.id) {
+       const previous = state.pieces.find(p => p.id === state.ball.carrierId);
+       rank += (tacticalOutlets(projected, carrier).best - tacticalOutlets(state, previous).best) * 850;
++      // A teammate can obstruct an otherwise legal shot. Reward opening the
++      // carrier's actual reaction-aware finish, not only receiving outlets.
++      rank += (tacticalShots(projected, carrier.team, true) - tacticalShots(state, carrier.team, true)) * 900;
+     }
+     return rank;
+   }
+@@ -2475,6 +2478,7 @@
+       + (tacticalTackleRisk(state, piece) - tacticalTackleRisk(projected, carrier)) * 680 + progressRank(state, piece.team, move.y);
+     const original = state.pieces.find(p => p.id === carrier.id);
+     return supportPotential(projected, moved, carrier) - supportPotential(state, piece, original)
++      + (tacticalShots(projected, carrier.team, true) - tacticalShots(state, carrier.team, true)) * 900
+       + (wideCrossingSupport(projected, carrier).best - wideCrossingSupport(state, original).best) * 240
+       + (tacticalOutlets(projected, carrier).best - tacticalOutlets(state, original).best) * 850
+       + (tacticalTackleRisk(state, original) - tacticalTackleRisk(projected, carrier)) * 450

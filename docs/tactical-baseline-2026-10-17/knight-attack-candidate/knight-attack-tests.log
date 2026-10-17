@@ -1,0 +1,12 @@
+✔ black Tactical finds a legal knight receiving carry and values its native finish (3028.862401ms)
+✔ black actual Tactical counterplay closes the knight route before the pass (1554.238226ms)
+✔ white Tactical finds a legal knight receiving carry and values its native finish (2542.615274ms)
+✔ white actual Tactical counterplay closes the knight route before the pass (1236.680663ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 8492.408988

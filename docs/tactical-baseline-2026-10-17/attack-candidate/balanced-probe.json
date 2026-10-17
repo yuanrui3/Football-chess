@@ -1,0 +1,763 @@
+[
+  {
+    "name": "engine-original.mjs",
+    "currentShot": 0.07950951829953569,
+    "outlets": {
+      "best": 0.8503554072812969,
+      "second": 0
+    },
+    "receivedShot": 0.8503554072812969,
+    "report": {
+      "action": {
+        "type": "kick",
+        "x": 8,
+        "y": 4
+      },
+      "value": 212.31893397449338,
+      "stats": {
+        "nodes": 1400,
+        "completedDepth": 2,
+        "cacheHits": 88,
+        "extensions": 417,
+        "cutoffs": 124,
+        "aborted": true
+      },
+      "line": [
+        {
+          "action": {
+            "type": "kick",
+            "x": 8,
+            "y": 4
+          },
+          "team": "white",
+          "phase": "kick"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-R1",
+            "x": 8,
+            "y": 2,
+            "freePawn": false
+          },
+          "team": "white",
+          "phase": "attackMove"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-Q",
+            "x": 10,
+            "y": 2,
+            "freePawn": false
+          },
+          "team": "white",
+          "phase": "attackMove"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-K",
+            "x": 7,
+            "y": 16,
+            "freePawn": true
+          },
+          "team": "white",
+          "phase": "attackMove"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "black-R1",
+            "x": 8,
+            "y": 1,
+            "freePawn": false
+          },
+          "team": "black",
+          "phase": "defendMove"
+        }
+      ]
+    },
+    "chosen": {
+      "receiverId": "white-R1"
+    },
+    "trace": [
+      {
+        "actor": "white",
+        "phase": "kick",
+        "a": {
+          "type": "kick",
+          "x": 8,
+          "y": 4
+        },
+        "event": "kick"
+      },
+      {
+        "actor": "white",
+        "phase": "attackMove",
+        "a": {
+          "type": "move",
+          "pieceId": "white-R1",
+          "x": 8,
+          "y": 1,
+          "freePawn": false
+        },
+        "event": "move",
+        "bestShot": 0.9799999998977895
+      },
+      {
+        "actor": "white",
+        "phase": "attackMove",
+        "a": {
+          "type": "move",
+          "pieceId": "white-Q",
+          "x": 11,
+          "y": 1,
+          "freePawn": false
+        },
+        "event": "move",
+        "bestShot": 0.9799999998977895
+      },
+      {
+        "actor": "white",
+        "phase": "attackMove",
+        "a": {
+          "type": "move",
+          "pieceId": "white-K",
+          "x": 7,
+          "y": 16,
+          "freePawn": true
+        },
+        "event": "move",
+        "bestShot": 0.9799999998977895
+      },
+      {
+        "actor": "black",
+        "phase": "defendMove",
+        "a": {
+          "type": "move",
+          "pieceId": "black-K",
+          "x": 6,
+          "y": 1,
+          "freePawn": true
+        },
+        "event": "move",
+        "bestShot": 0.9778263777938716
+      },
+      {
+        "actor": "black",
+        "phase": "defendMove",
+        "a": {
+          "type": "move",
+          "pieceId": "black-K",
+          "x": 7,
+          "y": 1,
+          "freePawn": false
+        },
+        "event": "move",
+        "bestShot": 0.3777912831422929
+      },
+      {
+        "actor": "white",
+        "phase": "kick",
+        "a": {
+          "type": "kick",
+          "x": 8,
+          "y": -1
+        },
+        "event": "shotAttempt",
+        "bestShot": 0.3777912831422929
+      }
+    ],
+    "finalAttack": "white",
+    "finalPhase": "keeperReact",
+    "finalShot": 0.3777912831422929
+  },
+  {
+    "name": "engine-finish-55.mjs",
+    "currentShot": 0.07950951829953569,
+    "outlets": {
+      "best": 0.8503554072812969,
+      "second": 0
+    },
+    "receivedShot": 0.8503554072812969,
+    "report": {
+      "action": {
+        "type": "kick",
+        "x": 8,
+        "y": 4
+      },
+      "value": 212.31893397449338,
+      "stats": {
+        "nodes": 1400,
+        "completedDepth": 2,
+        "cacheHits": 99,
+        "extensions": 413,
+        "cutoffs": 119,
+        "aborted": true
+      },
+      "line": [
+        {
+          "action": {
+            "type": "kick",
+            "x": 8,
+            "y": 4
+          },
+          "team": "white",
+          "phase": "kick"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-R1",
+            "x": 8,
+            "y": 2,
+            "freePawn": false
+          },
+          "team": "white",
+          "phase": "attackMove"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-Q",
+            "x": 10,
+            "y": 2,
+            "freePawn": false
+          },
+          "team": "white",
+          "phase": "attackMove"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-K",
+            "x": 7,
+            "y": 16,
+            "freePawn": true
+          },
+          "team": "white",
+          "phase": "attackMove"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "black-R1",
+            "x": 8,
+            "y": 1,
+            "freePawn": false
+          },
+          "team": "black",
+          "phase": "defendMove"
+        }
+      ]
+    },
+    "chosen": {
+      "receiverId": "white-R1"
+    },
+    "trace": [
+      {
+        "actor": "white",
+        "phase": "kick",
+        "a": {
+          "type": "kick",
+          "x": 8,
+          "y": 4
+        },
+        "event": "kick"
+      },
+      {
+        "actor": "white",
+        "phase": "attackMove",
+        "a": {
+          "type": "move",
+          "pieceId": "white-R1",
+          "x": 8,
+          "y": 1,
+          "freePawn": false
+        },
+        "event": "move",
+        "bestShot": 0.9799999998977895
+      },
+      {
+        "actor": "white",
+        "phase": "attackMove",
+        "a": {
+          "type": "move",
+          "pieceId": "white-Q",
+          "x": 11,
+          "y": 1,
+          "freePawn": false
+        },
+        "event": "move",
+        "bestShot": 0.9799999998977895
+      },
+      {
+        "actor": "white",
+        "phase": "attackMove",
+        "a": {
+          "type": "move",
+          "pieceId": "white-K",
+          "x": 7,
+          "y": 16,
+          "freePawn": true
+        },
+        "event": "move",
+        "bestShot": 0.9799999998977895
+      },
+      {
+        "actor": "black",
+        "phase": "defendMove",
+        "a": {
+          "type": "move",
+          "pieceId": "black-K",
+          "x": 6,
+          "y": 1,
+          "freePawn": true
+        },
+        "event": "move",
+        "bestShot": 0.9778263777938716
+      },
+      {
+        "actor": "black",
+        "phase": "defendMove",
+        "a": {
+          "type": "move",
+          "pieceId": "black-K",
+          "x": 7,
+          "y": 1,
+          "freePawn": false
+        },
+        "event": "move",
+        "bestShot": 0.3777912831422929
+      },
+      {
+        "actor": "white",
+        "phase": "kick",
+        "a": {
+          "type": "kick",
+          "x": 8,
+          "y": -1
+        },
+        "event": "shotAttempt",
+        "bestShot": 0.3777912831422929
+      }
+    ],
+    "finalAttack": "white",
+    "finalPhase": "keeperReact",
+    "finalShot": 0.3777912831422929
+  },
+  {
+    "name": "../balanced-candidate/engine.mjs",
+    "currentShot": 0.07950951829953569,
+    "outlets": {
+      "best": 0.8503554072812969,
+      "second": 0
+    },
+    "receivedShot": 0.8503554072812969,
+    "report": {
+      "action": {
+        "type": "kick",
+        "x": 6,
+        "y": -1
+      },
+      "value": 129.37706702548246,
+      "stats": {
+        "nodes": 1400,
+        "completedDepth": 2,
+        "cacheHits": 118,
+        "extensions": 527,
+        "cutoffs": 144,
+        "aborted": true
+      },
+      "line": [
+        {
+          "action": {
+            "type": "kick",
+            "x": 6,
+            "y": -1
+          },
+          "team": "white",
+          "phase": "kick"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "black-K",
+            "x": 6,
+            "y": 0,
+            "freePawn": false
+          },
+          "team": "black",
+          "phase": "keeperReact"
+        }
+      ]
+    },
+    "chosen": {
+      "goal": "white"
+    },
+    "trace": [
+      {
+        "actor": "white",
+        "phase": "kick",
+        "a": {
+          "type": "kick",
+          "x": 6,
+          "y": -1
+        },
+        "event": "shotAttempt"
+      }
+    ],
+    "finalAttack": "white",
+    "finalPhase": "keeperReact",
+    "finalShot": 0.07950951829953569
+  },
+  {
+    "name": "../balanced-candidate/engine-25.mjs",
+    "currentShot": 0.07950951829953569,
+    "outlets": {
+      "best": 0.8503554072812969,
+      "second": 0
+    },
+    "receivedShot": 0.8503554072812969,
+    "report": {
+      "action": {
+        "type": "kick",
+        "x": 8,
+        "y": 4
+      },
+      "value": 151.9563814103524,
+      "stats": {
+        "nodes": 1400,
+        "completedDepth": 2,
+        "cacheHits": 99,
+        "extensions": 416,
+        "cutoffs": 122,
+        "aborted": true
+      },
+      "line": [
+        {
+          "action": {
+            "type": "kick",
+            "x": 8,
+            "y": 4
+          },
+          "team": "white",
+          "phase": "kick"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-R1",
+            "x": 8,
+            "y": 2,
+            "freePawn": false
+          },
+          "team": "white",
+          "phase": "attackMove"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-Q",
+            "x": 10,
+            "y": 2,
+            "freePawn": false
+          },
+          "team": "white",
+          "phase": "attackMove"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-K",
+            "x": 7,
+            "y": 16,
+            "freePawn": true
+          },
+          "team": "white",
+          "phase": "attackMove"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "black-R1",
+            "x": 8,
+            "y": 1,
+            "freePawn": false
+          },
+          "team": "black",
+          "phase": "defendMove"
+        }
+      ]
+    },
+    "chosen": {
+      "receiverId": "white-R1"
+    },
+    "trace": [
+      {
+        "actor": "white",
+        "phase": "kick",
+        "a": {
+          "type": "kick",
+          "x": 8,
+          "y": 4
+        },
+        "event": "kick"
+      },
+      {
+        "actor": "white",
+        "phase": "attackMove",
+        "a": {
+          "type": "move",
+          "pieceId": "white-R1",
+          "x": 8,
+          "y": 1,
+          "freePawn": false
+        },
+        "event": "move",
+        "bestShot": 0.9799999998977895
+      },
+      {
+        "actor": "white",
+        "phase": "attackMove",
+        "a": {
+          "type": "move",
+          "pieceId": "white-Q",
+          "x": 11,
+          "y": 1,
+          "freePawn": false
+        },
+        "event": "move",
+        "bestShot": 0.9799999998977895
+      },
+      {
+        "actor": "white",
+        "phase": "attackMove",
+        "a": {
+          "type": "move",
+          "pieceId": "white-K",
+          "x": 7,
+          "y": 16,
+          "freePawn": true
+        },
+        "event": "move",
+        "bestShot": 0.9799999998977895
+      },
+      {
+        "actor": "black",
+        "phase": "defendMove",
+        "a": {
+          "type": "move",
+          "pieceId": "black-K",
+          "x": 6,
+          "y": 1,
+          "freePawn": true
+        },
+        "event": "move",
+        "bestShot": 0.9778263777938716
+      },
+      {
+        "actor": "black",
+        "phase": "defendMove",
+        "a": {
+          "type": "move",
+          "pieceId": "black-K",
+          "x": 7,
+          "y": 1,
+          "freePawn": false
+        },
+        "event": "move",
+        "bestShot": 0.3777912831422929
+      },
+      {
+        "actor": "white",
+        "phase": "kick",
+        "a": {
+          "type": "kick",
+          "x": 8,
+          "y": -1
+        },
+        "event": "shotAttempt",
+        "bestShot": 0.3777912831422929
+      }
+    ],
+    "finalAttack": "white",
+    "finalPhase": "keeperReact",
+    "finalShot": 0.3777912831422929
+  },
+  {
+    "name": "../balanced-candidate/engine-28.mjs",
+    "currentShot": 0.07950951829953569,
+    "outlets": {
+      "best": 0.8503554072812969,
+      "second": 0
+    },
+    "receivedShot": 0.8503554072812969,
+    "report": {
+      "action": {
+        "type": "kick",
+        "x": 8,
+        "y": 4
+      },
+      "value": 170.0651471795947,
+      "stats": {
+        "nodes": 1400,
+        "completedDepth": 2,
+        "cacheHits": 99,
+        "extensions": 416,
+        "cutoffs": 122,
+        "aborted": true
+      },
+      "line": [
+        {
+          "action": {
+            "type": "kick",
+            "x": 8,
+            "y": 4
+          },
+          "team": "white",
+          "phase": "kick"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-R1",
+            "x": 8,
+            "y": 2,
+            "freePawn": false
+          },
+          "team": "white",
+          "phase": "attackMove"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-Q",
+            "x": 10,
+            "y": 2,
+            "freePawn": false
+          },
+          "team": "white",
+          "phase": "attackMove"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-K",
+            "x": 7,
+            "y": 16,
+            "freePawn": true
+          },
+          "team": "white",
+          "phase": "attackMove"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "black-R1",
+            "x": 8,
+            "y": 1,
+            "freePawn": false
+          },
+          "team": "black",
+          "phase": "defendMove"
+        }
+      ]
+    },
+    "chosen": {
+      "receiverId": "white-R1"
+    },
+    "trace": [
+      {
+        "actor": "white",
+        "phase": "kick",
+        "a": {
+          "type": "kick",
+          "x": 8,
+          "y": 4
+        },
+        "event": "kick"
+      },
+      {
+        "actor": "white",
+        "phase": "attackMove",
+        "a": {
+          "type": "move",
+          "pieceId": "white-R1",
+          "x": 8,
+          "y": 1,
+          "freePawn": false
+        },
+        "event": "move",
+        "bestShot": 0.9799999998977895
+      },
+      {
+        "actor": "white",
+        "phase": "attackMove",
+        "a": {
+          "type": "move",
+          "pieceId": "white-Q",
+          "x": 11,
+          "y": 1,
+          "freePawn": false
+        },
+        "event": "move",
+        "bestShot": 0.9799999998977895
+      },
+      {
+        "actor": "white",
+        "phase": "attackMove",
+        "a": {
+          "type": "move",
+          "pieceId": "white-K",
+          "x": 7,
+          "y": 16,
+          "freePawn": true
+        },
+        "event": "move",
+        "bestShot": 0.9799999998977895
+      },
+      {
+        "actor": "black",
+        "phase": "defendMove",
+        "a": {
+          "type": "move",
+          "pieceId": "black-K",
+          "x": 6,
+          "y": 1,
+          "freePawn": true
+        },
+        "event": "move",
+        "bestShot": 0.9778263777938716
+      },
+      {
+        "actor": "black",
+        "phase": "defendMove",
+        "a": {
+          "type": "move",
+          "pieceId": "black-K",
+          "x": 7,
+          "y": 1,
+          "freePawn": false
+        },
+        "event": "move",
+        "bestShot": 0.3777912831422929
+      },
+      {
+        "actor": "white",
+        "phase": "kick",
+        "a": {
+          "type": "kick",
+          "x": 8,
+          "y": -1
+        },
+        "event": "shotAttempt",
+        "bestShot": 0.3777912831422929
+      }
+    ],
+    "finalAttack": "white",
+    "finalPhase": "keeperReact",
+    "finalShot": 0.3777912831422929
+  }
+]

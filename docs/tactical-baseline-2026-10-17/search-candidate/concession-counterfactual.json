@@ -1,0 +1,785 @@
+{
+  "sameRuleStateBefore176": true,
+  "baseline": {
+    "key": "Baseline",
+    "tackle": {
+      "type": "move",
+      "pieceId": "white-K",
+      "x": 5,
+      "y": 15,
+      "freePawn": false
+    },
+    "outcome": "evaded",
+    "roll": 0.6283462443388999,
+    "followup": {
+      "action": {
+        "type": "move",
+        "pieceId": "white-K",
+        "x": 6,
+        "y": 16,
+        "freePawn": true
+      },
+      "value": -1414.8925510002757,
+      "stats": {
+        "nodes": 1400,
+        "completedDepth": 1,
+        "cacheHits": 118,
+        "extensions": 254,
+        "cutoffs": 13,
+        "aborted": true
+      },
+      "line": [
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-K",
+            "x": 6,
+            "y": 16,
+            "freePawn": true
+          },
+          "team": "white",
+          "phase": "defendMove"
+        },
+        {
+          "action": {
+            "type": "kick",
+            "x": 5,
+            "y": 17,
+            "disguise": true
+          },
+          "team": "black",
+          "phase": "kick"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-K",
+            "x": 7,
+            "y": 16,
+            "freePawn": false
+          },
+          "team": "white",
+          "phase": "keeperReact"
+        }
+      ]
+    },
+    "finished": {
+      "pieces": [
+        {
+          "id": "white-K",
+          "team": "white",
+          "type": "K",
+          "x": 6,
+          "y": 16
+        },
+        {
+          "id": "white-Q",
+          "team": "white",
+          "type": "Q",
+          "x": 9,
+          "y": 4
+        },
+        {
+          "id": "white-R1",
+          "team": "white",
+          "type": "R",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "id": "white-R2",
+          "team": "white",
+          "type": "R",
+          "x": 4,
+          "y": 12
+        },
+        {
+          "id": "white-B1",
+          "team": "white",
+          "type": "B",
+          "x": 8,
+          "y": 6
+        },
+        {
+          "id": "white-B2",
+          "team": "white",
+          "type": "B",
+          "x": 2,
+          "y": 9
+        },
+        {
+          "id": "white-N1",
+          "team": "white",
+          "type": "N",
+          "x": 3,
+          "y": 9
+        },
+        {
+          "id": "white-N2",
+          "team": "white",
+          "type": "N",
+          "x": 11,
+          "y": 7
+        },
+        {
+          "id": "white-P1",
+          "team": "white",
+          "type": "P",
+          "x": 5,
+          "y": 9
+        },
+        {
+          "id": "white-P2",
+          "team": "white",
+          "type": "P",
+          "x": 7,
+          "y": 10
+        },
+        {
+          "id": "white-P3",
+          "team": "white",
+          "type": "P",
+          "x": 10,
+          "y": 16
+        },
+        {
+          "id": "black-K",
+          "team": "black",
+          "type": "K",
+          "x": 7,
+          "y": 0
+        },
+        {
+          "id": "black-Q",
+          "team": "black",
+          "type": "Q",
+          "x": 2,
+          "y": 2
+        },
+        {
+          "id": "black-R1",
+          "team": "black",
+          "type": "R",
+          "x": 12,
+          "y": 2
+        },
+        {
+          "id": "black-R2",
+          "team": "black",
+          "type": "R",
+          "x": 11,
+          "y": 3
+        },
+        {
+          "id": "black-B1",
+          "team": "black",
+          "type": "B",
+          "x": 7,
+          "y": 6
+        },
+        {
+          "id": "black-B2",
+          "team": "black",
+          "type": "B",
+          "x": 7,
+          "y": 13
+        },
+        {
+          "id": "black-N1",
+          "team": "black",
+          "type": "N",
+          "x": 6,
+          "y": 15
+        },
+        {
+          "id": "black-N2",
+          "team": "black",
+          "type": "N",
+          "x": 2,
+          "y": 8
+        },
+        {
+          "id": "black-P1",
+          "team": "black",
+          "type": "P",
+          "x": 6,
+          "y": 6
+        },
+        {
+          "id": "black-P2",
+          "team": "black",
+          "type": "P",
+          "x": 5,
+          "y": 8
+        },
+        {
+          "id": "black-P3",
+          "team": "black",
+          "type": "P",
+          "x": 6,
+          "y": 9
+        }
+      ],
+      "ball": {
+        "x": 6,
+        "y": 15,
+        "carrierId": "black-N1"
+      },
+      "attack": "black",
+      "phase": "kick",
+      "positionBudget": {
+        "normalUsed": false,
+        "pawnUsed": false,
+        "dribbleUsed": false
+      },
+      "pendingShot": null,
+      "releaseReason": null,
+      "score": {
+        "white": 0,
+        "black": 0
+      },
+      "turn": 32,
+      "randomState": 2698726570,
+      "log": [
+        "Black pawn moves to g12 (free pawn move).",
+        "Black pawn dribbles to i12.",
+        "White queen moves to i9.",
+        "White pawn moves to h8 (free pawn move).",
+        "Black kicks to i13 (100% accuracy). The ball is loose.",
+        "Black queen moves to i13 and collects the ball.",
+        "Black queen dribbles to f10.",
+        "Black pawn moves to g11 (free pawn move).",
+        "White bishop moves to f11.",
+        "White pawn moves to h5 (free pawn move).",
+        "Black passes to the knight at f9 (100% accuracy).",
+        "Black queen may follow its pass with the regular off-ball move, or decline the run.",
+        "Black queen follows its pass to e11. The regular off-ball move is used.",
+        "Black knight dribbles to d10.",
+        "Black pawn moves to h9 (free pawn move).",
+        "White rook moves to f10.",
+        "White goalkeeper moves to g1 (free king move).",
+        "Black kicks to e8 (100% accuracy). The ball is loose.",
+        "Black knight moves to e8 and collects the ball; collecting its own pass uses the dribble allowance.",
+        "Black pawn moves to g9 (free pawn move).",
+        "White rook moves to e4.",
+        "White pawn moves to g8 (free pawn move).",
+        "Black passes to the pawn at g9 (100% accuracy).",
+        "Black knight may follow its pass with the regular off-ball move, or decline the run.",
+        "Black knight follows its pass to c9. The regular off-ball move is used.",
+        "Black pawn dribbles to f9.",
+        "Black pawn moves to g10 (free pawn move).",
+        "White pawn moves to f8 (free pawn move).",
+        "White queen wins the tackle (90% chance) and takes possession at e8.",
+        "White bishop moves to e7.",
+        "White queen dribbles to d9.",
+        "White pawn moves to f7 (free pawn move).",
+        "Black queen moves to d10.",
+        "Black pawn moves to h12 (free pawn move).",
+        "White passes to the bishop at f11 (100% accuracy).",
+        "White bishop dribbles to j15.",
+        "White queen moves to i14.",
+        "White pawn moves to h6 (free pawn move).",
+        "Black queen moves to i15.",
+        "Black goalkeeper moves to h17 (free king move).",
+        "White bishop shoots toward g! Black may move its goalkeeper or hold before the shot resolves.",
+        "Black goalkeeper holds position.",
+        "Black queen blocks the shot out. White has a corner. Both teams may reposition before the restart.",
+        "White chooses rook R1 for the corner. Both teams may reposition before the kick.",
+        "White pawn moves to h7 (free pawn move).",
+        "White bishop moves to l17.",
+        "Black queen moves to c15.",
+        "Black pawn moves to g12 (free pawn move).",
+        "White lofts a pass to the bishop at l17 (90% accuracy).",
+        "White bishop moves to i11.",
+        "White bishop dribbles to k16.",
+        "White pawn moves to f8 (free pawn move).",
+        "Black rook moves to m15.",
+        "Black goalkeeper moves to i17 (free king move).",
+        "White bishop shoots toward i! Black may move its goalkeeper or hold before the shot resolves.",
+        "Black goalkeeper reacts to j17.",
+        "White shoots wide (78% miss chance). Black has a goal kick. Both teams may reposition before the goalkeeper passes the ball into the pitch.",
+        "Black knight moves to j5.",
+        "Black pawn moves to g9 (free pawn move).",
+        "White queen moves to j13.",
+        "White pawn moves to h8 (free pawn move).",
+        "Black lofts a pass to the knight at j5 (80% accuracy).",
+        "Black goalkeeper may follow its pass with the regular off-ball move, or decline the run.",
+        "Black goalkeeper follows its pass to i17. The regular off-ball move is used.",
+        "Black goalkeeper moves to h17 (free king move).",
+        "Black ends its positioning turn.",
+        "White pawn moves to h7 (free pawn move).",
+        "White rook moves to e5.",
+        "Black kicks to i3 (100% accuracy). The ball is loose.",
+        "Black bishop moves to i3 and collects the ball.",
+        "Black bishop dribbles to h4.",
+        "Black pawn moves to g11 (free pawn move).",
+        "White bishop moves to c8.",
+        "White pawn moves to k1 (free pawn move).",
+        "Black kicks to i3 (100% accuracy). The ball is loose.",
+        "Black knight moves to i3 and collects the ball.",
+        "Black knight dribbles to g2.",
+        "Black pawn moves to g8 (free pawn move).",
+        "White goalkeeper moves to f2, but the knight evades the tackle (50% chance). The knight keeps the ball; the regular move is used.",
+        "White goalkeeper moves to g1 (free king move)."
+      ],
+      "lastAction": {
+        "type": "move",
+        "team": "white",
+        "pieceId": "white-K",
+        "from": {
+          "x": 5,
+          "y": 15
+        },
+        "to": {
+          "x": 6,
+          "y": 16
+        },
+        "path": [
+          {
+            "x": 5,
+            "y": 15
+          },
+          {
+            "x": 6,
+            "y": 16
+          }
+        ],
+        "freePawn": true
+      },
+      "mode": "local",
+      "minutes": 10,
+      "rulesVersion": 19,
+      "boardDimensions": {
+        "width": 14,
+        "height": 17
+      },
+      "restart": null,
+      "offside": {
+        "team": "black",
+        "kickerId": "black-B2",
+        "ball": {
+          "x": 7,
+          "y": 13
+        },
+        "secondLastY": 16,
+        "flaggedIds": []
+      },
+      "looseBallKickOrigin": null,
+      "passRun": null,
+      "foulsEnabled": true,
+      "discipline": {},
+      "sentOff": [],
+      "winner": null,
+      "finishReason": null,
+      "ballProgress": {
+        "team": "black",
+        "anchorY": 14,
+        "rounds": 0,
+        "pendingRelease": false,
+        "excludeRelease": false
+      },
+      "paceControl": {
+        "team": "black",
+        "carrierId": "black-N1",
+        "dribbleRounds": 0,
+        "dribbledThisRound": true,
+        "history": [
+          "8,14:black-N1",
+          "8,14:black-B2"
+        ],
+        "furthestAdvance": 14
+      }
+    }
+  },
+  "q1": {
+    "key": "Q1",
+    "tackle": {
+      "type": "move",
+      "pieceId": "white-K",
+      "x": 7,
+      "y": 16,
+      "freePawn": false
+    },
+    "outcome": "evaded",
+    "roll": 0.6283462443388999,
+    "followup": {
+      "action": {
+        "type": "move",
+        "pieceId": "white-K",
+        "x": 6,
+        "y": 16,
+        "freePawn": true
+      },
+      "value": -1414.2948487326676,
+      "stats": {
+        "nodes": 1400,
+        "completedDepth": 3,
+        "cacheHits": 1028,
+        "extensions": 87,
+        "cutoffs": 68,
+        "aborted": true
+      },
+      "line": [
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-K",
+            "x": 6,
+            "y": 16,
+            "freePawn": true
+          },
+          "team": "white",
+          "phase": "defendMove"
+        },
+        {
+          "action": {
+            "type": "kick",
+            "x": 5,
+            "y": 17,
+            "disguise": true
+          },
+          "team": "black",
+          "phase": "kick"
+        },
+        {
+          "action": {
+            "type": "move",
+            "pieceId": "white-K",
+            "x": 7,
+            "y": 16,
+            "freePawn": false
+          },
+          "team": "white",
+          "phase": "keeperReact"
+        }
+      ]
+    },
+    "finished": {
+      "pieces": [
+        {
+          "id": "white-K",
+          "team": "white",
+          "type": "K",
+          "x": 6,
+          "y": 16
+        },
+        {
+          "id": "white-Q",
+          "team": "white",
+          "type": "Q",
+          "x": 9,
+          "y": 4
+        },
+        {
+          "id": "white-R1",
+          "team": "white",
+          "type": "R",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "id": "white-R2",
+          "team": "white",
+          "type": "R",
+          "x": 4,
+          "y": 12
+        },
+        {
+          "id": "white-B1",
+          "team": "white",
+          "type": "B",
+          "x": 8,
+          "y": 6
+        },
+        {
+          "id": "white-B2",
+          "team": "white",
+          "type": "B",
+          "x": 2,
+          "y": 9
+        },
+        {
+          "id": "white-N1",
+          "team": "white",
+          "type": "N",
+          "x": 3,
+          "y": 9
+        },
+        {
+          "id": "white-N2",
+          "team": "white",
+          "type": "N",
+          "x": 11,
+          "y": 7
+        },
+        {
+          "id": "white-P1",
+          "team": "white",
+          "type": "P",
+          "x": 5,
+          "y": 9
+        },
+        {
+          "id": "white-P2",
+          "team": "white",
+          "type": "P",
+          "x": 7,
+          "y": 10
+        },
+        {
+          "id": "white-P3",
+          "team": "white",
+          "type": "P",
+          "x": 10,
+          "y": 16
+        },
+        {
+          "id": "black-K",
+          "team": "black",
+          "type": "K",
+          "x": 7,
+          "y": 0
+        },
+        {
+          "id": "black-Q",
+          "team": "black",
+          "type": "Q",
+          "x": 2,
+          "y": 2
+        },
+        {
+          "id": "black-R1",
+          "team": "black",
+          "type": "R",
+          "x": 12,
+          "y": 2
+        },
+        {
+          "id": "black-R2",
+          "team": "black",
+          "type": "R",
+          "x": 11,
+          "y": 3
+        },
+        {
+          "id": "black-B1",
+          "team": "black",
+          "type": "B",
+          "x": 7,
+          "y": 6
+        },
+        {
+          "id": "black-B2",
+          "team": "black",
+          "type": "B",
+          "x": 7,
+          "y": 13
+        },
+        {
+          "id": "black-N1",
+          "team": "black",
+          "type": "N",
+          "x": 6,
+          "y": 15
+        },
+        {
+          "id": "black-N2",
+          "team": "black",
+          "type": "N",
+          "x": 2,
+          "y": 8
+        },
+        {
+          "id": "black-P1",
+          "team": "black",
+          "type": "P",
+          "x": 6,
+          "y": 6
+        },
+        {
+          "id": "black-P2",
+          "team": "black",
+          "type": "P",
+          "x": 5,
+          "y": 8
+        },
+        {
+          "id": "black-P3",
+          "team": "black",
+          "type": "P",
+          "x": 6,
+          "y": 9
+        }
+      ],
+      "ball": {
+        "x": 6,
+        "y": 15,
+        "carrierId": "black-N1"
+      },
+      "attack": "black",
+      "phase": "kick",
+      "positionBudget": {
+        "normalUsed": false,
+        "pawnUsed": false,
+        "dribbleUsed": false
+      },
+      "pendingShot": null,
+      "releaseReason": null,
+      "score": {
+        "white": 0,
+        "black": 0
+      },
+      "turn": 32,
+      "randomState": 2698726570,
+      "log": [
+        "Black pawn moves to g12 (free pawn move).",
+        "Black pawn dribbles to i12.",
+        "White queen moves to i9.",
+        "White pawn moves to h8 (free pawn move).",
+        "Black kicks to i13 (100% accuracy). The ball is loose.",
+        "Black queen moves to i13 and collects the ball.",
+        "Black queen dribbles to f10.",
+        "Black pawn moves to g11 (free pawn move).",
+        "White bishop moves to f11.",
+        "White pawn moves to h5 (free pawn move).",
+        "Black passes to the knight at f9 (100% accuracy).",
+        "Black queen may follow its pass with the regular off-ball move, or decline the run.",
+        "Black queen follows its pass to e11. The regular off-ball move is used.",
+        "Black knight dribbles to d10.",
+        "Black pawn moves to h9 (free pawn move).",
+        "White rook moves to f10.",
+        "White goalkeeper moves to g1 (free king move).",
+        "Black kicks to e8 (100% accuracy). The ball is loose.",
+        "Black knight moves to e8 and collects the ball; collecting its own pass uses the dribble allowance.",
+        "Black pawn moves to g9 (free pawn move).",
+        "White rook moves to e4.",
+        "White pawn moves to g8 (free pawn move).",
+        "Black passes to the pawn at g9 (100% accuracy).",
+        "Black knight may follow its pass with the regular off-ball move, or decline the run.",
+        "Black knight follows its pass to c9. The regular off-ball move is used.",
+        "Black pawn dribbles to f9.",
+        "Black pawn moves to g10 (free pawn move).",
+        "White pawn moves to f8 (free pawn move).",
+        "White queen wins the tackle (90% chance) and takes possession at e8.",
+        "White bishop moves to e7.",
+        "White queen dribbles to d9.",
+        "White pawn moves to f7 (free pawn move).",
+        "Black queen moves to d10.",
+        "Black pawn moves to h12 (free pawn move).",
+        "White passes to the bishop at f11 (100% accuracy).",
+        "White bishop dribbles to j15.",
+        "White queen moves to i14.",
+        "White pawn moves to h6 (free pawn move).",
+        "Black queen moves to i15.",
+        "Black goalkeeper moves to h17 (free king move).",
+        "White bishop shoots toward g! Black may move its goalkeeper or hold before the shot resolves.",
+        "Black goalkeeper holds position.",
+        "Black queen blocks the shot out. White has a corner. Both teams may reposition before the restart.",
+        "White chooses rook R1 for the corner. Both teams may reposition before the kick.",
+        "White pawn moves to h7 (free pawn move).",
+        "White bishop moves to l17.",
+        "Black queen moves to c15.",
+        "Black pawn moves to g12 (free pawn move).",
+        "White lofts a pass to the bishop at l17 (90% accuracy).",
+        "White bishop moves to i11.",
+        "White bishop dribbles to k16.",
+        "White pawn moves to f8 (free pawn move).",
+        "Black rook moves to m15.",
+        "Black goalkeeper moves to i17 (free king move).",
+        "White bishop shoots toward i! Black may move its goalkeeper or hold before the shot resolves.",
+        "Black goalkeeper reacts to j17.",
+        "White shoots wide (78% miss chance). Black has a goal kick. Both teams may reposition before the goalkeeper passes the ball into the pitch.",
+        "Black knight moves to j5.",
+        "Black pawn moves to g9 (free pawn move).",
+        "White queen moves to j13.",
+        "White pawn moves to h8 (free pawn move).",
+        "Black lofts a pass to the knight at j5 (80% accuracy).",
+        "Black goalkeeper may follow its pass with the regular off-ball move, or decline the run.",
+        "Black goalkeeper follows its pass to i17. The regular off-ball move is used.",
+        "Black goalkeeper moves to h17 (free king move).",
+        "Black ends its positioning turn.",
+        "White pawn moves to h7 (free pawn move).",
+        "White rook moves to e5.",
+        "Black kicks to i3 (100% accuracy). The ball is loose.",
+        "Black bishop moves to i3 and collects the ball.",
+        "Black bishop dribbles to h4.",
+        "Black pawn moves to g11 (free pawn move).",
+        "White bishop moves to c8.",
+        "White pawn moves to k1 (free pawn move).",
+        "Black kicks to i3 (100% accuracy). The ball is loose.",
+        "Black knight moves to i3 and collects the ball.",
+        "Black knight dribbles to g2.",
+        "Black pawn moves to g8 (free pawn move).",
+        "White goalkeeper moves to h1, but the knight evades the tackle (50% chance). The knight keeps the ball; the regular move is used.",
+        "White goalkeeper moves to g1 (free king move)."
+      ],
+      "lastAction": {
+        "type": "move",
+        "team": "white",
+        "pieceId": "white-K",
+        "from": {
+          "x": 7,
+          "y": 16
+        },
+        "to": {
+          "x": 6,
+          "y": 16
+        },
+        "path": [
+          {
+            "x": 7,
+            "y": 16
+          },
+          {
+            "x": 6,
+            "y": 16
+          }
+        ],
+        "freePawn": true
+      },
+      "mode": "local",
+      "minutes": 10,
+      "rulesVersion": 19,
+      "boardDimensions": {
+        "width": 14,
+        "height": 17
+      },
+      "restart": null,
+      "offside": {
+        "team": "black",
+        "kickerId": "black-B2",
+        "ball": {
+          "x": 7,
+          "y": 13
+        },
+        "secondLastY": 16,
+        "flaggedIds": []
+      },
+      "looseBallKickOrigin": null,
+      "passRun": null,
+      "foulsEnabled": true,
+      "discipline": {},
+      "sentOff": [],
+      "winner": null,
+      "finishReason": null,
+      "ballProgress": {
+        "team": "black",
+        "anchorY": 14,
+        "rounds": 0,
+        "pendingRelease": false,
+        "excludeRelease": false
+      },
+      "paceControl": {
+        "team": "black",
+        "carrierId": "black-N1",
+        "dribbleRounds": 0,
+        "dribbledThisRound": true,
+        "history": [
+          "8,14:black-N1",
+          "8,14:black-B2"
+        ],
+        "furthestAdvance": 14
+      }
+    }
+  }
+}

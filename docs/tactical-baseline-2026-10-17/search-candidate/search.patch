@@ -1,0 +1,31 @@
+--- a/dist/engine.js
++++ b/dist/engine.js
+@@ -2743,11 +2743,18 @@
+     let bestValue = maximizing ? -Infinity : Infinity, bestIndex = Infinity, bestAction = null, bestLine = [];
+     for (const {action, index} of ordered) {
+       const outcomes = outcomesFor(position, action);
++      // A settled shot starts a new contest. Its exact public distribution can
++      // contain dozens of equally likely keeper-spill squares. Do not spend a
++      // second quiescence tree on every landing after already resolving the
++      // shot: preserve all probability mass and ordinary remaining depth, but
++      // end the current extension sequence at this tactical event boundary.
++      // Forced pending shots are still resolved even when extra is zero.
++      const continuationExtra = position.phase === 'keeperReact' ? 0 : extending ? Math.max(0, extra - 1) : extra;
+       let value = 0, likely = null, continuation = [], deterministicChild = null;
+       for (const outcome of outcomes) {
+         // A weighted chance result must average exact children. An ordinary
+         // alpha/beta bound on one random outcome is not an expectation bound.
+-        const child = search(outcome.state, depth - 1, extending ? Math.max(0, extra - 1) : extra,
++        const child = search(outcome.state, depth - 1, continuationExtra,
+           outcomes.length === 1 ? alpha : -Infinity, outcomes.length === 1 ? beta : Infinity);
+         value += outcome.probability * child.value;
+         if (outcomes.length === 1) deterministicChild = child;
+@@ -2756,7 +2763,7 @@
+       // A fail-low/high bound equal to the incumbent is not proof of a tie.
+       // Resolve it before a canonical earlier move can replace that incumbent.
+       if (index < bestIndex && Math.abs(value - bestValue) <= 1e-8 && deterministicChild && deterministicChild.flag !== 'exact') {
+-        const child = search(outcomes[0].state, depth - 1, extending ? Math.max(0, extra - 1) : extra);
++        const child = search(outcomes[0].state, depth - 1, continuationExtra);
+         value = child.value; continuation = child.line;
+       }
+       if (bestAction === null || (maximizing ? value > bestValue + 1e-8 : value < bestValue - 1e-8)

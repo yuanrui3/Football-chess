@@ -1,0 +1,41 @@
+{
+  "createdAt": "2026-10-17T06:04:41.257503+00:00",
+  "source": "/workspace/github/football-chess-pace",
+  "files": [
+    {
+      "path": "dist/engine.js",
+      "sha256": "584b1dffb37d222969c80df04eb3b80fc79ef7fb05fc225483fb820efd47a29e",
+      "bytes": 185005
+    },
+    {
+      "path": "scripts/evaluate-selfplay.mjs",
+      "sha256": "917faa235a8957599179603fa493edcab3685255347d481e46ba659e30ba175a",
+      "bytes": 34351
+    },
+    {
+      "path": "scripts/evaluate-selfplay-worker.mjs",
+      "sha256": "dac3c6e451d8fc431f943ce56b74ba001198d2d7058b80971e1e9531e5d34a0d",
+      "bytes": 1684
+    },
+    {
+      "path": "scripts/rl-context-features.mjs",
+      "sha256": "2489e7c6f127c8c9fa8dafd4b1df347b017addbc6cc659007bdd035d3a273d3d",
+      "bytes": 8292
+    },
+    {
+      "path": "scripts/rl-shot-features.mjs",
+      "sha256": "b2c934a513a771c6085cc363354a42425121d4949403fc8e4f7bc1f03ff432a1",
+      "bytes": 1574
+    },
+    {
+      "path": "scripts/rl-features.mjs",
+      "sha256": "7e15d2ef657f1b12adf922437b42bdc62426aac38f2718a6ecd33dbb7378345c",
+      "bytes": 13070
+    },
+    {
+      "path": "scripts/simulate.mjs",
+      "sha256": "cde39f5ae87c49279a83d19e5a19f466283cd63dfee0e9e062b99f43251bf50b",
+      "bytes": 23285
+    }
+  ]
+}

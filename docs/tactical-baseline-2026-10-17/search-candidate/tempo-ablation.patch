@@ -1,0 +1,45 @@
+--- a/dist/engine.js
++++ b/dist/engine.js
+@@ -2674,6 +2674,13 @@
+   const stats = {nodes: 0, completedDepth: 0, cacheHits: 0, extensions: 0, cutoffs: 0, aborted: false};
+   if (!state || state.phase === 'finished') return {action: {type: 'skip'}, value: 0, stats, line: []};
+   const source = planningState(state), team = currentTeam(source);
++  // Search tempo discounts future gains from this decision's actual score
++  // ledger. Transform deterministic alpha/beta windows through the same affine
++  // map; passing parent windows unchanged would create unsound cutoffs.
++  const scoreLedger = ((source.score?.[team] || 0) - (source.score?.[other(team)] || 0)) * 2000;
++  const tempoDiscount = .985;
++  const soonerValue = value => scoreLedger + tempoDiscount * (value - scoreLedger);
++  const childBound = value => Number.isFinite(value) ? scoreLedger + (value - scoreLedger) / tempoDiscount : value;
+   const table = new Map(), ordering = new Map(), actionsCache = new Map(), values = new Map(), successors = new Map(), keys = new WeakMap();
+   let cachedSuccessorCount = 0;
+   const keyFor = position => {
+@@ -2755,8 +2762,8 @@
+         // A weighted chance result must average exact children. An ordinary
+         // alpha/beta bound on one random outcome is not an expectation bound.
+         const child = search(outcome.state, depth - 1, continuationExtra,
+-          outcomes.length === 1 ? alpha : -Infinity, outcomes.length === 1 ? beta : Infinity);
+-        value += outcome.probability * child.value;
++          outcomes.length === 1 ? childBound(alpha) : -Infinity, outcomes.length === 1 ? childBound(beta) : Infinity);
++        value += outcome.probability * soonerValue(child.value);
+         if (outcomes.length === 1) deterministicChild = child;
+         if (!likely || outcome.probability > likely.probability) { likely = outcome; continuation = child.line; }
+       }
+@@ -2764,7 +2771,7 @@
+       // Resolve it before a canonical earlier move can replace that incumbent.
+       if (index < bestIndex && Math.abs(value - bestValue) <= 1e-8 && deterministicChild && deterministicChild.flag !== 'exact') {
+         const child = search(outcomes[0].state, depth - 1, continuationExtra);
+-        value = child.value; continuation = child.line;
++        value = soonerValue(child.value); continuation = child.line;
+       }
+       if (bestAction === null || (maximizing ? value > bestValue + 1e-8 : value < bestValue - 1e-8)
+         || Math.abs(value - bestValue) <= 1e-8 && index < bestIndex) {
+@@ -2785,7 +2792,7 @@
+   // Keep the actual goalkeeper policy common to both levels.
+   if (source.phase === 'keeperReact') {
+     const action = chooseCasualAction(source);
+-    return {action, value: outcomesFor(source, action).reduce((sum, outcome) => sum + outcome.probability * evaluate(outcome.state), 0),
++    return {action, value: outcomesFor(source, action).reduce((sum, outcome) => sum + outcome.probability * soonerValue(evaluate(outcome.state)), 0),
+       stats, line: [{action, team, phase: source.phase}]};
+   }
+   for (let depth = 1; depth <= maxDepth; depth++) {

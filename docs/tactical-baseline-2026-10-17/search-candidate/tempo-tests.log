@@ -1,0 +1,17 @@
+✔ iterative Tactical analysis retains a legal completed answer when its next iteration is interrupted (289.015111ms)
+✔ bounded Tactical analysis is repeatable and never consults the future outcome seed (967.035622ms)
+✔ transposition reuse preserves the fully completed result of the uncached search (148.612927ms)
+✔ a cutoff bound tied with the best score cannot replace a proven stronger defensive continuation (465.053651ms)
+✔ Tactical horizon extensions resolve a close finish instead of valuing an unresolved shot as possession, either color (123.67997ms)
+✔ Tactical wins certain possession during its defensive turn, either color (969.860414ms)
+✔ forced keeper release remains a kick even when deeper search values a future reposition, either color (605.296953ms)
+✔ the principal continuation obeys real phase ownership and independent movement allowances (676.393251ms)
+✔ editing observable rule state between Tactical decisions never reuses the previous decision cache (2968.88336ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7355.304829

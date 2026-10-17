@@ -1,0 +1,41 @@
+{
+  "decidedAt": "2026-10-17T06:53:13.642383+00:00",
+  "decision": "Retain frozen production Tactical playing policy; ship completed-iteration callback and UI thinking-pipeline changes only",
+  "releaseEngineSha256": "df962903a48e9853a18ce0a600d498f648ac84fee600ed1ff045cf963d8311f8",
+  "frozenProductionSha256": "584b1dffb37d222969c80df04eb3b80fc79ef7fb05fc225483fb820efd47a29e",
+  "rejectedTrialSha256": "4388dc612b14feb2b266dc5389e1f95228c68e994bcabbcfd39c21a5e4d880f3",
+  "strengthClaim": "No decisive playing-strength or win-rate improvement demonstrated; no experimental policy promoted",
+  "unusedTestSeeds": [
+    720079,
+    720111
+  ],
+  "productionVerification": {
+    "passed": true,
+    "engineSha256": "df962903a48e9853a18ce0a600d498f648ac84fee600ed1ff045cf963d8311f8",
+    "fullSuite": {
+      "tests": 1142,
+      "pass": 1142,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "files": 59,
+      "elapsedSeconds": 163.87356913900112,
+      "finishedAt": "2026-10-17T06:54:48.332104+00:00",
+      "report": "verification/production/production-regression-status.json"
+    },
+    "policyEquivalence": {
+      "tacticalFullReports": 16,
+      "naturalStates": 640,
+      "legalMoveQueries": 28116,
+      "casualExactMatches": 640,
+      "fullTransitionMatches": 640,
+      "errors": [],
+      "report": "production-baseline-callback/equivalence-report.json"
+    },
+    "actualVersionedWorker": {
+      "checks": 4,
+      "passed": true,
+      "report": "verification/production/versioned-worker-release/worker-release-check.json"
+    }
+  }
+}

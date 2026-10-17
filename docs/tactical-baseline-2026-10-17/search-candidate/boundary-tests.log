@@ -1,0 +1,13 @@
+✔ white: close-shot search completes within1400 nodes after resolving every chance branch (1397.603884ms)
+✔ white: settling a shot changes no nominal-depth values when extensions disabled (69.909557ms)
+✔ black: close-shot search completes within1400 nodes after resolving every chance branch (1079.000915ms)
+✔ black: settling a shot changes no nominal-depth values when extensions disabled (44.474398ms)
+✔ completed-iteration progress snapshots cannot mutate search state or change the final answer (659.739607ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3438.31773

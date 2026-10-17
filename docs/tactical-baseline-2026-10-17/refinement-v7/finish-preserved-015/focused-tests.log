@@ -1,0 +1,59 @@
+✔ Tactical completes a real central supporting run for an isolated wide carrier, either colour (1881.880854ms)
+✔ cross support respects rook, bishop and knight passing geometry instead of mere central proximity (5.831495ms)
+✔ friendly and opposing intervening pieces invalidate a ray cross (1.40753ms)
+✔ offside forward receivers do not count; an onside central cutback behind the ball does (1.712819ms)
+✔ a long pass wide values an existing central delivery while retaining its accuracy penalty (2.054932ms)
+✔ a free orthogonal pawn step followed by its ordinary diagonal tackle is a real threat, either color (6.906151ms)
+✔ pawn setup risk respects current defensive budgets, but attacking moves face fresh defender budgets (1.792476ms)
+✔ occupied setup squares, distant pawns, and offside involvement do not create imaginary tackles (1.548087ms)
+✔ an existing diagonal tackle still works after the bonus has been spent, either color (1.058437ms)
+✔ risk uses the real knight resistance and clean-tackle probability, either color (1.631569ms)
+✔ the existing shared king bonus also permits a legal setup without inventing extra moves (0.678348ms)
+✔ a geometrical knight attack with every tackle landing occupied is not a real challenge (0.547125ms)
+✔ the bounded inner reply retains a pawn setup that the previous beam pruned, either color (59.353097ms)
+✖ Tactical avoids the reproducible free-pawn trap when a safe productive carry exists, either color (983.725819ms)
+✔ Tactical retains a real off-ball box runner and delivery in its bounded beam, either color (100.342568ms)
+✔ Tactical receiving opportunities reward usable finishes and discard an offside receiver (1.894075ms)
+✔ Tactical card evaluation values a removed teammate even when the current carrier is unchanged (5.560467ms)
+✔ Tactical uses the ordinary post-pass movement phase instead of a redundant opt-in run phase (959.256721ms)
+✔ Tactical converts a credible finish instead of perpetually valuing a backward recycle, either color (1940.992238ms)
+✔ Tactical still supplies a better receiving finish instead of shooting every legal opportunity (471.373501ms)
+✔ Tactical treats a pending protected corner as owned possession rather than a loose-ball race (1.361412ms)
+✔ iterative Tactical analysis retains a legal completed answer when its next iteration is interrupted (511.514015ms)
+✔ bounded Tactical analysis is repeatable and never consults the future outcome seed (1337.797277ms)
+✔ transposition reuse preserves the fully completed result of the uncached search (379.959853ms)
+✔ a cutoff bound tied with the best score cannot replace a proven stronger defensive continuation (154.474231ms)
+✔ Tactical horizon extensions resolve a close finish instead of valuing an unresolved shot as possession, either color (118.982579ms)
+✔ Tactical wins certain possession during its defensive turn, either color (1494.639929ms)
+✔ forced keeper release remains a kick even when deeper search values a future reposition, either color (878.711713ms)
+✔ the principal continuation obeys real phase ownership and independent movement allowances (1807.55747ms)
+✔ editing observable rule state between Tactical decisions never reuses the previous decision cache (4451.413267ms)
+✔ completed-iteration callbacks expose the deepest answer without mutating search or live snapshots (608.823536ms)
+ℹ tests 31
+ℹ suites 0
+ℹ pass 30
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 18668.714131
+
+✖ failing tests:
+
+test at tests/pawn-tactical-awareness.test.mjs:154:1
+✖ Tactical avoids the reproducible free-pawn trap when a safe productive carry exists, either color (983.725819ms)
+  AssertionError [ERR_ASSERTION]: the carrier actually advances productively
+      at TestContext.<anonymous> (file:///workspace/scratch/43be99f43c82/tactical-half-hour-20261017/refinement-v7/finish-preserved-015/tests/pawn-tactical-awareness.test.mjs:179:12)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

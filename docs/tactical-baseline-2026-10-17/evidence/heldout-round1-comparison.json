@@ -1,0 +1,359 @@
+{
+  "generatedAt": "2026-10-17T06:44:44.610572+00:00",
+  "status": "complete",
+  "sourceLock": {
+    "declaredLockAt": "2026-10-17T06:36:52Z",
+    "recordedAt": "2026-10-17T06:37:29.721102+00:00",
+    "source": "/workspace/github/football-chess-pace/dist/engine.js",
+    "snapshot": "/workspace/scratch/43be99f43c82/tactical-half-hour-20261017/evidence/selected-engine-locked.mjs",
+    "sha256": "4388dc612b14feb2b266dc5389e1f95228c68e994bcabbcfd39c21a5e4d880f3",
+    "frozenControlSha256": "584b1dffb37d222969c80df04eb3b80fc79ef7fb05fc225483fb820efd47a29e",
+    "selectedDescription": "Balanced v4:0.25 possession preference, preserved risk, completed-iteration callback; N/q/tempo/broad-risk experiments excluded.",
+    "modelWeights": null,
+    "heldoutOutcomesInspectedBeforeLock": false,
+    "unblindAuthorizedBy": "Explicit parent source-hash lock message06:36:52UTC"
+  },
+  "completed": 8,
+  "planned": 8,
+  "seeds": [
+    720017,
+    720043
+  ],
+  "foulsEnabled": true,
+  "candidate": {
+    "wins": 3,
+    "draws": 5,
+    "losses": 0,
+    "goals": 13,
+    "opponentGoals": 4,
+    "shots": 85,
+    "opponentShots": 8,
+    "xG": 12.367427654641826,
+    "opponentXG": 1.9969764781236046,
+    "stalls": 0,
+    "offsides": 2,
+    "nodes": 2556530,
+    "maxNodes": 1400,
+    "actions": 1839,
+    "thinkMs": 1104812.7747699998,
+    "completedDepth": 7494,
+    "meanThinkMs": 600.7682298912451,
+    "p95ThinkMs": 1116.286368000001,
+    "meanCompletedDepth": 4.075040783034257,
+    "errors": [],
+    "firstGoalActions": [
+      173,
+      226,
+      66,
+      115,
+      320,
+      264,
+      null,
+      391
+    ],
+    "scorelessLegs": 1,
+    "firstGoalMedianConditional": 226
+  },
+  "frozenControl": {
+    "wins": 5,
+    "draws": 3,
+    "losses": 0,
+    "goals": 10,
+    "opponentGoals": 4,
+    "shots": 71,
+    "opponentShots": 14,
+    "xG": 11.976485446246159,
+    "opponentXG": 4.102763631915947,
+    "stalls": 1,
+    "offsides": 1,
+    "nodes": 2632307,
+    "maxNodes": 1400,
+    "actions": 1913,
+    "thinkMs": 1176596.272308999,
+    "completedDepth": 8015,
+    "meanThinkMs": 615.0529390010449,
+    "p95ThinkMs": 1228.988845999993,
+    "meanCompletedDepth": 4.189754312598014,
+    "errors": [],
+    "firstGoalActions": [
+      276,
+      96,
+      83,
+      330,
+      198,
+      96,
+      null,
+      165
+    ],
+    "scorelessLegs": 1,
+    "firstGoalMedianConditional": 165
+  },
+  "checkpoints": {
+    "160": {
+      "candidate": {
+        "legs": 8,
+        "wins": 2,
+        "draws": 5,
+        "losses": 1,
+        "goalsFor": 2,
+        "goalsAgainst": 1,
+        "xGFor": 3.095227793862432,
+        "xGAgainst": 0.6459964555821291,
+        "shotsFor": 24,
+        "shotsAgainst": 3,
+        "stallsFor": 0,
+        "stallsAgainst": 2
+      },
+      "control": {
+        "legs": 8,
+        "wins": 3,
+        "draws": 5,
+        "losses": 0,
+        "goalsFor": 3,
+        "goalsAgainst": 0,
+        "xGFor": 2.6320615534356064,
+        "xGAgainst": 0.16481403275255357,
+        "shotsFor": 18,
+        "shotsAgainst": 2,
+        "stallsFor": 0,
+        "stallsAgainst": 7
+      }
+    },
+    "200": {
+      "candidate": {
+        "legs": 8,
+        "wins": 3,
+        "draws": 4,
+        "losses": 1,
+        "goalsFor": 4,
+        "goalsAgainst": 1,
+        "xGFor": 4.319837067874421,
+        "xGAgainst": 0.6459964555821291,
+        "shotsFor": 33,
+        "shotsAgainst": 3,
+        "stallsFor": 0,
+        "stallsAgainst": 2
+      },
+      "control": {
+        "legs": 8,
+        "wins": 5,
+        "draws": 3,
+        "losses": 0,
+        "goalsFor": 5,
+        "goalsAgainst": 0,
+        "xGFor": 4.261586606517917,
+        "xGAgainst": 1.1496400935844535,
+        "shotsFor": 24,
+        "shotsAgainst": 4,
+        "stallsFor": 0,
+        "stallsAgainst": 8
+      }
+    },
+    "240": {
+      "candidate": {
+        "legs": 8,
+        "wins": 4,
+        "draws": 3,
+        "losses": 1,
+        "goalsFor": 7,
+        "goalsAgainst": 1,
+        "xGFor": 5.603159572537834,
+        "xGAgainst": 0.6459964555821291,
+        "shotsFor": 42,
+        "shotsAgainst": 3,
+        "stallsFor": 0,
+        "stallsAgainst": 4
+      },
+      "control": {
+        "legs": 8,
+        "wins": 4,
+        "draws": 4,
+        "losses": 0,
+        "goalsFor": 5,
+        "goalsAgainst": 1,
+        "xGFor": 5.948715611454242,
+        "xGAgainst": 1.9496400935844536,
+        "shotsFor": 34,
+        "shotsAgainst": 5,
+        "stallsFor": 0,
+        "stallsAgainst": 8
+      }
+    },
+    "480": {
+      "candidate": {
+        "legs": 8,
+        "wins": 3,
+        "draws": 5,
+        "losses": 0,
+        "goalsFor": 13,
+        "goalsAgainst": 4,
+        "xGFor": 12.367427654641826,
+        "xGAgainst": 1.9969764781236046,
+        "shotsFor": 85,
+        "shotsAgainst": 8,
+        "stallsFor": 0,
+        "stallsAgainst": 7
+      },
+      "control": {
+        "legs": 8,
+        "wins": 5,
+        "draws": 3,
+        "losses": 0,
+        "goalsFor": 10,
+        "goalsAgainst": 4,
+        "xGFor": 11.976485446246159,
+        "xGAgainst": 4.102763631915947,
+        "shotsFor": 71,
+        "shotsAgainst": 14,
+        "stallsFor": 1,
+        "stallsAgainst": 16
+      }
+    }
+  },
+  "pairedLegs": [
+    {
+      "key": [
+        720017,
+        true,
+        "white",
+        "white"
+      ],
+      "candidateResult": "win",
+      "candidateScore": {
+        "white": 2,
+        "black": 0
+      },
+      "controlResult": "win",
+      "controlScore": {
+        "white": 1,
+        "black": 0
+      }
+    },
+    {
+      "key": [
+        720017,
+        true,
+        "white",
+        "black"
+      ],
+      "candidateResult": "draw",
+      "candidateScore": {
+        "white": 1,
+        "black": 1
+      },
+      "controlResult": "win",
+      "controlScore": {
+        "white": 2,
+        "black": 1
+      }
+    },
+    {
+      "key": [
+        720017,
+        true,
+        "black",
+        "white"
+      ],
+      "candidateResult": "win",
+      "candidateScore": {
+        "white": 0,
+        "black": 5
+      },
+      "controlResult": "draw",
+      "controlScore": {
+        "white": 1,
+        "black": 1
+      }
+    },
+    {
+      "key": [
+        720017,
+        true,
+        "black",
+        "black"
+      ],
+      "candidateResult": "win",
+      "candidateScore": {
+        "white": 0,
+        "black": 2
+      },
+      "controlResult": "win",
+      "controlScore": {
+        "white": 0,
+        "black": 1
+      }
+    },
+    {
+      "key": [
+        720043,
+        true,
+        "white",
+        "white"
+      ],
+      "candidateResult": "draw",
+      "candidateScore": {
+        "white": 1,
+        "black": 1
+      },
+      "controlResult": "win",
+      "controlScore": {
+        "white": 2,
+        "black": 1
+      }
+    },
+    {
+      "key": [
+        720043,
+        true,
+        "white",
+        "black"
+      ],
+      "candidateResult": "draw",
+      "candidateScore": {
+        "white": 1,
+        "black": 1
+      },
+      "controlResult": "draw",
+      "controlScore": {
+        "white": 1,
+        "black": 1
+      }
+    },
+    {
+      "key": [
+        720043,
+        true,
+        "black",
+        "white"
+      ],
+      "candidateResult": "draw",
+      "candidateScore": {
+        "white": 0,
+        "black": 0
+      },
+      "controlResult": "draw",
+      "controlScore": {
+        "white": 0,
+        "black": 0
+      }
+    },
+    {
+      "key": [
+        720043,
+        true,
+        "black",
+        "black"
+      ],
+      "candidateResult": "draw",
+      "candidateScore": {
+        "white": 1,
+        "black": 1
+      },
+      "controlResult": "win",
+      "controlScore": {
+        "white": 0,
+        "black": 2
+      }
+    }
+  ]
+}

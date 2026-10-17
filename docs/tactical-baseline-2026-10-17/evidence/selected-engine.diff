@@ -1,0 +1,110 @@
+--- frozen-v40
+
++++ locked-selected
+
+@@ -1936,9 +1936,11 @@
+
+ 
+ function looseBallValue(state, team) {
+   const sides = Object.fromEntries(TEAMS.map(side => {
+-    const players = state.pieces.filter(piece => piece.team === side && allowedSquare(piece, state.ball.x, state.ball.y));
++    const players = state.pieces.filter(piece => piece.team === side && allowedSquare(piece, state.ball.x, state.ball.y)
++      && (piece.type !== 'B' || (piece.x + piece.y - state.ball.x - state.ball.y) % 2 === 0));
+     const nearest = players.length ? Math.min(...players.map(piece => distance(piece, state.ball))) : 30;
+-    const collectors = players.filter(piece => !flagged(state, piece) && canCollect(state, piece, state.ball));
++    const collectors = players.filter(piece => !flagged(state, piece) && canCollect(state, piece, state.ball)
++      && !forbiddenPaceCarry(state, piece, state.ball));
+     return [side, {nearest, collectors}];
+   }));
+   const actor = currentTeam(state), budget = budgetFor(state);
+@@ -2443,7 +2445,10 @@
+
+     && (carrier.team === 'white' ? piece.y < carrier.y : piece.y > carrier.y)
+     && distance(piece, carrier) <= 5).length;
+   possession -= Math.min(2, cover) * 12;
+-  value += sign * possession * 0.35;
++  // Convert established possession into goals without discounting the
++  // defensive reply: retain the original immediate tackle-risk cost.
++  value += sign * possession * 0.25;
++  value -= sign * risk * (kickNow || !challengePending ? 0 : canEscape ? 65 : 520) * (0.35 - 0.25);
+   for (const keeper of state.pieces.filter(piece => piece.type === 'K')) {
+     const positioning = keeperHomeValue(keeper);
+     value += (keeper.team === team ? 1 : -1) * positioning * 0.35;
+@@ -2455,11 +2460,24 @@
+
+   if (forbiddenPaceCarry(state, piece, move)) return -16000;
+   const projected = projectedMove(state, piece, move);
+   const carrier = projected.pieces.find(p => p.id === projected.ball.carrierId), moved = projected.pieces.find(p => p.id === piece.id);
++  if (!state.ball.carrierId && projected.ball.carrierId !== piece.id) {
++    const home = piece.type === 'K' ? keeperHomeValue(moved) - keeperHomeValue(piece) : 0;
++    // Bishops retain square colour, so proximity to an opposite-colour loose
++    // ball is not collection progress. Prefer a real next-action receiving
++    // lane to a geometrically close square with the wrong movement pattern.
++    if (piece.type === 'B' && (piece.x + piece.y - state.ball.x - state.ball.y) % 2 !== 0) return home;
++    const beforeReach = canCollect(state, piece, state.ball), afterReach = canCollect(projected, moved, state.ball);
++    return (Number(afterReach) - Number(beforeReach)) * 110
++      + (distance(piece, state.ball) - distance(moved, state.ball)) * (piece.type === 'K' ? 1 : 8) + home;
++  }
+   if (!fast) {
+     let rank = moveValue(state, projected, piece, move, piece.team, beforeThreat);
+     if (carrier?.team === piece.team && carrier.id !== piece.id) {
+       const previous = state.pieces.find(p => p.id === state.ball.carrierId);
+       rank += (tacticalOutlets(projected, carrier).best - tacticalOutlets(state, previous).best) * 850;
++      // A teammate can obstruct an otherwise legal shot. Reward opening the
++      // carrier's actual reaction-aware finish, not only receiving outlets.
++      rank += (tacticalShots(projected, carrier.team, true) - tacticalShots(state, carrier.team, true)) * 900;
+     }
+     return rank;
+   }
+@@ -2475,6 +2493,7 @@
+
+       + (tacticalTackleRisk(state, piece) - tacticalTackleRisk(projected, carrier)) * 680 + progressRank(state, piece.team, move.y);
+     const original = state.pieces.find(p => p.id === carrier.id);
+     return supportPotential(projected, moved, carrier) - supportPotential(state, piece, original)
++      + (tacticalShots(projected, carrier.team, true) - tacticalShots(state, carrier.team, true)) * 900
+       + (wideCrossingSupport(projected, carrier).best - wideCrossingSupport(state, original).best) * 240
+       + (tacticalOutlets(projected, carrier).best - tacticalOutlets(state, original).best) * 850
+       + (tacticalTackleRisk(state, original) - tacticalTackleRisk(projected, carrier)) * 450
+@@ -2528,6 +2547,18 @@
+
+         const tackleSetup = freePawn && carrier && carrier.team !== team && tacticalTackleSetup(state, piece, move, carrier);
+         candidates.push({action: {type: 'move', pieceId: piece.id, x: move.x, y: move.y, freePawn}, rank: tacticalMoveRank(state, piece, move, beforeThreat, !root, threats) + (freePawn ? 0.01 : 0), category: tackleSetup ? 'tackleSetup' : freePawn ? 'pawn' : move.type === 'tackle' ? 'tackle' : carrying ? safeDribble ? 'safeDribble' : 'dribble' : boxRun ? 'boxRun' : 'support'});
+       }
++    }
++  }
++  // Cash a genuinely strong legal finish instead of postponing it for an
++  // optimistic leaf. A clearly superior onside receiving chance keeps normal
++  // search available; every chance includes the keeper's best legal reaction.
++  if (root && ['kick', 'kickoff', 'keeperRelease'].includes(state.phase)) {
++    const finish = kickingChoices(state).filter(kick => kick.goal === team && !kick.offside)
++      .map(kick => ({entry: candidates.find(entry => entry.category === 'shot' && entry.action.x === kick.x && entry.action.y === kick.y && !!entry.action.disguise === !!kick.disguise), chance: reactedShotChance(state, kick)}))
++      .sort((a, b) => b.chance - a.chance)[0];
++    const carrier = state.pieces.find(piece => piece.id === state.ball.carrierId);
++    if (finish?.chance >= 0.55 && finish.chance >= tacticalOutlets(state, carrier).best - 0.05) {
++      return [finish.entry];
+     }
+   }
+   candidates.sort((a, b) => b.rank - a.rank);
+@@ -2665,7 +2696,7 @@
+
+ // Public diagnostics make budgets, completed iterations and cache equivalence
+ // reproducible in tests and simulations. The controller still receives just an
+ // action through chooseAIAction; no analysis state enters a saved match.
+-export function analyzeTacticalAction(state, {maxDepth = AI_SEARCH.depth, nodeLimit = AI_SEARCH.nodes, useCache = true, extensions = true,
++export function analyzeTacticalAction(state, {maxDepth = AI_SEARCH.depth, nodeLimit = AI_SEARCH.nodes, useCache = true, extensions = true, onIteration,
+   modelWeights = RL_VALUE_MODEL.enabled ? RL_VALUE_MODEL.weights : null, modelScale = rlDefaultScale(modelWeights)} = {}) {
+   modelWeights = rlValidateWeights(modelWeights);
+   modelScale = rlValidateScale(modelScale);
+@@ -2785,6 +2816,11 @@
+
+     try {
+       const result = search(source, depth, extensions ? AI_SEARCH.extensions : 0, -Infinity, Infinity, true);
+       completed = result; stats.completedDepth = depth;
++      // A worker may deliver completed iterations while the next one searches.
++      // Isolate the callback's snapshot so a consumer cannot mutate search
++      // actions, cached principal variations or diagnostic counters.
++      if (typeof onIteration === 'function') onIteration({action: copy(completed.action), value: completed.value,
++        stats: {...stats}, line: copy(completed.line)});
+     } catch (error) {
+       if (error !== SEARCH_ABORT) throw error;
+       stats.aborted = true; break;

@@ -263,3 +263,28 @@ test('editing observable rule state between Tactical decisions never reuses the 
     assert.deepEqual(reused, fresh, 'in-place edits equal a fresh identical snapshot, including the complete search report');
   }
 });
+
+test('completed-iteration callbacks expose the deepest answer without mutating search or live snapshots', () => {
+  const state = e.createGame({seed: 31}), before = clone(state);
+  const options = {maxDepth: 8, nodeLimit: 600, modelWeights: null};
+  const ordinary = analysis(state, options), snapshots = [];
+  const watched = analysis(state, {...options, onIteration: snapshot => {
+    snapshots.push(clone(snapshot));
+    snapshot.action.type = 'invalid';
+    snapshot.stats.nodes = 1e9;
+    if (snapshot.line[0]) snapshot.line[0].action.type = 'invalid-line';
+    snapshot.line.length = 0;
+  }});
+  assert.deepEqual(watched, ordinary, 'a progress consumer cannot change the default decision, line, value or deterministic work');
+  assert.deepEqual(state, before);
+  assert.deepEqual(snapshots.map(snapshot => snapshot.stats.completedDepth),
+    Array.from({length: watched.stats.completedDepth}, (_, index) => index + 1));
+  assert.ok(snapshots.length > 0, 'at least one complete iteration is delivered');
+  const deepest = snapshots.at(-1);
+  legalChoice(state, deepest.action);
+  assert.deepEqual(deepest.action, watched.action);
+  assert.equal(deepest.value, watched.value);
+  assert.deepEqual(deepest.line, watched.line);
+  assert.equal(deepest.stats.aborted, false, 'only fully completed iterations are published');
+  assert.ok(deepest.stats.nodes <= watched.stats.nodes && watched.stats.nodes <= options.nodeLimit);
+});

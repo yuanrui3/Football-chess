@@ -1,0 +1,53 @@
+{
+  "status": "Prepared without reading held-out outcomes",
+  "suggestedRepositoryDestination": "docs/tactical-ai-2026-10-17",
+  "preserveRelativeLayout": true,
+  "requiredReproductionFiles": [
+    "benchmark.mjs",
+    "compare-batches.mjs",
+    "prefix-report.mjs",
+    "README.md",
+    "protocol.json",
+    "frozen-manifest.json",
+    "frozen/package.json",
+    "frozen/dist/engine.js",
+    "frozen/scripts/evaluate-selfplay.mjs",
+    "frozen/scripts/evaluate-selfplay-worker.mjs",
+    "frozen/scripts/rl-context-features.mjs",
+    "frozen/scripts/rl-shot-features.mjs",
+    "frozen/scripts/rl-features.mjs",
+    "frozen/scripts/simulate.mjs",
+    "write-heldout-report.py"
+  ],
+  "requiredEvidence": [
+    "evidence/development-tables.md",
+    "evidence/development-counts.json",
+    "comparison-progress.json",
+    "blind-baseline-process-status.json",
+    "Each completed batch directory's config.json, candidate-engine.mjs, rules-engine.mjs, summary.json and match-*.json",
+    "Partial batch records explicitly labeled incomplete; no imputed results",
+    "Final selected policy lock metadata, final held-out reports and final test logs after they exist",
+    "selected-policy-lock.json",
+    "evidence/selected-engine-locked.mjs",
+    "evidence/selected-engine.diff",
+    "evidence/heldout-comparison.md",
+    "evidence/heldout-comparison.json"
+  ],
+  "optionalEvidence": [
+    "Trial source directories and agent audits explaining accepted/rejected changes",
+    "Per-batch prefix reports and development logs"
+  ],
+  "excludeFromUserSourceBundle": [
+    "PENDING final-report-template.md unless clearly retained as a template",
+    "Downloaded connector helpers, credentials, hosting tokens or signed URLs",
+    "Duplicate deployment tarballs and obsolete deliverable ZIPs"
+  ],
+  "finalization": [
+    "Lock candidate source SHA before any held-out read",
+    "Complete or explicitly label partial held-out runs",
+    "Generate final report from actual completed outputs; retain development and held-out separation",
+    "Copy the reproducible experiment tree into repository documentation without changing relative paths",
+    "Package the complete project source with licensed runtime assets and final instructions",
+    "Update the existing source ZIP identity rather than creating a duplicate"
+  ]
+}

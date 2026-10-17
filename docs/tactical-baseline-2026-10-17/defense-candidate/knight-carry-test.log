@@ -1,0 +1,12 @@
+✔ natural: Tactical sees a native receiving knight carry threat that immediate-shot defense misses (66.298328ms)
+✔ natural: native-knight threat search remains legal, pure, budgeted and seed blind (1319.399619ms)
+✔ mirror: Tactical sees a native receiving knight carry threat that immediate-shot defense misses (102.396781ms)
+✔ mirror: native-knight threat search remains legal, pure, budgeted and seed blind (1120.169476ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2823.512973

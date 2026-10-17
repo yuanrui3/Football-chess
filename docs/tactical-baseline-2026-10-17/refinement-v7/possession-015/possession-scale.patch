@@ -1,0 +1,13 @@
+--- a/dist/engine.js
++++ b/dist/engine.js
+@@ -2447,8 +2447,8 @@
+   possession -= Math.min(2, cover) * 12;
+   // Convert established possession into goals without discounting the
+   // defensive reply: retain the original immediate tackle-risk cost.
+-  value += sign * possession * 0.25;
+-  value -= sign * risk * (kickNow || !challengePending ? 0 : canEscape ? 65 : 520) * (0.35 - 0.25);
++  value += sign * possession * 0.15;
++  value -= sign * risk * (kickNow || !challengePending ? 0 : canEscape ? 65 : 520) * (0.35 - 0.15);
+   for (const keeper of state.pieces.filter(piece => piece.type === 'K')) {
+     const positioning = keeperHomeValue(keeper);
+     value += (keeper.team === team ? 1 : -1) * positioning * 0.35;

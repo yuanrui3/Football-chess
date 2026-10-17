@@ -1,0 +1,12 @@
+--- engine.mjs	2026-10-16 23:05:35.102546965 -0700
++++ engine-pace-guard.mjs	2026-10-16 23:10:55.959732711 -0700
+@@ -1939,7 +1939,8 @@
+     const players = state.pieces.filter(piece => piece.team === side && allowedSquare(piece, state.ball.x, state.ball.y)
+       && (piece.type !== 'B' || (piece.x + piece.y - state.ball.x - state.ball.y) % 2 === 0));
+     const nearest = players.length ? Math.min(...players.map(piece => distance(piece, state.ball))) : 30;
+-    const collectors = players.filter(piece => !flagged(state, piece) && canCollect(state, piece, state.ball));
++    const collectors = players.filter(piece => !flagged(state, piece) && canCollect(state, piece, state.ball)
++      && !forbiddenPaceCarry(state, piece, state.ball));
+     return [side, {nearest, collectors}];
+   }));
+   const actor = currentTeam(state), budget = budgetFor(state);

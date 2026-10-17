@@ -1,0 +1,27 @@
+✖ Tactical avoids the reproducible free-pawn trap when a safe productive carry exists, either color (1039.279743ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1144.390467
+
+✖ failing tests:
+
+test at signed-retention-full-risk-pawn-tactical-awareness.test.mjs:154:1
+✖ Tactical avoids the reproducible free-pawn trap when a safe productive carry exists, either color (1039.279743ms)
+  AssertionError [ERR_ASSERTION]: the carrier actually advances productively
+      at TestContext.<anonymous> (file:///workspace/scratch/43be99f43c82/tactical-half-hour-20261017/defense-candidate/signed-retention-full-risk-pawn-tactical-awareness.test.mjs:179:12)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

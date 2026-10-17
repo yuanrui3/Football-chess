@@ -1,0 +1,5342 @@
+{
+  "updatedAt": "2026-10-17T06:52:08.699Z",
+  "baseline": "baseline-v40",
+  "rows": [
+    {
+      "label": "aggressive-v2",
+      "split": "dev",
+      "seeds": [
+        610017
+      ],
+      "controlLabel": "baseline-v40",
+      "planned": 4,
+      "completed": 4,
+      "actions": 480,
+      "opponent": "casual",
+      "fouls": [
+        true
+      ],
+      "sha256": "66a2984914855452ea6a1445993458530d73f5fff930a6fd5ec78f00d3684e38",
+      "full": {
+        "wdl": {
+          "wins": 3,
+          "draws": 0,
+          "losses": 1
+        },
+        "goals": [
+          7,
+          2
+        ],
+        "xG": [
+          8.206470207703967,
+          0.8334603174977695
+        ],
+        "shots": [
+          43,
+          8
+        ],
+        "stalls": [
+          0,
+          2
+        ],
+        "meanThinkMs": 761.1669665907673,
+        "p95ThinkMs": 1561.8404120000196,
+        "meanDepth": 4.385099685204617,
+        "errors": 0
+      },
+      "prefix160": {
+        "legs": 4,
+        "wins": 1,
+        "draws": 3,
+        "losses": 0,
+        "goalsFor": 1,
+        "goalsAgainst": 0,
+        "xGFor": 1.7062156526272676,
+        "xGAgainst": 0.05620572061586823,
+        "shotsFor": 13,
+        "shotsAgainst": 1,
+        "stallsFor": 0,
+        "stallsAgainst": 0
+      },
+      "commonPrefix160": {
+        "candidate": {
+          "legs": 4,
+          "wins": 1,
+          "draws": 3,
+          "losses": 0,
+          "goalsFor": 1,
+          "goalsAgainst": 0,
+          "xGFor": 1.7062156526272676,
+          "xGAgainst": 0.05620572061586823,
+          "shotsFor": 13,
+          "shotsAgainst": 1,
+          "stallsFor": 0,
+          "stallsAgainst": 0
+        },
+        "control": {
+          "legs": 4,
+          "wins": 0,
+          "draws": 4,
+          "losses": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "xGFor": 1.4942518143728738,
+          "xGAgainst": 0.058482398718648035,
+          "shotsFor": 10,
+          "shotsAgainst": 1,
+          "stallsFor": 0,
+          "stallsAgainst": 2
+        }
+      },
+      "commonFullHorizon": {
+        "candidate": {
+          "legs": 4,
+          "wins": 3,
+          "draws": 0,
+          "losses": 1,
+          "goalsFor": 7,
+          "goalsAgainst": 2,
+          "xGFor": 8.206470207703967,
+          "xGAgainst": 0.8334603174977695,
+          "shotsFor": 43,
+          "shotsAgainst": 8,
+          "stallsFor": 0,
+          "stallsAgainst": 2
+        },
+        "control": {
+          "legs": 4,
+          "wins": 4,
+          "draws": 0,
+          "losses": 0,
+          "goalsFor": 6,
+          "goalsAgainst": 0,
+          "xGFor": 6.771012952594147,
+          "xGAgainst": 0.6603048010653468,
+          "shotsFor": 38,
+          "shotsAgainst": 3,
+          "stallsFor": 0,
+          "stallsAgainst": 8
+        }
+      },
+      "firstGoalActions": {
+        "scoredLegs": 3,
+        "noCandidateGoalLegs": 1,
+        "medianConditionalOnScoring": 328,
+        "legs": [
+          {
+            "key": "610017/true/white/white",
+            "candidate": 114,
+            "opponent": null,
+            "any": 114
+          },
+          {
+            "key": "610017/true/white/black",
+            "candidate": null,
+            "opponent": 167,
+            "any": 167
+          },
+          {
+            "key": "610017/true/black/white",
+            "candidate": 328,
+            "opponent": null,
+            "any": 328
+          },
+          {
+            "key": "610017/true/black/black",
+            "candidate": 436,
+            "opponent": null,
+            "any": 436
+          }
+        ]
+      },
+      "checkpoints": {
+        "160": {
+          "legs": 4,
+          "wins": 1,
+          "draws": 3,
+          "losses": 0,
+          "goalsFor": 1,
+          "goalsAgainst": 0,
+          "xGFor": 1.7062156526272676,
+          "xGAgainst": 0.05620572061586823,
+          "shotsFor": 13,
+          "shotsAgainst": 1,
+          "stallsFor": 0,
+          "stallsAgainst": 0
+        },
+        "200": {
+          "legs": 4,
+          "wins": 1,
+          "draws": 2,
+          "losses": 1,
+          "goalsFor": 2,
+          "goalsAgainst": 1,
+          "xGFor": 2.344124432500757,
+          "xGAgainst": 0.27396880963409,
+          "shotsFor": 20,
+          "shotsAgainst": 2,
+          "stallsFor": 0,
+          "stallsAgainst": 0
+        },
+        "240": {
+          "legs": 4,
+          "wins": 1,
+          "draws": 2,
+          "losses": 1,
+          "goalsFor": 2,
+          "goalsAgainst": 2,
+          "xGFor": 2.387854667565502,
+          "xGAgainst": 0.5615679982969755,
+          "shotsFor": 21,
+          "shotsAgainst": 4,
+          "stallsFor": 0,
+          "stallsAgainst": 1
+        },
+        "480": {
+          "legs": 4,
+          "wins": 3,
+          "draws": 0,
+          "losses": 1,
+          "goalsFor": 7,
+          "goalsAgainst": 2,
+          "xGFor": 8.206470207703967,
+          "xGAgainst": 0.8334603174977695,
+          "shotsFor": 43,
+          "shotsAgainst": 8,
+          "stallsFor": 0,
+          "stallsAgainst": 2
+        }
+      },
+      "commonCheckpoints": {
+        "160": {
+          "candidate": {
+            "legs": 4,
+            "wins": 1,
+            "draws": 3,
+            "losses": 0,
+            "goalsFor": 1,
+            "goalsAgainst": 0,
+            "xGFor": 1.7062156526272676,
+            "xGAgainst": 0.05620572061586823,
+            "shotsFor": 13,
+            "shotsAgainst": 1,
+            "stallsFor": 0,
+            "stallsAgainst": 0
+          },
+          "control": {
+            "legs": 4,
+            "wins": 0,
+            "draws": 4,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 1.4942518143728738,
+            "xGAgainst": 0.058482398718648035,
+            "shotsFor": 10,
+            "shotsAgainst": 1,
+            "stallsFor": 0,
+            "stallsAgainst": 2
+          }
+        },
+        "200": {
+          "candidate": {
+            "legs": 4,
+            "wins": 1,
+            "draws": 2,
+            "losses": 1,
+            "goalsFor": 2,
+            "goalsAgainst": 1,
+            "xGFor": 2.344124432500757,
+            "xGAgainst": 0.27396880963409,
+            "shotsFor": 20,
+            "shotsAgainst": 2,
+            "stallsFor": 0,
+            "stallsAgainst": 0
+          },
+          "control": {
+            "legs": 4,
+            "wins": 2,
+            "draws": 2,
+            "losses": 0,
+            "goalsFor": 2,
+            "goalsAgainst": 0,
+            "xGFor": 2.265366543510647,
+            "xGAgainst": 0.058482398718648035,
+            "shotsFor": 15,
+            "shotsAgainst": 1,
+            "stallsFor": 0,
+            "stallsAgainst": 2
+          }
+        },
+        "240": {
+          "candidate": {
+            "legs": 4,
+            "wins": 1,
+            "draws": 2,
+            "losses": 1,
+            "goalsFor": 2,
+            "goalsAgainst": 2,
+            "xGFor": 2.387854667565502,
+            "xGAgainst": 0.5615679982969755,
+            "shotsFor": 21,
+            "shotsAgainst": 4,
+            "stallsFor": 0,
+            "stallsAgainst": 1
+          },
+          "control": {
+            "legs": 4,
+            "wins": 3,
+            "draws": 1,
+            "losses": 0,
+            "goalsFor": 3,
+            "goalsAgainst": 0,
+            "xGFor": 2.7577751340847123,
+            "xGAgainst": 0.058482398718648035,
+            "shotsFor": 18,
+            "shotsAgainst": 1,
+            "stallsFor": 0,
+            "stallsAgainst": 3
+          }
+        },
+        "480": {
+          "candidate": {
+            "legs": 4,
+            "wins": 3,
+            "draws": 0,
+            "losses": 1,
+            "goalsFor": 7,
+            "goalsAgainst": 2,
+            "xGFor": 8.206470207703967,
+            "xGAgainst": 0.8334603174977695,
+            "shotsFor": 43,
+            "shotsAgainst": 8,
+            "stallsFor": 0,
+            "stallsAgainst": 2
+          },
+          "control": {
+            "legs": 4,
+            "wins": 4,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 6,
+            "goalsAgainst": 0,
+            "xGFor": 6.771012952594147,
+            "xGAgainst": 0.6603048010653468,
+            "shotsFor": 38,
+            "shotsAgainst": 3,
+            "stallsFor": 0,
+            "stallsAgainst": 8
+          }
+        }
+      }
+    },
+    {
+      "label": "attack-finish-v2",
+      "split": "dev",
+      "seeds": [
+        610017
+      ],
+      "controlLabel": "baseline-v40",
+      "planned": 4,
+      "completed": 4,
+      "actions": 160,
+      "opponent": "casual",
+      "fouls": [
+        true
+      ],
+      "sha256": "1b7cbae3f8fdaec3d4f334659fa069e1f3ae4659f4d60eb1092b8fdacfbfef3c",
+      "full": {
+        "wdl": {
+          "wins": 0,
+          "draws": 4,
+          "losses": 0
+        },
+        "goals": [
+          0,
+          0
+        ],
+        "xG": [
+          1.589212813280803,
+          0.07559568353299803
+        ],
+        "shots": [
+          7,
+          1
+        ],
+        "stalls": [
+          0,
+          1
+        ],
+        "meanThinkMs": 730.185744678898,
+        "p95ThinkMs": 1435.4185400000001,
+        "meanDepth": 4.17125382262997,
+        "errors": 0
+      },
+      "prefix160": {
+        "legs": 4,
+        "wins": 0,
+        "draws": 4,
+        "losses": 0,
+        "goalsFor": 0,
+        "goalsAgainst": 0,
+        "xGFor": 1.589212813280803,
+        "xGAgainst": 0.07559568353299803,
+        "shotsFor": 7,
+        "shotsAgainst": 1,
+        "stallsFor": 0,
+        "stallsAgainst": 1
+      },
+      "commonPrefix160": {
+        "candidate": {
+          "legs": 4,
+          "wins": 0,
+          "draws": 4,
+          "losses": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "xGFor": 1.589212813280803,
+          "xGAgainst": 0.07559568353299803,
+          "shotsFor": 7,
+          "shotsAgainst": 1,
+          "stallsFor": 0,
+          "stallsAgainst": 1
+        },
+        "control": {
+          "legs": 4,
+          "wins": 0,
+          "draws": 4,
+          "losses": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "xGFor": 1.4942518143728738,
+          "xGAgainst": 0.058482398718648035,
+          "shotsFor": 10,
+          "shotsAgainst": 1,
+          "stallsFor": 0,
+          "stallsAgainst": 2
+        }
+      },
+      "commonFullHorizon": {
+        "candidate": {
+          "legs": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "xGFor": 0,
+          "xGAgainst": 0,
+          "shotsFor": 0,
+          "shotsAgainst": 0,
+          "stallsFor": 0,
+          "stallsAgainst": 0
+        },
+        "control": {
+          "legs": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "xGFor": 0,
+          "xGAgainst": 0,
+          "shotsFor": 0,
+          "shotsAgainst": 0,
+          "stallsFor": 0,
+          "stallsAgainst": 0
+        }
+      },
+      "firstGoalActions": {
+        "scoredLegs": 0,
+        "noCandidateGoalLegs": 4,
+        "medianConditionalOnScoring": null,
+        "legs": [
+          {
+            "key": "610017/true/white/white",
+            "candidate": null,
+            "opponent": null,
+            "any": null
+          },
+          {
+            "key": "610017/true/white/black",
+            "candidate": null,
+            "opponent": null,
+            "any": null
+          },
+          {
+            "key": "610017/true/black/white",
+            "candidate": null,
+            "opponent": null,
+            "any": null
+          },
+          {
+            "key": "610017/true/black/black",
+            "candidate": null,
+            "opponent": null,
+            "any": null
+          }
+        ]
+      },
+      "checkpoints": {
+        "160": {
+          "legs": 4,
+          "wins": 0,
+          "draws": 4,
+          "losses": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "xGFor": 1.589212813280803,
+          "xGAgainst": 0.07559568353299803,
+          "shotsFor": 7,
+          "shotsAgainst": 1,
+          "stallsFor": 0,
+          "stallsAgainst": 1
+        },
+        "200": null,
+        "240": null,
+        "480": null
+      },
+      "commonCheckpoints": {
+        "160": {
+          "candidate": {
+            "legs": 4,
+            "wins": 0,
+            "draws": 4,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 1.589212813280803,
+            "xGAgainst": 0.07559568353299803,
+            "shotsFor": 7,
+            "shotsAgainst": 1,
+            "stallsFor": 0,
+            "stallsAgainst": 1
+          },
+          "control": {
+            "legs": 4,
+            "wins": 0,
+            "draws": 4,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 1.4942518143728738,
+            "xGAgainst": 0.058482398718648035,
+            "shotsFor": 10,
+            "shotsAgainst": 1,
+            "stallsFor": 0,
+            "stallsAgainst": 2
+          }
+        },
+        "200": {
+          "candidate": {
+            "legs": 0,
+            "wins": 0,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 0,
+            "xGAgainst": 0,
+            "shotsFor": 0,
+            "shotsAgainst": 0,
+            "stallsFor": 0,
+            "stallsAgainst": 0
+          },
+          "control": {
+            "legs": 0,
+            "wins": 0,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 0,
+            "xGAgainst": 0,
+            "shotsFor": 0,
+            "shotsAgainst": 0,
+            "stallsFor": 0,
+            "stallsAgainst": 0
+          }
+        },
+        "240": {
+          "candidate": {
+            "legs": 0,
+            "wins": 0,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 0,
+            "xGAgainst": 0,
+            "shotsFor": 0,
+            "shotsAgainst": 0,
+            "stallsFor": 0,
+            "stallsAgainst": 0
+          },
+          "control": {
+            "legs": 0,
+            "wins": 0,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 0,
+            "xGAgainst": 0,
+            "shotsFor": 0,
+            "shotsAgainst": 0,
+            "stallsFor": 0,
+            "stallsAgainst": 0
+          }
+        },
+        "480": {
+          "candidate": {
+            "legs": 0,
+            "wins": 0,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 0,
+            "xGAgainst": 0,
+            "shotsFor": 0,
+            "shotsAgainst": 0,
+            "stallsFor": 0,
+            "stallsAgainst": 0
+          },
+          "control": {
+            "legs": 0,
+            "wins": 0,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 0,
+            "xGAgainst": 0,
+            "shotsFor": 0,
+            "shotsAgainst": 0,
+            "stallsFor": 0,
+            "stallsAgainst": 0
+          }
+        }
+      }
+    },
+    {
+      "label": "attack-opening-v1",
+      "split": "dev",
+      "seeds": [
+        610017
+      ],
+      "controlLabel": "baseline-v40",
+      "planned": 4,
+      "completed": 4,
+      "actions": 160,
+      "opponent": "casual",
+      "fouls": [
+        true
+      ],
+      "sha256": "dcc44823abc2e174987ae9d1a49f79f9532aa471814f7909e391fa6ad6146538",
+      "full": {
+        "wdl": {
+          "wins": 0,
+          "draws": 4,
+          "losses": 0
+        },
+        "goals": [
+          0,
+          0
+        ],
+        "xG": [
+          1.589212813280803,
+          0.07559568353299803
+        ],
+        "shots": [
+          7,
+          1
+        ],
+        "stalls": [
+          0,
+          1
+        ],
+        "meanThinkMs": 713.0223542232413,
+        "p95ThinkMs": 1330.3652760000114,
+        "meanDepth": 4.17125382262997,
+        "errors": 0
+      },
+      "prefix160": {
+        "legs": 4,
+        "wins": 0,
+        "draws": 4,
+        "losses": 0,
+        "goalsFor": 0,
+        "goalsAgainst": 0,
+        "xGFor": 1.589212813280803,
+        "xGAgainst": 0.07559568353299803,
+        "shotsFor": 7,
+        "shotsAgainst": 1,
+        "stallsFor": 0,
+        "stallsAgainst": 1
+      },
+      "commonPrefix160": {
+        "candidate": {
+          "legs": 4,
+          "wins": 0,
+          "draws": 4,
+          "losses": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "xGFor": 1.589212813280803,
+          "xGAgainst": 0.07559568353299803,
+          "shotsFor": 7,
+          "shotsAgainst": 1,
+          "stallsFor": 0,
+          "stallsAgainst": 1
+        },
+        "control": {
+          "legs": 4,
+          "wins": 0,
+          "draws": 4,
+          "losses": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "xGFor": 1.4942518143728738,
+          "xGAgainst": 0.058482398718648035,
+          "shotsFor": 10,
+          "shotsAgainst": 1,
+          "stallsFor": 0,
+          "stallsAgainst": 2
+        }
+      },
+      "commonFullHorizon": {
+        "candidate": {
+          "legs": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "xGFor": 0,
+          "xGAgainst": 0,
+          "shotsFor": 0,
+          "shotsAgainst": 0,
+          "stallsFor": 0,
+          "stallsAgainst": 0
+        },
+        "control": {
+          "legs": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "xGFor": 0,
+          "xGAgainst": 0,
+          "shotsFor": 0,
+          "shotsAgainst": 0,
+          "stallsFor": 0,
+          "stallsAgainst": 0
+        }
+      },
+      "firstGoalActions": {
+        "scoredLegs": 0,
+        "noCandidateGoalLegs": 4,
+        "medianConditionalOnScoring": null,
+        "legs": [
+          {
+            "key": "610017/true/white/white",
+            "candidate": null,
+            "opponent": null,
+            "any": null
+          },
+          {
+            "key": "610017/true/white/black",
+            "candidate": null,
+            "opponent": null,
+            "any": null
+          },
+          {
+            "key": "610017/true/black/white",
+            "candidate": null,
+            "opponent": null,
+            "any": null
+          },
+          {
+            "key": "610017/true/black/black",
+            "candidate": null,
+            "opponent": null,
+            "any": null
+          }
+        ]
+      },
+      "checkpoints": {
+        "160": {
+          "legs": 4,
+          "wins": 0,
+          "draws": 4,
+          "losses": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "xGFor": 1.589212813280803,
+          "xGAgainst": 0.07559568353299803,
+          "shotsFor": 7,
+          "shotsAgainst": 1,
+          "stallsFor": 0,
+          "stallsAgainst": 1
+        },
+        "200": null,
+        "240": null,
+        "480": null
+      },
+      "commonCheckpoints": {
+        "160": {
+          "candidate": {
+            "legs": 4,
+            "wins": 0,
+            "draws": 4,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 1.589212813280803,
+            "xGAgainst": 0.07559568353299803,
+            "shotsFor": 7,
+            "shotsAgainst": 1,
+            "stallsFor": 0,
+            "stallsAgainst": 1
+          },
+          "control": {
+            "legs": 4,
+            "wins": 0,
+            "draws": 4,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 1.4942518143728738,
+            "xGAgainst": 0.058482398718648035,
+            "shotsFor": 10,
+            "shotsAgainst": 1,
+            "stallsFor": 0,
+            "stallsAgainst": 2
+          }
+        },
+        "200": {
+          "candidate": {
+            "legs": 0,
+            "wins": 0,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 0,
+            "xGAgainst": 0,
+            "shotsFor": 0,
+            "shotsAgainst": 0,
+            "stallsFor": 0,
+            "stallsAgainst": 0
+          },
+          "control": {
+            "legs": 0,
+            "wins": 0,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 0,
+            "xGAgainst": 0,
+            "shotsFor": 0,
+            "shotsAgainst": 0,
+            "stallsFor": 0,
+            "stallsAgainst": 0
+          }
+        },
+        "240": {
+          "candidate": {
+            "legs": 0,
+            "wins": 0,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 0,
+            "xGAgainst": 0,
+            "shotsFor": 0,
+            "shotsAgainst": 0,
+            "stallsFor": 0,
+            "stallsAgainst": 0
+          },
+          "control": {
+            "legs": 0,
+            "wins": 0,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 0,
+            "xGAgainst": 0,
+            "shotsFor": 0,
+            "shotsAgainst": 0,
+            "stallsFor": 0,
+            "stallsAgainst": 0
+          }
+        },
+        "480": {
+          "candidate": {
+            "legs": 0,
+            "wins": 0,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 0,
+            "xGAgainst": 0,
+            "shotsFor": 0,
+            "shotsAgainst": 0,
+            "stallsFor": 0,
+            "stallsAgainst": 0
+          },
+          "control": {
+            "legs": 0,
+            "wins": 0,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 0,
+            "xGAgainst": 0,
+            "shotsFor": 0,
+            "shotsAgainst": 0,
+            "stallsFor": 0,
+            "stallsAgainst": 0
+          }
+        }
+      }
+    },
+    {
+      "label": "attack-wide-v3",
+      "split": "dev",
+      "seeds": [
+        610017
+      ],
+      "controlLabel": "baseline-v40",
+      "planned": 4,
+      "completed": 1,
+      "actions": 160,
+      "opponent": "casual",
+      "fouls": [
+        true
+      ],
+      "sha256": "f57e37bebb0b553ea28d9e77317ffd04ad6dbd538f22b7476e66e44a9311a554",
+      "full": {
+        "wdl": {
+          "wins": 0,
+          "draws": 1,
+          "losses": 0
+        },
+        "goals": [
+          0,
+          0
+        ],
+        "xG": [
+          0.22778207782883048,
+          0.09510102644753113
+        ],
+        "shots": [
+          2,
+          1
+        ],
+        "stalls": [
+          0,
+          0
+        ],
+        "meanThinkMs": 682.8952951739132,
+        "p95ThinkMs": 1291.0053739999998,
+        "meanDepth": 4.057971014492754,
+        "errors": 0
+      },
+      "prefix160": {
+        "legs": 1,
+        "wins": 0,
+        "draws": 1,
+        "losses": 0,
+        "goalsFor": 0,
+        "goalsAgainst": 0,
+        "xGFor": 0.22778207782883048,
+        "xGAgainst": 0.09510102644753113,
+        "shotsFor": 2,
+        "shotsAgainst": 1,
+        "stallsFor": 0,
+        "stallsAgainst": 0
+      },
+      "commonPrefix160": {
+        "candidate": {
+          "legs": 1,
+          "wins": 0,
+          "draws": 1,
+          "losses": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "xGFor": 0.22778207782883048,
+          "xGAgainst": 0.09510102644753113,
+          "shotsFor": 2,
+          "shotsAgainst": 1,
+          "stallsFor": 0,
+          "stallsAgainst": 0
+        },
+        "control": {
+          "legs": 1,
+          "wins": 0,
+          "draws": 1,
+          "losses": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "xGFor": 0.27939450824690765,
+          "xGAgainst": 0,
+          "shotsFor": 3,
+          "shotsAgainst": 0,
+          "stallsFor": 0,
+          "stallsAgainst": 0
+        }
+      },
+      "commonFullHorizon": {
+        "candidate": {
+          "legs": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "xGFor": 0,
+          "xGAgainst": 0,
+          "shotsFor": 0,
+          "shotsAgainst": 0,
+          "stallsFor": 0,
+          "stallsAgainst": 0
+        },
+        "control": {
+          "legs": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "xGFor": 0,
+          "xGAgainst": 0,
+          "shotsFor": 0,
+          "shotsAgainst": 0,
+          "stallsFor": 0,
+          "stallsAgainst": 0
+        }
+      },
+      "firstGoalActions": {
+        "scoredLegs": 0,
+        "noCandidateGoalLegs": 1,
+        "medianConditionalOnScoring": null,
+        "legs": [
+          {
+            "key": "610017/true/white/white",
+            "candidate": null,
+            "opponent": null,
+            "any": null
+          }
+        ]
+      },
+      "checkpoints": {
+        "160": {
+          "legs": 1,
+          "wins": 0,
+          "draws": 1,
+          "losses": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "xGFor": 0.22778207782883048,
+          "xGAgainst": 0.09510102644753113,
+          "shotsFor": 2,
+          "shotsAgainst": 1,
+          "stallsFor": 0,
+          "stallsAgainst": 0
+        },
+        "200": null,
+        "240": null,
+        "480": null
+      },
+      "commonCheckpoints": {
+        "160": {
+          "candidate": {
+            "legs": 1,
+            "wins": 0,
+            "draws": 1,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 0.22778207782883048,
+            "xGAgainst": 0.09510102644753113,
+            "shotsFor": 2,
+            "shotsAgainst": 1,
+            "stallsFor": 0,
+            "stallsAgainst": 0
+          },
+          "control": {
+            "legs": 1,
+            "wins": 0,
+            "draws": 1,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 0.27939450824690765,
+            "xGAgainst": 0,
+            "shotsFor": 3,
+            "shotsAgainst": 0,
+            "stallsFor": 0,
+            "stallsAgainst": 0
+          }
+        },
+        "200": {
+          "candidate": {
+            "legs": 0,
+            "wins": 0,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 0,
+            "xGAgainst": 0,
+            "shotsFor": 0,
+            "shotsAgainst": 0,
+            "stallsFor": 0,
+            "stallsAgainst": 0
+          },
+          "control": {
+            "legs": 0,
+            "wins": 0,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 0,
+            "xGAgainst": 0,
+            "shotsFor": 0,
+            "shotsAgainst": 0,
+            "stallsFor": 0,
+            "stallsAgainst": 0
+          }
+        },
+        "240": {
+          "candidate": {
+            "legs": 0,
+            "wins": 0,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 0,
+            "xGAgainst": 0,
+            "shotsFor": 0,
+            "shotsAgainst": 0,
+            "stallsFor": 0,
+            "stallsAgainst": 0
+          },
+          "control": {
+            "legs": 0,
+            "wins": 0,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 0,
+            "xGAgainst": 0,
+            "shotsFor": 0,
+            "shotsAgainst": 0,
+            "stallsFor": 0,
+            "stallsAgainst": 0
+          }
+        },
+        "480": {
+          "candidate": {
+            "legs": 0,
+            "wins": 0,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 0,
+            "xGAgainst": 0,
+            "shotsFor": 0,
+            "shotsAgainst": 0,
+            "stallsFor": 0,
+            "stallsAgainst": 0
+          },
+          "control": {
+            "legs": 0,
+            "wins": 0,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 0,
+            "xGAgainst": 0,
+            "shotsFor": 0,
+            "shotsAgainst": 0,
+            "stallsFor": 0,
+            "stallsAgainst": 0
+          }
+        }
+      }
+    },
+    {
+      "label": "balanced-v4",
+      "split": "dev",
+      "seeds": [
+        610017
+      ],
+      "controlLabel": "baseline-v40",
+      "planned": 4,
+      "completed": 4,
+      "actions": 480,
+      "opponent": "casual",
+      "fouls": [
+        true
+      ],
+      "sha256": "18890a5b0ffbd07f9a446299615bf0da7e2623c17ba06a9896b253b3f03e9327",
+      "full": {
+        "wdl": {
+          "wins": 3,
+          "draws": 1,
+          "losses": 0
+        },
+        "goals": [
+          3,
+          0
+        ],
+        "xG": [
+          9.034214393201172,
+          0.4560206829254155
+        ],
+        "shots": [
+          49,
+          4
+        ],
+        "stalls": [
+          0,
+          4
+        ],
+        "meanThinkMs": 695.105250477742,
+        "p95ThinkMs": 1358.9614520000177,
+        "meanDepth": 3.9283387622149837,
+        "errors": 0
+      },
+      "prefix160": {
+        "legs": 4,
+        "wins": 0,
+        "draws": 4,
+        "losses": 0,
+        "goalsFor": 0,
+        "goalsAgainst": 0,
+        "xGFor": 1.515224324523282,
+        "xGAgainst": 0.15358342516617912,
+        "shotsFor": 11,
+        "shotsAgainst": 2,
+        "stallsFor": 0,
+        "stallsAgainst": 1
+      },
+      "commonPrefix160": {
+        "candidate": {
+          "legs": 4,
+          "wins": 0,
+          "draws": 4,
+          "losses": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "xGFor": 1.515224324523282,
+          "xGAgainst": 0.15358342516617912,
+          "shotsFor": 11,
+          "shotsAgainst": 2,
+          "stallsFor": 0,
+          "stallsAgainst": 1
+        },
+        "control": {
+          "legs": 4,
+          "wins": 0,
+          "draws": 4,
+          "losses": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "xGFor": 1.4942518143728738,
+          "xGAgainst": 0.058482398718648035,
+          "shotsFor": 10,
+          "shotsAgainst": 1,
+          "stallsFor": 0,
+          "stallsAgainst": 2
+        }
+      },
+      "commonFullHorizon": {
+        "candidate": {
+          "legs": 4,
+          "wins": 3,
+          "draws": 1,
+          "losses": 0,
+          "goalsFor": 3,
+          "goalsAgainst": 0,
+          "xGFor": 9.034214393201172,
+          "xGAgainst": 0.4560206829254155,
+          "shotsFor": 49,
+          "shotsAgainst": 4,
+          "stallsFor": 0,
+          "stallsAgainst": 4
+        },
+        "control": {
+          "legs": 4,
+          "wins": 4,
+          "draws": 0,
+          "losses": 0,
+          "goalsFor": 6,
+          "goalsAgainst": 0,
+          "xGFor": 6.771012952594147,
+          "xGAgainst": 0.6603048010653468,
+          "shotsFor": 38,
+          "shotsAgainst": 3,
+          "stallsFor": 0,
+          "stallsAgainst": 8
+        }
+      },
+      "firstGoalActions": {
+        "scoredLegs": 3,
+        "noCandidateGoalLegs": 1,
+        "medianConditionalOnScoring": 276,
+        "legs": [
+          {
+            "key": "610017/true/white/white",
+            "candidate": 276,
+            "opponent": null,
+            "any": 276
+          },
+          {
+            "key": "610017/true/white/black",
+            "candidate": 226,
+            "opponent": null,
+            "any": 226
+          },
+          {
+            "key": "610017/true/black/white",
+            "candidate": null,
+            "opponent": null,
+            "any": null
+          },
+          {
+            "key": "610017/true/black/black",
+            "candidate": 295,
+            "opponent": null,
+            "any": 295
+          }
+        ]
+      },
+      "checkpoints": {
+        "160": {
+          "legs": 4,
+          "wins": 0,
+          "draws": 4,
+          "losses": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "xGFor": 1.515224324523282,
+          "xGAgainst": 0.15358342516617912,
+          "shotsFor": 11,
+          "shotsAgainst": 2,
+          "stallsFor": 0,
+          "stallsAgainst": 1
+        },
+        "200": {
+          "legs": 4,
+          "wins": 0,
+          "draws": 4,
+          "losses": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "xGFor": 2.246016345434799,
+          "xGAgainst": 0.15358342516617912,
+          "shotsFor": 16,
+          "shotsAgainst": 2,
+          "stallsFor": 0,
+          "stallsAgainst": 1
+        },
+        "240": {
+          "legs": 4,
+          "wins": 1,
+          "draws": 3,
+          "losses": 0,
+          "goalsFor": 1,
+          "goalsAgainst": 0,
+          "xGFor": 3.073611412866589,
+          "xGAgainst": 0.36971940032084166,
+          "shotsFor": 21,
+          "shotsAgainst": 3,
+          "stallsFor": 0,
+          "stallsAgainst": 1
+        },
+        "480": {
+          "legs": 4,
+          "wins": 3,
+          "draws": 1,
+          "losses": 0,
+          "goalsFor": 3,
+          "goalsAgainst": 0,
+          "xGFor": 9.034214393201172,
+          "xGAgainst": 0.4560206829254155,
+          "shotsFor": 49,
+          "shotsAgainst": 4,
+          "stallsFor": 0,
+          "stallsAgainst": 4
+        }
+      },
+      "commonCheckpoints": {
+        "160": {
+          "candidate": {
+            "legs": 4,
+            "wins": 0,
+            "draws": 4,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 1.515224324523282,
+            "xGAgainst": 0.15358342516617912,
+            "shotsFor": 11,
+            "shotsAgainst": 2,
+            "stallsFor": 0,
+            "stallsAgainst": 1
+          },
+          "control": {
+            "legs": 4,
+            "wins": 0,
+            "draws": 4,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 1.4942518143728738,
+            "xGAgainst": 0.058482398718648035,
+            "shotsFor": 10,
+            "shotsAgainst": 1,
+            "stallsFor": 0,
+            "stallsAgainst": 2
+          }
+        },
+        "200": {
+          "candidate": {
+            "legs": 4,
+            "wins": 0,
+            "draws": 4,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 2.246016345434799,
+            "xGAgainst": 0.15358342516617912,
+            "shotsFor": 16,
+            "shotsAgainst": 2,
+            "stallsFor": 0,
+            "stallsAgainst": 1
+          },
+          "control": {
+            "legs": 4,
+            "wins": 2,
+            "draws": 2,
+            "losses": 0,
+            "goalsFor": 2,
+            "goalsAgainst": 0,
+            "xGFor": 2.265366543510647,
+            "xGAgainst": 0.058482398718648035,
+            "shotsFor": 15,
+            "shotsAgainst": 1,
+            "stallsFor": 0,
+            "stallsAgainst": 2
+          }
+        },
+        "240": {
+          "candidate": {
+            "legs": 4,
+            "wins": 1,
+            "draws": 3,
+            "losses": 0,
+            "goalsFor": 1,
+            "goalsAgainst": 0,
+            "xGFor": 3.073611412866589,
+            "xGAgainst": 0.36971940032084166,
+            "shotsFor": 21,
+            "shotsAgainst": 3,
+            "stallsFor": 0,
+            "stallsAgainst": 1
+          },
+          "control": {
+            "legs": 4,
+            "wins": 3,
+            "draws": 1,
+            "losses": 0,
+            "goalsFor": 3,
+            "goalsAgainst": 0,
+            "xGFor": 2.7577751340847123,
+            "xGAgainst": 0.058482398718648035,
+            "shotsFor": 18,
+            "shotsAgainst": 1,
+            "stallsFor": 0,
+            "stallsAgainst": 3
+          }
+        },
+        "480": {
+          "candidate": {
+            "legs": 4,
+            "wins": 3,
+            "draws": 1,
+            "losses": 0,
+            "goalsFor": 3,
+            "goalsAgainst": 0,
+            "xGFor": 9.034214393201172,
+            "xGAgainst": 0.4560206829254155,
+            "shotsFor": 49,
+            "shotsAgainst": 4,
+            "stallsFor": 0,
+            "stallsAgainst": 4
+          },
+          "control": {
+            "legs": 4,
+            "wins": 4,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 6,
+            "goalsAgainst": 0,
+            "xGFor": 6.771012952594147,
+            "xGAgainst": 0.6603048010653468,
+            "shotsFor": 38,
+            "shotsAgainst": 3,
+            "stallsFor": 0,
+            "stallsAgainst": 8
+          }
+        }
+      }
+    },
+    {
+      "label": "baseline-dev-refinement",
+      "split": "dev",
+      "seeds": [
+        610043
+      ],
+      "controlLabel": "baseline-dev-refinement",
+      "planned": 4,
+      "completed": 4,
+      "actions": 240,
+      "opponent": "casual",
+      "fouls": [
+        true
+      ],
+      "sha256": "584b1dffb37d222969c80df04eb3b80fc79ef7fb05fc225483fb820efd47a29e",
+      "full": {
+        "wdl": {
+          "wins": 4,
+          "draws": 0,
+          "losses": 0
+        },
+        "goals": [
+          5,
+          0
+        ],
+        "xG": [
+          4.952801498209215,
+          0.058482398718648035
+        ],
+        "shots": [
+          17,
+          1
+        ],
+        "stalls": [
+          0,
+          3
+        ],
+        "meanThinkMs": 477.20143260960293,
+        "p95ThinkMs": 923.9997659999935,
+        "meanDepth": 4.277661795407098,
+        "errors": 0
+      },
+      "prefix160": {
+        "legs": 4,
+        "wins": 3,
+        "draws": 1,
+        "losses": 0,
+        "goalsFor": 3,
+        "goalsAgainst": 0,
+        "xGFor": 2.11852232536241,
+        "xGAgainst": 0.058482398718648035,
+        "shotsFor": 9,
+        "shotsAgainst": 1,
+        "stallsFor": 0,
+        "stallsAgainst": 3
+      },
+      "commonPrefix160": {
+        "candidate": {
+          "legs": 4,
+          "wins": 3,
+          "draws": 1,
+          "losses": 0,
+          "goalsFor": 3,
+          "goalsAgainst": 0,
+          "xGFor": 2.11852232536241,
+          "xGAgainst": 0.058482398718648035,
+          "shotsFor": 9,
+          "shotsAgainst": 1,
+          "stallsFor": 0,
+          "stallsAgainst": 3
+        },
+        "control": {
+          "legs": 4,
+          "wins": 3,
+          "draws": 1,
+          "losses": 0,
+          "goalsFor": 3,
+          "goalsAgainst": 0,
+          "xGFor": 2.11852232536241,
+          "xGAgainst": 0.058482398718648035,
+          "shotsFor": 9,
+          "shotsAgainst": 1,
+          "stallsFor": 0,
+          "stallsAgainst": 3
+        }
+      },
+      "commonFullHorizon": {
+        "candidate": {
+          "legs": 4,
+          "wins": 4,
+          "draws": 0,
+          "losses": 0,
+          "goalsFor": 5,
+          "goalsAgainst": 0,
+          "xGFor": 4.952801498209215,
+          "xGAgainst": 0.058482398718648035,
+          "shotsFor": 17,
+          "shotsAgainst": 1,
+          "stallsFor": 0,
+          "stallsAgainst": 3
+        },
+        "control": {
+          "legs": 4,
+          "wins": 4,
+          "draws": 0,
+          "losses": 0,
+          "goalsFor": 5,
+          "goalsAgainst": 0,
+          "xGFor": 4.952801498209215,
+          "xGAgainst": 0.058482398718648035,
+          "shotsFor": 17,
+          "shotsAgainst": 1,
+          "stallsFor": 0,
+          "stallsAgainst": 3
+        }
+      },
+      "firstGoalActions": {
+        "scoredLegs": 4,
+        "noCandidateGoalLegs": 0,
+        "medianConditionalOnScoring": 127,
+        "legs": [
+          {
+            "key": "610043/true/white/white",
+            "candidate": 111,
+            "opponent": null,
+            "any": 111
+          },
+          {
+            "key": "610043/true/white/black",
+            "candidate": 96,
+            "opponent": null,
+            "any": 96
+          },
+          {
+            "key": "610043/true/black/white",
+            "candidate": 143,
+            "opponent": null,
+            "any": 143
+          },
+          {
+            "key": "610043/true/black/black",
+            "candidate": 165,
+            "opponent": null,
+            "any": 165
+          }
+        ]
+      },
+      "checkpoints": {
+        "160": {
+          "legs": 4,
+          "wins": 3,
+          "draws": 1,
+          "losses": 0,
+          "goalsFor": 3,
+          "goalsAgainst": 0,
+          "xGFor": 2.11852232536241,
+          "xGAgainst": 0.058482398718648035,
+          "shotsFor": 9,
+          "shotsAgainst": 1,
+          "stallsFor": 0,
+          "stallsAgainst": 3
+        },
+        "200": {
+          "legs": 4,
+          "wins": 4,
+          "draws": 0,
+          "losses": 0,
+          "goalsFor": 4,
+          "goalsAgainst": 0,
+          "xGFor": 3.0963487031562815,
+          "xGAgainst": 0.058482398718648035,
+          "shotsFor": 10,
+          "shotsAgainst": 1,
+          "stallsFor": 0,
+          "stallsAgainst": 3
+        },
+        "240": {
+          "legs": 4,
+          "wins": 4,
+          "draws": 0,
+          "losses": 0,
+          "goalsFor": 5,
+          "goalsAgainst": 0,
+          "xGFor": 4.952801498209215,
+          "xGAgainst": 0.058482398718648035,
+          "shotsFor": 17,
+          "shotsAgainst": 1,
+          "stallsFor": 0,
+          "stallsAgainst": 3
+        },
+        "480": null
+      },
+      "commonCheckpoints": {
+        "160": {
+          "candidate": {
+            "legs": 4,
+            "wins": 3,
+            "draws": 1,
+            "losses": 0,
+            "goalsFor": 3,
+            "goalsAgainst": 0,
+            "xGFor": 2.11852232536241,
+            "xGAgainst": 0.058482398718648035,
+            "shotsFor": 9,
+            "shotsAgainst": 1,
+            "stallsFor": 0,
+            "stallsAgainst": 3
+          },
+          "control": {
+            "legs": 4,
+            "wins": 3,
+            "draws": 1,
+            "losses": 0,
+            "goalsFor": 3,
+            "goalsAgainst": 0,
+            "xGFor": 2.11852232536241,
+            "xGAgainst": 0.058482398718648035,
+            "shotsFor": 9,
+            "shotsAgainst": 1,
+            "stallsFor": 0,
+            "stallsAgainst": 3
+          }
+        },
+        "200": {
+          "candidate": {
+            "legs": 4,
+            "wins": 4,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 4,
+            "goalsAgainst": 0,
+            "xGFor": 3.0963487031562815,
+            "xGAgainst": 0.058482398718648035,
+            "shotsFor": 10,
+            "shotsAgainst": 1,
+            "stallsFor": 0,
+            "stallsAgainst": 3
+          },
+          "control": {
+            "legs": 4,
+            "wins": 4,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 4,
+            "goalsAgainst": 0,
+            "xGFor": 3.0963487031562815,
+            "xGAgainst": 0.058482398718648035,
+            "shotsFor": 10,
+            "shotsAgainst": 1,
+            "stallsFor": 0,
+            "stallsAgainst": 3
+          }
+        },
+        "240": {
+          "candidate": {
+            "legs": 4,
+            "wins": 4,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 5,
+            "goalsAgainst": 0,
+            "xGFor": 4.952801498209215,
+            "xGAgainst": 0.058482398718648035,
+            "shotsFor": 17,
+            "shotsAgainst": 1,
+            "stallsFor": 0,
+            "stallsAgainst": 3
+          },
+          "control": {
+            "legs": 4,
+            "wins": 4,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 5,
+            "goalsAgainst": 0,
+            "xGFor": 4.952801498209215,
+            "xGAgainst": 0.058482398718648035,
+            "shotsFor": 17,
+            "shotsAgainst": 1,
+            "stallsFor": 0,
+            "stallsAgainst": 3
+          }
+        },
+        "480": {
+          "candidate": {
+            "legs": 0,
+            "wins": 0,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 0,
+            "xGAgainst": 0,
+            "shotsFor": 0,
+            "shotsAgainst": 0,
+            "stallsFor": 0,
+            "stallsAgainst": 0
+          },
+          "control": {
+            "legs": 0,
+            "wins": 0,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 0,
+            "xGAgainst": 0,
+            "shotsFor": 0,
+            "shotsAgainst": 0,
+            "stallsFor": 0,
+            "stallsAgainst": 0
+          }
+        }
+      }
+    },
+    {
+      "label": "baseline-heldout-blind",
+      "split": "heldout",
+      "seeds": [
+        720017,
+        720043
+      ],
+      "controlLabel": "baseline-heldout-blind",
+      "planned": 8,
+      "completed": 8,
+      "actions": 480,
+      "opponent": "casual",
+      "fouls": [
+        true
+      ],
+      "sha256": "584b1dffb37d222969c80df04eb3b80fc79ef7fb05fc225483fb820efd47a29e",
+      "full": {
+        "wdl": {
+          "wins": 5,
+          "draws": 3,
+          "losses": 0
+        },
+        "goals": [
+          10,
+          4
+        ],
+        "xG": [
+          11.976485446246159,
+          4.102763631915947
+        ],
+        "shots": [
+          71,
+          14
+        ],
+        "stalls": [
+          1,
+          16
+        ],
+        "meanThinkMs": 615.0529390010449,
+        "p95ThinkMs": 1228.988845999993,
+        "meanDepth": 4.189754312598014,
+        "errors": 0
+      },
+      "prefix160": {
+        "legs": 8,
+        "wins": 3,
+        "draws": 5,
+        "losses": 0,
+        "goalsFor": 3,
+        "goalsAgainst": 0,
+        "xGFor": 2.6320615534356064,
+        "xGAgainst": 0.16481403275255357,
+        "shotsFor": 18,
+        "shotsAgainst": 2,
+        "stallsFor": 0,
+        "stallsAgainst": 7
+      },
+      "commonPrefix160": {
+        "candidate": {
+          "legs": 8,
+          "wins": 3,
+          "draws": 5,
+          "losses": 0,
+          "goalsFor": 3,
+          "goalsAgainst": 0,
+          "xGFor": 2.6320615534356064,
+          "xGAgainst": 0.16481403275255357,
+          "shotsFor": 18,
+          "shotsAgainst": 2,
+          "stallsFor": 0,
+          "stallsAgainst": 7
+        },
+        "control": {
+          "legs": 8,
+          "wins": 3,
+          "draws": 5,
+          "losses": 0,
+          "goalsFor": 3,
+          "goalsAgainst": 0,
+          "xGFor": 2.6320615534356064,
+          "xGAgainst": 0.16481403275255357,
+          "shotsFor": 18,
+          "shotsAgainst": 2,
+          "stallsFor": 0,
+          "stallsAgainst": 7
+        }
+      },
+      "commonFullHorizon": {
+        "candidate": {
+          "legs": 8,
+          "wins": 5,
+          "draws": 3,
+          "losses": 0,
+          "goalsFor": 10,
+          "goalsAgainst": 4,
+          "xGFor": 11.976485446246159,
+          "xGAgainst": 4.102763631915947,
+          "shotsFor": 71,
+          "shotsAgainst": 14,
+          "stallsFor": 1,
+          "stallsAgainst": 16
+        },
+        "control": {
+          "legs": 8,
+          "wins": 5,
+          "draws": 3,
+          "losses": 0,
+          "goalsFor": 10,
+          "goalsAgainst": 4,
+          "xGFor": 11.976485446246159,
+          "xGAgainst": 4.102763631915947,
+          "shotsFor": 71,
+          "shotsAgainst": 14,
+          "stallsFor": 1,
+          "stallsAgainst": 16
+        }
+      },
+      "firstGoalActions": {
+        "scoredLegs": 7,
+        "noCandidateGoalLegs": 1,
+        "medianConditionalOnScoring": 165,
+        "legs": [
+          {
+            "key": "720017/true/white/white",
+            "candidate": 276,
+            "opponent": null,
+            "any": 276
+          },
+          {
+            "key": "720017/true/white/black",
+            "candidate": 96,
+            "opponent": 211,
+            "any": 96
+          },
+          {
+            "key": "720017/true/black/white",
+            "candidate": 83,
+            "opponent": 325,
+            "any": 83
+          },
+          {
+            "key": "720017/true/black/black",
+            "candidate": 330,
+            "opponent": null,
+            "any": 330
+          },
+          {
+            "key": "720043/true/white/white",
+            "candidate": 198,
+            "opponent": 310,
+            "any": 198
+          },
+          {
+            "key": "720043/true/white/black",
+            "candidate": 96,
+            "opponent": 466,
+            "any": 96
+          },
+          {
+            "key": "720043/true/black/white",
+            "candidate": null,
+            "opponent": null,
+            "any": null
+          },
+          {
+            "key": "720043/true/black/black",
+            "candidate": 165,
+            "opponent": null,
+            "any": 165
+          }
+        ]
+      },
+      "checkpoints": {
+        "160": {
+          "legs": 8,
+          "wins": 3,
+          "draws": 5,
+          "losses": 0,
+          "goalsFor": 3,
+          "goalsAgainst": 0,
+          "xGFor": 2.6320615534356064,
+          "xGAgainst": 0.16481403275255357,
+          "shotsFor": 18,
+          "shotsAgainst": 2,
+          "stallsFor": 0,
+          "stallsAgainst": 7
+        },
+        "200": {
+          "legs": 8,
+          "wins": 5,
+          "draws": 3,
+          "losses": 0,
+          "goalsFor": 5,
+          "goalsAgainst": 0,
+          "xGFor": 4.261586606517917,
+          "xGAgainst": 1.1496400935844535,
+          "shotsFor": 24,
+          "shotsAgainst": 4,
+          "stallsFor": 0,
+          "stallsAgainst": 8
+        },
+        "240": {
+          "legs": 8,
+          "wins": 4,
+          "draws": 4,
+          "losses": 0,
+          "goalsFor": 5,
+          "goalsAgainst": 1,
+          "xGFor": 5.948715611454242,
+          "xGAgainst": 1.9496400935844536,
+          "shotsFor": 34,
+          "shotsAgainst": 5,
+          "stallsFor": 0,
+          "stallsAgainst": 8
+        },
+        "480": {
+          "legs": 8,
+          "wins": 5,
+          "draws": 3,
+          "losses": 0,
+          "goalsFor": 10,
+          "goalsAgainst": 4,
+          "xGFor": 11.976485446246159,
+          "xGAgainst": 4.102763631915947,
+          "shotsFor": 71,
+          "shotsAgainst": 14,
+          "stallsFor": 1,
+          "stallsAgainst": 16
+        }
+      },
+      "commonCheckpoints": {
+        "160": {
+          "candidate": {
+            "legs": 8,
+            "wins": 3,
+            "draws": 5,
+            "losses": 0,
+            "goalsFor": 3,
+            "goalsAgainst": 0,
+            "xGFor": 2.6320615534356064,
+            "xGAgainst": 0.16481403275255357,
+            "shotsFor": 18,
+            "shotsAgainst": 2,
+            "stallsFor": 0,
+            "stallsAgainst": 7
+          },
+          "control": {
+            "legs": 8,
+            "wins": 3,
+            "draws": 5,
+            "losses": 0,
+            "goalsFor": 3,
+            "goalsAgainst": 0,
+            "xGFor": 2.6320615534356064,
+            "xGAgainst": 0.16481403275255357,
+            "shotsFor": 18,
+            "shotsAgainst": 2,
+            "stallsFor": 0,
+            "stallsAgainst": 7
+          }
+        },
+        "200": {
+          "candidate": {
+            "legs": 8,
+            "wins": 5,
+            "draws": 3,
+            "losses": 0,
+            "goalsFor": 5,
+            "goalsAgainst": 0,
+            "xGFor": 4.261586606517917,
+            "xGAgainst": 1.1496400935844535,
+            "shotsFor": 24,
+            "shotsAgainst": 4,
+            "stallsFor": 0,
+            "stallsAgainst": 8
+          },
+          "control": {
+            "legs": 8,
+            "wins": 5,
+            "draws": 3,
+            "losses": 0,
+            "goalsFor": 5,
+            "goalsAgainst": 0,
+            "xGFor": 4.261586606517917,
+            "xGAgainst": 1.1496400935844535,
+            "shotsFor": 24,
+            "shotsAgainst": 4,
+            "stallsFor": 0,
+            "stallsAgainst": 8
+          }
+        },
+        "240": {
+          "candidate": {
+            "legs": 8,
+            "wins": 4,
+            "draws": 4,
+            "losses": 0,
+            "goalsFor": 5,
+            "goalsAgainst": 1,
+            "xGFor": 5.948715611454242,
+            "xGAgainst": 1.9496400935844536,
+            "shotsFor": 34,
+            "shotsAgainst": 5,
+            "stallsFor": 0,
+            "stallsAgainst": 8
+          },
+          "control": {
+            "legs": 8,
+            "wins": 4,
+            "draws": 4,
+            "losses": 0,
+            "goalsFor": 5,
+            "goalsAgainst": 1,
+            "xGFor": 5.948715611454242,
+            "xGAgainst": 1.9496400935844536,
+            "shotsFor": 34,
+            "shotsAgainst": 5,
+            "stallsFor": 0,
+            "stallsAgainst": 8
+          }
+        },
+        "480": {
+          "candidate": {
+            "legs": 8,
+            "wins": 5,
+            "draws": 3,
+            "losses": 0,
+            "goalsFor": 10,
+            "goalsAgainst": 4,
+            "xGFor": 11.976485446246159,
+            "xGAgainst": 4.102763631915947,
+            "shotsFor": 71,
+            "shotsAgainst": 14,
+            "stallsFor": 1,
+            "stallsAgainst": 16
+          },
+          "control": {
+            "legs": 8,
+            "wins": 5,
+            "draws": 3,
+            "losses": 0,
+            "goalsFor": 10,
+            "goalsAgainst": 4,
+            "xGFor": 11.976485446246159,
+            "xGAgainst": 4.102763631915947,
+            "shotsFor": 71,
+            "shotsAgainst": 14,
+            "stallsFor": 1,
+            "stallsAgainst": 16
+          }
+        }
+      }
+    },
+    {
+      "label": "baseline-v40",
+      "split": "dev",
+      "seeds": [
+        610017
+      ],
+      "controlLabel": "baseline-v40",
+      "planned": 4,
+      "completed": 4,
+      "actions": 480,
+      "opponent": "casual",
+      "fouls": [
+        true
+      ],
+      "sha256": "584b1dffb37d222969c80df04eb3b80fc79ef7fb05fc225483fb820efd47a29e",
+      "full": {
+        "wdl": {
+          "wins": 4,
+          "draws": 0,
+          "losses": 0
+        },
+        "goals": [
+          6,
+          0
+        ],
+        "xG": [
+          6.771012952594147,
+          0.6603048010653468
+        ],
+        "shots": [
+          38,
+          3
+        ],
+        "stalls": [
+          0,
+          8
+        ],
+        "meanThinkMs": 594.3321778630291,
+        "p95ThinkMs": 1237.1811940000043,
+        "meanDepth": 4.1993318485523385,
+        "errors": 0
+      },
+      "prefix160": {
+        "legs": 4,
+        "wins": 0,
+        "draws": 4,
+        "losses": 0,
+        "goalsFor": 0,
+        "goalsAgainst": 0,
+        "xGFor": 1.4942518143728738,
+        "xGAgainst": 0.058482398718648035,
+        "shotsFor": 10,
+        "shotsAgainst": 1,
+        "stallsFor": 0,
+        "stallsAgainst": 2
+      },
+      "commonPrefix160": {
+        "candidate": {
+          "legs": 4,
+          "wins": 0,
+          "draws": 4,
+          "losses": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "xGFor": 1.4942518143728738,
+          "xGAgainst": 0.058482398718648035,
+          "shotsFor": 10,
+          "shotsAgainst": 1,
+          "stallsFor": 0,
+          "stallsAgainst": 2
+        },
+        "control": {
+          "legs": 4,
+          "wins": 0,
+          "draws": 4,
+          "losses": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "xGFor": 1.4942518143728738,
+          "xGAgainst": 0.058482398718648035,
+          "shotsFor": 10,
+          "shotsAgainst": 1,
+          "stallsFor": 0,
+          "stallsAgainst": 2
+        }
+      },
+      "commonFullHorizon": {
+        "candidate": {
+          "legs": 4,
+          "wins": 4,
+          "draws": 0,
+          "losses": 0,
+          "goalsFor": 6,
+          "goalsAgainst": 0,
+          "xGFor": 6.771012952594147,
+          "xGAgainst": 0.6603048010653468,
+          "shotsFor": 38,
+          "shotsAgainst": 3,
+          "stallsFor": 0,
+          "stallsAgainst": 8
+        },
+        "control": {
+          "legs": 4,
+          "wins": 4,
+          "draws": 0,
+          "losses": 0,
+          "goalsFor": 6,
+          "goalsAgainst": 0,
+          "xGFor": 6.771012952594147,
+          "xGAgainst": 0.6603048010653468,
+          "shotsFor": 38,
+          "shotsAgainst": 3,
+          "stallsFor": 0,
+          "stallsAgainst": 8
+        }
+      },
+      "firstGoalActions": {
+        "scoredLegs": 4,
+        "noCandidateGoalLegs": 0,
+        "medianConditionalOnScoring": 198,
+        "legs": [
+          {
+            "key": "610017/true/white/white",
+            "candidate": 216,
+            "opponent": null,
+            "any": 216
+          },
+          {
+            "key": "610017/true/white/black",
+            "candidate": 180,
+            "opponent": null,
+            "any": 180
+          },
+          {
+            "key": "610017/true/black/white",
+            "candidate": 357,
+            "opponent": null,
+            "any": 357
+          },
+          {
+            "key": "610017/true/black/black",
+            "candidate": 173,
+            "opponent": null,
+            "any": 173
+          }
+        ]
+      },
+      "checkpoints": {
+        "160": {
+          "legs": 4,
+          "wins": 0,
+          "draws": 4,
+          "losses": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "xGFor": 1.4942518143728738,
+          "xGAgainst": 0.058482398718648035,
+          "shotsFor": 10,
+          "shotsAgainst": 1,
+          "stallsFor": 0,
+          "stallsAgainst": 2
+        },
+        "200": {
+          "legs": 4,
+          "wins": 2,
+          "draws": 2,
+          "losses": 0,
+          "goalsFor": 2,
+          "goalsAgainst": 0,
+          "xGFor": 2.265366543510647,
+          "xGAgainst": 0.058482398718648035,
+          "shotsFor": 15,
+          "shotsAgainst": 1,
+          "stallsFor": 0,
+          "stallsAgainst": 2
+        },
+        "240": {
+          "legs": 4,
+          "wins": 3,
+          "draws": 1,
+          "losses": 0,
+          "goalsFor": 3,
+          "goalsAgainst": 0,
+          "xGFor": 2.7577751340847123,
+          "xGAgainst": 0.058482398718648035,
+          "shotsFor": 18,
+          "shotsAgainst": 1,
+          "stallsFor": 0,
+          "stallsAgainst": 3
+        },
+        "480": {
+          "legs": 4,
+          "wins": 4,
+          "draws": 0,
+          "losses": 0,
+          "goalsFor": 6,
+          "goalsAgainst": 0,
+          "xGFor": 6.771012952594147,
+          "xGAgainst": 0.6603048010653468,
+          "shotsFor": 38,
+          "shotsAgainst": 3,
+          "stallsFor": 0,
+          "stallsAgainst": 8
+        }
+      },
+      "commonCheckpoints": {
+        "160": {
+          "candidate": {
+            "legs": 4,
+            "wins": 0,
+            "draws": 4,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 1.4942518143728738,
+            "xGAgainst": 0.058482398718648035,
+            "shotsFor": 10,
+            "shotsAgainst": 1,
+            "stallsFor": 0,
+            "stallsAgainst": 2
+          },
+          "control": {
+            "legs": 4,
+            "wins": 0,
+            "draws": 4,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 1.4942518143728738,
+            "xGAgainst": 0.058482398718648035,
+            "shotsFor": 10,
+            "shotsAgainst": 1,
+            "stallsFor": 0,
+            "stallsAgainst": 2
+          }
+        },
+        "200": {
+          "candidate": {
+            "legs": 4,
+            "wins": 2,
+            "draws": 2,
+            "losses": 0,
+            "goalsFor": 2,
+            "goalsAgainst": 0,
+            "xGFor": 2.265366543510647,
+            "xGAgainst": 0.058482398718648035,
+            "shotsFor": 15,
+            "shotsAgainst": 1,
+            "stallsFor": 0,
+            "stallsAgainst": 2
+          },
+          "control": {
+            "legs": 4,
+            "wins": 2,
+            "draws": 2,
+            "losses": 0,
+            "goalsFor": 2,
+            "goalsAgainst": 0,
+            "xGFor": 2.265366543510647,
+            "xGAgainst": 0.058482398718648035,
+            "shotsFor": 15,
+            "shotsAgainst": 1,
+            "stallsFor": 0,
+            "stallsAgainst": 2
+          }
+        },
+        "240": {
+          "candidate": {
+            "legs": 4,
+            "wins": 3,
+            "draws": 1,
+            "losses": 0,
+            "goalsFor": 3,
+            "goalsAgainst": 0,
+            "xGFor": 2.7577751340847123,
+            "xGAgainst": 0.058482398718648035,
+            "shotsFor": 18,
+            "shotsAgainst": 1,
+            "stallsFor": 0,
+            "stallsAgainst": 3
+          },
+          "control": {
+            "legs": 4,
+            "wins": 3,
+            "draws": 1,
+            "losses": 0,
+            "goalsFor": 3,
+            "goalsAgainst": 0,
+            "xGFor": 2.7577751340847123,
+            "xGAgainst": 0.058482398718648035,
+            "shotsFor": 18,
+            "shotsAgainst": 1,
+            "stallsFor": 0,
+            "stallsAgainst": 3
+          }
+        },
+        "480": {
+          "candidate": {
+            "legs": 4,
+            "wins": 4,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 6,
+            "goalsAgainst": 0,
+            "xGFor": 6.771012952594147,
+            "xGAgainst": 0.6603048010653468,
+            "shotsFor": 38,
+            "shotsAgainst": 3,
+            "stallsFor": 0,
+            "stallsAgainst": 8
+          },
+          "control": {
+            "legs": 4,
+            "wins": 4,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 6,
+            "goalsAgainst": 0,
+            "xGFor": 6.771012952594147,
+            "xGAgainst": 0.6603048010653468,
+            "shotsFor": 38,
+            "shotsAgainst": 3,
+            "stallsFor": 0,
+            "stallsAgainst": 8
+          }
+        }
+      }
+    },
+    {
+      "label": "combined-v1",
+      "split": "dev",
+      "seeds": [
+        610017
+      ],
+      "controlLabel": "baseline-v40",
+      "planned": 4,
+      "completed": 4,
+      "actions": 480,
+      "opponent": "casual",
+      "fouls": [
+        true
+      ],
+      "sha256": "048af7692c407c0ca5027ff0168c00e0c9faf31c465bdd52780ee98455899a44",
+      "full": {
+        "wdl": {
+          "wins": 3,
+          "draws": 1,
+          "losses": 0
+        },
+        "goals": [
+          6,
+          1
+        ],
+        "xG": [
+          7.646992728555532,
+          1.161924205464803
+        ],
+        "shots": [
+          45,
+          3
+        ],
+        "stalls": [
+          0,
+          2
+        ],
+        "meanThinkMs": 859.2760415554382,
+        "p95ThinkMs": 1638.3935200000124,
+        "meanDepth": 4.388595564941922,
+        "errors": 0
+      },
+      "prefix160": {
+        "legs": 4,
+        "wins": 1,
+        "draws": 3,
+        "losses": 0,
+        "goalsFor": 1,
+        "goalsAgainst": 0,
+        "xGFor": 1.9133467684007062,
+        "xGAgainst": 0,
+        "shotsFor": 12,
+        "shotsAgainst": 0,
+        "stallsFor": 0,
+        "stallsAgainst": 1
+      },
+      "commonPrefix160": {
+        "candidate": {
+          "legs": 4,
+          "wins": 1,
+          "draws": 3,
+          "losses": 0,
+          "goalsFor": 1,
+          "goalsAgainst": 0,
+          "xGFor": 1.9133467684007062,
+          "xGAgainst": 0,
+          "shotsFor": 12,
+          "shotsAgainst": 0,
+          "stallsFor": 0,
+          "stallsAgainst": 1
+        },
+        "control": {
+          "legs": 4,
+          "wins": 0,
+          "draws": 4,
+          "losses": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "xGFor": 1.4942518143728738,
+          "xGAgainst": 0.058482398718648035,
+          "shotsFor": 10,
+          "shotsAgainst": 1,
+          "stallsFor": 0,
+          "stallsAgainst": 2
+        }
+      },
+      "commonFullHorizon": {
+        "candidate": {
+          "legs": 4,
+          "wins": 3,
+          "draws": 1,
+          "losses": 0,
+          "goalsFor": 6,
+          "goalsAgainst": 1,
+          "xGFor": 7.646992728555532,
+          "xGAgainst": 1.161924205464803,
+          "shotsFor": 45,
+          "shotsAgainst": 3,
+          "stallsFor": 0,
+          "stallsAgainst": 2
+        },
+        "control": {
+          "legs": 4,
+          "wins": 4,
+          "draws": 0,
+          "losses": 0,
+          "goalsFor": 6,
+          "goalsAgainst": 0,
+          "xGFor": 6.771012952594147,
+          "xGAgainst": 0.6603048010653468,
+          "shotsFor": 38,
+          "shotsAgainst": 3,
+          "stallsFor": 0,
+          "stallsAgainst": 8
+        }
+      },
+      "firstGoalActions": {
+        "scoredLegs": 4,
+        "noCandidateGoalLegs": 0,
+        "medianConditionalOnScoring": 210.5,
+        "legs": [
+          {
+            "key": "610017/true/white/white",
+            "candidate": 214,
+            "opponent": null,
+            "any": 214
+          },
+          {
+            "key": "610017/true/white/black",
+            "candidate": 207,
+            "opponent": 177,
+            "any": 177
+          },
+          {
+            "key": "610017/true/black/white",
+            "candidate": 84,
+            "opponent": null,
+            "any": 84
+          },
+          {
+            "key": "610017/true/black/black",
+            "candidate": 240,
+            "opponent": null,
+            "any": 240
+          }
+        ]
+      },
+      "checkpoints": {
+        "160": {
+          "legs": 4,
+          "wins": 1,
+          "draws": 3,
+          "losses": 0,
+          "goalsFor": 1,
+          "goalsAgainst": 0,
+          "xGFor": 1.9133467684007062,
+          "xGAgainst": 0,
+          "shotsFor": 12,
+          "shotsAgainst": 0,
+          "stallsFor": 0,
+          "stallsAgainst": 1
+        },
+        "200": {
+          "legs": 4,
+          "wins": 1,
+          "draws": 2,
+          "losses": 1,
+          "goalsFor": 1,
+          "goalsAgainst": 1,
+          "xGFor": 2.4657549664172156,
+          "xGAgainst": 1.0863285219318046,
+          "shotsFor": 16,
+          "shotsAgainst": 2,
+          "stallsFor": 0,
+          "stallsAgainst": 1
+        },
+        "240": {
+          "legs": 4,
+          "wins": 3,
+          "draws": 1,
+          "losses": 0,
+          "goalsFor": 4,
+          "goalsAgainst": 1,
+          "xGFor": 3.3035623393915894,
+          "xGAgainst": 1.0863285219318046,
+          "shotsFor": 20,
+          "shotsAgainst": 2,
+          "stallsFor": 0,
+          "stallsAgainst": 1
+        },
+        "480": {
+          "legs": 4,
+          "wins": 3,
+          "draws": 1,
+          "losses": 0,
+          "goalsFor": 6,
+          "goalsAgainst": 1,
+          "xGFor": 7.646992728555532,
+          "xGAgainst": 1.161924205464803,
+          "shotsFor": 45,
+          "shotsAgainst": 3,
+          "stallsFor": 0,
+          "stallsAgainst": 2
+        }
+      },
+      "commonCheckpoints": {
+        "160": {
+          "candidate": {
+            "legs": 4,
+            "wins": 1,
+            "draws": 3,
+            "losses": 0,
+            "goalsFor": 1,
+            "goalsAgainst": 0,
+            "xGFor": 1.9133467684007062,
+            "xGAgainst": 0,
+            "shotsFor": 12,
+            "shotsAgainst": 0,
+            "stallsFor": 0,
+            "stallsAgainst": 1
+          },
+          "control": {
+            "legs": 4,
+            "wins": 0,
+            "draws": 4,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 1.4942518143728738,
+            "xGAgainst": 0.058482398718648035,
+            "shotsFor": 10,
+            "shotsAgainst": 1,
+            "stallsFor": 0,
+            "stallsAgainst": 2
+          }
+        },
+        "200": {
+          "candidate": {
+            "legs": 4,
+            "wins": 1,
+            "draws": 2,
+            "losses": 1,
+            "goalsFor": 1,
+            "goalsAgainst": 1,
+            "xGFor": 2.4657549664172156,
+            "xGAgainst": 1.0863285219318046,
+            "shotsFor": 16,
+            "shotsAgainst": 2,
+            "stallsFor": 0,
+            "stallsAgainst": 1
+          },
+          "control": {
+            "legs": 4,
+            "wins": 2,
+            "draws": 2,
+            "losses": 0,
+            "goalsFor": 2,
+            "goalsAgainst": 0,
+            "xGFor": 2.265366543510647,
+            "xGAgainst": 0.058482398718648035,
+            "shotsFor": 15,
+            "shotsAgainst": 1,
+            "stallsFor": 0,
+            "stallsAgainst": 2
+          }
+        },
+        "240": {
+          "candidate": {
+            "legs": 4,
+            "wins": 3,
+            "draws": 1,
+            "losses": 0,
+            "goalsFor": 4,
+            "goalsAgainst": 1,
+            "xGFor": 3.3035623393915894,
+            "xGAgainst": 1.0863285219318046,
+            "shotsFor": 20,
+            "shotsAgainst": 2,
+            "stallsFor": 0,
+            "stallsAgainst": 1
+          },
+          "control": {
+            "legs": 4,
+            "wins": 3,
+            "draws": 1,
+            "losses": 0,
+            "goalsFor": 3,
+            "goalsAgainst": 0,
+            "xGFor": 2.7577751340847123,
+            "xGAgainst": 0.058482398718648035,
+            "shotsFor": 18,
+            "shotsAgainst": 1,
+            "stallsFor": 0,
+            "stallsAgainst": 3
+          }
+        },
+        "480": {
+          "candidate": {
+            "legs": 4,
+            "wins": 3,
+            "draws": 1,
+            "losses": 0,
+            "goalsFor": 6,
+            "goalsAgainst": 1,
+            "xGFor": 7.646992728555532,
+            "xGAgainst": 1.161924205464803,
+            "shotsFor": 45,
+            "shotsAgainst": 3,
+            "stallsFor": 0,
+            "stallsAgainst": 2
+          },
+          "control": {
+            "legs": 4,
+            "wins": 4,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 6,
+            "goalsAgainst": 0,
+            "xGFor": 6.771012952594147,
+            "xGAgainst": 0.6603048010653468,
+            "shotsFor": 38,
+            "shotsAgainst": 3,
+            "stallsFor": 0,
+            "stallsAgainst": 8
+          }
+        }
+      }
+    },
+    {
+      "label": "complete-v5",
+      "split": "dev",
+      "seeds": [
+        610017
+      ],
+      "controlLabel": "baseline-v40",
+      "planned": 4,
+      "completed": 4,
+      "actions": 480,
+      "opponent": "casual",
+      "fouls": [
+        true
+      ],
+      "sha256": "b5b2612d1d3599265a29f364d20948d4bb4382029fa7096136269b9df199dd48",
+      "full": {
+        "wdl": {
+          "wins": 3,
+          "draws": 0,
+          "losses": 1
+        },
+        "goals": [
+          4,
+          1
+        ],
+        "xG": [
+          8.52751677626986,
+          0.9318474076047925
+        ],
+        "shots": [
+          45,
+          5
+        ],
+        "stalls": [
+          0,
+          3
+        ],
+        "meanThinkMs": 707.2717943063453,
+        "p95ThinkMs": 1393.2066559999948,
+        "meanDepth": 3.948577680525164,
+        "errors": 0
+      },
+      "prefix160": {
+        "legs": 4,
+        "wins": 0,
+        "draws": 4,
+        "losses": 0,
+        "goalsFor": 0,
+        "goalsAgainst": 0,
+        "xGFor": 1.8188255550417285,
+        "xGAgainst": 0.15358342516617912,
+        "shotsFor": 13,
+        "shotsAgainst": 2,
+        "stallsFor": 0,
+        "stallsAgainst": 1
+      },
+      "commonPrefix160": {
+        "candidate": {
+          "legs": 4,
+          "wins": 0,
+          "draws": 4,
+          "losses": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "xGFor": 1.8188255550417285,
+          "xGAgainst": 0.15358342516617912,
+          "shotsFor": 13,
+          "shotsAgainst": 2,
+          "stallsFor": 0,
+          "stallsAgainst": 1
+        },
+        "control": {
+          "legs": 4,
+          "wins": 0,
+          "draws": 4,
+          "losses": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "xGFor": 1.4942518143728738,
+          "xGAgainst": 0.058482398718648035,
+          "shotsFor": 10,
+          "shotsAgainst": 1,
+          "stallsFor": 0,
+          "stallsAgainst": 2
+        }
+      },
+      "commonFullHorizon": {
+        "candidate": {
+          "legs": 4,
+          "wins": 3,
+          "draws": 0,
+          "losses": 1,
+          "goalsFor": 4,
+          "goalsAgainst": 1,
+          "xGFor": 8.52751677626986,
+          "xGAgainst": 0.9318474076047925,
+          "shotsFor": 45,
+          "shotsAgainst": 5,
+          "stallsFor": 0,
+          "stallsAgainst": 3
+        },
+        "control": {
+          "legs": 4,
+          "wins": 4,
+          "draws": 0,
+          "losses": 0,
+          "goalsFor": 6,
+          "goalsAgainst": 0,
+          "xGFor": 6.771012952594147,
+          "xGAgainst": 0.6603048010653468,
+          "shotsFor": 38,
+          "shotsAgainst": 3,
+          "stallsFor": 0,
+          "stallsAgainst": 8
+        }
+      },
+      "firstGoalActions": {
+        "scoredLegs": 3,
+        "noCandidateGoalLegs": 1,
+        "medianConditionalOnScoring": 276,
+        "legs": [
+          {
+            "key": "610017/true/white/white",
+            "candidate": 276,
+            "opponent": null,
+            "any": 276
+          },
+          {
+            "key": "610017/true/white/black",
+            "candidate": 203,
+            "opponent": null,
+            "any": 203
+          },
+          {
+            "key": "610017/true/black/white",
+            "candidate": null,
+            "opponent": 297,
+            "any": 297
+          },
+          {
+            "key": "610017/true/black/black",
+            "candidate": 295,
+            "opponent": null,
+            "any": 295
+          }
+        ]
+      },
+      "checkpoints": {
+        "160": {
+          "legs": 4,
+          "wins": 0,
+          "draws": 4,
+          "losses": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "xGFor": 1.8188255550417285,
+          "xGAgainst": 0.15358342516617912,
+          "shotsFor": 13,
+          "shotsAgainst": 2,
+          "stallsFor": 0,
+          "stallsAgainst": 1
+        },
+        "200": {
+          "legs": 4,
+          "wins": 0,
+          "draws": 4,
+          "losses": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "xGFor": 2.2250668586566102,
+          "xGAgainst": 0.15358342516617912,
+          "shotsFor": 15,
+          "shotsAgainst": 2,
+          "stallsFor": 0,
+          "stallsAgainst": 1
+        },
+        "240": {
+          "legs": 4,
+          "wins": 1,
+          "draws": 3,
+          "losses": 0,
+          "goalsFor": 1,
+          "goalsAgainst": 0,
+          "xGFor": 3.195185826406614,
+          "xGAgainst": 0.36971940032084166,
+          "shotsFor": 21,
+          "shotsAgainst": 3,
+          "stallsFor": 0,
+          "stallsAgainst": 1
+        },
+        "480": {
+          "legs": 4,
+          "wins": 3,
+          "draws": 0,
+          "losses": 1,
+          "goalsFor": 4,
+          "goalsAgainst": 1,
+          "xGFor": 8.52751677626986,
+          "xGAgainst": 0.9318474076047925,
+          "shotsFor": 45,
+          "shotsAgainst": 5,
+          "stallsFor": 0,
+          "stallsAgainst": 3
+        }
+      },
+      "commonCheckpoints": {
+        "160": {
+          "candidate": {
+            "legs": 4,
+            "wins": 0,
+            "draws": 4,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 1.8188255550417285,
+            "xGAgainst": 0.15358342516617912,
+            "shotsFor": 13,
+            "shotsAgainst": 2,
+            "stallsFor": 0,
+            "stallsAgainst": 1
+          },
+          "control": {
+            "legs": 4,
+            "wins": 0,
+            "draws": 4,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 1.4942518143728738,
+            "xGAgainst": 0.058482398718648035,
+            "shotsFor": 10,
+            "shotsAgainst": 1,
+            "stallsFor": 0,
+            "stallsAgainst": 2
+          }
+        },
+        "200": {
+          "candidate": {
+            "legs": 4,
+            "wins": 0,
+            "draws": 4,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 2.2250668586566102,
+            "xGAgainst": 0.15358342516617912,
+            "shotsFor": 15,
+            "shotsAgainst": 2,
+            "stallsFor": 0,
+            "stallsAgainst": 1
+          },
+          "control": {
+            "legs": 4,
+            "wins": 2,
+            "draws": 2,
+            "losses": 0,
+            "goalsFor": 2,
+            "goalsAgainst": 0,
+            "xGFor": 2.265366543510647,
+            "xGAgainst": 0.058482398718648035,
+            "shotsFor": 15,
+            "shotsAgainst": 1,
+            "stallsFor": 0,
+            "stallsAgainst": 2
+          }
+        },
+        "240": {
+          "candidate": {
+            "legs": 4,
+            "wins": 1,
+            "draws": 3,
+            "losses": 0,
+            "goalsFor": 1,
+            "goalsAgainst": 0,
+            "xGFor": 3.195185826406614,
+            "xGAgainst": 0.36971940032084166,
+            "shotsFor": 21,
+            "shotsAgainst": 3,
+            "stallsFor": 0,
+            "stallsAgainst": 1
+          },
+          "control": {
+            "legs": 4,
+            "wins": 3,
+            "draws": 1,
+            "losses": 0,
+            "goalsFor": 3,
+            "goalsAgainst": 0,
+            "xGFor": 2.7577751340847123,
+            "xGAgainst": 0.058482398718648035,
+            "shotsFor": 18,
+            "shotsAgainst": 1,
+            "stallsFor": 0,
+            "stallsAgainst": 3
+          }
+        },
+        "480": {
+          "candidate": {
+            "legs": 4,
+            "wins": 3,
+            "draws": 0,
+            "losses": 1,
+            "goalsFor": 4,
+            "goalsAgainst": 1,
+            "xGFor": 8.52751677626986,
+            "xGAgainst": 0.9318474076047925,
+            "shotsFor": 45,
+            "shotsAgainst": 5,
+            "stallsFor": 0,
+            "stallsAgainst": 3
+          },
+          "control": {
+            "legs": 4,
+            "wins": 4,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 6,
+            "goalsAgainst": 0,
+            "xGFor": 6.771012952594147,
+            "xGAgainst": 0.6603048010653468,
+            "shotsFor": 38,
+            "shotsAgainst": 3,
+            "stallsFor": 0,
+            "stallsAgainst": 8
+          }
+        }
+      }
+    },
+    {
+      "label": "defense-dev",
+      "split": "dev",
+      "seeds": [
+        610017
+      ],
+      "controlLabel": "baseline-v40",
+      "planned": 4,
+      "completed": 4,
+      "actions": 160,
+      "opponent": "casual",
+      "fouls": [
+        true
+      ],
+      "sha256": "1c814ab66418c39ccabbfd345e4233a5f7ff07f0ba589f7c66ebb20903403498",
+      "full": {
+        "wdl": {
+          "wins": 0,
+          "draws": 4,
+          "losses": 0
+        },
+        "goals": [
+          0,
+          0
+        ],
+        "xG": [
+          2.152047096402252,
+          0
+        ],
+        "shots": [
+          14,
+          0
+        ],
+        "stalls": [
+          0,
+          1
+        ],
+        "meanThinkMs": 563.8333155187498,
+        "p95ThinkMs": 1099.6559830000042,
+        "meanDepth": 4.090625,
+        "errors": 0
+      },
+      "prefix160": {
+        "legs": 4,
+        "wins": 0,
+        "draws": 4,
+        "losses": 0,
+        "goalsFor": 0,
+        "goalsAgainst": 0,
+        "xGFor": 2.152047096402252,
+        "xGAgainst": 0,
+        "shotsFor": 14,
+        "shotsAgainst": 0,
+        "stallsFor": 0,
+        "stallsAgainst": 1
+      },
+      "commonPrefix160": {
+        "candidate": {
+          "legs": 4,
+          "wins": 0,
+          "draws": 4,
+          "losses": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "xGFor": 2.152047096402252,
+          "xGAgainst": 0,
+          "shotsFor": 14,
+          "shotsAgainst": 0,
+          "stallsFor": 0,
+          "stallsAgainst": 1
+        },
+        "control": {
+          "legs": 4,
+          "wins": 0,
+          "draws": 4,
+          "losses": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "xGFor": 1.4942518143728738,
+          "xGAgainst": 0.058482398718648035,
+          "shotsFor": 10,
+          "shotsAgainst": 1,
+          "stallsFor": 0,
+          "stallsAgainst": 2
+        }
+      },
+      "commonFullHorizon": {
+        "candidate": {
+          "legs": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "xGFor": 0,
+          "xGAgainst": 0,
+          "shotsFor": 0,
+          "shotsAgainst": 0,
+          "stallsFor": 0,
+          "stallsAgainst": 0
+        },
+        "control": {
+          "legs": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "xGFor": 0,
+          "xGAgainst": 0,
+          "shotsFor": 0,
+          "shotsAgainst": 0,
+          "stallsFor": 0,
+          "stallsAgainst": 0
+        }
+      },
+      "firstGoalActions": {
+        "scoredLegs": 0,
+        "noCandidateGoalLegs": 4,
+        "medianConditionalOnScoring": null,
+        "legs": [
+          {
+            "key": "610017/true/white/white",
+            "candidate": null,
+            "opponent": null,
+            "any": null
+          },
+          {
+            "key": "610017/true/white/black",
+            "candidate": null,
+            "opponent": null,
+            "any": null
+          },
+          {
+            "key": "610017/true/black/white",
+            "candidate": null,
+            "opponent": null,
+            "any": null
+          },
+          {
+            "key": "610017/true/black/black",
+            "candidate": null,
+            "opponent": null,
+            "any": null
+          }
+        ]
+      },
+      "checkpoints": {
+        "160": {
+          "legs": 4,
+          "wins": 0,
+          "draws": 4,
+          "losses": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "xGFor": 2.152047096402252,
+          "xGAgainst": 0,
+          "shotsFor": 14,
+          "shotsAgainst": 0,
+          "stallsFor": 0,
+          "stallsAgainst": 1
+        },
+        "200": null,
+        "240": null,
+        "480": null
+      },
+      "commonCheckpoints": {
+        "160": {
+          "candidate": {
+            "legs": 4,
+            "wins": 0,
+            "draws": 4,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 2.152047096402252,
+            "xGAgainst": 0,
+            "shotsFor": 14,
+            "shotsAgainst": 0,
+            "stallsFor": 0,
+            "stallsAgainst": 1
+          },
+          "control": {
+            "legs": 4,
+            "wins": 0,
+            "draws": 4,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 1.4942518143728738,
+            "xGAgainst": 0.058482398718648035,
+            "shotsFor": 10,
+            "shotsAgainst": 1,
+            "stallsFor": 0,
+            "stallsAgainst": 2
+          }
+        },
+        "200": {
+          "candidate": {
+            "legs": 0,
+            "wins": 0,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 0,
+            "xGAgainst": 0,
+            "shotsFor": 0,
+            "shotsAgainst": 0,
+            "stallsFor": 0,
+            "stallsAgainst": 0
+          },
+          "control": {
+            "legs": 0,
+            "wins": 0,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 0,
+            "xGAgainst": 0,
+            "shotsFor": 0,
+            "shotsAgainst": 0,
+            "stallsFor": 0,
+            "stallsAgainst": 0
+          }
+        },
+        "240": {
+          "candidate": {
+            "legs": 0,
+            "wins": 0,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 0,
+            "xGAgainst": 0,
+            "shotsFor": 0,
+            "shotsAgainst": 0,
+            "stallsFor": 0,
+            "stallsAgainst": 0
+          },
+          "control": {
+            "legs": 0,
+            "wins": 0,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 0,
+            "xGAgainst": 0,
+            "shotsFor": 0,
+            "shotsAgainst": 0,
+            "stallsFor": 0,
+            "stallsAgainst": 0
+          }
+        },
+        "480": {
+          "candidate": {
+            "legs": 0,
+            "wins": 0,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 0,
+            "xGAgainst": 0,
+            "shotsFor": 0,
+            "shotsAgainst": 0,
+            "stallsFor": 0,
+            "stallsAgainst": 0
+          },
+          "control": {
+            "legs": 0,
+            "wins": 0,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 0,
+            "xGAgainst": 0,
+            "shotsFor": 0,
+            "shotsAgainst": 0,
+            "stallsFor": 0,
+            "stallsAgainst": 0
+          }
+        }
+      }
+    },
+    {
+      "label": "finish-v3",
+      "split": "dev",
+      "seeds": [
+        610017
+      ],
+      "controlLabel": "baseline-v40",
+      "planned": 4,
+      "completed": 4,
+      "actions": 480,
+      "opponent": "casual",
+      "fouls": [
+        true
+      ],
+      "sha256": "3814000857825f0a0448edd638ceec94cf032722f3b6147d0a26e874d67fe5d5",
+      "full": {
+        "wdl": {
+          "wins": 3,
+          "draws": 1,
+          "losses": 0
+        },
+        "goals": [
+          6,
+          1
+        ],
+        "xG": [
+          5.8620796696200745,
+          1.2869860394779145
+        ],
+        "shots": [
+          40,
+          3
+        ],
+        "stalls": [
+          0,
+          2
+        ],
+        "meanThinkMs": 848.4243129080461,
+        "p95ThinkMs": 1618.1486429999932,
+        "meanDepth": 4.312434691745037,
+        "errors": 0
+      },
+      "prefix160": {
+        "legs": 4,
+        "wins": 1,
+        "draws": 3,
+        "losses": 0,
+        "goalsFor": 1,
+        "goalsAgainst": 0,
+        "xGFor": 1.3856147893797912,
+        "xGAgainst": 0,
+        "shotsFor": 11,
+        "shotsAgainst": 0,
+        "stallsFor": 0,
+        "stallsAgainst": 1
+      },
+      "commonPrefix160": {
+        "candidate": {
+          "legs": 4,
+          "wins": 1,
+          "draws": 3,
+          "losses": 0,
+          "goalsFor": 1,
+          "goalsAgainst": 0,
+          "xGFor": 1.3856147893797912,
+          "xGAgainst": 0,
+          "shotsFor": 11,
+          "shotsAgainst": 0,
+          "stallsFor": 0,
+          "stallsAgainst": 1
+        },
+        "control": {
+          "legs": 4,
+          "wins": 0,
+          "draws": 4,
+          "losses": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "xGFor": 1.4942518143728738,
+          "xGAgainst": 0.058482398718648035,
+          "shotsFor": 10,
+          "shotsAgainst": 1,
+          "stallsFor": 0,
+          "stallsAgainst": 2
+        }
+      },
+      "commonFullHorizon": {
+        "candidate": {
+          "legs": 4,
+          "wins": 3,
+          "draws": 1,
+          "losses": 0,
+          "goalsFor": 6,
+          "goalsAgainst": 1,
+          "xGFor": 5.8620796696200745,
+          "xGAgainst": 1.2869860394779145,
+          "shotsFor": 40,
+          "shotsAgainst": 3,
+          "stallsFor": 0,
+          "stallsAgainst": 2
+        },
+        "control": {
+          "legs": 4,
+          "wins": 4,
+          "draws": 0,
+          "losses": 0,
+          "goalsFor": 6,
+          "goalsAgainst": 0,
+          "xGFor": 6.771012952594147,
+          "xGAgainst": 0.6603048010653468,
+          "shotsFor": 38,
+          "shotsAgainst": 3,
+          "stallsFor": 0,
+          "stallsAgainst": 8
+        }
+      },
+      "firstGoalActions": {
+        "scoredLegs": 4,
+        "noCandidateGoalLegs": 0,
+        "medianConditionalOnScoring": 210.5,
+        "legs": [
+          {
+            "key": "610017/true/white/white",
+            "candidate": 214,
+            "opponent": null,
+            "any": 214
+          },
+          {
+            "key": "610017/true/white/black",
+            "candidate": 207,
+            "opponent": 177,
+            "any": 177
+          },
+          {
+            "key": "610017/true/black/white",
+            "candidate": 84,
+            "opponent": null,
+            "any": 84
+          },
+          {
+            "key": "610017/true/black/black",
+            "candidate": 389,
+            "opponent": null,
+            "any": 389
+          }
+        ]
+      },
+      "checkpoints": {
+        "160": {
+          "legs": 4,
+          "wins": 1,
+          "draws": 3,
+          "losses": 0,
+          "goalsFor": 1,
+          "goalsAgainst": 0,
+          "xGFor": 1.3856147893797912,
+          "xGAgainst": 0,
+          "shotsFor": 11,
+          "shotsAgainst": 0,
+          "stallsFor": 0,
+          "stallsAgainst": 1
+        },
+        "200": {
+          "legs": 4,
+          "wins": 1,
+          "draws": 2,
+          "losses": 1,
+          "goalsFor": 1,
+          "goalsAgainst": 1,
+          "xGFor": 1.7638747794857133,
+          "xGAgainst": 0.9799968878978992,
+          "shotsFor": 14,
+          "shotsAgainst": 1,
+          "stallsFor": 0,
+          "stallsAgainst": 1
+        },
+        "240": {
+          "legs": 4,
+          "wins": 2,
+          "draws": 2,
+          "losses": 0,
+          "goalsFor": 3,
+          "goalsAgainst": 1,
+          "xGFor": 2.4246721954694195,
+          "xGAgainst": 0.9799968878978992,
+          "shotsFor": 17,
+          "shotsAgainst": 1,
+          "stallsFor": 0,
+          "stallsAgainst": 1
+        },
+        "480": {
+          "legs": 4,
+          "wins": 3,
+          "draws": 1,
+          "losses": 0,
+          "goalsFor": 6,
+          "goalsAgainst": 1,
+          "xGFor": 5.8620796696200745,
+          "xGAgainst": 1.2869860394779145,
+          "shotsFor": 40,
+          "shotsAgainst": 3,
+          "stallsFor": 0,
+          "stallsAgainst": 2
+        }
+      },
+      "commonCheckpoints": {
+        "160": {
+          "candidate": {
+            "legs": 4,
+            "wins": 1,
+            "draws": 3,
+            "losses": 0,
+            "goalsFor": 1,
+            "goalsAgainst": 0,
+            "xGFor": 1.3856147893797912,
+            "xGAgainst": 0,
+            "shotsFor": 11,
+            "shotsAgainst": 0,
+            "stallsFor": 0,
+            "stallsAgainst": 1
+          },
+          "control": {
+            "legs": 4,
+            "wins": 0,
+            "draws": 4,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 1.4942518143728738,
+            "xGAgainst": 0.058482398718648035,
+            "shotsFor": 10,
+            "shotsAgainst": 1,
+            "stallsFor": 0,
+            "stallsAgainst": 2
+          }
+        },
+        "200": {
+          "candidate": {
+            "legs": 4,
+            "wins": 1,
+            "draws": 2,
+            "losses": 1,
+            "goalsFor": 1,
+            "goalsAgainst": 1,
+            "xGFor": 1.7638747794857133,
+            "xGAgainst": 0.9799968878978992,
+            "shotsFor": 14,
+            "shotsAgainst": 1,
+            "stallsFor": 0,
+            "stallsAgainst": 1
+          },
+          "control": {
+            "legs": 4,
+            "wins": 2,
+            "draws": 2,
+            "losses": 0,
+            "goalsFor": 2,
+            "goalsAgainst": 0,
+            "xGFor": 2.265366543510647,
+            "xGAgainst": 0.058482398718648035,
+            "shotsFor": 15,
+            "shotsAgainst": 1,
+            "stallsFor": 0,
+            "stallsAgainst": 2
+          }
+        },
+        "240": {
+          "candidate": {
+            "legs": 4,
+            "wins": 2,
+            "draws": 2,
+            "losses": 0,
+            "goalsFor": 3,
+            "goalsAgainst": 1,
+            "xGFor": 2.4246721954694195,
+            "xGAgainst": 0.9799968878978992,
+            "shotsFor": 17,
+            "shotsAgainst": 1,
+            "stallsFor": 0,
+            "stallsAgainst": 1
+          },
+          "control": {
+            "legs": 4,
+            "wins": 3,
+            "draws": 1,
+            "losses": 0,
+            "goalsFor": 3,
+            "goalsAgainst": 0,
+            "xGFor": 2.7577751340847123,
+            "xGAgainst": 0.058482398718648035,
+            "shotsFor": 18,
+            "shotsAgainst": 1,
+            "stallsFor": 0,
+            "stallsAgainst": 3
+          }
+        },
+        "480": {
+          "candidate": {
+            "legs": 4,
+            "wins": 3,
+            "draws": 1,
+            "losses": 0,
+            "goalsFor": 6,
+            "goalsAgainst": 1,
+            "xGFor": 5.8620796696200745,
+            "xGAgainst": 1.2869860394779145,
+            "shotsFor": 40,
+            "shotsAgainst": 3,
+            "stallsFor": 0,
+            "stallsAgainst": 2
+          },
+          "control": {
+            "legs": 4,
+            "wins": 4,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 6,
+            "goalsAgainst": 0,
+            "xGFor": 6.771012952594147,
+            "xGAgainst": 0.6603048010653468,
+            "shotsFor": 38,
+            "shotsAgainst": 3,
+            "stallsFor": 0,
+            "stallsAgainst": 8
+          }
+        }
+      }
+    },
+    {
+      "label": "knight-attack-v6",
+      "split": "dev",
+      "seeds": [
+        610017
+      ],
+      "controlLabel": "baseline-v40",
+      "planned": 4,
+      "completed": 4,
+      "actions": 240,
+      "opponent": "casual",
+      "fouls": [
+        true
+      ],
+      "sha256": "80ac412c6cabb1a0a0a9a6aeb27e723aaf0e39f748f40e5868fd8c1236c69036",
+      "full": {
+        "wdl": {
+          "wins": 1,
+          "draws": 3,
+          "losses": 0
+        },
+        "goals": [
+          1,
+          0
+        ],
+        "xG": [
+          2.631387950336159,
+          0.36971940032084166
+        ],
+        "shots": [
+          18,
+          3
+        ],
+        "stalls": [
+          0,
+          3
+        ],
+        "meanThinkMs": 604.1174794033609,
+        "p95ThinkMs": 1181.4255790000025,
+        "meanDepth": 3.78781512605042,
+        "errors": 0
+      },
+      "prefix160": {
+        "legs": 4,
+        "wins": 0,
+        "draws": 4,
+        "losses": 0,
+        "goalsFor": 0,
+        "goalsAgainst": 0,
+        "xGFor": 1.7313602996779442,
+        "xGAgainst": 0.15358342516617912,
+        "shotsFor": 12,
+        "shotsAgainst": 2,
+        "stallsFor": 0,
+        "stallsAgainst": 1
+      },
+      "commonPrefix160": {
+        "candidate": {
+          "legs": 4,
+          "wins": 0,
+          "draws": 4,
+          "losses": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "xGFor": 1.7313602996779442,
+          "xGAgainst": 0.15358342516617912,
+          "shotsFor": 12,
+          "shotsAgainst": 2,
+          "stallsFor": 0,
+          "stallsAgainst": 1
+        },
+        "control": {
+          "legs": 4,
+          "wins": 0,
+          "draws": 4,
+          "losses": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "xGFor": 1.4942518143728738,
+          "xGAgainst": 0.058482398718648035,
+          "shotsFor": 10,
+          "shotsAgainst": 1,
+          "stallsFor": 0,
+          "stallsAgainst": 2
+        }
+      },
+      "commonFullHorizon": {
+        "candidate": {
+          "legs": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "xGFor": 0,
+          "xGAgainst": 0,
+          "shotsFor": 0,
+          "shotsAgainst": 0,
+          "stallsFor": 0,
+          "stallsAgainst": 0
+        },
+        "control": {
+          "legs": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "xGFor": 0,
+          "xGAgainst": 0,
+          "shotsFor": 0,
+          "shotsAgainst": 0,
+          "stallsFor": 0,
+          "stallsAgainst": 0
+        }
+      },
+      "firstGoalActions": {
+        "scoredLegs": 1,
+        "noCandidateGoalLegs": 3,
+        "medianConditionalOnScoring": 169,
+        "legs": [
+          {
+            "key": "610017/true/white/white",
+            "candidate": null,
+            "opponent": null,
+            "any": null
+          },
+          {
+            "key": "610017/true/white/black",
+            "candidate": 169,
+            "opponent": null,
+            "any": 169
+          },
+          {
+            "key": "610017/true/black/white",
+            "candidate": null,
+            "opponent": null,
+            "any": null
+          },
+          {
+            "key": "610017/true/black/black",
+            "candidate": null,
+            "opponent": null,
+            "any": null
+          }
+        ]
+      },
+      "checkpoints": {
+        "160": {
+          "legs": 4,
+          "wins": 0,
+          "draws": 4,
+          "losses": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "xGFor": 1.7313602996779442,
+          "xGAgainst": 0.15358342516617912,
+          "shotsFor": 12,
+          "shotsAgainst": 2,
+          "stallsFor": 0,
+          "stallsAgainst": 1
+        },
+        "200": {
+          "legs": 4,
+          "wins": 1,
+          "draws": 3,
+          "losses": 0,
+          "goalsFor": 1,
+          "goalsAgainst": 0,
+          "xGFor": 2.010066438241652,
+          "xGAgainst": 0.15358342516617912,
+          "shotsFor": 14,
+          "shotsAgainst": 2,
+          "stallsFor": 0,
+          "stallsAgainst": 3
+        },
+        "240": {
+          "legs": 4,
+          "wins": 1,
+          "draws": 3,
+          "losses": 0,
+          "goalsFor": 1,
+          "goalsAgainst": 0,
+          "xGFor": 2.631387950336159,
+          "xGAgainst": 0.36971940032084166,
+          "shotsFor": 18,
+          "shotsAgainst": 3,
+          "stallsFor": 0,
+          "stallsAgainst": 3
+        },
+        "480": null
+      },
+      "commonCheckpoints": {
+        "160": {
+          "candidate": {
+            "legs": 4,
+            "wins": 0,
+            "draws": 4,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 1.7313602996779442,
+            "xGAgainst": 0.15358342516617912,
+            "shotsFor": 12,
+            "shotsAgainst": 2,
+            "stallsFor": 0,
+            "stallsAgainst": 1
+          },
+          "control": {
+            "legs": 4,
+            "wins": 0,
+            "draws": 4,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 1.4942518143728738,
+            "xGAgainst": 0.058482398718648035,
+            "shotsFor": 10,
+            "shotsAgainst": 1,
+            "stallsFor": 0,
+            "stallsAgainst": 2
+          }
+        },
+        "200": {
+          "candidate": {
+            "legs": 4,
+            "wins": 1,
+            "draws": 3,
+            "losses": 0,
+            "goalsFor": 1,
+            "goalsAgainst": 0,
+            "xGFor": 2.010066438241652,
+            "xGAgainst": 0.15358342516617912,
+            "shotsFor": 14,
+            "shotsAgainst": 2,
+            "stallsFor": 0,
+            "stallsAgainst": 3
+          },
+          "control": {
+            "legs": 4,
+            "wins": 2,
+            "draws": 2,
+            "losses": 0,
+            "goalsFor": 2,
+            "goalsAgainst": 0,
+            "xGFor": 2.265366543510647,
+            "xGAgainst": 0.058482398718648035,
+            "shotsFor": 15,
+            "shotsAgainst": 1,
+            "stallsFor": 0,
+            "stallsAgainst": 2
+          }
+        },
+        "240": {
+          "candidate": {
+            "legs": 4,
+            "wins": 1,
+            "draws": 3,
+            "losses": 0,
+            "goalsFor": 1,
+            "goalsAgainst": 0,
+            "xGFor": 2.631387950336159,
+            "xGAgainst": 0.36971940032084166,
+            "shotsFor": 18,
+            "shotsAgainst": 3,
+            "stallsFor": 0,
+            "stallsAgainst": 3
+          },
+          "control": {
+            "legs": 4,
+            "wins": 3,
+            "draws": 1,
+            "losses": 0,
+            "goalsFor": 3,
+            "goalsAgainst": 0,
+            "xGFor": 2.7577751340847123,
+            "xGAgainst": 0.058482398718648035,
+            "shotsFor": 18,
+            "shotsAgainst": 1,
+            "stallsFor": 0,
+            "stallsAgainst": 3
+          }
+        },
+        "480": {
+          "candidate": {
+            "legs": 0,
+            "wins": 0,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 0,
+            "xGAgainst": 0,
+            "shotsFor": 0,
+            "shotsAgainst": 0,
+            "stallsFor": 0,
+            "stallsAgainst": 0
+          },
+          "control": {
+            "legs": 0,
+            "wins": 0,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 0,
+            "xGAgainst": 0,
+            "shotsFor": 0,
+            "shotsAgainst": 0,
+            "stallsFor": 0,
+            "stallsAgainst": 0
+          }
+        }
+      }
+    },
+    {
+      "label": "search-dev",
+      "split": "dev",
+      "seeds": [
+        610017
+      ],
+      "controlLabel": "baseline-v40",
+      "planned": 4,
+      "completed": 4,
+      "actions": 160,
+      "opponent": "casual",
+      "fouls": [
+        true
+      ],
+      "sha256": "78ded9a16159342dd97dc9090d522e5b35662ee81bdedb3319ea9717cc82f591",
+      "full": {
+        "wdl": {
+          "wins": 0,
+          "draws": 4,
+          "losses": 0
+        },
+        "goals": [
+          0,
+          0
+        ],
+        "xG": [
+          1.2506864640495752,
+          0
+        ],
+        "shots": [
+          9,
+          0
+        ],
+        "stalls": [
+          0,
+          5
+        ],
+        "meanThinkMs": 506.0614608242811,
+        "p95ThinkMs": 950.4600199999986,
+        "meanDepth": 4.533546325878595,
+        "errors": 0
+      },
+      "prefix160": {
+        "legs": 4,
+        "wins": 0,
+        "draws": 4,
+        "losses": 0,
+        "goalsFor": 0,
+        "goalsAgainst": 0,
+        "xGFor": 1.2506864640495752,
+        "xGAgainst": 0,
+        "shotsFor": 9,
+        "shotsAgainst": 0,
+        "stallsFor": 0,
+        "stallsAgainst": 5
+      },
+      "commonPrefix160": {
+        "candidate": {
+          "legs": 4,
+          "wins": 0,
+          "draws": 4,
+          "losses": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "xGFor": 1.2506864640495752,
+          "xGAgainst": 0,
+          "shotsFor": 9,
+          "shotsAgainst": 0,
+          "stallsFor": 0,
+          "stallsAgainst": 5
+        },
+        "control": {
+          "legs": 4,
+          "wins": 0,
+          "draws": 4,
+          "losses": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "xGFor": 1.4942518143728738,
+          "xGAgainst": 0.058482398718648035,
+          "shotsFor": 10,
+          "shotsAgainst": 1,
+          "stallsFor": 0,
+          "stallsAgainst": 2
+        }
+      },
+      "commonFullHorizon": {
+        "candidate": {
+          "legs": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "xGFor": 0,
+          "xGAgainst": 0,
+          "shotsFor": 0,
+          "shotsAgainst": 0,
+          "stallsFor": 0,
+          "stallsAgainst": 0
+        },
+        "control": {
+          "legs": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "xGFor": 0,
+          "xGAgainst": 0,
+          "shotsFor": 0,
+          "shotsAgainst": 0,
+          "stallsFor": 0,
+          "stallsAgainst": 0
+        }
+      },
+      "firstGoalActions": {
+        "scoredLegs": 0,
+        "noCandidateGoalLegs": 4,
+        "medianConditionalOnScoring": null,
+        "legs": [
+          {
+            "key": "610017/true/white/white",
+            "candidate": null,
+            "opponent": null,
+            "any": null
+          },
+          {
+            "key": "610017/true/white/black",
+            "candidate": null,
+            "opponent": null,
+            "any": null
+          },
+          {
+            "key": "610017/true/black/white",
+            "candidate": null,
+            "opponent": null,
+            "any": null
+          },
+          {
+            "key": "610017/true/black/black",
+            "candidate": null,
+            "opponent": null,
+            "any": null
+          }
+        ]
+      },
+      "checkpoints": {
+        "160": {
+          "legs": 4,
+          "wins": 0,
+          "draws": 4,
+          "losses": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "xGFor": 1.2506864640495752,
+          "xGAgainst": 0,
+          "shotsFor": 9,
+          "shotsAgainst": 0,
+          "stallsFor": 0,
+          "stallsAgainst": 5
+        },
+        "200": null,
+        "240": null,
+        "480": null
+      },
+      "commonCheckpoints": {
+        "160": {
+          "candidate": {
+            "legs": 4,
+            "wins": 0,
+            "draws": 4,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 1.2506864640495752,
+            "xGAgainst": 0,
+            "shotsFor": 9,
+            "shotsAgainst": 0,
+            "stallsFor": 0,
+            "stallsAgainst": 5
+          },
+          "control": {
+            "legs": 4,
+            "wins": 0,
+            "draws": 4,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 1.4942518143728738,
+            "xGAgainst": 0.058482398718648035,
+            "shotsFor": 10,
+            "shotsAgainst": 1,
+            "stallsFor": 0,
+            "stallsAgainst": 2
+          }
+        },
+        "200": {
+          "candidate": {
+            "legs": 0,
+            "wins": 0,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 0,
+            "xGAgainst": 0,
+            "shotsFor": 0,
+            "shotsAgainst": 0,
+            "stallsFor": 0,
+            "stallsAgainst": 0
+          },
+          "control": {
+            "legs": 0,
+            "wins": 0,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 0,
+            "xGAgainst": 0,
+            "shotsFor": 0,
+            "shotsAgainst": 0,
+            "stallsFor": 0,
+            "stallsAgainst": 0
+          }
+        },
+        "240": {
+          "candidate": {
+            "legs": 0,
+            "wins": 0,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 0,
+            "xGAgainst": 0,
+            "shotsFor": 0,
+            "shotsAgainst": 0,
+            "stallsFor": 0,
+            "stallsAgainst": 0
+          },
+          "control": {
+            "legs": 0,
+            "wins": 0,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 0,
+            "xGAgainst": 0,
+            "shotsFor": 0,
+            "shotsAgainst": 0,
+            "stallsFor": 0,
+            "stallsAgainst": 0
+          }
+        },
+        "480": {
+          "candidate": {
+            "legs": 0,
+            "wins": 0,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 0,
+            "xGAgainst": 0,
+            "shotsFor": 0,
+            "shotsAgainst": 0,
+            "stallsFor": 0,
+            "stallsAgainst": 0
+          },
+          "control": {
+            "legs": 0,
+            "wins": 0,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 0,
+            "xGAgainst": 0,
+            "shotsFor": 0,
+            "shotsAgainst": 0,
+            "stallsFor": 0,
+            "stallsAgainst": 0
+          }
+        }
+      }
+    },
+    {
+      "label": "search-tempo-dev",
+      "split": "dev",
+      "seeds": [
+        610017
+      ],
+      "controlLabel": "baseline-v40",
+      "planned": 4,
+      "completed": 4,
+      "actions": 160,
+      "opponent": "casual",
+      "fouls": [
+        true
+      ],
+      "sha256": "8cfa662114122fab1b1771e2f2a9e5b609e8629002a722e45aaca08dfe1f2a2d",
+      "full": {
+        "wdl": {
+          "wins": 0,
+          "draws": 4,
+          "losses": 0
+        },
+        "goals": [
+          1,
+          1
+        ],
+        "xG": [
+          1.4040691401304695,
+          0.6505167363844597
+        ],
+        "shots": [
+          9,
+          2
+        ],
+        "stalls": [
+          0,
+          3
+        ],
+        "meanThinkMs": 545.0499467294526,
+        "p95ThinkMs": 943.6935189999931,
+        "meanDepth": 4.6438356164383565,
+        "errors": 0
+      },
+      "prefix160": {
+        "legs": 4,
+        "wins": 0,
+        "draws": 4,
+        "losses": 0,
+        "goalsFor": 1,
+        "goalsAgainst": 1,
+        "xGFor": 1.4040691401304695,
+        "xGAgainst": 0.6505167363844597,
+        "shotsFor": 9,
+        "shotsAgainst": 2,
+        "stallsFor": 0,
+        "stallsAgainst": 3
+      },
+      "commonPrefix160": {
+        "candidate": {
+          "legs": 4,
+          "wins": 0,
+          "draws": 4,
+          "losses": 0,
+          "goalsFor": 1,
+          "goalsAgainst": 1,
+          "xGFor": 1.4040691401304695,
+          "xGAgainst": 0.6505167363844597,
+          "shotsFor": 9,
+          "shotsAgainst": 2,
+          "stallsFor": 0,
+          "stallsAgainst": 3
+        },
+        "control": {
+          "legs": 4,
+          "wins": 0,
+          "draws": 4,
+          "losses": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "xGFor": 1.4942518143728738,
+          "xGAgainst": 0.058482398718648035,
+          "shotsFor": 10,
+          "shotsAgainst": 1,
+          "stallsFor": 0,
+          "stallsAgainst": 2
+        }
+      },
+      "commonFullHorizon": {
+        "candidate": {
+          "legs": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "xGFor": 0,
+          "xGAgainst": 0,
+          "shotsFor": 0,
+          "shotsAgainst": 0,
+          "stallsFor": 0,
+          "stallsAgainst": 0
+        },
+        "control": {
+          "legs": 0,
+          "wins": 0,
+          "draws": 0,
+          "losses": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "xGFor": 0,
+          "xGAgainst": 0,
+          "shotsFor": 0,
+          "shotsAgainst": 0,
+          "stallsFor": 0,
+          "stallsAgainst": 0
+        }
+      },
+      "firstGoalActions": {
+        "scoredLegs": 1,
+        "noCandidateGoalLegs": 3,
+        "medianConditionalOnScoring": 60,
+        "legs": [
+          {
+            "key": "610017/true/white/white",
+            "candidate": 60,
+            "opponent": 159,
+            "any": 60
+          },
+          {
+            "key": "610017/true/white/black",
+            "candidate": null,
+            "opponent": null,
+            "any": null
+          },
+          {
+            "key": "610017/true/black/white",
+            "candidate": null,
+            "opponent": null,
+            "any": null
+          },
+          {
+            "key": "610017/true/black/black",
+            "candidate": null,
+            "opponent": null,
+            "any": null
+          }
+        ]
+      },
+      "checkpoints": {
+        "160": {
+          "legs": 4,
+          "wins": 0,
+          "draws": 4,
+          "losses": 0,
+          "goalsFor": 1,
+          "goalsAgainst": 1,
+          "xGFor": 1.4040691401304695,
+          "xGAgainst": 0.6505167363844597,
+          "shotsFor": 9,
+          "shotsAgainst": 2,
+          "stallsFor": 0,
+          "stallsAgainst": 3
+        },
+        "200": null,
+        "240": null,
+        "480": null
+      },
+      "commonCheckpoints": {
+        "160": {
+          "candidate": {
+            "legs": 4,
+            "wins": 0,
+            "draws": 4,
+            "losses": 0,
+            "goalsFor": 1,
+            "goalsAgainst": 1,
+            "xGFor": 1.4040691401304695,
+            "xGAgainst": 0.6505167363844597,
+            "shotsFor": 9,
+            "shotsAgainst": 2,
+            "stallsFor": 0,
+            "stallsAgainst": 3
+          },
+          "control": {
+            "legs": 4,
+            "wins": 0,
+            "draws": 4,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 1.4942518143728738,
+            "xGAgainst": 0.058482398718648035,
+            "shotsFor": 10,
+            "shotsAgainst": 1,
+            "stallsFor": 0,
+            "stallsAgainst": 2
+          }
+        },
+        "200": {
+          "candidate": {
+            "legs": 0,
+            "wins": 0,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 0,
+            "xGAgainst": 0,
+            "shotsFor": 0,
+            "shotsAgainst": 0,
+            "stallsFor": 0,
+            "stallsAgainst": 0
+          },
+          "control": {
+            "legs": 0,
+            "wins": 0,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 0,
+            "xGAgainst": 0,
+            "shotsFor": 0,
+            "shotsAgainst": 0,
+            "stallsFor": 0,
+            "stallsAgainst": 0
+          }
+        },
+        "240": {
+          "candidate": {
+            "legs": 0,
+            "wins": 0,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 0,
+            "xGAgainst": 0,
+            "shotsFor": 0,
+            "shotsAgainst": 0,
+            "stallsFor": 0,
+            "stallsAgainst": 0
+          },
+          "control": {
+            "legs": 0,
+            "wins": 0,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 0,
+            "xGAgainst": 0,
+            "shotsFor": 0,
+            "shotsAgainst": 0,
+            "stallsFor": 0,
+            "stallsAgainst": 0
+          }
+        },
+        "480": {
+          "candidate": {
+            "legs": 0,
+            "wins": 0,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 0,
+            "xGAgainst": 0,
+            "shotsFor": 0,
+            "shotsAgainst": 0,
+            "stallsFor": 0,
+            "stallsAgainst": 0
+          },
+          "control": {
+            "legs": 0,
+            "wins": 0,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 0,
+            "xGAgainst": 0,
+            "shotsFor": 0,
+            "shotsAgainst": 0,
+            "stallsFor": 0,
+            "stallsAgainst": 0
+          }
+        }
+      }
+    },
+    {
+      "label": "selected-heldout",
+      "split": "test",
+      "seeds": [
+        720017,
+        720043
+      ],
+      "controlLabel": "baseline-heldout-blind",
+      "planned": 8,
+      "completed": 8,
+      "actions": 480,
+      "opponent": "casual",
+      "fouls": [
+        true
+      ],
+      "sha256": "4388dc612b14feb2b266dc5389e1f95228c68e994bcabbcfd39c21a5e4d880f3",
+      "full": {
+        "wdl": {
+          "wins": 3,
+          "draws": 5,
+          "losses": 0
+        },
+        "goals": [
+          13,
+          4
+        ],
+        "xG": [
+          12.367427654641826,
+          1.9969764781236046
+        ],
+        "shots": [
+          85,
+          8
+        ],
+        "stalls": [
+          0,
+          7
+        ],
+        "meanThinkMs": 600.7682298912451,
+        "p95ThinkMs": 1116.286368000001,
+        "meanDepth": 4.075040783034257,
+        "errors": 0
+      },
+      "prefix160": {
+        "legs": 8,
+        "wins": 2,
+        "draws": 5,
+        "losses": 1,
+        "goalsFor": 2,
+        "goalsAgainst": 1,
+        "xGFor": 3.095227793862432,
+        "xGAgainst": 0.6459964555821291,
+        "shotsFor": 24,
+        "shotsAgainst": 3,
+        "stallsFor": 0,
+        "stallsAgainst": 2
+      },
+      "commonPrefix160": {
+        "candidate": {
+          "legs": 8,
+          "wins": 2,
+          "draws": 5,
+          "losses": 1,
+          "goalsFor": 2,
+          "goalsAgainst": 1,
+          "xGFor": 3.095227793862432,
+          "xGAgainst": 0.6459964555821291,
+          "shotsFor": 24,
+          "shotsAgainst": 3,
+          "stallsFor": 0,
+          "stallsAgainst": 2
+        },
+        "control": {
+          "legs": 8,
+          "wins": 3,
+          "draws": 5,
+          "losses": 0,
+          "goalsFor": 3,
+          "goalsAgainst": 0,
+          "xGFor": 2.6320615534356064,
+          "xGAgainst": 0.16481403275255357,
+          "shotsFor": 18,
+          "shotsAgainst": 2,
+          "stallsFor": 0,
+          "stallsAgainst": 7
+        }
+      },
+      "commonFullHorizon": {
+        "candidate": {
+          "legs": 8,
+          "wins": 3,
+          "draws": 5,
+          "losses": 0,
+          "goalsFor": 13,
+          "goalsAgainst": 4,
+          "xGFor": 12.367427654641826,
+          "xGAgainst": 1.9969764781236046,
+          "shotsFor": 85,
+          "shotsAgainst": 8,
+          "stallsFor": 0,
+          "stallsAgainst": 7
+        },
+        "control": {
+          "legs": 8,
+          "wins": 5,
+          "draws": 3,
+          "losses": 0,
+          "goalsFor": 10,
+          "goalsAgainst": 4,
+          "xGFor": 11.976485446246159,
+          "xGAgainst": 4.102763631915947,
+          "shotsFor": 71,
+          "shotsAgainst": 14,
+          "stallsFor": 1,
+          "stallsAgainst": 16
+        }
+      },
+      "firstGoalActions": {
+        "scoredLegs": 7,
+        "noCandidateGoalLegs": 1,
+        "medianConditionalOnScoring": 226,
+        "legs": [
+          {
+            "key": "720017/true/white/white",
+            "candidate": 173,
+            "opponent": null,
+            "any": 173
+          },
+          {
+            "key": "720017/true/white/black",
+            "candidate": 226,
+            "opponent": 356,
+            "any": 226
+          },
+          {
+            "key": "720017/true/black/white",
+            "candidate": 66,
+            "opponent": null,
+            "any": 66
+          },
+          {
+            "key": "720017/true/black/black",
+            "candidate": 115,
+            "opponent": null,
+            "any": 115
+          },
+          {
+            "key": "720043/true/white/white",
+            "candidate": 320,
+            "opponent": 126,
+            "any": 126
+          },
+          {
+            "key": "720043/true/white/black",
+            "candidate": 264,
+            "opponent": 324,
+            "any": 264
+          },
+          {
+            "key": "720043/true/black/white",
+            "candidate": null,
+            "opponent": null,
+            "any": null
+          },
+          {
+            "key": "720043/true/black/black",
+            "candidate": 391,
+            "opponent": 292,
+            "any": 292
+          }
+        ]
+      },
+      "checkpoints": {
+        "160": {
+          "legs": 8,
+          "wins": 2,
+          "draws": 5,
+          "losses": 1,
+          "goalsFor": 2,
+          "goalsAgainst": 1,
+          "xGFor": 3.095227793862432,
+          "xGAgainst": 0.6459964555821291,
+          "shotsFor": 24,
+          "shotsAgainst": 3,
+          "stallsFor": 0,
+          "stallsAgainst": 2
+        },
+        "200": {
+          "legs": 8,
+          "wins": 3,
+          "draws": 4,
+          "losses": 1,
+          "goalsFor": 4,
+          "goalsAgainst": 1,
+          "xGFor": 4.319837067874421,
+          "xGAgainst": 0.6459964555821291,
+          "shotsFor": 33,
+          "shotsAgainst": 3,
+          "stallsFor": 0,
+          "stallsAgainst": 2
+        },
+        "240": {
+          "legs": 8,
+          "wins": 4,
+          "draws": 3,
+          "losses": 1,
+          "goalsFor": 7,
+          "goalsAgainst": 1,
+          "xGFor": 5.603159572537834,
+          "xGAgainst": 0.6459964555821291,
+          "shotsFor": 42,
+          "shotsAgainst": 3,
+          "stallsFor": 0,
+          "stallsAgainst": 4
+        },
+        "480": {
+          "legs": 8,
+          "wins": 3,
+          "draws": 5,
+          "losses": 0,
+          "goalsFor": 13,
+          "goalsAgainst": 4,
+          "xGFor": 12.367427654641826,
+          "xGAgainst": 1.9969764781236046,
+          "shotsFor": 85,
+          "shotsAgainst": 8,
+          "stallsFor": 0,
+          "stallsAgainst": 7
+        }
+      },
+      "commonCheckpoints": {
+        "160": {
+          "candidate": {
+            "legs": 8,
+            "wins": 2,
+            "draws": 5,
+            "losses": 1,
+            "goalsFor": 2,
+            "goalsAgainst": 1,
+            "xGFor": 3.095227793862432,
+            "xGAgainst": 0.6459964555821291,
+            "shotsFor": 24,
+            "shotsAgainst": 3,
+            "stallsFor": 0,
+            "stallsAgainst": 2
+          },
+          "control": {
+            "legs": 8,
+            "wins": 3,
+            "draws": 5,
+            "losses": 0,
+            "goalsFor": 3,
+            "goalsAgainst": 0,
+            "xGFor": 2.6320615534356064,
+            "xGAgainst": 0.16481403275255357,
+            "shotsFor": 18,
+            "shotsAgainst": 2,
+            "stallsFor": 0,
+            "stallsAgainst": 7
+          }
+        },
+        "200": {
+          "candidate": {
+            "legs": 8,
+            "wins": 3,
+            "draws": 4,
+            "losses": 1,
+            "goalsFor": 4,
+            "goalsAgainst": 1,
+            "xGFor": 4.319837067874421,
+            "xGAgainst": 0.6459964555821291,
+            "shotsFor": 33,
+            "shotsAgainst": 3,
+            "stallsFor": 0,
+            "stallsAgainst": 2
+          },
+          "control": {
+            "legs": 8,
+            "wins": 5,
+            "draws": 3,
+            "losses": 0,
+            "goalsFor": 5,
+            "goalsAgainst": 0,
+            "xGFor": 4.261586606517917,
+            "xGAgainst": 1.1496400935844535,
+            "shotsFor": 24,
+            "shotsAgainst": 4,
+            "stallsFor": 0,
+            "stallsAgainst": 8
+          }
+        },
+        "240": {
+          "candidate": {
+            "legs": 8,
+            "wins": 4,
+            "draws": 3,
+            "losses": 1,
+            "goalsFor": 7,
+            "goalsAgainst": 1,
+            "xGFor": 5.603159572537834,
+            "xGAgainst": 0.6459964555821291,
+            "shotsFor": 42,
+            "shotsAgainst": 3,
+            "stallsFor": 0,
+            "stallsAgainst": 4
+          },
+          "control": {
+            "legs": 8,
+            "wins": 4,
+            "draws": 4,
+            "losses": 0,
+            "goalsFor": 5,
+            "goalsAgainst": 1,
+            "xGFor": 5.948715611454242,
+            "xGAgainst": 1.9496400935844536,
+            "shotsFor": 34,
+            "shotsAgainst": 5,
+            "stallsFor": 0,
+            "stallsAgainst": 8
+          }
+        },
+        "480": {
+          "candidate": {
+            "legs": 8,
+            "wins": 3,
+            "draws": 5,
+            "losses": 0,
+            "goalsFor": 13,
+            "goalsAgainst": 4,
+            "xGFor": 12.367427654641826,
+            "xGAgainst": 1.9969764781236046,
+            "shotsFor": 85,
+            "shotsAgainst": 8,
+            "stallsFor": 0,
+            "stallsAgainst": 7
+          },
+          "control": {
+            "legs": 8,
+            "wins": 5,
+            "draws": 3,
+            "losses": 0,
+            "goalsFor": 10,
+            "goalsAgainst": 4,
+            "xGFor": 11.976485446246159,
+            "xGAgainst": 4.102763631915947,
+            "shotsFor": 71,
+            "shotsAgainst": 14,
+            "stallsFor": 1,
+            "stallsAgainst": 16
+          }
+        }
+      }
+    },
+    {
+      "label": "refinement-v7/finish-preserved-v7-dev",
+      "split": "dev",
+      "seeds": [
+        610043
+      ],
+      "controlLabel": "baseline-dev-refinement",
+      "planned": 4,
+      "completed": 4,
+      "actions": 240,
+      "opponent": "casual",
+      "fouls": [
+        true
+      ],
+      "sha256": "747056ef9cd3e4192d5e3c7a501a55b6681828c625c18f967b96bc8864cd271e",
+      "full": {
+        "wdl": {
+          "wins": 3,
+          "draws": 1,
+          "losses": 0
+        },
+        "goals": [
+          3,
+          0
+        ],
+        "xG": [
+          2.9066163072834503,
+          0.10633163403390551
+        ],
+        "shots": [
+          18,
+          1
+        ],
+        "stalls": [
+          0,
+          3
+        ],
+        "meanThinkMs": 554.146817097728,
+        "p95ThinkMs": 1066.545005,
+        "meanDepth": 4.068181818181818,
+        "errors": 0
+      },
+      "prefix160": {
+        "legs": 4,
+        "wins": 2,
+        "draws": 2,
+        "losses": 0,
+        "goalsFor": 2,
+        "goalsAgainst": 0,
+        "xGFor": 1.729483265993455,
+        "xGAgainst": 0.10633163403390551,
+        "shotsFor": 10,
+        "shotsAgainst": 1,
+        "stallsFor": 0,
+        "stallsAgainst": 2
+      },
+      "commonPrefix160": {
+        "candidate": {
+          "legs": 4,
+          "wins": 2,
+          "draws": 2,
+          "losses": 0,
+          "goalsFor": 2,
+          "goalsAgainst": 0,
+          "xGFor": 1.729483265993455,
+          "xGAgainst": 0.10633163403390551,
+          "shotsFor": 10,
+          "shotsAgainst": 1,
+          "stallsFor": 0,
+          "stallsAgainst": 2
+        },
+        "control": {
+          "legs": 4,
+          "wins": 3,
+          "draws": 1,
+          "losses": 0,
+          "goalsFor": 3,
+          "goalsAgainst": 0,
+          "xGFor": 2.11852232536241,
+          "xGAgainst": 0.058482398718648035,
+          "shotsFor": 9,
+          "shotsAgainst": 1,
+          "stallsFor": 0,
+          "stallsAgainst": 3
+        }
+      },
+      "commonFullHorizon": {
+        "candidate": {
+          "legs": 4,
+          "wins": 3,
+          "draws": 1,
+          "losses": 0,
+          "goalsFor": 3,
+          "goalsAgainst": 0,
+          "xGFor": 2.9066163072834503,
+          "xGAgainst": 0.10633163403390551,
+          "shotsFor": 18,
+          "shotsAgainst": 1,
+          "stallsFor": 0,
+          "stallsAgainst": 3
+        },
+        "control": {
+          "legs": 4,
+          "wins": 4,
+          "draws": 0,
+          "losses": 0,
+          "goalsFor": 5,
+          "goalsAgainst": 0,
+          "xGFor": 4.952801498209215,
+          "xGAgainst": 0.058482398718648035,
+          "shotsFor": 17,
+          "shotsAgainst": 1,
+          "stallsFor": 0,
+          "stallsAgainst": 3
+        }
+      },
+      "firstGoalActions": {
+        "scoredLegs": 3,
+        "noCandidateGoalLegs": 1,
+        "medianConditionalOnScoring": 118,
+        "legs": [
+          {
+            "key": "610043/true/white/white",
+            "candidate": null,
+            "opponent": null,
+            "any": null
+          },
+          {
+            "key": "610043/true/white/black",
+            "candidate": 118,
+            "opponent": null,
+            "any": 118
+          },
+          {
+            "key": "610043/true/black/white",
+            "candidate": 230,
+            "opponent": null,
+            "any": 230
+          },
+          {
+            "key": "610043/true/black/black",
+            "candidate": 84,
+            "opponent": null,
+            "any": 84
+          }
+        ]
+      },
+      "checkpoints": {
+        "160": {
+          "legs": 4,
+          "wins": 2,
+          "draws": 2,
+          "losses": 0,
+          "goalsFor": 2,
+          "goalsAgainst": 0,
+          "xGFor": 1.729483265993455,
+          "xGAgainst": 0.10633163403390551,
+          "shotsFor": 10,
+          "shotsAgainst": 1,
+          "stallsFor": 0,
+          "stallsAgainst": 2
+        },
+        "200": {
+          "legs": 4,
+          "wins": 2,
+          "draws": 2,
+          "losses": 0,
+          "goalsFor": 2,
+          "goalsAgainst": 0,
+          "xGFor": 2.30852720738768,
+          "xGAgainst": 0.10633163403390551,
+          "shotsFor": 14,
+          "shotsAgainst": 1,
+          "stallsFor": 0,
+          "stallsAgainst": 3
+        },
+        "240": {
+          "legs": 4,
+          "wins": 3,
+          "draws": 1,
+          "losses": 0,
+          "goalsFor": 3,
+          "goalsAgainst": 0,
+          "xGFor": 2.9066163072834503,
+          "xGAgainst": 0.10633163403390551,
+          "shotsFor": 18,
+          "shotsAgainst": 1,
+          "stallsFor": 0,
+          "stallsAgainst": 3
+        },
+        "480": null
+      },
+      "commonCheckpoints": {
+        "160": {
+          "candidate": {
+            "legs": 4,
+            "wins": 2,
+            "draws": 2,
+            "losses": 0,
+            "goalsFor": 2,
+            "goalsAgainst": 0,
+            "xGFor": 1.729483265993455,
+            "xGAgainst": 0.10633163403390551,
+            "shotsFor": 10,
+            "shotsAgainst": 1,
+            "stallsFor": 0,
+            "stallsAgainst": 2
+          },
+          "control": {
+            "legs": 4,
+            "wins": 3,
+            "draws": 1,
+            "losses": 0,
+            "goalsFor": 3,
+            "goalsAgainst": 0,
+            "xGFor": 2.11852232536241,
+            "xGAgainst": 0.058482398718648035,
+            "shotsFor": 9,
+            "shotsAgainst": 1,
+            "stallsFor": 0,
+            "stallsAgainst": 3
+          }
+        },
+        "200": {
+          "candidate": {
+            "legs": 4,
+            "wins": 2,
+            "draws": 2,
+            "losses": 0,
+            "goalsFor": 2,
+            "goalsAgainst": 0,
+            "xGFor": 2.30852720738768,
+            "xGAgainst": 0.10633163403390551,
+            "shotsFor": 14,
+            "shotsAgainst": 1,
+            "stallsFor": 0,
+            "stallsAgainst": 3
+          },
+          "control": {
+            "legs": 4,
+            "wins": 4,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 4,
+            "goalsAgainst": 0,
+            "xGFor": 3.0963487031562815,
+            "xGAgainst": 0.058482398718648035,
+            "shotsFor": 10,
+            "shotsAgainst": 1,
+            "stallsFor": 0,
+            "stallsAgainst": 3
+          }
+        },
+        "240": {
+          "candidate": {
+            "legs": 4,
+            "wins": 3,
+            "draws": 1,
+            "losses": 0,
+            "goalsFor": 3,
+            "goalsAgainst": 0,
+            "xGFor": 2.9066163072834503,
+            "xGAgainst": 0.10633163403390551,
+            "shotsFor": 18,
+            "shotsAgainst": 1,
+            "stallsFor": 0,
+            "stallsAgainst": 3
+          },
+          "control": {
+            "legs": 4,
+            "wins": 4,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 5,
+            "goalsAgainst": 0,
+            "xGFor": 4.952801498209215,
+            "xGAgainst": 0.058482398718648035,
+            "shotsFor": 17,
+            "shotsAgainst": 1,
+            "stallsFor": 0,
+            "stallsAgainst": 3
+          }
+        },
+        "480": {
+          "candidate": {
+            "legs": 0,
+            "wins": 0,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 0,
+            "xGAgainst": 0,
+            "shotsFor": 0,
+            "shotsAgainst": 0,
+            "stallsFor": 0,
+            "stallsAgainst": 0
+          },
+          "control": {
+            "legs": 0,
+            "wins": 0,
+            "draws": 0,
+            "losses": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "xGFor": 0,
+            "xGAgainst": 0,
+            "shotsFor": 0,
+            "shotsAgainst": 0,
+            "stallsFor": 0,
+            "stallsAgainst": 0
+          }
+        }
+      }
+    }
+  ],
+  "note": "Full horizons and atomic 160-action prefixes are separate. Common-prefix comparisons use exactly matched seed/fouls/color/kickoff legs. Whole seed clusters, not individual legs, are independent samples."
+}
