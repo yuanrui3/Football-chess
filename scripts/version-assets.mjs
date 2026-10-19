@@ -24,8 +24,10 @@ async function versionEngineImport(name){
 const replayVersion=await versionEngineImport('goal-replay.js');
 const statsVersion=await versionEngineImport('match-stats.js');
 const commentaryClipsVersion=hash(await readFile(asset('commentary-clips.js'),'utf8'));
+const commentarySpatialVersion=await versionEngineImport('commentary-spatial.js');
 let commentary=await readFile(asset('commentary.js'),'utf8');
 commentary=commentary.replace(/from ['"]\.\/commentary-clips\.js(?:\?v=[^'"]+)?['"]/,`from './commentary-clips.js?v=${commentaryClipsVersion}'`);
+commentary=commentary.replace(/from ['"]\.\/commentary-spatial\.js(?:\?v=[^'"]+)?['"]/,`from './commentary-spatial.js?v=${commentarySpatialVersion}'`);
 await writeFile(asset('commentary.js'),commentary);
 const commentaryVersion=hash(commentary);
 const paradeeWorkerVersion=hash(await readFile(asset('paradee-worker.js'),'utf8'));
@@ -47,4 +49,4 @@ let html=await readFile(asset('index.html'),'utf8');
 html=html.replace(/href="style\.css(?:\?v=[^"]+)?"/,`href="style.css?v=${cssVersion}"`)
   .replace(/src="app\.js(?:\?v=[^"]+)?"/,`src="app.js?v=${appVersion}"`);
 await writeFile(asset('index.html'),html);
-console.log('Versioned game assets:',{app:appVersion,engine:engineVersion,worker:workerVersion,replay:replayVersion,stats:statsVersion,commentary:commentaryVersion,commentaryClips:commentaryClipsVersion,paradeeWorker:paradeeWorkerVersion,paradeeSpeech:paradeeSpeechVersion,clock:clockVersion,css:cssVersion});
+console.log('Versioned game assets:',{app:appVersion,engine:engineVersion,worker:workerVersion,replay:replayVersion,stats:statsVersion,commentary:commentaryVersion,commentaryClips:commentaryClipsVersion,commentarySpatial:commentarySpatialVersion,paradeeWorker:paradeeWorkerVersion,paradeeSpeech:paradeeSpeechVersion,clock:clockVersion,css:cssVersion});

@@ -1,5 +1,6 @@
-/** Public match commentary only: no engine calls, seeds, hidden targets or AI search. */
+/** Public match commentary: read-only board geometry, never seeds, hidden targets or AI search. */
 import {COMMENTARY_CLIPS} from './commentary-clips.js?v=29cbe0d352e1';
+import {commentaryPositionFacts, commentaryTransitionFact} from './commentary-spatial.js?v=10c3df7a193a';
 const TEAM_NAMES = {white: 'Ivory', black: 'Obsidian'};
 const PIECE_NAMES = {K: 'keeper', Q: 'queen', R: 'rook', B: 'bishop', N: 'knight', P: 'pawn'};
 const NUMBERS = {'1': 'one', '2': 'two', '3': 'three'};
@@ -9,6 +10,7 @@ export const COMMENTARY_PACE = 3000;
 export const COMMENTARY_HEARTBEAT_MS = 12000;
 export const COMMENTARY_ROUTINE_MS = 10000;
 export const COMMENTARY_LOCAL_DEADLINE_MS = 5500;
+export const COMMENTARY_SPATIAL_REPEAT_MS = 30000;
 const voiceId = voice => `${voice.voiceURI || voice.name || ''}|${voice.lang || ''}`;
 const voiceRank = voice => (/natural|neural/i.test(voice.name) ? 100 : /google.*english|microsoft.*online/i.test(voice.name) ? 70 : 0)
   + (/^en[-_]US$/i.test(voice.lang) ? 15 : 0) + (voice.default ? 1 : 0);
@@ -85,9 +87,12 @@ function restartLine(restart) {
   const type = {corner: 'Corner', goalKick: 'Goal kick', throwIn: 'Throw-in', freeKick: 'Free kick'}[restart.type];
   return type ? ` ${type} to ${teamName(restart.team)}.` : '';
 }
+const spatialLine = fact => ({kind: 'trend', priority: COMMENTARY_PRIORITY.trend, text: fact.text,
+  id: `spatial:${fact.key}`, team: fact.team, clipKey: null, spatial: fact,
+  delivery: fact.urgent ? 'urgent' : 'normal'});
 
 /** A deterministic line describing a committed, public transition. No timing or speech. */
-export function commentaryEvent(before, after, {stats} = {}) {
+export function commentaryEvent(before, after, {stats, passes = [], spatial = true} = {}) {
   if (!before || !after || before === after) return null;
   const action = actionOf(before, after);
   if (!action) return null;
@@ -151,6 +156,10 @@ export function commentaryEvent(before, after, {stats} = {}) {
   if (before.attack !== after.attack && !after.restart && ['tackle', 'interception', 'move'].includes(action.type)) {
     return event('trend', variant([`${teamName(after.attack)} win it back. A change of possession.`, `${teamName(after.attack)} regain possession. The initiative changes hands.`], after.turn, action.pieceId), before, after, action, {routine: true, clipKey: 'turnover'});
   }
+  if (spatial) {
+    const fact = commentaryTransitionFact(before, after, {passes});
+    if (fact) return {...spatialLine(fact), routine: true};
+  }
   if (action.type === 'kick' && action.outcome === 'complete' && before.attack === after.attack && point(action.from) && point(action.to)) {
     const advance = (action.team === 'white' ? -1 : 1) * (action.to.y - action.from.y);
     const passer = before.pieces?.find(piece => piece.id === action.pieceId);
@@ -169,6 +178,9 @@ export function commentaryEvent(before, after, {stats} = {}) {
 /** Current visible facts for quiet passages; no forecast, hidden targets or exact moves. */
 export function commentarySituation(state, {index = 0} = {}) {
   if (!state || state.pendingShot || ['keeperReact', 'finished'].includes(state.phase) || !TEAM_NAMES[state.attack] || !point(state.ball)) return null;
+  const spatial = commentaryPositionFacts(state);
+  if (spatial.length) return {...spatialLine(spatial[Math.abs(index) % spatial.length]),
+    id: `situation:${state.turn}:${index}`, heartbeat: true};
   const team = state.attack, name = teamName(team), carrier = state.pieces?.find(piece => piece.id === state.ball.carrierId);
   const advance = team === 'white' ? 16 - state.ball.y : state.ball.y;
   const zone = advance < 6 ? 'their own half' : advance >= 11 ? 'the attacking third' : 'midfield';
@@ -273,7 +285,9 @@ export function createCommentary({speechSynthesis = globalThis.speechSynthesis,
   setTimer = (fn, delay) => setTimeout(fn, delay), clearTimer = id => clearTimeout(id)} = {}) {
   let enabled = false, destroyed = false, epoch = 0, pace = 1200, active = null, watchdog = null;
   let lastSpoken = -Infinity, lastTrend = -Infinity, lastAttempt = -Infinity, demo = false, situationIndex = 0, lastText = '', cueSequence = 0;
+  let latestState = null;
   const samples = [], seen = new Set(), spoken = new Set(), demoTimers = new Set();
+  const passes = [], spatialSpokenAt = new Map();
   const speechSupported = !!(speechSynthesis && typeof speechSynthesis.speak === 'function' && typeof Utterance === 'function');
   const recordedSupported = typeof AudioCtor === 'function' && Object.values(clips).some(clip => clip?.src && clip?.text);
   const localSupported = !!(localSpeech && typeof localSpeech.speak === 'function' && typeof localSpeech.load === 'function');
@@ -310,6 +324,31 @@ export function createCommentary({speechSynthesis = globalThis.speechSynthesis,
     if (current?.loadTimer !== undefined) clearTimer(current.loadTimer);
   }
   const remember = (set, key) => {set.add(key); if (set.size > 120) set.delete(set.values().next().value);};
+  const spatialCurrent = line => !line?.spatial?.live || !!latestState
+    && commentaryPositionFacts(latestState).some(fact => fact.key === line.spatial.key && fact.text === line.spatial.text);
+  function updatePosition(state) {
+    const previousAttack = latestState?.attack;
+    latestState = state;
+    if (active?.event.spatial && (!spatialCurrent(active.event) || state?.restart || state?.pendingShot
+        || state?.phase === 'finished' || previousAttack && previousAttack !== state?.attack)) cancelActive();
+  }
+  function rememberPass(before, after) {
+    const action = after.lastAction;
+    if (after.restart || after.pendingShot || before.attack !== after.attack || ['kickoff', 'finished'].includes(after.phase)) {
+      passes.length = 0; return;
+    }
+    if (action?.type === 'move' && point(action.from) && point(action.to)
+        && (action.from.x !== action.to.x || action.from.y !== action.to.y)
+        && before.ball?.carrierId !== action.pieceId && !action.collection) {
+      for (const pass of passes) if (pass.pieceId === action.pieceId) pass.ran = true;
+    }
+    if (action?.type !== 'kick' || action.outcome !== 'complete' || !point(action.from) || !point(action.to)) return;
+    const receiver = after.pieces?.find(piece => piece.id === action.receiverId);
+    if (!receiver || receiver.team !== action.team || receiver.id === action.pieceId) return;
+    passes.push({team: action.team, pieceId: action.pieceId, receiverId: receiver.id,
+      from: {...action.from}, to: {...action.to}, turn: after.turn, ran: false});
+    if (passes.length > 4) passes.shift();
+  }
   function cancelActive({preserveGoal = false} = {}) {
     if (preserveGoal && active?.event.kind === 'goal' && !active.event.demo) return;
     const previous = active; active = null;
@@ -332,11 +371,13 @@ export function createCommentary({speechSynthesis = globalThis.speechSynthesis,
     if (!enabled || pace !== COMMENTARY_PACE || destroyed || !line?.text || !COMMENTARY_PRIORITY[line.kind]) return false;
     if (demo && !demoCall) return false;
     if (!demoCall && line.epoch !== undefined && line.epoch !== epoch) return false;
+    if (!demoCall && !spatialCurrent(line)) return false;
     const at = now(), ttl = line.kind === 'goal' ? 30000 : line.kind === 'outcome' ? 12000 : 6000;
     if (!demoCall && finite(line.createdAt) && at - line.createdAt > ttl) return false;
     if (spoken.has(line.id)) return false;
     if (active && line.priority <= active.event.priority && line.kind !== 'goal') return false;
     if (!demoCall && !explicit && line.kind === 'trend' && (at - lastTrend < COMMENTARY_ROUTINE_MS || at - lastSpoken < COMMENTARY_ROUTINE_MS)) return false;
+    if (!demoCall && line.spatial && at - (spatialSpokenAt.get(line.spatial.key) ?? -Infinity) < COMMENTARY_SPATIAL_REPEAT_MS) return false;
     if (!demoCall && line.kind === 'attempt' && at - lastAttempt < (pace < 700 ? 3000 : 1200)) return false;
     const useLocal = playback === 'local' && (line.kind === 'trend' || line.keeperRebound === true) && line.clipKey !== 'enable'
       && localSupported && localState().ready;
@@ -347,6 +388,10 @@ export function createCommentary({speechSynthesis = globalThis.speechSynthesis,
     const token = {}, spokenEvent = {...line, text};
     active = {token, event: spokenEvent, transport: 'caption'};
     remember(spoken, line.id); lastSpoken = at; lastText = text;
+    if (line.spatial) {
+      spatialSpokenAt.set(line.spatial.key, at);
+      if (spatialSpokenAt.size > 120) spatialSpokenAt.delete(spatialSpokenAt.keys().next().value);
+    }
     if (line.kind === 'trend') lastTrend = at;
     if (line.kind === 'attempt') lastAttempt = at;
     caption(text, spokenEvent);
@@ -383,6 +428,9 @@ export function createCommentary({speechSynthesis = globalThis.speechSynthesis,
     }
     function recorded(fallbackFromLocal = false) {
       if (active?.token !== token) return;
+      // Technical facts have no matching stock recording. Preserve their exact
+      // caption instead of replacing the analysis with unrelated audio.
+      if (line.spatial && !clip) {armWatchdog(); status('caption'); return;}
       if (fallbackFromLocal && clip?.text) {
         // Generic recordings cannot announce the live names or score from the proposed line.
         text = clip.text; lastText = text; active.event = {...line, text}; caption(text, active.event);
@@ -426,9 +474,10 @@ export function createCommentary({speechSynthesis = globalThis.speechSynthesis,
       }
       active.loadTimer = setTimer(fallbackLocal, Math.max(0, deadline - at));
       try {
-        const delivery = line.keeperRebound === true || ['counter', 'pressure', 'queen_linebreak', 'final_third', 'knight_pocket', 'advance_centre', 'advance_wide', 'test'].includes(line.clipKey) ? 'urgent' : 'normal';
+        const delivery = line.delivery === 'urgent' || line.keeperRebound === true || ['counter', 'pressure', 'queen_linebreak', 'final_third', 'knight_pocket', 'advance_centre', 'advance_wide', 'test'].includes(line.clipKey) ? 'urgent' : 'normal';
         Promise.resolve(localSpeech.speak(text, {expiresAt: deadline, delivery, onPlaying() {
           if (active?.token !== token || active.transport !== 'local') return;
+          if (!spatialCurrent(line)) {cancelActive(); return;}
           clearTimer(active.loadTimer); active.loadTimer = undefined; status('playing'); armWatchdog();
         }})).then(result => {
           if (active?.token !== token || active.transport !== 'local') return;
@@ -442,7 +491,9 @@ export function createCommentary({speechSynthesis = globalThis.speechSynthesis,
   function observe(before, after, options = {}) {
     if (destroyed || !before || !after || before === after) return null;
     if (finite(options.pace)) setPace(options.pace);
-    let line = commentaryEvent(before, after, options);
+    updatePosition(after);
+    let line = commentaryEvent(before, after, {...options, passes, spatial: enabled});
+    rememberPass(before, after);
     if (after.restart || ['kickoff', 'finished'].includes(after.phase) || line?.kind === 'goal') samples.length = 0;
     const turnover = !after.restart && before.attack !== after.attack && point(after.ball) && TEAM_NAMES[after.attack];
     if ((completedCommentaryRound(before, after) || turnover) && point(after.ball) && TEAM_NAMES[after.attack]) {
@@ -459,6 +510,7 @@ export function createCommentary({speechSynthesis = globalThis.speechSynthesis,
   }
   function reset() {
     epoch++; stopDemo(); cancelActive(); samples.length = 0; seen.clear(); spoken.clear();
+    passes.length = 0; spatialSpokenAt.clear(); latestState = null;
     lastSpoken = lastTrend = lastAttempt = -Infinity; situationIndex = 0; lastText = '';
   }
   function setPace(value) {
@@ -469,10 +521,11 @@ export function createCommentary({speechSynthesis = globalThis.speechSynthesis,
   return {
     observe,
     tick(state, {blocked = false} = {}) {
+      updatePosition(state);
       if (blocked || !enabled || pace !== COMMENTARY_PACE || destroyed || demo || active || now() - lastSpoken < COMMENTARY_HEARTBEAT_MS) return false;
       if (!state || state.pendingShot || ['keeperReact', 'finished'].includes(state.phase)) return false;
       const latest = samples.at(-1);
-      if (!state.restart && latest?.team === state.attack && state.turn >= latest.turn && state.turn - latest.turn <= 8) {
+      if (!commentaryPositionFacts(state).length && !state.restart && latest?.team === state.attack && state.turn >= latest.turn && state.turn - latest.turn <= 8) {
         const trend = analyseCommentaryTrend(samples);
         if (trend && trend.text !== lastText && speak({...trend, createdAt: now(), epoch})) return true;
       }
@@ -487,7 +540,7 @@ export function createCommentary({speechSynthesis = globalThis.speechSynthesis,
     testVoice() {
       if (playback === 'local' && !localState().ready) return false;
       return speak({kind: 'trend', priority: 1, text: playback === 'local'
-        ? 'Ivory surge forward! The queen switches play, and Obsidian scramble across.'
+        ? 'Ivory surge forward! The bishop supports the queen, while the rook offers a cross into the middle.'
         : 'Football Chess commentary. This is your selected voice.', clipKey: 'test', localOnly: playback === 'local', id: `voice-test:${epoch}:${++cueSequence}`}, {explicit: true});
     },
     reveal: line => speak(line?.deferred ? {...line, createdAt: now(), deferred: false} : line),
