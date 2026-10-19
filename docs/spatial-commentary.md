@@ -1,6 +1,6 @@
 # Spatial match commentary
 
-The commentary combines public board geometry with a short history of completed passes and off-ball moves. It does not invoke Tactical search, a language model, random draws or the speech service. The existing local Hugo voice speaks new analysis; Tom retains recorded shot and goal reactions.
+The commentary combines public board geometry with a short history of completed passes and off-ball moves. It does not invoke Tactical search, a language model, random draws or the speech service. The default Instant analysis mode selects prepared whole-sentence Hugo clips from those live facts; Tom retains recorded shot and goal reactions. Optional Live Hugo mode still synthesizes new sentences locally.
 
 ## Terms and evidence
 
@@ -25,10 +25,14 @@ Native pass generation supplies receiver and offside flags. Read-only board geom
 
 Technical facts take priority over generic zone summaries, subject to the existing ten-second routine cooldown and twelve-second quiet-passage heartbeat. Repeated spatial relationships have a thirty-second cooldown. Shots and goals still interrupt routine analysis; shot results remain tied to the visible animation impact.
 
-Present-tense facts have stable keys naming the involved pieces. The controller recomputes them after observed board changes and immediately before local playback, requiring both the same key and the same spoken claim. Invalid facts are cancelled; unrelated moves do not cancel still-valid analysis. Completed actions use past tense. Turnovers, restarts, shots, pauses, undo, mute and pace changes cannot leave stale technical speech queued.
+Present-tense facts have stable keys naming the involved pieces. The controller recomputes them after observed board changes and immediately before playback, requiring both the same key and the same underlying claim. A library caption always matches the selected recording exactly; the original spatial fact remains attached for revalidation. Invalid facts are cancelled; unrelated moves do not cancel still-valid analysis. Completed actions use past tense. Turnovers, restarts, shots, pauses, undo, mute and pace changes cannot leave stale technical speech queued.
 
-Use **Relaxed · 3 seconds** and **Live analysis · Hugo + Tom** for spoken spatial analysis. The selected device voice can also read it. When Hugo is unavailable, or recorded-only mode has no matching clip, the exact technical caption remains; an unrelated stock recording is never presented as that analysis. Saved shot/goal calls continue normally. The local model and voice assets are unchanged.
+Use **Relaxed · 3 seconds** and **Instant analysis · Hugo + Tom** for spoken spatial analysis without runtime speech generation. Complete Hugo sentences are prepared ahead of time in `dist/audio/hugo/`, and `hugoCommentaryClip(line, state)` chooses a truthful variant using the fact type, involved piece roles and native lane evidence. Scripts omit team names and piece numbers so a finite bank can describe either side. They are not assembled from word fragments. No match data leaves the browser. Missing variants keep their technical caption instead of playing an unrelated call.
+
+The optional **Live Hugo · slower** mode loads about 38 MB of model/runtime assets and may need several seconds per sentence. Valid spatial calls can generate for up to twelve seconds; explicit voice tests get twenty seconds. A changed or expired claim is still cancelled immediately, and urgent keeper-rebound calls retain a shorter deadline. Audio-context interruption recovery and a thirty-second inference watchdog permit explicit retries instead of leaving the worker permanently busy. A selected device voice is another alternative.
+
+`docs/hugo-commentary-library-provenance.json` records the prepared scripts, source identities, file hashes and audio checks. `scripts/build-hugo-commentary-library.mjs` reproduces the bank using the bundled Hugo voice and local speech model. Saved shot/goal calls and the existing model/voice identities are preserved.
 
 ## Verification
 
-`tests/commentary-spatial.test.mjs` covers mirrored positive and negative geometry cases, including offside, blockers, pawn setup, backward tackles and actual pass-and-run history. `tests/commentary-spatial-delivery.test.mjs` checks exact local speech, truthful caption fallbacks, cadence, priority and cancellation. Existing commentary and speech tests remain applicable.
+`tests/commentary-spatial.test.mjs` covers mirrored positive and negative geometry cases, including offside, blockers, pawn setup, backward tackles and actual pass-and-run history. `tests/commentary-spatial-delivery.test.mjs` checks exact local speech, truthful caption fallbacks, cadence, priority and cancellation. `tests/commentary-library.test.mjs` checks prepared variants, exact captions, stale-call cancellation and playback without local synthesis. Existing commentary and speech tests remain applicable.

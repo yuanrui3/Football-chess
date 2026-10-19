@@ -118,29 +118,29 @@ export function commentaryPositionFacts(state) {
       && attackingShots.length && attackingShots.every(kick => !kick.shotModel?.blockerIds?.length)
       && !outfield.some(piece => geometry.controls(piece, carrier, {bonus: true}) > 0 || shotCorridor(carrier, piece))) {
       facts.push(liveFact('oneOnOne', carrier.team,
-        `${named(carrier)} is one on one with the keeper; no outfield defender covers the shooting corridor.`, [carrier.id, keeper.id],
+        `${named(carrier)} is one on one with the keeper!`, [carrier.id, keeper.id],
         {pieceId: carrier.id, keeperId: keeper.id, urgent: true}));
     }
     if (state.phase === 'defendMove') {
       for (const defender of defenders) {
         if (!geometry.flagged(defender) && directTackles(state, defender, carrier)) facts.push(liveFact('pressing', defender.team,
-          `${named(defender)} has the ${role(carrier)} under pressure, with a clear route to a tackle.`, [carrier.id, defender.id],
+          `${named(defender)} has the ${role(carrier)} under pressure!`, [carrier.id, defender.id],
           {pieceId: defender.id, carrierId: carrier.id, defenderId: defender.id, urgent: true}));
         else if (pawnSetup(ctx, defender)) facts.push(liveFact('pawnSetup', defender.team,
-          `${named(defender)} can use its free step to set up a diagonal tackle on the ${role(carrier)}.`, [carrier.id, defender.id],
+          `${named(defender)} can use a free step for a diagonal challenge.`, [carrier.id, defender.id],
           {pieceId: defender.id, carrierId: carrier.id, defenderId: defender.id}));
       }
     }
     const screenedShot = attackingShots.find(kick => kick.shotModel?.blockerIds?.length);
     const shotBlocker = screenedShot && defenders.find(piece => piece.id === screenedShot.shotModel.blockerIds[0]);
     if (shotBlocker) facts.push(liveFact('shotTraffic', carrier.team,
-      `The ${role(carrier)} can shoot through traffic, but ${named(shotBlocker)} is in one of the shooting lanes.`,
+      `${named(shotBlocker)} screens a shooting lane; the ${role(carrier)} faces traffic.`,
       [carrier.id, shotBlocker.id], {pieceId: carrier.id, defenderId: shotBlocker.id}));
     if (wide(carrier) && depth(carrier.team, carrier) <= 8) {
       for (const {piece: receiver} of outlets) {
         if (central(receiver) && depth(carrier.team, receiver) <= 6 && Math.abs(receiver.x - carrier.x) >= 3) {
           facts.push(liveFact('crossSupport', carrier.team,
-            `${named(carrier)} has the ${role(receiver)} available centrally; the passing lane is open for a cross.`, [carrier.id, receiver.id],
+            `${named(carrier)} can cross to the ${role(receiver)} in the middle.`, [carrier.id, receiver.id],
             {pieceId: carrier.id, receiverId: receiver.id, supporterId: receiver.id}));
         }
       }
@@ -149,12 +149,14 @@ export function commentaryPositionFacts(state) {
       if (gain(carrier.team, carrier, target) < 0) continue;
       const blocker = laneBlocker(ctx, target);
       if (blocker) facts.push(liveFact('blockedLane', blocker.team,
-        `${named(blocker)} screens the ${role(carrier)}'s passing lane toward ${named(target)}.`, [carrier.id, blocker.id, target.id],
+        `${named(blocker)} screens the ${role(carrier)}'s passing lane to the ${role(target)}.`, [carrier.id, blocker.id, target.id],
         {pieceId: carrier.id, receiverId: target.id, defenderId: blocker.id}));
     }
     for (const {piece: receiver} of [...outlets].sort((a, b) => distance(carrier, a.piece) - distance(carrier, b.piece) || a.piece.id.localeCompare(b.piece.id))) {
       if (distance(carrier, receiver) <= 5) facts.push(liveFact('support', carrier.team,
-        `${named(receiver)} offers the ${role(carrier)} a short passing option ${carrier.type === 'N' ? 'with an L-shaped jumping pass' : `along a clear ${laneName(carrier, receiver)}`}.`, [carrier.id, receiver.id],
+        carrier.type === 'N'
+          ? `${named(receiver)} offers the ${role(carrier)} an L-shaped jumping pass.`
+          : `${named(receiver)} supports the ${role(carrier)} along an open ${laneName(carrier, receiver)}.`, [carrier.id, receiver.id],
         {pieceId: carrier.id, receiverId: receiver.id, supporterId: receiver.id}));
     }
     return facts;
@@ -194,8 +196,8 @@ export function commentaryTransitionFact(before, after, {passes = []} = {}) {
       if (isCross(team, action.from, action.to)) {
         const cutback = gain(team, action.from, action.to) < 0;
         return make(cutback ? 'cutback' : 'cross', receiver
-          ? `${named(actor)} ${cutback ? 'cut the ball back into the middle' : 'crossed into the middle'}, finding the ${role(receiver)} along an open ${laneName(action.from, action.to)}.`
-          : `${named(actor)} ${cutback ? 'cut the ball back into the middle' : 'crossed into the middle'}; the ball arrived loose, without an immediate receiver.`,
+          ? `${named(actor)} ${cutback ? 'cut back into the middle' : 'crossed into the middle'}, finding the ${role(receiver)}.`
+          : `${named(actor)} ${cutback ? 'cut back into the middle' : 'crossed into the middle'}; the ball stayed loose.`,
         [receiver?.id], {receiverId: receiver?.id || null});
       }
       if (!after.ball.carrierId && gain(team, action.from, action.to) >= 3 && nearbyLineDefenders(beforeCtx, action.from, action.to).length >= 2) {
@@ -203,16 +205,16 @@ export function commentaryTransitionFact(before, after, {passes = []} = {}) {
         const runner = beforeCtx.teammates.find(piece => beforeCtx.geometry.onside(piece, actorBefore)
           && !geometry.flagged(piece) && geometry.canMove(piece, after.ball)
           && legalMoves(after, piece.id).some(move => move.type === 'move' && move.x === after.ball.x && move.y === after.ball.y));
-        if (runner) return make('throughBall', `${named(actor)} slipped a through ball beyond the defenders; the ${role(runner)} had an onside route to collect.`,
+        if (runner) return make('throughBall', `Through ball from ${named(actor)}; the onside ${role(runner)} had a route.`,
           [runner.id], {runnerId: runner.id, urgent: true});
       }
       if (receiver && receiver.id !== actor.id && receiver.type !== 'K') {
         const prior = Array.isArray(passes) ? passes.filter(pass => pass && TEAMS.includes(pass.team) && Number.isInteger(pass.turn)
           && !(pass.turn === after.turn && pass.pieceId === actor.id && pass.receiverId === receiver.id)).at(-1) : null;
         if (prior?.team === team && prior.receiverId === actor.id && prior.turn <= after.turn && after.turn - prior.turn <= 6) {
-          if (prior.pieceId === receiver.id && prior.ran === true) return make('oneTwo', `${named(actor)} returned the pass to the ${role(receiver)} after its run; that completed the one-two combination.`,
+          if (prior.pieceId === receiver.id && prior.ran === true) return make('oneTwo', `${named(actor)} found the ${role(receiver)} after its run. One-two completed!`,
             [receiver.id], {receiverId: receiver.id});
-          if (prior.pieceId !== receiver.id) return make('linkUp', `${named(actor)} linked the passes together, receiving from one teammate before finding the ${role(receiver)} through a clear lane.`,
+          if (prior.pieceId !== receiver.id) return make('linkUp', `${named(actor)} linked play, receiving then finding the ${role(receiver)}.`,
             [prior.pieceId, receiver.id], {receiverId: receiver.id, previousPasserId: prior.pieceId});
         }
       }
@@ -225,14 +227,14 @@ export function commentaryTransitionFact(before, after, {passes = []} = {}) {
       const newControl = afterCtx.geometry.controls(actor, carrier, {bonus: false}) > 0;
       const oldControl = beforeCtx.geometry.controls(actorBefore, beforeCtx.carrier, {bonus: false}) > 0;
       if (newControl && !oldControl && distance(actor, carrier) < distance(actorBefore, beforeCtx.carrier)) {
-        return make('pressMove', `${named(actor)} closed down the ${role(carrier)}, moving closer and bringing the carrier inside its tackling pattern.`,
+        return make('pressMove', `${named(actor)} closed down the ${role(carrier)}, moving into tackling range.`,
           [carrier.id], {defenderId: actor.id, carrierId: carrier.id});
       }
       for (const target of afterCtx.teammates) {
         const oldTarget = before.pieces.find(piece => piece.id === target.id);
         if (oldTarget && beforeCtx.outlets.some(outlet => outlet.piece.id === oldTarget.id)
           && laneBlocker(afterCtx, target)?.id === actor.id) {
-          return make('screenMove', `${named(actor)} stepped across the passing lane, screening the ${role(carrier)}'s connection to the ${role(target)}.`,
+          return make('screenMove', `${named(actor)} cut the ${role(carrier)}'s passing lane to the ${role(target)}.`,
             [carrier.id, target.id], {defenderId: actor.id, carrierId: carrier.id, receiverId: target.id});
         }
       }
@@ -241,21 +243,21 @@ export function commentaryTransitionFact(before, after, {passes = []} = {}) {
     if (actor.team !== carrier.team) return null;
     if (actor.id !== carrier.id) {
       if (action.passRun === true && before.phase === 'passRun' && before.passRun?.pieceId === actor.id) {
-        return make('passRun', `${named(actor)} followed the pass with an off-ball run, while the ${role(carrier)} kept possession.`,
+        return make('passRun', `${named(actor)} ran after passing; the ${role(carrier)} kept possession.`,
           [carrier.id], {runnerId: actor.id, receiverId: carrier.id});
       }
       if (gain(team, action.from, action.to) >= 2 && afterCtx.geometry.onside(actor, carrier) && !afterCtx.geometry.flagged(actor)
         && afterCtx.outlets.some(outlet => outlet.piece.id === actor.id)) {
         const alreadyAvailable = beforeCtx.outlets.some(outlet => outlet.piece.id === actor.id);
         return make('run', alreadyAvailable
-          ? `${named(actor)} made a forward support run, staying available for an onside pass from the ${role(carrier)}.`
-          : `${named(actor)} made a forward run and opened an onside passing connection for the ${role(carrier)}.`,
+          ? `${named(actor)} ran forward, staying available for an onside pass.`
+          : `${named(actor)} ran forward, opening an onside outlet for the ${role(carrier)}.`,
           [carrier.id], {runnerId: actor.id, carrierId: carrier.id});
       }
       return null;
     }
     if (gain(team, action.from, action.to) >= 2 && !afterCtx.defenders.some(piece => afterCtx.geometry.controls(piece, carrier, {bonus: true}) > 0)) {
-      return make('dribbleSpace', `${named(actor)} carried the ball forward into space, outside the defenders' immediate tackling patterns.`, [], {carrierId: carrier.id});
+      return make('dribbleSpace', `${named(actor)} carried forward into space, beyond immediate tackling threats.`, [], {carrierId: carrier.id});
     }
     return null;
   } catch { return null; }

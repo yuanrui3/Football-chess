@@ -1,0 +1,4217 @@
+{
+  "feature": "Prepared whole-sentence Hugo technical match commentary",
+  "status": "complete",
+  "plannedClips": 145,
+  "completedClips": 145,
+  "buildStarted": "2026-10-19T23:45:18.219Z",
+  "updatedAt": "2026-10-19T23:50:28.513Z",
+  "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+  "scriptsSha256": "fef975f14c41fafadb5349933dca0755c8b1d128b6cf2418f8341a0b21df45a0",
+  "model": {
+    "repository": "https://huggingface.co/KittenML/kitten-tts-nano-0.8-int8",
+    "revision": "84781d74e29ee25217551556398b42f80593a813",
+    "original_file": "kitten_tts_nano_v0_8.onnx",
+    "local_file": "dist/vendor/kitten/kitten-nano-int8.onnx",
+    "license": "Apache-2.0",
+    "source_sha256": "f7b0afcbee92870b32b8e0276d855b954dc25470c9f051b376ac7eee537c76fc"
+  },
+  "voice": {
+    "name": "Hugo",
+    "gender": "male",
+    "source_file": "voices.npz",
+    "source_sha256": "8aa7cee235abb0739cb51e6559685f65a4dacd95568833d05699b1633f519b3f",
+    "key": "expr-voice-4-m",
+    "source_shape": [
+      400,
+      256
+    ],
+    "local_file": "dist/vendor/kitten/hugo.bin",
+    "derivation": "Extracted the exact expr-voice-4-m NumPy array into C-order little-endian float32 bytes; no modification of voice values.",
+    "speed_prior": 0.9
+  },
+  "frontend": {
+    "frontend_upstream": "https://github.com/KittenML/KittenTTS-web",
+    "frontend_commit": "c846fe92858f3447f4912226471f5a63983b3f94",
+    "dictionary_upstream": "https://github.com/espeak-ng/espeak-ng",
+    "dictionary_commit": "59eb19938f12e30881c81d86ce4a7de25414c9f4",
+    "transpiler": "typescript5.8.3",
+    "generated_factory": "Unmodified _L factory and generic bundle helpers extracted from upstream checked-in examples/html/assets/kittentts-web.js; ES module default export added."
+  },
+  "licenses": {
+    "model_voice_frontend": "Apache-2.0",
+    "english_rules_dictionary": "GPL-3.0; exact plaintext source bundled",
+    "onnxruntime": "MIT with third-party notices in vendor/paradee/licenses"
+  },
+  "runtimeFiles": {
+    "dist/paradee-worker.js": {
+      "bytes": 9931,
+      "sha256": "7b278aba28ef10050ca71b4aef172fca8b54dc28a5c533d3630c6283124cf42a"
+    },
+    "dist/vendor/kitten/TextCleaner.js": {
+      "bytes": 2472,
+      "sha256": "2ef135a9c00c3aacf327bbb974e36e1c7bec21f423ddc04a9b49c00d0e33eb82"
+    },
+    "dist/vendor/kitten/TextPreprocessor.js": {
+      "bytes": 9708,
+      "sha256": "ea9ea8999fd60e3617de49d0e3c037a57f0f71aeaa3e40921c14136dae773fd2"
+    },
+    "dist/vendor/kitten/cephonemizer-runtime.js": {
+      "bytes": 895490,
+      "sha256": "445387b4ba77e009a0adc0d4204587a36a2ac2f56419d6e565a588773b7a6d72"
+    },
+    "dist/vendor/kitten/en_rules": {
+      "bytes": 161691,
+      "sha256": "8e75e9341ea735cc514b29a7d3a95c6c241c1cc176ad43e5699b8f7f66ab3194"
+    },
+    "dist/vendor/kitten/en_list": {
+      "bytes": 102788,
+      "sha256": "24eb79018ed6253c10682096de672ce9265c1fe15c3e19e7f754d57a0fcd9790"
+    },
+    "dist/vendor/kitten/kitten-nano-int8.onnx": {
+      "bytes": 24369971,
+      "sha256": "f7b0afcbee92870b32b8e0276d855b954dc25470c9f051b376ac7eee537c76fc"
+    },
+    "dist/vendor/kitten/hugo.bin": {
+      "bytes": 409600,
+      "sha256": "1e036f1166acf869ba42d20a6f77ee13433f3959b44600af210e67b332cb53ca"
+    },
+    "dist/vendor/paradee/ort.wasm.min.mjs": {
+      "bytes": 49997,
+      "sha256": "d5a6d7bc8ee587648fb3742dde8c0094d17cbd3822a68bbec8ddfcd4f2adb88e"
+    },
+    "dist/vendor/paradee/ort-wasm-simd-threaded.mjs": {
+      "bytes": 24274,
+      "sha256": "5687566b1bc1c8cf628d76c2ddb16b2a3b81a7997273d4666564880495088e57"
+    },
+    "dist/vendor/paradee/ort-wasm-simd-threaded.wasm": {
+      "bytes": 12361745,
+      "sha256": "be0e129949062ad50290ef94683fac8be5bb6156f709e030b7a5f1661a2f6c17"
+    }
+  },
+  "synthesis": {
+    "backend": "Deployed onnxruntime-web 1.24.3 WASM",
+    "threadsPerWorker": 1,
+    "maxConcurrentWorkers": 4,
+    "externalServices": false,
+    "voiceCloning": false,
+    "fragmentSplicing": false,
+    "completeSentences": true,
+    "normalSpeed": 0.936,
+    "urgentSpeed": 0.99
+  },
+  "encoding": {
+    "ffmpeg": "ffmpeg version 6.1.1-3ubuntu5 Copyright (c) 2000-2023 the FFmpeg developers",
+    "format": "MP3",
+    "channels": 1,
+    "sampleRate": 24000,
+    "bitrate": "64k",
+    "filter": "loudnorm=I=-16:TP=-1.5:LRA=11"
+  },
+  "scriptsSource": {
+    "technical": "Original project-authored factual scripts in this generator",
+    "routine": "Exact project-authored trend texts from dist/commentary-clips.js",
+    "generator": "scripts/build-hugo-commentary-library.mjs",
+    "generatorSha256": "6f7475f46bff5fc14f6233cbb43d5ccc7bd73f8e03dfe7bd93f982b1ce44fd92"
+  },
+  "selection": "Current fact IDs select piece-role sentences; no team names or IDs are spliced into recordings. Shot/result/goal calls remain outside this library.",
+  "workerInitialization": [
+    {
+      "worker": 1,
+      "initializationMs": 7889.803366999999
+    },
+    {
+      "worker": 2,
+      "initializationMs": 7948.884993
+    },
+    {
+      "worker": 3,
+      "initializationMs": 8360.523587
+    },
+    {
+      "worker": 4,
+      "initializationMs": 8472.079153
+    },
+    {
+      "worker": 1,
+      "initializationMs": 11365.726001,
+      "passStarted": "2026-10-19T23:50:06.209Z"
+    },
+    {
+      "worker": 2,
+      "initializationMs": 10512.167556,
+      "passStarted": "2026-10-19T23:50:06.209Z"
+    },
+    {
+      "worker": 3,
+      "initializationMs": 9445.584188,
+      "passStarted": "2026-10-19T23:50:06.209Z"
+    },
+    {
+      "worker": 4,
+      "initializationMs": 8710.502217,
+      "passStarted": "2026-10-19T23:50:06.209Z"
+    }
+  ],
+  "clips": [
+    {
+      "key": "hugo_enable",
+      "text": "Hugo here. Let’s follow the tactics!",
+      "delivery": "urgent",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "747304e208d205c461dff715557f80c4490af8e71aeb1bea231c809ea173f2f3",
+      "bytes": 18861,
+      "durationMs": 2328,
+      "decodedAudio": {
+        "samples": 54592,
+        "rms": 0.09149517555613501,
+        "peak": 0.8019170761108398,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 54592,
+        "rms": 0.10662130377511134,
+        "peak": 0.9301304221153259,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4142.674939,
+      "modelDurationMs": 2275,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/hugo_enable.mp3",
+      "ready": true
+    },
+    {
+      "key": "hugo_test",
+      "text": "Hugo here! The queen has support, and the rook goes wide.",
+      "delivery": "urgent",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "d899f49be61a63da78bb823ab5b2d5ad9dce9e45d5317e016defed463dc6f689",
+      "bytes": 24621,
+      "durationMs": 3048,
+      "decodedAudio": {
+        "samples": 71593,
+        "rms": 0.11837220617769524,
+        "peak": 0.7968260049819946,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 71593,
+        "rms": 0.11137107620190356,
+        "peak": 0.7469934821128845,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4520.654186,
+      "modelDurationMs": 2983,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/hugo_test.mp3",
+      "ready": true
+    },
+    {
+      "key": "hugo_demo",
+      "text": "Commentary sample. The bishop supports the queen along an open diagonal.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "9632db66eb3309056b6621421658926fb951f2e1c691578d68d5ee36d8c915bc",
+      "bytes": 38829,
+      "durationMs": 4824,
+      "decodedAudio": {
+        "samples": 114381,
+        "rms": 0.15518961305942564,
+        "peak": 0.8113523721694946,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 114381,
+        "rms": 0.10569969660537805,
+        "peak": 0.7763391137123108,
+        "nonFinite": 0
+      },
+      "inferenceMs": 8533.359442,
+      "modelDurationMs": 4766,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/hugo_demo.mp3",
+      "ready": true
+    },
+    {
+      "key": "support_queen_vertical",
+      "text": "The queen has support along an open vertical file.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "746bb5e1bc18793ae82bf0688c74da4799120afe7990bcf3fbe80d01b354c571",
+      "bytes": 24813,
+      "durationMs": 3072,
+      "decodedAudio": {
+        "samples": 72200,
+        "rms": 0.1492099954713393,
+        "peak": 0.8049499988555908,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 72200,
+        "rms": 0.09802102676132854,
+        "peak": 0.7473523616790771,
+        "nonFinite": 0
+      },
+      "inferenceMs": 3941.0407780000005,
+      "modelDurationMs": 3008,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/support_queen_vertical.mp3",
+      "ready": true
+    },
+    {
+      "key": "support_queen_horizontal",
+      "text": "The queen has support along an open horizontal rank.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "2401bf32c2586441e9e523e92211e9c0ea36c346c062ca659db72654a9709610",
+      "bytes": 25581,
+      "durationMs": 3168,
+      "decodedAudio": {
+        "samples": 74358,
+        "rms": 0.1475186936437953,
+        "peak": 0.8037492632865906,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 74358,
+        "rms": 0.10285424353101086,
+        "peak": 0.8286250829696655,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4104.11607,
+      "modelDurationMs": 3098,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/support_queen_horizontal.mp3",
+      "ready": true
+    },
+    {
+      "key": "support_queen_diagonal",
+      "text": "The queen has support along an open diagonal.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "8418a580468931bd53db640a757f1cdf8fd94f88e24091a824295af4cdebeac0",
+      "bytes": 25005,
+      "durationMs": 3096,
+      "decodedAudio": {
+        "samples": 72707,
+        "rms": 0.14952576389188182,
+        "peak": 0.8133814334869385,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 72707,
+        "rms": 0.10912247428523093,
+        "peak": 0.8262315988540649,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4129.505133999999,
+      "modelDurationMs": 3029,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/support_queen_diagonal.mp3",
+      "ready": true
+    },
+    {
+      "key": "one_on_one_queen",
+      "text": "The queen is one on one with the keeper!",
+      "delivery": "urgent",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "bcf0dd7ebd5826f83c7b59a4f1fe18febb43daf3a7cda377f918d0ab92bff6d7",
+      "bytes": 18669,
+      "durationMs": 2304,
+      "decodedAudio": {
+        "samples": 54102,
+        "rms": 0.09739606655479452,
+        "peak": 0.7986227869987488,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 54102,
+        "rms": 0.10767257231235691,
+        "peak": 0.883780837059021,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4098.967984000001,
+      "modelDurationMs": 2254,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/one_on_one_queen.mp3",
+      "ready": true
+    },
+    {
+      "key": "cross_support_queen",
+      "text": "The queen can cross to a teammate in the middle.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "1066e1a7be6225721b630226992cf09c742ec0f4f268ab64e932ed813192ace2",
+      "bytes": 22893,
+      "durationMs": 2832,
+      "decodedAudio": {
+        "samples": 66360,
+        "rms": 0.08702072727223421,
+        "peak": 0.8045128583908081,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 66360,
+        "rms": 0.09864711582235285,
+        "peak": 0.905363142490387,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4166.250855999999,
+      "modelDurationMs": 2765,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/cross_support_queen.mp3",
+      "ready": true
+    },
+    {
+      "key": "cross_queen",
+      "text": "A cross into the middle, finding the queen.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "2a7f772c546c4a3d080177a58c196bd6971e135dc278a7f6765ffc2d96eddac4",
+      "bytes": 23085,
+      "durationMs": 2856,
+      "decodedAudio": {
+        "samples": 67082,
+        "rms": 0.08747850895658427,
+        "peak": 0.8013463616371155,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 67082,
+        "rms": 0.10540502268272395,
+        "peak": 0.962856113910675,
+        "nonFinite": 0
+      },
+      "inferenceMs": 5817.795895000003,
+      "modelDurationMs": 2795,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/cross_queen.mp3",
+      "ready": true
+    },
+    {
+      "key": "cutback_queen",
+      "text": "A cutback into the middle, finding the queen.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "64467fb8db421b173337485a59bb5e7ec2edd7f255fc98185fca60cf8f2a1c9a",
+      "bytes": 23661,
+      "durationMs": 2928,
+      "decodedAudio": {
+        "samples": 69057,
+        "rms": 0.0758274307667067,
+        "peak": 0.7988314628601074,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 69057,
+        "rms": 0.0943764918017463,
+        "peak": 0.9889925718307495,
+        "nonFinite": 0
+      },
+      "inferenceMs": 5796.267270999997,
+      "modelDurationMs": 2877,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/cutback_queen.mp3",
+      "ready": true
+    },
+    {
+      "key": "through_ball_queen",
+      "text": "A through ball! The onside queen had a route to collect.",
+      "delivery": "urgent",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "d413bfaf371f509cab5846cd7c1ea6935470c3639ab51b97cd536b56c332d25c",
+      "bytes": 25773,
+      "durationMs": 3192,
+      "decodedAudio": {
+        "samples": 74927,
+        "rms": 0.14116837212755978,
+        "peak": 0.8075155019760132,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 74920,
+        "rms": 0.10712905567498464,
+        "peak": 0.8266932368278503,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4563.025529000002,
+      "modelDurationMs": 3122,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/through_ball_queen.mp3",
+      "ready": true
+    },
+    {
+      "key": "one_two_queen",
+      "text": "A one-two! The queen received the return after its run.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "49cf46635141b9d5a2e17a74fce285c48157d8be02684555c9d70b7cf6445ba2",
+      "bytes": 27693,
+      "durationMs": 3432,
+      "decodedAudio": {
+        "samples": 80825,
+        "rms": 0.14956451293199552,
+        "peak": 0.8063205480575562,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 80825,
+        "rms": 0.0957828320237088,
+        "peak": 0.7958694696426392,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4794.817251999997,
+      "modelDurationMs": 3368,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/one_two_queen.mp3",
+      "ready": true
+    },
+    {
+      "key": "link_up_queen",
+      "text": "The queen linked the passes, receiving and moving it on.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "dcb37a688e6cc27200ed2b8996447fa3a2cde77b8da8e6595620d7f057ce34cb",
+      "bytes": 25773,
+      "durationMs": 3192,
+      "decodedAudio": {
+        "samples": 75140,
+        "rms": 0.1625720265526648,
+        "peak": 0.8099969625473022,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 75140,
+        "rms": 0.08788426890093241,
+        "peak": 0.8378582000732422,
+        "nonFinite": 0
+      },
+      "inferenceMs": 5020.3843750000015,
+      "modelDurationMs": 3131,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/link_up_queen.mp3",
+      "ready": true
+    },
+    {
+      "key": "run_queen",
+      "text": "The queen made a forward run and is available for a pass.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "9cc36c981c03ec92d0bea6a35ae7a3d4e8d291b52a02472e707ac2839cbf190e",
+      "bytes": 26541,
+      "durationMs": 3288,
+      "decodedAudio": {
+        "samples": 77760,
+        "rms": 0.16061566272968603,
+        "peak": 0.8129905462265015,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 77760,
+        "rms": 0.11660787228992373,
+        "peak": 0.9044450521469116,
+        "nonFinite": 0
+      },
+      "inferenceMs": 5050.504383999998,
+      "modelDurationMs": 3240,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/run_queen.mp3",
+      "ready": true
+    },
+    {
+      "key": "dribble_space_queen",
+      "text": "The queen carried forward into space, beyond immediate tackling threats.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "8aad5cdbb2f618f876aa8b3923eb6e771af695f3c06054be5950c0a0cc096623",
+      "bytes": 34029,
+      "durationMs": 4224,
+      "decodedAudio": {
+        "samples": 99769,
+        "rms": 0.14644051601621694,
+        "peak": 0.8094020485877991,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 99769,
+        "rms": 0.10382814291810542,
+        "peak": 0.7593430876731873,
+        "nonFinite": 0
+      },
+      "inferenceMs": 9159.326640999996,
+      "modelDurationMs": 4157,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/dribble_space_queen.mp3",
+      "ready": true
+    },
+    {
+      "key": "pass_run_queen_queen",
+      "text": "The queen ran after passing; the queen kept possession.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "ac5583a93fe0e971439ddbb9fade8d8f51cc345972ffc06c8bbc56e826aef331",
+      "bytes": 27885,
+      "durationMs": 3456,
+      "decodedAudio": {
+        "samples": 81552,
+        "rms": 0.15719078952300816,
+        "peak": 0.8096541166305542,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 81552,
+        "rms": 0.09626758011177045,
+        "peak": 0.7637355327606201,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4522.276014000003,
+      "modelDurationMs": 3398,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/pass_run_queen_queen.mp3",
+      "ready": true
+    },
+    {
+      "key": "pass_run_queen_rook",
+      "text": "The queen ran after passing; the rook kept possession.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "0e4c7538aeefa7fe06d9333dad76a0b2e862be5a63c9ff8eee61451dd7b36f61",
+      "bytes": 29997,
+      "durationMs": 3720,
+      "decodedAudio": {
+        "samples": 87600,
+        "rms": 0.14748640702630064,
+        "peak": 0.8163203597068787,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 87600,
+        "rms": 0.09749824024012438,
+        "peak": 0.8901221752166748,
+        "nonFinite": 0
+      },
+      "inferenceMs": 5199.863605999999,
+      "modelDurationMs": 3650,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/pass_run_queen_rook.mp3",
+      "ready": true
+    },
+    {
+      "key": "pass_run_queen_bishop",
+      "text": "The queen ran after passing; the bishop kept possession.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "a06c95adec7980a346b61eedac9007947f66cfe9a2ddad0dde73d6a0014cdcb4",
+      "bytes": 28461,
+      "durationMs": 3528,
+      "decodedAudio": {
+        "samples": 83334,
+        "rms": 0.15210969430804017,
+        "peak": 0.811686635017395,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 83334,
+        "rms": 0.09579113085845017,
+        "peak": 0.7741846442222595,
+        "nonFinite": 0
+      },
+      "inferenceMs": 5719.770639999995,
+      "modelDurationMs": 3472,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/pass_run_queen_bishop.mp3",
+      "ready": true
+    },
+    {
+      "key": "pass_run_queen_knight",
+      "text": "The queen ran after passing; the knight kept possession.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "5e393eb5dfae802fc1ef9b61f73a2f9d3175c9b45c959008db1daf769f00dfba",
+      "bytes": 28653,
+      "durationMs": 3552,
+      "decodedAudio": {
+        "samples": 84000,
+        "rms": 0.1508970285047238,
+        "peak": 0.8244549036026001,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 84000,
+        "rms": 0.10512133779056852,
+        "peak": 0.8793053030967712,
+        "nonFinite": 0
+      },
+      "inferenceMs": 6163.704155000007,
+      "modelDurationMs": 3500,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/pass_run_queen_knight.mp3",
+      "ready": true
+    },
+    {
+      "key": "pass_run_queen_pawn",
+      "text": "The queen ran after passing; the pawn kept possession.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "ad3356be21e20ce86b2dde3ab6c58c6e0554389380d24670a01dcf8206735b9e",
+      "bytes": 29421,
+      "durationMs": 3648,
+      "decodedAudio": {
+        "samples": 86400,
+        "rms": 0.14965369221837382,
+        "peak": 0.8149769306182861,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 86400,
+        "rms": 0.1030667046790214,
+        "peak": 0.8625598549842834,
+        "nonFinite": 0
+      },
+      "inferenceMs": 6507.504363,
+      "modelDurationMs": 3600,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/pass_run_queen_pawn.mp3",
+      "ready": true
+    },
+    {
+      "key": "support_rook_vertical",
+      "text": "The rook has support along an open vertical file.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "611ea217f6c37a8674927362e1500d4f21b6be44e1d0f63f46da1dbce223d443",
+      "bytes": 25389,
+      "durationMs": 3144,
+      "decodedAudio": {
+        "samples": 73916,
+        "rms": 0.1567580885222488,
+        "peak": 0.8071833848953247,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 73916,
+        "rms": 0.10851241602782119,
+        "peak": 0.7852569818496704,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4250.221647000006,
+      "modelDurationMs": 3080,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/support_rook_vertical.mp3",
+      "ready": true
+    },
+    {
+      "key": "support_rook_horizontal",
+      "text": "The rook has support along an open horizontal rank.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "afbbaf3fbef54e06b3265452f64579e955b7d1502c27a3ba82065128c28d6803",
+      "bytes": 24621,
+      "durationMs": 3048,
+      "decodedAudio": {
+        "samples": 71471,
+        "rms": 0.11473830038833085,
+        "peak": 0.7960566282272339,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 71431,
+        "rms": 0.10450450805369556,
+        "peak": 0.7281867265701294,
+        "nonFinite": 0
+      },
+      "inferenceMs": 3966.2000719999996,
+      "modelDurationMs": 2976,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/support_rook_horizontal.mp3",
+      "ready": true
+    },
+    {
+      "key": "one_on_one_rook",
+      "text": "The rook is one on one with the keeper!",
+      "delivery": "urgent",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "d50c1db46a03538c6e9926124226c1a20f3ed86a2dde89532a9d51dfa073e768",
+      "bytes": 19437,
+      "durationMs": 2400,
+      "decodedAudio": {
+        "samples": 56310,
+        "rms": 0.10579824739082572,
+        "peak": 0.8016427159309387,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 56310,
+        "rms": 0.10771355777963677,
+        "peak": 0.812752902507782,
+        "nonFinite": 0
+      },
+      "inferenceMs": 3220.978543999998,
+      "modelDurationMs": 2346,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/one_on_one_rook.mp3",
+      "ready": true
+    },
+    {
+      "key": "cross_support_rook",
+      "text": "The rook can cross to a teammate in the middle.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "a06676032da34b13c19441f09f5b38c5714f7ed7c5a864db6bfaa20745cb4c76",
+      "bytes": 23085,
+      "durationMs": 2856,
+      "decodedAudio": {
+        "samples": 67023,
+        "rms": 0.0897705625125601,
+        "peak": 0.8007370829582214,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 67023,
+        "rms": 0.09820329104508674,
+        "peak": 0.8765208125114441,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4387.512841000003,
+      "modelDurationMs": 2793,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/cross_support_rook.mp3",
+      "ready": true
+    },
+    {
+      "key": "cross_rook",
+      "text": "A cross into the middle, finding the rook.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "9ae496b91e2da3b2ceb2706fe28d0688602d081379d0cafc032eac4031c65d51",
+      "bytes": 22893,
+      "durationMs": 2832,
+      "decodedAudio": {
+        "samples": 66350,
+        "rms": 0.09507944227193928,
+        "peak": 0.8023134469985962,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 66350,
+        "rms": 0.1081741772852205,
+        "peak": 0.9085457921028137,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4079.0233739999967,
+      "modelDurationMs": 2765,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/cross_rook.mp3",
+      "ready": true
+    },
+    {
+      "key": "cutback_rook",
+      "text": "A cutback into the middle, finding the rook.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "a5aa1d4e5b9f4e7db0fdcb4dc35e99b4e546c6a9cf5d2aba6f4ab9cd7615fce9",
+      "bytes": 23085,
+      "durationMs": 2856,
+      "decodedAudio": {
+        "samples": 66951,
+        "rms": 0.09113100558812781,
+        "peak": 0.7917954921722412,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 66951,
+        "rms": 0.09658732049305002,
+        "peak": 0.843188464641571,
+        "nonFinite": 0
+      },
+      "inferenceMs": 3433.9598229999974,
+      "modelDurationMs": 2790,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/cutback_rook.mp3",
+      "ready": true
+    },
+    {
+      "key": "through_ball_rook",
+      "text": "A through ball! The onside rook had a route to collect.",
+      "delivery": "urgent",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "e7dd137a0a2505deaeec5ec8bd531c457667cafc3a180af0eb9f28dedf8bdc53",
+      "bytes": 25389,
+      "durationMs": 3144,
+      "decodedAudio": {
+        "samples": 73939,
+        "rms": 0.13748340481933524,
+        "peak": 0.815653920173645,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 73939,
+        "rms": 0.11213352982480948,
+        "peak": 0.912048876285553,
+        "nonFinite": 0
+      },
+      "inferenceMs": 5368.084508,
+      "modelDurationMs": 3081,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/through_ball_rook.mp3",
+      "ready": true
+    },
+    {
+      "key": "one_two_rook",
+      "text": "A one-two! The rook received the return after its run.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "34cfdd3fa1fe91eb4d6f4e6f237c24b4dbe6cf5e9127f9dda50f61231a4e869f",
+      "bytes": 27117,
+      "durationMs": 3360,
+      "decodedAudio": {
+        "samples": 79301,
+        "rms": 0.14334034175255964,
+        "peak": 0.8133504986763,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 79301,
+        "rms": 0.09484902465561902,
+        "peak": 0.8525899052619934,
+        "nonFinite": 0
+      },
+      "inferenceMs": 5147.644919000006,
+      "modelDurationMs": 3304,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/one_two_rook.mp3",
+      "ready": true
+    },
+    {
+      "key": "link_up_rook",
+      "text": "The rook linked the passes, receiving and moving it on.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "ee25b69f62945c82d5337ff3ade0cb8ee6c0c14b224bc93904a9d814c7bef57c",
+      "bytes": 27117,
+      "durationMs": 3360,
+      "decodedAudio": {
+        "samples": 79304,
+        "rms": 0.15279402950099183,
+        "peak": 0.8187461495399475,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 79304,
+        "rms": 0.09329394401518062,
+        "peak": 0.8442014455795288,
+        "nonFinite": 0
+      },
+      "inferenceMs": 5945.610717000003,
+      "modelDurationMs": 3304,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/link_up_rook.mp3",
+      "ready": true
+    },
+    {
+      "key": "run_rook",
+      "text": "The rook made a forward run and is available for a pass.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "54e5db14d4d593754e4fd12ab51449ec80d441a2187f773970176d15f98f29e1",
+      "bytes": 29613,
+      "durationMs": 3672,
+      "decodedAudio": {
+        "samples": 86905,
+        "rms": 0.16614709682826023,
+        "peak": 0.8055588006973267,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 86905,
+        "rms": 0.11354833026858105,
+        "peak": 0.7811015844345093,
+        "nonFinite": 0
+      },
+      "inferenceMs": 5489.011559999999,
+      "modelDurationMs": 3621,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/run_rook.mp3",
+      "ready": true
+    },
+    {
+      "key": "dribble_space_rook",
+      "text": "The rook carried forward into space, beyond immediate tackling threats.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "98f87f1c3772da25190250587950c90738a2813c681570406225fec077142994",
+      "bytes": 34029,
+      "durationMs": 4224,
+      "decodedAudio": {
+        "samples": 99720,
+        "rms": 0.14635193968536064,
+        "peak": 0.8093534708023071,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 99720,
+        "rms": 0.11027460020692033,
+        "peak": 0.7857098579406738,
+        "nonFinite": 0
+      },
+      "inferenceMs": 5760.823144000002,
+      "modelDurationMs": 4155,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/dribble_space_rook.mp3",
+      "ready": true
+    },
+    {
+      "key": "pass_run_rook_queen",
+      "text": "The rook ran after passing; the queen kept possession.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "9d7c9db43074a18385168f4f2913f806ab4af409b94b47a25dd0bdbf1b6556c1",
+      "bytes": 29997,
+      "durationMs": 3720,
+      "decodedAudio": {
+        "samples": 87600,
+        "rms": 0.15035869023918508,
+        "peak": 0.8389328718185425,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 87600,
+        "rms": 0.09400854651898466,
+        "peak": 0.718950629234314,
+        "nonFinite": 0
+      },
+      "inferenceMs": 7395.793497999999,
+      "modelDurationMs": 3650,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/pass_run_rook_queen.mp3",
+      "ready": true
+    },
+    {
+      "key": "pass_run_rook_rook",
+      "text": "The rook ran after passing; the rook kept possession.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "4f017302bb9043eaa5ffb11160fd44efe47605ee0599a6fa6a189d4c0a97a74b",
+      "bytes": 25389,
+      "durationMs": 3144,
+      "decodedAudio": {
+        "samples": 73831,
+        "rms": 0.14403146253285273,
+        "peak": 0.8112205266952515,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 73831,
+        "rms": 0.09928446626487565,
+        "peak": 0.7774125933647156,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4071.7540140000056,
+      "modelDurationMs": 3076,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/pass_run_rook_rook.mp3",
+      "ready": true
+    },
+    {
+      "key": "pass_run_rook_bishop",
+      "text": "The rook ran after passing; the bishop kept possession.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "50c30ad231c905360c72501df50772d26b60d4e965f0988d303ca1b22eec116c",
+      "bytes": 31149,
+      "durationMs": 3864,
+      "decodedAudio": {
+        "samples": 91200,
+        "rms": 0.13838324797759538,
+        "peak": 0.8125326037406921,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 91200,
+        "rms": 0.09458507154794986,
+        "peak": 0.7826386094093323,
+        "nonFinite": 0
+      },
+      "inferenceMs": 7145.563349999997,
+      "modelDurationMs": 3800,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/pass_run_rook_bishop.mp3",
+      "ready": true
+    },
+    {
+      "key": "pass_run_rook_knight",
+      "text": "The rook ran after passing; the knight kept possession.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "ceb4364fae6c5824cd90f0159174bd2b2d5f68d5f2e656d4510c62c0b2c7d002",
+      "bytes": 27117,
+      "durationMs": 3360,
+      "decodedAudio": {
+        "samples": 79227,
+        "rms": 0.1443357479944683,
+        "peak": 0.8180193901062012,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 79227,
+        "rms": 0.10068970160709013,
+        "peak": 0.8008867502212524,
+        "nonFinite": 0
+      },
+      "inferenceMs": 6602.581593000003,
+      "modelDurationMs": 3301,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/pass_run_rook_knight.mp3",
+      "ready": true
+    },
+    {
+      "key": "pass_run_rook_pawn",
+      "text": "The rook ran after passing; the pawn kept possession.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "552da7f21e5c64e6933ec53c708f9e1fbe1732af850fc66c01197ce67e85c93f",
+      "bytes": 27501,
+      "durationMs": 3408,
+      "decodedAudio": {
+        "samples": 80394,
+        "rms": 0.1411870585815804,
+        "peak": 0.815575122833252,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 80394,
+        "rms": 0.09787111717344972,
+        "peak": 0.808712363243103,
+        "nonFinite": 0
+      },
+      "inferenceMs": 5595.599662999994,
+      "modelDurationMs": 3350,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/pass_run_rook_pawn.mp3",
+      "ready": true
+    },
+    {
+      "key": "support_bishop_diagonal",
+      "text": "The bishop has support along an open diagonal.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "755f9f241727c5b0bde4556a0059819f0163c889ef09f45da84d22da10110d47",
+      "bytes": 25581,
+      "durationMs": 3168,
+      "decodedAudio": {
+        "samples": 74453,
+        "rms": 0.1473803777377927,
+        "peak": 0.8129003047943115,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 74453,
+        "rms": 0.10923766237281467,
+        "peak": 0.7885252237319946,
+        "nonFinite": 0
+      },
+      "inferenceMs": 6324.823533999996,
+      "modelDurationMs": 3102,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/support_bishop_diagonal.mp3",
+      "ready": true
+    },
+    {
+      "key": "one_on_one_bishop",
+      "text": "The bishop is one on one with the keeper!",
+      "delivery": "urgent",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "9990bf4c1aabf9abbbf4a23572c5a084a8446bff52f05787aeed3ccf94282c62",
+      "bytes": 20205,
+      "durationMs": 2496,
+      "decodedAudio": {
+        "samples": 58223,
+        "rms": 0.0996047064983539,
+        "peak": 0.7965290546417236,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 58211,
+        "rms": 0.10332443275167595,
+        "peak": 0.8266817927360535,
+        "nonFinite": 0
+      },
+      "inferenceMs": 5540.250839,
+      "modelDurationMs": 2425,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/one_on_one_bishop.mp3",
+      "ready": true
+    },
+    {
+      "key": "cross_support_bishop",
+      "text": "The bishop can cross to a teammate in the middle.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "497fdf95795dacd6a92f87e236df4ad2816a0af2dcb0169c96977abfda26ffa9",
+      "bytes": 23469,
+      "durationMs": 2904,
+      "decodedAudio": {
+        "samples": 68015,
+        "rms": 0.08315525591910371,
+        "peak": 0.7987713813781738,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 67991,
+        "rms": 0.09876170163705031,
+        "peak": 0.9486265778541565,
+        "nonFinite": 0
+      },
+      "inferenceMs": 6265.192838999996,
+      "modelDurationMs": 2833,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/cross_support_bishop.mp3",
+      "ready": true
+    },
+    {
+      "key": "cross_bishop",
+      "text": "A cross into the middle, finding the bishop.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "eaa09ea58fd3afd5200044a0c3903d8c38cb92bba6816d86733f81f616de2e2a",
+      "bytes": 22893,
+      "durationMs": 2832,
+      "decodedAudio": {
+        "samples": 66627,
+        "rms": 0.10517505640749865,
+        "peak": 0.797267735004425,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 66627,
+        "rms": 0.11154474646990989,
+        "peak": 0.8469681739807129,
+        "nonFinite": 0
+      },
+      "inferenceMs": 5353.383344999995,
+      "modelDurationMs": 2776,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/cross_bishop.mp3",
+      "ready": true
+    },
+    {
+      "key": "cutback_bishop",
+      "text": "A cutback into the middle, finding the bishop.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "f121d0ff774f9e72453cf3fa9fafe97a1d821e71186b57869ca865d92b8ef1c6",
+      "bytes": 23277,
+      "durationMs": 2880,
+      "decodedAudio": {
+        "samples": 67800,
+        "rms": 0.09810497086236843,
+        "peak": 0.7989932298660278,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 67800,
+        "rms": 0.10101377474351408,
+        "peak": 0.8225814700126648,
+        "nonFinite": 0
+      },
+      "inferenceMs": 6355.681719999993,
+      "modelDurationMs": 2825,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/cutback_bishop.mp3",
+      "ready": true
+    },
+    {
+      "key": "through_ball_bishop",
+      "text": "A through ball! The onside bishop had a route to collect.",
+      "delivery": "urgent",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "76d3e3ca07c374f24d9a45ca79493a27762fd236a836332c8498da1d4f4fdf91",
+      "bytes": 25773,
+      "durationMs": 3192,
+      "decodedAudio": {
+        "samples": 75199,
+        "rms": 0.13666617545233967,
+        "peak": 0.8106706738471985,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 75199,
+        "rms": 0.10646375919125926,
+        "peak": 0.8565550446510315,
+        "nonFinite": 0
+      },
+      "inferenceMs": 3779.8746590000083,
+      "modelDurationMs": 3133,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/through_ball_bishop.mp3",
+      "ready": true
+    },
+    {
+      "key": "one_two_bishop",
+      "text": "A one-two! The bishop received the return after its run.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "b19ff7587a6db686b5596e3a6555caf792164eed1aabd527520ccde9f6c07389",
+      "bytes": 27693,
+      "durationMs": 3432,
+      "decodedAudio": {
+        "samples": 80687,
+        "rms": 0.14182359909203535,
+        "peak": 0.8049620389938354,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 80645,
+        "rms": 0.09806552633347296,
+        "peak": 0.7832735776901245,
+        "nonFinite": 0
+      },
+      "inferenceMs": 5518.753284999999,
+      "modelDurationMs": 3360,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/one_two_bishop.mp3",
+      "ready": true
+    },
+    {
+      "key": "link_up_bishop",
+      "text": "The bishop linked the passes, receiving and moving it on.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "9e5abeb915db2504dfacb3799793ad7d8b3272b87535b9869b654daf21a941cd",
+      "bytes": 27117,
+      "durationMs": 3360,
+      "decodedAudio": {
+        "samples": 79332,
+        "rms": 0.15440095968152634,
+        "peak": 0.8102594614028931,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 79332,
+        "rms": 0.08537517636174083,
+        "peak": 0.7989434599876404,
+        "nonFinite": 0
+      },
+      "inferenceMs": 6615.748395000002,
+      "modelDurationMs": 3306,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/link_up_bishop.mp3",
+      "ready": true
+    },
+    {
+      "key": "run_bishop",
+      "text": "The bishop made a forward run and is available for a pass.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "ece27806533e622acc1f90394d088260ac7d281bd31da82add58226ff6fe671f",
+      "bytes": 28269,
+      "durationMs": 3504,
+      "decodedAudio": {
+        "samples": 82538,
+        "rms": 0.16226247666103122,
+        "peak": 0.8073006272315979,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 82538,
+        "rms": 0.11394996343906402,
+        "peak": 0.8654705882072449,
+        "nonFinite": 0
+      },
+      "inferenceMs": 9201.491839,
+      "modelDurationMs": 3439,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/run_bishop.mp3",
+      "ready": true
+    },
+    {
+      "key": "dribble_space_bishop",
+      "text": "The bishop carried forward into space, beyond immediate tackling threats.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "2d58268ac80924c39845a43d406f44521506bcda91913df0ba716ee758f45761",
+      "bytes": 34797,
+      "durationMs": 4320,
+      "decodedAudio": {
+        "samples": 102185,
+        "rms": 0.14886521936305033,
+        "peak": 0.8035888075828552,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 102185,
+        "rms": 0.10444594984793251,
+        "peak": 0.7887269258499146,
+        "nonFinite": 0
+      },
+      "inferenceMs": 8771.255443000002,
+      "modelDurationMs": 4258,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/dribble_space_bishop.mp3",
+      "ready": true
+    },
+    {
+      "key": "pass_run_bishop_queen",
+      "text": "The bishop ran after passing; the queen kept possession.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "39e5263268bfcd0d2b51fe9448325bcb6e5bf491f6a2f3b38e03363daece0bd5",
+      "bytes": 28461,
+      "durationMs": 3528,
+      "decodedAudio": {
+        "samples": 83321,
+        "rms": 0.1488502030279893,
+        "peak": 0.8339289426803589,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 83321,
+        "rms": 0.09497207480002695,
+        "peak": 0.8146955370903015,
+        "nonFinite": 0
+      },
+      "inferenceMs": 5183.988732999991,
+      "modelDurationMs": 3472,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/pass_run_bishop_queen.mp3",
+      "ready": true
+    },
+    {
+      "key": "pass_run_bishop_rook",
+      "text": "The bishop ran after passing; the rook kept possession.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "aa2e7476048dd9e663e5722d6ecc71e509f57db1b640459d74ca7c0fdf50faa9",
+      "bytes": 30957,
+      "durationMs": 3840,
+      "decodedAudio": {
+        "samples": 90600,
+        "rms": 0.13602914442064265,
+        "peak": 0.8164450526237488,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 90600,
+        "rms": 0.09427514108520736,
+        "peak": 0.8099128603935242,
+        "nonFinite": 0
+      },
+      "inferenceMs": 5068.054655999993,
+      "modelDurationMs": 3775,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/pass_run_bishop_rook.mp3",
+      "ready": true
+    },
+    {
+      "key": "pass_run_bishop_bishop",
+      "text": "The bishop ran after passing; the bishop kept possession.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "920c0891b529e904b3dc7d7ec192b1efa3b9d08f0b9da3ce028dc4ec3700b0f2",
+      "bytes": 29037,
+      "durationMs": 3600,
+      "decodedAudio": {
+        "samples": 85224,
+        "rms": 0.14131215050089047,
+        "peak": 0.8109272718429565,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 85224,
+        "rms": 0.09441746867648435,
+        "peak": 0.7492913603782654,
+        "nonFinite": 0
+      },
+      "inferenceMs": 7774.429162,
+      "modelDurationMs": 3551,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/pass_run_bishop_bishop.mp3",
+      "ready": true
+    },
+    {
+      "key": "pass_run_bishop_knight",
+      "text": "The bishop ran after passing; the knight kept possession.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "2189d41be4c2a45057ea99ef9b3b7bdaccc35bebf3ad6078f3efba4ab358fbfd",
+      "bytes": 29997,
+      "durationMs": 3720,
+      "decodedAudio": {
+        "samples": 87600,
+        "rms": 0.14270020785853654,
+        "peak": 0.8224297761917114,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 87600,
+        "rms": 0.10246645853863168,
+        "peak": 0.825172483921051,
+        "nonFinite": 0
+      },
+      "inferenceMs": 5295.997878999988,
+      "modelDurationMs": 3650,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/pass_run_bishop_knight.mp3",
+      "ready": true
+    },
+    {
+      "key": "pass_run_bishop_pawn",
+      "text": "The bishop ran after passing; the pawn kept possession.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "fe2a7fa4b5274e5f5807bca6f7b0f9cb69c9dd1e65abef6beafaefac00116367",
+      "bytes": 30381,
+      "durationMs": 3768,
+      "decodedAudio": {
+        "samples": 88800,
+        "rms": 0.1389885743305902,
+        "peak": 0.8093980550765991,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 88800,
+        "rms": 0.10060711521811173,
+        "peak": 0.7966777682304382,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4961.349838000009,
+      "modelDurationMs": 3700,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/pass_run_bishop_pawn.mp3",
+      "ready": true
+    },
+    {
+      "key": "support_knight_jump",
+      "text": "The knight has an L-shaped jumping pass to a teammate.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "8e75f098e7114c3528411e5d008d8ba62fa9a765d291b0f430561edde8f30bc6",
+      "bytes": 25965,
+      "durationMs": 3216,
+      "decodedAudio": {
+        "samples": 75931,
+        "rms": 0.14563493491891627,
+        "peak": 0.8117167949676514,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 75931,
+        "rms": 0.10288065909740458,
+        "peak": 0.9098115563392639,
+        "nonFinite": 0
+      },
+      "inferenceMs": 7021.6468659999955,
+      "modelDurationMs": 3164,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/support_knight_jump.mp3",
+      "ready": true
+    },
+    {
+      "key": "one_on_one_knight",
+      "text": "The knight is one on one with the keeper!",
+      "delivery": "urgent",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "3e2a0a4e5cad07b0b9756762f5cc6c83fd489c088e0a07292a918b90c3f95f99",
+      "bytes": 22893,
+      "durationMs": 2832,
+      "decodedAudio": {
+        "samples": 66658,
+        "rms": 0.11249497031437926,
+        "peak": 0.7849175930023193,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 66658,
+        "rms": 0.10491526390336998,
+        "peak": 0.7395652532577515,
+        "nonFinite": 0
+      },
+      "inferenceMs": 6344.792089999988,
+      "modelDurationMs": 2777,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/one_on_one_knight.mp3",
+      "ready": true
+    },
+    {
+      "key": "cross_support_knight",
+      "text": "The knight can cross to a teammate in the middle.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "01addb654898009639192a395c59cc31451eb17897ba43fad96dac73225650af",
+      "bytes": 22509,
+      "durationMs": 2784,
+      "decodedAudio": {
+        "samples": 65517,
+        "rms": 0.08466524667846997,
+        "peak": 0.7923051118850708,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 65517,
+        "rms": 0.10392175854403082,
+        "peak": 0.9813357591629028,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4058.069611999992,
+      "modelDurationMs": 2730,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/cross_support_knight.mp3",
+      "ready": true
+    },
+    {
+      "key": "cross_knight",
+      "text": "A cross into the middle, finding the knight.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "43739dc42cb57c60318aa6ec7874176074a1c3ea56dcc3dde596364c89fcabcc",
+      "bytes": 20205,
+      "durationMs": 2496,
+      "decodedAudio": {
+        "samples": 58223,
+        "rms": 0.09192009659689876,
+        "peak": 0.7990335822105408,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 58200,
+        "rms": 0.11347563653132615,
+        "peak": 0.9845262765884399,
+        "nonFinite": 0
+      },
+      "inferenceMs": 3671.0962480000017,
+      "modelDurationMs": 2425,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/cross_knight.mp3",
+      "ready": true
+    },
+    {
+      "key": "cutback_knight",
+      "text": "A cutback into the middle, finding the knight.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "1951efe00e2c60e93e4a90007007194c73a180eefb451906cde3ae97f7723a3e",
+      "bytes": 21357,
+      "durationMs": 2640,
+      "decodedAudio": {
+        "samples": 62001,
+        "rms": 0.08897202304462079,
+        "peak": 0.7946302890777588,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 62001,
+        "rms": 0.09626259608448885,
+        "peak": 0.8600013256072998,
+        "nonFinite": 0
+      },
+      "inferenceMs": 8111.002278,
+      "modelDurationMs": 2583,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/cutback_knight.mp3",
+      "ready": true
+    },
+    {
+      "key": "through_ball_knight",
+      "text": "A through ball! The onside knight had a route to collect.",
+      "delivery": "urgent",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "3eb10f6aa663422f14e5624ca21a30d18d24cec977697073cd321ccfab8de035",
+      "bytes": 25389,
+      "durationMs": 3144,
+      "decodedAudio": {
+        "samples": 73988,
+        "rms": 0.1383942355213868,
+        "peak": 0.8131656646728516,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 73988,
+        "rms": 0.1143871335746968,
+        "peak": 0.9265091419219971,
+        "nonFinite": 0
+      },
+      "inferenceMs": 8372.612089000002,
+      "modelDurationMs": 3083,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/through_ball_knight.mp3",
+      "ready": true
+    },
+    {
+      "key": "one_two_knight",
+      "text": "A one-two! The knight received the return after its run.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "2ad327c30d6ffdea5e0ce081792aa8443abf6a68f73f930599a099f4cd06011e",
+      "bytes": 27693,
+      "durationMs": 3432,
+      "decodedAudio": {
+        "samples": 80825,
+        "rms": 0.14143498100659146,
+        "peak": 0.8202580213546753,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 80825,
+        "rms": 0.09764984622452152,
+        "peak": 0.8373533487319946,
+        "nonFinite": 0
+      },
+      "inferenceMs": 5322.063783000005,
+      "modelDurationMs": 3368,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/one_two_knight.mp3",
+      "ready": true
+    },
+    {
+      "key": "link_up_knight",
+      "text": "The knight linked the passes, receiving and moving it on.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "4ecee446422661406a114d664b1485b3048df8ca5a2923daa7078f93cec47b01",
+      "bytes": 26349,
+      "durationMs": 3264,
+      "decodedAudio": {
+        "samples": 76904,
+        "rms": 0.1463176200966728,
+        "peak": 0.8109896183013916,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 76904,
+        "rms": 0.09319391324086906,
+        "peak": 0.8513402342796326,
+        "nonFinite": 0
+      },
+      "inferenceMs": 5131.378778000013,
+      "modelDurationMs": 3204,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/link_up_knight.mp3",
+      "ready": true
+    },
+    {
+      "key": "run_knight",
+      "text": "The knight made a forward run and is available for a pass.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "be9c165182c347b62edf7e321a6307e0c3f17d5f6a0ec289227319014fbb25d9",
+      "bytes": 25389,
+      "durationMs": 3144,
+      "decodedAudio": {
+        "samples": 73988,
+        "rms": 0.1592224532772505,
+        "peak": 0.806512176990509,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 73988,
+        "rms": 0.10959446312865818,
+        "peak": 0.7584198117256165,
+        "nonFinite": 0
+      },
+      "inferenceMs": 7633.593049000001,
+      "modelDurationMs": 3083,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/run_knight.mp3",
+      "ready": true
+    },
+    {
+      "key": "dribble_space_knight",
+      "text": "The knight carried forward into space, beyond immediate tackling threats.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "6fe73eda4a042896cb32a7aeb9d5a53051bca76774fbd4de4e7e68d0a0b9d2cb",
+      "bytes": 33261,
+      "durationMs": 4128,
+      "decodedAudio": {
+        "samples": 97920,
+        "rms": 0.14516517738127105,
+        "peak": 0.8173202276229858,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 97920,
+        "rms": 0.1075022570592618,
+        "peak": 0.7645578384399414,
+        "nonFinite": 0
+      },
+      "inferenceMs": 6757.016044000004,
+      "modelDurationMs": 4080,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/dribble_space_knight.mp3",
+      "ready": true
+    },
+    {
+      "key": "pass_run_knight_queen",
+      "text": "The knight ran after passing; the queen kept possession.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "352ae31586f84d2ffdba2056dd64c015b63edbc8f18871069be318f4780f6181",
+      "bytes": 29421,
+      "durationMs": 3648,
+      "decodedAudio": {
+        "samples": 86400,
+        "rms": 0.15142171923256956,
+        "peak": 0.8210519552230835,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 86400,
+        "rms": 0.10642787575397063,
+        "peak": 0.793368399143219,
+        "nonFinite": 0
+      },
+      "inferenceMs": 9275.16303099999,
+      "modelDurationMs": 3600,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/pass_run_knight_queen.mp3",
+      "ready": true
+    },
+    {
+      "key": "pass_run_knight_rook",
+      "text": "The knight ran after passing; the rook kept possession.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "df1f3589bfd88675e51a7e7776ab8bf708a2aeb574116a9be408e9fd4bc85c04",
+      "bytes": 26349,
+      "durationMs": 3264,
+      "decodedAudio": {
+        "samples": 76754,
+        "rms": 0.13922295830249576,
+        "peak": 0.8416069746017456,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 76754,
+        "rms": 0.10356642182788887,
+        "peak": 0.8091415166854858,
+        "nonFinite": 0
+      },
+      "inferenceMs": 8246.234624000004,
+      "modelDurationMs": 3198,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/pass_run_knight_rook.mp3",
+      "ready": true
+    },
+    {
+      "key": "pass_run_knight_bishop",
+      "text": "The knight ran after passing; the bishop kept possession.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "55de899eab2856ef39f7d5f6f31a2bb48d4cf38b0eed4d66c2473596b8f5754a",
+      "bytes": 29805,
+      "durationMs": 3696,
+      "decodedAudio": {
+        "samples": 87023,
+        "rms": 0.14922616199633698,
+        "peak": 0.814249575138092,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 87000,
+        "rms": 0.1059868676221042,
+        "peak": 0.796119749546051,
+        "nonFinite": 0
+      },
+      "inferenceMs": 5222.204134,
+      "modelDurationMs": 3625,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/pass_run_knight_bishop.mp3",
+      "ready": true
+    },
+    {
+      "key": "pass_run_knight_knight",
+      "text": "The knight ran after passing; the knight kept possession.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "32bf4714cd89fade637e924e486471a15b73c7cc63a9606352e18209e5573c70",
+      "bytes": 30189,
+      "durationMs": 3744,
+      "decodedAudio": {
+        "samples": 88200,
+        "rms": 0.14361306540587918,
+        "peak": 0.8253042697906494,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 88200,
+        "rms": 0.10081798173431918,
+        "peak": 0.7908527851104736,
+        "nonFinite": 0
+      },
+      "inferenceMs": 5383.03344900001,
+      "modelDurationMs": 3675,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/pass_run_knight_knight.mp3",
+      "ready": true
+    },
+    {
+      "key": "pass_run_knight_pawn",
+      "text": "The knight ran after passing; the pawn kept possession.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "f84136ac86cbfe0c11597d39f8ada323b66d956fffde640ce1f478f88124b6ea",
+      "bytes": 30189,
+      "durationMs": 3744,
+      "decodedAudio": {
+        "samples": 88200,
+        "rms": 0.14218083281034952,
+        "peak": 0.8238325119018555,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 88200,
+        "rms": 0.09659282608726384,
+        "peak": 0.7936800718307495,
+        "nonFinite": 0
+      },
+      "inferenceMs": 9443.705906999996,
+      "modelDurationMs": 3675,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/pass_run_knight_pawn.mp3",
+      "ready": true
+    },
+    {
+      "key": "support_pawn_vertical",
+      "text": "The pawn has support along an open vertical file.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "6440eb198895a564028945d8fb5ca56e4196521eae5a9f5976e272b0fc1897e8",
+      "bytes": 25005,
+      "durationMs": 3096,
+      "decodedAudio": {
+        "samples": 72893,
+        "rms": 0.149992273627828,
+        "peak": 0.8112252950668335,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 72893,
+        "rms": 0.11002682704385645,
+        "peak": 0.816430926322937,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4164.700589,
+      "modelDurationMs": 3037,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/support_pawn_vertical.mp3",
+      "ready": true
+    },
+    {
+      "key": "support_pawn_horizontal",
+      "text": "The pawn has support along an open horizontal rank.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "f225a1bb52fb984324c910942c228cb825cc6c7e3d26f1cfc5e6eeea0cf4c716",
+      "bytes": 30957,
+      "durationMs": 3840,
+      "decodedAudio": {
+        "samples": 90573,
+        "rms": 0.15293671617150917,
+        "peak": 0.8347947597503662,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 90573,
+        "rms": 0.11550779897033607,
+        "peak": 0.8169057369232178,
+        "nonFinite": 0
+      },
+      "inferenceMs": 9140.301378999997,
+      "modelDurationMs": 3774,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/support_pawn_horizontal.mp3",
+      "ready": true
+    },
+    {
+      "key": "one_on_one_pawn",
+      "text": "The pawn is one on one with the keeper!",
+      "delivery": "urgent",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "3fdf19ad1d6a7fb9571e752be9654f19f173c89557a18543749c1f2b904612ff",
+      "bytes": 22701,
+      "durationMs": 2808,
+      "decodedAudio": {
+        "samples": 66000,
+        "rms": 0.10855308060330178,
+        "peak": 0.8043936491012573,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 66000,
+        "rms": 0.10471131377981541,
+        "peak": 0.7708826065063477,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4091.4133800000127,
+      "modelDurationMs": 2750,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/one_on_one_pawn.mp3",
+      "ready": true
+    },
+    {
+      "key": "cross_support_pawn",
+      "text": "The pawn can cross to a teammate in the middle.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "388d818087ce86f0705f0af79c456a7fc86b4249b6d43ae72e70a1898a0df7f3",
+      "bytes": 22509,
+      "durationMs": 2784,
+      "decodedAudio": {
+        "samples": 65536,
+        "rms": 0.08341684449176244,
+        "peak": 0.7948712110519409,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 65536,
+        "rms": 0.10136082483772509,
+        "peak": 0.9711737632751465,
+        "nonFinite": 0
+      },
+      "inferenceMs": 5202.970046999995,
+      "modelDurationMs": 2731,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/cross_support_pawn.mp3",
+      "ready": true
+    },
+    {
+      "key": "cross_pawn",
+      "text": "A cross into the middle, finding the pawn.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "fc5865a0f35552025867ef14bf0035a04079b1052c5dd3ff8c3ece1b8cfd2385",
+      "bytes": 21741,
+      "durationMs": 2688,
+      "decodedAudio": {
+        "samples": 63119,
+        "rms": 0.09164549922104269,
+        "peak": 0.7975589632987976,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 63119,
+        "rms": 0.11220118494479059,
+        "peak": 0.9739522337913513,
+        "nonFinite": 0
+      },
+      "inferenceMs": 5497.338216000004,
+      "modelDurationMs": 2630,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/cross_pawn.mp3",
+      "ready": true
+    },
+    {
+      "key": "cutback_pawn",
+      "text": "A cutback into the middle, finding the pawn.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "b6d7cb66212c0aad9066229a8e48c2dcf748f2fb983dda4a26f24d94682b52ff",
+      "bytes": 23469,
+      "durationMs": 2904,
+      "decodedAudio": {
+        "samples": 68015,
+        "rms": 0.09295560955497402,
+        "peak": 0.8033193349838257,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 67984,
+        "rms": 0.09514212345271346,
+        "peak": 0.8165222406387329,
+        "nonFinite": 0
+      },
+      "inferenceMs": 6530.686178000004,
+      "modelDurationMs": 2833,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/cutback_pawn.mp3",
+      "ready": true
+    },
+    {
+      "key": "through_ball_pawn",
+      "text": "A through ball! The onside pawn had a route to collect.",
+      "delivery": "urgent",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "dbcbe4d62f7c9b9bb9182961327b7a277fa7860add11112f90adc189796d4d56",
+      "bytes": 25197,
+      "durationMs": 3120,
+      "decodedAudio": {
+        "samples": 73261,
+        "rms": 0.13944021787144678,
+        "peak": 0.8152642250061035,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 73261,
+        "rms": 0.11272806653128577,
+        "peak": 0.8959187865257263,
+        "nonFinite": 0
+      },
+      "inferenceMs": 6422.988499999992,
+      "modelDurationMs": 3053,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/through_ball_pawn.mp3",
+      "ready": true
+    },
+    {
+      "key": "one_two_pawn",
+      "text": "A one-two! The pawn received the return after its run.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "3971f37d68476b5b16e793266049440b91b5d797e254d0aacb52ad5f73725d8f",
+      "bytes": 27885,
+      "durationMs": 3456,
+      "decodedAudio": {
+        "samples": 81425,
+        "rms": 0.1367955014634256,
+        "peak": 0.8115873336791992,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 81425,
+        "rms": 0.09682052175651154,
+        "peak": 0.8767743110656738,
+        "nonFinite": 0
+      },
+      "inferenceMs": 6804.598776999992,
+      "modelDurationMs": 3393,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/one_two_pawn.mp3",
+      "ready": true
+    },
+    {
+      "key": "link_up_pawn",
+      "text": "The pawn linked the passes, receiving and moving it on.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "b754d292464e7ea6386f1addbfe559fa3e0f71460597ed95d327a11cf372ee5f",
+      "bytes": 26733,
+      "durationMs": 3312,
+      "decodedAudio": {
+        "samples": 78103,
+        "rms": 0.14974452173946962,
+        "peak": 0.8141231536865234,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 78103,
+        "rms": 0.09408753923592683,
+        "peak": 0.9000052213668823,
+        "nonFinite": 0
+      },
+      "inferenceMs": 6334.163015000027,
+      "modelDurationMs": 3254,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/link_up_pawn.mp3",
+      "ready": true
+    },
+    {
+      "key": "run_pawn",
+      "text": "The pawn made a forward run and is available for a pass.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "eb59b57186dcb7e2ae34ff0442b25c72696d8221c3dc1a9d95297a3b1732a9bd",
+      "bytes": 25197,
+      "durationMs": 3120,
+      "decodedAudio": {
+        "samples": 73461,
+        "rms": 0.15482845103603984,
+        "peak": 0.8060380220413208,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 73461,
+        "rms": 0.10941704550921995,
+        "peak": 0.767829418182373,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4975.815047999997,
+      "modelDurationMs": 3061,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/run_pawn.mp3",
+      "ready": true
+    },
+    {
+      "key": "dribble_space_pawn",
+      "text": "The pawn carried forward into space, beyond immediate tackling threats.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "8a0b06d9eacdfd2dd1fd495e7d023ea30e96be5ab3cddaf3568d0cb3abbbdc3f",
+      "bytes": 33453,
+      "durationMs": 4152,
+      "decodedAudio": {
+        "samples": 97967,
+        "rms": 0.14701434237011754,
+        "peak": 0.8219084739685059,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 97928,
+        "rms": 0.10616692791692556,
+        "peak": 0.7801938056945801,
+        "nonFinite": 0
+      },
+      "inferenceMs": 6559.074456000002,
+      "modelDurationMs": 4080,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/dribble_space_pawn.mp3",
+      "ready": true
+    },
+    {
+      "key": "pass_run_pawn_queen",
+      "text": "The pawn ran after passing; the queen kept possession.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "dc03a82d86f767a8a1d8f71eb18601ded241606f83b351ec150604398bdd2273",
+      "bytes": 29037,
+      "durationMs": 3600,
+      "decodedAudio": {
+        "samples": 85200,
+        "rms": 0.15014884918418414,
+        "peak": 0.8198356032371521,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 85200,
+        "rms": 0.10668723479441258,
+        "peak": 0.7728836536407471,
+        "nonFinite": 0
+      },
+      "inferenceMs": 7174.984671000013,
+      "modelDurationMs": 3550,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/pass_run_pawn_queen.mp3",
+      "ready": true
+    },
+    {
+      "key": "pass_run_pawn_rook",
+      "text": "The pawn ran after passing; the rook kept possession.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "61fd3b88a6e4bb337042d4b1cde8b90e0da19fb11663acfb1e6a345f006f9abc",
+      "bytes": 26925,
+      "durationMs": 3336,
+      "decodedAudio": {
+        "samples": 78586,
+        "rms": 0.14311350351819482,
+        "peak": 0.8079787492752075,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 78586,
+        "rms": 0.10426042697713571,
+        "peak": 0.7952374219894409,
+        "nonFinite": 0
+      },
+      "inferenceMs": 3903.276259999984,
+      "modelDurationMs": 3274,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/pass_run_pawn_rook.mp3",
+      "ready": true
+    },
+    {
+      "key": "pass_run_pawn_bishop",
+      "text": "The pawn ran after passing; the bishop kept possession.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "a3ffffb9dc101e2906f814adbbc9a1429f01ad23c9330054d35bf16e49f7b9f3",
+      "bytes": 29421,
+      "durationMs": 3648,
+      "decodedAudio": {
+        "samples": 86400,
+        "rms": 0.14602132843522558,
+        "peak": 0.8121223449707031,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 86400,
+        "rms": 0.10831498175608331,
+        "peak": 0.8031647801399231,
+        "nonFinite": 0
+      },
+      "inferenceMs": 5805.81951099998,
+      "modelDurationMs": 3600,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/pass_run_pawn_bishop.mp3",
+      "ready": true
+    },
+    {
+      "key": "pass_run_pawn_knight",
+      "text": "The pawn ran after passing; the knight kept possession.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "6675fabae38de1435a597fbd6f57a1360b7f0f5b9ae8fdbce086bbf86c491507",
+      "bytes": 29037,
+      "durationMs": 3600,
+      "decodedAudio": {
+        "samples": 85200,
+        "rms": 0.14262413301590687,
+        "peak": 0.8217265605926514,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 85200,
+        "rms": 0.1014846131527377,
+        "peak": 0.8024903535842896,
+        "nonFinite": 0
+      },
+      "inferenceMs": 6273.706734999985,
+      "modelDurationMs": 3550,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/pass_run_pawn_knight.mp3",
+      "ready": true
+    },
+    {
+      "key": "pass_run_pawn_pawn",
+      "text": "The pawn ran after passing; the pawn kept possession.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "e21d42f129834cfea120a3868b15c9634526b9ec2510def5823e7b4463a50c1c",
+      "bytes": 29997,
+      "durationMs": 3720,
+      "decodedAudio": {
+        "samples": 87600,
+        "rms": 0.14028226613900874,
+        "peak": 0.8121623396873474,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 87600,
+        "rms": 0.09947291858289387,
+        "peak": 0.771450400352478,
+        "nonFinite": 0
+      },
+      "inferenceMs": 5005.513290999981,
+      "modelDurationMs": 3650,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/pass_run_pawn_pawn.mp3",
+      "ready": true
+    },
+    {
+      "key": "pressing_queen",
+      "text": "The queen has the ball carrier under pressure!",
+      "delivery": "urgent",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "a444cf95951a1f134d01438ec2523eb998450fa1d45519960acf5e39e588e3fe",
+      "bytes": 22125,
+      "durationMs": 2736,
+      "decodedAudio": {
+        "samples": 63983,
+        "rms": 0.08988244026565663,
+        "peak": 0.8014956116676331,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 63947,
+        "rms": 0.10093207924755708,
+        "peak": 0.8955535292625427,
+        "nonFinite": 0
+      },
+      "inferenceMs": 2864.486001000012,
+      "modelDurationMs": 2664,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/pressing_queen.mp3",
+      "ready": true
+    },
+    {
+      "key": "blocked_lane_queen",
+      "text": "The queen screens the passing lane to a teammate.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "7832daf7183e858a650393def8d8174caa37c2c40023fa9e25bfd0ed968786f5",
+      "bytes": 22317,
+      "durationMs": 2760,
+      "decodedAudio": {
+        "samples": 64828,
+        "rms": 0.09032320670408589,
+        "peak": 0.8006929159164429,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 64828,
+        "rms": 0.09285268981764855,
+        "peak": 0.8201037645339966,
+        "nonFinite": 0
+      },
+      "inferenceMs": 5544.785403999995,
+      "modelDurationMs": 2701,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/blocked_lane_queen.mp3",
+      "ready": true
+    },
+    {
+      "key": "shot_traffic_queen",
+      "text": "The queen screens a shooting lane. The attack faces traffic.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "512f09a2bbf8ed74d081c32d45f7145795b3344980b2d2a06eb6970056348879",
+      "bytes": 29421,
+      "durationMs": 3648,
+      "decodedAudio": {
+        "samples": 86222,
+        "rms": 0.1658647788740683,
+        "peak": 0.8090001344680786,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 86222,
+        "rms": 0.09648563410388683,
+        "peak": 0.8490519523620605,
+        "nonFinite": 0
+      },
+      "inferenceMs": 5431.987699999998,
+      "modelDurationMs": 3593,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/shot_traffic_queen.mp3",
+      "ready": true
+    },
+    {
+      "key": "press_move_queen",
+      "text": "The queen closed down the carrier, moving into tackling range.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "8722ca7bf9438d4da2e9c793ec39073fcf82ca35b03453ac9cb54c2babd22bd6",
+      "bytes": 29613,
+      "durationMs": 3672,
+      "decodedAudio": {
+        "samples": 86665,
+        "rms": 0.15324159094565667,
+        "peak": 0.8128476142883301,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 86665,
+        "rms": 0.10414468772870353,
+        "peak": 0.7579901814460754,
+        "nonFinite": 0
+      },
+      "inferenceMs": 6669.616420999984,
+      "modelDurationMs": 3611,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/press_move_queen.mp3",
+      "ready": true
+    },
+    {
+      "key": "screen_move_queen",
+      "text": "The queen cut the ball carrier’s passing lane to a teammate.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "039b747747fb5a3b2118086dfc126a01a8341b02dbe3bcf9c6b66342f0ed52a1",
+      "bytes": 26733,
+      "durationMs": 3312,
+      "decodedAudio": {
+        "samples": 78128,
+        "rms": 0.1483154193518725,
+        "peak": 0.8107585906982422,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 78128,
+        "rms": 0.09864390778233649,
+        "peak": 0.9027766585350037,
+        "nonFinite": 0
+      },
+      "inferenceMs": 5577.247849000007,
+      "modelDurationMs": 3255,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/screen_move_queen.mp3",
+      "ready": true
+    },
+    {
+      "key": "pressing_rook",
+      "text": "The rook has the ball carrier under pressure!",
+      "delivery": "urgent",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "f42c1abc19691d49a44fb3dbf0533ebaa0313c1c060194ba64542378c4f35711",
+      "bytes": 20589,
+      "durationMs": 2544,
+      "decodedAudio": {
+        "samples": 59742,
+        "rms": 0.09516270268424355,
+        "peak": 0.7917904853820801,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 59742,
+        "rms": 0.10985635192469258,
+        "peak": 0.9207670092582703,
+        "nonFinite": 0
+      },
+      "inferenceMs": 3843.684878,
+      "modelDurationMs": 2489,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/pressing_rook.mp3",
+      "ready": true
+    },
+    {
+      "key": "blocked_lane_rook",
+      "text": "The rook screens the passing lane to a teammate.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "15ec51f00d5836979fc7bcf3613e23aba9ef9865fc03b2016c1481ed25f545ed",
+      "bytes": 26157,
+      "durationMs": 3240,
+      "decodedAudio": {
+        "samples": 76200,
+        "rms": 0.15207054374621637,
+        "peak": 0.8027713298797607,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 76200,
+        "rms": 0.09734557541227148,
+        "peak": 0.815800130367279,
+        "nonFinite": 0
+      },
+      "inferenceMs": 5970.716374000011,
+      "modelDurationMs": 3175,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/blocked_lane_rook.mp3",
+      "ready": true
+    },
+    {
+      "key": "shot_traffic_rook",
+      "text": "The rook screens a shooting lane. The attack faces traffic.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "2ced5dd74a2a01f7c58fb03a9816c7fc335d6d658d1b82394ceaed3134eebeb6",
+      "bytes": 33261,
+      "durationMs": 4128,
+      "decodedAudio": {
+        "samples": 97800,
+        "rms": 0.15420474995383876,
+        "peak": 0.8127076625823975,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 97800,
+        "rms": 0.09854957252452812,
+        "peak": 0.9292849898338318,
+        "nonFinite": 0
+      },
+      "inferenceMs": 7407.599623000016,
+      "modelDurationMs": 4075,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/shot_traffic_rook.mp3",
+      "ready": true
+    },
+    {
+      "key": "press_move_rook",
+      "text": "The rook closed down the carrier, moving into tackling range.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "5b8b998616284056b8bfb2f1d1b749f3d0fd3de5762aa5ac6c1a10b1cdadc9c2",
+      "bytes": 28845,
+      "durationMs": 3576,
+      "decodedAudio": {
+        "samples": 84249,
+        "rms": 0.1523103474564134,
+        "peak": 0.8143712282180786,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 84249,
+        "rms": 0.10740863948886786,
+        "peak": 0.7473098039627075,
+        "nonFinite": 0
+      },
+      "inferenceMs": 5259.995885000011,
+      "modelDurationMs": 3510,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/press_move_rook.mp3",
+      "ready": true
+    },
+    {
+      "key": "screen_move_rook",
+      "text": "The rook cut the ball carrier’s passing lane to a teammate.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "c4a1e4cd921728db8053c59785538e9306c84270619261881cf22c0d5509440d",
+      "bytes": 25197,
+      "durationMs": 3120,
+      "decodedAudio": {
+        "samples": 73379,
+        "rms": 0.14998712574633827,
+        "peak": 0.8052883744239807,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 73379,
+        "rms": 0.10311268036606111,
+        "peak": 0.8413479924201965,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4698.031892999978,
+      "modelDurationMs": 3057,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/screen_move_rook.mp3",
+      "ready": true
+    },
+    {
+      "key": "pressing_bishop",
+      "text": "The bishop has the ball carrier under pressure!",
+      "delivery": "urgent",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "0f3c974d17729074bac5088624bfe4276630ebad060f2f47b7453a06152262ad",
+      "bytes": 22893,
+      "durationMs": 2832,
+      "decodedAudio": {
+        "samples": 66294,
+        "rms": 0.09129765559154432,
+        "peak": 0.7932519316673279,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 66294,
+        "rms": 0.09713891124712634,
+        "peak": 0.8468283414840698,
+        "nonFinite": 0
+      },
+      "inferenceMs": 5493.468826999975,
+      "modelDurationMs": 2762,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/pressing_bishop.mp3",
+      "ready": true
+    },
+    {
+      "key": "blocked_lane_bishop",
+      "text": "The bishop screens the passing lane to a teammate.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "06627aa11153e11e1d9d5003b19810011d0174f78e8c4205fc04589826b0c4fc",
+      "bytes": 23085,
+      "durationMs": 2856,
+      "decodedAudio": {
+        "samples": 67262,
+        "rms": 0.09333221865187472,
+        "peak": 0.7964522242546082,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 67262,
+        "rms": 0.09278303765680787,
+        "peak": 0.7905558943748474,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4301.557721999998,
+      "modelDurationMs": 2803,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/blocked_lane_bishop.mp3",
+      "ready": true
+    },
+    {
+      "key": "shot_traffic_bishop",
+      "text": "The bishop screens a shooting lane. The attack faces traffic.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "eaddb57141f2b782ae7e67105bfa86b1aa2b994d289769bb98b7888380b5af26",
+      "bytes": 29805,
+      "durationMs": 3696,
+      "decodedAudio": {
+        "samples": 87423,
+        "rms": 0.15835817929603382,
+        "peak": 0.8067688941955566,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 87423,
+        "rms": 0.09806822621879643,
+        "peak": 0.8988499045372009,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4868.584402999986,
+      "modelDurationMs": 3643,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/shot_traffic_bishop.mp3",
+      "ready": true
+    },
+    {
+      "key": "press_move_bishop",
+      "text": "The bishop closed down the carrier, moving into tackling range.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "e66262386e00334d6b3a10ced925b3a5f67195e192e0a201fd6ffb464f09d833",
+      "bytes": 30381,
+      "durationMs": 3768,
+      "decodedAudio": {
+        "samples": 89055,
+        "rms": 0.15651351741296976,
+        "peak": 0.816463828086853,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 89055,
+        "rms": 0.10217534139596095,
+        "peak": 0.7091706991195679,
+        "nonFinite": 0
+      },
+      "inferenceMs": 7414.753486000001,
+      "modelDurationMs": 3711,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/press_move_bishop.mp3",
+      "ready": true
+    },
+    {
+      "key": "screen_move_bishop",
+      "text": "The bishop cut the ball carrier’s passing lane to a teammate.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "d5a64b70925ab339b3036017fe0e741d73dd1f1ba9b7288fb352ed4bfa320bce",
+      "bytes": 27309,
+      "durationMs": 3384,
+      "decodedAudio": {
+        "samples": 79928,
+        "rms": 0.14695105751963283,
+        "peak": 0.809475302696228,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 79928,
+        "rms": 0.09832111729776861,
+        "peak": 0.8397555351257324,
+        "nonFinite": 0
+      },
+      "inferenceMs": 6851.148058999999,
+      "modelDurationMs": 3330,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/screen_move_bishop.mp3",
+      "ready": true
+    },
+    {
+      "key": "pressing_knight",
+      "text": "The knight has the ball carrier under pressure!",
+      "delivery": "urgent",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "1223b715682fb2db952b6dc16cf9773b6b29c72a56920e8ea3cc6956f671e29b",
+      "bytes": 21165,
+      "durationMs": 2616,
+      "decodedAudio": {
+        "samples": 61103,
+        "rms": 0.09943941733621593,
+        "peak": 0.7902308702468872,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 61083,
+        "rms": 0.11053772235717793,
+        "peak": 0.8868921995162964,
+        "nonFinite": 0
+      },
+      "inferenceMs": 3654.079752999998,
+      "modelDurationMs": 2545,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/pressing_knight.mp3",
+      "ready": true
+    },
+    {
+      "key": "blocked_lane_knight",
+      "text": "The knight screens the passing lane to a teammate.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "89c0a2db675eaddb1c6651e7650014811fe8bd6b83d022f964f4928834b29baa",
+      "bytes": 22893,
+      "durationMs": 2832,
+      "decodedAudio": {
+        "samples": 66610,
+        "rms": 0.10068540830025614,
+        "peak": 0.8104685544967651,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 66610,
+        "rms": 0.09449965614470193,
+        "peak": 0.7474155426025391,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4804.8740729999845,
+      "modelDurationMs": 2775,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/blocked_lane_knight.mp3",
+      "ready": true
+    },
+    {
+      "key": "shot_traffic_knight",
+      "text": "The knight screens a shooting lane. The attack faces traffic.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "5d7d3ed29678229a76f36af2a2f76cb98274e781309382cb89d584305505b8cb",
+      "bytes": 27117,
+      "durationMs": 3360,
+      "decodedAudio": {
+        "samples": 78972,
+        "rms": 0.15669079535791042,
+        "peak": 0.8233197927474976,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 78972,
+        "rms": 0.0979341317445897,
+        "peak": 0.7950873374938965,
+        "nonFinite": 0
+      },
+      "inferenceMs": 6056.203065999987,
+      "modelDurationMs": 3291,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/shot_traffic_knight.mp3",
+      "ready": true
+    },
+    {
+      "key": "press_move_knight",
+      "text": "The knight closed down the carrier, moving into tackling range.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "05b0fcdc2b52ff07647db174bd026f6a9d2bd64ed49e2b7dc794b04246def35e",
+      "bytes": 28077,
+      "durationMs": 3480,
+      "decodedAudio": {
+        "samples": 81865,
+        "rms": 0.1533493282118827,
+        "peak": 0.8135703802108765,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 81865,
+        "rms": 0.11334389054355352,
+        "peak": 0.8121327757835388,
+        "nonFinite": 0
+      },
+      "inferenceMs": 6358.472691000003,
+      "modelDurationMs": 3411,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/press_move_knight.mp3",
+      "ready": true
+    },
+    {
+      "key": "screen_move_knight",
+      "text": "The knight cut the ball carrier’s passing lane to a teammate.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "845be0498904ab77651f837185c0a7be0167e3b4c280a5fe1fde80417a6a0bc6",
+      "bytes": 31725,
+      "durationMs": 3936,
+      "decodedAudio": {
+        "samples": 93000,
+        "rms": 0.14696610968126556,
+        "peak": 0.8221808671951294,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 93000,
+        "rms": 0.10758849860766932,
+        "peak": 0.9440169930458069,
+        "nonFinite": 0
+      },
+      "inferenceMs": 6171.256243999989,
+      "modelDurationMs": 3875,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/screen_move_knight.mp3",
+      "ready": true
+    },
+    {
+      "key": "pressing_pawn",
+      "text": "The pawn has the ball carrier under pressure!",
+      "delivery": "urgent",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "5b69050ccf540e1af57579a503d98d089c5c9367e0eec281ca9adcb4645c25b5",
+      "bytes": 20973,
+      "durationMs": 2592,
+      "decodedAudio": {
+        "samples": 61030,
+        "rms": 0.10188963161552196,
+        "peak": 0.7890243530273438,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 61030,
+        "rms": 0.11293769683896167,
+        "peak": 0.8834012150764465,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4105.149780000007,
+      "modelDurationMs": 2543,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/pressing_pawn.mp3",
+      "ready": true
+    },
+    {
+      "key": "blocked_lane_pawn",
+      "text": "The pawn screens the passing lane to a teammate.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "fbddf16e6a4d7f0dcfdc829ca973c613170deb88122067da881659e5afd0937c",
+      "bytes": 23085,
+      "durationMs": 2856,
+      "decodedAudio": {
+        "samples": 67389,
+        "rms": 0.0954908027091098,
+        "peak": 0.79255211353302,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 67389,
+        "rms": 0.09464817904504057,
+        "peak": 0.7910857200622559,
+        "nonFinite": 0
+      },
+      "inferenceMs": 5655.880481,
+      "modelDurationMs": 2808,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/blocked_lane_pawn.mp3",
+      "ready": true
+    },
+    {
+      "key": "shot_traffic_pawn",
+      "text": "The pawn screens a shooting lane. The attack faces traffic.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "bb7b00f4e3415fc12f0e43df375a1edbdaf4125f5a5c27991b48dc1df0a0140b",
+      "bytes": 27501,
+      "durationMs": 3408,
+      "decodedAudio": {
+        "samples": 80203,
+        "rms": 0.15859318104429843,
+        "peak": 0.8114857077598572,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 80203,
+        "rms": 0.09916596845229829,
+        "peak": 0.9009965658187866,
+        "nonFinite": 0
+      },
+      "inferenceMs": 6067.937787000003,
+      "modelDurationMs": 3342,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/shot_traffic_pawn.mp3",
+      "ready": true
+    },
+    {
+      "key": "press_move_pawn",
+      "text": "The pawn closed down the carrier, moving into tackling range.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "68a35d374fc763413b31fee790d129a4e6efd76e5caf2c8ad8a1a78ccc06eda5",
+      "bytes": 27501,
+      "durationMs": 3408,
+      "decodedAudio": {
+        "samples": 80111,
+        "rms": 0.15692292782832362,
+        "peak": 0.8073601126670837,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 80080,
+        "rms": 0.11386873049712173,
+        "peak": 0.7636160850524902,
+        "nonFinite": 0
+      },
+      "inferenceMs": 7283.117075999995,
+      "modelDurationMs": 3337,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/press_move_pawn.mp3",
+      "ready": true
+    },
+    {
+      "key": "screen_move_pawn",
+      "text": "The pawn cut the ball carrier’s passing lane to a teammate.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "1b1d6e784e19498a112dc1c9278c9c9ce40c637c0756690a26eb3b934f3eeb3b",
+      "bytes": 30957,
+      "durationMs": 3840,
+      "decodedAudio": {
+        "samples": 90600,
+        "rms": 0.14692849870536592,
+        "peak": 0.8155677318572998,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 90600,
+        "rms": 0.1089379053183848,
+        "peak": 0.912086009979248,
+        "nonFinite": 0
+      },
+      "inferenceMs": 8133.479425999976,
+      "modelDurationMs": 3775,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/screen_move_pawn.mp3",
+      "ready": true
+    },
+    {
+      "key": "pressing_keeper",
+      "text": "The keeper has the ball carrier under pressure!",
+      "delivery": "urgent",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "50848e40022f3fd1778840ddc08fbb43c88accfa95dc8434a82a8eb469d1a66d",
+      "bytes": 22701,
+      "durationMs": 2808,
+      "decodedAudio": {
+        "samples": 65741,
+        "rms": 0.0975435208642389,
+        "peak": 0.7941010594367981,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 65741,
+        "rms": 0.10029148856053227,
+        "peak": 0.8218461871147156,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4467.790453000023,
+      "modelDurationMs": 2739,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/pressing_keeper.mp3",
+      "ready": true
+    },
+    {
+      "key": "blocked_lane_keeper",
+      "text": "The keeper screens the passing lane to a teammate.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "88659c5736e7b9d6635bb3fd6e20d72375c491bfc6a09f3cf165825ff2736d00",
+      "bytes": 22893,
+      "durationMs": 2832,
+      "decodedAudio": {
+        "samples": 66712,
+        "rms": 0.09091671463001978,
+        "peak": 0.8038296699523926,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 66712,
+        "rms": 0.09009555551276796,
+        "peak": 0.7911245226860046,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4874.959622000024,
+      "modelDurationMs": 2780,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/blocked_lane_keeper.mp3",
+      "ready": true
+    },
+    {
+      "key": "shot_traffic_keeper",
+      "text": "The keeper screens a shooting lane. The attack faces traffic.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "5b4ada86c2afe2a93cd74847638726d8c36ce6784e7b3c5f57f897c5e3cbad7f",
+      "bytes": 29421,
+      "durationMs": 3648,
+      "decodedAudio": {
+        "samples": 86224,
+        "rms": 0.1600046547633771,
+        "peak": 0.8111788034439087,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 86224,
+        "rms": 0.09729544496853287,
+        "peak": 0.8557681441307068,
+        "nonFinite": 0
+      },
+      "inferenceMs": 8526.815113999997,
+      "modelDurationMs": 3593,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/shot_traffic_keeper.mp3",
+      "ready": true
+    },
+    {
+      "key": "press_move_keeper",
+      "text": "The keeper closed down the carrier, moving into tackling range.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "70300b2dd7110462fbc51484d1e564305216b7429b1ccfa4d1d1e9d43f07a79f",
+      "bytes": 30189,
+      "durationMs": 3744,
+      "decodedAudio": {
+        "samples": 88454,
+        "rms": 0.15641613114492461,
+        "peak": 0.84242844581604,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 88454,
+        "rms": 0.10240992892923284,
+        "peak": 0.6851527094841003,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4650.034780000016,
+      "modelDurationMs": 3686,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/press_move_keeper.mp3",
+      "ready": true
+    },
+    {
+      "key": "screen_move_keeper",
+      "text": "The keeper cut the ball carrier’s passing lane to a teammate.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "42cc079a3e77c7e7081345b36e98f459b534c8e37e4b6151f5d53278e6b456fb",
+      "bytes": 27501,
+      "durationMs": 3408,
+      "decodedAudio": {
+        "samples": 80528,
+        "rms": 0.1529561006565271,
+        "peak": 0.8232247233390808,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 80528,
+        "rms": 0.09637756770838796,
+        "peak": 0.8075971603393555,
+        "nonFinite": 0
+      },
+      "inferenceMs": 7615.374335,
+      "modelDurationMs": 3355,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/screen_move_keeper.mp3",
+      "ready": true
+    },
+    {
+      "key": "pawn_setup",
+      "text": "The pawn can use a free step for a diagonal challenge.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "ac420e383dbeb14c436c3645871b4914d27bc7bc9cd45d9462f1c7333746efd2",
+      "bytes": 26925,
+      "durationMs": 3336,
+      "decodedAudio": {
+        "samples": 78517,
+        "rms": 0.14992356388003092,
+        "peak": 0.8198673725128174,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 78517,
+        "rms": 0.10093860098698422,
+        "peak": 0.8062880039215088,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4687.894205999997,
+      "modelDurationMs": 3272,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/pawn_setup.mp3",
+      "ready": true
+    },
+    {
+      "key": "cross_loose",
+      "text": "A cross into the middle. The ball stayed loose.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "4b4f68254942e52a10d05cc872f37b2e281fbbe64d43c334c7d20c7ddb7afbfe",
+      "bytes": 22701,
+      "durationMs": 2808,
+      "decodedAudio": {
+        "samples": 66140,
+        "rms": 0.10331578845931688,
+        "peak": 0.7949827909469604,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 66140,
+        "rms": 0.11142800782641532,
+        "peak": 0.861437976360321,
+        "nonFinite": 0
+      },
+      "inferenceMs": 3680.6956920000084,
+      "modelDurationMs": 2756,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/cross_loose.mp3",
+      "ready": true
+    },
+    {
+      "key": "cutback_loose",
+      "text": "A cutback into the middle. The ball stayed loose.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "430c66dc090b5a190cf6384acddc351505adcba20d568c7cec5ab38304f048d1",
+      "bytes": 23661,
+      "durationMs": 2928,
+      "decodedAudio": {
+        "samples": 68973,
+        "rms": 0.10027027078346418,
+        "peak": 0.7978065609931946,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 68973,
+        "rms": 0.09789952978279774,
+        "peak": 0.7782295942306519,
+        "nonFinite": 0
+      },
+      "inferenceMs": 6187.089340000006,
+      "modelDurationMs": 2874,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/cutback_loose.mp3",
+      "ready": true
+    },
+    {
+      "key": "routine_kickoff",
+      "text": "And we’re underway! The battle for space begins.",
+      "delivery": "urgent",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "64fbe48cafef5e96768e3d1f9f9f5d832eb9bcf37a7127d885be6b5eea12536e",
+      "bytes": 24813,
+      "durationMs": 3072,
+      "decodedAudio": {
+        "samples": 72397,
+        "rms": 0.1473376638143659,
+        "peak": 0.8116478323936462,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 72397,
+        "rms": 0.11370500834354354,
+        "peak": 0.7902268767356873,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4591.531786000007,
+      "modelDurationMs": 3017,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/routine_kickoff.mp3",
+      "ready": true
+    },
+    {
+      "key": "routine_turnover",
+      "text": "They’ve won it back! Can they make this count?",
+      "delivery": "urgent",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "0e4d7cc5d1392c8177bc6eda52d247859be69b4abbde722710b929e563d6b2ab",
+      "bytes": 19629,
+      "durationMs": 2424,
+      "decodedAudio": {
+        "samples": 56931,
+        "rms": 0.10109682832453021,
+        "peak": 0.7970237731933594,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 56931,
+        "rms": 0.10178503126096623,
+        "peak": 0.8043100237846375,
+        "nonFinite": 0
+      },
+      "inferenceMs": 5335.322766999976,
+      "modelDurationMs": 2372,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/routine_turnover.mp3",
+      "ready": true
+    },
+    {
+      "key": "routine_counter",
+      "text": "They’re away on the counter! Now there’s ground to attack!",
+      "delivery": "urgent",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "bb9f04798a7a46ce62391dc583ac0fcb4661c6d1c4a9923b6388f9dd0343bb38",
+      "bytes": 25005,
+      "durationMs": 3096,
+      "decodedAudio": {
+        "samples": 73022,
+        "rms": 0.15641058124829782,
+        "peak": 0.8067471385002136,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 73022,
+        "rms": 0.11997035303241867,
+        "peak": 0.8739719390869141,
+        "nonFinite": 0
+      },
+      "inferenceMs": 3974.4843039999832,
+      "modelDurationMs": 3043,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/routine_counter.mp3",
+      "ready": true
+    },
+    {
+      "key": "routine_forward_centre",
+      "text": "Forward through the middle. They’re looking to open things up.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "71ff08fc32db64420df00413ad6e8f09c73141530be3bbbe9a91d4118d0aa53a",
+      "bytes": 26349,
+      "durationMs": 3264,
+      "decodedAudio": {
+        "samples": 76992,
+        "rms": 0.15601568118902434,
+        "peak": 0.8055341243743896,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 76992,
+        "rms": 0.1116787824063509,
+        "peak": 0.9695865511894226,
+        "nonFinite": 0
+      },
+      "inferenceMs": 6207.3622719999985,
+      "modelDurationMs": 3208,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/routine_forward_centre.mp3",
+      "ready": true
+    },
+    {
+      "key": "routine_forward_wide",
+      "text": "They move it down the flank. A bit of width now.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "3383b2fd13fe984297de66e1e2c5260de38772cbfb122ef3e26774d660429f06",
+      "bytes": 21933,
+      "durationMs": 2712,
+      "decodedAudio": {
+        "samples": 63428,
+        "rms": 0.12908887011349698,
+        "peak": 0.7994974851608276,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 63428,
+        "rms": 0.10530306840304667,
+        "peak": 0.6518930196762085,
+        "nonFinite": 0
+      },
+      "inferenceMs": 6460.877559000015,
+      "modelDurationMs": 2643,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/routine_forward_wide.mp3",
+      "ready": true
+    },
+    {
+      "key": "routine_switch",
+      "text": "A switch of play! Stretching the defence across the pitch.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "0d91208b5cd41f717128ed2ad7bd7a5437cb7798167efe7c1f49ab25631573ab",
+      "bytes": 27117,
+      "durationMs": 3360,
+      "decodedAudio": {
+        "samples": 79413,
+        "rms": 0.1343364741825668,
+        "peak": 0.8070984482765198,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 79413,
+        "rms": 0.0871042469483877,
+        "peak": 0.8761494159698486,
+        "nonFinite": 0
+      },
+      "inferenceMs": 7623.877959999983,
+      "modelDurationMs": 3309,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/routine_switch.mp3",
+      "ready": true
+    },
+    {
+      "key": "routine_queen_linebreak",
+      "text": "The queen breaks the lines! That pass takes defenders out.",
+      "delivery": "urgent",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "4f43b7caf6198225592ac564a10433573f8b5d97decb326858b3799f7687db81",
+      "bytes": 26157,
+      "durationMs": 3240,
+      "decodedAudio": {
+        "samples": 76261,
+        "rms": 0.14204688813708893,
+        "peak": 0.8033835887908936,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 76261,
+        "rms": 0.0939450708817934,
+        "peak": 0.7914962768554688,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4113.754814000014,
+      "modelDurationMs": 3178,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/routine_queen_linebreak.mp3",
+      "ready": true
+    },
+    {
+      "key": "routine_rook_wide",
+      "text": "The rook sends it up the wide channel. Good forward intent.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "47521a6fc22821b4252c590aa6296cd0df6094d08bdceab700e250dd631f7af4",
+      "bytes": 28653,
+      "durationMs": 3552,
+      "decodedAudio": {
+        "samples": 83896,
+        "rms": 0.15439018093792978,
+        "peak": 0.8091769814491272,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 83896,
+        "rms": 0.10803338819786887,
+        "peak": 0.8522273302078247,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4396.2493130000075,
+      "modelDurationMs": 3496,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/routine_rook_wide.mp3",
+      "ready": true
+    },
+    {
+      "key": "routine_bishop_diagonal",
+      "text": "A diagonal from the bishop. Changing the angle of attack.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "3ada58fab676f24625909cc2a04fd932568c9863c387e86959cff03f9b020a19",
+      "bytes": 27885,
+      "durationMs": 3456,
+      "decodedAudio": {
+        "samples": 81360,
+        "rms": 0.16389042141102095,
+        "peak": 0.8085570335388184,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 81360,
+        "rms": 0.1103559558475588,
+        "peak": 0.6761499643325806,
+        "nonFinite": 0
+      },
+      "inferenceMs": 5833.587456000008,
+      "modelDurationMs": 3390,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/routine_bishop_diagonal.mp3",
+      "ready": true
+    },
+    {
+      "key": "routine_knight_pocket",
+      "text": "The knight has found a pocket of space near goal!",
+      "delivery": "urgent",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "55d99fbd7d3e7c3fe41dfa531e8d4ba6509c42d51597fa0dd3577c8db01f968d",
+      "bytes": 26541,
+      "durationMs": 3288,
+      "decodedAudio": {
+        "samples": 77400,
+        "rms": 0.14352621472738886,
+        "peak": 0.8144547939300537,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 77400,
+        "rms": 0.09862913496434138,
+        "peak": 0.7387918829917908,
+        "nonFinite": 0
+      },
+      "inferenceMs": 6833.243657999992,
+      "modelDurationMs": 3225,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/routine_knight_pocket.mp3",
+      "ready": true
+    },
+    {
+      "key": "routine_build_back",
+      "text": "Building from the back. Looking for that first opening.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "f79bcff4741e6b654f3b6efc18bb4d6bc572d3752496af14dda16a2e97139ed6",
+      "bytes": 27117,
+      "durationMs": 3360,
+      "decodedAudio": {
+        "samples": 79421,
+        "rms": 0.14968836627151252,
+        "peak": 0.8274198770523071,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 79421,
+        "rms": 0.11228688932808233,
+        "peak": 0.8913053274154663,
+        "nonFinite": 0
+      },
+      "inferenceMs": 7370.054577000003,
+      "modelDurationMs": 3309,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/routine_build_back.mp3",
+      "ready": true
+    },
+    {
+      "key": "routine_midfield",
+      "text": "The midfield battle continues. Who can take the initiative?",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "f553cc67b36bb956ad652751fe3863e13b878ee29b5a7d9f5c12a5e37b8ecf80",
+      "bytes": 30189,
+      "durationMs": 3744,
+      "decodedAudio": {
+        "samples": 88292,
+        "rms": 0.16133002356105658,
+        "peak": 0.815406084060669,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 88292,
+        "rms": 0.1031580455014228,
+        "peak": 0.857434868812561,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4598.392848999996,
+      "modelDurationMs": 3679,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/routine_midfield.mp3",
+      "ready": true
+    },
+    {
+      "key": "routine_final_third",
+      "text": "They’re in the final third now. Can they find the opening?",
+      "delivery": "urgent",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "81a410c827249d950bde1a7f434d52b765f3c18d4957dd5c574f7f0edcc414ca",
+      "bytes": 30957,
+      "durationMs": 3840,
+      "decodedAudio": {
+        "samples": 90600,
+        "rms": 0.1590698973720415,
+        "peak": 0.81092768907547,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 90600,
+        "rms": 0.11591366942427947,
+        "peak": 0.9781507253646851,
+        "nonFinite": 0
+      },
+      "inferenceMs": 6775.344569999987,
+      "modelDurationMs": 3775,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/routine_final_third.mp3",
+      "ready": true
+    },
+    {
+      "key": "routine_central_possession",
+      "text": "They’re working it through the centre, looking for an opening.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "b7251af50a41af70d1aa832ce98af18766c0cdcac90f98ce7c0ea16028c3813d",
+      "bytes": 25773,
+      "durationMs": 3192,
+      "decodedAudio": {
+        "samples": 75032,
+        "rms": 0.15355764270334132,
+        "peak": 0.801037073135376,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 75032,
+        "rms": 0.10655468751772422,
+        "peak": 0.8163955211639404,
+        "nonFinite": 0
+      },
+      "inferenceMs": 7801.849386999995,
+      "modelDurationMs": 3126,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/routine_central_possession.mp3",
+      "ready": true
+    },
+    {
+      "key": "routine_wide_possession",
+      "text": "They’ve got it out wide. Trying to stretch this defence.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "d2cd369b178821c2d538542bfc6fdd5798bd04394b34afff54d9238dce75ea04",
+      "bytes": 25773,
+      "durationMs": 3192,
+      "decodedAudio": {
+        "samples": 74992,
+        "rms": 0.13943480977302883,
+        "peak": 0.8079080581665039,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 74992,
+        "rms": 0.10311300530976927,
+        "peak": 0.7868065237998962,
+        "nonFinite": 0
+      },
+      "inferenceMs": 5380.0175379999855,
+      "modelDurationMs": 3125,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/routine_wide_possession.mp3",
+      "ready": true
+    },
+    {
+      "key": "routine_tight_space",
+      "text": "Defenders close by. Very little room to work with here.",
+      "delivery": "urgent",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "d4e74541b6df6402955bfda6436662673b8db2a325733fb8f9883c308961d68a",
+      "bytes": 29805,
+      "durationMs": 3696,
+      "decodedAudio": {
+        "samples": 87023,
+        "rms": 0.15283689789907376,
+        "peak": 0.8043118119239807,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 87000,
+        "rms": 0.1120907428511006,
+        "peak": 0.869122326374054,
+        "nonFinite": 0
+      },
+      "inferenceMs": 8511.714693000016,
+      "modelDurationMs": 3625,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/routine_tight_space.mp3",
+      "ready": true
+    },
+    {
+      "key": "routine_loose_ball",
+      "text": "A loose ball! Who’s going to get there first?",
+      "delivery": "urgent",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "877574f9c9af60b037dd62a233b6fcdec6c4be24a99186819e468d7d12480cce",
+      "bytes": 20013,
+      "durationMs": 2472,
+      "decodedAudio": {
+        "samples": 57671,
+        "rms": 0.11429775024745306,
+        "peak": 0.7910866737365723,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 57671,
+        "rms": 0.11363280442730862,
+        "peak": 0.7904227375984192,
+        "nonFinite": 0
+      },
+      "inferenceMs": 3865.9587900000042,
+      "modelDurationMs": 2403,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/routine_loose_ball.mp3",
+      "ready": true
+    },
+    {
+      "key": "routine_level_score",
+      "text": "Still all square. One moment could turn this contest.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "b5993f491d897428663ce70e9d34f3167442c7798eae0b13d469e9b8e62e3b52",
+      "bytes": 25197,
+      "durationMs": 3120,
+      "decodedAudio": {
+        "samples": 73677,
+        "rms": 0.15275693066779228,
+        "peak": 0.8205361366271973,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 73677,
+        "rms": 0.11066192594493442,
+        "peak": 0.8190515637397766,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4458.031430000003,
+      "modelDurationMs": 3070,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/routine_level_score.mp3",
+      "ready": true
+    },
+    {
+      "key": "routine_leader",
+      "text": "The leaders have the advantage. Plenty for the other side to do.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "50cb50478b46b0548490bc3ec7ca90084a5467847a56d38c7077d95d495a4370",
+      "bytes": 31917,
+      "durationMs": 3960,
+      "decodedAudio": {
+        "samples": 93633,
+        "rms": 0.14922517112791392,
+        "peak": 0.8173725605010986,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 93633,
+        "rms": 0.09458722140043145,
+        "peak": 0.6916011571884155,
+        "nonFinite": 0
+      },
+      "inferenceMs": 8476.901111999992,
+      "modelDurationMs": 3901,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/routine_leader.mp3",
+      "ready": true
+    },
+    {
+      "key": "routine_advance_centre",
+      "text": "They’re making ground through the middle. The initiative is theirs.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "79e5e62805155ada736b7445c57baad56ac44bb5b85472d2a5c521198923548a",
+      "bytes": 29229,
+      "durationMs": 3624,
+      "decodedAudio": {
+        "samples": 85370,
+        "rms": 0.1648201439119925,
+        "peak": 0.8021879196166992,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 85370,
+        "rms": 0.11241024196282907,
+        "peak": 0.8058801889419556,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4331.946272000001,
+      "modelDurationMs": 3557,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/routine_advance_centre.mp3",
+      "ready": true
+    },
+    {
+      "key": "routine_advance_wide",
+      "text": "Progress down the wing. They’re working those outer files.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "464192d9df45001570c983c4b038ad2f3de662f573a24b1a45d48f804ff7bbc1",
+      "bytes": 27117,
+      "durationMs": 3360,
+      "decodedAudio": {
+        "samples": 79261,
+        "rms": 0.15590450125983604,
+        "peak": 0.8049752712249756,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 79261,
+        "rms": 0.1098222942384633,
+        "peak": 0.9381848573684692,
+        "nonFinite": 0
+      },
+      "inferenceMs": 7214.470272000006,
+      "modelDurationMs": 3303,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/routine_advance_wide.mp3",
+      "ready": true
+    },
+    {
+      "key": "routine_pressure",
+      "text": "They’re keeping it in the final third. The pressure is building.",
+      "delivery": "urgent",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "e9dc41f7b837cd391cf94e91211b57b273b8e232505ad82f6c9b792a3b3c7894",
+      "bytes": 31917,
+      "durationMs": 3960,
+      "decodedAudio": {
+        "samples": 93600,
+        "rms": 0.15281025978150414,
+        "peak": 0.8069319128990173,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 93600,
+        "rms": 0.10795028640016456,
+        "peak": 0.9146229028701782,
+        "nonFinite": 0
+      },
+      "inferenceMs": 5479.2017570000025,
+      "modelDurationMs": 3900,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/routine_pressure.mp3",
+      "ready": true
+    },
+    {
+      "key": "routine_patient",
+      "text": "Patient possession. They’re still searching for a way through.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "e6f40a5ca75627b3664742098f2d38f36591afb9190ad481ee0239e8cbb50443",
+      "bytes": 27117,
+      "durationMs": 3360,
+      "decodedAudio": {
+        "samples": 78959,
+        "rms": 0.15065370097556602,
+        "peak": 0.8031127452850342,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 78947,
+        "rms": 0.1000781436982098,
+        "peak": 0.7018316984176636,
+        "nonFinite": 0
+      },
+      "inferenceMs": 5721.977885,
+      "modelDurationMs": 3289,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/routine_patient.mp3",
+      "ready": true
+    },
+    {
+      "key": "routine_corner",
+      "text": "A corner. A chance to load the box and ask questions.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "45b7be81745458be09def4141e28eb385eba135ca06272c942b1b02deb4f0469",
+      "bytes": 33645,
+      "durationMs": 4176,
+      "decodedAudio": {
+        "samples": 98755,
+        "rms": 0.13393155910064716,
+        "peak": 0.806389570236206,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 98755,
+        "rms": 0.1012291681120171,
+        "peak": 0.9104982614517212,
+        "nonFinite": 0
+      },
+      "inferenceMs": 9582.672057999996,
+      "modelDurationMs": 4115,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/routine_corner.mp3",
+      "ready": true
+    },
+    {
+      "key": "routine_throw",
+      "text": "A throw-in. A moment to reset and find the next pass.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "40083f83b29be2a6d3eed510b098ec6402d0e2e4440315cf85181d9395e7bb77",
+      "bytes": 25773,
+      "durationMs": 3192,
+      "decodedAudio": {
+        "samples": 75136,
+        "rms": 0.15104365032903277,
+        "peak": 0.8033081889152527,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 75136,
+        "rms": 0.10875489593959288,
+        "peak": 0.9601543545722961,
+        "nonFinite": 0
+      },
+      "inferenceMs": 3946.219916000002,
+      "modelDurationMs": 3131,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/routine_throw.mp3",
+      "ready": true
+    },
+    {
+      "key": "routine_free",
+      "text": "A free kick. Can they make something of this set piece?",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "c68d5ff4126aadf9a1095004b78a3bb45510fef6ba61312ecfe483f4234c3654",
+      "bytes": 26349,
+      "durationMs": 3264,
+      "decodedAudio": {
+        "samples": 77107,
+        "rms": 0.1464087626366193,
+        "peak": 0.8177908658981323,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 77107,
+        "rms": 0.09181567221382861,
+        "peak": 0.7269283533096313,
+        "nonFinite": 0
+      },
+      "inferenceMs": 8054.061114000011,
+      "modelDurationMs": 3213,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/routine_free.mp3",
+      "ready": true
+    },
+    {
+      "key": "routine_indirect",
+      "text": "An indirect free kick. They’ll need to build the chance.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "8c5171cfa3b64c1297eefbf647e9869638b015fd7da36d468a838e7d70f7b765",
+      "bytes": 31725,
+      "durationMs": 3936,
+      "decodedAudio": {
+        "samples": 93000,
+        "rms": 0.15465749970938006,
+        "peak": 0.828049898147583,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 93000,
+        "rms": 0.10163764839677299,
+        "peak": 0.7346049547195435,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4962.298271999985,
+      "modelDurationMs": 3875,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/routine_indirect.mp3",
+      "ready": true
+    },
+    {
+      "key": "routine_goalkick",
+      "text": "A goal kick. Time to reset the shape and build again.",
+      "delivery": "normal",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "3e915ec47f6428ef474a08d9d3986768797dda0d236a5c79de37a1d8efa13b75",
+      "bytes": 27309,
+      "durationMs": 3384,
+      "decodedAudio": {
+        "samples": 80054,
+        "rms": 0.14632188668177512,
+        "peak": 0.8173917531967163,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 80054,
+        "rms": 0.1065658917121174,
+        "peak": 0.8638712167739868,
+        "nonFinite": 0
+      },
+      "inferenceMs": 3942.009626999992,
+      "modelDurationMs": 3336,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/routine_goalkick.mp3",
+      "ready": true
+    },
+    {
+      "key": "routine_offside",
+      "text": "The flag is up! Offside. That move comes to an end.",
+      "delivery": "urgent",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "c9ca805670b4967b949225d5e9393f95694d1db33ff5eb8f1ee19a0b7adb77f0",
+      "bytes": 25773,
+      "durationMs": 3192,
+      "decodedAudio": {
+        "samples": 75160,
+        "rms": 0.13963784373537635,
+        "peak": 0.8126024007797241,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 75160,
+        "rms": 0.0978178434926704,
+        "peak": 0.8369343876838684,
+        "nonFinite": 0
+      },
+      "inferenceMs": 5013.474826999998,
+      "modelDurationMs": 3132,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/routine_offside.mp3",
+      "ready": true
+    },
+    {
+      "key": "routine_timeout",
+      "text": "Too much hesitation! An indirect free kick to the other side.",
+      "delivery": "urgent",
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "8b398ab7a26f6ca46032ebea7ca8b0f65d01a7d95b668a524bf5b3a7f9ea622a",
+      "bytes": 28077,
+      "durationMs": 3480,
+      "decodedAudio": {
+        "samples": 82103,
+        "rms": 0.1591736775833076,
+        "peak": 0.8116335272789001,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 82103,
+        "rms": 0.09533550824345009,
+        "peak": 0.7264853119850159,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4307.190828999999,
+      "modelDurationMs": 3421,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/routine_timeout.mp3",
+      "ready": true
+    }
+  ]
+}

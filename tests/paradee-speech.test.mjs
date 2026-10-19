@@ -5,7 +5,10 @@ import { createParadeeSpeech } from '../dist/paradee-speech.js';
 const flush = async () => { for (let i = 0; i < 12; i++) await Promise.resolve(); };
 function rig(overrides = {}) {
   const workers = [], contexts = [], states = [];
-  let time = 1000;
+  const timers = new Map();
+  let time = 1000, serial = 0;
+  const setTimer = (fn, delay) => { const id = ++serial; timers.set(id, {at: time + delay, fn}); return id; };
+  const clearTimer = id => timers.delete(id);
   class Worker {
     constructor(url, options) { this.url = url; this.options = options; this.messages = []; workers.push(this); }
     postMessage(value) { this.messages.push(value); }
@@ -13,23 +16,35 @@ function rig(overrides = {}) {
     send(data) { this.onmessage?.({ data }); }
   }
   class AudioContext {
-    constructor() { this.state = 'suspended'; this.sources = []; this.destination = {}; contexts.push(this); }
-    resume() { this.state = 'running'; return Promise.resolve(); }
-    close() { this.state = 'closed'; return Promise.resolve(); }
+    constructor() { this.state = overrides.contextState || 'suspended'; this.sources = []; this.destination = {}; this.listeners = new Set(); this.resumeCalls = 0; contexts.push(this); }
+    addEventListener(type, listener) { if (type === 'statechange') this.listeners.add(listener); }
+    removeEventListener(type, listener) { if (type === 'statechange') this.listeners.delete(listener); }
+    changeState(value) { this.state = value; for (const listener of [...this.listeners]) listener(); }
+    resume() { this.resumeCalls++; this.changeState('running'); return Promise.resolve(); }
+    close() { this.changeState('closed'); return Promise.resolve(); }
     createBuffer(channels, count, rate) { return { channels, count, rate, copyToChannel(samples) { this.samples = samples; } }; }
     createBufferSource() {
       const source = { start() { this.started = true; }, stop() { this.stopped = true; }, connect() {}, disconnect() {}, end() { this.onended?.(); } };
       this.sources.push(source); return source;
     }
   }
-  const voice = createParadeeSpeech({ WorkerCtor: Worker, AudioContextCtor: AudioContext, onState: (s) => states.push(s), now: () => time, ...overrides });
+  const voice = createParadeeSpeech({ WorkerCtor: Worker, AudioContextCtor: AudioContext, onState: (s) => states.push(s), now: () => time, setTimer, clearTimer, ...overrides });
   async function loaded() { const promise = voice.load(); workers.at(-1).send({ type: 'ready' }); await promise; }
   function result(samples = new Float32Array([.1, -.1, .2])) {
     const request = workers.at(-1).messages.findLast((message) => message.type === 'synthesize');
     assert.ok(request, 'an inference request exists');
     workers.at(-1).send({ type: 'audio', id: request.id, samples, sampleRate: 24000 });
   }
-  return { voice, workers, contexts, states, loaded, result, setTime(value) { time = value; } };
+  async function advance(ms) {
+    const end = time + ms;
+    for (;;) {
+      const entry = [...timers].filter(([, timer]) => timer.at <= end).sort((a, b) => a[1].at - b[1].at)[0];
+      if (!entry) break;
+      timers.delete(entry[0]); time = entry[1].at; entry[1].fn(); await flush();
+    }
+    time = end; await flush();
+  }
+  return { voice, workers, contexts, states, timers, loaded, result, advance, setTime(value) { time = value; } };
 }
 
 test('model and audio are both lazy; repeated load shares one worker', async () => {
@@ -191,4 +206,151 @@ test('late messages from a failed worker cannot mark a replacement ready', async
   const second = r.voice.load(); old.send({ type: 'ready' });
   assert.equal(r.voice.getState().ready, false);
   r.workers[1].send({ type: 'ready' }); await second; r.voice.destroy();
+});
+
+test('an explicit gesture resumes an interrupted audio context instead of leaving Hugo silent', async () => {
+  const r = rig({contextState: 'interrupted'});
+  assert.equal(await r.voice.unlock(), true);
+  assert.equal(r.contexts[0].resumeCalls, 1);
+  assert.equal(r.voice.getState().audioState, 'running');
+  assert.equal(r.voice.getState().unlocked, true);
+  r.contexts[0].changeState('interrupted');
+  assert.equal(r.voice.getState().unlocked, false);
+  assert.equal(r.voice.getState().audioState, 'interrupted');
+  assert.equal(await r.voice.unlock(), true);
+  assert.equal(r.contexts[0].resumeCalls, 2);
+  r.voice.destroy();
+});
+
+test('a closed audio context is recreated on the next gesture and old listeners are removed', async () => {
+  const r = rig(); await r.voice.unlock();
+  const old = r.contexts[0];
+  assert.equal(old.listeners.size, 1);
+  old.changeState('closed');
+  assert.equal(r.voice.getState().unlocked, false);
+  assert.equal(await r.voice.unlock(), true);
+  assert.equal(r.contexts.length, 2);
+  assert.equal(old.listeners.size, 0);
+  assert.equal(r.contexts[1].listeners.size, 1);
+  assert.equal(r.voice.getState().audioState, 'running');
+  r.voice.destroy();
+  assert.equal(r.contexts[1].listeners.size, 0);
+});
+
+test('a late rejection from an old resume cannot lock a replacement running audio context', async () => {
+  const contexts = [];
+  let rejectOldResume;
+  class DelayedContext {
+    constructor() { this.state = 'suspended'; this.listeners = new Set(); contexts.push(this); }
+    addEventListener(type, listener) { if (type === 'statechange') this.listeners.add(listener); }
+    removeEventListener(type, listener) { if (type === 'statechange') this.listeners.delete(listener); }
+    changeState(value) { this.state = value; for (const listener of [...this.listeners]) listener(); }
+    resume() {
+      if (contexts[0] === this) return new Promise((resolve, reject) => { rejectOldResume = reject; });
+      this.changeState('running'); return Promise.resolve();
+    }
+    close() { this.changeState('closed'); return Promise.resolve(); }
+  }
+  const r = rig({AudioContextCtor: DelayedContext});
+  const oldUnlock = r.voice.unlock();
+  contexts[0].changeState('closed');
+  assert.equal(await r.voice.unlock(), true);
+  assert.equal(contexts.length, 2);
+  assert.equal(contexts[0].listeners.size, 0);
+  rejectOldResume(new Error('The old audio context could not resume.'));
+  assert.equal(await oldUnlock, false);
+  assert.equal(r.voice.getState().unlocked, true);
+  assert.equal(r.voice.getState().audioState, 'running');
+  assert.equal(r.voice.getState().error, null);
+  r.voice.destroy();
+});
+
+test('interruption during inference prevents false playback and a new gesture restores speech', async () => {
+  const r = rig(); await r.loaded(); await r.voice.unlock();
+  const pending = r.voice.speak('The bishop is supporting the queen.'); await flush();
+  r.contexts[0].changeState('interrupted');
+  r.result();
+  assert.deepEqual(await pending, {spoken: false, reason: 'audio_locked'});
+  assert.equal(r.contexts[0].sources.length, 0);
+  assert.equal(r.voice.getState().audioState, 'interrupted');
+  assert.equal(await r.voice.unlock(), true);
+  const retry = r.voice.speak('The rook has a crossing option.'); await flush(); r.result(); await flush();
+  assert.equal(r.contexts[0].sources[0].started, true);
+  r.contexts[0].sources[0].end();
+  assert.deepEqual(await retry, {spoken: true});
+  r.voice.destroy();
+});
+
+test('interrupted playback settles unsuccessfully, rather than claiming the unheard call finished', async () => {
+  const r = rig(); await r.loaded(); await r.voice.unlock();
+  const pending = r.voice.speak('The queen is under pressure.'); await flush(); r.result(); await flush();
+  const source = r.contexts[0].sources[0];
+  assert.equal(source.started, true);
+  r.contexts[0].changeState('interrupted');
+  assert.deepEqual(await pending, {spoken: false, reason: 'audio_interrupted'});
+  assert.equal(source.stopped, true);
+  assert.equal(r.voice.getState().unlocked, false);
+  r.voice.destroy();
+});
+
+test('an interruption between the onPlaying hook and source.start cannot produce false success', async () => {
+  const r = rig(); await r.loaded(); await r.voice.unlock();
+  const pending = r.voice.speak('The knight is making a run.', {onPlaying() {r.contexts[0].changeState('interrupted');}});
+  await flush(); r.result();
+  assert.deepEqual(await pending, {spoken: false, reason: 'audio_interrupted'});
+  assert.equal(r.contexts[0].sources[0].started, undefined);
+  r.voice.destroy();
+});
+
+test('a hung inference is bounded, terminates its worker and can load a clean replacement', async () => {
+  const r = rig({generationTimeoutMs: 30000}); await r.loaded(); await r.voice.unlock();
+  const old = r.workers[0], pending = r.voice.speak('The bishop has found a passing lane.'); await flush();
+  const oldRequest = old.messages.at(-1);
+  await r.advance(29999);
+  assert.equal(old.terminated, undefined);
+  assert.equal(r.voice.getState().busy, true);
+  await r.advance(1);
+  assert.deepEqual(await pending, {spoken: false, reason: 'generation_timeout'});
+  assert.equal(old.terminated, true);
+  assert.equal(r.voice.getState().busy, false);
+  assert.equal(r.voice.getState().ready, false);
+  assert.match(r.voice.getState().error, /took too long/);
+  const loading = r.voice.load();
+  old.send({type: 'audio', id: oldRequest.id, samples: new Float32Array([.1]), sampleRate: 24000});
+  old.send({type: 'ready'});
+  assert.equal(r.voice.getState().ready, false);
+  r.workers[1].send({type: 'ready'}); await loading;
+  const retry = r.voice.speak('The rook supports the attack.'); await flush(); r.result(); await flush();
+  r.contexts[0].sources[0].end();
+  assert.deepEqual(await retry, {spoken: true});
+  assert.equal(r.timers.size, 0, 'successful audio clears the generation watchdog');
+  r.voice.destroy();
+});
+
+test('cancelled inference may drain but its watchdog prevents perpetual busy without output', async () => {
+  const r = rig({generationTimeoutMs: 1000}); await r.loaded();
+  const pending = r.voice.speak('The queen advances.'); await flush();
+  r.voice.cancel();
+  assert.deepEqual(await pending, {spoken: false, reason: 'cancelled'});
+  assert.equal(r.voice.getState().busy, true);
+  assert.deepEqual(await r.voice.speak('Another call.'), {spoken: false, reason: 'busy'});
+  await r.advance(1000);
+  assert.equal(r.voice.getState().busy, false);
+  assert.equal(r.workers[0].terminated, true);
+  assert.equal(r.contexts.length, 0);
+  r.voice.destroy();
+});
+
+test('a returned worker error and destroy both clear generation watchdogs', async () => {
+  const r = rig({generationTimeoutMs: 1000}); await r.loaded();
+  const failed = r.voice.speak('The rook switches play.'); await flush();
+  const worker = r.workers[0], request = worker.messages.at(-1);
+  worker.send({type: 'error', stage: 'synthesize', id: request.id, message: 'Inference failed'});
+  assert.deepEqual(await failed, {spoken: false, reason: 'generation_failed'});
+  assert.equal(r.timers.size, 0);
+  const cancelled = r.voice.speak('The bishop supports.'); await flush();
+  assert.equal(r.timers.size, 1);
+  r.voice.destroy();
+  assert.deepEqual(await cancelled, {spoken: false, reason: 'cancelled'});
+  assert.equal(r.timers.size, 0);
 });

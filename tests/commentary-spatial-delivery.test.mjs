@@ -119,6 +119,22 @@ test('a genuine one-on-one reaches Hugo with explicit urgent delivery', async ()
   await finish(h.jobs[0]); h.controller.destroy();
 });
 
+for (const delay of [6500, 8500]) test(`a still-current spatial call can begin after ${delay}ms within the twelve-second local window`, async () => {
+  const h = harness(), state = position(), caption = beginSpatial(h, state), job = h.jobs[0];
+  assert.equal(job.settings.expiresAt, 12000);
+  h.advance(delay);
+  assert.equal(h.controller.getState().audioStatus, 'generating');
+  assert.equal(h.local.cancels, 0); assert.equal(h.jobs.length, 1);
+  assert.equal(h.controller.tick(state), false, 'quiet UI polling cannot queue another call or cancel a valid fact');
+  job.settings.onPlaying();
+  assert.equal(h.controller.getState().audioStatus, 'playing');
+  assert.equal(h.captions.at(-1).text, caption.text);
+  job.resolve({spoken: true}); await flush();
+  assert.equal(h.controller.getState().speaking, false);
+  assert.equal(h.audios.length, 0); assert.equal(h.deviceCalls.length, 0);
+  h.controller.destroy();
+});
+
 for (const options of [{ready: false, playback: 'local'}, {ready: true, playback: 'recorded'}]) {
   test(`${options.playback}, local ready=${options.ready}: technical captions never become an unrelated recording or device voice`, () => {
     const h = harness(options), caption = beginSpatial(h, position());
@@ -140,11 +156,17 @@ for (const failure of ['busy', 'deadline']) {
   test(`a ${failure} local spatial call preserves its factual caption without an unrelated fallback`, async () => {
     const h = harness(), caption = beginSpatial(h, position()), job = h.jobs[0];
     if (failure === 'busy') {job.resolve({spoken: false, reason: 'busy'}); await flush();}
-    else h.advance(5500);
+    else {
+      h.advance(11999);
+      assert.equal(h.local.cancels, 0); assert.equal(h.controller.getState().audioStatus, 'generating');
+      h.advance(1);
+    }
+    assert.equal(h.local.cancels, 1, 'failed or expired generation is cancelled once');
     assert.equal(h.audios.length, 0); assert.equal(h.deviceCalls.length, 0);
     assert.equal(h.captions.at(-1).text, caption.text);
     job.settings.onPlaying(); job.resolve({spoken: true}); await flush();
     assert.equal(h.audios.length, 0); assert.equal(h.deviceCalls.length, 0);
+    assert.equal(h.controller.getState().audioStatus === 'playing', false, 'an expired or failed call cannot start later');
     h.controller.destroy();
   });
 }
@@ -307,6 +329,7 @@ test('a knight arriving in covering range invalidates the pending one-on-one cal
 for (const stop of ['goal', 'off']) {
   test(`${stop} preempts spatial synthesis and its late result stays silent`, async () => {
     const h = harness(); beginSpatial(h, position()); const job = h.jobs[0];
+    h.advance(8500); assert.equal(h.controller.getState().audioStatus, 'generating');
     if (stop === 'off') h.controller.setEnabled(false);
     else h.controller.reveal({kind: 'goal', priority: 4, text: 'GOAL for Ivory!', clipKey: 'goal_generic', id: 'spatial-test-goal'});
     const caption = h.captions.at(-1).text;

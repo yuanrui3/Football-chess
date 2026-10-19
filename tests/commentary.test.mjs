@@ -624,7 +624,7 @@ test('the local male voice speaks current analysis while Tom keeps attempts, res
   assert.equal(h.jobs.length, 1); assert.equal(h.jobs[0].text, dynamic.text);
   assert.equal(h.audios.length, 0); assert.equal(h.spoken.length, 0);
   assert.equal(h.captions.at(-1).text, dynamic.text); assert.equal(h.controller.getState().audioStatus, 'generating');
-  assert.equal(h.jobs[0].settings.expiresAt, 5500);
+  assert.equal(h.jobs[0].settings.expiresAt, 12000);
   h.advance(1500); h.jobs[0].settings.onPlaying();
   assert.equal(h.controller.getState().audioStatus, 'playing');
   h.jobs[0].resolve({spoken: true}); await flushLocal();
@@ -647,6 +647,52 @@ test('loading the local voice falls back to saved lines, and ready Test voice au
   assert.equal(h.audios.length, 1, 'the Tom voice test is not passed off as a local male audition');
   h.jobs[0].settings.onPlaying(); h.jobs[0].resolve({spoken: true}); await flushLocal();
   assert.equal(h.controller.getState().speaking, false);
+});
+
+for (const delay of [6500, 8500]) test(`a local voice audition can finish generating after ${delay}ms within its explicit twenty-second window`, async () => {
+  const h = localHarness();
+  assert.equal(h.controller.testVoice(), true);
+  assert.equal(h.jobs[0].settings.expiresAt, 20000);
+  h.advance(delay);
+  assert.equal(h.controller.getState().audioStatus, 'generating');
+  assert.equal(h.local.cancels, 0); assert.equal(h.audios.length, 0);
+  h.jobs[0].settings.onPlaying();
+  assert.equal(h.controller.getState().audioStatus, 'playing');
+  h.jobs[0].resolve({spoken: true}); await flushLocal();
+  assert.equal(h.controller.getState().speaking, false);
+  assert.equal(h.audios.length, 0); assert.equal(h.spoken.length, 0);
+  h.controller.destroy();
+});
+
+test('an audition that reaches its twenty-second deadline cannot play later or substitute a saved voice', async () => {
+  const h = localHarness(); h.controller.testVoice(); const job = h.jobs[0];
+  h.advance(19999);
+  assert.equal(h.controller.getState().audioStatus, 'generating'); assert.equal(h.local.cancels, 0);
+  h.advance(1);
+  assert.equal(h.local.cancels, 1); assert.equal(h.controller.getState().speaking, false);
+  assert.equal(h.controller.getState().audioStatus, 'unavailable');
+  const caption = h.captions.at(-1).text;
+  job.settings.onPlaying(); job.resolve({spoken: true}); await flushLocal();
+  assert.equal(h.captions.at(-1).text, caption);
+  assert.equal(h.controller.getState().speaking, false);
+  assert.equal(h.audios.length, 0); assert.equal(h.spoken.length, 0);
+  h.controller.destroy();
+});
+
+test('a slow local audition remains preemptible by Off or a goal throughout its extended window', async () => {
+  for (const stop of ['off', 'goal']) {
+    const h = localHarness(); h.controller.testVoice(); const job = h.jobs[0];
+    h.advance(8500); assert.equal(h.controller.getState().audioStatus, 'generating');
+    if (stop === 'off') h.controller.setEnabled(false);
+    else h.controller.reveal(recordedLine('goal', 'goal_generic', 'audition-goal'));
+    const caption = h.captions.at(-1).text;
+    assert.equal(h.local.cancels, 1);
+    job.settings.onPlaying(); job.resolve({spoken: true}); await flushLocal();
+    assert.equal(h.captions.at(-1).text, caption);
+    assert.equal(h.jobs.length, 1); assert.equal(h.audios.length, stop === 'goal' ? 1 : 0);
+    assert.equal(h.spoken.length, 0); assert.equal(h.controller.getState().speaking, stop === 'goal');
+    h.controller.destroy();
+  }
 });
 
 test('local analysis quickens for counters and pressure, while measured buildup stays normal', async () => {
@@ -700,7 +746,7 @@ test('slow or failed local generation falls back once, with captions matching th
   for (const failure of ['timeout', 'reject', 'busy']) {
     const h = localHarness(); h.controller.reveal({...recordedLine('trend', 'leader'), text: 'Ivory lead. Ivory 2, Obsidian 0.'});
     const old = h.jobs[0];
-    if (failure === 'timeout') h.advance(5500);
+    if (failure === 'timeout') h.advance(12000);
     else if (failure === 'reject') {old.reject(Error('Model unavailable')); await flushLocal();}
     else {old.resolve({spoken: false, reason: 'busy'}); await flushLocal();}
     assert.equal(h.local.cancels, 1); assert.equal(h.audios.length, 1);
@@ -736,6 +782,7 @@ test('Hugo delivers the live keeper-spill call urgently without substituting a c
   const h=localHarness(),{pending,model}=shot(),after=E.skipMove(pending,{roll:model.goalProbability+model.keeperCornerProbability+model.keeperReboundProbability/2,reboundRoll:.25});
   const line=commentaryEvent(pending,after);h.controller.reveal(line);
   assert.equal(h.jobs.length,1);assert.equal(h.jobs[0].settings.delivery,'urgent');
+  assert.equal(h.jobs[0].settings.expiresAt,5500,'an urgent keeper spill keeps its short generation window');
   assert.match(h.jobs[0].text,/loose|rebound/i);assert.equal(h.audios.length,0);
   h.jobs[0].resolve({spoken:true});await flushLocal();
 });

@@ -18,10 +18,12 @@ export function createParadeeSpeech({
   setTimer = (fn, delay) => setTimeout(fn, delay),
   clearTimer = (id) => clearTimeout(id),
   loadTimeoutMs = 90000,
+  generationTimeoutMs = 30000,
 } = {}) {
   const supported = typeof WorkerCtor === 'function' && typeof AudioContextCtor === 'function';
   let worker = null;
   let context = null;
+  let removeContextListener = null;
   let disposed = false;
   let ready = false;
   let unlocked = false;
@@ -30,15 +32,23 @@ export function createParadeeSpeech({
   let loadReject = null;
   let loadTimer = null;
   let generation = null;
+  let generationTimer = null;
   let active = null;
   let source = null;
   let finishPlayback = null;
   let serial = 0;
   let state = { status: supported ? 'idle' : 'unsupported', progress: 0, ready: false,
-    supported, unlocked: false, error: null, busy: false };
+    supported, unlocked: false, audioState: 'uninitialized', error: null, busy: false };
+
+  const audioRunning = () => !!context && (context.state === 'running' || context.state === undefined);
+  function clearGenerationTimer() {
+    if (generationTimer !== null) clearTimer(generationTimer);
+    generationTimer = null;
+  }
 
   function publish(patch) {
-    state = { ...state, ...patch, ready, unlocked, busy: !!(active || generation) };
+    unlocked = unlocked && audioRunning();
+    state = { ...state, ...patch, ready, unlocked, audioState: context?.state ?? 'uninitialized', busy: !!(active || generation) };
     try { onState({ ...state }); } catch { /* UI callbacks cannot stop playback cleanup. */ }
   }
   function resting() {
@@ -52,12 +62,12 @@ export function createParadeeSpeech({
     if (error) job.reject(error); else job.resolve(value);
     resting();
   }
-  function stopSource() {
+  function stopSource(reason = 'cancelled') {
     const current = source;
     source = null;
     const finish = finishPlayback;
     finishPlayback = null;
-    if (finish) finish({ spoken: false, reason: 'cancelled' });
+    if (finish) finish({ spoken: false, reason });
     if (!current) return;
     current.onended = null;
     try { current.stop(); } catch { /* Already ended or not started. */ }
@@ -73,6 +83,7 @@ export function createParadeeSpeech({
     const message = error?.message || String(error || 'The local speech worker failed.');
     if (loadTimer !== null) clearTimer(loadTimer);
     loadTimer = null;
+    clearGenerationTimer();
     ready = false;
     const rejectLoad = loadReject;
     loadResolve = loadReject = null;
@@ -83,7 +94,7 @@ export function createParadeeSpeech({
     generation = null;
     publish({ status: 'error', error: message, progress: 0 });
     if (rejectLoad) rejectLoad(speechError(message, 'LOAD_FAILED'));
-    if (pending) pending.reject(speechError(message, 'GENERATION_FAILED'));
+    if (pending) pending.reject(speechError(message, error?.code === 'GENERATION_TIMEOUT' ? 'GENERATION_TIMEOUT' : 'GENERATION_FAILED'));
   }
   function receive(event) {
     const data = event?.data || {};
@@ -102,6 +113,7 @@ export function createParadeeSpeech({
     } else if (data.type === 'audio' && generation?.id === data.id) {
       const pending = generation;
       generation = null;
+      clearGenerationTimer();
       const samples = data.samples instanceof Float32Array ? data.samples : new Float32Array(data.samples);
       if (!samples.length || samples.some((sample) => !Number.isFinite(sample))) {
         pending.reject(speechError('The local voice returned invalid audio.', 'GENERATION_FAILED'));
@@ -115,6 +127,7 @@ export function createParadeeSpeech({
       } else if (generation?.id === data.id) {
         const pending = generation;
         generation = null;
+        clearGenerationTimer();
         publish({ status: 'error', error: data.message || 'Could not generate speech.' });
         pending.reject(speechError(data.message || 'Could not generate speech.', 'GENERATION_FAILED'));
       }
@@ -144,14 +157,35 @@ export function createParadeeSpeech({
   function unlock() {
     if (disposed || !supported) return Promise.resolve(false);
     try {
-      context ||= new AudioContextCtor({ latencyHint: 'interactive' });
-      const resumed = context.state === 'suspended' ? context.resume() : Promise.resolve();
+      if (!context || context.state === 'closed') {
+        stopSource('audio_closed');
+        removeContextListener?.();
+        context = new AudioContextCtor({ latencyHint: 'interactive' });
+        const created = context;
+        const changed = () => {
+          if (disposed || context !== created) return;
+          unlocked = audioRunning();
+          if (!unlocked && source) stopSource(created.state === 'closed' ? 'audio_closed' : 'audio_interrupted');
+          publish({ error: unlocked ? null : 'Tap Start or Test voice to restore audio.' });
+        };
+        if (typeof created.addEventListener === 'function') {
+          created.addEventListener('statechange', changed);
+          removeContextListener = () => created.removeEventListener?.('statechange', changed);
+        } else {
+          created.onstatechange = changed;
+          removeContextListener = () => { if (created.onstatechange === changed) created.onstatechange = null; };
+        }
+      }
+      const created = context;
+      const resumed = !audioRunning() ? created.resume() : Promise.resolve();
       return Promise.resolve(resumed).then(() => {
-        if (disposed) return false;
-        unlocked = context.state === 'running' || context.state === undefined;
+        if (disposed || context !== created) return false;
+        unlocked = audioRunning();
         publish({ error: unlocked ? null : 'Click Start or Test voice to allow audio.' });
         return unlocked;
       }).catch((error) => {
+        if (disposed || context !== created) return false;
+        unlocked = false;
         publish({ error: error?.message || 'Audio permission is needed.' });
         return false;
       });
@@ -188,15 +222,21 @@ export function createParadeeSpeech({
     return new Promise((resolve, reject) => {
       generation = { id: job.id, resolve, reject };
       publish({ status: 'generating', error: null });
+      const created = worker;
+      generationTimer = setTimer(() => {
+        if (generation?.id !== job.id || worker !== created) return;
+        failWorker(speechError('Hugo took too long to generate audio. Tap Test voice to retry.', 'GENERATION_TIMEOUT'));
+      }, Math.max(1, Number.isFinite(generationTimeoutMs) ? generationTimeoutMs : 30000));
       try { worker.postMessage({ type: 'synthesize', id: job.id, text,
         delivery: options.delivery === 'urgent' ? 'urgent' : 'normal' }); }
-      catch (error) { generation = null; reject(error); }
+      catch (error) { generation = null; clearGenerationTimer(); reject(error); }
     });
   }
   async function playBuffer(audio, options, job) {
     if (job.finished || disposed) throw speechError('Speech cancelled.', 'CANCELLED');
     if (expired(options)) return { spoken: false, reason: 'expired' };
-    if (!context || !unlocked || context.state === 'suspended') throw speechError('Click Start or Test voice to allow audio.', 'AUDIO_LOCKED');
+    if (!unlocked || !audioRunning()) throw speechError('Click Start or Test voice to allow audio.', 'AUDIO_LOCKED');
+    const playbackContext = context;
     const samples = audio?.samples instanceof Float32Array ? audio.samples : new Float32Array(audio?.samples || []);
     if (!samples.length) throw speechError('The local voice returned no audio.', 'EMPTY_AUDIO');
     const buffer = context.createBuffer(1, samples.length, audio.sampleRate || PARADEE_SAMPLE_RATE);
@@ -211,7 +251,8 @@ export function createParadeeSpeech({
         finishPlayback = null;
         if (source === current) source = null;
         try { current.disconnect(); } catch { /* Already disconnected. */ }
-        resolve({ spoken: true });
+        resolve(context === playbackContext && unlocked && audioRunning()
+          ? { spoken: true } : { spoken: false, reason: 'audio_interrupted' });
       };
       // A callback may cancel the request, so check again before starting sound.
       if (job.finished || disposed || expired(options)) {
@@ -226,6 +267,11 @@ export function createParadeeSpeech({
           current.onended = null;
           stopSource();
           resolve({ spoken: false, reason: job.finished ? 'cancelled' : 'expired' });
+          return;
+        }
+        if (context !== playbackContext || !unlocked || !audioRunning()) {
+          current.onended = null;
+          stopSource('audio_interrupted');
           return;
         }
         current.start();
@@ -259,13 +305,17 @@ export function createParadeeSpeech({
     loading = null;
     if (generation) generation.reject(speechError('The local voice was closed.', 'DESTROYED'));
     generation = null;
+    clearGenerationTimer();
     worker?.terminate();
     worker = null;
     ready = false;
+    removeContextListener?.();
+    removeContextListener = null;
     if (context?.close) Promise.resolve(context.close()).catch(() => {});
     context = null;
     unlocked = false;
     publish({ status: 'closed' });
   }
-  return { load, unlock, speak, synthesize, play, cancel, getState: () => ({ ...state }), destroy };
+  return { load, unlock, speak, synthesize, play, cancel,
+    getState: () => ({ ...state, unlocked: unlocked && audioRunning(), audioState: context?.state ?? 'uninitialized' }), destroy };
 }
