@@ -143,7 +143,7 @@ test('every spatial fact has a ready, whole-sentence Hugo recording that preserv
       'the bishop has the collection route; the queen made the delivery');
     if (fact.type === 'oneTwo') assert.match(clip.text, /queen received the return/i,
       'the queen receives the return; the rook played it');
-    if (fact.type === 'pressing') assert.match(clip.text, /rook has the ball carrier under pressure/i,
+    if (fact.type === 'pressing') assert.match(clip.text, /rook had the ball carrier under pressure/i,
       'the rook supplies pressure against the queen, not the reverse');
     if (fact.type === 'passRun') assert.match(clip.text, /queen ran after passing; the rook kept possession/i);
     assert.doesNotMatch(clip.text, /Ivory|Obsidian|\b(?:queen|rook|bishop|knight|pawn) (?:one|two|three)\b/i,

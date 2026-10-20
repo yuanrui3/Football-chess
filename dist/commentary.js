@@ -1,6 +1,7 @@
 /** Public match commentary: read-only board geometry, never seeds, hidden targets or AI search. */
 import {COMMENTARY_CLIPS} from './commentary-clips.js?v=29cbe0d352e1';
-import {HUGO_COMMENTARY_CLIPS, hugoCommentaryClip} from './hugo-commentary-clips.js?v=b5aa2bd3feb6';
+import {HUGO_COMMENTARY_CLIPS, hugoCommentaryClip} from './hugo-commentary-clips.js?v=c2b4a4251deb';
+import {createTacticalCommentary} from './commentary-tactics.js?v=c2edbd16f79c';
 import {commentaryPositionFacts, commentaryTransitionFact} from './commentary-spatial.js?v=f1178052f8e6';
 const TEAM_NAMES = {white: 'Ivory', black: 'Obsidian'};
 const PIECE_NAMES = {K: 'keeper', Q: 'queen', R: 'rook', B: 'bishop', N: 'knight', P: 'pawn'};
@@ -13,6 +14,7 @@ export const COMMENTARY_ROUTINE_MS = 10000;
 export const COMMENTARY_LOCAL_DEADLINE_MS = 12000;
 export const COMMENTARY_LOCAL_AUDITION_MS = 20000;
 export const COMMENTARY_SPATIAL_REPEAT_MS = 30000;
+export const COMMENTARY_TACTICAL_REPEAT_MS = 45000;
 const voiceId = voice => `${voice.voiceURI || voice.name || ''}|${voice.lang || ''}`;
 const voiceRank = voice => (/natural|neural/i.test(voice.name) ? 100 : /google.*english|microsoft.*online/i.test(voice.name) ? 70 : 0)
   + (/^en[-_]US$/i.test(voice.lang) ? 15 : 0) + (voice.default ? 1 : 0);
@@ -287,9 +289,10 @@ export function createCommentary({speechSynthesis = globalThis.speechSynthesis,
   setTimer = (fn, delay) => setTimeout(fn, delay), clearTimer = id => clearTimeout(id)} = {}) {
   let enabled = false, destroyed = false, epoch = 0, pace = 1200, active = null, watchdog = null;
   let lastSpoken = -Infinity, lastTrend = -Infinity, lastAttempt = -Infinity, demo = false, situationIndex = 0, lastText = '', cueSequence = 0;
-  let latestState = null;
+  let latestState = null, latestStats = null, broadStreak = 0;
+  const tactics = createTacticalCommentary();
   const samples = [], seen = new Set(), spoken = new Set(), demoTimers = new Set();
-  const passes = [], spatialSpokenAt = new Map();
+  const passes = [], spatialSpokenAt = new Map(), tacticalSpokenAt = new Map(), tacticalEvidence = new Map();
   const speechSupported = !!(speechSynthesis && typeof speechSynthesis.speak === 'function' && typeof Utterance === 'function');
   const recordedSupported = typeof AudioCtor === 'function' && Object.values(clips).some(clip => clip?.src && clip?.text);
   const librarySupported = typeof AudioCtor === 'function' && Object.values(hugoClips).some(clip => clip?.src && clip?.text);
@@ -329,11 +332,39 @@ export function createCommentary({speechSynthesis = globalThis.speechSynthesis,
   const remember = (set, key) => {set.add(key); if (set.size > 120) set.delete(set.values().next().value);};
   const spatialCurrent = line => !line?.spatial?.live || !!latestState
     && commentaryPositionFacts(latestState).some(fact => fact.key === line.spatial.key && fact.text === line.spatial.text);
+  const tacticalKey = line => line?.tactical?.key || `${line?.tactical?.type}:${line?.team}:${line?.tactical?.pieceId || ''}`;
+  function evidenceKey(line) {
+    if (!line?.tactical) return '';
+    // Counters, shape and territory may recur; unchanged individual totals
+    // should not keep earning the same performance verdict.
+    if (!line.clipKey?.startsWith('performance_')) return '';
+    const {observedSerial, key, rank, ...evidence} = line.tactical;
+    return JSON.stringify(evidence);
+  }
+  function tacticalCandidates(state) {
+    if (!enabled || !state) return [];
+    return tactics.lines(state, {stats: latestStats}).filter(line => {
+      const key = tacticalKey(line);
+      return now() - (tacticalSpokenAt.get(key) ?? -Infinity) >= COMMENTARY_TACTICAL_REPEAT_MS
+        && (!evidenceKey(line) || tacticalEvidence.get(key) !== evidenceKey(line));
+    });
+  }
+  function chooseRoutine(state, fallback) {
+    const broader = tacticalCandidates(state);
+    // Broader analysis leads; an occasional concrete detail gives it context.
+    if (broader.length && !(broadStreak >= 3 && fallback?.spatial)) return broader[0];
+    return fallback || broader[0] || null;
+  }
   function updatePosition(state) {
     const previousAttack = latestState?.attack;
     latestState = state;
-    if (active?.event.spatial && (!spatialCurrent(active.event) || state?.restart || state?.pendingShot
-        || state?.phase === 'finished' || previousAttack && previousAttack !== state?.attack)) cancelActive();
+    if (!active) return;
+    // A recorded past-tense observation remains true after an ordinary move.
+    // Pending audio must still describe a valid fact when it first starts.
+    const completedSnapshot = active.event.snapshot === true && active.started === true;
+    if ((active.event.spatial || active.event.tactical) && (state?.pendingShot || state?.phase === 'finished')) {cancelActive(); return;}
+    if (active.event.spatial && !completedSnapshot && (!spatialCurrent(active.event) || state?.restart
+        || previousAttack && previousAttack !== state?.attack)) cancelActive();
   }
   function rememberPass(before, after) {
     const action = after.lastAction;
@@ -377,13 +408,15 @@ export function createCommentary({speechSynthesis = globalThis.speechSynthesis,
     if (!demoCall && !spatialCurrent(line)) return false;
     const at = now(), ttl = line.audition ? COMMENTARY_LOCAL_AUDITION_MS
       : line.kind === 'goal' ? 30000 : line.kind === 'outcome' ? 12000
-        : line.spatial ? COMMENTARY_LOCAL_DEADLINE_MS : 6000;
+        : line.spatial || line.tactical ? COMMENTARY_LOCAL_DEADLINE_MS : 6000;
     if (!demoCall && finite(line.createdAt) && at - line.createdAt > ttl) return false;
     if (spoken.has(line.id)) return false;
     if (active && line.priority <= active.event.priority && line.kind !== 'goal'
         && !(explicit && active.event.kind === 'trend')) return false;
     if (!demoCall && !explicit && line.kind === 'trend' && (at - lastTrend < COMMENTARY_ROUTINE_MS || at - lastSpoken < COMMENTARY_ROUTINE_MS)) return false;
     if (!demoCall && line.spatial && at - (spatialSpokenAt.get(line.spatial.key) ?? -Infinity) < COMMENTARY_SPATIAL_REPEAT_MS) return false;
+    if (!demoCall && line.tactical && (at - (tacticalSpokenAt.get(tacticalKey(line)) ?? -Infinity) < COMMENTARY_TACTICAL_REPEAT_MS
+        || evidenceKey(line) && tacticalEvidence.get(tacticalKey(line)) === evidenceKey(line))) return false;
     if (!demoCall && line.kind === 'attempt' && at - lastAttempt < (pace < 700 ? 3000 : 1200)) return false;
     const useLocal = playback === 'local' && (line.kind === 'trend' || line.keeperRebound === true) && line.clipKey !== 'enable'
       && localSupported && localState().ready;
@@ -394,13 +427,22 @@ export function createCommentary({speechSynthesis = globalThis.speechSynthesis,
     let text = useLocal ? line.text : clip?.text || (pace < 700 && line.kind === 'trend' && line.shortText ? line.shortText : line.text);
     if (!demoCall && !explicit && line.kind === 'trend' && text === lastText) return false;
     cancelActive();
-    const token = {}, spokenEvent = {...line, text, ...(clip ? {voice: hugoClip ? 'Hugo' : 'Tom'} : {})};
+    const token = {}, spokenEvent = {...line, text, snapshot: playback === 'library' && clip?.snapshot === true,
+      ...(clip ? {voice: hugoClip ? 'Hugo' : 'Tom'} : {})};
     active = {token, event: spokenEvent, transport: 'caption'};
     remember(spoken, line.id); lastSpoken = at; lastText = text;
     if (line.spatial) {
       spatialSpokenAt.set(line.spatial.key, at);
       if (spatialSpokenAt.size > 120) spatialSpokenAt.delete(spatialSpokenAt.keys().next().value);
     }
+    if (!demoCall && !explicit && line.tactical) {
+      const key = tacticalKey(line);
+      tacticalSpokenAt.set(key, at);
+      if (evidenceKey(line)) tacticalEvidence.set(key, evidenceKey(line));
+      if (tacticalSpokenAt.size > 120) tacticalSpokenAt.delete(tacticalSpokenAt.keys().next().value);
+      if (tacticalEvidence.size > 120) tacticalEvidence.delete(tacticalEvidence.keys().next().value);
+      broadStreak++;
+    } else if (!demoCall && !explicit && line.spatial) broadStreak = 0;
     if (line.kind === 'trend') lastTrend = at;
     if (line.kind === 'attempt') lastAttempt = at;
     caption(text, spokenEvent);
@@ -460,7 +502,8 @@ export function createCommentary({speechSynthesis = globalThis.speechSynthesis,
         status('loading');
         const playing = () => {
           if (active?.token !== token || active.transport !== 'recorded') {stopAudio(audio); return;}
-          if (!demoCall && (!spatialCurrent(line) || finite(line.createdAt) && now() - line.createdAt > ttl)) {cancelActive(); return;}
+          if (!active.started && !demoCall && (!spatialCurrent(line) || finite(line.createdAt) && now() - line.createdAt > ttl)) {cancelActive(); return;}
+          active.started = true;
           clearTimer(active.loadTimer); status('playing');
         };
         audio.onended = () => finish(token); audio.onerror = fallback; audio.onplaying = playing;
@@ -504,15 +547,19 @@ export function createCommentary({speechSynthesis = globalThis.speechSynthesis,
     if (destroyed || !before || !after || before === after) return null;
     if (finite(options.pace)) setPace(options.pace);
     updatePosition(after);
+    if (options.stats) latestStats = options.stats;
+    const completedRound = completedCommentaryRound(before, after);
+    if (enabled && pace === COMMENTARY_PACE) tactics.observe(before, after, {stats: latestStats, completedRound});
     let line = commentaryEvent(before, after, {...options, passes, spatial: enabled});
     rememberPass(before, after);
     if (after.restart || ['kickoff', 'finished'].includes(after.phase) || line?.kind === 'goal') samples.length = 0;
     const turnover = !after.restart && before.attack !== after.attack && point(after.ball) && TEAM_NAMES[after.attack];
-    if ((completedCommentaryRound(before, after) || turnover) && point(after.ball) && TEAM_NAMES[after.attack]) {
+    if ((completedRound || turnover) && point(after.ball) && TEAM_NAMES[after.attack]) {
       const sample = {turn: after.turn, team: after.attack, ball: {x: after.ball.x, y: after.ball.y}};
       if (samples.at(-1)?.turn !== sample.turn) {samples.push(sample); if (samples.length > 10) samples.shift();}
       if (!line) line = analyseCommentaryTrend(samples);
     }
+    if (!line || line.kind === 'trend') line = chooseRoutine(after, line);
     if (!line || seen.has(line.id)) return null;
     remember(seen, line.id);
     const deferred = !!(options.deferResult && (line.kind === 'goal' || line.shot && line.kind === 'outcome'));
@@ -522,7 +569,8 @@ export function createCommentary({speechSynthesis = globalThis.speechSynthesis,
   }
   function reset() {
     epoch++; stopDemo(); cancelActive(); samples.length = 0; seen.clear(); spoken.clear();
-    passes.length = 0; spatialSpokenAt.clear(); latestState = null;
+    passes.length = 0; spatialSpokenAt.clear(); tacticalSpokenAt.clear(); tacticalEvidence.clear(); tactics.reset();
+    latestState = latestStats = null; broadStreak = 0;
     lastSpoken = lastTrend = lastAttempt = -Infinity; situationIndex = 0; lastText = '';
   }
   function setPace(value) {
@@ -532,10 +580,16 @@ export function createCommentary({speechSynthesis = globalThis.speechSynthesis,
   }
   return {
     observe,
-    tick(state, {blocked = false} = {}) {
+    tick(state, {blocked = false, stats} = {}) {
       updatePosition(state);
+      if (stats) latestStats = stats;
       if (blocked || !enabled || pace !== COMMENTARY_PACE || destroyed || demo || active || now() - lastSpoken < COMMENTARY_HEARTBEAT_MS) return false;
       if (!state || state.pendingShot || ['keeperReact', 'finished'].includes(state.phase)) return false;
+      if (broadStreak < 3 || !commentaryPositionFacts(state).length) {
+        for (const line of tacticalCandidates(state)) {
+          if (speak({...line, createdAt: now(), epoch})) return true;
+        }
+      }
       const latest = samples.at(-1);
       if (!commentaryPositionFacts(state).length && !state.restart && latest?.team === state.attack && state.turn >= latest.turn && state.turn - latest.turn <= 8) {
         const trend = analyseCommentaryTrend(samples);
@@ -545,6 +599,9 @@ export function createCommentary({speechSynthesis = globalThis.speechSynthesis,
         const line = commentarySituation(state, {index: situationIndex++});
         if (!line) return false;
         if (line.text !== lastText && speak({...line, createdAt: now(), epoch})) return true;
+      }
+      for (const line of tacticalCandidates(state)) {
+        if (speak({...line, createdAt: now(), epoch})) return true;
       }
       return false;
     },

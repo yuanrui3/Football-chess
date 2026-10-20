@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import vm from 'node:vm';
+import {shortPieceId} from '../dist/match-stats.js';
 
 // Run the real app handlers with a pending model load. No browser, model,
 // network, board simulation or copied request-cancellation logic is needed.
@@ -33,7 +34,7 @@ function harness() {
   };
   const context = vm.createContext({
     $: element, voiceEnabled: false, voiceActivated: false, voicePlayback: 'local',
-    voiceTestRequest: 0, voiceLifecycle: 'playing', voiceLastCaption: '', voiceCaptionDemo: false,
+    voiceTestRequest: 0, voiceLifecycle: 'playing', voiceLastCaption: '', voiceLastContext: '', voiceCaptionDemo: false,
     aiPace: 3000, paused: false, stage: 'playing', dialogOpen: false, replayAutoContinue: false,
     game: {lastAction: null},
     document: {hidden: false, addEventListener: (event, callback) => listeners.set(`document:${event}`, callback)},
@@ -112,3 +113,15 @@ for (const [name, interrupt] of interruptions) {
     assert.equal(h.calls.tests, 1, 'a new user test still works after the model is ready');
   });
 }
+
+
+test('analysis context names the assessed team and stable piece without changing the spoken caption', () => {
+  const context=vm.createContext({TEAM:{white:'Ivory FC',black:'Obsidian FC'},shortPieceId});
+  vm.runInContext(section('function commentaryContext(event){','function renderVoiceover(){'),context);
+  assert.equal(context.commentaryContext({team:'black',clipKey:'performance_progress_rook',tactical:{pieceId:'black-R2'}}),
+    'Obsidian FC · R2 · Player performance');
+  assert.equal(context.commentaryContext({team:'white',clipKey:'shape_compact',tactical:{}}),'Ivory FC · Team shape');
+  assert.equal(context.commentaryContext({team:'black',clipKey:'tactic_counter',tactical:{}}),'Obsidian FC · Team tactics');
+  assert.equal(context.commentaryContext({kind:'goal',team:'black'}),'');
+  assert.equal(context.commentaryContext({team:'invalid',clipKey:'shape_wide',tactical:{}}),'');
+});

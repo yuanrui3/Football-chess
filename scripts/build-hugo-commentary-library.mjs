@@ -12,6 +12,7 @@ import {execFile} from 'node:child_process';
 import {promisify} from 'node:util';
 import {Worker, isMainThread, parentPort, workerData} from 'node:worker_threads';
 import {COMMENTARY_CLIPS} from '../dist/commentary-clips.js';
+import {TACTICAL_COMMENTARY_SCRIPTS} from '../dist/commentary-tactics.js';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const output = path.join(root, 'dist/audio/hugo');
@@ -32,27 +33,27 @@ for (const role of roles) {
   const lanes = role === 'queen' ? ['vertical', 'horizontal', 'diagonal'] : role === 'rook' || role === 'pawn'
     ? ['vertical', 'horizontal'] : role === 'bishop' ? ['diagonal'] : ['jump'];
   for (const lane of lanes) add(`support_${role}_${lane}`, lane === 'jump'
-    ? 'The knight has an L-shaped jumping pass to a teammate.'
-    : `The ${role} has support along an open ${lane === 'vertical' ? 'vertical file' : lane === 'horizontal' ? 'horizontal rank' : 'diagonal'}.`);
-  add(`one_on_one_${role}`, `The ${role} is one on one with the keeper!`, 'urgent');
-  add(`cross_support_${role}`, `The ${role} can cross to a teammate in the middle.`);
+    ? 'The knight had an L-shaped jumping pass to a teammate.'
+    : `The ${role} had support along an open ${lane === 'vertical' ? 'vertical file' : lane === 'horizontal' ? 'horizontal rank' : 'diagonal'}.`);
+  add(`one_on_one_${role}`, `The ${role} was one on one with the keeper!`, 'urgent');
+  add(`cross_support_${role}`, `The ${role} could cross to a teammate in the middle.`);
   add(`cross_${role}`, `A cross into the middle, finding the ${role}.`);
   add(`cutback_${role}`, `A cutback into the middle, finding the ${role}.`);
   add(`through_ball_${role}`, `A through ball! The onside ${role} had a route to collect.`, 'urgent');
   add(`one_two_${role}`, `A one-two! The ${role} received the return after its run.`);
   add(`link_up_${role}`, `The ${role} linked the passes, receiving and moving it on.`);
-  add(`run_${role}`, `The ${role} made a forward run and is available for a pass.`);
+  add(`run_${role}`, `The ${role} made a forward run and was available for a pass.`);
   add(`dribble_space_${role}`, `The ${role} carried forward into space, beyond immediate tackling threats.`);
   for (const carrier of roles) add(`pass_run_${role}_${carrier}`, `The ${role} ran after passing; the ${carrier} kept possession.`);
 }
 for (const role of defenders) {
-  add(`pressing_${role}`, `The ${role} has the ball carrier under pressure!`, 'urgent');
-  add(`blocked_lane_${role}`, `The ${role} screens the passing lane to a teammate.`);
-  add(`shot_traffic_${role}`, `The ${role} screens a shooting lane. The attack faces traffic.`);
+  add(`pressing_${role}`, `The ${role} had the ball carrier under pressure!`, 'urgent');
+  add(`blocked_lane_${role}`, `The ${role} screened the passing lane to a teammate.`);
+  add(`shot_traffic_${role}`, `The ${role} screened a shooting lane. The attack faced traffic.`);
   add(`press_move_${role}`, `The ${role} closed down the carrier, moving into tackling range.`);
   add(`screen_move_${role}`, `The ${role} cut the ball carrier’s passing lane to a teammate.`);
 }
-add('pawn_setup', 'The pawn can use a free step for a diagonal challenge.');
+add('pawn_setup', 'The pawn had a free step for a diagonal challenge.');
 add('cross_loose', 'A cross into the middle. The ball stayed loose.');
 add('cutback_loose', 'A cutback into the middle. The ball stayed loose.');
 const routineKeys = ['kickoff', 'turnover', 'counter', 'forward_centre', 'forward_wide', 'switch', 'queen_linebreak',
@@ -61,6 +62,12 @@ const routineKeys = ['kickoff', 'turnover', 'counter', 'forward_centre', 'forwar
   'pressure', 'patient', 'corner', 'throw', 'free', 'indirect', 'goalkick', 'offside', 'timeout'];
 for (const key of routineKeys) add(`routine_${key}`, COMMENTARY_CLIPS[key].text,
   COMMENTARY_CLIPS[key].delivery === 'calm' ? 'normal' : 'urgent');
+
+for (const [key, script] of Object.entries(TACTICAL_COMMENTARY_SCRIPTS)) add(key, script.text, script.delivery);
+
+// A spatial recording describes the verified position when playback began.
+// Its past-tense wording can finish over subsequent routine actions.
+for (const definition of definitions) if (!definition.key.startsWith('routine_') && !definition.key.startsWith('hugo_')) definition.snapshot = true;
 
 const selectorSource = String.raw`
 const ROLE = Object.freeze({Q:'queen', R:'rook', B:'bishop', N:'knight', P:'pawn', K:'keeper'});
@@ -72,7 +79,7 @@ export function hugoCommentaryClip(line, state) {
   if (!line || line.kind !== 'trend') return null;
   const alias = {enable:'hugo_enable', test:'hugo_test', demo:'hugo_demo'};
   let key = alias[line.clipKey] || line.clipKey;
-  if (!['hugo_enable', 'hugo_test', 'hugo_demo'].includes(key)) {
+  if (!['hugo_enable', 'hugo_test', 'hugo_demo'].includes(key) && !/^(?:tactic_|performance_|shape_)/.test(key || '')) {
     const f = line.spatial;
     if (!f) key = 'routine_' + line.clipKey;
     else {
@@ -222,9 +229,9 @@ async function main() {
     let totalBytes = 0;
     for (const definition of definitions) {
       const clip = previousClips.get(definition.key), manifest = HUGO_COMMENTARY_CLIPS[definition.key];
-      if (!clip?.ready || clip.text !== definition.text || clip.delivery !== definition.delivery || clip.voice !== 'Hugo'
+      if (!clip?.ready || clip.text !== definition.text || clip.delivery !== definition.delivery || clip.voice !== 'Hugo' || !!clip.snapshot !== !!definition.snapshot
         || !manifest?.ready || manifest.text !== clip.text || manifest.sha256 !== clip.sha256
-        || manifest.durationMs !== clip.durationMs) throw new Error('Tracked script or manifest differs: '+definition.key);
+        || manifest.durationMs !== clip.durationMs || !!manifest.snapshot !== !!definition.snapshot) throw new Error('Tracked script or manifest differs: '+definition.key);
       const filename = path.join(output,definition.key+'.mp3');
       const bytes = await fs.readFile(filename);
       if (sha(bytes) !== clip.sha256 || bytes.length !== clip.bytes) throw new Error('MP3 integrity differs: '+definition.key);
@@ -273,8 +280,9 @@ async function main() {
         normalSpeed:0.936,urgentSpeed:0.99},
       encoding:{ffmpeg,format:'MP3',channels:1,sampleRate:24000,bitrate:'64k',filter:'loudnorm=I=-16:TP=-1.5:LRA=11'},
       scriptsSource:{technical:'Original project-authored factual scripts in this generator',routine:'Exact project-authored trend texts from dist/commentary-clips.js',
+        tactical:{file:'dist/commentary-tactics.js',definitionsSha256:sha(JSON.stringify(TACTICAL_COMMENTARY_SCRIPTS))},
         generator:'scripts/build-hugo-commentary-library.mjs',generatorSha256:sha(await fs.readFile(fileURLToPath(import.meta.url)))},
-      selection:'Current fact IDs select piece-role sentences; no team names or IDs are spliced into recordings. Shot/result/goal calls remain outside this library.',
+      selection:'Current fact IDs select past-tense piece-role snapshots; tactical evidence selects rolling-analysis sentences. No team names or IDs are spliced into recordings. Shot/result/goal calls remain outside this library.',
       workerInitialization:[...(sameRuntime ? previous.workerInitialization || [] : []),...workers.map(worker=>worker.measurement).filter(Boolean)],
       clips:definitions.map(definition=>({...definition,...(receipts.get(definition.key)||{}),voice:'Hugo',file:'dist/audio/hugo/'+definition.key+'.mp3',ready:receipts.has(definition.key)}))};
     await atomicWrite(modulePath,source);
