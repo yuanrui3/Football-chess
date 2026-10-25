@@ -262,7 +262,11 @@ export function createParadeeSpeech({
         return;
       }
       try {
-        options.onPlaying?.();
+        const durationMs = samples.length / (audio.sampleRate || PARADEE_SAMPLE_RATE) * 1000;
+        let startedAt = NaN;
+        const hasAudioClock = Number.isFinite(Number(playbackContext.currentTime));
+        options.onPlaying?.({durationMs, getPositionMs: hasAudioClock
+          ? () => Number.isFinite(startedAt) ? Math.max(0, (playbackContext.currentTime - startedAt) * 1000) : 0 : undefined});
         if (job.finished || disposed || expired(options)) {
           current.onended = null;
           stopSource();
@@ -274,6 +278,7 @@ export function createParadeeSpeech({
           stopSource('audio_interrupted');
           return;
         }
+        startedAt = Number(playbackContext.currentTime);
         current.start();
         publish({ status: 'speaking', error: null });
       } catch (error) { stopSource(); reject(error); }

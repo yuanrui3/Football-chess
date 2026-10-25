@@ -1,12 +1,12 @@
-import {chooseAIAction,analyzeTacticalAction} from './engine.js?v=df962903a48e';
+import {chooseAIAction,analyzeTacticalAction} from './engine.js?v=d1bb1027b949';
 
 if(typeof self!=='undefined')self.onmessage=({data})=>{
-  const {requestId,state,difficulty}=data;
+  const {requestId,state,difficulty,selectionSeed}=data;
   // Playable Tactical uses handcrafted evaluation, including legacy requests.
   const options={difficulty,modelWeights:null};
   try{
     const action=difficulty==='tactical'
-      ?analyzeTacticalAction(state,{modelWeights:null,onIteration:progress=>self.postMessage({requestId,progress})}).action
+      ?analyzeTacticalAction(state,{modelWeights:null,selectionSeed,onIteration:progress=>self.postMessage({requestId,progress})}).action
       :chooseAIAction(state,options);
     self.postMessage({requestId,action});
   }

@@ -9,6 +9,7 @@ const html = readFileSync(new URL('../dist/index.html', import.meta.url), 'utf8'
 const worker = readFileSync(new URL('../dist/ai-worker.js', import.meta.url), 'utf8');
 const plain = value => JSON.parse(JSON.stringify(value));
 const oldPreferenceKey = 'football-chess-self-play-v1';
+const selectionSeedBase = 0x51f15e;
 
 // Execute production bootstrap and AI handlers at their browser boundary. The
 // throwing model detects accidental checkpoint access; a stored legacy opt-in
@@ -35,7 +36,7 @@ function harness({pref = {enabled: true}, mode = 'solo', actor = 'black', diffic
     listeners: {}, addEventListener(kind, listener) {this.listeners[kind] = listener;}
   }]));
   const storage = new Map([[oldPreferenceKey, JSON.stringify(pref)]]), storageReads = [];
-  let timerId = 0, dialogOpen = false;
+  let timerId = 0, dialogOpen = false, seedDraws = 0;
   const timers = new Map(), workers = [], calls = [], commits = [], saves = [], applied = [];
   class FakeWorker {
     constructor(url, options) {this.url = url; this.options = options; this.messages = []; this.terminated = false; workers.push(this);}
@@ -44,7 +45,7 @@ function harness({pref = {enabled: true}, mode = 'solo', actor = 'black', diffic
   }
   const model = new Proxy({}, {get() {throw new Error('Playable UI must not access a learned checkpoint');}});
   const context = vm.createContext({
-    URL, structuredClone, RL_VALUE_MODEL: model, window: {Worker: hasWorker ? FakeWorker : undefined},
+    URL, structuredClone, RL_VALUE_MODEL: model, window: {Worker: hasWorker ? FakeWorker : undefined, crypto:{getRandomValues(values){values[0]=selectionSeedBase+seedDraws++;return values;}}},
     document: {querySelector: selector => selector === '.shot-legend' ? {textContent: 'Shot chance'} : selector === 'dialog[open]' && dialogOpen ? {} : null, getElementById: id => elements[id]},
     localStorage: {getItem: key => {storageReads.push(key); return storage.get(key) ?? null;}, setItem: (key, value) => storage.set(key, value)},
     W: 14, H: 17, BOX_FILES: [4,5,6,7,8,9], BOX_DEPTH: 3, DRIBBLE_RANGE: 8, LONG_TACKLE_RANGE: 5, ACTION_SECONDS: 30,
@@ -75,7 +76,7 @@ function harness({pref = {enabled: true}, mode = 'solo', actor = 'black', diffic
     globalThis.setActor=value=>{game.actor=value;};
     globalThis.selectDifficulty=(id,value)=>{$(id).value=value;$(id).listeners.change();};
   `, context);
-  return {elements, storage, storageReads, timers, workers, calls, commits, saves, applied,
+  return {elements, storage, storageReads, timers, workers, calls, commits, saves, applied, seedDraws:()=>seedDraws,
     inspect: () => context.inspect(), start: () => context.start(), cancel: () => context.cancel(), setPaused: value => context.setPaused(value), setDialog: value => {dialogOpen = value;}, setShotFlight: value => context.setShotFlight(value), setActor: value => context.setActor(value),
     selectDifficulty: (id, value) => context.selectDifficulty(id, value),
     fire(ms) {const pending = [...timers].filter(([, timer]) => timer.ms === ms); assert.equal(pending.length, 1, `one ${ms} ms timer`); const [id, timer] = pending[0]; timers.delete(id); timer.fn();}
@@ -97,7 +98,7 @@ for (const pref of [{enabled: true}, {enabled: false}, {enabled: 'yes'}, null]) 
   test(`handcrafted fallback forces null weights despite old preference ${JSON.stringify(pref)}`, () => {
     const ui = harness({pref, hasWorker: false});
     ui.start(); ui.fire(3000);
-    assert.deepEqual(ui.calls, [{difficulty: 'tactical', modelWeights: null}]);
+    assert.deepEqual(ui.calls, [{difficulty: 'tactical', modelWeights: null, selectionSeed:selectionSeedBase}]);
     assert.equal(ui.commits.length, 1);
   });
 }
@@ -134,7 +135,7 @@ test('worker errors and watchdog fallback cannot reactivate learned weights', ()
     if (failure === 'message') worker.onmessage({data: {requestId, error: 'search failed'}});
     else if (failure === 'error') worker.onerror({preventDefault() {}});
     else ui.fire(4000);
-    assert.deepEqual(ui.calls, [{difficulty: failure === 'watchdog' ? 'casual' : 'tactical', modelWeights: null}]);
+    assert.deepEqual(ui.calls, [{difficulty: failure === 'watchdog' ? 'casual' : 'tactical', modelWeights: null, selectionSeed:selectionSeedBase}]);
     assert.equal(ui.commits.length, 1);
     assert.equal(worker.terminated, true);
   }
@@ -180,7 +181,7 @@ test('wrong request IDs and incomplete iteration progress never become a timeout
   worker.onmessage(progress(requestId, 1.5));
   assert.equal(ui.commits.length, 0);
   ui.fire(4000);
-  assert.deepEqual(ui.calls, [{difficulty: 'casual', modelWeights: null}]);
+  assert.deepEqual(ui.calls, [{difficulty: 'casual', modelWeights: null, selectionSeed:selectionSeedBase}]);
   assert.equal(ui.applied.length, 0);
 });
 
@@ -190,7 +191,7 @@ test('paused or cancelled requests ignore progress and cannot commit a stored an
     const worker = ui.workers[0], callback = worker.onmessage, requestId = worker.messages[0].requestId;
     if (paused) {
       ui.setPaused(true); callback(progress(requestId, 3)); ui.setPaused(false); ui.fire(4000);
-      assert.deepEqual(ui.calls, [{difficulty: 'casual', modelWeights: null}]);
+      assert.deepEqual(ui.calls, [{difficulty: 'casual', modelWeights: null, selectionSeed:selectionSeedBase}]);
     } else {
       callback(progress(requestId, 1)); ui.cancel(); callback(progress(requestId, 3));
       assert.equal(ui.timers.size, 0);
@@ -299,7 +300,7 @@ test('an early worker failure defers synchronous fallback until the pace expires
   assert.equal(ui.calls.length, 0);
   assert.equal(ui.commits.length, 0);
   ui.fire(3000);
-  assert.deepEqual(ui.calls, [{difficulty: 'tactical', modelWeights: null}]);
+  assert.deepEqual(ui.calls, [{difficulty: 'tactical', modelWeights: null, selectionSeed:selectionSeedBase}]);
   assert.equal(ui.commits.length, 1);
 });
 
@@ -324,4 +325,17 @@ test('pace expiry rechecks pause, dialog, shot flight and actor guards before a 
     assert.equal(ui.commits.length, 0);
     assert.equal(ui.calls.length, 0);
   }
+});
+
+
+test('one separate Tactical seed is captured per decision and shared by worker and recovery',()=>{
+  const ui=harness();ui.start();ui.fire(3000);
+  const first=ui.workers[0].messages[0];
+  assert.equal(first.selectionSeed,selectionSeedBase);assert.equal(ui.seedDraws(),1);
+  ui.workers[0].onerror({preventDefault(){}});
+  assert.equal(ui.calls[0].selectionSeed,first.selectionSeed,'recovery cannot draw a different plan seed');
+  assert.equal(ui.seedDraws(),1);
+  ui.cancel();ui.start();
+  assert.equal(ui.workers.at(-1).messages[0].selectionSeed,selectionSeedBase+1,'a fresh decision gets a fresh seed');
+  assert.equal(ui.inspect().game.randomState,19,'AI variety never consumes match outcome randomness');
 });

@@ -2,8 +2,8 @@
 import {COMMENTARY_CLIPS} from './commentary-clips.js?v=29cbe0d352e1';
 import {HUGO_COMMENTARY_CLIPS, hugoCommentaryClip} from './hugo-commentary-clips.js?v=92bf6b3929a5';
 import {commentaryStatsLines} from './commentary-stats.js?v=510d8a0ad598';
-import {createTacticalCommentary} from './commentary-tactics.js?v=c2edbd16f79c';
-import {commentaryPositionFacts, commentaryTransitionFact} from './commentary-spatial.js?v=f1178052f8e6';
+import {createTacticalCommentary} from './commentary-tactics.js?v=728e07af52f2';
+import {commentaryPositionFacts, commentaryTransitionFact} from './commentary-spatial.js?v=15666a86d24f';
 const TEAM_NAMES = {white: 'Ivory', black: 'Obsidian'};
 const PIECE_NAMES = {K: 'keeper', Q: 'queen', R: 'rook', B: 'bishop', N: 'knight', P: 'pawn'};
 const NUMBERS = {'1': 'one', '2': 'two', '3': 'three'};
@@ -383,7 +383,7 @@ export function createCommentary({speechSynthesis = globalThis.speechSynthesis,
     if (broader.length && !(broadStreak >= 3 && fallback?.spatial)) return broader[0];
     return fallback || broader[0] || null;
   }
-  const hugoInProgress = () => !!active?.started && !active.event.demo
+  const hugoInProgress = () => !!active?.started
     && ['recorded', 'local'].includes(active.transport)
     && (active.event.voice === 'Hugo' || active.transport === 'local');
   function updatePosition(state) {
@@ -450,7 +450,7 @@ export function createCommentary({speechSynthesis = globalThis.speechSynthesis,
     if (!demoCall && finite(line.createdAt) && at - line.createdAt > ttl) return false;
     if (spoken.has(line.id)) return false;
     if (explicit && pendingReaction) return false;
-    if (!demoCall && !explicit && line.priority >= COMMENTARY_PRIORITY.attempt && hugoInProgress()) {
+    if (!explicit && line.priority >= COMMENTARY_PRIORITY.attempt && hugoInProgress()) {
       if (pendingReaction?.line.id === line.id || pendingReaction && pendingReaction.line.priority > line.priority) return false;
       // One bounded slot: a final result replaces its now-obsolete shot call.
       pendingReaction = {line: {...line, createdAt: finite(line.createdAt) ? line.createdAt : at}, options: {demoCall, explicit}};
@@ -496,16 +496,45 @@ export function createCommentary({speechSynthesis = globalThis.speechSynthesis,
     if (line.kind === 'trend') lastTrend = at;
     if (line.kind === 'attempt') lastAttempt = at;
     caption(text, spokenEvent);
-    function armWatchdog() {
+    function armWatchdog({durationMs = null, getPositionMs = null} = {}) {
       if (watchdog !== null) clearTimer(watchdog);
-      const duration = Math.min(18000, Math.max(2200, text.split(/\s+/).length * 430 + 1200));
-      watchdog = setTimer(() => {
+      const stopHungPlayback = () => {
         if (active?.token !== token) return;
-        // Some browsers never fire end/error after switching tabs.
         if (active.transport === 'device' && speechSupported) {try {speechSynthesis.cancel();} catch {}}
         if (active.transport === 'local') {try {localSpeech.cancel();} catch {}}
         finish(token);
-      }, active?.transport === 'recorded' ? Math.max(12000, duration) : duration);
+      };
+      if (active?.transport === 'recorded' || active?.transport === 'local' && typeof getPositionMs === 'function') {
+        const audio = active.audio;
+        const readPosition = () => {
+          try {return active?.transport === 'recorded' ? Number(audio?.currentTime) * 1000 : Number(getPositionMs());}
+          catch {return NaN;}
+        };
+        let position = readPosition(), progressedAt = now();
+        const actualDuration = finite(durationMs) && durationMs > 0 ? durationMs : 0;
+        const stallLimit = Math.max(15000, actualDuration + 5000);
+        const check = () => {
+          if (active?.token !== token) return;
+          const next = readPosition();
+          if (finite(next) && (!finite(position) || next > position + 1)) {position = next; progressedAt = now();}
+          // A progressing recording is never ended because of a time estimate.
+          // Local PCM may be cleaned up only after its measured buffer has played.
+          if ((active.transport === 'local' && actualDuration && finite(next) && next >= actualDuration + 3000)
+              || now() - progressedAt >= stallLimit) {stopHungPlayback(); return;}
+          watchdog = setTimer(check, 2000);
+        };
+        watchdog = setTimer(check, 2000);
+        return;
+      }
+      if (active?.transport === 'local') {
+        // The adapter supplies measured PCM duration. Legacy injected adapters
+        // without metadata get a generous failure guard, never a word estimate.
+        watchdog = setTimer(stopHungPlayback, finite(durationMs) && durationMs > 0 ? durationMs + 5000 : 60000);
+        return;
+      }
+      // Device speech/captions retain their independent fallback guard.
+      const fallbackDuration = Math.min(18000, Math.max(2200, text.split(/\s+/).length * 430 + 1200));
+      watchdog = setTimer(stopHungPlayback, fallbackDuration);
     }
     function device(fallback = false) {
       if (active?.token !== token) return;
@@ -542,6 +571,7 @@ export function createCommentary({speechSynthesis = globalThis.speechSynthesis,
         if (active?.token !== token || active.transport !== 'recorded') return;
         clearTimer(active.loadTimer); stopAudio(audio); active.audio = null; active.transport = 'caption'; active.started = false;
         if (pendingReaction) {finish(token); return;}
+        armWatchdog();
         // A failed request cannot return later and speak a superseded match moment.
         if (!demoCall && finite(line.createdAt) && now() - line.createdAt > ttl) {finish(token); return;}
         device(true);
@@ -549,13 +579,13 @@ export function createCommentary({speechSynthesis = globalThis.speechSynthesis,
       try {
         audio = new AudioCtor(clip.src);
         active.audio = audio; active.transport = 'recorded'; audio.preload = 'auto'; audio.volume = 1;
-        armWatchdog();
         status('loading');
         const playing = () => {
           if (active?.token !== token || active.transport !== 'recorded') {stopAudio(audio); return;}
           if (!active.started && !demoCall && (!claimCurrent(line) || finite(line.createdAt) && now() - line.createdAt > ttl)) {cancelActive(); return;}
-          active.started = true;
+          const firstStart = !active.started; active.started = true;
           clearTimer(active.loadTimer); status('playing');
+          if (firstStart) armWatchdog({durationMs: Number.isFinite(audio.duration) && audio.duration > 0 ? audio.duration * 1000 : clip.durationMs});
         };
         audio.onended = () => finish(token); audio.onerror = fallback; audio.onplaying = playing;
         active.loadTimer = setTimer(fallback, 5000);
@@ -582,12 +612,12 @@ export function createCommentary({speechSynthesis = globalThis.speechSynthesis,
       active.loadTimer = setTimer(fallbackLocal, Math.max(0, deadline - at));
       try {
         const delivery = line.delivery === 'urgent' || line.keeperRebound === true || ['counter', 'pressure', 'queen_linebreak', 'final_third', 'knight_pocket', 'advance_centre', 'advance_wide', 'test'].includes(line.clipKey) ? 'urgent' : 'normal';
-        Promise.resolve(localSpeech.speak(text, {expiresAt: deadline, delivery, onPlaying() {
+        Promise.resolve(localSpeech.speak(text, {expiresAt: deadline, delivery, onPlaying(playback = {}) {
           if (active?.token !== token || active.transport !== 'local') return;
           if (active.started) return;
           if (!claimCurrent(line)) {cancelActive(); return;}
           active.started = true;
-          clearTimer(active.loadTimer); active.loadTimer = undefined; status('playing'); armWatchdog();
+          clearTimer(active.loadTimer); active.loadTimer = undefined; status('playing'); armWatchdog(playback);
         }})).then(result => {
           if (active?.token !== token || active.transport !== 'local') return;
           if (result?.spoken) finish(token); else fallbackLocal();

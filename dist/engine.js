@@ -2644,6 +2644,28 @@ function tacticalStateKey(state) {
 }
 const tacticalActionKey = action => JSON.stringify([action.type, action.pieceId, action.x, action.y, !!action.freePawn, !!action.passRun, !!action.disguise]);
 const SEARCH_ABORT = Symbol('Tactical search allowance exhausted');
+// Optional playing variety is kept separate from match/chance randomness. A
+// goal is worth 2000 evaluation points; this permits at most a 0.4% goal-value
+// difference, among compatible plans, after verifying exact search values.
+export const TACTICAL_VARIETY = Object.freeze({scoreWindow: 8, maxChoices: 3});
+const tacticalPlanFamily = category => ['pass', 'space'].includes(category) ? 'distribution'
+  : ['safeDribble', 'support', 'pawn', 'boxRun'].includes(category) ? 'positioning' : category;
+function variedTacticalResult(result, selectionSeed, positionKey, depth) {
+  if (selectionSeed === undefined || selectionSeed === null || !result.choices?.length) return result;
+  const bestKey = tacticalActionKey(result.action);
+  const best = result.choices.find(choice => tacticalActionKey(choice.action) === bestKey);
+  if (!best) return result;
+  const choices = result.choices.filter(choice => choice.exact && tacticalPlanFamily(choice.category) === tacticalPlanFamily(best.category)
+      && choice.value >= result.value - TACTICAL_VARIETY.scoreWindow - 1e-8)
+    .sort((a, b) => b.value - a.value || a.index - b.index).slice(0, TACTICAL_VARIETY.maxChoices);
+  const inspected = result.choices.map(({action,value,category,exact}) => ({action,value,category,exact}));
+  if (choices.length < 2) return {...result,variety:{eligible:choices.length,scoreLoss:0,choices:inspected}};
+  const draw = normalizeSeed(`${selectionSeed}:${depth}:${positionKey}`) / 4294967296;
+  // Keep the best move most often, while allowing a few essentially equal plans.
+  const selected = choices[draw < .55 ? 0 : 1 + Math.min(choices.length - 2, Math.floor((draw - .55) / .45 * (choices.length - 1)))];
+  return {...result, action: selected.action, value: selected.value, line: selected.line,
+    variety: {eligible: choices.length, scoreLoss: Math.max(0, result.value - selected.value),choices:inspected}};
+}
 
 function tacticalUnsettled(state) {
   if (state.phase === 'keeperReact' || state.phase === 'keeperRelease' || state.phase === 'kick' || state.phase === 'passRun' || state.phase === 'cornerSelect') return true;
@@ -2666,7 +2688,7 @@ function tacticalUnsettled(state) {
 // reproducible in tests and simulations. The controller still receives just an
 // action through chooseAIAction; no analysis state enters a saved match.
 export function analyzeTacticalAction(state, {maxDepth = AI_SEARCH.depth, nodeLimit = AI_SEARCH.nodes, useCache = true, extensions = true, onIteration,
-  modelWeights = RL_VALUE_MODEL.enabled ? RL_VALUE_MODEL.weights : null, modelScale = rlDefaultScale(modelWeights)} = {}) {
+  modelWeights = RL_VALUE_MODEL.enabled ? RL_VALUE_MODEL.weights : null, modelScale = rlDefaultScale(modelWeights), selectionSeed = null} = {}) {
   modelWeights = rlValidateWeights(modelWeights);
   modelScale = rlValidateScale(modelScale);
   maxDepth = clamp(Math.floor(Number(maxDepth) || 1), 1, 12);
@@ -2741,7 +2763,8 @@ export function analyzeTacticalAction(state, {maxDepth = AI_SEARCH.depth, nodeLi
     ordered.sort((a, b) => Number(tacticalActionKey(b.action) === preferred) - Number(tacticalActionKey(a.action) === preferred) || a.index - b.index);
     const maximizing = currentTeam(position) === team;
     let bestValue = maximizing ? -Infinity : Infinity, bestIndex = Infinity, bestAction = null, bestLine = [];
-    for (const {action, index} of ordered) {
+    const choices = [];
+    for (const {action, index, category} of ordered) {
       const outcomes = outcomesFor(position, action);
       let value = 0, likely = null, continuation = [], deterministicChild = null;
       for (const outcome of outcomes) {
@@ -2757,8 +2780,18 @@ export function analyzeTacticalAction(state, {maxDepth = AI_SEARCH.depth, nodeLi
       // Resolve it before a canonical earlier move can replace that incumbent.
       if (index < bestIndex && Math.abs(value - bestValue) <= 1e-8 && deterministicChild && deterministicChild.flag !== 'exact') {
         const child = search(outcomes[0].state, depth - 1, extending ? Math.max(0, extra - 1) : extra);
-        value = child.value; continuation = child.line;
+        value = child.value; continuation = child.line; deterministicChild = child;
       }
+      // A bound close to the leader is not proof of a near-equal alternative.
+      // Re-search only those candidates before allowing playing variety.
+      if (root && selectionSeed !== null && selectionSeed !== undefined && deterministicChild
+          && deterministicChild.flag !== 'exact' && value >= bestValue - TACTICAL_VARIETY.scoreWindow - 1e-8) {
+        const child = search(outcomes[0].state, depth - 1, extending ? Math.max(0, extra - 1) : extra);
+        value = child.value; continuation = child.line; deterministicChild = child;
+      }
+      if (root && selectionSeed !== null && selectionSeed !== undefined) choices.push({action, index, category, value,
+        exact: !deterministicChild || deterministicChild.flag === 'exact',
+        line: [{action, team: currentTeam(position), phase: position.phase}, ...continuation]});
       if (bestAction === null || (maximizing ? value > bestValue + 1e-8 : value < bestValue - 1e-8)
         || Math.abs(value - bestValue) <= 1e-8 && index < bestIndex) {
         bestValue = value; bestIndex = index; bestAction = action;
@@ -2768,7 +2801,7 @@ export function analyzeTacticalAction(state, {maxDepth = AI_SEARCH.depth, nodeLi
       if (alpha >= beta) { stats.cutoffs++; break; }
     }
     const flag = bestValue <= originalAlpha ? 'upper' : bestValue >= originalBeta ? 'lower' : 'exact';
-    const result = {value: bestValue, action: bestAction, line: bestLine, flag};
+    const result = {value: bestValue, action: bestAction, line: bestLine, flag, ...(choices.length ? {choices} : {})};
     if (useCache) table.set(cacheKey, result);
     ordering.set(positionKey, tacticalActionKey(bestAction));
     return result;
@@ -2784,7 +2817,7 @@ export function analyzeTacticalAction(state, {maxDepth = AI_SEARCH.depth, nodeLi
   for (let depth = 1; depth <= maxDepth; depth++) {
     try {
       const result = search(source, depth, extensions ? AI_SEARCH.extensions : 0, -Infinity, Infinity, true);
-      completed = result; stats.completedDepth = depth;
+      completed = variedTacticalResult(result, selectionSeed, keyFor(source), depth); stats.completedDepth = depth;
       // A worker may deliver completed iterations while the next one searches.
       // Isolate the callback's snapshot so a consumer cannot mutate search
       // actions, cached principal variations or diagnostic counters.
@@ -2795,16 +2828,17 @@ export function analyzeTacticalAction(state, {maxDepth = AI_SEARCH.depth, nodeLi
       stats.aborted = true; break;
     }
   }
-  return {action: completed.action, value: completed.value, stats, line: completed.line};
+  return {action: completed.action, value: completed.value, stats, line: completed.line,
+    ...(completed.variety ? {variety: completed.variety} : {})};
 }
 
-function chooseTacticalAction(state, modelWeights, modelScale) {
-  return analyzeTacticalAction(state, {modelWeights, modelScale}).action;
+function chooseTacticalAction(state, modelWeights, modelScale, selectionSeed) {
+  return analyzeTacticalAction(state, {modelWeights, modelScale, selectionSeed}).action;
 }
 
-export function chooseAIAction(state, {difficulty = 'casual', modelWeights = RL_VALUE_MODEL.enabled ? RL_VALUE_MODEL.weights : null, modelScale = rlDefaultScale(modelWeights)} = {}) {
+export function chooseAIAction(state, {difficulty = 'casual', modelWeights = RL_VALUE_MODEL.enabled ? RL_VALUE_MODEL.weights : null, modelScale = rlDefaultScale(modelWeights), selectionSeed = null} = {}) {
   // Keep geometry reuse within a decision, while allowing custom setups or
   // API callers to edit an existing state object between decisions.
   if (state && typeof state === 'object') { passThreatCache.delete(state); tacticalOutletCache.delete(state); crossingSupportCache.delete(state); }
-  return difficulty === 'tactical' ? chooseTacticalAction(state, modelWeights, modelScale) : chooseCasualAction(state);
+  return difficulty === 'tactical' ? chooseTacticalAction(state, modelWeights, modelScale, selectionSeed) : chooseCasualAction(state);
 }

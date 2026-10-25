@@ -1,9 +1,9 @@
-import {createGame, legalMoves, legalKicks, disguisedShotTargets, applyMove, applyKick, skipMove, chooseAIAction, currentTeam, cornerTakers, selectCornerTaker, BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, BOX_FILES, BOX_DEPTH, CENTRAL_GOAL_FILES, MIDFIELD_RANK, inOwnBox, canOccupySquare, isBox, isGoalMouth, shotChance, shotModel, offsideInfo, offsideFlaggedIds, LONG_TACKLE_RANGE, DRIBBLE_RANGE, FOUL_RULE, STALLING_RULE, PACE_RULE, ACTION_SECONDS, actionTimeout, progressInfo, paceInfo, positionActions, normalizeGame} from './engine.js?v=df962903a48e';
+import {createGame, legalMoves, legalKicks, disguisedShotTargets, applyMove, applyKick, skipMove, chooseAIAction, currentTeam, cornerTakers, selectCornerTaker, BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, BOX_FILES, BOX_DEPTH, CENTRAL_GOAL_FILES, MIDFIELD_RANK, inOwnBox, canOccupySquare, isBox, isGoalMouth, shotChance, shotModel, offsideInfo, offsideFlaggedIds, LONG_TACKLE_RANGE, DRIBBLE_RANGE, FOUL_RULE, STALLING_RULE, PACE_RULE, ACTION_SECONDS, actionTimeout, progressInfo, paceInfo, positionActions, normalizeGame} from './engine.js?v=d1bb1027b949';
 import {createMatchClock, restoreMatchClock, tickMatchClock, settleMatchClock, rewindMatchClock} from './match-clock.js?v=1fa32f5eed6c';
-import {buildGoalReplay, restoreGoalReplay, createReplayPlayer} from './goal-replay.js?v=61ab601656f2';
-import {createMatchStats, restoreMatchStats, recordMatchTransition, addPossessionTime, matchStatsSummary, shortPieceId} from './match-stats.js?v=7db3a2ae87a7';
-import {createCommentary} from './commentary.js?v=4a3830fd8c66';
-import {createParadeeSpeech} from './paradee-speech.js?v=abadf72a064b';
+import {buildGoalReplay, restoreGoalReplay, createReplayPlayer} from './goal-replay.js?v=8a53516104f2';
+import {createMatchStats, restoreMatchStats, recordMatchTransition, addPossessionTime, matchStatsSummary, shortPieceId} from './match-stats.js?v=e2bd5df1c963';
+import {createCommentary} from './commentary.js?v=e03dc5ced3d1';
+import {createParadeeSpeech} from './paradee-speech.js?v=e9d0fc794cfb';
 
 const $ = id => document.getElementById(id);
 const normalShotLegend = document.querySelector('.shot-legend').textContent;
@@ -732,6 +732,8 @@ function animateComputerMove(action){
 function scheduleAI(){
   if(shotFlight||stage!=='playing'||paused||anyDialog()||!isComputer()||aiTimer!==null||aiWorker)return;
   const requestId=aiGeneration,actor=currentTeam(game),difficulty=computerDifficulty(actor);
+  // Separate decision noise never consumes the match's shooting/foul RNG.
+  const selectionSeed=difficulty==='tactical'?(()=>{try{return window.crypto.getRandomValues(new Uint32Array(1))[0]||1;}catch{return (Math.random()*0x100000000)>>>0||1;}})():undefined;
   let completedAI=null,completedDepth=0,paceElapsed=false,pendingAction=null,deferredFallback=null;
   const stillCurrent=()=>requestId===aiGeneration&&actor===currentTeam(game)&&stage==='playing'&&!paused&&!anyDialog()&&!shotFlight&&isComputer();
   const fail=err=>{if(!stillCurrent())return;stopAIWorker();paused=true;render();toast('Play paused: '+err.message);};
@@ -744,7 +746,7 @@ function scheduleAI(){
   const fallback=(level=difficulty)=>{
     if(!stillCurrent())return;stopAIWorker();
     if(!paceElapsed){deferredFallback=level;return;}
-    try{receive(chooseAIAction(game,{difficulty:level,modelWeights:null}));}catch(err){fail(err);}
+    try{receive(chooseAIAction(game,{difficulty:level,modelWeights:null,selectionSeed}));}catch(err){fail(err);}
   };
   const completedOrFallback=(level=difficulty)=>{if(completedAI)receive(completedAI);else fallback(level);};
   aiTimer=setTimeout(()=>{
@@ -753,7 +755,7 @@ function scheduleAI(){
   },aiPace);
   if(difficulty==='tactical'&&typeof window.Worker==='function'){
     try{
-      aiWorker=new window.Worker(new URL('./ai-worker.js?v=410f29e715d9',import.meta.url),{type:'module',name:'football-chess-tactical'});
+      aiWorker=new window.Worker(new URL('./ai-worker.js?v=8410631ae7ad',import.meta.url),{type:'module',name:'football-chess-tactical'});
       aiWorker.onmessage=event=>{
         if(!stillCurrent()||event.data?.requestId!==requestId)return;
         const progress=event.data.progress;
@@ -766,7 +768,7 @@ function scheduleAI(){
       };
       aiWorker.onerror=event=>{event.preventDefault?.();completedOrFallback();};
       aiWatchdog=setTimeout(()=>completedOrFallback('casual'),4000);
-      aiWorker.postMessage({requestId,state:game,difficulty});
+      aiWorker.postMessage({requestId,state:game,difficulty,selectionSeed});
     }catch{fallback();}
   }
 }

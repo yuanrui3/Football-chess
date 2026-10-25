@@ -354,3 +354,15 @@ test('a returned worker error and destroy both clear generation watchdogs', asyn
   assert.deepEqual(await cancelled, {spoken: false, reason: 'cancelled'});
   assert.equal(r.timers.size, 0);
 });
+
+test('playback reports measured PCM duration and its audio clock instead of a text estimate', async () => {
+  const r=rig();await r.loaded();await r.voice.unlock();r.contexts[0].currentTime=12.5;
+  let playback;
+  const pending=r.voice.speak('A short line.',{onPlaying: value=>{playback=value;r.contexts[0].currentTime+=5;}});
+  await flush();r.result(new Float32Array(24000*9).fill(.1));await flush();
+  assert.equal(playback.durationMs,9000);
+  assert.equal(playback.getPositionMs(),0);
+  r.contexts[0].currentTime=21;
+  assert.equal(playback.getPositionMs(),3500);
+  r.contexts[0].sources[0].end();assert.deepEqual(await pending,{spoken:true});r.voice.destroy();
+});

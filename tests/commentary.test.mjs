@@ -761,7 +761,7 @@ test('slow or failed local generation falls back once, with captions matching th
 
 test('local playback clears its generation timer and remains bounded by the speech watchdog', async () => {
   const h = localHarness(); h.controller.reveal(recordedLine('trend', 'midfield'));
-  h.advance(5000); h.jobs[0].settings.onPlaying(); h.advance(1000);
+  h.advance(5000); h.jobs[0].settings.onPlaying({durationMs:5000}); h.advance(1000);
   assert.equal(h.audios.length, 0, 'a started local call cannot time out into overlapping Tom audio');
   assert.equal(h.controller.getState().speaking, true);
   h.advance(20000); assert.equal(h.local.cancels, 1); assert.equal(h.controller.getState().speaking, false);
