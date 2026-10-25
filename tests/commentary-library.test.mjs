@@ -230,24 +230,34 @@ test('an explicit voice test can replace a failed or active routine call, while 
   assert.equal(active.audios[1].requestedSrc, fakeLibrary.hugo_test.src);
   assert.equal(active.controller.reveal(reaction('goal')), true);
   const count = active.audios.length;
-  assert.equal(active.controller.testVoice(), false, 'an explicit voice audition cannot interrupt a real goal');
-  assert.equal(active.audios.length, count); assert.equal(active.captions.at(-1).event.kind, 'goal');
+  assert.equal(active.controller.getState().pendingReaction, 'goal');
+  assert.equal(active.controller.testVoice(), false, 'an explicit voice audition cannot discard a waiting goal');
+  assert.equal(active.audios.length, count); assert.equal(active.captions.at(-1).event.kind, 'trend');
+  active.audios.at(-1).onended();
+  assert.equal(active.captions.at(-1).event.kind, 'goal');
+  assert.equal(active.controller.testVoice(), false, 'an explicit voice audition cannot interrupt an active goal');
+  assert.equal(active.audios.length, count + 1);
   active.controller.destroy();
 });
 
-test('shots and goals preempt prepared analysis, use Tom, and cannot be cleared by old audio callbacks', () => {
+test('a goal replaces a waiting shot, follows Hugo, and old audio callbacks cannot clear it', () => {
   const h = harness(), {state, fact} = positionFact(board({positions: {'white-Q': [6, 8], 'white-R1': [6, 5]}}), 'support');
   revealFact(h, state, fact);
   const old = h.audios[0], ended = old.onended, playing = old.onplaying;
   assert.equal(h.controller.reveal(reaction('attempt')), true);
-  assert.ok(old.pauses > 0);
-  assert.equal(h.audios[1].requestedSrc, COMMENTARY_CLIPS.shot_normal.src);
-  assert.equal(h.captions.at(-1).event.voice, 'Tom');
+  assert.equal(old.pauses, 0); assert.equal(h.audios.length, 1);
+  assert.equal(h.controller.getState().pendingReaction, 'attempt');
+  assert.equal(h.captions.at(-1).event.voice, 'Hugo');
   assert.equal(h.controller.reveal(reaction('goal')), true);
+  assert.equal(h.controller.getState().pendingReaction, 'goal');
+  assert.equal(h.captions.at(-1).text, fakeLibrary.support.text, 'the current caption still matches Hugo');
+  ended();
+  assert.equal(h.audios[1].requestedSrc, COMMENTARY_CLIPS.goal_generic.src);
   assert.equal(h.captions.at(-1).text, COMMENTARY_CLIPS.goal_generic.text);
+  assert.equal(h.captions.at(-1).event.voice, 'Tom');
   ended(); playing();
   assert.equal(h.captions.at(-1).event.kind, 'goal'); assert.equal(h.controller.getState().speaking, true);
-  assert.equal(h.audios.length, 3, 'preempted technical audio is not queued for later');
+  assert.equal(h.audios.length, 2, 'the obsolete attempt and completed analysis are never replayed');
   assert.equal(h.local.speaks, 0); assert.equal(h.local.loads, 0);
   h.controller.destroy();
 });
@@ -278,7 +288,7 @@ test('mute and changing away from three-second pace immediately stop prepared au
   }
 });
 
-test('a still-valid support clip survives irrelevant movement, while loss of its lane cancels stale audio', () => {
+test('a started support clip finishes over lane changes, while the old evidence cannot start again', () => {
   const {state, fact} = positionFact(board({phase: 'defendMove', positions: {'white-Q': [6, 8], 'white-R1': [6, 5]}}), 'support');
   const h = harness(); revealFact(h, state, fact);
   const audio = h.audios[0], late = audio.onplaying;
@@ -291,9 +301,10 @@ test('a still-valid support clip survives irrelevant movement, while loss of its
   changed.lastAction = {type: 'move', team: 'white', pieceId: supporter.id, from: {x: 6, y: 5}, to: {x: 7, y: 5}};
   assert.ok(!commentaryPositionFacts(changed).some(value => value.key === fact.key));
   h.controller.observe(quiet, changed);
-  assert.ok(audio.pauses > 0); assert.equal(h.controller.getState().speaking, false);
+  assert.equal(audio.pauses, 0); assert.equal(h.controller.getState().speaking, true);
   const caption = h.captions.at(-1).text; late();
-  assert.equal(h.captions.at(-1).text, caption);
+  assert.equal(h.captions.at(-1).text, caption, 'a duplicate playing notification cannot clip begun speech');
+  audio.onended(); assert.equal(h.controller.getState().speaking, false);
   assert.equal(h.controller.reveal({...spatialLine(fact), id: 'stale-support'}), false);
   assert.equal(h.local.speaks, 0); assert.equal(h.local.loads, 0);
   h.controller.destroy();

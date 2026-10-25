@@ -158,12 +158,19 @@ test('a started macro observation finishes over the next native carrying action'
   h.controller.destroy();
 });
 
-for (const kind of ['attempt', 'goal']) test(`${kind} preempts macro analysis with Tom and old callbacks stay silent`, () => {
-  const h = harness(), state = prepare(h), {audio} = beginMacro(h, state), late = audio.onended;
-  assert.equal(h.controller.reveal(reaction(kind)), true); assert.ok(audio.pauses > 0);
-  assert.equal(h.last.event.voice, 'Tom'); assert.equal(h.last.event.kind, kind);
+for (const kind of ['attempt', 'goal']) test(`${kind} follows completed macro analysis with Tom and old callbacks stay silent`, () => {
+  const h = harness(), state = prepare(h), {audio, event} = beginMacro(h, state), ended = audio.onended, late = audio.onplaying;
+  const count = h.audios.length;
+  assert.equal(h.controller.reveal(reaction(kind)), true); assert.equal(audio.pauses, 0);
+  assert.equal(h.controller.getState().pendingReaction, kind);
+  assert.equal(h.audios.length, count); assert.equal(h.last.event.voice, 'Hugo');
+  assert.equal(h.last.text, event.text);
+  ended();
+  assert.equal(h.audios.length, count + 1); assert.equal(h.last.event.voice, 'Tom'); assert.equal(h.last.event.kind, kind);
   assert.equal(h.last.text, COMMENTARY_CLIPS[kind === 'goal' ? 'goal_generic' : 'shot_normal'].text);
-  late(); assert.equal(h.last.event.kind, kind); h.controller.destroy();
+  ended(); late(); assert.equal(h.last.event.kind, kind);
+  assert.equal(h.audios.length, count + 1, 'an old callback cannot replay completed macro analysis');
+  h.controller.destroy();
 });
 
 test('tactical key cooldown remains 45 seconds and does not postpone a later fresh call', () => {

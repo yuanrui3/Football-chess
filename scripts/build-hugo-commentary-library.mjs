@@ -13,6 +13,7 @@ import {promisify} from 'node:util';
 import {Worker, isMainThread, parentPort, workerData} from 'node:worker_threads';
 import {COMMENTARY_CLIPS} from '../dist/commentary-clips.js';
 import {TACTICAL_COMMENTARY_SCRIPTS} from '../dist/commentary-tactics.js';
+import {STAT_COMMENTARY_SCRIPTS} from '../dist/commentary-stats.js';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const output = path.join(root, 'dist/audio/hugo');
@@ -64,6 +65,7 @@ for (const key of routineKeys) add(`routine_${key}`, COMMENTARY_CLIPS[key].text,
   COMMENTARY_CLIPS[key].delivery === 'calm' ? 'normal' : 'urgent');
 
 for (const [key, script] of Object.entries(TACTICAL_COMMENTARY_SCRIPTS)) add(key, script.text, script.delivery);
+for (const [key, script] of Object.entries(STAT_COMMENTARY_SCRIPTS)) add(key, script.text, script.delivery);
 
 // A spatial recording describes the verified position when playback began.
 // Its past-tense wording can finish over subsequent routine actions.
@@ -79,7 +81,7 @@ export function hugoCommentaryClip(line, state) {
   if (!line || line.kind !== 'trend') return null;
   const alias = {enable:'hugo_enable', test:'hugo_test', demo:'hugo_demo'};
   let key = alias[line.clipKey] || line.clipKey;
-  if (!['hugo_enable', 'hugo_test', 'hugo_demo'].includes(key) && !/^(?:tactic_|performance_|shape_)/.test(key || '')) {
+  if (!['hugo_enable', 'hugo_test', 'hugo_demo'].includes(key) && !/^(?:tactic_|performance_|shape_|stat_)/.test(key || '')) {
     const f = line.spatial;
     if (!f) key = 'routine_' + line.clipKey;
     else {
@@ -281,8 +283,9 @@ async function main() {
       encoding:{ffmpeg,format:'MP3',channels:1,sampleRate:24000,bitrate:'64k',filter:'loudnorm=I=-16:TP=-1.5:LRA=11'},
       scriptsSource:{technical:'Original project-authored factual scripts in this generator',routine:'Exact project-authored trend texts from dist/commentary-clips.js',
         tactical:{file:'dist/commentary-tactics.js',definitionsSha256:sha(JSON.stringify(TACTICAL_COMMENTARY_SCRIPTS))},
+        statistics:{file:'dist/commentary-stats.js',definitionsSha256:sha(JSON.stringify(STAT_COMMENTARY_SCRIPTS))},
         generator:'scripts/build-hugo-commentary-library.mjs',generatorSha256:sha(await fs.readFile(fileURLToPath(import.meta.url)))},
-      selection:'Current fact IDs select past-tense piece-role snapshots; tactical evidence selects rolling-analysis sentences. No team names or IDs are spliced into recordings. Shot/result/goal calls remain outside this library.',
+      selection:'Current fact IDs select past-tense piece-role snapshots; tactical evidence selects rolling-analysis sentences. Team-named statistics are whole sentences; no names, IDs or numbers are spliced into recordings. Shot/result/goal calls remain outside this library.',
       workerInitialization:[...(sameRuntime ? previous.workerInitialization || [] : []),...workers.map(worker=>worker.measurement).filter(Boolean)],
       clips:definitions.map(definition=>({...definition,...(receipts.get(definition.key)||{}),voice:'Hugo',file:'dist/audio/hugo/'+definition.key+'.mp3',ready:receipts.has(definition.key)}))};
     await atomicWrite(modulePath,source);

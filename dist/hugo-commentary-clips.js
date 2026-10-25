@@ -1866,6 +1866,1066 @@ const entries = [
     "ready": true,
     "durationMs": 3768,
     "sha256": "857a0cdeddf1bca775d03c9ab41bbbee87a45c770a3a08effdbeb2547341d4e1"
+  },
+  {
+    "key": "stat_shots_white_0",
+    "text": "Ivory have taken zero shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 2976,
+    "sha256": "a1af3d8242771f42649a650f90242d534f23dba2bc29f62d8a7b2787e686926f"
+  },
+  {
+    "key": "stat_shots_white_1",
+    "text": "Ivory have taken one shot so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 2784,
+    "sha256": "3f4181fb28cfe498f58d3929b29fd16e27af7a82575b2c76c1041e405f53bc70"
+  },
+  {
+    "key": "stat_shots_white_2",
+    "text": "Ivory have taken two shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 2760,
+    "sha256": "84e062045b742a7c6afa74a243f6d2589ff59f38a5e02d9993872c869fe50fe9"
+  },
+  {
+    "key": "stat_shots_white_3",
+    "text": "Ivory have taken three shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 2856,
+    "sha256": "0afee03c4d5e7e54cc3dc37ec4dcb42bf8a3a1528f4e688fb84988e358630f6f"
+  },
+  {
+    "key": "stat_shots_white_4",
+    "text": "Ivory have taken four shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 2952,
+    "sha256": "2f8f73335d809bb6b7824931b065a4248a2f148fb57d3cd40e170a3db3fa1383"
+  },
+  {
+    "key": "stat_shots_white_5",
+    "text": "Ivory have taken five shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 2928,
+    "sha256": "2e89dc4568b50995d0626072af5fb03d4bba6a78566e7b8f609aeb0e3ad120b4"
+  },
+  {
+    "key": "stat_shots_white_6",
+    "text": "Ivory have taken six shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 2928,
+    "sha256": "809a072d5bb7e925357136f133c78c42c2d50feaee1d95ea280ec3aa27884b1b"
+  },
+  {
+    "key": "stat_shots_white_7",
+    "text": "Ivory have taken seven shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 2904,
+    "sha256": "930585e4cf17fb7a19e4d74f221575e356e496e9253a0832ea2c23229ea2a21b"
+  },
+  {
+    "key": "stat_shots_white_8",
+    "text": "Ivory have taken eight shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 2760,
+    "sha256": "5af21d8d2a9a246fd55d945bf46fcf87fe7be3f05f80fc889d502fb1c9e33950"
+  },
+  {
+    "key": "stat_shots_white_9",
+    "text": "Ivory have taken nine shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 2880,
+    "sha256": "4d9054e9cd339e1e221ad4b5dad1d71cf180990698c6edfef905f0ddd5e7e5e2"
+  },
+  {
+    "key": "stat_shots_white_10",
+    "text": "Ivory have taken ten shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 2784,
+    "sha256": "24f4b38033c4f748f33e9f48396c5f60070d36c89317b663de1261b73c44f28f"
+  },
+  {
+    "key": "stat_shots_white_11",
+    "text": "Ivory have taken eleven shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3072,
+    "sha256": "b3cd66a1a35f1d088b5c265119630b0d23d7b4cf074e80f3810642ff7c61a1af"
+  },
+  {
+    "key": "stat_shots_white_12",
+    "text": "Ivory have taken twelve shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 2880,
+    "sha256": "bb4c5f97854b9af96945299e6ffe95b11d23bd0eb43da516706052890084c661"
+  },
+  {
+    "key": "stat_shots_white_13",
+    "text": "Ivory have taken thirteen shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3480,
+    "sha256": "42c2e7bc86906c620881734f0e70eec5661b2a5aeea0220fb6b326caabab6635"
+  },
+  {
+    "key": "stat_shots_white_14",
+    "text": "Ivory have taken fourteen shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3072,
+    "sha256": "a866be454194dc461c5b83043056bff8dea59c6298176cef08a4b8d21b9c7f6c"
+  },
+  {
+    "key": "stat_shots_white_15",
+    "text": "Ivory have taken fifteen shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3360,
+    "sha256": "a5217916bebb4c5fc79844ac9c238f646fd655e7b46508f4772e73bdd6f23e20"
+  },
+  {
+    "key": "stat_shots_white_16",
+    "text": "Ivory have taken sixteen shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3144,
+    "sha256": "97f1c8a74f545c01c6c4ec0982d968f8952a7262de9b65be7ec20ae4cd6f0c17"
+  },
+  {
+    "key": "stat_shots_white_17",
+    "text": "Ivory have taken seventeen shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3312,
+    "sha256": "05fa55c13669f48e07315a12e5883636e8619caff0d39dd8379c40cc1ee83176"
+  },
+  {
+    "key": "stat_shots_white_18",
+    "text": "Ivory have taken eighteen shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3000,
+    "sha256": "7abbc65f6e77977893cba7da6ca8fa664c8b2338c0fddf54c0552e68af8a8250"
+  },
+  {
+    "key": "stat_shots_white_19",
+    "text": "Ivory have taken nineteen shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3096,
+    "sha256": "9855f8197122c401ca8174657f77320bbd0e0a49977de51eb5a8ce56474248f2"
+  },
+  {
+    "key": "stat_shots_white_20",
+    "text": "Ivory have taken twenty shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 2976,
+    "sha256": "91d3bcf54a65a6a34eef0feb9da97210fd8afe9033055fd409fbaea46163d09c"
+  },
+  {
+    "key": "stat_shots_white_21",
+    "text": "Ivory have taken twenty one shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3384,
+    "sha256": "31899b2003961f69b6dc1e37e37fe4d831a178241121f1de42de10c68310c34f"
+  },
+  {
+    "key": "stat_shots_white_22",
+    "text": "Ivory have taken twenty two shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3432,
+    "sha256": "9ec68b17ce365d885b6c49733ac4d5abcf45a9d9a56ec7502a3d868ffae1218f"
+  },
+  {
+    "key": "stat_shots_white_23",
+    "text": "Ivory have taken twenty three shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3384,
+    "sha256": "37b97cb363d163ebd93424a14a79cf16a384ec029144ea21b9c00fd1dd90c78f"
+  },
+  {
+    "key": "stat_shots_white_24",
+    "text": "Ivory have taken twenty four shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3408,
+    "sha256": "a3f634002917a7c6d686c912f331bf35c462c4e7754594b7b014021a2cac2e18"
+  },
+  {
+    "key": "stat_shots_white_25",
+    "text": "Ivory have taken twenty five shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3480,
+    "sha256": "41d87c08ab5b3b578994385ce8baafed135340d75515cbae1e0641eec73207c8"
+  },
+  {
+    "key": "stat_shots_white_26",
+    "text": "Ivory have taken twenty six shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3480,
+    "sha256": "c9e33bd7e66994d25e6e90b20f9960d5443e999476771c2882ccc2c9ad3605c0"
+  },
+  {
+    "key": "stat_shots_white_27",
+    "text": "Ivory have taken twenty seven shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3432,
+    "sha256": "e12fbbda130e0a2714feef0d12f397d387503ac459fdf652101c7e13255ee186"
+  },
+  {
+    "key": "stat_shots_white_28",
+    "text": "Ivory have taken twenty eight shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3288,
+    "sha256": "ee86cf0ef22bfcc500886b29dd82d9516af6741df27fdf3d709a2b0763ca0762"
+  },
+  {
+    "key": "stat_shots_white_29",
+    "text": "Ivory have taken twenty nine shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3408,
+    "sha256": "71400e5f0f1b4ce3d2df0c1bb59fb6c4fd348f055280119e563041cb42022844"
+  },
+  {
+    "key": "stat_shots_white_30",
+    "text": "Ivory have taken thirty shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 2880,
+    "sha256": "1a6f3b95c2cc57b9fad993f852f5b8b8e829dd1894342d93a97164ceef062a71"
+  },
+  {
+    "key": "stat_shots_white_over30",
+    "text": "Ivory have taken more than thirty shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3216,
+    "sha256": "8d8e3f62514d8697c677005a4c8ea544afd9b0ac534d8da15b0f1ef13b4e1f44"
+  },
+  {
+    "key": "stat_possession_white_0",
+    "text": "Ivory have had about zero percent of the ball.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3000,
+    "sha256": "d72180ffc3a60adcc99901d3978d4cbc05227b34109600d30022ab62d5980dc4"
+  },
+  {
+    "key": "stat_possession_white_5",
+    "text": "Ivory have had about five percent of the ball.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 2784,
+    "sha256": "4815743c482376bbd86f324ddf9e4cdd4de70c20858ebf44c0df81f5cd7c0379"
+  },
+  {
+    "key": "stat_possession_white_10",
+    "text": "Ivory have had about ten percent of the ball.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3360,
+    "sha256": "844415f34e87f3dc8001d594fc7854c1d592b4bc90b3007f08b352edf1f0579f"
+  },
+  {
+    "key": "stat_possession_white_15",
+    "text": "Ivory have had about fifteen percent of the ball.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3480,
+    "sha256": "c1dc573a23eb438892515b3ac48604372a22a12294aa8d1b1c632de91bdc3b33"
+  },
+  {
+    "key": "stat_possession_white_20",
+    "text": "Ivory have had about twenty percent of the ball.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3024,
+    "sha256": "0d8b827596fe568fa53169a0a67217ae10a8f49c868b4cb6afa24b252be35ab2"
+  },
+  {
+    "key": "stat_possession_white_25",
+    "text": "Ivory have had about twenty five percent of the ball.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 2880,
+    "sha256": "eb82e23d5902903bca0ba2ae9fdc11195e7a140642a53c330d86f08d483dd838"
+  },
+  {
+    "key": "stat_possession_white_30",
+    "text": "Ivory have had about thirty percent of the ball.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 2616,
+    "sha256": "fe4fb22c89a996ca4250e171e31c5f89140efaaddf97205c99993829b9ce8ddc"
+  },
+  {
+    "key": "stat_possession_white_35",
+    "text": "Ivory have had about thirty five percent of the ball.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 2976,
+    "sha256": "bd83655ba04e7aafb4c91cd692eec0daf73e7a5c3da942b70fe295ada2d400bd"
+  },
+  {
+    "key": "stat_possession_white_40",
+    "text": "Ivory have had about forty percent of the ball.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3024,
+    "sha256": "98c284df868173400905d27cb3e1ad9858ca5b63c3c2261a51c9eb822176f8f5"
+  },
+  {
+    "key": "stat_possession_white_45",
+    "text": "Ivory have had about forty five percent of the ball.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 2928,
+    "sha256": "56f6437719a9acd051c77dd6656b9504e20839711620a749b2ca733aaaeffd16"
+  },
+  {
+    "key": "stat_possession_white_50",
+    "text": "Ivory have had about fifty percent of the ball.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 2616,
+    "sha256": "76ecffdf05474a058b48633785accefb4fb92d5df0757d82e38c1f6b6e10e0b0"
+  },
+  {
+    "key": "stat_possession_white_55",
+    "text": "Ivory have had about fifty five percent of the ball.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3048,
+    "sha256": "338960cc5f6457af5c6fc93db3b09c94e119887334d09f9e84add7c472f0d438"
+  },
+  {
+    "key": "stat_possession_white_60",
+    "text": "Ivory have had about sixty percent of the ball.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3120,
+    "sha256": "a5c650f98fae2b9ef62517457a6bef2d8b123adb84224267e49e21c42dfca3b1"
+  },
+  {
+    "key": "stat_possession_white_65",
+    "text": "Ivory have had about sixty five percent of the ball.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3024,
+    "sha256": "ff3bf5167aa0ae706b1a71a635eb67a6eb0422abf881ef6f99d7f326b5c34372"
+  },
+  {
+    "key": "stat_possession_white_70",
+    "text": "Ivory have had about seventy percent of the ball.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3384,
+    "sha256": "80552c46c69822f9c35c7e7372b77d2cee64c84a8f8fddf1acdb82932f2d4c6e"
+  },
+  {
+    "key": "stat_possession_white_75",
+    "text": "Ivory have had about seventy five percent of the ball.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3024,
+    "sha256": "5c5a99078cff13d34eb5bc47485dea0929cd197b989bdcc94874a999d8fd810a"
+  },
+  {
+    "key": "stat_possession_white_80",
+    "text": "Ivory have had about eighty percent of the ball.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 2784,
+    "sha256": "50462c94a388cdd5450852e77b214de0847e1539617f258aea8b10f78e43bab6"
+  },
+  {
+    "key": "stat_possession_white_85",
+    "text": "Ivory have had about eighty five percent of the ball.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3168,
+    "sha256": "95d6b34beac7dd12ff2eca0951717bc57b8abdc04636362d8f9ec66d6c4be113"
+  },
+  {
+    "key": "stat_possession_white_90",
+    "text": "Ivory have had about ninety percent of the ball.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3024,
+    "sha256": "13dbc8db4822ba7b31cc65e89902768b894d1908e8cd128992c526b8274b78ed"
+  },
+  {
+    "key": "stat_possession_white_95",
+    "text": "Ivory have had about ninety five percent of the ball.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 2928,
+    "sha256": "900fec9e7bc2fe06024bb2e22ece87c93cdf28b60d47f41d95ebc760415e4181"
+  },
+  {
+    "key": "stat_possession_white_100",
+    "text": "Ivory have had about one hundred percent of the ball.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 2928,
+    "sha256": "b0be822a96dbe48f0fa1bcbb041f3d346dcabce5be1b5549f2beebc0e884e6fa"
+  },
+  {
+    "key": "stat_shots_black_0",
+    "text": "Obsidian have taken zero shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3240,
+    "sha256": "6a0df2a4f9ea6cb5242da84329de901c19aaabe5fe05a62da98c1bef6db9edcd"
+  },
+  {
+    "key": "stat_shots_black_1",
+    "text": "Obsidian have taken one shot so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3096,
+    "sha256": "3ad77eee665d7eb5797a8fa5312daaa3fcbf0afe94aeb8872d061bc764b249a8"
+  },
+  {
+    "key": "stat_shots_black_2",
+    "text": "Obsidian have taken two shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 2976,
+    "sha256": "49cc79c97852c2fa9f959787d1984192b1493a04e23330687bb31e1b7a5fb741"
+  },
+  {
+    "key": "stat_shots_black_3",
+    "text": "Obsidian have taken three shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3216,
+    "sha256": "e9a9c8524cef73716c9602066644b309fdaf3b585eae0f90c99bb3ac9bbd378d"
+  },
+  {
+    "key": "stat_shots_black_4",
+    "text": "Obsidian have taken four shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3048,
+    "sha256": "33ac653cfd1754028c89698779afee036fe8d22ecbfec5dee268f403d58ba067"
+  },
+  {
+    "key": "stat_shots_black_5",
+    "text": "Obsidian have taken five shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3096,
+    "sha256": "6de1aa1355322a354fa5d4ce01b0452d77992f7c269c3a36220756017fd17e73"
+  },
+  {
+    "key": "stat_shots_black_6",
+    "text": "Obsidian have taken six shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3120,
+    "sha256": "ff9e10f118618232268a542d6c8daed1fa3c8e72d6dfb119910b7977e90178dc"
+  },
+  {
+    "key": "stat_shots_black_7",
+    "text": "Obsidian have taken seven shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3456,
+    "sha256": "a75df62f8257c33df49efb8cec69159bbf27cb82becc291500b059ebd8674a43"
+  },
+  {
+    "key": "stat_shots_black_8",
+    "text": "Obsidian have taken eight shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 2976,
+    "sha256": "bbc67a861f633a094c363ac90bfd916bdb2bec090de10e6c0d979fefc802e181"
+  },
+  {
+    "key": "stat_shots_black_9",
+    "text": "Obsidian have taken nine shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3120,
+    "sha256": "eba4d6a991c15eff6cc91e5f1546f6d0b23d72ff6d8817ed67b0b4a8af349250"
+  },
+  {
+    "key": "stat_shots_black_10",
+    "text": "Obsidian have taken ten shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 2976,
+    "sha256": "43b09ee79ad081ec75a53bc09fa98bc0c4b89bfadf84a583e512007c2f8de265"
+  },
+  {
+    "key": "stat_shots_black_11",
+    "text": "Obsidian have taken eleven shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3240,
+    "sha256": "64ad4e69f2616984cb80bf2b0c290e946f09311616574b9d2ff1be1095d905cc"
+  },
+  {
+    "key": "stat_shots_black_12",
+    "text": "Obsidian have taken twelve shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3480,
+    "sha256": "5067180ab8a7a4c65584d3e6525b042a5036ef7cba87859dc3dc612f8f0592a3"
+  },
+  {
+    "key": "stat_shots_black_13",
+    "text": "Obsidian have taken thirteen shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3096,
+    "sha256": "2ade4a3c27f84ede7c576fb37afe28e71d3bfbbd4c22bbe668264b80342a2c4b"
+  },
+  {
+    "key": "stat_shots_black_14",
+    "text": "Obsidian have taken fourteen shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3312,
+    "sha256": "c43bd8c99cf4864dbdadcdb29ac6c83128d733abaa8ee15557bc09025534c983"
+  },
+  {
+    "key": "stat_shots_black_15",
+    "text": "Obsidian have taken fifteen shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3120,
+    "sha256": "224a89c04f84dba5370e3ce720a6d4fa7fb6c021e14e05279ce5fec49aca1299"
+  },
+  {
+    "key": "stat_shots_black_16",
+    "text": "Obsidian have taken sixteen shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3360,
+    "sha256": "9d637c1ff5983465538d82ebb2aa376886b3a90efd6296a46e893e297eb41465"
+  },
+  {
+    "key": "stat_shots_black_17",
+    "text": "Obsidian have taken seventeen shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3552,
+    "sha256": "40a43941a733b2389d4fad8a5b53f8934ca2bead7546b1ca9a71464202a174de"
+  },
+  {
+    "key": "stat_shots_black_18",
+    "text": "Obsidian have taken eighteen shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3264,
+    "sha256": "7251b0b22e3458d0157ecb36167b1247e321f5e1c28f5305a883a6384038a9b7"
+  },
+  {
+    "key": "stat_shots_black_19",
+    "text": "Obsidian have taken nineteen shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3360,
+    "sha256": "7a5f089b28f7220d3f4192505d1f37ad0258a12e7a75c40feba9660f90504bab"
+  },
+  {
+    "key": "stat_shots_black_20",
+    "text": "Obsidian have taken twenty shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3216,
+    "sha256": "37156f834d1ac2d88678c6582aa26ed723f4b6083e1b046ff55059102a08f99b"
+  },
+  {
+    "key": "stat_shots_black_21",
+    "text": "Obsidian have taken twenty one shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3456,
+    "sha256": "2d0d5d0f78f462bed33066b323e1cc4a8d952e58792c10b07710a0344e676863"
+  },
+  {
+    "key": "stat_shots_black_22",
+    "text": "Obsidian have taken twenty two shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3528,
+    "sha256": "2cef08d1e2853a357e6005046aea75bc724ee6a73a310fd32bbd962b2b3da25d"
+  },
+  {
+    "key": "stat_shots_black_23",
+    "text": "Obsidian have taken twenty three shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3456,
+    "sha256": "ac5bd187dab67268493904420e5edcdda1a0decbc8a3d060a04f0b9d6cdd6a18"
+  },
+  {
+    "key": "stat_shots_black_24",
+    "text": "Obsidian have taken twenty four shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3480,
+    "sha256": "92c30a9f8fbb56b71b0de131aa80c4f6b843eb8a0446e0deec1428565b822c89"
+  },
+  {
+    "key": "stat_shots_black_25",
+    "text": "Obsidian have taken twenty five shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3504,
+    "sha256": "e8518bbe1a343946a8f395a685296b07c1c5ab80e05fdf243073eb9ac324e0e7"
+  },
+  {
+    "key": "stat_shots_black_26",
+    "text": "Obsidian have taken twenty six shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3480,
+    "sha256": "8ae454ebb37d728931423f30e8b5079c9a7cf3fb8abc877226fddf36880d1064"
+  },
+  {
+    "key": "stat_shots_black_27",
+    "text": "Obsidian have taken twenty seven shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3528,
+    "sha256": "d85d833617da186991c7eefc3694a0b080f544659c1d740c5d3a0fda553fbe3e"
+  },
+  {
+    "key": "stat_shots_black_28",
+    "text": "Obsidian have taken twenty eight shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3336,
+    "sha256": "3f23d876dca6672879a6c91d2d5ea1eac90193691952997f5fe1ea265abb176f"
+  },
+  {
+    "key": "stat_shots_black_29",
+    "text": "Obsidian have taken twenty nine shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3432,
+    "sha256": "c4ab2370f801644baead868e7f5f7164d4bb05210264b4a402d6943166eb6654"
+  },
+  {
+    "key": "stat_shots_black_30",
+    "text": "Obsidian have taken thirty shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3432,
+    "sha256": "e921e6b80be7dd6493860be6664ff8ed106f6a297426c149bd3229039a271c20"
+  },
+  {
+    "key": "stat_shots_black_over30",
+    "text": "Obsidian have taken more than thirty shots so far.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3360,
+    "sha256": "675dc882073f4fd15a10374b706c838922dab1d42aaf9a1e4b243a82ea14c468"
+  },
+  {
+    "key": "stat_possession_black_0",
+    "text": "Obsidian have had about zero percent of the ball.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3456,
+    "sha256": "6c1c6e172b006497d79be1cfa5126f92cc990813e8d1b6fb1fd6caf8e3877a60"
+  },
+  {
+    "key": "stat_possession_black_5",
+    "text": "Obsidian have had about five percent of the ball.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3144,
+    "sha256": "7cbcfb9d62d1763dbc68e235e0ebdbb050322a33dd55cb0b53ddc0b42692c74a"
+  },
+  {
+    "key": "stat_possession_black_10",
+    "text": "Obsidian have had about ten percent of the ball.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 2736,
+    "sha256": "52352217e5b4d07cbc68f422be3216d1de046f0830329bb09f2fe66a0fca4a03"
+  },
+  {
+    "key": "stat_possession_black_15",
+    "text": "Obsidian have had about fifteen percent of the ball.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3312,
+    "sha256": "31ecc6e167d70e5a81468cc3a3ad4c2ecaf4a6ccbb4d85b1cc7c7440e0c797ce"
+  },
+  {
+    "key": "stat_possession_black_20",
+    "text": "Obsidian have had about twenty percent of the ball.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3432,
+    "sha256": "80bad6f18153cbfc8fec6722470edd0da4f313379f446d548f47f63c0d810b75"
+  },
+  {
+    "key": "stat_possession_black_25",
+    "text": "Obsidian have had about twenty five percent of the ball.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 4080,
+    "sha256": "0ba0cac21fdc8cac132a6ea44f76a70d37402745f4d478c8dc1642d7d13c62ce"
+  },
+  {
+    "key": "stat_possession_black_30",
+    "text": "Obsidian have had about thirty percent of the ball.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3576,
+    "sha256": "10d7780e8016f2ec4a6ff895f70ead8db76b2cdce67a2ed692b5af2ae56441ab"
+  },
+  {
+    "key": "stat_possession_black_35",
+    "text": "Obsidian have had about thirty five percent of the ball.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3144,
+    "sha256": "908a59dec024584bb4808bd73e1f347c80eb56fed35bbb5bf0b904f0f442b188"
+  },
+  {
+    "key": "stat_possession_black_40",
+    "text": "Obsidian have had about forty percent of the ball.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3384,
+    "sha256": "6bb40b99ce6dc4d755e43590ce3f2473b8c1c339192d02a7d4bb6d22cfc69a98"
+  },
+  {
+    "key": "stat_possession_black_45",
+    "text": "Obsidian have had about forty five percent of the ball.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 4104,
+    "sha256": "e3d34dc3b46cddfbb28e4aa352b79c1a85e883439707f676276e5528feee34c9"
+  },
+  {
+    "key": "stat_possession_black_50",
+    "text": "Obsidian have had about fifty percent of the ball.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3624,
+    "sha256": "8574a0c69ceb2ba26ccb53e0b920bb2a702e7fa54f6086f1d28ca7873b55be23"
+  },
+  {
+    "key": "stat_possession_black_55",
+    "text": "Obsidian have had about fifty five percent of the ball.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3144,
+    "sha256": "83e317248a1c61d796ba4d6141d3241a1d07d6bf568bc5b706f93cf804c1067e"
+  },
+  {
+    "key": "stat_possession_black_60",
+    "text": "Obsidian have had about sixty percent of the ball.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3504,
+    "sha256": "1652f0a106690ce9375cff5f09bcd97fc674b1ee6c4019604a3ca72682c516db"
+  },
+  {
+    "key": "stat_possession_black_65",
+    "text": "Obsidian have had about sixty five percent of the ball.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 4128,
+    "sha256": "6c353ebc828394ccbf68bfccb0f441d66d73f1fcf42b0ce787f6d0022def559b"
+  },
+  {
+    "key": "stat_possession_black_70",
+    "text": "Obsidian have had about seventy percent of the ball.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3240,
+    "sha256": "235be91f7748cebfcb0fc6da9671d80f52c34ff4e3d81cfca482c076436828ce"
+  },
+  {
+    "key": "stat_possession_black_75",
+    "text": "Obsidian have had about seventy five percent of the ball.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3240,
+    "sha256": "288e2fc10a8f86697b02d12c0a94897be128c5949ad8d3f8de09df2738bc35c7"
+  },
+  {
+    "key": "stat_possession_black_80",
+    "text": "Obsidian have had about eighty percent of the ball.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3072,
+    "sha256": "893d457910b0eb5d66433a860990b895facde0b88053069fb5f47e661af6ef21"
+  },
+  {
+    "key": "stat_possession_black_85",
+    "text": "Obsidian have had about eighty five percent of the ball.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3000,
+    "sha256": "928afe0f8f2c6790be3285fb95f3ca146343e64aad52c0e58d18307f1fdcf911"
+  },
+  {
+    "key": "stat_possession_black_90",
+    "text": "Obsidian have had about ninety percent of the ball.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3456,
+    "sha256": "a1e6dab29558b8a50a008ab5af83c41747727bb6ac750ab79cc18c8a4796577a"
+  },
+  {
+    "key": "stat_possession_black_95",
+    "text": "Obsidian have had about ninety five percent of the ball.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 4080,
+    "sha256": "93afca374bf18c072ab365d673b061d44c5afca7ad1e1c1442d8cd1b89000fad"
+  },
+  {
+    "key": "stat_possession_black_100",
+    "text": "Obsidian have had about one hundred percent of the ball.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3984,
+    "sha256": "8fc674d7f18800085562ddb88378fb610fcf50c2c3a895b93053d3e759ac5b9b"
   }
 ];
 export const HUGO_COMMENTARY_CLIPS = Object.freeze(Object.fromEntries(entries.map(clip => [clip.key, Object.freeze({...clip, src:new URL(`./audio/hugo/${clip.key}.mp3?v=${clip.sha256?.slice(0,12) || "pending"}`, import.meta.url).href})])));
@@ -1879,7 +2939,7 @@ export function hugoCommentaryClip(line, state) {
   if (!line || line.kind !== 'trend') return null;
   const alias = {enable:'hugo_enable', test:'hugo_test', demo:'hugo_demo'};
   let key = alias[line.clipKey] || line.clipKey;
-  if (!['hugo_enable', 'hugo_test', 'hugo_demo'].includes(key) && !/^(?:tactic_|performance_|shape_)/.test(key || '')) {
+  if (!['hugo_enable', 'hugo_test', 'hugo_demo'].includes(key) && !/^(?:tactic_|performance_|shape_|stat_)/.test(key || '')) {
     const f = line.spatial;
     if (!f) key = 'routine_' + line.clipKey;
     else {

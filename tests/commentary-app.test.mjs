@@ -122,6 +122,8 @@ test('analysis context names the assessed team and stable piece without changing
     'Obsidian FC · R2 · Player performance');
   assert.equal(context.commentaryContext({team:'white',clipKey:'shape_compact',tactical:{}}),'Ivory FC · Team shape');
   assert.equal(context.commentaryContext({team:'black',clipKey:'tactic_counter',tactical:{}}),'Obsidian FC · Team tactics');
+  assert.equal(context.commentaryContext({team:'black',clipKey:'stat_shots_black_7',statsCommentary:{shots:7,onTarget:3,possessionPercent:62.46}}),
+    'Obsidian FC · Possession 62.5% · Shots 7 · On target 3');
   assert.equal(context.commentaryContext({kind:'goal',team:'black'}),'');
   assert.equal(context.commentaryContext({team:'invalid',clipKey:'shape_wide',tactical:{}}),'');
 });

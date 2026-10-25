@@ -2,7 +2,7 @@ import {createGame, legalMoves, legalKicks, disguisedShotTargets, applyMove, app
 import {createMatchClock, restoreMatchClock, tickMatchClock, settleMatchClock, rewindMatchClock} from './match-clock.js?v=1fa32f5eed6c';
 import {buildGoalReplay, restoreGoalReplay, createReplayPlayer} from './goal-replay.js?v=61ab601656f2';
 import {createMatchStats, restoreMatchStats, recordMatchTransition, addPossessionTime, matchStatsSummary, shortPieceId} from './match-stats.js?v=7db3a2ae87a7';
-import {createCommentary} from './commentary.js?v=df6f91391d25';
+import {createCommentary} from './commentary.js?v=4a3830fd8c66';
 import {createParadeeSpeech} from './paradee-speech.js?v=abadf72a064b';
 
 const $ = id => document.getElementById(id);
@@ -108,7 +108,14 @@ applyVoicePreference();
 function applyVoicePreference(){const state=commentary.getState();if(voicePreferredId&&state.voices.some(voice=>voice.id===voicePreferredId)&&state.voiceId!==voicePreferredId)commentary.setVoice(voicePreferredId);}
 
 function commentaryContext(event){
-  if(!event?.tactical||!TEAM[event.team])return '';
+  if(!TEAM[event?.team])return '';
+  if(event.statsCommentary){
+    const value=event.statsCommentary,details=[];
+    if(Number.isFinite(value.possessionPercent))details.push(`Possession ${value.possessionPercent.toFixed(1)}%`);
+    if(Number.isInteger(value.shots))details.push(`Shots ${value.shots}${Number.isInteger(value.onTarget)?' · On target '+value.onTarget:''}`);
+    return `${TEAM[event.team]} · ${details.join(' · ')}`;
+  }
+  if(!event.tactical)return '';
   const category=event.clipKey?.startsWith('performance_')?'Player performance':event.clipKey?.startsWith('shape_')?'Team shape':'Team tactics';
   return `${TEAM[event.team]}${event.tactical.pieceId?' · '+shortPieceId(event.tactical.pieceId):''} · ${category}`;
 }
@@ -129,14 +136,14 @@ function renderVoiceover(){
   $('voiceDeviceControls').hidden=!device;
   $('voiceSelect').value=voices.some(voice=>voice.id===voicePreferredId)?voicePreferredId:'';$('voiceSelect').disabled=!allowed||!device||!voices.length;
   $('voiceNote').textContent=local?(localLoading?`Loading Hugo${localProgress} for fresh analysis. ${state.audioStatus==='unavailable'?'Audio is currently unavailable; captions remain available.':'Tom still calls shots and goals.'}`:localGenerating?'Hugo is generating speech. A slower device may need several seconds.':state.audioStatus==='caption'?'This spatial call is captioned. Hugo speaks fresh analysis when ready; Tom still calls shots and goals.':state.audioStatus==='unavailable'?'Commentary audio is currently unavailable · captions remain available. Test voice retries Hugo.':localLocked?'Hugo needs audio permission. Test voice retries; saved match calls remain available.':localFailed?(localState.supported===false?'Local speech is unavailable in this browser · saved match calls remain available.':localReady?'Hugo could not speak this call · saved match calls remain available.':`Hugo could not load${localError?': '+localError:''}. Tap Load & test Hugo to retry.`):localReady?'Hugo analyses recent tactics, formation and player contributions; Tom calls shots and goals.':'Turn commentary On for live analysis · about 38 MB on first load. Tom supplies recorded reactions.')
-    :library?(state.audioStatus==='unavailable'?'Commentary audio could not play. Tap Test Hugo to retry; captions remain available.':'Hugo analyses counters, switches, team shape and player contributions over several rounds. Tom calls shots and goals.')
+    :library?(state.audioStatus==='unavailable'?'Commentary audio could not play. Tap Test Hugo to retry; captions remain available.':'Hugo covers tactics, team shape, player contributions and occasional shot and possession totals. Tom calls shots and goals.')
     :recorded?(state.audioStatus==='caption'?'Spatial analysis is captioned in this mode. Choose Instant analysis to hear it.':state.audioStatus==='fallback'?'Saved audio unavailable for this call · using your device voice.':state.audioStatus==='unavailable'?'Audio is unavailable. Check sound or choose a device voice.':'Saved match calls · fresh spatial analysis appears in captions.')
     :state.voiceName?`Selected: ${state.voiceName}.`:'English speech voices load from your browser or device. Captions are available while no voice is ready.';
   const demoAvailable=allowed&&audioAvailable&&(stage==='setup'||stage==='playing'&&paused)&&!anyDialog()&&!shotFlight;
   $('voiceDemo').disabled=!demoAvailable;$('voiceDemo').title=!allowed?'Available at Relaxed · 3 seconds.':!audioAvailable?'Commentary audio must be available to hear a sample.':demoAvailable?'Hear example match commentary without changing your match.':'Pause the match to hear the match sample.';
   $('voiceTest').textContent=local?(localLoading?'Loading Hugo…':localBusy?'Hugo is busy…':localReady?'▶ Test Hugo':'▶ Load & test Hugo'):library?'▶ Test Hugo':'▶ Test voice';
   $('voiceTest').disabled=!allowed||!audioAvailable||anyDialog()||local&&(localLoading||localBusy||localState.supported===false);$('voiceTest').title=!allowed?'Available at Relaxed · 3 seconds.':local&&localLoading?'Hugo is loading; progress appears above.':local&&localBusy?'Wait for Hugo to finish, or pause the match before testing.':local&&!localReady?'Load Hugo and hear a short live voice check.':local&&localLocked?'Restore audio permission and hear Hugo speak.':local?'Hear Hugo speak a short live line. Pause the match for an uninterrupted test.':'Hear one short call. This does not pause or change your match.';
-  $('voiceStatus').textContent=!allowed?'Available at Relaxed · 3 seconds.':!voiceEnabled?'Off · Football commentary at Relaxed pace.':!voiceActivated?'On · Start or resume the match to activate sound.':voiceCaptionDemo&&state.demo?'Demo · Match sample; your match is unchanged.':!audioAvailable?'On · Captions only; commentary audio is unavailable.':local&&localLoading?`On · Loading Hugo${localProgress}…`:state.audioStatus==='loading'?'On · Preparing the next commentary call…':local&&localGenerating?'On · Hugo is generating live speech…':paused?'On · Paused. Resume for fresh commentary.':anyDialog()?(replayAutoContinue?'On · Goal replay.':'On · Commentary paused while this panel is open.'):stage==='setup'?'On · Ready for kickoff.':stage==='finished'?'On · Full time.':local&&(localLocked||localFailed)?'On · Saved match calls; local analysis is unavailable.':'On · Match calls and analysis about every 10–15 seconds of live play.';
+  $('voiceStatus').textContent=!allowed?'Available at Relaxed · 3 seconds.':!voiceEnabled?'Off · Football commentary at Relaxed pace.':!voiceActivated?'On · Start or resume the match to activate sound.':voiceCaptionDemo&&state.demo?'Demo · Match sample; your match is unchanged.':!audioAvailable?'On · Captions only; commentary audio is unavailable.':local&&localLoading?`On · Loading Hugo${localProgress}…`:state.audioStatus==='loading'?'On · Preparing the next commentary call…':local&&localGenerating?'On · Hugo is generating live speech…':state.pendingReaction?'On · Hugo is finishing his sentence; the match reaction follows.':paused?'On · Paused. Resume for fresh commentary.':anyDialog()?(replayAutoContinue?'On · Goal replay.':'On · Commentary paused while this panel is open.'):stage==='setup'?'On · Ready for kickoff.':stage==='finished'?'On · Full time.':local&&(localLocked||localFailed)?'On · Saved match calls; local analysis is unavailable.':'On · Match calls and analysis about every 10–15 seconds of live play.';
 }
 function syncVoiceover(){
   if(aiPace!==3000&&voiceEnabled){voiceTestRequest++;voiceEnabled=false;voiceActivated=false;saveVoicePreference();}
@@ -144,7 +151,7 @@ function syncVoiceover(){
   const lifecycle=paused?'paused':anyDialog()?(replayAutoContinue?'autoReplay':'dialog'):stage;
   if(lifecycle!==voiceLifecycle){
     voiceLifecycle=lifecycle;
-    if(lifecycle!=='playing'){voiceTestRequest++;commentary.suspend({preserveGoal:lifecycle==='autoReplay'||stage==='finished'&&$('resultDialog').hasAttribute('open')&&game.lastAction?.type==='goal'});}
+    if(lifecycle!=='playing'){voiceTestRequest++;commentary.suspend({preserveGoal:lifecycle==='autoReplay'||stage==='finished'&&$('resultDialog').hasAttribute('open')&&game.lastAction?.type==='goal',preserveHugo:lifecycle==='autoReplay'||stage==='finished'});}
   }
   renderVoiceover();
 }
@@ -505,7 +512,7 @@ function render(){
   $('shotPanel').hidden=!reacting||stage!=='playing';
   if(reacting&&game.pendingShot)$('shotSummary').textContent=penaltyPending()?`Penalty aimed at ${FILES[game.pendingShot.x].toUpperCase()}. Fixed 80% conversion; the keeper holds position.`:game.pendingShot.disguised?`Disguised shot: ${goalChoiceNames(game.pendingShot.targetOptions)}, each 50%. Neither target is committed before the keeper decision.`:`Shot aimed at column ${FILES[game.pendingShot.x].toUpperCase()}. ${keeperCanReact()?`${TEAM[acting]} may move its king one square before resolution.`:'The defending king is outside its own box and has no goalkeeper reaction.'}`;
   $('skipBtn').hidden=watching||kicking||choosingCorner||stage==='finished';$('skipBtn').disabled=blocked()||choosingCorner;$('skipBtn').textContent=running?'Skip run →':reacting?(penaltyPending()?'Resolve penalty · 80%':keeperCanReact()?'Hold keeper · resolve shot':'Resolve shot · king outside box'):'End positioning · skip unused →';
-  $('statsBtn').hidden=stage!=='finished';$('pauseBtn').disabled=stage!=='playing';$('pauseBtn').textContent=paused?'▶ Resume':'Ⅱ Pause';$('finishBtn').disabled=stage!=='playing'||duration>0;$('finishBtn').title=duration>0?'Timed matches end after the clock and final chance settle.':'Finish this untimed match.';$('undoBtn').disabled=!history.length||stage!=='playing'||anyDialog();
+  $('statsBtn').hidden=stage!=='finished'&&!paused;$('pauseBtn').disabled=stage!=='playing';$('pauseBtn').textContent=paused?'▶ Resume':'Ⅱ Pause';$('finishBtn').disabled=stage!=='playing'||duration>0;$('finishBtn').title=duration>0?'Timed matches end after the clock and final chance settle.':'Finish this untimed match.';$('undoBtn').disabled=!history.length||stage!=='playing'||anyDialog();
   $('replayBtn').disabled=!lastGoalReplay||anyDialog();
   document.body.classList.toggle('thinking',stage==='playing'&&isComputer()&&!paused);document.body.classList.toggle('paused',paused&&stage==='playing');
   const carrier=game.pieces.find(p=>p.id===game.ball.carrierId);
@@ -711,7 +718,7 @@ function openGoalReplay({automatic=false}={}){
   if(!automatic&&stage==='playing'&&advanceClockNow())return;
   if(anyDialog())return;
   cancelAI();replayAutoContinue=automatic;
-  commentary.suspend({preserveGoal:automatic});
+  commentary.suspend({preserveGoal:automatic,preserveHugo:automatic});
   $('replayDialog').showModal();replayPlayer.load(lastGoalReplay,{autoplay:true});
   lastTick=Date.now();render();save();
 }
@@ -851,7 +858,12 @@ $('dribbleBtn').addEventListener('click',()=>{if(blocked()||!positionActions(gam
 $('pawnMoveBtn').addEventListener('click',()=>{if(blocked()||!positionActions(game).pawnAvailable)return;setMoveMode('pawn');selectedId=null;render();});
 $('startBtn').addEventListener('click',()=>{if(stage!=='setup')return;resetVoiceover();activateVoiceover();resetClock();stage='playing';paused=false;selectedId=null;render();save();if(voiceEnabled&&voiceActivated)commentary.confirmEnabled();});
 $('skipBtn').addEventListener('click',()=>{if(!blocked())commit(skipMove(game));});
-$('pauseBtn').addEventListener('click',()=>{if(stage!=='playing'&&!shotFlight||advanceClockNow())return;const resuming=paused;if(resuming){if(commentary.getState().demo)resetVoiceover();activateVoiceover();}paused=!paused;lastTick=Date.now();render();save();if(resuming&&voiceEnabled&&voiceActivated)commentary.confirmEnabled();});
+$('pauseBtn').addEventListener('click',()=>{
+  if(stage!=='playing'&&!shotFlight||advanceClockNow())return;
+  if(paused){resumePausedMatch();return;}
+  paused=true;lastTick=Date.now();render();showPauseStats();save();
+});
+$('pauseStatsResumeBtn').addEventListener('click',resumePausedMatch);
 $('undoBtn').addEventListener('click',()=>{if(!history.length||stage!=='playing'||anyDialog()||advanceClockNow())return;resetVoiceover();cancelShotFlight();cancelAI();let entry=history.pop();if(game.mode==='solo')while(entry.actor!=='white'&&history.length)entry=history.pop();game=upgradeSavedGame(entry.game);passRunSelected=!!entry.passRunSelected&&['kick','kickoff','keeperRelease'].includes(game.phase);disguiseSelected=entry.disguiseSelected!==false;foulsEnabled=game.foulsEnabled===true;matchStats=restoreMatchStats(entry.matchStats,game,{partial:true});if(lastGoalReplay&&(game.score.white<lastGoalReplay.score.white||game.score.black<lastGoalReplay.score.black))lastGoalReplay=null;if(game.mode==='watch')paused=true;restoreClock(rewindMatchClock(clockSnapshot(),entry.clock,{actionSeconds:ACTION_SECONDS}));selectedId=null;lastComputerAction=null;freePawnMode=false;dribbleMode=false;lastTick=Date.now();render();save();toast(game.mode==='watch'?'Last computer action undone. Press Resume to continue.':'Last move undone.');});
 $('flipBtn').addEventListener('click',()=>{flipped=!flipped;render();save();});
 $('replayBtn').addEventListener('click',()=>openGoalReplay());
@@ -897,6 +909,47 @@ function renderGoalMap(summary){
   const zones=[['Inside keeper box','box'],['Central approach','central'],['Wide close','wide'],['Further out','distant']];
   $('statsGoalZoneRows').innerHTML=zones.map(([label,key])=>`<tr><td>${info.byTeam.white.zones[key]}</td><th scope="row">${label}</th><td>${info.byTeam.black.zones[key]}</td></tr>`).join('');
 }
+// A paused shot retains the same pre-impact score/statistics as the pitch.
+function pauseStatsSnapshot(){
+  const beforeImpact=!!shotFlight&&!shotFlight.revealed;
+  const recorded=beforeImpact?history.at(-1)?.matchStats:null;
+  return {summary:matchStatsSummary(recorded||matchStats),score:beforeImpact?shotFlight.score:game.score,beforeImpact};
+}
+function renderPauseStats(){
+  const {summary,score,beforeImpact}=pauseStatsSnapshot(),white=summary.teams.white,black=summary.teams.black;
+  $('pauseStatsScore').textContent=`${score.white} : ${score.black}`;
+  const seconds=Math.ceil(Math.max(0,remaining));
+  $('pauseStatsClock').textContent=duration===0?'Untimed match':`${Math.floor(seconds/60)}:${String(seconds%60).padStart(2,'0')} remaining`;
+  $('pauseStatsShotNote').hidden=!beforeImpact;
+  $('pauseStatsShotNote').textContent=beforeImpact?'The shot is paused in flight. Its outcome will appear when the ball arrives.':'';
+  const rows=[['Shots',white.shots,black.shots],['On target',white.onTarget,black.onTarget],['Corners',white.corners,black.corners],['Fouls',white.fouls||0,black.fouls||0],['Yellow cards',white.yellowCards||0,black.yellowCards||0],['Red cards',white.redCards||0,black.redCards||0],['Possession',white.possessionPercent===null?'—':`${Math.round(white.possessionPercent)}%`,black.possessionPercent===null?'—':`${100-Math.round(white.possessionPercent)}%`]];
+  $('pauseStatsRows').innerHTML=rows.map(([label,w,b])=>`<tr><td>${w}</td><th scope="row">${label}</th><td>${b}</td></tr>`).join('');
+  $('pauseStatsPartial').hidden=!summary.partial;
+  const earlier=summary.baselineScore.white+summary.baselineScore.black;
+  $('pauseStatsPartial').textContent=`Stats recorded from this update.${earlier?` ${earlier} earlier goal${earlier===1?' has':'s have'} no recorded scorer.`:''}`;
+  const contributions=(items,empty)=>items.length?items.map(item=>`<li><span class="stats-team-dot ${item.team}" aria-hidden="true"></span><span>${TEAM[item.team]} · <b>${shortPieceId(item.pieceId)}</b></span><strong>${item.count}</strong></li>`).join(''):`<li class="stats-empty">${empty}</li>`;
+  $('pauseStatsScorers').innerHTML=contributions(summary.scorers,'No recorded goals.');
+  $('pauseStatsAssists').innerHTML=contributions(summary.assists,'No recorded assists.');
+  $('pauseStatsGoalLog').innerHTML=summary.goals.length?summary.goals.map(goal=>{
+    const time=goal.matchSeconds===null?`Round ${goal.turn}`:`${Math.floor(goal.matchSeconds/60)}:${String(Math.floor(goal.matchSeconds%60)).padStart(2,'0')}`;
+    return `<li><time>${time}</time><span><b>${TEAM[goal.team]} · ${shortPieceId(goal.scorerId)}${goal.ownGoal?' (own goal)':''}</b><small>${goal.ownGoal?`By ${TEAM[goal.scorerId.split('-')[0]]}`:goal.assistId?`Assist: ${shortPieceId(goal.assistId)}`:'Unassisted'}</small></span></li>`;
+  }).join(''):'<li class="stats-empty">No recorded goals.</li>';
+}
+function showPauseStats(){
+  if(!paused||stage!=='playing'&&!shotFlight)return false;
+  renderPauseStats();
+  if(!$('pauseStatsDialog').open)$('pauseStatsDialog').showModal();
+  syncVoiceover();syncShotFlightPlayback();cancelAI();updateClock();
+  return true;
+}
+function resumePausedMatch(){
+  if(!paused||stage!=='playing'&&!shotFlight)return false;
+  if($('pauseStatsDialog').open)$('pauseStatsDialog').close();
+  if(commentary.getState().demo)resetVoiceover();
+  paused=false;lastTick=Date.now();activateVoiceover();render();save();
+  if(voiceEnabled&&voiceActivated)commentary.confirmEnabled();
+  return true;
+}
 function renderMatchStats(){
   const summary=matchStatsSummary(matchStats),white=summary.teams.white,black=summary.teams.black;
   const rows=[['Shots',white.shots,black.shots],['On target',white.onTarget,black.onTarget],['Corners',white.corners,black.corners],['Fouls',white.fouls||0,black.fouls||0],['Yellow cards',white.yellowCards||0,black.yellowCards||0],['Red cards',white.redCards||0,black.redCards||0],['Possession',white.possessionPercent===null?'—':`${Math.round(white.possessionPercent)}%`,black.possessionPercent===null?'—':`${100-Math.round(white.possessionPercent)}%`]];
@@ -918,10 +971,10 @@ function renderMatchStats(){
 }
 function showResult(){const forfeited=game.finishReason==='forfeit',winner=forfeited&&['white','black'].includes(game.winner)?game.winner:game.score.white===game.score.black?null:game.score.white>game.score.black?'white':'black';$('resultTitle').textContent=winner?TEAM[winner]+(forfeited?' wins by forfeit.':' wins.'):'Honours even.';$('resultScore').textContent=`${game.score.white} : ${game.score.black}`;$('resultText').textContent=forfeited?`${TEAM[game.winner==='white'?'black':'white']} has fewer than seven active players. The score shown is the actual score when play stopped.`:winner?'A well-played match. The next move is a fresh start.':'Nothing between the sides. Settle it in a rematch.';renderMatchStats();if(!$('resultDialog').open)$('resultDialog').showModal();}
 $('finishBtn').addEventListener('click',()=>{if(stage==='playing'&&duration===0)finishMatch();});
-$('statsBtn').addEventListener('click',()=>{if(stage==='finished'&&!shotFlight){commentary.suspend();showResult();renderVoiceover();}});
+$('statsBtn').addEventListener('click',()=>{if(stage==='playing'&&paused){showPauseStats();return;}if(stage==='finished'&&!shotFlight){commentary.suspend();showResult();renderVoiceover();}});
 function newMatch(){resetVoiceover();cancelShotFlight();cancelAI();replayPlayer.stop();replayAutoContinue=false;replayPendingResult=false;lastGoalReplay=null;stage='setup';paused=false;for(const dialog of document.querySelectorAll('dialog[open]'))dialog.close();resetClock();selectedId=null;lastComputerAction=null;freePawnMode=false;dribbleMode=false;passRunSelected=false;history=[];game=createGame({foulsEnabled,mode:game.mode,minutes:duration||10,kickoff:$('kickoff').value});matchStats=createMatchStats();render();save();}
 $('newBtn').addEventListener('click',()=>{if(stage==='playing'){if(advanceClockNow())return;$('confirmDialog').showModal();syncVoiceover();syncShotFlightPlayback();cancelAI();updateClock();}else newMatch();});$('confirmNewBtn').addEventListener('click',newMatch);$('rematchBtn').addEventListener('click',newMatch);
-function openRules(){advanceClockNow();$('rulesDialog').showModal();syncVoiceover();syncShotFlightPlayback();cancelAI();updateClock();}
+function openRules(){advanceClockNow();commentary.suspend();$('rulesDialog').showModal();syncVoiceover();syncShotFlightPlayback();cancelAI();updateClock();}
 $('rulesBtn').addEventListener('click',openRules);$('detailsBtn').addEventListener('click',openRules);
 for(const el of document.querySelectorAll('[data-close]'))el.addEventListener('click',()=>$(el.dataset.close).close());
 for(const dialog of document.querySelectorAll('dialog')){dialog.addEventListener('close',()=>{if(dialog.id==='replayDialog'){replayPlayer.stop();replayAutoContinue=false;const showFinalResult=replayPendingResult;replayPendingResult=false;if(showFinalResult&&stage==='finished')showResult();}lastTick=Date.now();render();});dialog.addEventListener('click',event=>{if(event.target===dialog){const r=dialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)dialog.close();}});}

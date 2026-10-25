@@ -79,23 +79,28 @@ test('a completed cross explanation finishes across the next normal attacker and
   h.controller.destroy();
 });
 
-for (const kind of ['attempt', 'goal']) test(`${kind} still interrupts a completed-action explanation`, () => {
-  const h = harness(), {after, fact} = completedCross(), audio = begin(h, after, fact), late = audio.onended;
+for (const kind of ['attempt', 'goal']) test(`${kind} waits for a started completed-action explanation to finish`, () => {
+  const h = harness(), {after, fact} = completedCross(), audio = begin(h, after, fact), ended = audio.onended, late = audio.onplaying;
   assert.equal(h.controller.reveal(reaction(kind)), true);
-  assert.ok(audio.pauses > 0); assert.equal(h.captions.at(-1).event.kind, kind);
-  late(); assert.equal(h.captions.at(-1).event.kind, kind);
+  assert.equal(audio.pauses, 0); assert.equal(h.audios.length, 1);
+  assert.equal(h.controller.getState().pendingReaction, kind);
+  assert.equal(h.captions.at(-1).event.kind, 'trend');
+  ended(); assert.equal(h.captions.at(-1).event.kind, kind);
+  assert.equal(h.audios.length, 2); assert.equal(h.controller.getState().pendingReaction, null);
+  ended(); late(); assert.equal(h.captions.at(-1).event.kind, kind);
   assert.equal(h.controller.getState().speaking, true);
   h.controller.destroy();
 });
 
-for (const change of ['turnover', 'restart']) test(`a ${change} ends the preceding attack's completed-action explanation`, () => {
+for (const change of ['turnover', 'restart']) test(`a ${change} leaves a started completed-action explanation intact`, () => {
   const h = harness(), {after, fact} = completedCross(), audio = begin(h, after, fact);
   const next = structuredClone(after);
   if (change === 'turnover') {next.attack = 'black'; next.ball = {x: 12, y: 3, carrierId: 'black-R2'};}
   else next.restart = {type: 'corner', team: 'white'};
   next.turn++; next.lastAction = null;
   h.controller.observe(after, next);
-  assert.ok(audio.pauses > 0); assert.equal(h.controller.getState().speaking, false);
+  assert.equal(audio.pauses, 0); assert.equal(h.controller.getState().speaking, true);
+  audio.onended(); assert.equal(h.controller.getState().speaking, false);
   h.controller.destroy();
 });
 
@@ -112,7 +117,7 @@ for (const change of ['mute', 'pace', 'pause', 'reset']) test(`${change} immedia
   h.controller.destroy();
 });
 
-test('an urgent current-position claim still stops when its native evidence disappears', () => {
+test('a started urgent observation finishes, but its vanished native evidence cannot start another call', () => {
   const state = position({support: true, phase: 'defendMove'});
   state.pieces.push({id: 'black-R1', team: 'black', type: 'R', x: 6, y: 10});
   const fact = commentaryPositionFacts(state).find(value => value.type === 'pressing');
@@ -121,7 +126,11 @@ test('an urgent current-position claim still stops when its native evidence disa
   const next = E.applyMove(state, 'black-R1', 7, 10);
   assert.notEqual(next, state);
   h.controller.observe(state, next);
-  assert.ok(audio.pauses > 0, 'a vanished current tackle threat must not be spoken as still present');
+  assert.equal(audio.pauses, 0, 'a started observation of the earlier position finishes its sentence');
+  audio.onended();
+  assert.equal(h.controller.getState().speaking, false);
+  assert.equal(h.controller.reveal({kind: 'trend', priority: 1, id: 'vanished-pressure', text: fact.text, spatial: fact}), false,
+    'a new call still needs current native evidence before starting');
   h.controller.destroy();
 });
 
@@ -178,22 +187,27 @@ test('a snapshot whose audio has not started cannot begin after its live evidenc
   h.controller.destroy();
 });
 
-for (const kind of ['attempt', 'goal']) test(`${kind} preempts a started snapshot without reviving it later`, () => {
+for (const kind of ['attempt', 'goal']) test(`${kind} follows a started snapshot exactly once without reviving it later`, () => {
   const h = harness({snapshot: true}), {state, fact} = supportPosition(), audio = begin(h, state, fact);
-  const late = audio.onended;
+  const ended = audio.onended, late = audio.onplaying;
   assert.equal(h.controller.reveal(reaction(kind)), true);
-  assert.ok(audio.pauses > 0); assert.equal(h.captions.at(-1).event.kind, kind);
-  late(); assert.equal(h.captions.at(-1).event.kind, kind);
+  assert.equal(audio.pauses, 0); assert.equal(h.controller.getState().pendingReaction, kind);
+  assert.equal(h.captions.at(-1).event.kind, 'trend');
+  ended(); assert.equal(h.captions.at(-1).event.kind, kind);
+  assert.equal(h.audios.length, 2);
+  ended(); late(); assert.equal(h.captions.at(-1).event.kind, kind);
+  assert.equal(h.audios.length, 2, 'old callbacks cannot replay the snapshot or reaction');
   h.controller.destroy();
 });
 
-for (const change of ['pendingShot', 'finished']) test(`${change} immediately stops even a started snapshot`, () => {
+for (const change of ['pendingShot', 'finished']) test(`${change} does not clip a started snapshot`, () => {
   const h = harness({snapshot: true}), {state, fact} = supportPosition(), audio = begin(h, state, fact);
   const next = structuredClone(state);
   if (change === 'pendingShot') {next.pendingShot = {shooterId: 'white-Q'}; next.phase = 'keeperReact';}
   else next.phase = 'finished';
   h.controller.tick(next, {blocked: true});
-  assert.ok(audio.pauses > 0); assert.equal(h.controller.getState().speaking, false);
+  assert.equal(audio.pauses, 0); assert.equal(h.controller.getState().speaking, true);
+  audio.onended(); assert.equal(h.controller.getState().speaking, false);
   h.controller.destroy();
 });
 

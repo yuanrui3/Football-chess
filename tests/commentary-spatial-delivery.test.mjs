@@ -97,13 +97,15 @@ function beginSpatial(h, state) {
   return caption;
 }
 
-test('Hugo receives the exact current spatial explanation and captions name the same public facts', async () => {
+test('Hugo voices a past-tense observation while retaining the exact current fact for start validation', async () => {
   const h = harness(), state = position(), untouched = structuredClone(state);
   const caption = beginSpatial(h, state);
   assert.equal(h.jobs.length, 1);
   assert.equal(h.jobs[0].text, caption.text);
-  assert.equal(h.jobs[0].text, caption.event.spatial.text);
+  assert.equal(h.jobs[0].text, "Ivory's rook one supported the queen along an open vertical file.");
+  assert.equal(caption.event.spatial.text, "Ivory's rook one supports the queen along an open vertical file.");
   assert.match(caption.text, /queen|rook/i);
+  assert.equal(caption.event.snapshot, true);
   assert.equal(h.audios.length, 0); assert.equal(h.deviceCalls.length, 0);
   assert.deepEqual(state, untouched, 'speech selection cannot change the board or random state');
   await finish(h.jobs[0]);
@@ -182,7 +184,7 @@ test('an irrelevant defender shuffle retains a still-valid support explanation',
   await finish(h.jobs[0]); h.controller.destroy();
 });
 
-test('defending-side pressure survives quiet ticks and an irrelevant bonus step, then stops on a real turnover', async () => {
+test('defending-side pressure validates before local speech, then finishes naturally across a real turnover', async () => {
   const before = position({phase: 'defendMove'});
   Object.assign(before.pieces.find(piece => piece.id === 'black-R1'), {x: 6, y: 10});
   before.foulsEnabled = false;
@@ -211,10 +213,14 @@ test('defending-side pressure survives quiet ticks and an irrelevant bonus step,
   const won = E.applyMove(after, 'black-R1', tackle.x, tackle.y);
   assert.equal(won.attack, 'black'); assert.equal(won.lastAction.type, 'tackle');
   h.controller.observe(after, won);
-  assert.equal(h.local.cancels, 1);
+  assert.equal(h.local.cancels, 0, 'a new possession does not interrupt the begun historical observation');
+  assert.match(h.captions.at(-1).text, /had the queen under pressure/);
   const textAfterTurnover = h.captions.at(-1).text;
-  job.settings.onPlaying(); job.resolve({spoken: true}); await flush();
+  job.settings.onPlaying();
+  assert.equal(h.local.cancels, 0, 'a duplicate local playback notification cannot revalidate begun speech');
   assert.equal(h.captions.at(-1).text, textAfterTurnover);
+  job.resolve({spoken: true}); await flush();
+  assert.equal(h.captions.at(-1).text, '');
   assert.equal(h.controller.getState().audioStatus === 'playing', false);
   h.controller.destroy();
 });

@@ -1,12 +1,12 @@
 {
   "feature": "Prepared whole-sentence Hugo technical match commentary",
   "status": "complete",
-  "plannedClips": 190,
-  "completedClips": 190,
+  "plannedClips": 296,
+  "completedClips": 296,
   "buildStarted": "2026-10-19T23:45:18.219Z",
-  "updatedAt": "2026-10-20T22:46:00.333Z",
+  "updatedAt": "2026-10-25T02:33:49.167Z",
   "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
-  "scriptsSha256": "360682c58957111948ed5c33decfa428eefac242f50c3d2cbed9b15ef5ce9af2",
+  "scriptsSha256": "e06ffa21aad7b409947a8a5c98f7f001f1ef4d0b810efb26e76ec5d15d532311",
   "model": {
     "repository": "https://huggingface.co/KittenML/kitten-tts-nano-0.8-int8",
     "revision": "84781d74e29ee25217551556398b42f80593a813",
@@ -114,10 +114,14 @@
       "file": "dist/commentary-tactics.js",
       "definitionsSha256": "01bef1132225e12c4540d4b80132034f309f1ce4f39718ab7b99850eb4fbf0e9"
     },
+    "statistics": {
+      "file": "dist/commentary-stats.js",
+      "definitionsSha256": "9760b8aabf4471f58d8d6c8f183ac5c2aff6828e63d149d35b5e5c1dc4a144cc"
+    },
     "generator": "scripts/build-hugo-commentary-library.mjs",
-    "generatorSha256": "6ec1fba06a1f6828aff46a7058bc50d38cbd1bc03e955f4777514e9e85ebf411"
+    "generatorSha256": "db120b5690f931458fb7abcb6820a5326f2e4fc96c0d6185e34a6d66435bddb7"
   },
-  "selection": "Current fact IDs select past-tense piece-role snapshots; tactical evidence selects rolling-analysis sentences. No team names or IDs are spliced into recordings. Shot/result/goal calls remain outside this library.",
+  "selection": "Current fact IDs select past-tense piece-role snapshots; tactical evidence selects rolling-analysis sentences. Team-named statistics are whole sentences; no names, IDs or numbers are spliced into recordings. Shot/result/goal calls remain outside this library.",
   "workerInitialization": [
     {
       "worker": 1,
@@ -214,6 +218,26 @@
       "worker": 4,
       "initializationMs": 1660.543842,
       "passStarted": "2026-10-20T22:45:54.162Z"
+    },
+    {
+      "worker": 1,
+      "initializationMs": 2287.6222159999998,
+      "passStarted": "2026-10-25T02:32:06.216Z"
+    },
+    {
+      "worker": 2,
+      "initializationMs": 2657.455562,
+      "passStarted": "2026-10-25T02:32:06.216Z"
+    },
+    {
+      "worker": 3,
+      "initializationMs": 2660.5139999999997,
+      "passStarted": "2026-10-25T02:32:06.216Z"
+    },
+    {
+      "worker": 4,
+      "initializationMs": 2621.718754,
+      "passStarted": "2026-10-25T02:32:06.216Z"
     }
   ],
   "clips": [
@@ -5692,6 +5716,3080 @@
       "modelDurationMs": 3706,
       "voice": "Hugo",
       "file": "dist/audio/hugo/performance_wasteful_pawn.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_white_0",
+      "text": "Ivory have taken zero shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "a1af3d8242771f42649a650f90242d534f23dba2bc29f62d8a7b2787e686926f",
+      "bytes": 24045,
+      "durationMs": 2976,
+      "decodedAudio": {
+        "samples": 69777,
+        "rms": 0.10458909953759545,
+        "peak": 0.8019125461578369,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 69777,
+        "rms": 0.10325717018030206,
+        "peak": 0.7883437871932983,
+        "nonFinite": 0
+      },
+      "inferenceMs": 3067.510543,
+      "modelDurationMs": 2907,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_white_0.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_white_1",
+      "text": "Ivory have taken one shot so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "3f4181fb28cfe498f58d3929b29fd16e27af7a82575b2c76c1041e405f53bc70",
+      "bytes": 22509,
+      "durationMs": 2784,
+      "decodedAudio": {
+        "samples": 65616,
+        "rms": 0.10157267420114433,
+        "peak": 0.8046706914901733,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 65616,
+        "rms": 0.10299757910471773,
+        "peak": 0.8095885515213013,
+        "nonFinite": 0
+      },
+      "inferenceMs": 3304.3419320000003,
+      "modelDurationMs": 2734,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_white_1.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_white_2",
+      "text": "Ivory have taken two shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "84e062045b742a7c6afa74a243f6d2589ff59f38a5e02d9993872c869fe50fe9",
+      "bytes": 22317,
+      "durationMs": 2760,
+      "decodedAudio": {
+        "samples": 64931,
+        "rms": 0.09086531786981238,
+        "peak": 0.7864634990692139,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 64931,
+        "rms": 0.09350074713664876,
+        "peak": 0.8226460218429565,
+        "nonFinite": 0
+      },
+      "inferenceMs": 3373.196972,
+      "modelDurationMs": 2705,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_white_2.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_white_3",
+      "text": "Ivory have taken three shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "0afee03c4d5e7e54cc3dc37ec4dcb42bf8a3a1528f4e688fb84988e358630f6f",
+      "bytes": 23085,
+      "durationMs": 2856,
+      "decodedAudio": {
+        "samples": 67089,
+        "rms": 0.09221339945902599,
+        "peak": 0.8011610507965088,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 67089,
+        "rms": 0.09297359079676928,
+        "peak": 0.8033210039138794,
+        "nonFinite": 0
+      },
+      "inferenceMs": 3452.658266,
+      "modelDurationMs": 2795,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_white_3.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_white_4",
+      "text": "Ivory have taken four shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "2f8f73335d809bb6b7824931b065a4248a2f148fb57d3cd40e170a3db3fa1383",
+      "bytes": 23853,
+      "durationMs": 2952,
+      "decodedAudio": {
+        "samples": 69430,
+        "rms": 0.09459548261337392,
+        "peak": 0.7857788801193237,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 69430,
+        "rms": 0.09537665700987197,
+        "peak": 0.8030310273170471,
+        "nonFinite": 0
+      },
+      "inferenceMs": 2765.475583999999,
+      "modelDurationMs": 2893,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_white_4.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_white_5",
+      "text": "Ivory have taken five shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "2e89dc4568b50995d0626072af5fb03d4bba6a78566e7b8f609aeb0e3ad120b4",
+      "bytes": 23661,
+      "durationMs": 2928,
+      "decodedAudio": {
+        "samples": 68643,
+        "rms": 0.09641030850557723,
+        "peak": 0.7992426156997681,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 68643,
+        "rms": 0.09685211968098426,
+        "peak": 0.8021537065505981,
+        "nonFinite": 0
+      },
+      "inferenceMs": 3194.4325419999996,
+      "modelDurationMs": 2860,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_white_5.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_white_6",
+      "text": "Ivory have taken six shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "809a072d5bb7e925357136f133c78c42c2d50feaee1d95ea280ec3aa27884b1b",
+      "bytes": 23661,
+      "durationMs": 2928,
+      "decodedAudio": {
+        "samples": 68845,
+        "rms": 0.09385930853618489,
+        "peak": 0.8187487721443176,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 68845,
+        "rms": 0.08842789623808474,
+        "peak": 0.7529204487800598,
+        "nonFinite": 0
+      },
+      "inferenceMs": 2440.3037110000005,
+      "modelDurationMs": 2869,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_white_6.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_white_7",
+      "text": "Ivory have taken seven shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "930585e4cf17fb7a19e4d74f221575e356e496e9253a0832ea2c23229ea2a21b",
+      "bytes": 23469,
+      "durationMs": 2904,
+      "decodedAudio": {
+        "samples": 68438,
+        "rms": 0.10069203635151544,
+        "peak": 0.7938953638076782,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 68438,
+        "rms": 0.09825392372326168,
+        "peak": 0.7772371172904968,
+        "nonFinite": 0
+      },
+      "inferenceMs": 2388.3955909999995,
+      "modelDurationMs": 2852,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_white_7.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_white_8",
+      "text": "Ivory have taken eight shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "5af21d8d2a9a246fd55d945bf46fcf87fe7be3f05f80fc889d502fb1c9e33950",
+      "bytes": 22317,
+      "durationMs": 2760,
+      "decodedAudio": {
+        "samples": 64808,
+        "rms": 0.09344231104354316,
+        "peak": 0.8063622713088989,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 64808,
+        "rms": 0.09391743010372634,
+        "peak": 0.8006964325904846,
+        "nonFinite": 0
+      },
+      "inferenceMs": 2249.979037000001,
+      "modelDurationMs": 2700,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_white_8.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_white_9",
+      "text": "Ivory have taken nine shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "4d9054e9cd339e1e221ad4b5dad1d71cf180990698c6edfef905f0ddd5e7e5e2",
+      "bytes": 23277,
+      "durationMs": 2880,
+      "decodedAudio": {
+        "samples": 67806,
+        "rms": 0.10289748472081575,
+        "peak": 0.7886995673179626,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 67806,
+        "rms": 0.09850451169069112,
+        "peak": 0.7647885680198669,
+        "nonFinite": 0
+      },
+      "inferenceMs": 2202.4061120000006,
+      "modelDurationMs": 2825,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_white_9.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_white_10",
+      "text": "Ivory have taken ten shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "24f4b38033c4f748f33e9f48396c5f60070d36c89317b663de1261b73c44f28f",
+      "bytes": 22509,
+      "durationMs": 2784,
+      "decodedAudio": {
+        "samples": 65288,
+        "rms": 0.0921147884256935,
+        "peak": 0.7927722930908203,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 65288,
+        "rms": 0.0938702578755163,
+        "peak": 0.8100839853286743,
+        "nonFinite": 0
+      },
+      "inferenceMs": 2090.784228999999,
+      "modelDurationMs": 2720,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_white_10.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_white_11",
+      "text": "Ivory have taken eleven shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "b3cd66a1a35f1d088b5c265119630b0d23d7b4cf074e80f3810642ff7c61a1af",
+      "bytes": 24813,
+      "durationMs": 3072,
+      "decodedAudio": {
+        "samples": 72235,
+        "rms": 0.150988376953245,
+        "peak": 0.8078808188438416,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 72235,
+        "rms": 0.10552909419149428,
+        "peak": 0.7523529529571533,
+        "nonFinite": 0
+      },
+      "inferenceMs": 2029.4152790000007,
+      "modelDurationMs": 3010,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_white_11.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_white_12",
+      "text": "Ivory have taken twelve shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "bb4c5f97854b9af96945299e6ffe95b11d23bd0eb43da516706052890084c661",
+      "bytes": 23277,
+      "durationMs": 2880,
+      "decodedAudio": {
+        "samples": 67807,
+        "rms": 0.09007350978700168,
+        "peak": 0.7986327409744263,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 67807,
+        "rms": 0.09984010312423389,
+        "peak": 0.8842760324478149,
+        "nonFinite": 0
+      },
+      "inferenceMs": 2319.6056070000013,
+      "modelDurationMs": 2825,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_white_12.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_white_13",
+      "text": "Ivory have taken thirteen shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "42c2e7bc86906c620881734f0e70eec5661b2a5aeea0220fb6b326caabab6635",
+      "bytes": 28077,
+      "durationMs": 3480,
+      "decodedAudio": {
+        "samples": 82200,
+        "rms": 0.149245381680937,
+        "peak": 0.8130840063095093,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 82200,
+        "rms": 0.10436242754514623,
+        "peak": 0.7800015807151794,
+        "nonFinite": 0
+      },
+      "inferenceMs": 3844.3465220000016,
+      "modelDurationMs": 3425,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_white_13.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_white_14",
+      "text": "Ivory have taken fourteen shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "a866be454194dc461c5b83043056bff8dea59c6298176cef08a4b8d21b9c7f6c",
+      "bytes": 24813,
+      "durationMs": 3072,
+      "decodedAudio": {
+        "samples": 72047,
+        "rms": 0.14405616305130015,
+        "peak": 0.8203379511833191,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 72027,
+        "rms": 0.0954925279357121,
+        "peak": 0.7993820905685425,
+        "nonFinite": 0
+      },
+      "inferenceMs": 2119.064483,
+      "modelDurationMs": 3001,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_white_14.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_white_15",
+      "text": "Ivory have taken fifteen shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "a5217916bebb4c5fc79844ac9c238f646fd655e7b46508f4772e73bdd6f23e20",
+      "bytes": 27117,
+      "durationMs": 3360,
+      "decodedAudio": {
+        "samples": 79200,
+        "rms": 0.1496946829101383,
+        "peak": 0.831104576587677,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 79200,
+        "rms": 0.10217245054324303,
+        "peak": 0.7689142823219299,
+        "nonFinite": 0
+      },
+      "inferenceMs": 3836.6274010000016,
+      "modelDurationMs": 3300,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_white_15.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_white_16",
+      "text": "Ivory have taken sixteen shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "97f1c8a74f545c01c6c4ec0982d968f8952a7262de9b65be7ec20ae4cd6f0c17",
+      "bytes": 25389,
+      "durationMs": 3144,
+      "decodedAudio": {
+        "samples": 74229,
+        "rms": 0.14665133818559772,
+        "peak": 0.8103393912315369,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 74229,
+        "rms": 0.09031575198564921,
+        "peak": 0.7930187582969666,
+        "nonFinite": 0
+      },
+      "inferenceMs": 2247.6683709999998,
+      "modelDurationMs": 3093,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_white_16.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_white_17",
+      "text": "Ivory have taken seventeen shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "05fa55c13669f48e07315a12e5883636e8619caff0d39dd8379c40cc1ee83176",
+      "bytes": 26733,
+      "durationMs": 3312,
+      "decodedAudio": {
+        "samples": 78282,
+        "rms": 0.14904101087964133,
+        "peak": 0.8058550357818604,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 78282,
+        "rms": 0.09984906258433958,
+        "peak": 0.7883825302124023,
+        "nonFinite": 0
+      },
+      "inferenceMs": 3269.12802,
+      "modelDurationMs": 3262,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_white_17.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_white_18",
+      "text": "Ivory have taken eighteen shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "7abbc65f6e77977893cba7da6ca8fa664c8b2338c0fddf54c0552e68af8a8250",
+      "bytes": 24237,
+      "durationMs": 3000,
+      "decodedAudio": {
+        "samples": 70453,
+        "rms": 0.09851155419299797,
+        "peak": 0.7951859831809998,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 70453,
+        "rms": 0.09513234471125441,
+        "peak": 0.7712414264678955,
+        "nonFinite": 0
+      },
+      "inferenceMs": 3428.3357879999967,
+      "modelDurationMs": 2936,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_white_18.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_white_19",
+      "text": "Ivory have taken nineteen shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "9855f8197122c401ca8174657f77320bbd0e0a49977de51eb5a8ce56474248f2",
+      "bytes": 25005,
+      "durationMs": 3096,
+      "decodedAudio": {
+        "samples": 72819,
+        "rms": 0.1505214766493161,
+        "peak": 0.8090838193893433,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 72819,
+        "rms": 0.09647763795600253,
+        "peak": 0.7372190356254578,
+        "nonFinite": 0
+      },
+      "inferenceMs": 3014.475119999999,
+      "modelDurationMs": 3034,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_white_19.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_white_20",
+      "text": "Ivory have taken twenty shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "91d3bcf54a65a6a34eef0feb9da97210fd8afe9033055fd409fbaea46163d09c",
+      "bytes": 24045,
+      "durationMs": 2976,
+      "decodedAudio": {
+        "samples": 70212,
+        "rms": 0.09680374710889611,
+        "peak": 0.7949854135513306,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 70212,
+        "rms": 0.09619770898021508,
+        "peak": 0.7934330105781555,
+        "nonFinite": 0
+      },
+      "inferenceMs": 2077.542154999999,
+      "modelDurationMs": 2926,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_white_20.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_white_21",
+      "text": "Ivory have taken twenty one shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "31899b2003961f69b6dc1e37e37fe4d831a178241121f1de42de10c68310c34f",
+      "bytes": 27309,
+      "durationMs": 3384,
+      "decodedAudio": {
+        "samples": 79992,
+        "rms": 0.14259926402344325,
+        "peak": 0.8127120733261108,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 79992,
+        "rms": 0.09734357209293604,
+        "peak": 0.7604222297668457,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4245.3671890000005,
+      "modelDurationMs": 3333,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_white_21.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_white_22",
+      "text": "Ivory have taken twenty two shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "9ec68b17ce365d885b6c49733ac4d5abcf45a9d9a56ec7502a3d868ffae1218f",
+      "bytes": 27693,
+      "durationMs": 3432,
+      "decodedAudio": {
+        "samples": 81143,
+        "rms": 0.13705790768112744,
+        "peak": 0.8057019114494324,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 81143,
+        "rms": 0.09374016367656562,
+        "peak": 0.7463979721069336,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4259.330822,
+      "modelDurationMs": 3381,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_white_22.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_white_23",
+      "text": "Ivory have taken twenty three shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "37b97cb363d163ebd93424a14a79cf16a384ec029144ea21b9c00fd1dd90c78f",
+      "bytes": 27309,
+      "durationMs": 3384,
+      "decodedAudio": {
+        "samples": 79929,
+        "rms": 0.14370794449023125,
+        "peak": 0.8244007229804993,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 79929,
+        "rms": 0.10460159196901248,
+        "peak": 0.7994782328605652,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4247.960179999998,
+      "modelDurationMs": 3330,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_white_23.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_white_24",
+      "text": "Ivory have taken twenty four shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "a3f634002917a7c6d686c912f331bf35c462c4e7754594b7b014021a2cac2e18",
+      "bytes": 27501,
+      "durationMs": 3408,
+      "decodedAudio": {
+        "samples": 80231,
+        "rms": 0.14560418514932877,
+        "peak": 0.8080476522445679,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 80231,
+        "rms": 0.11080980731636654,
+        "peak": 0.8204895853996277,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4177.8246679999975,
+      "modelDurationMs": 3343,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_white_24.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_white_25",
+      "text": "Ivory have taken twenty five shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "41d87c08ab5b3b578994385ce8baafed135340d75515cbae1e0641eec73207c8",
+      "bytes": 28077,
+      "durationMs": 3480,
+      "decodedAudio": {
+        "samples": 82044,
+        "rms": 0.1397897092700335,
+        "peak": 0.8218809366226196,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 82044,
+        "rms": 0.11145479223352196,
+        "peak": 0.839928150177002,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4442.273448,
+      "modelDurationMs": 3419,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_white_25.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_white_26",
+      "text": "Ivory have taken twenty six shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "c9e33bd7e66994d25e6e90b20f9960d5443e999476771c2882ccc2c9ad3605c0",
+      "bytes": 28077,
+      "durationMs": 3480,
+      "decodedAudio": {
+        "samples": 82217,
+        "rms": 0.13928436337050368,
+        "peak": 0.8226497173309326,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 82217,
+        "rms": 0.10522256125725055,
+        "peak": 0.9745302200317383,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4356.812716,
+      "modelDurationMs": 3426,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_white_26.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_white_27",
+      "text": "Ivory have taken twenty seven shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "e12fbbda130e0a2714feef0d12f397d387503ac459fdf652101c7e13255ee186",
+      "bytes": 27693,
+      "durationMs": 3432,
+      "decodedAudio": {
+        "samples": 80687,
+        "rms": 0.14478493265170814,
+        "peak": 0.814664363861084,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 80643,
+        "rms": 0.10470240091456665,
+        "peak": 0.7962266802787781,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4395.204428000001,
+      "modelDurationMs": 3360,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_white_27.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_white_28",
+      "text": "Ivory have taken twenty eight shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "ee86cf0ef22bfcc500886b29dd82d9516af6741df27fdf3d709a2b0763ca0762",
+      "bytes": 26541,
+      "durationMs": 3288,
+      "decodedAudio": {
+        "samples": 77622,
+        "rms": 0.1463393640330701,
+        "peak": 0.8092260360717773,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 77622,
+        "rms": 0.09637729482828393,
+        "peak": 0.7589266300201416,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4280.058439,
+      "modelDurationMs": 3234,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_white_28.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_white_29",
+      "text": "Ivory have taken twenty nine shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "71400e5f0f1b4ce3d2df0c1bb59fb6c4fd348f055280119e563041cb42022844",
+      "bytes": 27501,
+      "durationMs": 3408,
+      "decodedAudio": {
+        "samples": 80413,
+        "rms": 0.14971761440231754,
+        "peak": 0.8030264377593994,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 80413,
+        "rms": 0.11223658998154656,
+        "peak": 0.8721264004707336,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4174.398542999996,
+      "modelDurationMs": 3351,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_white_29.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_white_30",
+      "text": "Ivory have taken thirty shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "1a6f3b95c2cc57b9fad993f852f5b8b8e829dd1894342d93a97164ceef062a71",
+      "bytes": 23277,
+      "durationMs": 2880,
+      "decodedAudio": {
+        "samples": 67932,
+        "rms": 0.10097379230087661,
+        "peak": 0.7939070463180542,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 67932,
+        "rms": 0.09796736030983944,
+        "peak": 0.7752967476844788,
+        "nonFinite": 0
+      },
+      "inferenceMs": 3425.0880400000024,
+      "modelDurationMs": 2831,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_white_30.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_white_over30",
+      "text": "Ivory have taken more than thirty shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "8d8e3f62514d8697c677005a4c8ea544afd9b0ac534d8da15b0f1ef13b4e1f44",
+      "bytes": 25965,
+      "durationMs": 3216,
+      "decodedAudio": {
+        "samples": 76029,
+        "rms": 0.14492677566164894,
+        "peak": 0.8109784126281738,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 76029,
+        "rms": 0.10124228537930278,
+        "peak": 0.7395734190940857,
+        "nonFinite": 0
+      },
+      "inferenceMs": 3218.766499000001,
+      "modelDurationMs": 3168,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_white_over30.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_possession_white_0",
+      "text": "Ivory have had about zero percent of the ball.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "d72180ffc3a60adcc99901d3978d4cbc05227b34109600d30022ab62d5980dc4",
+      "bytes": 24237,
+      "durationMs": 3000,
+      "decodedAudio": {
+        "samples": 70337,
+        "rms": 0.10307433273089166,
+        "peak": 0.7997398376464844,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 70337,
+        "rms": 0.10124194878703302,
+        "peak": 0.7811819314956665,
+        "nonFinite": 0
+      },
+      "inferenceMs": 2822.3308099999995,
+      "modelDurationMs": 2931,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_possession_white_0.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_possession_white_5",
+      "text": "Ivory have had about five percent of the ball.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "4815743c482376bbd86f324ddf9e4cdd4de70c20858ebf44c0df81f5cd7c0379",
+      "bytes": 22509,
+      "durationMs": 2784,
+      "decodedAudio": {
+        "samples": 65620,
+        "rms": 0.0900220033241198,
+        "peak": 0.7959154844284058,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 65620,
+        "rms": 0.10436168554779099,
+        "peak": 0.9240554571151733,
+        "nonFinite": 0
+      },
+      "inferenceMs": 3515.535901999996,
+      "modelDurationMs": 2734,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_possession_white_5.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_possession_white_10",
+      "text": "Ivory have had about ten percent of the ball.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "844415f34e87f3dc8001d594fc7854c1d592b4bc90b3007f08b352edf1f0579f",
+      "bytes": 27117,
+      "durationMs": 3360,
+      "decodedAudio": {
+        "samples": 79200,
+        "rms": 0.14721763671603064,
+        "peak": 0.8103727102279663,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 79200,
+        "rms": 0.11277611059174544,
+        "peak": 0.8789372444152832,
+        "nonFinite": 0
+      },
+      "inferenceMs": 2490.9040469999964,
+      "modelDurationMs": 3300,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_possession_white_10.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_possession_white_15",
+      "text": "Ivory have had about fifteen percent of the ball.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "c1dc573a23eb438892515b3ac48604372a22a12294aa8d1b1c632de91bdc3b33",
+      "bytes": 28077,
+      "durationMs": 3480,
+      "decodedAudio": {
+        "samples": 82200,
+        "rms": 0.14777713727059485,
+        "peak": 0.812728226184845,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 82200,
+        "rms": 0.10298025841098238,
+        "peak": 0.8813670873641968,
+        "nonFinite": 0
+      },
+      "inferenceMs": 2526.707690000003,
+      "modelDurationMs": 3425,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_possession_white_15.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_possession_white_20",
+      "text": "Ivory have had about twenty percent of the ball.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "0d8b827596fe568fa53169a0a67217ae10a8f49c868b4cb6afa24b252be35ab2",
+      "bytes": 24429,
+      "durationMs": 3024,
+      "decodedAudio": {
+        "samples": 70917,
+        "rms": 0.09961240778694859,
+        "peak": 0.7954697608947754,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 70917,
+        "rms": 0.09947058538474197,
+        "peak": 0.795764684677124,
+        "nonFinite": 0
+      },
+      "inferenceMs": 3692.0030009999973,
+      "modelDurationMs": 2955,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_possession_white_20.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_possession_white_25",
+      "text": "Ivory have had about twenty five percent of the ball.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "eb82e23d5902903bca0ba2ae9fdc11195e7a140642a53c330d86f08d483dd838",
+      "bytes": 23277,
+      "durationMs": 2880,
+      "decodedAudio": {
+        "samples": 67688,
+        "rms": 0.09071526180038048,
+        "peak": 0.7714423537254333,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 67688,
+        "rms": 0.09555424053715948,
+        "peak": 0.8391071557998657,
+        "nonFinite": 0
+      },
+      "inferenceMs": 2276.0921450000023,
+      "modelDurationMs": 2820,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_possession_white_25.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_possession_white_30",
+      "text": "Ivory have had about thirty percent of the ball.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "fe4fb22c89a996ca4250e171e31c5f89140efaaddf97205c99993829b9ce8ddc",
+      "bytes": 21165,
+      "durationMs": 2616,
+      "decodedAudio": {
+        "samples": 61341,
+        "rms": 0.09209092344832444,
+        "peak": 0.7884928584098816,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 61341,
+        "rms": 0.10411334770206584,
+        "peak": 0.9019303321838379,
+        "nonFinite": 0
+      },
+      "inferenceMs": 2220.702897999996,
+      "modelDurationMs": 2556,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_possession_white_30.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_possession_white_35",
+      "text": "Ivory have had about thirty five percent of the ball.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "bd83655ba04e7aafb4c91cd692eec0daf73e7a5c3da942b70fe295ada2d400bd",
+      "bytes": 24045,
+      "durationMs": 2976,
+      "decodedAudio": {
+        "samples": 69850,
+        "rms": 0.10255275465944916,
+        "peak": 0.7956989407539368,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 69850,
+        "rms": 0.10125434014075581,
+        "peak": 0.7887863516807556,
+        "nonFinite": 0
+      },
+      "inferenceMs": 3943.3803960000005,
+      "modelDurationMs": 2910,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_possession_white_35.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_possession_white_40",
+      "text": "Ivory have had about forty percent of the ball.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "98c284df868173400905d27cb3e1ad9858ca5b63c3c2261a51c9eb822176f8f5",
+      "bytes": 24429,
+      "durationMs": 3024,
+      "decodedAudio": {
+        "samples": 70937,
+        "rms": 0.10492672554426129,
+        "peak": 0.8085982203483582,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 70937,
+        "rms": 0.10533256101558637,
+        "peak": 0.800340473651886,
+        "nonFinite": 0
+      },
+      "inferenceMs": 3977.5087459999995,
+      "modelDurationMs": 2956,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_possession_white_40.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_possession_white_45",
+      "text": "Ivory have had about forty five percent of the ball.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "56f6437719a9acd051c77dd6656b9504e20839711620a749b2ca733aaaeffd16",
+      "bytes": 23661,
+      "durationMs": 2928,
+      "decodedAudio": {
+        "samples": 68951,
+        "rms": 0.0993795499098485,
+        "peak": 0.8169901967048645,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 68951,
+        "rms": 0.10069381160215278,
+        "peak": 0.8111273050308228,
+        "nonFinite": 0
+      },
+      "inferenceMs": 2234.567458000005,
+      "modelDurationMs": 2873,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_possession_white_45.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_possession_white_50",
+      "text": "Ivory have had about fifty percent of the ball.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "76ecffdf05474a058b48633785accefb4fb92d5df0757d82e38c1f6b6e10e0b0",
+      "bytes": 21165,
+      "durationMs": 2616,
+      "decodedAudio": {
+        "samples": 61309,
+        "rms": 0.09263771945998593,
+        "peak": 0.7915353775024414,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 61309,
+        "rms": 0.09847695729638602,
+        "peak": 0.8466814160346985,
+        "nonFinite": 0
+      },
+      "inferenceMs": 1912.1556109999947,
+      "modelDurationMs": 2555,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_possession_white_50.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_possession_white_55",
+      "text": "Ivory have had about fifty five percent of the ball.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "338960cc5f6457af5c6fc93db3b09c94e119887334d09f9e84add7c472f0d438",
+      "bytes": 24621,
+      "durationMs": 3048,
+      "decodedAudio": {
+        "samples": 71651,
+        "rms": 0.09653047635904213,
+        "peak": 0.7995685935020447,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 71651,
+        "rms": 0.09686210498290444,
+        "peak": 0.8003615140914917,
+        "nonFinite": 0
+      },
+      "inferenceMs": 2327.1406140000036,
+      "modelDurationMs": 2985,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_possession_white_55.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_possession_white_60",
+      "text": "Ivory have had about sixty percent of the ball.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "a5c650f98fae2b9ef62517457a6bef2d8b123adb84224267e49e21c42dfca3b1",
+      "bytes": 25197,
+      "durationMs": 3120,
+      "decodedAudio": {
+        "samples": 73316,
+        "rms": 0.1416252090850163,
+        "peak": 0.8097650408744812,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 73316,
+        "rms": 0.09558895841018905,
+        "peak": 0.7815544605255127,
+        "nonFinite": 0
+      },
+      "inferenceMs": 3708.092131999998,
+      "modelDurationMs": 3055,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_possession_white_60.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_possession_white_65",
+      "text": "Ivory have had about sixty five percent of the ball.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "ff3bf5167aa0ae706b1a71a635eb67a6eb0422abf881ef6f99d7f326b5c34372",
+      "bytes": 24429,
+      "durationMs": 3024,
+      "decodedAudio": {
+        "samples": 71288,
+        "rms": 0.08654486227388809,
+        "peak": 0.7977779507637024,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 71288,
+        "rms": 0.09323320347356517,
+        "peak": 0.8568768501281738,
+        "nonFinite": 0
+      },
+      "inferenceMs": 2274.6529910000027,
+      "modelDurationMs": 2970,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_possession_white_65.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_possession_white_70",
+      "text": "Ivory have had about seventy percent of the ball.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "80552c46c69822f9c35c7e7372b77d2cee64c84a8f8fddf1acdb82932f2d4c6e",
+      "bytes": 27309,
+      "durationMs": 3384,
+      "decodedAudio": {
+        "samples": 79800,
+        "rms": 0.13900192345079987,
+        "peak": 0.8146188259124756,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 79800,
+        "rms": 0.10706341313105135,
+        "peak": 0.9665234684944153,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4190.027672999997,
+      "modelDurationMs": 3325,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_possession_white_70.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_possession_white_75",
+      "text": "Ivory have had about seventy five percent of the ball.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "5c5a99078cff13d34eb5bc47485dea0929cd197b989bdcc94874a999d8fd810a",
+      "bytes": 24429,
+      "durationMs": 3024,
+      "decodedAudio": {
+        "samples": 70925,
+        "rms": 0.09309559248794946,
+        "peak": 0.7896201014518738,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 70925,
+        "rms": 0.10075306320939495,
+        "peak": 0.8632855415344238,
+        "nonFinite": 0
+      },
+      "inferenceMs": 2363.695144999998,
+      "modelDurationMs": 2955,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_possession_white_75.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_possession_white_80",
+      "text": "Ivory have had about eighty percent of the ball.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "50462c94a388cdd5450852e77b214de0847e1539617f258aea8b10f78e43bab6",
+      "bytes": 22509,
+      "durationMs": 2784,
+      "decodedAudio": {
+        "samples": 65160,
+        "rms": 0.09586417932836142,
+        "peak": 0.7869811654090881,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 65160,
+        "rms": 0.09951052568616398,
+        "peak": 0.8255427479743958,
+        "nonFinite": 0
+      },
+      "inferenceMs": 2018.7669430000024,
+      "modelDurationMs": 2715,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_possession_white_80.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_possession_white_85",
+      "text": "Ivory have had about eighty five percent of the ball.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "95d6b34beac7dd12ff2eca0951717bc57b8abdc04636362d8f9ec66d6c4be113",
+      "bytes": 25581,
+      "durationMs": 3168,
+      "decodedAudio": {
+        "samples": 74568,
+        "rms": 0.1446244521946491,
+        "peak": 0.8056992292404175,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 74568,
+        "rms": 0.1054047193489392,
+        "peak": 0.8673977255821228,
+        "nonFinite": 0
+      },
+      "inferenceMs": 3925.926207000004,
+      "modelDurationMs": 3107,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_possession_white_85.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_possession_white_90",
+      "text": "Ivory have had about ninety percent of the ball.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "13dbc8db4822ba7b31cc65e89902768b894d1908e8cd128992c526b8274b78ed",
+      "bytes": 24429,
+      "durationMs": 3024,
+      "decodedAudio": {
+        "samples": 71057,
+        "rms": 0.10337240116586704,
+        "peak": 0.7958092093467712,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 71057,
+        "rms": 0.10538364721810975,
+        "peak": 0.8095266222953796,
+        "nonFinite": 0
+      },
+      "inferenceMs": 2231.4031710000054,
+      "modelDurationMs": 2961,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_possession_white_90.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_possession_white_95",
+      "text": "Ivory have had about ninety five percent of the ball.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "900fec9e7bc2fe06024bb2e22ece87c93cdf28b60d47f41d95ebc760415e4181",
+      "bytes": 23661,
+      "durationMs": 2928,
+      "decodedAudio": {
+        "samples": 68951,
+        "rms": 0.0969959671139644,
+        "peak": 0.7975800633430481,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 68951,
+        "rms": 0.09906267076989239,
+        "peak": 0.8165169358253479,
+        "nonFinite": 0
+      },
+      "inferenceMs": 2244.2933189999967,
+      "modelDurationMs": 2873,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_possession_white_95.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_possession_white_100",
+      "text": "Ivory have had about one hundred percent of the ball.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "b0be822a96dbe48f0fa1bcbb041f3d346dcabce5be1b5549f2beebc0e884e6fa",
+      "bytes": 23661,
+      "durationMs": 2928,
+      "decodedAudio": {
+        "samples": 68981,
+        "rms": 0.09856309039239652,
+        "peak": 0.794767439365387,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 68981,
+        "rms": 0.10110063314108396,
+        "peak": 0.8192974925041199,
+        "nonFinite": 0
+      },
+      "inferenceMs": 3532.0894539999936,
+      "modelDurationMs": 2874,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_possession_white_100.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_black_0",
+      "text": "Obsidian have taken zero shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "6a0df2a4f9ea6cb5242da84329de901c19aaabe5fe05a62da98c1bef6db9edcd",
+      "bytes": 26157,
+      "durationMs": 3240,
+      "decodedAudio": {
+        "samples": 76210,
+        "rms": 0.15896126440487499,
+        "peak": 0.8129525780677795,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 76210,
+        "rms": 0.09628910350830974,
+        "peak": 0.7946419715881348,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4185.731482000003,
+      "modelDurationMs": 3175,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_black_0.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_black_1",
+      "text": "Obsidian have taken one shot so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "3ad77eee665d7eb5797a8fa5312daaa3fcbf0afe94aeb8872d061bc764b249a8",
+      "bytes": 25005,
+      "durationMs": 3096,
+      "decodedAudio": {
+        "samples": 72759,
+        "rms": 0.14979297811468212,
+        "peak": 0.8102445602416992,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 72759,
+        "rms": 0.09347734037294941,
+        "peak": 0.7532552480697632,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4412.4660250000015,
+      "modelDurationMs": 3032,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_black_1.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_black_2",
+      "text": "Obsidian have taken two shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "49cc79c97852c2fa9f959787d1984192b1493a04e23330687bb31e1b7a5fb741",
+      "bytes": 24045,
+      "durationMs": 2976,
+      "decodedAudio": {
+        "samples": 70012,
+        "rms": 0.08734206256247898,
+        "peak": 0.7992435693740845,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 70012,
+        "rms": 0.08845280297362679,
+        "peak": 0.8108798265457153,
+        "nonFinite": 0
+      },
+      "inferenceMs": 6612.015894000004,
+      "modelDurationMs": 2917,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_black_2.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_black_3",
+      "text": "Obsidian have taken three shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "e9a9c8524cef73716c9602066644b309fdaf3b585eae0f90c99bb3ac9bbd378d",
+      "bytes": 25965,
+      "durationMs": 3216,
+      "decodedAudio": {
+        "samples": 75513,
+        "rms": 0.151376960180872,
+        "peak": 0.8120452165603638,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 75513,
+        "rms": 0.0905161259944822,
+        "peak": 0.8004856705665588,
+        "nonFinite": 0
+      },
+      "inferenceMs": 7454.778075000002,
+      "modelDurationMs": 3146,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_black_3.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_black_4",
+      "text": "Obsidian have taken four shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "33ac653cfd1754028c89698779afee036fe8d22ecbfec5dee268f403d58ba067",
+      "bytes": 24621,
+      "durationMs": 3048,
+      "decodedAudio": {
+        "samples": 71726,
+        "rms": 0.10280552230586101,
+        "peak": 0.7978168725967407,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 71726,
+        "rms": 0.09769544023694972,
+        "peak": 0.7559083700180054,
+        "nonFinite": 0
+      },
+      "inferenceMs": 3648.4272799999962,
+      "modelDurationMs": 2989,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_black_4.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_black_5",
+      "text": "Obsidian have taken five shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "6de1aa1355322a354fa5d4ce01b0452d77992f7c269c3a36220756017fd17e73",
+      "bytes": 25005,
+      "durationMs": 3096,
+      "decodedAudio": {
+        "samples": 72853,
+        "rms": 0.14510682580080553,
+        "peak": 0.813351571559906,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 72853,
+        "rms": 0.09801536981379276,
+        "peak": 0.9332740306854248,
+        "nonFinite": 0
+      },
+      "inferenceMs": 3531.708985999998,
+      "modelDurationMs": 3036,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_black_5.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_black_6",
+      "text": "Obsidian have taken six shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "ff9e10f118618232268a542d6c8daed1fa3c8e72d6dfb119910b7977e90178dc",
+      "bytes": 25197,
+      "durationMs": 3120,
+      "decodedAudio": {
+        "samples": 73455,
+        "rms": 0.14326116053463583,
+        "peak": 0.8302145600318909,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 73455,
+        "rms": 0.09327215106748704,
+        "peak": 0.8574750423431396,
+        "nonFinite": 0
+      },
+      "inferenceMs": 5360.135839999995,
+      "modelDurationMs": 3061,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_black_6.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_black_7",
+      "text": "Obsidian have taken seven shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "a75df62f8257c33df49efb8cec69159bbf27cb82becc291500b059ebd8674a43",
+      "bytes": 27885,
+      "durationMs": 3456,
+      "decodedAudio": {
+        "samples": 81263,
+        "rms": 0.14791795563280002,
+        "peak": 0.8146973252296448,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 81229,
+        "rms": 0.10156573835568383,
+        "peak": 0.8644173741340637,
+        "nonFinite": 0
+      },
+      "inferenceMs": 3432.9096280000012,
+      "modelDurationMs": 3385,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_black_7.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_black_8",
+      "text": "Obsidian have taken eight shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "bbc67a861f633a094c363ac90bfd916bdb2bec090de10e6c0d979fefc802e181",
+      "bytes": 24045,
+      "durationMs": 2976,
+      "decodedAudio": {
+        "samples": 69756,
+        "rms": 0.09202074414589968,
+        "peak": 0.8078529834747314,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 69756,
+        "rms": 0.08865272367769443,
+        "peak": 0.7694874405860901,
+        "nonFinite": 0
+      },
+      "inferenceMs": 2510.2838739999934,
+      "modelDurationMs": 2907,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_black_8.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_black_9",
+      "text": "Obsidian have taken nine shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "eba4d6a991c15eff6cc91e5f1546f6d0b23d72ff6d8817ed67b0b4a8af349250",
+      "bytes": 25197,
+      "durationMs": 3120,
+      "decodedAudio": {
+        "samples": 73482,
+        "rms": 0.15726585854329891,
+        "peak": 0.8072781562805176,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 73482,
+        "rms": 0.09973091802202445,
+        "peak": 0.7644447088241577,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4578.387852,
+      "modelDurationMs": 3062,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_black_9.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_black_10",
+      "text": "Obsidian have taken ten shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "43b09ee79ad081ec75a53bc09fa98bc0c4b89bfadf84a583e512007c2f8de265",
+      "bytes": 24045,
+      "durationMs": 2976,
+      "decodedAudio": {
+        "samples": 69819,
+        "rms": 0.09564012694101169,
+        "peak": 0.7988138198852539,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 69819,
+        "rms": 0.089431893448635,
+        "peak": 0.7463807463645935,
+        "nonFinite": 0
+      },
+      "inferenceMs": 2714.7362839999987,
+      "modelDurationMs": 2909,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_black_10.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_black_11",
+      "text": "Obsidian have taken eleven shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "64ad4e69f2616984cb80bf2b0c290e946f09311616574b9d2ff1be1095d905cc",
+      "bytes": 26157,
+      "durationMs": 3240,
+      "decodedAudio": {
+        "samples": 76210,
+        "rms": 0.15157811161349205,
+        "peak": 0.8168027400970459,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 76210,
+        "rms": 0.09787300708258566,
+        "peak": 0.7609268426895142,
+        "nonFinite": 0
+      },
+      "inferenceMs": 3918.5825789999944,
+      "modelDurationMs": 3175,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_black_11.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_black_12",
+      "text": "Obsidian have taken twelve shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "5067180ab8a7a4c65584d3e6525b042a5036ef7cba87859dc3dc612f8f0592a3",
+      "bytes": 28077,
+      "durationMs": 3480,
+      "decodedAudio": {
+        "samples": 82200,
+        "rms": 0.14548785053935806,
+        "peak": 0.8134963512420654,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 82200,
+        "rms": 0.10444566981803333,
+        "peak": 0.8028469681739807,
+        "nonFinite": 0
+      },
+      "inferenceMs": 2669.429022999997,
+      "modelDurationMs": 3425,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_black_12.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_black_13",
+      "text": "Obsidian have taken thirteen shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "2ade4a3c27f84ede7c576fb37afe28e71d3bfbbd4c22bbe668264b80342a2c4b",
+      "bytes": 25005,
+      "durationMs": 3096,
+      "decodedAudio": {
+        "samples": 72835,
+        "rms": 0.1499462719843376,
+        "peak": 0.8099794387817383,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 72835,
+        "rms": 0.09775731978141607,
+        "peak": 0.7836560606956482,
+        "nonFinite": 0
+      },
+      "inferenceMs": 3645.056506000001,
+      "modelDurationMs": 3035,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_black_13.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_black_14",
+      "text": "Obsidian have taken fourteen shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "c43bd8c99cf4864dbdadcdb29ac6c83128d733abaa8ee15557bc09025534c983",
+      "bytes": 26733,
+      "durationMs": 3312,
+      "decodedAudio": {
+        "samples": 78326,
+        "rms": 0.15212227735784314,
+        "peak": 0.8057806491851807,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 78326,
+        "rms": 0.09369194368953895,
+        "peak": 0.7709305286407471,
+        "nonFinite": 0
+      },
+      "inferenceMs": 2365.1771750000044,
+      "modelDurationMs": 3264,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_black_14.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_black_15",
+      "text": "Obsidian have taken fifteen shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "224a89c04f84dba5370e3ce720a6d4fa7fb6c021e14e05279ce5fec49aca1299",
+      "bytes": 25197,
+      "durationMs": 3120,
+      "decodedAudio": {
+        "samples": 73525,
+        "rms": 0.15378496925697385,
+        "peak": 0.810416579246521,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 73525,
+        "rms": 0.09546920848624138,
+        "peak": 0.7525604367256165,
+        "nonFinite": 0
+      },
+      "inferenceMs": 2434.0418799999898,
+      "modelDurationMs": 3064,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_black_15.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_black_16",
+      "text": "Obsidian have taken sixteen shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "9d637c1ff5983465538d82ebb2aa376886b3a90efd6296a46e893e297eb41465",
+      "bytes": 27117,
+      "durationMs": 3360,
+      "decodedAudio": {
+        "samples": 79030,
+        "rms": 0.1517854033504867,
+        "peak": 0.8125805854797363,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 79030,
+        "rms": 0.08937020928905191,
+        "peak": 0.8044013381004333,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4106.395602999997,
+      "modelDurationMs": 3293,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_black_16.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_black_17",
+      "text": "Obsidian have taken seventeen shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "40a43941a733b2389d4fad8a5b53f8934ca2bead7546b1ca9a71464202a174de",
+      "bytes": 28653,
+      "durationMs": 3552,
+      "decodedAudio": {
+        "samples": 84093,
+        "rms": 0.1508831989181646,
+        "peak": 0.8066236972808838,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 84093,
+        "rms": 0.10264343409744106,
+        "peak": 0.8187068700790405,
+        "nonFinite": 0
+      },
+      "inferenceMs": 2532.4665680000035,
+      "modelDurationMs": 3504,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_black_17.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_black_18",
+      "text": "Obsidian have taken eighteen shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "7251b0b22e3458d0157ecb36167b1247e321f5e1c28f5305a883a6384038a9b7",
+      "bytes": 26349,
+      "durationMs": 3264,
+      "decodedAudio": {
+        "samples": 76849,
+        "rms": 0.1556535273077178,
+        "peak": 0.8088039755821228,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 76849,
+        "rms": 0.09006998018219357,
+        "peak": 0.7422047853469849,
+        "nonFinite": 0
+      },
+      "inferenceMs": 3942.7991739999998,
+      "modelDurationMs": 3202,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_black_18.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_black_19",
+      "text": "Obsidian have taken nineteen shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "7a5f089b28f7220d3f4192505d1f37ad0258a12e7a75c40feba9660f90504bab",
+      "bytes": 27117,
+      "durationMs": 3360,
+      "decodedAudio": {
+        "samples": 78959,
+        "rms": 0.1549634804150559,
+        "peak": 0.8088822364807129,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 78926,
+        "rms": 0.09588787069636812,
+        "peak": 0.7807005643844604,
+        "nonFinite": 0
+      },
+      "inferenceMs": 2578.4170860000013,
+      "modelDurationMs": 3289,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_black_19.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_black_20",
+      "text": "Obsidian have taken twenty shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "37156f834d1ac2d88678c6582aa26ed723f4b6083e1b046ff55059102a08f99b",
+      "bytes": 25965,
+      "durationMs": 3216,
+      "decodedAudio": {
+        "samples": 75610,
+        "rms": 0.14862625939222832,
+        "peak": 0.8131160140037537,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 75610,
+        "rms": 0.09020736376526284,
+        "peak": 0.735493540763855,
+        "nonFinite": 0
+      },
+      "inferenceMs": 2322.3909260000073,
+      "modelDurationMs": 3150,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_black_20.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_black_21",
+      "text": "Obsidian have taken twenty one shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "2d0d5d0f78f462bed33066b323e1cc4a8d952e58792c10b07710a0344e676863",
+      "bytes": 27885,
+      "durationMs": 3456,
+      "decodedAudio": {
+        "samples": 81270,
+        "rms": 0.15061696930060123,
+        "peak": 0.8130196332931519,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 81270,
+        "rms": 0.1003644559198188,
+        "peak": 0.7580116987228394,
+        "nonFinite": 0
+      },
+      "inferenceMs": 2643.1921189999994,
+      "modelDurationMs": 3386,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_black_21.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_black_22",
+      "text": "Obsidian have taken twenty two shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "2cef08d1e2853a357e6005046aea75bc724ee6a73a310fd32bbd962b2b3da25d",
+      "bytes": 28461,
+      "durationMs": 3528,
+      "decodedAudio": {
+        "samples": 83111,
+        "rms": 0.1490652996533347,
+        "peak": 0.826440155506134,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 83111,
+        "rms": 0.09370916566528698,
+        "peak": 0.7577700614929199,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4331.909509000005,
+      "modelDurationMs": 3463,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_black_22.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_black_23",
+      "text": "Obsidian have taken twenty three shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "ac5bd187dab67268493904420e5edcdda1a0decbc8a3d060a04f0b9d6cdd6a18",
+      "bytes": 27885,
+      "durationMs": 3456,
+      "decodedAudio": {
+        "samples": 81263,
+        "rms": 0.14809768714067334,
+        "peak": 0.8271555304527283,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 81243,
+        "rms": 0.0943413122090106,
+        "peak": 0.7738824486732483,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4280.893203,
+      "modelDurationMs": 3385,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_black_23.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_black_24",
+      "text": "Obsidian have taken twenty four shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "92c30a9f8fbb56b71b0de131aa80c4f6b843eb8a0446e0deec1428565b822c89",
+      "bytes": 28077,
+      "durationMs": 3480,
+      "decodedAudio": {
+        "samples": 81842,
+        "rms": 0.15028778257204187,
+        "peak": 0.8210026621818542,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 81842,
+        "rms": 0.09916112239792402,
+        "peak": 0.7628145813941956,
+        "nonFinite": 0
+      },
+      "inferenceMs": 2524.967685999989,
+      "modelDurationMs": 3410,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_black_24.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_black_25",
+      "text": "Obsidian have taken twenty five shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "e8518bbe1a343946a8f395a685296b07c1c5ab80e05fdf243073eb9ac324e0e7",
+      "bytes": 28269,
+      "durationMs": 3504,
+      "decodedAudio": {
+        "samples": 82443,
+        "rms": 0.14323609511400387,
+        "peak": 0.811774492263794,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 82443,
+        "rms": 0.09997780466322068,
+        "peak": 1.037738561630249,
+        "nonFinite": 0
+      },
+      "inferenceMs": 2781.748338000005,
+      "modelDurationMs": 3435,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_black_25.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_black_26",
+      "text": "Obsidian have taken twenty six shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "8ae454ebb37d728931423f30e8b5079c9a7cf3fb8abc877226fddf36880d1064",
+      "bytes": 28077,
+      "durationMs": 3480,
+      "decodedAudio": {
+        "samples": 81842,
+        "rms": 0.14784575717714007,
+        "peak": 0.812603235244751,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 81842,
+        "rms": 0.09337594496723757,
+        "peak": 0.7536460757255554,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4171.143744000001,
+      "modelDurationMs": 3410,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_black_26.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_black_27",
+      "text": "Obsidian have taken twenty seven shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "d85d833617da186991c7eefc3694a0b080f544659c1d740c5d3a0fda553fbe3e",
+      "bytes": 28461,
+      "durationMs": 3528,
+      "decodedAudio": {
+        "samples": 83085,
+        "rms": 0.15145426686975244,
+        "peak": 0.8182706832885742,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 83085,
+        "rms": 0.09188616051259578,
+        "peak": 0.7588239312171936,
+        "nonFinite": 0
+      },
+      "inferenceMs": 2670.8381479999953,
+      "modelDurationMs": 3462,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_black_27.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_black_28",
+      "text": "Obsidian have taken twenty eight shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "3f23d876dca6672879a6c91d2d5ea1eac90193691952997f5fe1ea265abb176f",
+      "bytes": 26925,
+      "durationMs": 3336,
+      "decodedAudio": {
+        "samples": 78884,
+        "rms": 0.15094443224068402,
+        "peak": 0.8064849376678467,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 78884,
+        "rms": 0.09690191159267143,
+        "peak": 0.7585651278495789,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4099.811394000004,
+      "modelDurationMs": 3287,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_black_28.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_black_29",
+      "text": "Obsidian have taken twenty nine shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "c4ab2370f801644baead868e7f5f7164d4bb05210264b4a402d6943166eb6654",
+      "bytes": 27693,
+      "durationMs": 3432,
+      "decodedAudio": {
+        "samples": 80687,
+        "rms": 0.1565543895513938,
+        "peak": 0.8315647840499878,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 80686,
+        "rms": 0.10133089579129195,
+        "peak": 0.7806506156921387,
+        "nonFinite": 0
+      },
+      "inferenceMs": 2565.1676869999937,
+      "modelDurationMs": 3362,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_black_29.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_black_30",
+      "text": "Obsidian have taken thirty shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "e921e6b80be7dd6493860be6664ff8ed106f6a297426c149bd3229039a271c20",
+      "bytes": 27693,
+      "durationMs": 3432,
+      "decodedAudio": {
+        "samples": 80944,
+        "rms": 0.14855787828366707,
+        "peak": 0.8087694644927979,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 80944,
+        "rms": 0.10039869428380684,
+        "peak": 0.7716816067695618,
+        "nonFinite": 0
+      },
+      "inferenceMs": 2520.221881000005,
+      "modelDurationMs": 3373,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_black_30.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_shots_black_over30",
+      "text": "Obsidian have taken more than thirty shots so far.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "675dc882073f4fd15a10374b706c838922dab1d42aaf9a1e4b243a82ea14c468",
+      "bytes": 27117,
+      "durationMs": 3360,
+      "decodedAudio": {
+        "samples": 79002,
+        "rms": 0.15481026334783282,
+        "peak": 0.8154803514480591,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 79002,
+        "rms": 0.10005181773463853,
+        "peak": 0.7449548840522766,
+        "nonFinite": 0
+      },
+      "inferenceMs": 2581.411506999997,
+      "modelDurationMs": 3292,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_shots_black_over30.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_possession_black_0",
+      "text": "Obsidian have had about zero percent of the ball.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "6c1c6e172b006497d79be1cfa5126f92cc990813e8d1b6fb1fd6caf8e3877a60",
+      "bytes": 27885,
+      "durationMs": 3456,
+      "decodedAudio": {
+        "samples": 81600,
+        "rms": 0.15611006734376232,
+        "peak": 0.8151881694793701,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 81600,
+        "rms": 0.11244215191717528,
+        "peak": 0.8911188840866089,
+        "nonFinite": 0
+      },
+      "inferenceMs": 3669.8022990000027,
+      "modelDurationMs": 3400,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_possession_black_0.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_possession_black_5",
+      "text": "Obsidian have had about five percent of the ball.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "7cbcfb9d62d1763dbc68e235e0ebdbb050322a33dd55cb0b53ddc0b42692c74a",
+      "bytes": 25389,
+      "durationMs": 3144,
+      "decodedAudio": {
+        "samples": 73915,
+        "rms": 0.1431941036558962,
+        "peak": 0.8288673162460327,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 73915,
+        "rms": 0.09888179576025555,
+        "peak": 0.8897404074668884,
+        "nonFinite": 0
+      },
+      "inferenceMs": 2921.6484130000026,
+      "modelDurationMs": 3080,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_possession_black_5.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_possession_black_10",
+      "text": "Obsidian have had about ten percent of the ball.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "52352217e5b4d07cbc68f422be3216d1de046f0830329bb09f2fe66a0fca4a03",
+      "bytes": 22125,
+      "durationMs": 2736,
+      "decodedAudio": {
+        "samples": 64304,
+        "rms": 0.09331910146116458,
+        "peak": 0.7942691445350647,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 64304,
+        "rms": 0.09815240695321402,
+        "peak": 0.836208164691925,
+        "nonFinite": 0
+      },
+      "inferenceMs": 1988.5091419999953,
+      "modelDurationMs": 2679,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_possession_black_10.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_possession_black_15",
+      "text": "Obsidian have had about fifteen percent of the ball.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "31ecc6e167d70e5a81468cc3a3ad4c2ecaf4a6ccbb4d85b1cc7c7440e0c797ce",
+      "bytes": 26733,
+      "durationMs": 3312,
+      "decodedAudio": {
+        "samples": 78252,
+        "rms": 0.15612549791880057,
+        "peak": 0.8189094066619873,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 78252,
+        "rms": 0.09640776055694178,
+        "peak": 0.8006889820098877,
+        "nonFinite": 0
+      },
+      "inferenceMs": 2824.3399419999914,
+      "modelDurationMs": 3261,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_possession_black_15.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_possession_black_20",
+      "text": "Obsidian have had about twenty percent of the ball.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "80bad6f18153cbfc8fec6722470edd0da4f313379f446d548f47f63c0d810b75",
+      "bytes": 27693,
+      "durationMs": 3432,
+      "decodedAudio": {
+        "samples": 81000,
+        "rms": 0.14998919607000608,
+        "peak": 0.8044416904449463,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 81000,
+        "rms": 0.11182331813266692,
+        "peak": 0.8988021016120911,
+        "nonFinite": 0
+      },
+      "inferenceMs": 3012.2175759999955,
+      "modelDurationMs": 3375,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_possession_black_20.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_possession_black_25",
+      "text": "Obsidian have had about twenty five percent of the ball.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "0ba0cac21fdc8cac132a6ea44f76a70d37402745f4d478c8dc1642d7d13c62ce",
+      "bytes": 32877,
+      "durationMs": 4080,
+      "decodedAudio": {
+        "samples": 96600,
+        "rms": 0.1411425682981571,
+        "peak": 0.8073025345802307,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 96600,
+        "rms": 0.10627510537893586,
+        "peak": 0.8702203035354614,
+        "nonFinite": 0
+      },
+      "inferenceMs": 5313.908515000003,
+      "modelDurationMs": 4025,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_possession_black_25.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_possession_black_30",
+      "text": "Obsidian have had about thirty percent of the ball.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "10d7780e8016f2ec4a6ff895f70ead8db76b2cdce67a2ed692b5af2ae56441ab",
+      "bytes": 28845,
+      "durationMs": 3576,
+      "decodedAudio": {
+        "samples": 84600,
+        "rms": 0.14836401044816835,
+        "peak": 0.8104283809661865,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 84600,
+        "rms": 0.10583101665427617,
+        "peak": 0.9143022894859314,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4937.022924000004,
+      "modelDurationMs": 3525,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_possession_black_30.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_possession_black_35",
+      "text": "Obsidian have had about thirty five percent of the ball.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "908a59dec024584bb4808bd73e1f347c80eb56fed35bbb5bf0b904f0f442b188",
+      "bytes": 25389,
+      "durationMs": 3144,
+      "decodedAudio": {
+        "samples": 74147,
+        "rms": 0.1501186925593952,
+        "peak": 0.8116030693054199,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 74147,
+        "rms": 0.09947637517728194,
+        "peak": 0.7430222034454346,
+        "nonFinite": 0
+      },
+      "inferenceMs": 2855.6630000000005,
+      "modelDurationMs": 3089,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_possession_black_35.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_possession_black_40",
+      "text": "Obsidian have had about forty percent of the ball.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "6bb40b99ce6dc4d755e43590ce3f2473b8c1c339192d02a7d4bb6d22cfc69a98",
+      "bytes": 27309,
+      "durationMs": 3384,
+      "decodedAudio": {
+        "samples": 79800,
+        "rms": 0.15392012182404186,
+        "peak": 0.8162592053413391,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 79800,
+        "rms": 0.11625856038397735,
+        "peak": 0.8266351819038391,
+        "nonFinite": 0
+      },
+      "inferenceMs": 2804.54877400001,
+      "modelDurationMs": 3325,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_possession_black_40.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_possession_black_45",
+      "text": "Obsidian have had about forty five percent of the ball.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "e3d34dc3b46cddfbb28e4aa352b79c1a85e883439707f676276e5528feee34c9",
+      "bytes": 33069,
+      "durationMs": 4104,
+      "decodedAudio": {
+        "samples": 97200,
+        "rms": 0.14220765591973053,
+        "peak": 0.8168190717697144,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 97200,
+        "rms": 0.11047156954105394,
+        "peak": 0.9503770470619202,
+        "nonFinite": 0
+      },
+      "inferenceMs": 3149.271120999998,
+      "modelDurationMs": 4050,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_possession_black_45.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_possession_black_50",
+      "text": "Obsidian have had about fifty percent of the ball.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "8574a0c69ceb2ba26ccb53e0b920bb2a702e7fa54f6086f1d28ca7873b55be23",
+      "bytes": 29229,
+      "durationMs": 3624,
+      "decodedAudio": {
+        "samples": 85800,
+        "rms": 0.15128044119789968,
+        "peak": 0.8335661888122559,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 85800,
+        "rms": 0.10009336519553197,
+        "peak": 0.8890878558158875,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4670.030992,
+      "modelDurationMs": 3575,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_possession_black_50.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_possession_black_55",
+      "text": "Obsidian have had about fifty five percent of the ball.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "83e317248a1c61d796ba4d6141d3241a1d07d6bf568bc5b706f93cf804c1067e",
+      "bytes": 25389,
+      "durationMs": 3144,
+      "decodedAudio": {
+        "samples": 73993,
+        "rms": 0.1545461048850915,
+        "peak": 0.81448894739151,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 73993,
+        "rms": 0.09277217821552938,
+        "peak": 0.7451216578483582,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4308.182094000003,
+      "modelDurationMs": 3083,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_possession_black_55.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_possession_black_60",
+      "text": "Obsidian have had about sixty percent of the ball.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "1652f0a106690ce9375cff5f09bcd97fc674b1ee6c4019604a3ca72682c516db",
+      "bytes": 28269,
+      "durationMs": 3504,
+      "decodedAudio": {
+        "samples": 82800,
+        "rms": 0.14849102945462295,
+        "peak": 0.8165467381477356,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 82800,
+        "rms": 0.10598997031692327,
+        "peak": 0.8854179382324219,
+        "nonFinite": 0
+      },
+      "inferenceMs": 2620.5575240000035,
+      "modelDurationMs": 3450,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_possession_black_60.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_possession_black_65",
+      "text": "Obsidian have had about sixty five percent of the ball.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "6c353ebc828394ccbf68bfccb0f441d66d73f1fcf42b0ce787f6d0022def559b",
+      "bytes": 33261,
+      "durationMs": 4128,
+      "decodedAudio": {
+        "samples": 97800,
+        "rms": 0.14380912542778213,
+        "peak": 0.8119362592697144,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 97800,
+        "rms": 0.10186086129641689,
+        "peak": 0.9035740494728088,
+        "nonFinite": 0
+      },
+      "inferenceMs": 3107.143072000006,
+      "modelDurationMs": 4075,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_possession_black_65.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_possession_black_70",
+      "text": "Obsidian have had about seventy percent of the ball.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "235be91f7748cebfcb0fc6da9671d80f52c34ff4e3d81cfca482c076436828ce",
+      "bytes": 26157,
+      "durationMs": 3240,
+      "decodedAudio": {
+        "samples": 76222,
+        "rms": 0.1505461750108689,
+        "peak": 0.8062252402305603,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 76222,
+        "rms": 0.10061072106363478,
+        "peak": 0.864688515663147,
+        "nonFinite": 0
+      },
+      "inferenceMs": 2456.9756120000093,
+      "modelDurationMs": 3176,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_possession_black_70.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_possession_black_75",
+      "text": "Obsidian have had about seventy five percent of the ball.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "288e2fc10a8f86697b02d12c0a94897be128c5949ad8d3f8de09df2738bc35c7",
+      "bytes": 26157,
+      "durationMs": 3240,
+      "decodedAudio": {
+        "samples": 76456,
+        "rms": 0.14405724875460002,
+        "peak": 0.8084836006164551,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 76456,
+        "rms": 0.09905984084287253,
+        "peak": 0.9560186862945557,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4238.700448999996,
+      "modelDurationMs": 3186,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_possession_black_75.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_possession_black_80",
+      "text": "Obsidian have had about eighty percent of the ball.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "893d457910b0eb5d66433a860990b895facde0b88053069fb5f47e661af6ef21",
+      "bytes": 24813,
+      "durationMs": 3072,
+      "decodedAudio": {
+        "samples": 72066,
+        "rms": 0.1562022841560526,
+        "peak": 0.815251886844635,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 72066,
+        "rms": 0.09280066584419995,
+        "peak": 0.8017679452896118,
+        "nonFinite": 0
+      },
+      "inferenceMs": 3967.884506000002,
+      "modelDurationMs": 3003,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_possession_black_80.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_possession_black_85",
+      "text": "Obsidian have had about eighty five percent of the ball.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "928afe0f8f2c6790be3285fb95f3ca146343e64aad52c0e58d18307f1fdcf911",
+      "bytes": 24237,
+      "durationMs": 3000,
+      "decodedAudio": {
+        "samples": 70688,
+        "rms": 0.09526495601956057,
+        "peak": 0.7944188117980957,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 70688,
+        "rms": 0.0921920084007073,
+        "peak": 0.7667189240455627,
+        "nonFinite": 0
+      },
+      "inferenceMs": 2247.40787000001,
+      "modelDurationMs": 2945,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_possession_black_85.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_possession_black_90",
+      "text": "Obsidian have had about ninety percent of the ball.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "a1e6dab29558b8a50a008ab5af83c41747727bb6ac750ab79cc18c8a4796577a",
+      "bytes": 27885,
+      "durationMs": 3456,
+      "decodedAudio": {
+        "samples": 81600,
+        "rms": 0.16254527807869967,
+        "peak": 0.8133495450019836,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 81600,
+        "rms": 0.11587777003479682,
+        "peak": 0.8887059688568115,
+        "nonFinite": 0
+      },
+      "inferenceMs": 2554.5156140000036,
+      "modelDurationMs": 3400,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_possession_black_90.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_possession_black_95",
+      "text": "Obsidian have had about ninety five percent of the ball.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "93afca374bf18c072ab365d673b061d44c5afca7ad1e1c1442d8cd1b89000fad",
+      "bytes": 32877,
+      "durationMs": 4080,
+      "decodedAudio": {
+        "samples": 96600,
+        "rms": 0.14901062450697436,
+        "peak": 0.8104913234710693,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 96600,
+        "rms": 0.10961785072929812,
+        "peak": 0.8825588822364807,
+        "nonFinite": 0
+      },
+      "inferenceMs": 3107.4769700000033,
+      "modelDurationMs": 4025,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_possession_black_95.mp3",
+      "ready": true
+    },
+    {
+      "key": "stat_possession_black_100",
+      "text": "Obsidian have had about one hundred percent of the ball.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "8fc674d7f18800085562ddb88378fb610fcf50c2c3a895b93053d3e759ac5b9b",
+      "bytes": 32109,
+      "durationMs": 3984,
+      "decodedAudio": {
+        "samples": 94200,
+        "rms": 0.149218055562014,
+        "peak": 0.8181301951408386,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 94200,
+        "rms": 0.10715047563608085,
+        "peak": 0.8533642888069153,
+        "nonFinite": 0
+      },
+      "inferenceMs": 2952.735541999995,
+      "modelDurationMs": 3925,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/stat_possession_black_100.mp3",
       "ready": true
     }
   ]
