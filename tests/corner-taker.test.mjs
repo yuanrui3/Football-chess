@@ -97,12 +97,15 @@ for (const team of ['white','black']) {
     assert.throws(()=>E.selectCornerTaker(state,chosen.id),'an established taker cannot be reselected');
   });
 
-  test(`${team}: occupied corner relocates only the selected taker to the nearest legal vacant square`,()=>{
+  test(`${team}: occupied corner clears its occupant so the selected taker uses the flag`,()=>{
     const {awarded}=cornerFixture(team,{occupiedCorner:true}), selected=E.cornerTakers(awarded).find(p=>p.type==='Q');
     const next=E.selectCornerTaker(awarded,selected.id), corner=mirror([0,0],team);
-    assert.notDeepEqual([next.ball.x,next.ball.y],corner);
-    assert.equal(Math.hypot(next.ball.x-corner[0],next.ball.y-corner[1]),1);
-    for (const p of next.pieces.filter(p=>p.id!==selected.id)) assert.deepEqual(p,awarded.pieces.find(q=>q.id===p.id));
+    assert.deepEqual([next.ball.x,next.ball.y],corner);
+    const clearance=next.restart.clearance;
+    assert.equal(clearance.pieceId,`${other(team)}-P3`);
+    assert.deepEqual(clearance.from,{x:corner[0],y:corner[1]});
+    assert.equal(Math.hypot(clearance.to.x-corner[0],clearance.to.y-corner[1]),1);
+    for (const p of next.pieces.filter(p=>p.id!==selected.id&&p.id!==clearance.pieceId)) assert.deepEqual(p,awarded.pieces.find(q=>q.id===p.id));
     checkRoster(next);
   });
 

@@ -107,7 +107,7 @@ function assessment(key, id, evidence = {}) {
 }
 
 test('every tactical, formation and performance script has its exact ready Hugo recording', () => {
-  assert.equal(Object.keys(TACTICAL_COMMENTARY_SCRIPTS).length, 45);
+  assert.equal(Object.keys(TACTICAL_COMMENTARY_SCRIPTS).length, 51);
   for (const [key, script] of Object.entries(TACTICAL_COMMENTARY_SCRIPTS)) {
     const clip = hugoCommentaryClip(assessment(key, key), passingPosition());
     assert.equal(clip, HUGO_COMMENTARY_CLIPS[key]); assert.equal(clip.ready, true);

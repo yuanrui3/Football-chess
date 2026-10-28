@@ -121,7 +121,10 @@ test('analysis context names the assessed team and stable piece without changing
   assert.equal(context.commentaryContext({team:'black',clipKey:'performance_progress_rook',tactical:{pieceId:'black-R2'}}),
     'Obsidian FC · R2 · Player performance');
   assert.equal(context.commentaryContext({team:'white',clipKey:'shape_compact',tactical:{}}),'Ivory FC · Team shape');
-  assert.equal(context.commentaryContext({team:'black',clipKey:'tactic_counter',tactical:{}}),'Obsidian FC · Team tactics');
+  assert.equal(context.commentaryContext({team:'black',clipKey:'tactic_counter',tactical:{}}),'Obsidian FC · Counterattack');
+  assert.equal(context.commentaryContext({team:'white',clipKey:'tactic_control',tactical:{}}),'Ivory FC · Midfield control');
+  assert.equal(context.commentaryContext({team:'black',clipKey:'tactic_pawn_trap',tactical:{pieceId:'black-P1'}}),'Obsidian FC · P1 · Pawn pressing trap');
+  assert.equal(context.commentaryContext({team:'white',clipKey:'tactic_file_attack',tactical:{}}),'Ivory FC · Open-file attack');
   assert.equal(context.commentaryContext({team:'black',clipKey:'stat_shots_black_7',statsCommentary:{shots:7,onTarget:3,possessionPercent:62.46}}),
     'Obsidian FC · Possession 62.5% · Shots 7 · On target 3');
   assert.equal(context.commentaryContext({kind:'goal',team:'black'}),'');

@@ -1,9 +1,9 @@
 /** Public match commentary: read-only board geometry, never seeds, hidden targets or AI search. */
 import {COMMENTARY_CLIPS} from './commentary-clips.js?v=29cbe0d352e1';
-import {HUGO_COMMENTARY_CLIPS, hugoCommentaryClip} from './hugo-commentary-clips.js?v=92bf6b3929a5';
+import {HUGO_COMMENTARY_CLIPS, hugoCommentaryClip} from './hugo-commentary-clips.js?v=cfaced2e3dd2';
 import {commentaryStatsLines} from './commentary-stats.js?v=510d8a0ad598';
-import {createTacticalCommentary} from './commentary-tactics.js?v=958c35ded711';
-import {commentaryPositionFacts, commentaryTransitionFact} from './commentary-spatial.js?v=2de2444e531e';
+import {createTacticalCommentary} from './commentary-tactics.js?v=9ed7d992367d';
+import {commentaryPositionFacts, commentaryTransitionFact} from './commentary-spatial.js?v=d9a32a8eceeb';
 const TEAM_NAMES = {white: 'Ivory', black: 'Obsidian'};
 const PIECE_NAMES = {K: 'keeper', Q: 'queen', R: 'rook', B: 'bishop', N: 'knight', P: 'pawn'};
 const NUMBERS = {'1': 'one', '2': 'two', '3': 'three'};
@@ -350,8 +350,14 @@ export function createCommentary({speechSynthesis = globalThis.speechSynthesis,
   const statsValue = line => line.statsCommentary?.type === 'shots' ? line.statsCommentary.shots : line.statsCommentary?.spokenPossessionPercent;
   const statsCurrent = line => !line?.statsCommentary || commentaryStatsLines(latestStats, latestState)
     .some(current => current.statsCommentary.key === line.statsCommentary.key && current.clipKey === line.clipKey);
-  const claimCurrent = line => spatialCurrent(line) && statsCurrent(line);
   const tacticalKey = line => line?.tactical?.key || `${line?.tactical?.type}:${line?.team}:${line?.tactical?.pieceId || ''}`;
+  // Rolling observations are rechecked while audio is loading or generating.
+  // Explicit public assessments without the analyser's scope marker retain
+  // their delivery-only contract. Once Hugo starts, the sentence still finishes.
+  const tacticalCurrent = line => line?.tactical?.evidenceScope !== 'rolling' || !!latestState
+    && tactics.lines(latestState, {stats: latestStats}).some(current => current.clipKey === line.clipKey
+      && tacticalKey(current) === tacticalKey(line));
+  const claimCurrent = line => spatialCurrent(line) && statsCurrent(line) && tacticalCurrent(line);
   function evidenceKey(line) {
     if (!line?.tactical) return '';
     // Counters, shape and territory may recur; unchanged individual totals
@@ -615,7 +621,7 @@ export function createCommentary({speechSynthesis = globalThis.speechSynthesis,
         Promise.resolve(localSpeech.speak(text, {expiresAt: deadline, delivery, onPlaying(playback = {}) {
           if (active?.token !== token || active.transport !== 'local') return;
           if (active.started) return;
-          if (!claimCurrent(line)) {cancelActive(); return;}
+          if (!claimCurrent(line) || now() > deadline) {cancelActive(); return;}
           active.started = true;
           clearTimer(active.loadTimer); active.loadTimer = undefined; status('playing'); armWatchdog(playback);
         }})).then(result => {

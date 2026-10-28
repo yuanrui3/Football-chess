@@ -1418,6 +1418,66 @@ const entries = [
     "sha256": "8b398ab7a26f6ca46032ebea7ca8b0f65d01a7d95b668a524bf5b3a7f9ea622a"
   },
   {
+    "key": "tactic_control",
+    "text": "They controlled midfield with connected pieces and more than one passing route.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 4560,
+    "sha256": "b098d2ce3792472b56837e78abef9e47f515e467e030af0bf6cbdc290d3e7cb8"
+  },
+  {
+    "key": "tactic_wing_overload",
+    "text": "They built numbers on the wing, with a central receiver available for the cross.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 4248,
+    "sha256": "b1c63e69690cc97809f1a299bd090b790d8d9b7e0730753f135f45e6bdd41b76"
+  },
+  {
+    "key": "tactic_pawn_trap",
+    "text": "The pawn used its free step, then won the ball with a diagonal tackle. A clever pressing trap!",
+    "delivery": "urgent",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 4752,
+    "sha256": "2d538c70658d16658b198bff827c01740ba5b854c5e95c7662c516cacd8cdd90"
+  },
+  {
+    "key": "tactic_counterpress",
+    "text": "They won the ball back near where they lost it. Quick counter-pressing!",
+    "delivery": "urgent",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3144,
+    "sha256": "91e5139eae075f8e9bb748e11e9e9d0882697e7204de02ef4adf61fe8164f560"
+  },
+  {
+    "key": "tactic_file_attack",
+    "text": "They cleared a shooting file for the rook, opening a direct route to goal.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 3792,
+    "sha256": "65219070c35cbbd2e20372979c31e62a4b5c2fdefbd17ef7bf4cc09f7ca7f5fb"
+  },
+  {
+    "key": "tactic_keeper_launch",
+    "text": "The keeper lifted the ball over a player and found a teammate beyond halfway.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 4224,
+    "sha256": "913789838e3b288ce6a9e0da7f3db221f7ef31a7feb36fe70c1c6cf2bb3f98b8"
+  },
+  {
     "key": "tactic_counter",
     "text": "They won it back and drove forward quickly on the counterattack!",
     "delivery": "urgent",

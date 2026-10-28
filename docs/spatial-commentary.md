@@ -45,6 +45,29 @@ The optional **Live Hugo · slower** mode loads about 38 MB of model/runtime ass
 
 `tests/commentary-spatial.test.mjs` covers mirrored positive and negative geometry cases, including offside, blockers, pawn setup, backward tackles and actual pass-and-run history. `tests/commentary-spatial-delivery.test.mjs` checks exact local speech, truthful caption fallbacks, cadence, priority and cancellation. `tests/commentary-library.test.mjs` checks prepared variants, exact captions, stale-call cancellation and playback without local synthesis. `tests/commentary-tactics.test.mjs` verifies sequence, formation and performance evidence; delivery and continuity tests check macro emphasis, snapshot completion and protected interruptions. Existing commentary and speech tests remain applicable.
 
+## Tactical patterns and chess connections
+
+Hugo can name a tactical topic in the caption, rather than labelling every call
+only as team tactics. The starting preset never establishes a playing style.
+These six additional complete recordings are selected from native legal geometry
+and observed actions:
+
+| Topic | Evidence before the call |
+| --- | --- |
+| Midfield control | Three completed rounds with central midfield possession, at least two legal onside nonkeeper outlets at each checkpoint, and a recent three-pass combination involving at least three players. |
+| Wing overload | Two completed rounds with three nearby attackers on the same wing outnumbering nearby defenders and a legal onside central crossing receiver. The delivery must have genuine inward width and a receiver near the attacking goal. |
+| Pawn pressing trap | An actual defensive bonus pawn step, followed by that pawn's legal ordinary diagonal tackle winning possession. An offered setup or evaded tackle does not qualify. |
+| Counter-press | A genuine open-play loss followed by a nearby clean tackle or interception regain within a short action/round window, before the opponent advances three squares. Restarts and goals clear this window. |
+| Open-file attack | A legal off-ball teammate move removes a physical friendly obstruction in front of a carrier rook, making a previously illegal opponent-goal shot available on that file. |
+| Keeper distribution | An accurate goal-kick pass actually bypasses one player and reaches a teammate beyond halfway. An ordinary backpass or a clear unlofted launch is not this pattern. |
+
+This connects football ideas of support, overloads and pressing with chess ideas
+of coordination, restriction and open files. It does not predict the next move,
+infer a coach's intention or announce a whole-match identity after one action.
+New event observations expire after a bounded number of committed actions/rounds.
+Rolling assessments are revalidated before recorded or locally generated speech
+starts; a started Hugo sentence retains its existing completion protection.
+
 ## Statistical commentary
 
 `dist/commentary-stats.js` derives team-named shot and possession calls from `matchStatsSummary`. Shot counts start at three and are spoken exactly through thirty, with a truthful “more than thirty” call above that. Possession requires at least sixty seconds of active recorded play; the voice rounds to five percentage points and says “about”, while the separate context retains the observed exact percentage, shots and on-target count. Partial restored records stay silent. Stats share the routine cadence but have a global sixty-second minimum gap; topic/team rotation prevents shot updates starving possession or one team. Unchanged shot counts or possession buckets do not repeat. Pending clips are checked against the current count/bucket before first start, without requiring exact floating-percentage equality that would starve playback.

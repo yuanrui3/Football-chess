@@ -1,8 +1,8 @@
-import {createGame, legalMoves, legalKicks, disguisedShotTargets, applyMove, applyKick, skipMove, chooseAIAction, currentTeam, cornerTakers, selectCornerTaker, BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, BOX_FILES, BOX_DEPTH, CENTRAL_GOAL_FILES, MIDFIELD_RANK, inOwnBox, canOccupySquare, isBox, isGoalMouth, shotChance, shotModel, offsideInfo, offsideFlaggedIds, LONG_TACKLE_RANGE, DRIBBLE_RANGE, FOUL_RULE, STALLING_RULE, PACE_RULE, ACTION_SECONDS, actionTimeout, progressInfo, paceInfo, positionActions, normalizeGame, FORMATION_PRESETS, setStartingFormation} from './engine.js?v=e7f3cce731e9';
+import {createGame, legalMoves, legalKicks, disguisedShotTargets, applyMove, applyKick, skipMove, chooseAIAction, currentTeam, cornerTakers, selectCornerTaker, BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, BOX_FILES, BOX_DEPTH, CENTRAL_GOAL_FILES, MIDFIELD_RANK, inOwnBox, canOccupySquare, isBox, isGoalMouth, shotChance, shotModel, offsideInfo, offsideFlaggedIds, LONG_TACKLE_RANGE, DRIBBLE_RANGE, FOUL_RULE, STALLING_RULE, PACE_RULE, ACTION_SECONDS, actionTimeout, progressInfo, paceInfo, positionActions, normalizeGame, FORMATION_PRESETS, setStartingFormation} from './engine.js?v=1711834496ff';
 import {createMatchClock, restoreMatchClock, tickMatchClock, settleMatchClock, rewindMatchClock} from './match-clock.js?v=1fa32f5eed6c';
-import {buildGoalReplay, restoreGoalReplay, createReplayPlayer} from './goal-replay.js?v=faa6d68732cd';
-import {createMatchStats, restoreMatchStats, recordMatchTransition, addPossessionTime, matchStatsSummary, shortPieceId} from './match-stats.js?v=0bc51d7be12a';
-import {createCommentary} from './commentary.js?v=b16b5f943c73';
+import {buildGoalReplay, restoreGoalReplay, createReplayPlayer} from './goal-replay.js?v=dced6b0b802c';
+import {createMatchStats, restoreMatchStats, recordMatchTransition, addPossessionTime, matchStatsSummary, shortPieceId} from './match-stats.js?v=05bccf6f9744';
+import {createCommentary} from './commentary.js?v=7ff721be47b9';
 import {createParadeeSpeech} from './paradee-speech.js?v=e9d0fc794cfb';
 
 const $ = id => document.getElementById(id);
@@ -116,7 +116,8 @@ function commentaryContext(event){
     return `${TEAM[event.team]} · ${details.join(' · ')}`;
   }
   if(!event.tactical)return '';
-  const category=event.clipKey?.startsWith('performance_')?'Player performance':event.clipKey?.startsWith('shape_')?'Team shape':'Team tactics';
+  const topics={tactic_control:'Midfield control',tactic_wing_overload:'Wing overload',tactic_pawn_trap:'Pawn pressing trap',tactic_counterpress:'Counter-press',tactic_file_attack:'Open-file attack',tactic_keeper_launch:'Keeper distribution',tactic_counter:'Counterattack',tactic_switch:'Switching play',tactic_combinations:'Passing combinations',tactic_pressure:'Sustained pressure',tactic_centre:'Central progression',tactic_wide:'Wing progression',tactic_patient:'Slow progression'};
+  const category=topics[event.clipKey]||(event.clipKey?.startsWith('performance_')?'Player performance':event.clipKey?.startsWith('shape_')?'Team shape':'Team tactics');
   return `${TEAM[event.team]}${event.tactical.pieceId?' · '+shortPieceId(event.tactical.pieceId):''} · ${category}`;
 }
 
@@ -236,7 +237,7 @@ function shotPreviewModel(x,y,keeperPosition){
 function drawShotPaths(model,className){for(const targetModel of model.targetModels||[model])addLine([targetModel.origin,targetModel.target],className);}
 function restartGuide(){
   const restart=game.restart;if(!restart)return '';
-  if(cornerSelectPhase())return isComputer()?'The computer chooses a corner taker from its teammates in the attacking half. The middle rank does not count. The taker moves to the corner; both teams then resettle before the kick.':'Choose any teammate in the attacking half as the corner taker. The middle rank does not count. Select a highlighted player on the pitch or choose from the list. The taker moves to the corner; both teams then resettle before the kick.';
+  if(cornerSelectPhase())return (isComputer()?'The computer chooses a corner taker from its teammates in the attacking half.':'Choose any teammate in the attacking half as the corner taker. Select a highlighted player on the pitch or choose from the list.')+' The middle rank does not count. The taker uses the corner flag; any other player there steps aside to the nearest free legal square. Both teams then resettle before the kick.';
   if(restart.type==='penalty')return kickPhase()?'Choose any of the four attacking goal targets. Penalties have a fixed 80% conversion chance; piece pattern, distance and keeper position do not alter it. The keeper holds position.':'Both teams have a protected positioning round before the penalty. The taker stays locked at the foul spot; then choose a goal target for the fixed 80% penalty.';
   if(restart.type==='freeKick'&&kickPhase())return 'Take the free kick using the taker’s kicking pattern. Passes may loft over one intervening player; legal direct shots are allowed.';
   if(restart.type==='goalKick'&&kickPhase())return 'Both teams have resettled. The king must now pass from the goal box and may loft over one intervening player; a direct shot is not allowed.';
@@ -256,7 +257,9 @@ function renderRestart(){
   }));
   if(!restart)return;
   $('restartTitle').textContent=`${restartName(restart)} · ${TEAM[restart.team]}`;
-  $('restartInfo').textContent=choosing?restartGuide():`${taker?pieceLabel(taker):'Nearest eligible player'} at ${coord(restart.spot.x,restart.spot.y)}. ${restart.cornerFallback?'No teammate was in the attacking half, so the nearest eligible player takes the corner. ':''}${restartGuide()}`;
+  const clearance=restart.clearance,displaced=clearance&&game.pieces.find(piece=>piece.id===clearance.pieceId);
+  const steppedAside=displaced?`${TEAM[displaced.team]} ${pieceLabel(displaced)} stepped aside to ${coord(clearance.to.x,clearance.to.y)} without using a positioning action. `:'';
+  $('restartInfo').textContent=choosing?restartGuide():`${taker?pieceLabel(taker):'Nearest eligible player'} at ${coord(restart.spot.x,restart.spot.y)}. ${restart.cornerFallback?'No teammate was in the attacking half, so the nearest eligible player takes the corner. ':''}${steppedAside}${restartGuide()}`;
   $('throwGuide').hidden=restart.type!=='throwIn';
   $('throwGuide').textContent='1–5 squares: 100% · 6: 85% · 7: 70% · 8: 55% · 9: 40% · 10: 25%';
 }
@@ -756,7 +759,7 @@ function scheduleAI(){
   },aiPace);
   if(difficulty==='tactical'&&typeof window.Worker==='function'){
     try{
-      aiWorker=new window.Worker(new URL('./ai-worker.js?v=6350edcb9bcb',import.meta.url),{type:'module',name:'football-chess-tactical'});
+      aiWorker=new window.Worker(new URL('./ai-worker.js?v=3c426b2308a8',import.meta.url),{type:'module',name:'football-chess-tactical'});
       aiWorker.onmessage=event=>{
         if(!stillCurrent()||event.data?.requestId!==requestId)return;
         const progress=event.data.progress;

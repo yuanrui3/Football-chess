@@ -1,11 +1,17 @@
 /** Rolling match analysis from committed public actions and completed rounds.
  * Claims describe observed play, never hidden AI plans, predictions or ratings.
  */
-import {BOARD_WIDTH, BOARD_HEIGHT, BOARD_CENTER_X, BOX_FILES, BOX_DEPTH} from './engine.js?v=e7f3cce731e9';
+import {BOARD_WIDTH, BOARD_HEIGHT, BOARD_CENTER_X, BOX_FILES, BOX_DEPTH, legalKicks, legalMoves} from './engine.js?v=1711834496ff';
 
 const TEAMS = ['white', 'black'];
 const ROLES = {Q:'queen', R:'rook', B:'bishop', N:'knight', P:'pawn', K:'keeper'};
 const scripts = {
+  tactic_control: {text:'They controlled midfield with connected pieces and more than one passing route.', delivery:'normal'},
+  tactic_wing_overload: {text:'They built numbers on the wing, with a central receiver available for the cross.', delivery:'normal'},
+  tactic_pawn_trap: {text:'The pawn used its free step, then won the ball with a diagonal tackle. A clever pressing trap!', delivery:'urgent'},
+  tactic_counterpress: {text:'They won the ball back near where they lost it. Quick counter-pressing!', delivery:'urgent'},
+  tactic_file_attack: {text:'They cleared a shooting file for the rook, opening a direct route to goal.', delivery:'normal'},
+  tactic_keeper_launch: {text:'The keeper lifted the ball over a player and found a teammate beyond halfway.', delivery:'normal'},
   tactic_counter: {text:'They won it back and drove forward quickly on the counterattack!', delivery:'urgent'},
   tactic_switch: {text:'They switched the attack across the pitch, changing the passing angle.', delivery:'normal'},
   tactic_combinations: {text:'Short passes linked different pieces and kept the ball moving.', delivery:'normal'},
@@ -49,9 +55,43 @@ const actionOf = (before,after) => before?.phase === 'keeperReact' && after?.las
 const heldBy = (state,team) => !!state?.ball?.carrierId && state.pieces?.some(p=>p.id===state.ball.carrierId
   && p.team===team && p.x===state.ball.x && p.y===state.ball.y);
 const pieceRole = id => ROLES[/^(?:white|black)-([KQRBNP])/.exec(id || '')?.[1]];
+const PATTERN_LABELS = Object.freeze({tactic_control:'Midfield control',tactic_wing_overload:'Wing overload',
+  tactic_pawn_trap:'Pawn pressing trap',tactic_counterpress:'Counter-press',tactic_file_attack:'Open-file attack',
+  tactic_keeper_launch:'Keeper distribution'});
+
+// Read-only native previews preserve blockers, kicking patterns and kick-time
+// offside. Nearness alone is never evidence of a usable passing connection.
+function nativeKicks(state) {
+  try {return legalKicks({...state,phase:'kick'});} catch {return [];}
+}
+function nativeOutlets(state) {
+  const carrier=state.pieces?.find(p=>p.id===state.ball?.carrierId && p.team===state.attack);
+  if(!carrier) return [];
+  return nativeKicks(state).filter(k=>!k.goal && !k.offside && k.receiverId && k.receiverId!==carrier.id)
+    .map(k=>({kick:k,piece:state.pieces.find(p=>p.id===k.receiverId && p.team===carrier.team && p.type!=='K')}))
+    .filter(value=>value.piece);
+}
+function patternGeometry(state) {
+  const carrier=state.pieces?.find(p=>p.id===state.ball?.carrierId && p.team===state.attack);
+  if(!carrier || carrier.type==='K') return {outletIds:[],wing:null};
+  const outlets=nativeOutlets(state),side=flank(carrier),team=carrier.team;
+  const attackers=state.pieces.filter(p=>p.team===team && p.type!=='K' && distance(p,carrier)<=4 && flank(p)===side);
+  const defenders=state.pieces.filter(p=>p.team!==team && distance(p,carrier)<=4);
+  const receiver=outlets.find(({piece})=>central(piece) && Math.abs(piece.x-carrier.x)>=3
+    && progress(team,piece)>=BOARD_HEIGHT-6 && gain(team,carrier,piece)>=-2);
+  return {outletIds:outlets.map(({piece})=>piece.id),wing:side && progress(team,carrier)>Math.floor((BOARD_HEIGHT-1)/2)
+    && attackers.length>=3 && attackers.length>defenders.length && receiver
+    ? {side,carrierId:carrier.id,receiverId:receiver.piece.id,attackers:attackers.length,defenders:defenders.length} : null};
+}
+function nativeMoveMatches(state,action) {
+  try {return legalMoves(state,action.pieceId,{freePawn:!!action.freePawn})
+    .some(move=>move.x===action.to?.x && move.y===action.to?.y && (action.type!=='tackle' || move.type==='tackle' && move.targetId===action.targetId));}
+  catch {return false;}
+}
 
 function snapshot(state, round, serial) {
   return {round,serial,team:state.attack,turn:state.turn,ball:{x:state.ball.x,y:state.ball.y,carrierId:state.ball.carrierId || null},
+    geometry:patternGeometry(state),
     pieces:state.pieces.filter(p => p && isTeam(p.team) && ROLES[p.type] && point(p))
       .map(({id,team,type,x,y})=>({id,team,type,x,y}))};
 }
@@ -61,12 +101,15 @@ function snapshot(state, round, serial) {
  */
 export function createTacticalCommentary() {
   let serial = 0, round = 0, lastRound = null, turnover = null, lastAttack = null;
+  let pawnSetup=null;
   const seen = new Set(), snapshots = [], possession = [], events = [];
+  const patterns=[],losses=new Map();
   const goalSeen = new Set();
   function clearSequence() {snapshots.length=0; possession.length=0; turnover=null; lastRound=null;}
   function reset() {
     serial=round=0; lastRound=null; turnover=null; lastAttack=null;
     seen.clear(); snapshots.length=0; possession.length=0; events.length=0; goalSeen.clear();
+    patterns.length=0;losses.clear();pawnSetup=null;
   }
   function addEvent(type,pieceId,details={}) {
     if (!pieceRole(pieceId) || !isTeam(teamOf(pieceId))) return;
@@ -96,17 +139,66 @@ export function createTacticalCommentary() {
     serial++;
     const changed=before.attack!==after.attack;
     const resetSequence=!!after.restart || ['kickoff','finished'].includes(after.phase);
+    const actorId=a.shooterId || a.pieceId;
+    const actor=before.pieces?.find(p=>p.id===actorId);
+    const actorTeam=actor?.team || teamOf(actorId);
+    const addPattern=(key,team,evidence,rank)=>patterns.push({key,team,evidence,rank,serial,round});
     const genuineWin=changed && !before.restart && !after.restart && before.phase!=='kickoff'
       && ['tackle','interception','move','save','blockedShot'].includes(a.type)
       && !(a.type==='save' && a.backPass) && point(after.ball) && heldBy(after,after.attack);
+    if(resetSequence || before.restart || before.phase==='kickoff') {patterns.length=0;losses.clear();pawnSetup=null;}
+    if(changed) patterns.length=0;
+    for(const lost of losses.values()) if(before.attack!==lost.team && after.attack===before.attack && point(after.ball))
+      lost.opponentAdvance=Math.max(lost.opponentAdvance,gain(before.attack,lost.from,after.ball));
+    if(genuineWin) {
+      const lost=losses.get(after.attack);
+      if(lost && serial-lost.serial<=8 && round-lost.round<=1 && lost.opponentAdvance<3
+          && distance(lost.from,after.ball)<=3 && (a.type==='interception' || a.type==='tackle' && a.outcome==='won'))
+        addPattern('tactic_counterpress',after.attack,{pieceId:after.ball.carrierId,lossSerial:lost.serial,
+          regainSerial:serial,distanceFromLoss:distance(lost.from,after.ball),opponentAdvance:lost.opponentAdvance},93);
+      if(heldBy(before,before.attack)) losses.set(before.attack,{team:before.attack,from:{x:before.ball.x,y:before.ball.y},
+        serial,round,opponentAdvance:Math.max(0,gain(after.attack,before.ball,after.ball))});
+    }
+    const setup=pawnSetup;
+    if(setup && serial===setup.serial+1 && before.phase==='defendMove' && !before.restart && !after.restart
+        && a.type==='tackle' && a.outcome==='won' && a.freePawn===false && actor?.type==='P'
+        && actor.id===setup.pieceId && a.targetId===setup.carrierId && before.attack===setup.attack
+        && before.ball.carrierId===setup.carrierId && before.positionBudget?.pawnUsed===true
+        && before.positionBudget?.normalUsed===false && nativeMoveMatches(before,a) && genuineWin)
+      addPattern('tactic_pawn_trap',actor.team,{pieceId:actor.id,carrierId:setup.carrierId,
+        setupFrom:setup.from,setupTo:setup.to,contactSquare:{x:before.ball.x,y:before.ball.y},tackleSerial:serial},94);
+    pawnSetup=null;
+    if(a.type==='move' && a.freePawn===true && actor?.type==='P' && before.phase==='defendMove'
+        && after.phase==='defendMove' && actor.team!==before.attack && !before.restart && !after.restart
+        && heldBy(before,before.attack) && heldBy(after,before.attack)
+        && before.positionBudget?.normalUsed===false && before.positionBudget?.pawnUsed===false
+        && after.positionBudget?.pawnUsed===true && after.positionBudget?.normalUsed===false && nativeMoveMatches(before,a))
+      pawnSetup={pieceId:actor.id,carrierId:before.ball.carrierId,attack:before.attack,serial,from:{...a.from},to:{...a.to}};
+    if(a.type==='move' && actor && actor.team===before.attack && actor.id!==before.ball?.carrierId
+        && !before.restart && !after.restart && !changed && nativeMoveMatches(before,a)) {
+      const rook=before.pieces.find(p=>p.id===before.ball.carrierId && p.type==='R');
+      const sameRook=rook && after.pieces.find(p=>p.id===rook.id && p.x===rook.x && p.y===rook.y);
+      if(sameRook && after.ball.carrierId===rook.id && actor.x===rook.x && gain(rook.team,rook,actor)>0) {
+        const oldShots=nativeKicks(before).filter(k=>k.goal===rook.team && !k.offside);
+        const opened=nativeKicks(after).find(k=>k.goal===rook.team && !k.offside && !oldShots.some(old=>old.x===k.x && old.y===k.y));
+        if(opened) addPattern('tactic_file_attack',rook.team,{pieceId:rook.id,clearingPieceId:actor.id,
+          goalTarget:{x:opened.x,y:opened.y},clearedFrom:{...a.from},clearedTo:{...a.to}},89);
+      }
+    }
+    if(before.restart?.type==='goalKick' && actor?.type==='K' && a.type==='kick' && a.outcome==='complete'
+        && a.lofted===true && a.receiverId===after.ball?.carrierId && !after.restart && !changed) {
+      const receiver=after.pieces.find(p=>p.id===a.receiverId && p.team===actor.team && p.type!=='K');
+      const native=nativeKicks(before).find(k=>k.x===a.to?.x && k.y===a.to?.y && k.receiverId===receiver?.id
+        && k.lofted && k.bypassedPieceId===a.bypassedPieceId && !k.offside);
+      if(receiver && native && progress(actor.team,receiver)>Math.floor((BOARD_HEIGHT-1)/2))
+        addPattern('tactic_keeper_launch',actor.team,{pieceId:actor.id,receiverId:receiver.id,
+          bypassedPieceId:a.bypassedPieceId,from:{...a.from},to:{...a.to},distance:a.distance},88);
+    }
     if (changed || resetSequence) {
       clearSequence();
       if(genuineWin) turnover={team:after.attack,from:{x:after.ball.x,y:after.ball.y},round,serial};
     }
     lastAttack=after.attack;
-    const actorId=a.shooterId || a.pieceId;
-    const actor=before.pieces?.find(p=>p.id===actorId);
-    const actorTeam=actor?.team || teamOf(actorId);
     const complete=a.type==='kick' && a.outcome==='complete' && actorTeam===before.attack
       && actorTeam===after.attack && !before.restart && before.phase!=='kickoff' && point(a.from) && point(a.to);
     if (complete) {
@@ -139,6 +231,8 @@ export function createTacticalCommentary() {
     while(possession.length>18 || possession[0] && round-possession[0].round>6) possession.shift();
     while(events.length>100 || events[0] && (serial-events[0].serial>120 || round-events[0].round>24)) events.shift();
     if(turnover && (round-turnover.round>3 || serial-turnover.serial>18 || turnover.team!==after.attack)) turnover=null;
+    while(patterns.length>12 || patterns[0] && (serial-patterns[0].serial>8 || round-patterns[0].round>2)) patterns.shift();
+    for(const [team,lost] of losses) if(serial-lost.serial>8 || round-lost.round>1) losses.delete(team);
   }
   function lines(state,{stats}={}) {
     if(!activeState(state) || lastAttack!==state.attack) return [];
@@ -148,13 +242,25 @@ export function createTacticalCommentary() {
       if(!script) return;
       const key=[clipKey,callTeam,evidence.pieceId || ''].join(':');
       output.push({kind:'trend',priority:1,text:script.text,delivery:script.delivery,clipKey,team:callTeam,
-        id:`tactical:${key}:${serial}`,tactical:{type:clipKey,key,rank,live:false,observedSerial:serial,...evidence}});
+        id:`tactical:${key}:${serial}`,tactical:{type:clipKey,key,rank,live:false,evidenceScope:'rolling',observedSerial:serial,
+          ...(PATTERN_LABELS[clipKey]?{label:PATTERN_LABELS[clipKey]}:{}),...evidence}});
     };
     const recent=snapshots.filter(s=>s.team===team).slice(-6),last=recent.at(-1),first=recent[0];
     if(turnover && turnover.team===team && gain(team,turnover.from,state.ball)>=4
         && round-turnover.round>=1 && round-turnover.round<=3)
       add('tactic_counter',team,{rounds:round-turnover.round,forwardGain:gain(team,turnover.from,state.ball),turnoverSerial:turnover.serial},100);
     const passes=possession.filter(p=>p.team===team && round-p.round<=4 && p.receiverId),lastPass=passes.at(-1);
+    for(const pattern of patterns) if(pattern.team===team)
+      add(pattern.key,team,{...pattern.evidence,patternSerial:pattern.serial},pattern.rank);
+    const lastThree=recent.slice(-3),middle=s=>central(s.ball) && progress(team,s.ball)>=5 && progress(team,s.ball)<=11;
+    const connected=passes.slice(-3);
+    if(lastThree.length===3 && lastThree.every(s=>heldBy(s,team) && middle(s) && s.geometry.outletIds.length>=2)
+        && connected.length===3 && new Set(connected.flatMap(p=>[p.pieceId,p.receiverId])).size>=3)
+      add('tactic_control',team,{rounds:3,pieceIds:[...new Set(connected.flatMap(p=>[p.pieceId,p.receiverId]))],
+        minimumOutlets:Math.min(...lastThree.map(s=>s.geometry.outletIds.length))},87);
+    const wing=recent.slice(-2);
+    if(wing.length===2 && wing.every(s=>s.geometry.wing) && wing[0].geometry.wing.side===wing[1].geometry.wing.side)
+      add('tactic_wing_overload',team,{rounds:2,...wing[1].geometry.wing},86);
     if(lastPass && serial-lastPass.serial<=7) {
       const run=passes.slice(-5),start=run.find(p=>flank(p.from) && flank(lastPass.to)===-flank(p.from));
       if(start && Math.abs(lastPass.to.x-start.from.x)>=7 && gain(team,start.from,lastPass.to)>=-2)

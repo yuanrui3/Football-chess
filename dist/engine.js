@@ -647,6 +647,24 @@ export function selectCornerTaker(state, pieceId) {
   return next;
 }
 
+// Clearing the flag is restart administration, not a player's positioning move.
+// The selected taker's old square is vacated simultaneously and can be used by
+// the displaced player. Equal distances rotate with the restart's team.
+function cornerClearance(state, taker, occupant, origin, team) {
+  const squares = [];
+  for (let y = 0; y < BOARD_HEIGHT; y++) for (let x = 0; x < BOARD_WIDTH; x++) {
+    if (x === origin.x && y === origin.y || !allowedSquare(occupant, x, y)) continue;
+    const blocking = pieceAt(state, x, y);
+    if (blocking && blocking.id !== taker.id && blocking.id !== occupant.id) continue;
+    squares.push({x, y});
+  }
+  const orientation = team === 'white' ? 1 : -1;
+  squares.sort((a, b) => Math.hypot(a.x - origin.x, a.y - origin.y) - Math.hypot(b.x - origin.x, b.y - origin.y)
+    || orientation * (b.y - a.y) || orientation * (a.x - b.x));
+  const to = squares[0];
+  return to ? {pieceId: occupant.id, from: {x: occupant.x, y: occupant.y}, to} : null;
+}
+
 function awardRestart(state, type, team, requestedSpot, {exit, reason, selectedTakerId} = {}) {
   resetPace(state);
   const origin = {x: clamp(Math.round(requestedSpot.x), 0, BOARD_WIDTH - 1), y: clamp(Math.round(requestedSpot.y), 0, BOARD_HEIGHT - 1)};
@@ -661,8 +679,16 @@ function awardRestart(state, type, team, requestedSpot, {exit, reason, selectedT
   }
   const candidates = state.pieces.filter(p => p.team === team && (type !== 'goalKick' || p.type === 'K') && (!selectedTakerId || p.id === selectedTakerId));
   candidates.sort((a, b) => Math.hypot(a.x - origin.x, a.y - origin.y) - Math.hypot(b.x - origin.x, b.y - origin.y) || a.id.localeCompare(b.id));
-  let taker, spot;
+  let taker, spot, clearance = null;
   for (const candidate of candidates) {
+    if (type === 'corner' && allowedSquare(candidate, origin.x, origin.y)) {
+      const occupant = pieceAt(state, origin.x, origin.y);
+      const displaced = occupant && occupant.id !== candidate.id
+        ? cornerClearance(state, candidate, occupant, origin, team) : null;
+      if (!occupant || occupant.id === candidate.id || displaced) {
+        taker = candidate; spot = {...origin}; clearance = displaced; break;
+      }
+    }
     const squares = [];
     for (let y = 0; y < BOARD_HEIGHT; y++) for (let x = 0; x < BOARD_WIDTH; x++) {
       const occupant = pieceAt(state, x, y);
@@ -675,12 +701,19 @@ function awardRestart(state, type, team, requestedSpot, {exit, reason, selectedT
   // A legal full squad always has a goalkeeper and room in its box. In an
   // incomplete imported scenario, never appoint a knight or outfield player
   // to take a goal kick in the missing goalkeeper's place.
-  if (taker) { taker.x = spot.x; taker.y = spot.y; }
+  if (taker) {
+    if (clearance) {
+      const displaced = state.pieces.find(piece => piece.id === clearance.pieceId);
+      Object.assign(displaced, clearance.to);
+      addLog(state, `${title(displaced.team)} ${NAMES[displaced.type]} ${displaced.id.split('-')[1]} steps away from ${square(clearance.from.x, clearance.from.y)} to ${square(clearance.to.x, clearance.to.y)} for the corner taker.`);
+    }
+    taker.x = spot.x; taker.y = spot.y;
+  }
   else spot = origin;
   state.ball = {...spot, carrierId: taker?.id || null}; state.attack = team;
   state.looseBallKickOrigin = null;
   beginPosition(state); state.offside = null;
-  state.restart = {type, team, takerId: taker?.id || null, spot: {...spot}, indirect: ['offside', 'stalling', 'timeout'].includes(type), ...(type === 'corner' && !eligible.length ? {cornerFallback: true} : {}), ...(exit ? {exit} : {}), ...(reason ? {reason} : {})};
+  state.restart = {type, team, takerId: taker?.id || null, spot: {...spot}, indirect: ['offside', 'stalling', 'timeout'].includes(type), ...(type === 'corner' && !eligible.length ? {cornerFallback: true} : {}), ...(clearance ? {clearance} : {}), ...(exit ? {exit} : {}), ...(reason ? {reason} : {})};
   resetProgress(state);
   return state.restart;
 }
