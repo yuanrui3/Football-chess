@@ -22,7 +22,10 @@ async function versionEngineImport(name){
   return hash(source);
 }
 const replayVersion=await versionEngineImport('goal-replay.js');
-const statsVersion=await versionEngineImport('match-stats.js');
+const playerRatingsVersion=await versionEngineImport('player-ratings.js');
+const ratingsViewVersion=hash(await readFile(asset('player-ratings-view.js'),'utf8'));
+const ratingsCssVersion=hash(await readFile(asset('player-ratings.css'),'utf8'));
+const statsVersion=await versionImports('match-stats.js',{'engine.js':engineVersion,'player-ratings.js':playerRatingsVersion});
 const commentaryClipsVersion=hash(await readFile(asset('commentary-clips.js'),'utf8'));
 const hugoCommentaryVersion=hash(await readFile(asset('hugo-commentary-clips.js'),'utf8'));
 const commentarySpatialVersion=await versionEngineImport('commentary-spatial.js');
@@ -75,6 +78,8 @@ app=app.replace(/['"]\.\/ai-worker\.js(?:\?v=[^'"]+)?['"]/,`'./ai-worker.js?v=${
 app=app.replace(/from ['"]\.\/match-clock\.js(?:\?v=[^'"]+)?['"]/,`from './match-clock.js?v=${clockVersion}'`);
 app=app.replace(/from ['"]\.\/goal-replay\.js(?:\?v=[^'"]+)?['"]/,`from './goal-replay.js?v=${replayVersion}'`);
 app=app.replace(/from ['"]\.\/match-stats\.js(?:\?v=[^'"]+)?['"]/,`from './match-stats.js?v=${statsVersion}'`);
+app=app.replace(/from ['"]\.\/player-ratings\.js(?:\?v=[^'"]+)?['"]/,`from './player-ratings.js?v=${playerRatingsVersion}'`);
+app=app.replace(/from ['"]\.\/player-ratings-view\.js(?:\?v=[^'"]+)?['"]/,`from './player-ratings-view.js?v=${ratingsViewVersion}'`);
 app=app.replace(/from ['"]\.\/commentary\.js(?:\?v=[^'"]+)?['"]/,`from './commentary.js?v=${commentaryVersion}'`);
 app=app.replace(/from ['"]\.\/paradee-speech\.js(?:\?v=[^'"]+)?['"]/,`from './paradee-speech.js?v=${paradeeSpeechVersion}'`);
 app=app.replace(/from ['"]\.\/evaluation\.js(?:\?v=[^'"]+)?['"]/,`from './evaluation.js?v=${evaluationVersion}'`);
@@ -82,6 +87,7 @@ await writeFile(asset('app.js'),app);
 const appVersion=hash(app),cssVersion=hash(await readFile(asset('style.css'),'utf8'));
 let html=await readFile(asset('index.html'),'utf8');
 html=html.replace(/href="style\.css(?:\?v=[^"]+)?"/,`href="style.css?v=${cssVersion}"`)
+  .replace(/href="player-ratings\.css(?:\?v=[^"]+)?"/,`href="player-ratings.css?v=${ratingsCssVersion}"`)
   .replace(/src="app\.js(?:\?v=[^"]+)?"/,`src="app.js?v=${appVersion}"`);
 await writeFile(asset('index.html'),html);
 let exercisesHtml=await readFile(asset('exercises.html'),'utf8');

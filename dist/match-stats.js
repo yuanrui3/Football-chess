@@ -1,5 +1,6 @@
 /** Match records are independent of engine decisions and replay playback. */
 import {BOARD_WIDTH, BOARD_HEIGHT, GOAL_FILES, BOX_FILES, BOX_DEPTH} from './engine.js?v=400633f53b46';
+import {createPlayerRatings,restorePlayerRatings,recordPlayerRatings} from './player-ratings.js?v=f7496ad9dd1a';
 const TEAMS = ['white', 'black'];
 const SHOT_RESULTS = ['goal', 'save', 'shotMiss', 'blockedShot'];
 const IDS = /^(white|black)-(K|Q|[RBN][12]|P[123])$/;
@@ -33,12 +34,14 @@ export const shortPieceId = id => isId(id) ? id.split('-')[1] : 'Unknown';
 
 export function createMatchStats({partial = false, baselineScore = {white: 0, black: 0}} = {}) {
   return {version: 2, pitch: {width: BOARD_WIDTH, height: BOARD_HEIGHT}, partial: !!partial, baselineScore: scoreOf(baselineScore),
-    teams: {white: emptyTeam(), black: emptyTeam()}, goals: [], foulEvents: [], lastPass: null, pendingShot: null};
+    teams: {white: emptyTeam(), black: emptyTeam()}, goals: [], foulEvents: [], lastPass: null, pendingShot: null,
+    playerRatings:createPlayerRatings({partial})};
 }
 
 export function restoreMatchStats(saved, game, {partial = true} = {}) {
   const fallback = () => {
     const stats = createMatchStats({partial, baselineScore: partial ? game?.score : undefined});
+    stats.playerRatings=restorePlayerRatings(null,game,{partial});
     // A restored old match can already have a committed shot in flight. Its
     // known attempt belongs in the partial record so a save cannot exceed shots.
     const shot = game?.pendingShot;
@@ -61,6 +64,7 @@ export function restoreMatchStats(saved, game, {partial = true} = {}) {
   if (!TEAMS.every(team => saved.teams[team].onTarget <= saved.teams[team].shots
       && saved.baselineScore[team] + saved.goals.filter(goal => goal.team === team).length === (game?.score?.[team] ?? 0))) return fallback();
   const restored = createMatchStats({partial: saved.partial, baselineScore: saved.baselineScore});
+  restored.playerRatings=restorePlayerRatings(saved.playerRatings,game,{partial:!saved.playerRatings||saved.partial});
   for (const team of TEAMS) for (const key of ['shots', 'onTarget', 'corners', 'possessionMs', 'fouls', 'yellowCards', 'redCards']) restored.teams[team][key] = saved.teams[team][key] ?? 0;
   // Stable player identity and the credited side decide whether a goal is an
   // own goal. Older pending-shot saves could lose shootingTeam and persist a
@@ -100,6 +104,10 @@ export function recordMatchTransition(stats, before, after, {matchSeconds = null
   // carries the penalty while its triggering action still resolves the shot.
   const action = before.phase === 'keeperReact' && recordedAction.type === 'stalling' && SHOT_RESULTS.includes(recordedAction.triggeringAction?.type)
     ? recordedAction.triggeringAction : recordedAction;
+  // Record before assist candidates are cleared by a shot result or turnover.
+  const provider=before.phase==='keeperReact'?stats.pendingShot?.assistId
+    :stats.lastPass?.receiverId===before.ball?.carrierId?stats.lastPass.providerId:null;
+  next.playerRatings=recordPlayerRatings(stats.playerRatings,before,after,{assistId:provider,passProviderId:stats.lastPass?.providerId||null});
   if (action.type === 'foul') {
     const offenderId = action.offenderId || action.pieceId, fouledId = action.fouledId || action.targetId;
     const team = teamOf(offenderId), card = [null, 'yellow', 'red'].includes(action.card) ? action.card : null, secondYellow = !!action.secondYellow;
