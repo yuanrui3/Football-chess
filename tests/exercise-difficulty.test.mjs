@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {EXERCISES,createExercisePosition} from '../dist/exercise-positions.js';
+import {BOARD_HEIGHT,GOAL_FILES,inOwnBox} from '../dist/engine.js';
 
 const originalIds=['pick-the-open-file','knights-two-posts','queen-two-targets',
   'release-the-knight','diagonal-pocket','pass-down-the-channel','diagonal-delivery',
@@ -37,6 +38,22 @@ test('larger study diagrams use legal pieces from the real squad inventory',()=>
       const squad=pieces.filter(p=>p.team===team&&p.type===type);
       assert.ok(squad.length<=max,`${d.id}: ${team} has too many ${type}`);
       for(const p of squad)assert.match(p.id,new RegExp(`^${team}-${type}${max===1?'':`[1-${max}]`}$`));
+    }
+  }
+});
+
+test('study keepers start in a natural goalmouth position and shade only toward a wide threat',()=>{
+  const central=GOAL_FILES.slice(1,-1),leftPost=GOAL_FILES[0],rightPost=GOAL_FILES.at(-1);
+  for(const d of EXERCISES){
+    const game=createExercisePosition(d),ball=game.ball;
+    for(const keeper of game.pieces.filter(p=>p.type==='K')){
+      assert.ok(inOwnBox(keeper.team,keeper.x,keeper.y),`${d.id}: ${keeper.id} starts in its own box`);
+      const home=keeper.team==='white'?BOARD_HEIGHT-1:0;
+      assert.ok(Math.abs(keeper.y-home)<=1,`${d.id}: ${keeper.id} starts on the goal line or one square out`);
+      const defending=keeper.team!==game.attack;
+      const natural=central.includes(keeper.x)||defending&&(
+        keeper.x===leftPost&&ball.x<=leftPost-2||keeper.x===rightPost&&ball.x>=rightPost+2);
+      assert.ok(natural,`${d.id}: ${keeper.id} covers the centre or shades toward a genuinely wide ball`);
     }
   }
 });

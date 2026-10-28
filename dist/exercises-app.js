@@ -1,7 +1,7 @@
 import {BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, BOX_FILES, BOX_DEPTH, currentTeam, legalMoves, legalKicks, disguisedShotTargets, cornerTakers, isBox, isGoalMouth, positionActions, applyKick} from './engine.js?v=400633f53b46';
 import {chooseExerciseAction} from './exercise-ai.js?v=d139e7cf8e65';
-import {EXERCISES} from './exercise-positions.js?v=b7bdb42d4f5c';
-import {createExerciseSession, applyExerciseAction, bestKeeperShotChance} from './exercise-session.js?v=bc5ac51ee1b3';
+import {EXERCISES} from './exercise-positions.js?v=e2b4ee47220c';
+import {createExerciseSession, applyExerciseAction, bestKeeperShotChance} from './exercise-session.js?v=7d8b12dcd56b';
 import {createEvaluation} from './evaluation.js?v=4bec8a3d06ec';
 
 export const EXERCISE_PROGRESS_KEY='football-chess-exercises-v1';

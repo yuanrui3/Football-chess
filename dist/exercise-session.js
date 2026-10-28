@@ -4,7 +4,7 @@
  */
 import {applyMove,applyKick,skipMove,selectCornerTaker,legalMoves,legalKicks,disguisedShotTargets,
   currentTeam,shotModel,offsideInfo,inOwnBox,MIDFIELD_RANK} from './engine.js?v=400633f53b46';
-import {createExercisePosition} from './exercise-positions.js?v=b7bdb42d4f5c';
+import {createExercisePosition} from './exercise-positions.js?v=e2b4ee47220c';
 
 const TEAMS=['white','black'];
 const other=team=>team==='white'?'black':'white';

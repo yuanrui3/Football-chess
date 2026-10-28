@@ -69,6 +69,22 @@ test('all diagrams are legal sparse positions with both goalkeepers and intact b
   assert.throws(()=>createExercisePosition('missing-study'),RangeError);
 });
 
+test('Easy keepers start centrally in their own box, with near-post shading only for a wide ball',()=>{
+  for(const d of EASY_EXERCISES){
+    const carrier=d.position.pieces.find(p=>p.id===d.position.carrierId),attack=d.position.attack||carrier.team;
+    for(const keeper of d.position.pieces.filter(p=>p.type==='K')){
+      const depth=keeper.team==='white'?16-keeper.y:keeper.y;
+      assert.ok(E.inOwnBox(keeper.team,keeper.x,keeper.y),`${d.id}: keeper stays inside its own box`);
+      assert.ok([0,1].includes(depth),`${d.id}: keeper stays near the goal line`);
+      assert.ok(keeper.x>=5&&keeper.x<=8,`${d.id}: keeper stays between the posts`);
+      if(![6,7].includes(keeper.x)){
+        assert.notEqual(keeper.team,attack,'an inactive keeper has no reason to leave the centre');
+        assert.ok(keeper.x===5&&carrier.x<=3||keeper.x===8&&carrier.x>=10,`${d.id}: shading follows a genuinely wide ball`);
+      }
+    }
+  }
+});
+
 for(const d of EASY_EXERCISES) test(`${d.id}: an illustrative route succeeds against the study opponent within the round limit`,()=>{
   for(const seed of [1984]) {
     const {session,botActions}=play(d,d.exampleActions,{seed});
@@ -91,17 +107,19 @@ test('different knight targets and a queen single aim or disguise all satisfy th
     assert.equal(play(queen,[action]).session.status,'solved');
 });
 
-test('the cross admits a stronger carry before shooting, rather than enforcing the example route',()=>{
-  const d=byId('cross-to-the-middle'),baseline=play(d).session;
-  const alternative=play(d,[{type:'kick',x:7,y:2},{type:'move',pieceId:'white-Q',x:8,y:1},{type:'skip'},{type:'kick',x:8,y:-1}]).session;
-  assert.equal(alternative.status,'solved');assert.equal(alternative.progress.boxEntry,true);
-  assert.ok(alternative.metrics.lastShotXG>baseline.metrics.lastShotXG+.25);
+test('the cross creates a sound finish after carrying beyond the natural keeper’s immediate challenge',()=>{
+  const d=byId('cross-to-the-middle');
+  const premature=play(d,[{type:'kick',x:7,y:2},{type:'skip'}]).session;
+  assert.equal(premature.status,'failed');assert.equal(premature.reason,'possession-lost');
+  const improved=play(d).session;
+  assert.equal(improved.status,'solved');assert.equal(improved.progress.boxEntry,true);
+  assert.ok(improved.metrics.lastShotXG>=d.goal.minShotXG);
 });
 
 test('screening and keeper bonus may be played in either order',()=>{
   const d=byId('screen-and-cover');
-  const alternative=play(d,[{type:'move',pieceId:'white-K',x:7,y:16,freePawn:true},
-    {type:'move',pieceId:'white-R1',x:6,y:13},{type:'move',pieceId:'white-K',x:6,y:16}]).session;
+  const alternative=play(d,[{type:'move',pieceId:'white-K',x:6,y:16,freePawn:true},
+    {type:'move',pieceId:'white-R1',x:6,y:13},{type:'skip'}]).session;
   assert.equal(alternative.status,'solved');assert.ok(alternative.metrics.lastOpponentShotXG<.15);
 });
 
@@ -118,16 +136,28 @@ test('the illustrative through-ball routes cross a nearby defensive line',()=>{
   }
 });
 
+test('Easy progression studies still require improving the position against the natural keeper',()=>{
+  for(const d of EASY_EXERCISES.filter(d=>d.side==='attack'&&d.theme!=='one-on-one')){
+    const game={...createExercisePosition(d),phase:'kick'};
+    const initial=E.legalKicks(game).filter(k=>k.goal==='white'&&!k.offside)
+      .map(k=>bestKeeperShotChance(E.applyKick(game,k.x,k.y)));
+    assert.ok(Math.max(0,...initial)<d.goal.minShotXG,`${d.id}: a premature direct shot is below the outcome target`);
+  }
+});
+
 test('the wide-carry study starts with a poor shot and rewards a real improvement in angle',()=>{
   const d=byId('carry-inward'),game=createExercisePosition(d),shooting={...game,phase:'kick'};
   const initial=E.legalKicks(shooting).filter(k=>k.goal==='white'&&!k.offside)
     .map(k=>bestKeeperShotChance(E.applyKick(shooting,k.x,k.y)));
   assert.ok(Math.max(...initial)<.1);
-  const result=play(d).session;assert.ok(result.metrics.lastShotXG>.8);
+  const result=play(d).session;assert.ok(result.metrics.lastShotXG>=d.goal.minShotXG);
+  assert.ok(result.metrics.lastShotXG>Math.max(...initial)+.15,'the carry improves a genuine chance against a central keeper');
+  const disguised=d.exampleActions.map(a=>({...a}));disguised.at(-1).disguise=true;
+  assert.equal(play(d,disguised).session.status,'solved','a different legal shooting choice is credited too');
 });
 
 test('good finishes still solve when the native outcome is deliberately forced to miss',()=>{
   const d=byId('pick-the-open-file'),result=play(d,d.exampleActions,{forceFinalRoll:.999999}).session;
   assert.equal(result.status,'solved');assert.equal(result.metrics.shotResult.goal,false);
-  assert.ok(result.metrics.lastShotXG>.9);
+  assert.ok(result.metrics.lastShotXG>=d.goal.minShotXG);
 });

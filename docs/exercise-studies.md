@@ -8,6 +8,15 @@ attention on the tactical idea. Opponents use expanded Tactical study analysis
 with immediate reply checks. This search is bounded; it is not a proof of
 globally optimal play. Match opponents retain their normal profile.
 
+## Natural goalkeeper starts
+
+Both keepers begin inside their own box, on the goal line or one square in
+front of it. They normally cover the central two goal files. A defending keeper
+may shade toward the near post when the ball starts genuinely wide. Puzzle
+solutions are built around that coverage rather than a keeper stranded outside
+the posts or far upfield. Studies that previously depended on such starts have
+new positions and revision numbers; earlier completions remain in their history.
+
 `dist/exercise-positions.js` combines and freezes the catalog; the new tier
 definitions live in `exercise-medium.js`, `exercise-tough-attack.js`,
 `exercise-tough-mixed.js` and `exercise-tough-defence-extra.js`. Each definition includes progressive hints and one
@@ -19,7 +28,7 @@ answer key checked against the student's moves.
 
 | Tier | Studies | Pieces on the pitch | Typical plan |
 | --- | ---: | ---: | --- |
-| Easy | 12 | 5–7 | Learn a core finishing or defensive idea |
+| Easy | 12 | Reduced positions | Learn a core finishing or defensive idea |
 | Medium | 12 | 10–14 | Link 2–3 student steps |
 | Tough | 12 | 14–18 | Coordinate 3–4 student steps |
 
@@ -58,64 +67,60 @@ Easy lines take one or two rounds; larger studies use the same short horizon.
 The allowance permits alternative sound plans without turning an exercise into
 a full match. Plan steps and possession rounds are different measures.
 
-## Earlier Easy examples
+## Current study outcomes
 
-The table records the original baseline examples before expanded study analysis.
-These historical values are not a claim about the strongest current opposition.
-Finishing values are after the best keeper response to the final declared shot;
-defensive values are after the student's actual response.
+These targets use the current positions and the native chance model, including the keeper’s best legal response. They are outcome thresholds, not prescribed move sequences.
 
-| Study | Main idea | Example result | Completed rounds |
-| --- | --- | ---: | ---: |
-| Pick the open file | Close queen finish against a displaced keeper | 92.1% shot | 1 |
-| The knight has two posts | L-shaped targets, with direct or disguised choices | 98.0% shot on the far-side aim | 1 |
-| Keep the goalkeeper guessing | Queen's two-target disguise | 67.4% mixture; both direct aims also qualify | 1 |
-| Release the knight beyond the line | Bd10–h14, teammate collection and onward knight jump | 49.2% shot | 2 |
-| Find the diagonal pocket | Qf13–h15, collect and change direction | 49.2% shot | 2 |
-| Pass down the channel | Rd11–d15, collect and enter on a knight jump | 49.2% shot | 2 |
-| Deliver to the box | Diagonal bishop pass to an onside box receiver | 49.2% shot | 2 |
-| Cross to the middle | Horizontal rook cross to the queen | 29.1% shot, above a 25% task threshold | 2 |
-| Carry inward, then finish | Improve a tight-angle wide queen shot by ordinary box entry | 4.2% initial shot becomes 90.6% | 1 |
-| Win it before the shot | Bonus pawn step followed by a regular diagonal tackle | Clean possession win | 1 |
-| Screen the shot and cover the goal | Rook body block, king bonus and keeper reaction | 10.5% opponent shot | 1 |
-| Cover the declared aim | Move the goalkeeper onto the committed shooting file | 19.0% opponent shot | 1 |
-
-<!-- NEW-TIER-TABLES -->
-## Medium study outcomes
+### Easy
 
 | Study | Coaching theme | Example steps | Pieces | Outcome |
 | --- | --- | ---: | ---: | --- |
-| Open the rook’s long shot | Finishing | 3 | 12 | Create and take a finish worth at least 65% against the best legal keeper response. Any legal plan can succeed. |
-| Switch wide, drive inside | Into the box | 3 | 12 | Create and take a finish worth at least 60% against the best legal keeper response. Any legal plan can succeed. |
-| Receive and escape the keeper | Into the box | 3 | 12 | Create and take a finish worth at least 80% against the best legal keeper response. Any legal plan can succeed. |
-| The knight’s cut-back | Into the box | 3 | 13 | Create and take a finish worth at least 35% against the best legal keeper response. Any legal plan can succeed. |
-| Make room with the pawn | Finishing | 3 | 11 | Create and take a finish worth at least 25% against the best legal keeper response. Any legal plan can succeed. |
-| Thread the bishop’s pass | Through ball | 3 | 12 | Create and take a finish worth at least 40% against the best legal keeper response. Any legal plan can succeed. |
-| Clear the diagonal runway | Finishing | 3 | 12 | Create and take a finish worth at least 25% against the best legal keeper response. Any legal plan can succeed. |
-| Release the queen into space | Through ball | 3 | 12 | Create and take a finish worth at least 55% against the best legal keeper response. Any legal plan can succeed. |
-| Vacate the finishing pocket | Into the box | 3 | 12 | Create and take a finish worth at least 80% against the best legal keeper response. Any legal plan can succeed. |
-| The rook’s weighted retreat | Defence | 3 | 11 | Win possession, or limit every available immediate finish to 12% or less with sound keeper play. Any legal plan can succeed. |
-| Close the diagonal gate | Defence | 3 | 10 | Win possession, or limit every available immediate finish to 10% or less with sound keeper play. Any legal plan can succeed. |
-| The keeper’s two-action challenge | Defence | 2 | 11 | Win possession, or limit every available immediate finish to 15% or less with sound keeper play. Any legal plan can succeed. |
+| Take the central finish | Finishing | 1 | 5 | Create and take a finish worth at least 25% after the best legal keeper reply. Any legal plan can succeed. |
+| The knight has two posts | Finishing | 1 | 5 | Create and take a finish worth at least 45% after the best legal keeper reply. Any legal plan can succeed. |
+| Keep the goalkeeper guessing | Finishing | 1 | 5 | Create and take a finish worth at least 35% after the best legal keeper reply. Any legal plan can succeed. |
+| Release the knight beyond the line | Through ball | 4 | 6 | Create and take a finish worth at least 20% after the best legal keeper reply. Any legal plan can succeed. |
+| Find the diagonal pocket | Through ball | 4 | 6 | Create and take a finish worth at least 20% after the best legal keeper reply. Any legal plan can succeed. |
+| Pass down the channel | Through ball | 4 | 6 | Create and take a finish worth at least 20% after the best legal keeper reply. Any legal plan can succeed. |
+| Deliver to the far-side receiver | Into the box | 2 | 6 | Create and take a finish worth at least 20% after the best legal keeper reply. Any legal plan can succeed. |
+| Cross to the middle | Into the box | 3 | 6 | Create and take a finish worth at least 25% after the best legal keeper reply. Any legal plan can succeed. |
+| Carry inward, then finish | Into the box | 2 | 6 | Create and take a finish worth at least 25% after the best legal keeper reply. Any legal plan can succeed. |
+| Win it before the shot | Defence | 2 | 6 | Win possession, or hold the strongest available immediate finish to 15% or less, with sound keeper play. |
+| Screen the shot and cover the goal | Defence | 2 | 6 | Win possession, or hold the strongest available immediate finish to 15% or less, with sound keeper play. |
+| Cover the declared aim | Defence | 1 | 5 | Hold the already declared finish to 20% or less with a sound keeper reaction. |
 
-## Tough study outcomes
+### Medium
 
 | Study | Coaching theme | Example steps | Pieces | Outcome |
 | --- | --- | ---: | ---: | --- |
-| Open the rook’s finishing file | Into the box | 4 | 14 | Create and take a finish worth at least 15% against the best keeper response. Any legal route can succeed. |
-| Cross, jump, and chip | Into the box | 4 | 14 | Create and take a finish worth at least 40% against the best keeper response. Passes and box entry are suggestions, not requirements. |
-| Clear the knight’s finishing pocket | Into the box | 4 | 14 | Create and take a finish worth at least 20% against the best keeper response. A stronger legal route earns credit too. |
-| Through the line, then lay off | Through ball | 4 | 14 | Create and take a finish worth at least 15% against the best keeper response. The through-ball theme is optional coaching. |
-| Clear the offside runner first | Into the box | 3 | 14 | Create and take a legal finish worth at least 10% against the best keeper response. Normal offside rules still apply. |
-| The sweeper’s diagonal outlet | Into the box | 3 | 14 | Create and take a finish worth at least 15% against the best keeper response. Any legal buildup from the advanced king is accepted. |
-| Unlock the rook battery | Into the box | 4 | 15 | Create and take a finish worth at least 60% against the best goalkeeper reaction. Any legal plan can earn credit. |
-| Find the protected pocket | Through ball | 4 | 16 | Create and take a finish worth at least 35% against the best goalkeeper reaction. Any legal plan can earn credit. |
-| Clear the delivery diagonal | Into the box | 3 | 14 | Create and take a finish worth at least 35% against the best goalkeeper reaction. Any legal plan can earn credit. |
-| A screen and a keeper route | Defence | 3 | 15 | Hold the opponent’s finishing chance to 12% or less, or win possession. Any legal defensive plan can earn credit. |
-| Open the keeper’s return route | Defence | 3 | 14 | Hold the opponent’s finishing chance to 30% or less, or win possession. Any legal defensive plan can earn credit. |
-| Clear the box gateway | Defence | 3 | 14 | Hold the opponent’s finishing chance to 28% or less, or win possession. Any legal defensive plan can earn credit. |
+| Clear the rook’s approach | Finishing | 3 | 12 | Create and take a finish worth at least 20% after the best legal keeper reply. Any legal plan can succeed. |
+| Switch wide, drive inside | Into the box | 3 | 12 | Create and take a finish worth at least 25% after the best legal keeper reply. Any legal plan can succeed. |
+| Launch diagonally, finish at the edge | Finishing | 3 | 12 | Create and take a finish worth at least 20% after the best legal keeper reply. Any legal plan can succeed. |
+| Hand the file to the forward rook | Finishing | 3 | 13 | Create and take a finish worth at least 20% after the best legal keeper reply. Any legal plan can succeed. |
+| Clear the pawn, keep a safe distance | Finishing | 3 | 11 | Create and take a finish worth at least 20% after the best legal keeper reply. Any legal plan can succeed. |
+| Lead the rook through the line | Through ball | 3 | 12 | Create and take a finish worth at least 20% after the best legal keeper reply. Any legal plan can succeed. |
+| Clear the diagonal runway | Finishing | 3 | 12 | Create and take a finish worth at least 20% after the best legal keeper reply. Any legal plan can succeed. |
+| Collect at the edge of the box | Through ball | 3 | 12 | Create and take a finish worth at least 20% after the best legal keeper reply. Any legal plan can succeed. |
+| Vacate the finishing pocket | Finishing | 3 | 12 | Create and take a finish worth at least 20% after the best legal keeper reply. Any legal plan can succeed. |
+| Screen and react from the centre | Defence | 2 | 11 | Win possession, or hold the strongest available immediate finish to 12% or less, with sound keeper play. |
+| Close the diagonal gate | Defence | 3 | 10 | Win possession, or hold the strongest available immediate finish to 10% or less, with sound keeper play. |
+| Step out and challenge | Defence | 2 | 11 | Win possession, or hold the strongest available immediate finish to 15% or less, with sound keeper play. |
 
-<!-- END-NEW-TIER-TABLES -->
+### Tough
+
+| Study | Coaching theme | Example steps | Pieces | Outcome |
+| --- | --- | ---: | ---: | --- |
+| Open the rook’s finishing file | Into the box | 4 | 14 | Create and take a finish worth at least 15% after the best legal keeper reply. Any legal plan can succeed. |
+| Cross, jump, and chip | Into the box | 4 | 14 | Create and take a finish worth at least 20% after the best legal keeper reply. Any legal plan can succeed. |
+| Link through the knight, then escape | Into the box | 4 | 15 | Create and take a finish worth at least 15% after the best legal keeper reply. Any legal plan can succeed. |
+| Through the line, then lay off | Through ball | 4 | 15 | Create and take a finish worth at least 15% after the best legal keeper reply. Any legal plan can succeed. |
+| Clear the offside runner first | Into the box | 3 | 14 | Create and take a finish worth at least 10% after the best legal keeper reply. Any legal plan can succeed. |
+| Build from the goalkeeper | Finishing | 4 | 14 | Create and take a finish worth at least 15% after the best legal keeper reply. Any legal plan can succeed. |
+| Unlock the rook battery | Into the box | 4 | 15 | Create and take a finish worth at least 20% after the best legal keeper reply. Any legal plan can succeed. |
+| Find the protected pocket | Through ball | 4 | 16 | Create and take a finish worth at least 20% after the best legal keeper reply. Any legal plan can succeed. |
+| Switch around the central screen | Into the box | 3 | 14 | Create and take a finish worth at least 20% after the best legal keeper reply. Any legal plan can succeed. |
+| Two screens and the keeper | Defence | 3 | 15 | Win possession, or hold the strongest available immediate finish to 7% or less, with sound keeper play. |
+| Cover the far post | Defence | 3 | 15 | Win possession, or hold the strongest available immediate finish to 10% or less, with sound keeper play. |
+| Bring the bishop across | Defence | 3 | 15 | Win possession, or hold the strongest available immediate finish to 10% or less, with sound keeper play. |
 
 ## Alternative plans verified
 
@@ -123,7 +128,7 @@ defensive values are after the student's actual response.
   objective in the second study.
 - Both direct queen aims and the two-target disguise pass the third study.
 - After the rook cross, carrying the queen from h15 to i16 before shooting is
-  accepted and creates a substantially stronger chance than the shorter example.
+  accepted; alternative sufficiently strong finishes also earn credit.
 - The rook screen and king bonus in the defensive coordination study may be
   executed in either order.
 
@@ -133,8 +138,8 @@ be rejected for omitting a pass quota or a box-entry badge.
 ## Verification
 
 `tests/exercise-difficulty.test.mjs` checks all 36 IDs, tier sizes, the original
-Easy IDs, truthful plan-step labels, larger diagram sizes and the real squad
-inventory. The tier-specific tests exercise the new teaching lines, alternatives
+Easy IDs, truthful plan-step labels, larger diagram sizes, the real squad
+inventory and natural starting positions for all 72 goalkeepers. The tier-specific tests exercise the new teaching lines, alternatives
 and critical preparation steps. Independent review additionally tries immediate
 shots/tackles and tries shorter or stronger legal alternatives. A good shortcut
 is credited; an intrinsically trivial board is rebuilt instead of adding a gate.
@@ -142,8 +147,8 @@ is credited; an intrinsically trivial board is rebuilt instead of adding a gate.
 `tests/exercise-positions.test.mjs` checks catalog structure, legal occupancy,
 ball metadata, Easy example lines against the current study opponent and round
 limits. The tier tests cover the new examples and alternative plans. The tests
-also check alternative plans
-above and forces a good finishing shot to miss to verify outcome-independent
+also check the alternative plans
+above and force a good finishing shot to miss to verify outcome-independent
 credit. Session tests independently cover chance grading, offside collection,
 limits, immutable state and stopping conditions. No simulation result is used to
 claim these positions have only one solution or that the bot is unbeatable.

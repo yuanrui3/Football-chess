@@ -26,7 +26,7 @@ function play(definition,actions=definition.exampleActions,seed=1984){
   respond();return {session,botActions};
 }
 
-test('four crowded mixed Tough studies respect the real squad and stated plan lengths',()=>{
+test('four crowded mixed Tough studies respect natural keepers, the real squad and stated plan lengths',()=>{
   assert.equal(TOUGH_MIXED_EXERCISES.length,4);
   assert.equal(TOUGH_MIXED_EXERCISES.filter(d=>d.side==='attack').length,3);
   assert.equal(TOUGH_MIXED_EXERCISES.filter(d=>d.side==='defence').length,1);
@@ -40,6 +40,11 @@ test('four crowded mixed Tough studies respect the real squad and stated plan le
     for(const team of ['white','black'])for(const [type,max]of Object.entries({K:1,Q:1,R:2,B:2,N:2,P:3})){
       const count=d.position.pieces.filter(p=>p.team===team&&p.type===type).length;
       assert.ok(count<=max,`${d.id}: ${team} ${type} count`);if(type==='K')assert.equal(count,1);
+    }
+    for(const keeper of d.position.pieces.filter(p=>p.type==='K')){
+      assert.ok([6,7].includes(keeper.x),`${d.id}: ${keeper.id} begins centrally`);
+      assert.ok(keeper.team==='white'?[15,16].includes(keeper.y):[0,1].includes(keeper.y));
+      assert.ok(E.inOwnBox(keeper.team,keeper.x,keeper.y));
     }
     assert.equal(d.hints.length,3);assert.ok(d.coachNote&&d.objective);
   }
@@ -56,21 +61,14 @@ for(const d of TOUGH_MIXED_EXERCISES)test(`${d.id}: expanded study replies solve
 
 test('different legal bishop clearances earn the same outcome-based credit',()=>{
   const d=byId('tough-clear-the-delivery-diagonal');
-  for(const [x,y]of [[11,2],[12,1]]){
+  for(const [x,y]of [[7,2],[5,4]]){
     const line=d.exampleActions.map((a,i)=>i?{...a}:{type:'move',pieceId:'white-B1',x,y});
     assert.equal(play(d,line).session.status,'solved');
   }
 });
 test('the coordinated screen accepts either preparation order',()=>{
-  const d=byId('tough-pawn-screen-keeper-route'),[king,pawn,reaction]=d.exampleActions;
-  assert.equal(play(d,[pawn,king,reaction]).session.status,'solved');
-});
-test('the pressing cage also accepts a rook screen with the shared king bonus',()=>{
-  const d=byId('tough-pawn-screen-keeper-route');
-  const line=[{type:'move',pieceId:'white-R1',x:7,y:13},
-    {type:'move',pieceId:'white-K',x:6,y:16,freePawn:true},
-    {type:'move',pieceId:'white-K',x:7,y:16}];
-  const result=play(d,line).session;
+  const d=byId('tough-pawn-screen-keeper-route'),[rook,pawn,reaction]=d.exampleActions;
+  const result=play(d,[pawn,rook,reaction]).session;
   assert.equal(result.status,'solved');assert.ok(result.metrics.testedThreatXG<=d.goal.maxOpponentShotXG);
 });
 test('a defender cannot solve the crowded keeper study by an immediate or bonus-setup tackle',()=>{
@@ -96,8 +94,8 @@ test('the rook battery accepts a different supporting bishop destination',()=>{
   assert.equal(result.status,'solved');assert.ok(result.metrics.lastShotXG>=d.goal.minShotXG);
 });
 test('the new pawn screen is necessary rather than a pawn shuffled along the same shot path',()=>{
-  const d=byId('tough-pawn-screen-keeper-route'),[king,,reaction]=d.exampleActions;
-  const {session}=play(d,[king,{type:'skip'},reaction]);
+  const d=byId('tough-pawn-screen-keeper-route'),[rook,,reaction]=d.exampleActions;
+  const {session}=play(d,[rook,{type:'skip'},reaction]);
   assert.equal(session.status,'failed');assert.ok(session.metrics.lastOpponentShotXG>d.goal.maxOpponentShotXG);
 });
 test('the rebuilt pressing cage has no immediate or two-action finishing defence',()=>{
@@ -118,5 +116,5 @@ test('the rebuilt pressing cage has no immediate or two-action finishing defence
     const next=apply(initial,first);inspect(next,1);
     if(next.phase==='defendMove')for(const second of actions(next))inspect(apply(next,second),2);
   }
-  assert.ok(checked>1800);assert.ok(minChance>.19);
+  assert.ok(checked>1800);assert.ok(minChance>d.goal.maxOpponentShotXG);
 });
