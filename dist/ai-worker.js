@@ -1,4 +1,4 @@
-import {chooseAIAction,analyzeTacticalAction} from './engine.js?v=1711834496ff';
+import {chooseAIAction,analyzeTacticalAction} from './engine.js?v=2c106a991787';
 
 if(typeof self!=='undefined')self.onmessage=({data})=>{
   const {requestId,state,difficulty,selectionSeed}=data;

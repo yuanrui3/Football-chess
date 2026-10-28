@@ -5,6 +5,7 @@ import {EXERCISES,createExercisePosition} from '../dist/exercise-positions.js';
 import {createExerciseSession,applyExerciseAction,bestKeeperShotChance} from '../dist/exercise-session.js';
 
 const byId=id=>EXERCISES.find(item=>item.id===id);
+const EASY_EXERCISES=EXERCISES.filter(item=>item.difficulty==='easy');
 function play(definition,actions=definition.exampleActions,{seed=1984,forceFinalRoll}={}) {
   let session=createExerciseSession(definition,{seed}),botActions=0;
   const transition=(action,bot=false)=>{
@@ -31,11 +32,11 @@ function play(definition,actions=definition.exampleActions,{seed=1984,forceFinal
 }
 
 test('the first study set contains nine finishing studies and three defensive studies',()=>{
-  assert.equal(EXERCISES.length,12);
-  assert.equal(new Set(EXERCISES.map(d=>d.id)).size,12);
-  assert.equal(EXERCISES.filter(d=>d.side==='attack').length,9);
-  assert.equal(EXERCISES.filter(d=>d.side==='defence').length,3);
-  assert.deepEqual(Object.fromEntries(['one-on-one','through-ball','box-entry','defence'].map(theme=>[theme,EXERCISES.filter(d=>d.theme===theme).length])),
+  assert.equal(EASY_EXERCISES.length,12);
+  assert.equal(new Set(EXERCISES.map(d=>d.id)).size,EXERCISES.length);
+  assert.equal(EASY_EXERCISES.filter(d=>d.side==='attack').length,9);
+  assert.equal(EASY_EXERCISES.filter(d=>d.side==='defence').length,3);
+  assert.deepEqual(Object.fromEntries(['one-on-one','through-ball','box-entry','defence'].map(theme=>[theme,EASY_EXERCISES.filter(d=>d.theme===theme).length])),
     {'one-on-one':3,'through-ball':3,'box-entry':3,defence:3});
   assert.ok(Object.isFrozen(EXERCISES));
   for(const d of EXERCISES) {
@@ -106,7 +107,7 @@ test('screening and keeper bonus may be played in either order',()=>{
 });
 
 test('each through-ball study crosses a nearby defensive line and cannot be replaced by an unrelated finish',()=>{
-  for(const d of EXERCISES.filter(d=>d.theme==='through-ball')) {
+  for(const d of EASY_EXERCISES.filter(d=>d.theme==='through-ball')) {
     const game=createExercisePosition(d),action=d.exampleActions[0];
     const after=E.applyKick(game,action.x,action.y);
     assert.equal(after.ball.carrierId,null,'the teaching delivery is into space');

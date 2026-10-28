@@ -1,10 +1,34 @@
-import {BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, BOX_FILES, BOX_DEPTH, currentTeam, legalMoves, legalKicks, disguisedShotTargets, cornerTakers, isBox, isGoalMouth, positionActions, applyKick, chooseAIAction} from './engine.js?v=1711834496ff';
-import {EXERCISES} from './exercise-positions.js?v=4218035fc899';
-import {createExerciseSession, applyExerciseAction, bestKeeperShotChance} from './exercise-session.js?v=790bd9d45e40';
-import {createEvaluation} from './evaluation.js?v=521504a912c4';
+import {BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, BOX_FILES, BOX_DEPTH, currentTeam, legalMoves, legalKicks, disguisedShotTargets, cornerTakers, isBox, isGoalMouth, positionActions, applyKick, chooseAIAction} from './engine.js?v=2c106a991787';
+import {EXERCISES} from './exercise-positions.js?v=80d49d7c93f1';
+import {createExerciseSession, applyExerciseAction, bestKeeperShotChance} from './exercise-session.js?v=056f74535c21';
+import {createEvaluation} from './evaluation.js?v=cf50f77ce2d1';
 
 export const EXERCISE_PROGRESS_KEY='football-chess-exercises-v1';
 export const EXERCISE_THEME_LABELS=Object.freeze({'one-on-one':'One on one','through-ball':'Through balls','box-entry':'Into the box',defence:'Defend the finish'});
+export const EXERCISE_DIFFICULTY_LABELS=Object.freeze({easy:'Easy',medium:'Medium',tough:'Tough'});
+export const exerciseDifficulty=definition=>definition.difficulty||'easy';
+export function filterExercises(catalog=EXERCISES,{theme='all',difficulty='all'}={}){
+  return catalog.filter(def=>(theme==='all'||def.theme===theme)&&(difficulty==='all'||exerciseDifficulty(def)===difficulty));
+}
+export function selectFilteredExercise(catalog,filters,selectedId){
+  const list=filterExercises(catalog,filters);
+  return list.find(def=>def.id===selectedId)||list[0]||null;
+}
+export function nextFilteredExercise(catalog,filters,selectedId){
+  const list=filterExercises(catalog,filters),index=list.findIndex(def=>def.id===selectedId);
+  return list.length?list[(index+1)%list.length]:null;
+}
+/** An empty filter pauses the current study rather than playing it off-list. */
+export function syncExerciseFilters(controller,catalog,filters,loadDefinition,{allowResume=true}={}){
+  const selected=selectFilteredExercise(catalog,filters,controller.getState().session?.definitionId);
+  if(!selected){controller.suspend();return null;}
+  if(selected.id!==controller.getState().session?.definitionId)loadDefinition(selected);
+  if(allowResume)controller.resume();
+  return selected;
+}
+export function exercisePlanText(definition){
+  return Number.isInteger(definition.planSteps)?`Typical plan: ${definition.planSteps} steps`:'Core tactical idea';
+}
 const TEAM={white:'Ivory FC',black:'Obsidian FC'};
 const TYPES={K:'Goalkeeper',Q:'Queen',R:'Rook',B:'Bishop',N:'Knight',P:'Pawn'};
 const SYMBOLS={K:'♚',Q:'♛',R:'♜',B:'♝',N:'♞',P:'♟'};
@@ -47,7 +71,7 @@ export function recordExerciseSolved(progress,id,catalog=EXERCISES){
  * both late worker answers and already scheduled presentation timers.
  */
 export function createExerciseController({definition,makeSession=createExerciseSession,applyAction=applyExerciseAction,
-  workerFactory=typeof Worker==='function'?()=>new Worker(new URL('./ai-worker.js?v=3c426b2308a8',import.meta.url),{type:'module',name:'football-chess-exercise-tactical'}):null,
+  workerFactory=typeof Worker==='function'?()=>new Worker(new URL('./ai-worker.js?v=91d748b44efe',import.meta.url),{type:'module',name:'football-chess-exercise-tactical'}):null,
   chooseTactical=chooseAIAction,selectionSeed=()=>null,now=()=>Date.now(),delayMs=1000,watchdogMs=5000,
   setTimer=(fn,ms)=>setTimeout(fn,ms),clearTimer=id=>clearTimeout(id),onChange=()=>{},onError=()=>{}}={}){
   let session=null,started=false,thinking=false,suspended=false,destroyed=false,generation=0,pending=null,lastAction=null;
@@ -114,7 +138,7 @@ export function initExercisePage(){
   const $=id=>document.getElementById(id);
   let storage=null;try{storage=window.localStorage;}catch{}
   let progress=readExerciseProgress(storage),selectedId=null,moveMode='offball',hintsUsed=0,passRun=false,disguise=false;
-  let state=null,controller=null,evaluation=null,lastBoard=null,focusedSquare=null;
+  let state=null,controller=null,evaluation=null,lastBoard=null,focusedSquare=null,filterBlocked=false;
   const squares=[];
   for(let y=0;y<H;y++)for(let x=0;x<W;x++){
     const button=document.createElement('button');button.type='button';button.dataset.x=x;button.dataset.y=y;button.setAttribute('role','gridcell');button.tabIndex=-1;
@@ -127,7 +151,7 @@ export function initExercisePage(){
     button.innerHTML=`<span class="goal-file">${FILES[x].toUpperCase()}</span><span class="goal-odds">—</span>`;$(id).append(button);
   }
   const isKick=game=>['kick','kickoff','keeperRelease'].includes(game.phase);
-  const playable=()=>state?.started&&!state.suspended&&!state.thinking&&state.session.status==='active'&&currentTeam(state.session.game)===state.session.playerTeam;
+  const playable=()=>!filterBlocked&&state?.started&&!state.suspended&&!state.thinking&&state.session.status==='active'&&currentTeam(state.session.game)===state.session.playerTeam;
   function targets(){
     if(!playable())return [];
     const game=state.session.game;
@@ -140,15 +164,23 @@ export function initExercisePage(){
   }
   function setMode(mode){moveMode=mode;const game=state.session.game;if(mode==='dribble')selectedId=game.ball.carrierId;else if(selectedId===game.ball.carrierId)selectedId=null;render(state);}
   function save(){saveExerciseProgress(storage,progress);}
+  const filters=()=>({theme:$('themeFilter').value,difficulty:$('difficultyFilter').value});
   function renderLibrary(){
-    const filter=$('themeFilter').value;
+    const list=filterExercises(EXERCISES,filters());
     $('solvedCount').textContent=`${Object.keys(progress.solved).length} / ${EXERCISES.length}`;
-    $('exerciseList').replaceChildren(...EXERCISES.filter(def=>filter==='all'||def.theme===filter).map(def=>{
+    $('tierCounts').textContent=Object.entries(EXERCISE_DIFFICULTY_LABELS).map(([id,label])=>`${EXERCISES.filter(def=>exerciseDifficulty(def)===id).length} ${label}`).join(' · ');
+    for(const option of $('difficultyFilter').options)option.textContent=option.value==='all'?`All levels (${EXERCISES.length})`:`${EXERCISE_DIFFICULTY_LABELS[option.value]} (${EXERCISES.filter(def=>exerciseDifficulty(def)===option.value).length})`;
+    $('filteredCount').textContent=`${list.length} ${list.length===1?'exercise':'exercises'} shown`;
+    $('nextBtn').disabled=!list.length;
+    $('exerciseList').replaceChildren(...list.map(def=>{
       const index=EXERCISES.indexOf(def),button=document.createElement('button');button.type='button';button.className='exercise-card'+(progress.solved[def.id]?' solved':'');button.dataset.exerciseId=def.id;button.setAttribute('aria-pressed',String(def.id===state?.session.definitionId));
-      button.setAttribute('aria-label',`${index+1}. ${def.title}, ${EXERCISE_THEME_LABELS[def.theme]}, ${def.roundLimit} rounds${progress.solved[def.id]?', solved':''}`);
+      const difficulty=exerciseDifficulty(def),level=EXERCISE_DIFFICULTY_LABELS[difficulty];
+      button.setAttribute('aria-label',`${index+1}. ${def.title}, ${level}, ${EXERCISE_THEME_LABELS[def.theme]}, ${exercisePlanText(def)}, up to ${def.roundLimit} possession rounds${progress.solved[def.id]?', solved':''}`);
       const number=document.createElement('span');number.className='exercise-number';number.textContent=progress.solved[def.id]?'✓':String(index+1).padStart(2,'0');
-      const copy=document.createElement('span'),title=document.createElement('b'),detail=document.createElement('small');title.textContent=def.title;detail.textContent=`${EXERCISE_THEME_LABELS[def.theme]} · ${def.roundLimit} rounds`;copy.append(title,detail);button.append(number,copy);return button;
+      const copy=document.createElement('span'),badge=document.createElement('span'),title=document.createElement('b'),detail=document.createElement('small');
+      badge.className=`exercise-level ${difficulty}`;badge.textContent=level;title.textContent=def.title;detail.textContent=`${EXERCISE_THEME_LABELS[def.theme]} · ${Number.isInteger(def.planSteps)?`${def.planSteps} steps`:'Core idea'}`;copy.append(badge,title,detail);button.append(number,copy);return button;
     }));
+    if(!list.length){const empty=document.createElement('p');empty.className='exercise-empty';empty.textContent='No exercises match both filters. Choose another level or theme.';$('exerciseList').append(empty);}
   }
   function phaseCopy(game){
     if(state.thinking)return ['TACTICAL OPPONENT','The opponent is thinking.','Watch its reply. The next human decision will unlock automatically.'];
@@ -210,17 +242,20 @@ export function initExercisePage(){
       if(playable()&&game.phase==='keeperReact'){selectedId=game.pieces.find(p=>p.type==='K'&&p.team===session.playerTeam)?.id;moveMode='offball';}
     }
     $('exerciseTitle').textContent=def.title;$('themeLabel').textContent=EXERCISE_THEME_LABELS[def.theme]||'Tactical exercise';$('exerciseObjective').textContent=def.objective;
+    $('difficultyLabel').textContent=EXERCISE_DIFFICULTY_LABELS[exerciseDifficulty(def)];$('difficultyLabel').className=`exercise-level ${exerciseDifficulty(def)}`;
+    $('planLength').textContent=`${exercisePlanText(def)} · up to ${def.roundLimit} possession rounds.`;
     $('qualityGoal').textContent=def.goal.type==='defend'?`Win possession or hold the finishing chance to ${percent(def.goal.maxOpponentShotXG)} or less.`:`Create and take a shot worth at least ${percent(def.goal.minShotXG)} against the best keeper reply.`;
     $('roundCounter').textContent=`${Math.min(session.roundsUsed,session.roundLimit)} / ${session.roundLimit} rounds`;
     $('sideLabel').textContent=`YOU · ${TEAM[session.playerTeam].toUpperCase()} ${session.playerTeam==='white'?'↑':'↓'}`;
-    $('playBtn').hidden=view.started;$('actionPanel').hidden=!view.started||session.status!=='active';$('feedbackPanel').hidden=session.status==='active';
-    $('undoBtn').disabled=!view.canUndo;$('retryBtn').disabled=!view.started&&session.roundsUsed===0;
+    $('playBtn').hidden=view.started;$('playBtn').disabled=filterBlocked;$('actionPanel').hidden=filterBlocked||!view.started||session.status!=='active';$('feedbackPanel').hidden=filterBlocked||session.status==='active';
+    $('undoBtn').disabled=filterBlocked||!view.canUndo;$('retryBtn').disabled=filterBlocked||!view.started&&session.roundsUsed===0;
     const requirements=[];
     if(def.goal.requires==='through-ball')requirements.push({done:session.progress.throughBall,text:'Through ball and onside teammate collection'});
     if(def.goal.requires==='box-entry')requirements.push({done:session.progress.boxEntry,text:def.goal.boxEntryMode==='pass'?'Receive a teammate’s pass in the box':'Enter the box with the ball'});
+    if(def.goal.minCompletedPasses>0)requirements.push({done:session.progress.completedPasses>=def.goal.minCompletedPasses,text:`Complete ${def.goal.minCompletedPasses} outfield teammate ${def.goal.minCompletedPasses===1?'pass':'passes'} (${Math.min(session.progress.completedPasses,def.goal.minCompletedPasses)} / ${def.goal.minCompletedPasses})`});
     $('requirements').replaceChildren(...requirements.map(r=>{const item=document.createElement('span');item.className=r.done?'done':'';item.textContent=`${r.done?'✓':'○'} ${r.text}`;return item;}));
     const [phase,title,help]=phaseCopy(game);$('phaseLabel').textContent=phase;$('phaseTitle').textContent=title;$('actionHelp').textContent=help;
-    $('boardStatus').textContent=!view.started?'Study the position, then Play exercise.':session.status!=='active'?session.feedback:view.thinking?`${TEAM[currentTeam(session.game)]} · Tactical is choosing its reply…`:help;
+    $('boardStatus').textContent=filterBlocked?'No exercises match both filters. The current study is paused; change the level or theme to continue.':!view.started?'Study the position, then Play exercise.':session.status!=='active'?session.feedback:view.thinking?`${TEAM[currentTeam(session.game)]} · Tactical is choosing its reply…`:help;
     const positional=['attackMove','defendMove'].includes(game.phase),budget=game.positionBudget||{};
     $('positionModes').hidden=!positional||!!game.restart;
     const availability=positional?positionActions(game):null;
@@ -236,7 +271,7 @@ export function initExercisePage(){
       const result=session.metrics?.shotResult;$('shotQuality').textContent=result?`Chance against the best keeper reply: ${percent(result.bestReplyXG)}${Number.isFinite(result.actualReplyXG)?` · after the actual reply: ${percent(result.actualReplyXG)}`:''}.`:'';
       if(session.status==='solved'&&!progress.solved[def.id]){progress=recordExerciseSolved(progress,def.id);save();}
     }
-    $('hintBtn').disabled=hintsUsed>=(def.hints?.length||0);$('hintBtn').firstChild.textContent=hintsUsed?`Next hint (${hintsUsed}/${def.hints.length}) `:'Show a hint ';
+    $('hintBtn').disabled=filterBlocked||hintsUsed>=(def.hints?.length||0);$('hintBtn').firstChild.textContent=hintsUsed?`Next hint (${hintsUsed}/${def.hints.length}) `:'Show a hint ';
     $('hintsList').replaceChildren(...(def.hints||[]).slice(0,hintsUsed).map(text=>{const li=document.createElement('li');li.textContent=text;return li;}));
     $('lastActionPanel').hidden=!view.lastAction;$('lastActionText').textContent=actionDescription();renderLibrary();renderBoard(game);
     if(evaluation){syncExerciseEvaluation(evaluation,view);renderEvaluation(evaluation.getState());}
@@ -252,15 +287,20 @@ export function initExercisePage(){
     $('evaluationRail').hidden=!value.enabled;$('evaluationInfo').hidden=!value.enabled;
     $('evaluationFill').style.height=`${available?Math.max(0,Math.min(1,value.share??.5))*100:50}%`;
     $('evaluationScore').textContent=available?`${value.score>0?'+':''}${value.score.toFixed(2)}`:complete||value.status==='unavailable'?'—':'…';
-    $('evaluationInfo').textContent=complete?`Last decision estimate · exercise complete${available?` · depth ${value.depth}, ${value.nodes} nodes`:''}. Heuristic units, not xG or a win percentage.`:value.status==='ready'?`Engine estimate · Ivory perspective · depth ${value.depth}, ${value.nodes} nodes. Heuristic units, not xG or a win percentage.`:value.status==='unavailable'?'Engine estimate unavailable. The exercise can continue.':value.status==='suspended'?'The Tactical opponent is thinking; analysis resumes at your next decision.':'Analysing the visible position…';
+    $('evaluationInfo').textContent=complete?`Last decision in this round · exercise complete${available?` · depth ${value.depth}, ${value.nodes} nodes`:''}. Heuristic round units, not xG or a win percentage.`:value.status==='ready'?`Current-round estimate · Ivory perspective · depth ${value.depth}, ${value.nodes} nodes. Heuristic round units, not xG or a win percentage.`:value.status==='unavailable'?'Current-round estimate unavailable. The exercise can continue.':value.status==='suspended'?'The Tactical opponent is thinking; analysis resumes at your next decision.':'Analysing this round’s attack and defence…';
   }
   evaluation=createEvaluation({onUpdate:renderEvaluation});
   $('exerciseList').addEventListener('click',event=>{const id=event.target.closest('[data-exercise-id]')?.dataset.exerciseId;const def=EXERCISES.find(def=>def.id===id);if(def)loadDefinition(def);});
-  $('themeFilter').addEventListener('change',()=>{renderLibrary();const selected=state?.session.definition;if($('themeFilter').value!=='all'&&selected?.theme!==$('themeFilter').value){const first=EXERCISES.find(def=>def.theme===$('themeFilter').value);if(first)loadDefinition(first);}});
+  const filterChanged=()=>{
+    filterBlocked=!selectFilteredExercise(EXERCISES,filters(),state?.session.definitionId);
+    syncExerciseFilters(controller,EXERCISES,filters(),loadDefinition,{allowResume:!document.hidden});
+    render(controller.getState());
+  };
+  $('themeFilter').addEventListener('change',filterChanged);$('difficultyFilter').addEventListener('change',filterChanged);
   $('playBtn').addEventListener('click',()=>{selectedId=exerciseStartingPiece(state.session.game,state.session.playerTeam);moveMode=state.session.game.phase==='attackMove'?'dribble':'offball';$('errorMessage').textContent='';controller.start();});
   $('retryBtn').addEventListener('click',()=>{const def=state.session.definition;loadDefinition(def);controller.start();});
   $('undoBtn').addEventListener('click',()=>{$('errorMessage').textContent='';selectedId=null;controller.undo();});
-  $('nextBtn').addEventListener('click',()=>{const filter=$('themeFilter').value,list=EXERCISES.filter(def=>filter==='all'||def.theme===filter),index=list.findIndex(def=>def.id===state.session.definitionId);loadDefinition(list[(index+1)%list.length]||EXERCISES[0]);});
+  $('nextBtn').addEventListener('click',()=>{const next=nextFilteredExercise(EXERCISES,filters(),state.session.definitionId);if(next)loadDefinition(next);});
   $('hintBtn').addEventListener('click',()=>{hintsUsed=Math.min(hintsUsed+1,state.session.definition.hints?.length||0);render(state);});
   $('offballBtn').addEventListener('click',()=>setMode('offball'));$('dribbleBtn').addEventListener('click',()=>setMode('dribble'));$('bonusBtn').addEventListener('click',()=>setMode('bonus'));
   $('passRunEnabled').addEventListener('change',()=>{passRun=$('passRunEnabled').checked;});$('disguiseEnabled').addEventListener('change',()=>{disguise=$('disguiseEnabled').checked;render(state);});
@@ -286,9 +326,9 @@ export function initExercisePage(){
   });
   for(const id of['goalTop','goalBottom'])$(id).addEventListener('click',event=>{const button=event.target.closest('[data-x]');if(!button||!playable()||button.disabled)return;$('errorMessage').textContent='';controller.play({type:'kick',x:Number(button.dataset.x),y:Number(button.dataset.y),disguise});});
   window.addEventListener('pagehide',()=>{controller.suspend();evaluation.suspend();});
-  window.addEventListener('pageshow',()=>{controller.resume();syncExerciseEvaluation(evaluation,state);renderEvaluation(evaluation.getState());});
-  document.addEventListener('visibilitychange',()=>{if(document.hidden){controller.suspend();evaluation.suspend();}else{controller.resume();syncExerciseEvaluation(evaluation,state);renderEvaluation(evaluation.getState());}});
-  loadDefinition(EXERCISES.find(def=>def.id===progress.lastId)||EXERCISES[0]);
+  window.addEventListener('pageshow',()=>{if(!filterBlocked)controller.resume();syncExerciseEvaluation(evaluation,state);renderEvaluation(evaluation.getState());});
+  document.addEventListener('visibilitychange',()=>{if(document.hidden){controller.suspend();evaluation.suspend();}else{if(!filterBlocked)controller.resume();syncExerciseEvaluation(evaluation,state);renderEvaluation(evaluation.getState());}});
+  loadDefinition(selectFilteredExercise(EXERCISES,filters(),progress.lastId)||EXERCISES[0]);
   return {controller,evaluation};
 }
 if(typeof document!=='undefined'&&document.getElementById('exerciseBoard'))initExercisePage();

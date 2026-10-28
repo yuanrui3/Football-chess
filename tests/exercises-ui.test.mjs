@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import * as E from '../dist/engine.js';
-import {createExerciseController,readExerciseProgress,saveExerciseProgress,recordExerciseSolved,EXERCISE_PROGRESS_KEY,exerciseMoveMode,exerciseStartingPiece,syncExerciseEvaluation} from '../dist/exercises-app.js';
+import {createExerciseController,readExerciseProgress,saveExerciseProgress,recordExerciseSolved,EXERCISE_PROGRESS_KEY,exerciseMoveMode,exerciseStartingPiece,syncExerciseEvaluation,filterExercises,selectFilteredExercise,nextFilteredExercise,exerciseDifficulty,exercisePlanText,syncExerciseFilters} from '../dist/exercises-app.js';
 
 const def={id:'fixture',title:'A finishing study',playerTeam:'white',roundLimit:3};
 function harness({worker=true,botFirst=false,solve=false,deterministic=false}={}){
@@ -116,8 +116,66 @@ test('corrupt, inaccessible or stale progress does not block training',()=>{
 test('the exercise page makes objectives, alternatives, study rounds and optional analysis explicit',async()=>{
   const html=await readFile(new URL('../dist/exercises.html',import.meta.url),'utf8');
   assert.match(html,/Several plans can work/);assert.match(html,/against the best keeper reply/);assert.match(html,/not by a lucky goal or an unlucky save/);
-  for(const id of['themeFilter','exerciseBoard','playBtn','hintBtn','retryBtn','nextBtn','undoBtn','analysisEnabled'])assert.ok(html.includes(`id="${id}"`));
-  assert.match(html,/Engine estimate/);assert.match(html,/optional help/);assert.doesNotMatch(html,/id="analysisEnabled"[^>]*checked/);
+  for(const id of['themeFilter','difficultyFilter','tierCounts','filteredCount','difficultyLabel','planLength','exerciseBoard','playBtn','hintBtn','retryBtn','nextBtn','undoBtn','analysisEnabled'])assert.ok(html.includes(`id="${id}"`));
+  assert.match(html,/Current-round estimate/);assert.match(html,/optional help/);assert.doesNotMatch(html,/id="analysisEnabled"[^>]*checked/);
+  assert.match(html,/12 Easy · 12 Medium · 12 Tough/);assert.match(html,/0 \/ 36/);
+  assert.match(html,/Ending positioning and the bot’s replies do not count/);assert.match(html,/Plan lengths are a guide/);
+});
+
+const levelCatalog=[
+  {id:'old-easy',theme:'one-on-one',roundLimit:3},
+  {id:'medium-cross',difficulty:'medium',theme:'box-entry',planSteps:3,roundLimit:4},
+  {id:'medium-finish',difficulty:'medium',theme:'one-on-one',planSteps:2,roundLimit:3},
+  {id:'tough-cross',difficulty:'tough',theme:'box-entry',planSteps:4,roundLimit:4},
+  {id:'tough-cross-two',difficulty:'tough',theme:'box-entry',planSteps:3,roundLimit:4},
+];
+test('difficulty and theme filters intersect while older studies default to Easy',()=>{
+  assert.equal(exerciseDifficulty(levelCatalog[0]),'easy');
+  assert.deepEqual(filterExercises(levelCatalog,{difficulty:'easy'}).map(d=>d.id),['old-easy']);
+  assert.deepEqual(filterExercises(levelCatalog,{difficulty:'medium',theme:'box-entry'}).map(d=>d.id),['medium-cross']);
+  assert.equal(filterExercises(levelCatalog,{theme:'box-entry'}).length,3);
+  assert.deepEqual(filterExercises(levelCatalog),levelCatalog);
+});
+test('changing level chooses a matching study and Next stays inside both filters',()=>{
+  const filters={difficulty:'tough',theme:'box-entry'};
+  assert.equal(selectFilteredExercise(levelCatalog,filters,'medium-cross').id,'tough-cross');
+  assert.equal(selectFilteredExercise(levelCatalog,filters,'tough-cross-two').id,'tough-cross-two');
+  assert.equal(nextFilteredExercise(levelCatalog,filters,'tough-cross').id,'tough-cross-two');
+  assert.equal(nextFilteredExercise(levelCatalog,filters,'tough-cross-two').id,'tough-cross');
+  assert.equal(nextFilteredExercise(levelCatalog,filters,'old-easy').id,'tough-cross');
+  const empty={difficulty:'easy',theme:'defence'};
+  assert.equal(selectFilteredExercise(levelCatalog,empty,'old-easy'),null);assert.equal(nextFilteredExercise(levelCatalog,empty,'old-easy'),null);
+});
+test('an empty filter suspends the hidden study and cancels an in-flight Tactical reply',()=>{
+  const h=harness({botFirst:true});h.controller.start();const stale=h.workers[0],snapshot=structuredClone(h.controller.getState().session),loads=[];
+  assert.equal(syncExerciseFilters(h.controller,[def],{difficulty:'medium'},d=>loads.push(d)),null);
+  assert.equal(h.controller.getState().suspended,true);assert.equal(stale.terminated,true);
+  stale.respond();h.advance(6000);assert.deepEqual(h.controller.getState().session,snapshot);assert.equal(h.transitions.length,0);assert.deepEqual(loads,[]);
+  assert.equal(h.controller.play({type:'human'}),false,'the off-list position cannot change progress');
+  assert.equal(syncExerciseFilters(h.controller,[def],{},d=>loads.push(d)).id,def.id);
+  assert.equal(h.controller.getState().suspended,false);assert.equal(h.workers.length,2);assert.deepEqual(loads,[],'the matching study resumes without resetting the decision');
+  h.controller.destroy();
+});
+test('a matching filter loads a visible study but does not resume a background page',()=>{
+  const h=harness(),other={...def,id:'medium',difficulty:'medium'},loads=[];
+  h.controller.suspend();
+  const selected=syncExerciseFilters(h.controller,[def,other],{difficulty:'medium'},d=>{loads.push(d.id);h.controller.load(d);},{allowResume:false});
+  assert.equal(selected.id,'medium');assert.deepEqual(loads,['medium']);assert.equal(h.controller.getState().session.definitionId,'medium');
+  assert.equal(h.controller.getState().suspended,true);assert.equal(h.workers.length,0);h.controller.destroy();
+});
+test('expected plan length is distinct from the possession-round allowance',()=>{
+  assert.equal(exercisePlanText(levelCatalog[0]),'Core tactical idea');
+  assert.equal(exercisePlanText(levelCatalog[1]),'Typical plan: 3 steps');
+  assert.equal(levelCatalog[1].roundLimit,4);
+});
+test('adding difficulty tiers preserves solved Easy IDs and the previous selected study',()=>{
+  const stored={version:1,solved:{'old-easy':true},lastId:'old-easy'};
+  const progress=readExerciseProgress({getItem:key=>key===EXERCISE_PROGRESS_KEY?JSON.stringify(stored):null},levelCatalog);
+  assert.deepEqual(progress,stored);
+  assert.equal(selectFilteredExercise(levelCatalog,{difficulty:'all',theme:'all'},progress.lastId).id,'old-easy');
+  const next=recordExerciseSolved(progress,'medium-cross',levelCatalog);
+  assert.deepEqual(next.solved,{'old-easy':true,'medium-cross':true});
+  assert.deepEqual(progress,stored,'extending progress does not mutate old records');
 });
 
 

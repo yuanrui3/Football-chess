@@ -1,7 +1,7 @@
 /** Rolling match analysis from committed public actions and completed rounds.
  * Claims describe observed play, never hidden AI plans, predictions or ratings.
  */
-import {BOARD_WIDTH, BOARD_HEIGHT, BOARD_CENTER_X, BOX_FILES, BOX_DEPTH, legalKicks, legalMoves} from './engine.js?v=1711834496ff';
+import {BOARD_WIDTH, BOARD_HEIGHT, BOARD_CENTER_X, BOX_FILES, BOX_DEPTH, legalKicks, legalMoves} from './engine.js?v=2c106a991787';
 
 const TEAMS = ['white', 'black'];
 const ROLES = {Q:'queen', R:'rook', B:'bishop', N:'knight', P:'pawn', K:'keeper'};

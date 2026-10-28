@@ -1,0 +1,42 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {EXERCISES,createExercisePosition} from '../dist/exercise-positions.js';
+
+const originalIds=['pick-the-open-file','knights-two-posts','queen-two-targets',
+  'release-the-knight','diagonal-pocket','pass-down-the-channel','diagonal-delivery',
+  'cross-to-the-middle','carry-inward','pawn-before-the-shot','screen-and-cover','cover-the-declared-aim'];
+
+test('36 studies preserve the original Easy IDs and provide twelve studies per tier',()=>{
+  assert.equal(EXERCISES.length,36);
+  assert.equal(new Set(EXERCISES.map(d=>d.id)).size,36);
+  assert.deepEqual(EXERCISES.filter(d=>d.difficulty==='easy').map(d=>d.id),originalIds);
+  for(const difficulty of ['easy','medium','tough']){
+    const list=EXERCISES.filter(d=>d.difficulty===difficulty);
+    assert.equal(list.length,12,difficulty);
+    assert.equal(list.filter(d=>d.side==='attack').length,9,difficulty);
+    assert.equal(list.filter(d=>d.side==='defence').length,3,difficulty);
+  }
+});
+
+test('new plan lengths count student moves, passes and shots separately from ending positioning',()=>{
+  for(const d of EXERCISES.filter(d=>d.difficulty!=='easy')){
+    const range=d.difficulty==='medium'?[2,3]:[3,4];
+    assert.ok(range.includes(d.planSteps),`${d.id}: expected ${range.join('–')} steps`);
+    assert.equal(d.exampleActions.filter(a=>a.type!=='skip').length,d.planSteps,`${d.id}: truthful step label`);
+    assert.ok([3,4].includes(d.roundLimit));
+  }
+});
+
+test('larger study diagrams use legal pieces from the real squad inventory',()=>{
+  const inventory={K:1,Q:1,R:2,B:2,N:2,P:3};
+  for(const d of EXERCISES){
+    const game=createExercisePosition(d),pieces=game.pieces;
+    if(d.difficulty==='medium')assert.ok(pieces.length>=10&&pieces.length<=14,`${d.id}: Medium density`);
+    if(d.difficulty==='tough')assert.ok(pieces.length>=14&&pieces.length<=18,`${d.id}: Tough density`);
+    for(const team of ['white','black'])for(const [type,max]of Object.entries(inventory)){
+      const squad=pieces.filter(p=>p.team===team&&p.type===type);
+      assert.ok(squad.length<=max,`${d.id}: ${team} has too many ${type}`);
+      for(const p of squad)assert.match(p.id,new RegExp(`^${team}-${type}${max===1?'':`[1-${max}]`}$`));
+    }
+  }
+});

@@ -248,3 +248,104 @@ test('a legal on-restart teammate collection retains the native direct-receipt o
   session=apply(session,kick(6,2));session=apply(session,move('white-N1',6,2));
   assert.equal(session.progress.boxEntry,true);assert.equal(session.game.lastAction.type,'move');
 });
+
+test('combination objectives default to zero passes and reject invalid pass counts',()=>{
+  const d=definition();
+  assert.equal(createExerciseSession(d).definition.goal.minCompletedPasses,0);
+  for(const minCompletedPasses of [-1,1.5,4,'2',NaN,Infinity])
+    assert.throws(()=>createExerciseSession({...d,goal:{...d.goal,minCompletedPasses}}),/zero and three/);
+  for(const minCompletedPasses of [0,1,2,3])
+    assert.equal(createExerciseSession({...d,goal:{...d.goal,minCompletedPasses}}).definition.goal.minCompletedPasses,minCompletedPasses);
+});
+
+test('two genuine teammate passes qualify a combination before its finishing shot',()=>{
+  let session=start({'white-Q':['Q',6,7],'white-R1':['R',6,5],'white-N1':['N',6,1]},
+    {goal:{type:'finish',minShotXG:.35,minCompletedPasses:2}});
+  session=apply(session,kick(6,5));assert.equal(session.progress.completedPasses,1);
+  session=toKick(session);session=apply(session,kick(6,1));assert.equal(session.progress.completedPasses,2);
+  session=toKick(session);session=shoot(session,kick(5,-1));
+  assert.equal(session.pendingAssessment.completedPasses,2);
+  assert.equal(session.pendingAssessment.prerequisiteMet,true);
+  session=resolve(session,{roll:.9999});assert.equal(session.status,'solved');
+  assert.equal(session.roundsUsed,3);
+});
+
+test('a lucky direct goal cannot skip a pass combination and receives specific feedback',()=>{
+  let session=start({}, {goal:{type:'finish',minShotXG:.35,minCompletedPasses:2}});
+  session=shoot(session);const pending=clone(session);
+  session=resolve(session,{roll:0});
+  assert.equal(session.game.lastAction.type,'goal');assert.equal(session.status,'failed');
+  assert.equal(session.reason,'missing-theme');assert.match(session.feedback,/at least 2 teammate passes/);
+  assert.match(session.feedback,/0 completed/);assert.doesNotMatch(session.feedback,/opposing box/);
+  assert.equal(pending.pendingAssessment.prerequisiteMet,false);
+});
+
+test('self-pass collections and direct keeper receipts do not inflate combination progress',()=>{
+  let self=throughPosition();self=apply(self,kick(7,3));self=apply(self,move('white-Q',7,3));
+  assert.equal(self.game.lastAction.selfPassCollection,true);assert.equal(self.progress.completedPasses,0);
+  let keeper=start({'white-Q':['Q',6,7],'white-R1':['R',1,11]},
+    {goal:{type:'finish',minShotXG:.35,minCompletedPasses:2}});
+  keeper=apply(keeper,kick(6,16));assert.equal(keeper.game.phase,'keeperRelease');
+  assert.equal(keeper.progress.completedPasses,0);
+  keeper=apply(keeper,kick(1,11));assert.equal(keeper.progress.completedPasses,1,
+    'the keeper release is one outfield delivery, not a two-pass combination');
+});
+
+function combinedThroughPosition() {
+  return start({'white-Q':['B',3,7],'white-N1':['N',5,4],'white-Q2':['Q',5,2],
+    'black-R2':['R',8,4],'black-R1':['R',12,1]},
+  {goal:{type:'finish',minShotXG:.1,requires:'through-ball',minCompletedPasses:2},roundLimit:4});
+}
+test('a through-ball collection and a second teammate pass jointly satisfy both prerequisites',()=>{
+  let session=combinedThroughPosition();
+  session=apply(session,kick(7,3));session=apply(session,move('white-N1',7,3));
+  assert.equal(session.progress.throughBall,true);assert.equal(session.progress.completedPasses,1);
+  session=toKick(session);session=apply(session,kick(5,2));
+  assert.equal(session.progress.completedPasses,2);
+  session=toKick(session);session=shoot(session,kick(8,-1));
+  assert.equal(session.pendingAssessment.prerequisiteMet,true);
+  session=resolve(session,{roll:.9999});assert.equal(session.status,'solved');
+});
+
+test('the through-ball badge alone cannot substitute for the required second pass',()=>{
+  let session=combinedThroughPosition();
+  session=apply(session,kick(7,3));session=apply(session,move('white-N1',7,3));
+  session=apply(session,move('white-N1',8,1));session=toKick(session);session=shoot(session,kick(7,-1));
+  assert.equal(session.pendingAssessment.throughBall,true);
+  assert.equal(session.pendingAssessment.completedPasses,1);
+  assert.equal(session.pendingAssessment.prerequisiteMet,false);
+  session=resolve(session,{roll:0});assert.equal(session.status,'failed');
+  assert.match(session.feedback,/at least 2 teammate passes/);
+  assert.doesNotMatch(session.feedback,/First play a forward ball/);
+});
+
+test('two direct passes do not substitute for a required through ball',()=>{
+  let session=start({'white-Q':['Q',6,7],'white-R1':['R',6,5],'white-N1':['N',6,1]},
+    {goal:{type:'finish',minShotXG:.35,minCompletedPasses:2,requires:'through-ball'}});
+  session=apply(session,kick(6,5));session=toKick(session);session=apply(session,kick(6,1));
+  session=toKick(session);session=shoot(session,kick(5,-1));
+  assert.equal(session.pendingAssessment.completedPasses,2);assert.equal(session.pendingAssessment.prerequisiteMet,false);
+  session=resolve(session,{roll:0});assert.equal(session.status,'failed');
+  assert.match(session.feedback,/onside teammate/);assert.doesNotMatch(session.feedback,/at least 2 teammate passes/);
+});
+
+test('combination evidence and feedback are fixed when the shot is committed',()=>{
+  const pending=shoot(start({}, {goal:{type:'finish',minShotXG:.35,minCompletedPasses:2}}));
+  const altered=clone(pending);altered.progress.completedPasses=2;
+  const result=resolve(altered,{roll:0});
+  assert.equal(result.status,'failed');assert.match(result.feedback,/0 completed/);
+  assert.equal(pending.progress.completedPasses,0);
+});
+
+test('a three-pass build-up still leaves its shot on the fourth allowed possession round',()=>{
+  let session=start({'white-Q':['Q',6,7],'white-R1':['R',6,5],
+    'white-R2':['R',8,5],'white-N1':['N',8,1]},
+  {roundLimit:4,goal:{type:'finish',minShotXG:.2,minCompletedPasses:3}});
+  for(const [x,y]of [[6,5],[8,5],[8,1]]) {
+    session=apply(session,kick(x,y));session=toKick(session);
+  }
+  assert.equal(session.roundsUsed,3);assert.equal(session.progress.completedPasses,3);
+  session=shoot(session,kick(7,-1));assert.equal(session.status,'active');
+  session=resolve(session,{roll:.9999});assert.equal(session.status,'solved');
+  assert.equal(session.roundsUsed,4);
+});

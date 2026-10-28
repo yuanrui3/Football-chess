@@ -2,7 +2,11 @@
  * Example actions document one native route against the deterministic Tactical
  * bot; session grading evaluates the objective, never this move list.
  */
-import {createGame,applyKick} from './engine.js?v=1711834496ff';
+import {createGame,applyKick} from './engine.js?v=2c106a991787';
+import {MEDIUM_EXERCISES} from './exercise-medium.js?v=1bc19095a042';
+import {TOUGH_ATTACK_EXERCISES} from './exercise-tough-attack.js?v=b493f4031173';
+import {TOUGH_MIXED_EXERCISES} from './exercise-tough-mixed.js?v=e664cf2804ec';
+import {TOUGH_DEFENCE_EXTRA} from './exercise-tough-defence-extra.js?v=0c545fcea655';
 
 const piece=(id,x,y)=>({id,team:id.split('-')[0],type:id.split('-')[1][0],x,y});
 const base=({keeper=[8,0],defender=[12,3]}={})=>[
@@ -129,7 +133,10 @@ const deepFreeze=value=>{
   if(value&&typeof value==='object') {for(const child of Object.values(value))deepFreeze(child);Object.freeze(value);}
   return value;
 };
-export const EXERCISES=deepFreeze(definitions);
+export const EXERCISES=deepFreeze([
+  ...definitions.map(definition=>({...definition,difficulty:'easy'})),
+  ...MEDIUM_EXERCISES,...TOUGH_ATTACK_EXERCISES,...TOUGH_MIXED_EXERCISES,...TOUGH_DEFENCE_EXTRA,
+]);
 
 export function createExercisePosition(definitionOrId,seed=1984) {
   const definition=typeof definitionOrId==='string'?EXERCISES.find(item=>item.id===definitionOrId):definitionOrId;

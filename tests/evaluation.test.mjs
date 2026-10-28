@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import vm from 'node:vm';
-import {createGame} from '../dist/engine.js';
+import {createGame,applyKick,analyzeTacticalAction} from '../dist/engine.js';
 import {evaluatePosition,evaluationNumbers,EVALUATION_GOAL_UNIT} from '../dist/evaluation-worker.js';
 import {createEvaluation,evaluationPositionKey,evaluationSnapshot,formatEvaluation} from '../dist/evaluation.js';
 
@@ -38,23 +38,25 @@ test('worker analysis fixes the handcrafted search budget and ignores caller mod
   const state=fresh();state.phase='defendMove';let options;
   const progress=[];
   const result=evaluatePosition(state,{onProgress:value=>progress.push(value),analyze:(position,config)=>{
-    assert.equal(position,state);options=config;config.onIteration({value:-600,stats:{completedDepth:2,nodes:50}});
+    assert.notEqual(position,state);assert.deepEqual(position.score,{white:0,black:0});
+    assert.equal(position.pieces,state.pieces);options=config;config.onIteration({value:-600,stats:{completedDepth:2,nodes:50}});
     return {value:-800,stats:{completedDepth:3,nodes:1400}};
   }});
   assert.equal(options.maxDepth,8);assert.equal(options.nodeLimit,1400);
   assert.equal(options.modelWeights,null);assert.equal(options.modelScale,80);assert.equal(options.selectionSeed,null);
+  assert.equal(options.evaluationScope,'round');assert.equal(result.scope,'round');assert.equal(result.attackTeam,'white');
   assert.equal(result.sideToMove,'black');assert.equal(result.whiteValue,800);
   assert.equal(progress[0].whiteValue,600);assert.equal(result.depth,3);
 });
 
-test('terminal scores and forfeits use their real result instead of the search finished-state zero',()=>{
+test('a finished match has no active round and never fills the bar from the final score or forfeit',()=>{
   const state=fresh();state.phase='finished';state.score={white:1,black:3};
   let result=evaluatePosition(state,{analyze:()=>{throw Error('terminal positions need no search');}});
-  assert.equal(result.terminal,true);assert.equal(result.winner,'black');assert.equal(result.score,-2);assert.equal(result.share,0);
+  assert.equal(result.terminal,true);assert.equal(result.winner,null);assert.equal(result.score,0);assert.equal(result.share,.5);assert.equal(result.roundActive,false);
   state.finishReason='forfeit';state.winner='white';
-  result=evaluatePosition(state);assert.equal(result.winner,'white');assert.equal(result.share,1);assert.equal(formatEvaluation(result),'Ivory wins');
+  result=evaluatePosition(state);assert.equal(result.winner,null);assert.equal(result.share,.5);assert.equal(formatEvaluation(result),'No active round');
   delete state.finishReason;state.score={white:2,black:2};
-  result=evaluatePosition(state);assert.equal(result.winner,null);assert.equal(result.share,.5);assert.equal(formatEvaluation(result),'Draw');
+  result=evaluatePosition(state);assert.equal(result.winner,null);assert.equal(result.share,.5);assert.equal(formatEvaluation(result),'No active round');
 });
 
 test('native analysis leaves both the live position and its future chance seed intact',()=>{
@@ -83,6 +85,82 @@ test('position identity ignores future chance state and UI-only settings',()=>{
   assert.equal(h.worker().messages.length,1);h.controller.destroy();
 });
 
+function roundDiagram({keeperX=8,blocker=false,phase='kick'}={}){
+  const state=fresh();state.phase=phase;state.attack='white';
+  state.pieces=[{id:'white-K',team:'white',type:'K',x:6,y:16},
+    {id:'white-Q',team:'white',type:'Q',x:6,y:2},
+    {id:'black-K',team:'black',type:'K',x:keeperX,y:0},
+    {id:'black-R1',team:'black',type:'R',x:blocker?6:13,y:blocker?1:8}];
+  state.ball={x:6,y:2,carrierId:'white-Q'};state.restart=null;state.offside=null;
+  state.positionBudget={normalUsed:false,pawnUsed:false,dribbleUsed:false};
+  state.ballProgress={team:'white',anchorY:2,rounds:0,pendingRelease:false,excludeRelease:false};
+  state.pendingShot=null;state.paceControl=null;state.looseBallKickOrigin=null;
+  return state;
+}
+
+test('identical current rounds evaluate identically at 0–0, 0–7 and 9–1, without mutating the score',()=>{
+  const position=roundDiagram(),baseline=evaluatePosition(position);
+  for(const score of [{white:0,black:7},{white:9,black:1}]){
+    const variant={...structuredClone(position),score},before=structuredClone(variant);
+    assert.deepEqual(evaluatePosition(variant),baseline);
+    assert.deepEqual(variant,before);
+    assert.equal(evaluationPositionKey(variant),evaluationPositionKey(position));
+    assert.deepEqual(evaluationSnapshot(variant).score,{white:0,black:0});
+  }
+});
+
+test('round scope stops at the kick boundary while default playing search remains identical',()=>{
+  const position=roundDiagram(),before=structuredClone(position);
+  const options={maxDepth:3,nodeLimit:1400,modelWeights:null,modelScale:80};
+  assert.deepEqual(analyzeTacticalAction(position,options),analyzeTacticalAction(position,{...options,evaluationScope:'match'}));
+  const round=analyzeTacticalAction(position,{...options,evaluationScope:'round'});
+  assert.ok(round.stats.roundStops>0,'round boundaries are actual search leaves');
+  assert.ok(round.line.length<=2,'a kick and its keeper reaction do not start the next positioning round');
+  assert.deepEqual(position,before);
+  assert.throws(()=>analyzeTacticalAction(position,{evaluationScope:'unknown'}));
+});
+
+test('current shot and keeper geometry change the round estimate, but irrelevant raw material does not',()=>{
+  const clear=evaluatePosition(applyKick(roundDiagram({keeperX:9}),6,-1));
+  const covered=evaluatePosition(applyKick(roundDiagram({keeperX:6}),6,-1));
+  const screened=evaluatePosition(applyKick(roundDiagram({keeperX:9,blocker:true}),6,-1));
+  assert.ok(clear.whiteValue>covered.whiteValue,'covering the shooting file improves the defence');
+  assert.ok(clear.whiteValue>screened.whiteValue,'a body on the shot route improves the defence');
+  const position=roundDiagram(),remote=structuredClone(position);
+  remote.pieces.push({id:'black-P1',team:'black',type:'P',x:13,y:15});
+  const options={evaluationScope:'round',maxDepth:1,nodeLimit:1,modelWeights:null,modelScale:80};
+  assert.equal(analyzeTacticalAction(position,options).value,analyzeTacticalAction(remote,options).value);
+});
+
+test('a resolved penalty values only this round goal or stop, without kickoff formations or a counterattack',()=>{
+  const position=roundDiagram();position.score={white:4,black:9};
+  position.restart={type:'penalty',team:'white',takerId:'white-Q',spot:{x:6,y:2},indirect:false};
+  const pending=applyKick(position,6,-1),saved=structuredClone(pending),result=evaluatePosition(pending);
+  // Native penalties are exactly80% goal,20% caught save, with no corners or
+  // rebound. A current-round goal is2000 and a stopped attack is−80.
+  assert.ok(Math.abs(result.whiteValue-(.8*2000+.2*(-80)))<1e-8);
+  assert.deepEqual(pending,saved);assert.equal(result.sideToMove,'black');
+  const altered=structuredClone(pending);
+  altered.pieces.find(p=>p.id==='white-K').x=8;
+  assert.equal(evaluatePosition(altered).whiteValue,result.whiteValue,'next-kickoff home values do not leak into a completed goal');
+});
+
+test('an accurate pass ends the analysed round, but a backpass completes the compulsory keeper release',()=>{
+  const position=roundDiagram();position.pieces.find(p=>p.id==='white-Q').type='R';
+  Object.assign(position.pieces.find(p=>p.id==='white-Q'),{x:0,y:10});
+  position.ball={x:0,y:10,carrierId:'white-Q'};
+  const options={evaluationScope:'round',maxDepth:4,nodeLimit:1400,modelWeights:null,modelScale:80};
+  const passing=analyzeTacticalAction(position,options);
+  assert.equal(passing.line.length,1,'a rook pass cannot spend the next positioning round');
+  assert.equal(passing.line[0].phase,'kick');assert.ok(passing.stats.roundStops>0);
+  // Make the keeper the only teammate receiver on the rook's file. The root
+  // pass family includes that100% backpass; its release must be expanded.
+  const backpass=roundDiagram();const passer=backpass.pieces.find(p=>p.id==='white-Q');
+  Object.assign(passer,{type:'R',x:6,y:10});backpass.ball={x:6,y:10,carrierId:passer.id};
+  const release=analyzeTacticalAction(backpass,options);
+  assert.ok(release.stats.keeperReleaseContinuations>0,'immediate king releases are inside the analysed round');
+});
+
 test('rapid updates keep only one running request and the newest pending board',()=>{
   const h=harness(),a=fresh(),b=structuredClone(a),c=structuredClone(a);b.turn++;c.turn+=2;
   h.controller.update(a);h.controller.setEnabled(true);const first=h.worker().messages[0];
@@ -94,6 +172,16 @@ test('rapid updates keep only one running request and the newest pending board',
   assert.equal(h.controller.getState().score,null,'the stale final score is discarded too');
   h.finish(reply(-.25));assert.equal(h.controller.getState().status,'ready');assert.equal(h.controller.getState().score,-.25);
   assert.equal(h.workers.length,1);h.controller.destroy();
+});
+
+test('a new round clears the previous round estimate before its worker reply',()=>{
+  const h=harness(),game=fresh();h.controller.update(game);h.controller.setEnabled(true);h.finish(reply(.8));
+  assert.equal(h.controller.getState().score,.8);
+  h.controller.update({...game,turn:game.turn+1});
+  assert.equal(h.controller.getState().score,null);assert.equal(h.controller.getState().share,.5);
+  h.finish(reply(.1));assert.equal(h.controller.getState().score,.1);
+  h.controller.update({...game,turn:game.turn+1,attack:'black'});
+  assert.equal(h.controller.getState().score,null);h.controller.destroy();
 });
 
 test('completed search iterations can update the estimate while their current search continues',()=>{
@@ -149,6 +237,8 @@ test('main analysis UI names an estimate and uses separate preferences without a
   const html=await readFile(new URL('../dist/index.html',import.meta.url),'utf8');
   assert.match(html,/id="evaluationRail"[^>]+role="img"/);assert.doesNotMatch(html,/id="evaluationRail"[^>]+aria-valuenow/);
   assert.match(html,/neither expected goals nor a calibrated win probability/);
+  assert.match(html,/current attack against the defence, independently of the match score/);
+  assert.match(app,/Current-round advantage/);assert.match(app,/Match score excluded/);
   assert.match(app,/EVALUATION_STORE = 'football-chess-analysis-v1'/);
   assert.match(app,/evaluation\.setEnabled\(evaluationEnabled\)/);
 });

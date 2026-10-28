@@ -55,7 +55,13 @@ async function versionImports(name, versions){
 }
 const evaluationWorkerVersion=await versionImports('evaluation-worker.js',{'engine.js':engineVersion});
 const evaluationVersion=await versionImports('evaluation.js',{'engine.js':engineVersion,'evaluation-worker.js':evaluationWorkerVersion});
-const positionsVersion=await versionImports('exercise-positions.js',{'engine.js':engineVersion});
+const mediumVersion=await versionImports('exercise-medium.js',{'engine.js':engineVersion});
+const toughAttackVersion=await versionImports('exercise-tough-attack.js',{'engine.js':engineVersion});
+const toughMixedVersion=await versionImports('exercise-tough-mixed.js',{'engine.js':engineVersion});
+const toughDefenceVersion=await versionImports('exercise-tough-defence-extra.js',{'engine.js':engineVersion});
+const positionsVersion=await versionImports('exercise-positions.js',{'engine.js':engineVersion,
+  'exercise-medium.js':mediumVersion,'exercise-tough-attack.js':toughAttackVersion,
+  'exercise-tough-mixed.js':toughMixedVersion,'exercise-tough-defence-extra.js':toughDefenceVersion});
 const sessionVersion=await versionImports('exercise-session.js',{'engine.js':engineVersion,'exercise-positions.js':positionsVersion});
 const exercisesVersion=await versionImports('exercises-app.js',{'engine.js':engineVersion,'exercise-positions.js':positionsVersion,
   'exercise-session.js':sessionVersion,'evaluation.js':evaluationVersion,'ai-worker.js':workerVersion});

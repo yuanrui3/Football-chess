@@ -1,10 +1,10 @@
-import {createGame, legalMoves, legalKicks, disguisedShotTargets, applyMove, applyKick, skipMove, chooseAIAction, currentTeam, cornerTakers, selectCornerTaker, BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, BOX_FILES, BOX_DEPTH, CENTRAL_GOAL_FILES, MIDFIELD_RANK, inOwnBox, canOccupySquare, isBox, isGoalMouth, shotChance, shotModel, offsideInfo, offsideFlaggedIds, LONG_TACKLE_RANGE, DRIBBLE_RANGE, FOUL_RULE, STALLING_RULE, PACE_RULE, ACTION_SECONDS, actionTimeout, progressInfo, paceInfo, positionActions, normalizeGame, FORMATION_PRESETS, setStartingFormation} from './engine.js?v=1711834496ff';
+import {createGame, legalMoves, legalKicks, disguisedShotTargets, applyMove, applyKick, skipMove, chooseAIAction, currentTeam, cornerTakers, selectCornerTaker, BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, BOX_FILES, BOX_DEPTH, CENTRAL_GOAL_FILES, MIDFIELD_RANK, inOwnBox, canOccupySquare, isBox, isGoalMouth, shotChance, shotModel, offsideInfo, offsideFlaggedIds, LONG_TACKLE_RANGE, DRIBBLE_RANGE, FOUL_RULE, STALLING_RULE, PACE_RULE, ACTION_SECONDS, actionTimeout, progressInfo, paceInfo, positionActions, normalizeGame, FORMATION_PRESETS, setStartingFormation} from './engine.js?v=2c106a991787';
 import {createMatchClock, restoreMatchClock, tickMatchClock, settleMatchClock, rewindMatchClock} from './match-clock.js?v=1fa32f5eed6c';
-import {buildGoalReplay, restoreGoalReplay, createReplayPlayer} from './goal-replay.js?v=dced6b0b802c';
-import {createMatchStats, restoreMatchStats, recordMatchTransition, addPossessionTime, matchStatsSummary, shortPieceId} from './match-stats.js?v=05bccf6f9744';
-import {createCommentary} from './commentary.js?v=7ff721be47b9';
+import {buildGoalReplay, restoreGoalReplay, createReplayPlayer} from './goal-replay.js?v=d236edbdb640';
+import {createMatchStats, restoreMatchStats, recordMatchTransition, addPossessionTime, matchStatsSummary, shortPieceId} from './match-stats.js?v=7e3e5aefb0de';
+import {createCommentary} from './commentary.js?v=62aedaaaf135';
 import {createParadeeSpeech} from './paradee-speech.js?v=e9d0fc794cfb';
-import {createEvaluation,formatEvaluation} from './evaluation.js?v=521504a912c4';
+import {createEvaluation,formatEvaluation} from './evaluation.js?v=cf50f77ce2d1';
 
 const $ = id => document.getElementById(id);
 const normalShotLegend = document.querySelector('.shot-legend').textContent;
@@ -119,8 +119,8 @@ function paintEvaluation(state=evaluation.getState()){
   document.querySelector('.pitch-area').classList.toggle('analysis-visible',visible);
   $('evaluationScore').textContent=visible?formatEvaluation(state):'—';
   $('evaluationIvory').style.height=`${Math.max(0,Math.min(1,state.share??.5))*100}%`;
-  $('evaluationRail').setAttribute('aria-label',visible?`Advantage estimate: ${formatEvaluation(state)}. Engine units, not win probability.`:'Advantage analysis is off.');
-  $('evaluationNote').textContent=!visible?'Optional Tactical estimate. Not xG or win probability.':shotFlight&&!shotFlight.revealed?'Shot in flight · estimate held until the result is visible.':state.status==='unavailable'?(state.error||'Analysis is unavailable. Toggle off and on to retry.'):state.terminal?'Match result.':state.status==='suspended'?'Analysis paused while this page is hidden.':`${state.status==='thinking'||state.status==='queued'?'Analysing · ':''}Depth ${state.depth||0} · ${state.nodes||0} nodes · Engine estimate`;
+  $('evaluationRail').setAttribute('aria-label',visible?`Current-round advantage: ${formatEvaluation(state)}. Match score excluded. Engine units, not win probability.`:'Current-round analysis is off.');
+  $('evaluationNote').textContent=!visible?'Optional current-round estimate. Match score excluded.':shotFlight&&!shotFlight.revealed?'Shot in flight · estimate held until the result is visible.':state.status==='unavailable'?(state.error||'Analysis is unavailable. Toggle off and on to retry.'):state.terminal?'No active attack or defence round.':state.status==='suspended'?'Analysis paused while this page is hidden.':`${state.status==='thinking'||state.status==='queued'?'Analysing · ':''}Current round · ${state.attackTeam==='white'?'Ivory attacking':state.attackTeam==='black'?'Obsidian attacking':'attack versus defence'} · Depth ${state.depth||0} · ${state.nodes||0} nodes · score excluded`;
 }
 function renderEvaluation(){
   // The committed game already contains a hidden shot result during animation.
@@ -785,7 +785,7 @@ function scheduleAI(){
   },aiPace);
   if(difficulty==='tactical'&&typeof window.Worker==='function'){
     try{
-      aiWorker=new window.Worker(new URL('./ai-worker.js?v=3c426b2308a8',import.meta.url),{type:'module',name:'football-chess-tactical'});
+      aiWorker=new window.Worker(new URL('./ai-worker.js?v=91d748b44efe',import.meta.url),{type:'module',name:'football-chess-tactical'});
       aiWorker.onmessage=event=>{
         if(!stillCurrent()||event.data?.requestId!==requestId)return;
         const progress=event.data.progress;

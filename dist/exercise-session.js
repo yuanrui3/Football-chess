@@ -3,8 +3,8 @@
  * string or a favourable sampled goal. All session transitions are immutable.
  */
 import {applyMove,applyKick,skipMove,selectCornerTaker,legalMoves,
-  currentTeam,shotModel,offsideInfo,inOwnBox,MIDFIELD_RANK} from './engine.js?v=1711834496ff';
-import {createExercisePosition} from './exercise-positions.js?v=4218035fc899';
+  currentTeam,shotModel,offsideInfo,inOwnBox,MIDFIELD_RANK} from './engine.js?v=2c106a991787';
+import {createExercisePosition} from './exercise-positions.js?v=80d49d7c93f1';
 
 const TEAMS=['white','black'];
 const other=team=>team==='white'?'black':'white';
@@ -57,14 +57,17 @@ function objectiveOf(definition) {
     throw new RangeError('Exercise chance thresholds must be probabilities.');
   const boxEntryMode=source.boxEntryMode||'pass';
   if(!['pass','either'].includes(boxEntryMode))throw new RangeError('Unknown box-entry objective.');
-  return {...source,type,requires,minShotXG,maxOpponentShotXG,boxEntryMode};
+  const minCompletedPasses=source.minCompletedPasses??0;
+  if(!Number.isInteger(minCompletedPasses)||minCompletedPasses<0||minCompletedPasses>3)
+    throw new RangeError('A combination requires between zero and three completed outfield passes.');
+  return {...source,type,requires,minShotXG,maxOpponentShotXG,boxEntryMode,minCompletedPasses};
 }
 function assessment(game,playerTeam,progress) {
   const shot=game.pendingShot;
   if(!shot)return null;
   return {shootingTeam:shot.shootingTeam,scoringTeam:shot.scoringTeam,
     bestReplyXG:bestKeeperShotChance(game),prerequisiteMet:true,
-    throughBall:progress.throughBall,boxEntry:progress.boxEntry,
+    throughBall:progress.throughBall,boxEntry:progress.boxEntry,completedPasses:progress.completedPasses,
     playerShot:shot.shootingTeam===playerTeam&&shot.scoringTeam===playerTeam};
 }
 export function createExerciseSession(definition,options={}) {
@@ -82,7 +85,10 @@ export function createExerciseSession(definition,options={}) {
     loosePass:null,reviewGame:null,feedbackTitle:'Find a useful plan',
     feedback:definition.objective||'Create a strong chance within the round limit.',reason:null,
     metrics:{bestShotXG:0,lastShotXG:null,lastOpponentShotXG:null,shotCount:0,shotResult:null},events:[]};
-  if(session.pendingAssessment)session.pendingAssessment.prerequisiteMet=prerequisite(session);
+  if(session.pendingAssessment) {
+    session.pendingAssessment.prerequisiteMet=prerequisite(session);
+    session.pendingAssessment.prerequisiteMessage=missingPrerequisite(session);
+  }
   return session;
 }
 
@@ -100,15 +106,22 @@ function end(session,status,reason,title,message) {
   Object.assign(session,{status,reason,feedbackTitle:title,feedback:message});
 }
 function prerequisite(session,progress=session.progress) {
-  return session.definition.goal.requires==='through-ball'?progress.throughBall
-    :session.definition.goal.requires==='box-entry'?progress.boxEntry:true;
+  const goal=session.definition.goal;
+  return progress.completedPasses>=goal.minCompletedPasses
+    &&(goal.requires==='through-ball'?progress.throughBall
+      :goal.requires==='box-entry'?progress.boxEntry:true);
 }
 function missingPrerequisite(session) {
-  return session.definition.goal.requires==='through-ball'
-    ?'First play a forward ball through the defensive line into space and have an onside teammate collect it.'
-    :session.definition.goal.boxEntryMode==='either'
+  const goal=session.definition.goal,progress=session.progress,messages=[];
+  if(progress.completedPasses<goal.minCompletedPasses)
+    messages.push(`Complete at least ${goal.minCompletedPasses} teammate passes to outfield players before finishing (${progress.completedPasses} completed). Self-passes and passes to the keeper do not count.`);
+  if(goal.requires==='through-ball'&&!progress.throughBall)
+    messages.push('First play a forward ball through the defensive line into space and have an onside teammate collect it.');
+  if(goal.requires==='box-entry'&&!progress.boxEntry)
+    messages.push(goal.boxEntryMode==='either'
       ?'First carry into the opposing box or deliver the ball there to a teammate.'
-      :'First deliver the ball into the opposing box to a teammate; a self-pass does not meet this objective.';
+      :'First deliver the ball into the opposing box to a teammate; a self-pass does not meet this objective.');
+  return messages.join(' ');
 }
 function rememberLoosePass(before,after,playerTeam) {
   const a=after.lastAction,actor=before.pieces.find(piece=>piece.id===a?.pieceId);
@@ -132,9 +145,9 @@ function updateProgress(session,before,after) {
   const carrier=after.pieces.find(piece=>piece.id===after.ball.carrierId);
   const priorLoose=session.loosePass;
   if(a.type==='kick'&&a.outcome==='complete'&&actor?.team===team&&after.attack===team) {
-    if(carrier&&carrier.team===team&&carrier.id!==actor.id) {
+    if(carrier&&carrier.team===team&&carrier.id!==actor.id&&carrier.type!=='K') {
       session.progress.completedPasses++;
-      if(carrier.type!=='K'&&inOwnBox(other(team),carrier.x,carrier.y))session.progress.boxEntry=true;
+      if(inOwnBox(other(team),carrier.x,carrier.y))session.progress.boxEntry=true;
     }
     session.loosePass=rememberLoosePass(before,after,team);
   } else if(priorLoose&&a.type==='move'&&a.collection&&!a.selfPassCollection
@@ -184,7 +197,7 @@ function finishShot(session,before,after) {
     if(pending.scoringTeam!==session.playerTeam)
       end(session,'failed','own-goal','Wrong goal','That attempt was aimed at your own goal. Retry and attack the opposite net.');
     else if(!pending.prerequisiteMet)
-      end(session,'failed','missing-theme','Use the exercise theme',missingPrerequisite(session));
+      end(session,'failed','missing-theme','Complete the combination',pending.prerequisiteMessage||missingPrerequisite(session));
     else if(pending.bestReplyXG+1e-9>=goal.minShotXG)
       end(session,'solved','strong-finish','Strong chance created',
         `Your finish is worth ${percentage(pending.bestReplyXG)} against the keeper's best legal response. Shot quality solves the exercise, even if the sampled shot is saved or misses.`);
@@ -220,6 +233,7 @@ export function applyExerciseAction(session,action,overrides={}) {
   if(after.phase==='keeperReact'&&before.phase!=='keeperReact') {
     next.pendingAssessment=assessment(after,next.playerTeam,next.progress);
     next.pendingAssessment.prerequisiteMet=prerequisite(next);
+    next.pendingAssessment.prerequisiteMessage=missingPrerequisite(next);
     next.feedbackTitle='Keeper responds';
     next.feedback='The shot is committed. Its quality will be checked after the goalkeeper response.';
     return next;

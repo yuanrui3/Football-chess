@@ -2778,14 +2778,39 @@ function tacticalUnsettled(state) {
 // reproducible in tests and simulations. The controller still receives just an
 // action through chooseAIAction; no analysis state enters a saved match.
 export function analyzeTacticalAction(state, {maxDepth = AI_SEARCH.depth, nodeLimit = AI_SEARCH.nodes, useCache = true, extensions = true, onIteration,
-  modelWeights = RL_VALUE_MODEL.enabled ? RL_VALUE_MODEL.weights : null, modelScale = rlDefaultScale(modelWeights), selectionSeed = null} = {}) {
+  modelWeights = RL_VALUE_MODEL.enabled ? RL_VALUE_MODEL.weights : null, modelScale = rlDefaultScale(modelWeights), selectionSeed = null,
+  evaluationScope = 'match'} = {}) {
+  if (!['match', 'round'].includes(evaluationScope)) throw new Error('Choose match or round analysis.');
+  const roundScoped = evaluationScope === 'round';
   modelWeights = rlValidateWeights(modelWeights);
   modelScale = rlValidateScale(modelScale);
   maxDepth = clamp(Math.floor(Number(maxDepth) || 1), 1, 12);
   nodeLimit = clamp(Math.floor(Number(nodeLimit) || 1), 1, 50000);
-  const stats = {nodes: 0, completedDepth: 0, cacheHits: 0, extensions: 0, cutoffs: 0, aborted: false};
+  const stats = {nodes: 0, completedDepth: 0, cacheHits: 0, extensions: 0, cutoffs: 0, aborted: false,
+    ...(roundScoped ? {roundStops: 0, keeperReleaseContinuations: 0} : {})};
   if (!state || state.phase === 'finished') return {action: {type: 'skip'}, value: 0, stats, line: []};
-  const source = planningState(state), team = currentTeam(source);
+  // The optional display scope evaluates this round, independent of the match
+  // score. Playing bots retain the original match search and its exact leaves.
+  const source = roundScoped ? {...planningState(state), score: {white: 0, black: 0}} : planningState(state);
+  const team = currentTeam(source), roundAttack = source.attack;
+  const roundEnded = position => position.attack !== roundAttack
+    || position.turn !== source.turn && position.phase !== 'keeperRelease';
+  const roundValue = position => {
+    const goalValue = (position.score[team] - position.score[other(team)]) * 2000;
+    // A goal ends the round; do not add the conceding side's new kickoff or
+    // formation value. A turnover values stopping this attack, without starting
+    // to evaluate the opponent's subsequent counterattack.
+    if (goalValue) return goalValue;
+    if (position.attack !== roundAttack) return roundAttack === team ? -80 : 80;
+    if (position.phase === 'finished') return 0;
+    const material = {Q: 150, R: 105, B: 100, N: 90, P: 55, K: 0};
+    const inventoryValue = position.pieces.reduce((sum, piece) => sum
+      + (piece.team === team ? 1 : -1) * ((material[piece.type] || 0)
+        - (position.discipline?.[piece.id]?.yellowCards ? 8 : 0)), 0);
+    // Pieces still matter through their actual lanes, support, tackles, screens
+    // and keeper positions, rather than through a historical material balance.
+    return tacticalBasePositionValue(position, team) - inventoryValue;
+  };
   const table = new Map(), ordering = new Map(), actionsCache = new Map(), values = new Map(), successors = new Map(), keys = new WeakMap();
   let cachedSuccessorCount = 0;
   const keyFor = position => {
@@ -2795,7 +2820,7 @@ export function analyzeTacticalAction(state, {maxDepth = AI_SEARCH.depth, nodeLi
   const evaluate = position => {
     const key = keyFor(position);
     if (useCache && values.has(key)) return values.get(key);
-    const value = tacticalPositionValue(position, team, modelWeights, modelScale);
+    const value = roundScoped ? roundValue(position) : tacticalPositionValue(position, team, modelWeights, modelScale);
     if (useCache) values.set(key, value);
     return value;
   };
@@ -2836,6 +2861,13 @@ export function analyzeTacticalAction(state, {maxDepth = AI_SEARCH.depth, nodeLi
       if (alpha >= beta) return cached;
     }
     expand();
+    if (roundScoped && position.turn !== source.turn && position.phase === 'keeperRelease') stats.keeperReleaseContinuations++;
+    if (roundScoped && roundEnded(position)) {
+      stats.roundStops++;
+      const result = {value: evaluate(position), action: null, line: [], flag: 'exact'};
+      if (useCache) table.set(cacheKey, result);
+      return result;
+    }
     const forcedShot = position.phase === 'keeperReact';
     const extending = depth <= 0 && (forcedShot || extra > 0 && tacticalUnsettled(position));
     if (position.phase === 'finished' || depth <= 0 && !extending) {

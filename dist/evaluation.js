@@ -1,6 +1,6 @@
 /** One running analysis and one latest pending position; no game/chance mutations. */
 const clone = value => typeof structuredClone === 'function' ? structuredClone(value) : JSON.parse(JSON.stringify(value));
-const FIELDS = ['pieces','ball','attack','phase','positionBudget','score','restart','offside','pendingShot',
+const FIELDS = ['pieces','ball','attack','phase','positionBudget','restart','offside','pendingShot',
   'ballProgress','paceControl','looseBallKickOrigin','releaseReason','passRun','rulesVersion','turn',
   'foulsEnabled','discipline','sentOff','winner','finishReason'];
 export function evaluationPositionKey(game) {
@@ -11,16 +11,17 @@ export function evaluationSnapshot(game) {
   // Planning uses expected outcomes. The real match's future chance seed must
   // never leave the match controller or influence an analysis score.
   snapshot.randomState = 1;
+  snapshot.score = {white:0,black:0};
   return snapshot;
 }
 export function formatEvaluation(state) {
-  if (state?.terminal) return state.winner === 'white'?'Ivory wins':state.winner === 'black'?'Obsidian wins':'Draw';
+  if (state?.terminal) return 'No active round';
   if (!Number.isFinite(state?.score)) return '—';
   if (Math.abs(state.score) < 0.005) return 'Level 0.00';
   return `${state.score > 0 ? 'Ivory' : 'Obsidian'} +${Math.abs(state.score).toFixed(2)}`;
 }
 export function createEvaluation({WorkerCtor = globalThis.Worker,onUpdate = ()=>{},
-  workerUrl = new URL('./evaluation-worker.js?v=dd9001f51ba5',import.meta.url),setTimer = setTimeout,clearTimer = clearTimeout,
+  workerUrl = new URL('./evaluation-worker.js?v=3b228aa23eaa',import.meta.url),setTimer = setTimeout,clearTimer = clearTimeout,
   timeoutMs = 12000} = {}) {
   let enabled=false,suspended=false,destroyed=false,worker=null,generation=0,serial=0;
   let latestInput=null,latestKey=null,running=null,pending=null,result=null;
@@ -87,6 +88,9 @@ export function createEvaluation({WorkerCtor = globalThis.Worker,onUpdate = ()=>
     if(destroyed || !game)return false;
     const key=evaluationPositionKey(game);
     if(key===latestKey)return false;
+    // Do not carry the previous round's bar into a new attack while its worker
+    // is still running. Neutral/analysing is preferable to a stale advantage.
+    if(latestInput&&(latestInput.turn!==game.turn||latestInput.attack!==game.attack||game.phase==='finished'))result=null;
     latestInput=clone(game);latestKey=key;
     if(enabled)queueLatest();return true;
   }
