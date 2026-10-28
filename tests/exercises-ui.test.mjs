@@ -2,10 +2,10 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import * as E from '../dist/engine.js';
-import {createExerciseController,readExerciseProgress,saveExerciseProgress,recordExerciseSolved,EXERCISE_PROGRESS_KEY,exerciseMoveMode,exerciseStartingPiece,syncExerciseEvaluation,exerciseEvaluationDisplay,filterExercises,selectFilteredExercise,nextFilteredExercise,exerciseDifficulty,exercisePlanText,syncExerciseFilters} from '../dist/exercises-app.js';
+import {createExerciseController,readExerciseProgress,saveExerciseProgress,recordExerciseSolved,EXERCISE_PROGRESS_KEY,exerciseMoveMode,exerciseStartingPiece,syncExerciseEvaluation,exerciseEvaluationDisplay,filterExercises,selectFilteredExercise,nextFilteredExercise,exerciseDifficulty,exerciseRevision,exercisePlanText,syncExerciseFilters,exerciseOutcomeText,exerciseCoachingItems} from '../dist/exercises-app.js';
 
 const def={id:'fixture',title:'A finishing study',playerTeam:'white',roundLimit:3};
-function harness({worker=true,botFirst=false,solve=false,deterministic=false}={}){
+function harness({worker=true,botFirst=false,solve=false,useStudyWatchdog=false}={}){
   let time=0,timerSerial=0;
   const timers=new Map(),workers=[],states=[],errors=[],fallbacks=[],transitions=[];
   const makeSession=definition=>({definition,definitionId:definition.id,playerTeam:'white',status:'active',roundsUsed:0,roundLimit:3,
@@ -25,7 +25,7 @@ function harness({worker=true,botFirst=false,solve=false,deterministic=false}={}
     respond(data={action:{type:'bot'}}){this.onmessage?.({data:{requestId:this.request.requestId,...data}});}
   }
   const controller=createExerciseController({definition:def,makeSession,applyAction,
-    workerFactory:worker?()=>new FakeWorker():null,now:()=>time,selectionSeed:deterministic?undefined:()=>123,delayMs:1000,watchdogMs:5000,
+    workerFactory:worker?()=>new FakeWorker():null,now:()=>time,delayMs:1000,...(!useStudyWatchdog?{watchdogMs:5000}:{}),
     chooseTactical:(state,options)=>{fallbacks.push({state,options});return {type:'bot'};},
     setTimer(fn,delay){const id=++timerSerial;timers.set(id,{at:time+delay,fn});return id;},clearTimer:id=>timers.delete(id),
     onChange:state=>states.push(state),onError:text=>errors.push(text)});
@@ -36,7 +36,7 @@ function harness({worker=true,botFirst=false,solve=false,deterministic=false}={}
 test('opening a study does not start a bot or allow a move before Play exercise',()=>{
   const h=harness({botFirst:true});assert.equal(h.workers.length,0);assert.equal(h.controller.getState().started,false);
   assert.equal(h.controller.play({type:'human'}),false);assert.equal(h.transitions.length,0);
-  h.controller.start();assert.equal(h.workers.length,1);assert.equal(h.workers[0].request.difficulty,'tactical');assert.equal(h.workers[0].request.selectionSeed,123);h.controller.destroy();
+  h.controller.start();assert.equal(h.workers.length,1);assert.deepEqual(Object.keys(h.workers[0].request).sort(),['requestId','state']);h.controller.destroy();
 });
 
 test('an early Tactical answer waits for the visible action pace and then returns control',()=>{
@@ -62,13 +62,13 @@ test('a wrong request ID cannot commit an action and human moves cannot race the
   assert.equal(h.transitions.length,1);h.workers[0].respond();h.advance(0);assert.equal(h.transitions.length,2);h.controller.destroy();
 });
 
-test('worker failure uses only Tactical fallback with learned weights explicitly disabled',()=>{
+test('worker failure uses the same expanded study fallback without switching to the match policy',()=>{
   const h=harness();h.controller.start();h.controller.play({type:'human'});h.workers[0].onerror();h.advance(1000);
-  assert.equal(h.fallbacks.length,1);assert.deepEqual(h.fallbacks[0].options,{difficulty:'tactical',modelWeights:null,selectionSeed:123});
+  assert.equal(h.fallbacks.length,1);assert.equal(h.fallbacks[0].options,undefined);
   assert.equal(h.controller.getState().session.game.phase,'kick');h.controller.destroy();
 });
 
-test('without a worker the same Tactical policy is deferred and played at the chosen pace',()=>{
+test('without a worker the same study policy is deferred and played at the chosen pace',()=>{
   const h=harness({worker:false});h.controller.start();h.controller.play({type:'human'});
   assert.equal(h.fallbacks.length,0);h.advance(0);assert.equal(h.fallbacks.length,1);assert.equal(h.transitions.length,1);
   h.advance(1000);assert.equal(h.transitions.length,2);h.controller.destroy();
@@ -78,6 +78,14 @@ test('watchdog recovery can use a completed Tactical iteration without running a
   const h=harness();h.controller.start();h.controller.play({type:'human'});
   h.workers[0].respond({progress:{depth:3,action:{type:'bot'}}});h.advance(5000);
   assert.equal(h.fallbacks.length,0);assert.equal(h.transitions.length,2);assert.equal(h.controller.getState().thinking,false);h.controller.destroy();
+});
+
+test('study workers receive the expanded-search watchdog and an early legal safeguard can be recovered',()=>{
+  const h=harness({useStudyWatchdog:true});h.controller.start();h.controller.play({type:'human'});
+  assert.ok([...h.timers.values()].some(timer=>timer.at===20000));
+  h.workers[0].respond({progress:{stats:{completedDepth:0},action:{type:'bot'}}});
+  h.advance(19999);assert.equal(h.transitions.length,1);
+  h.advance(1);assert.equal(h.transitions.length,2);assert.equal(h.fallbacks.length,0);h.controller.destroy();
 });
 
 test('an exercise result stops further bot scheduling and late worker answers',()=>{
@@ -101,16 +109,16 @@ test('exercise progress uses a distinct key and never replaces the saved full ma
   const data=new Map([['football-chess-match-v4','valuable saved match']]);
   const storage={getItem:key=>data.get(key)||null,setItem:(key,value)=>data.set(key,value)};
   const catalog=[def,{...def,id:'second'}];let progress=readExerciseProgress(storage,catalog);
-  assert.deepEqual(progress,{version:1,solved:{},lastId:null});progress=recordExerciseSolved(progress,'fixture',catalog);assert.ok(saveExerciseProgress(storage,progress));
+  assert.deepEqual(progress,{version:1,solved:{},solvedRevisions:{},previouslySolved:{},lastId:null});progress=recordExerciseSolved(progress,'fixture',catalog);assert.ok(saveExerciseProgress(storage,progress));
   assert.equal(data.get('football-chess-match-v4'),'valuable saved match');assert.equal(data.size,2);assert.equal(EXERCISE_PROGRESS_KEY,'football-chess-exercises-v1');
   assert.deepEqual(readExerciseProgress(storage,catalog),progress);assert.equal(recordExerciseSolved(progress,'unknown',catalog).solved.unknown,undefined);
 });
 
 test('corrupt, inaccessible or stale progress does not block training',()=>{
-  assert.deepEqual(readExerciseProgress({getItem(){throw Error('denied');}},[def]),{version:1,solved:{},lastId:null});
-  assert.deepEqual(readExerciseProgress({getItem:()=>'{bad'},[def]),{version:1,solved:{},lastId:null});
+  assert.deepEqual(readExerciseProgress({getItem(){throw Error('denied');}},[def]),{version:1,solved:{},solvedRevisions:{},previouslySolved:{},lastId:null});
+  assert.deepEqual(readExerciseProgress({getItem:()=>'{bad'},[def]),{version:1,solved:{},solvedRevisions:{},previouslySolved:{},lastId:null});
   const clean=readExerciseProgress({getItem:()=>JSON.stringify({solved:{fixture:true,deleted:true,second:'yes'},lastId:'deleted'})},[def]);
-  assert.deepEqual(clean,{version:1,solved:{fixture:true},lastId:null});assert.equal(saveExerciseProgress({setItem(){throw Error('full');}},clean),false);
+  assert.deepEqual(clean,{version:1,solved:{fixture:true},solvedRevisions:{fixture:1},previouslySolved:{},lastId:null});assert.equal(saveExerciseProgress({setItem(){throw Error('full');}},clean),false);
 });
 
 test('the exercise page makes objectives, alternatives, study rounds and optional analysis explicit',async()=>{
@@ -119,7 +127,9 @@ test('the exercise page makes objectives, alternatives, study rounds and optiona
   for(const id of['themeFilter','difficultyFilter','tierCounts','filteredCount','difficultyLabel','planLength','exerciseBoard','playBtn','hintBtn','retryBtn','nextBtn','undoBtn','analysisEnabled'])assert.ok(html.includes(`id="${id}"`));
   assert.match(html,/Current-round estimate/);assert.match(html,/optional help/);assert.doesNotMatch(html,/id="analysisEnabled"[^>]*checked/);
   assert.match(html,/12 Easy · 12 Medium · 12 Tough/);assert.match(html,/0 \/ 36/);
-  assert.match(html,/Ending positioning and the bot’s replies do not count/);assert.match(html,/Plan lengths are a guide/);
+  assert.match(html,/Ending positioning and the bot’s replies do not count/);assert.match(html,/Plan lengths are a guide, not a minimum/);
+  assert.match(html,/Themes, pass counts and example moves never gate credit/);
+  assert.match(html,/Tactical uses expanded study analysis/);
 });
 
 const levelCatalog=[
@@ -165,22 +175,52 @@ test('a matching filter loads a visible study but does not resume a background p
 });
 test('expected plan length is distinct from the possession-round allowance',()=>{
   assert.equal(exercisePlanText(levelCatalog[0]),'Core tactical idea');
-  assert.equal(exercisePlanText(levelCatalog[1]),'Typical plan: 3 steps');
+  assert.equal(exercisePlanText(levelCatalog[1]),'Illustrative plan: 3 steps');
   assert.equal(levelCatalog[1].roundLimit,4);
 });
 test('adding difficulty tiers preserves solved Easy IDs and the previous selected study',()=>{
   const stored={version:1,solved:{'old-easy':true},lastId:'old-easy'};
   const progress=readExerciseProgress({getItem:key=>key===EXERCISE_PROGRESS_KEY?JSON.stringify(stored):null},levelCatalog);
-  assert.deepEqual(progress,stored);
+  const normalized={...stored,solvedRevisions:{'old-easy':1},previouslySolved:{}};
+  assert.deepEqual(progress,normalized);
   assert.equal(selectFilteredExercise(levelCatalog,{difficulty:'all',theme:'all'},progress.lastId).id,'old-easy');
   const next=recordExerciseSolved(progress,'medium-cross',levelCatalog);
   assert.deepEqual(next.solved,{'old-easy':true,'medium-cross':true});
-  assert.deepEqual(progress,stored,'extending progress does not mutate old records');
+  assert.deepEqual(progress,normalized,'extending progress does not mutate old records');
+});
+
+test('rebuilding a board retains its earlier achievement while requiring a new solve for current credit',()=>{
+  const catalog=[{...levelCatalog[0]},{...levelCatalog[1],revision:2}];
+  const old={version:1,solved:{'old-easy':true,'medium-cross':true},lastId:'medium-cross'};
+  const storage={getItem:()=>JSON.stringify(old)};
+  const progress=readExerciseProgress(storage,catalog);
+  assert.deepEqual(progress.solved,{'old-easy':true});
+  assert.deepEqual(progress.previouslySolved,{'medium-cross':true});
+  assert.deepEqual(progress.solvedRevisions,{'old-easy':1,'medium-cross':1});
+  assert.equal(progress.lastId,'medium-cross');assert.equal(exerciseRevision(catalog[0]),1);
+  const serialized=JSON.stringify(progress);
+  assert.deepEqual(readExerciseProgress({getItem:()=>serialized},catalog),progress,'the older achievement survives saving and reloading');
+  const solved=recordExerciseSolved(progress,'medium-cross',catalog);
+  assert.deepEqual(solved.solved,{'old-easy':true,'medium-cross':true});
+  assert.deepEqual(solved.previouslySolved,{});assert.equal(solved.solvedRevisions['medium-cross'],2);
+  assert.deepEqual(progress.previouslySolved,{'medium-cross':true},'recording the new solve preserves the prior snapshot');
+  assert.deepEqual(readExerciseProgress({getItem:()=>JSON.stringify(solved)},catalog),solved);
 });
 
 
-test('exercise Tactical replies are deterministic by default, preserving canonical training lines',()=>{
-  const h=harness({botFirst:true,deterministic:true});h.controller.start();assert.equal(h.workers[0].request.selectionSeed,null);h.controller.destroy();
+test('exercise replies send only the visible position, without match difficulty or variety overrides',()=>{
+  const h=harness({botFirst:true});h.controller.start();assert.equal(h.workers[0].request.selectionSeed,undefined);assert.equal(h.workers[0].request.difficulty,undefined);h.controller.destroy();
+});
+
+test('the visible outcome accepts a stronger direct route despite advisory pass and theme metadata',()=>{
+  const definition={side:'attack',objective:'Make exactly two passes with the rook.',goal:{type:'finish',minShotXG:.55,requires:'through-ball',minCompletedPasses:2}};
+  const text=exerciseOutcomeText(definition);
+  assert.match(text,/any legal shot worth at least 55%/);assert.match(text,/Any route/);
+  assert.doesNotMatch(text,/rook|two passes|through/);
+  const optional=exerciseCoachingItems(definition,{throughBall:false,completedPasses:0});
+  assert.deepEqual(optional,[{done:false,text:'Through ball collected by an onside teammate'},{done:false,text:'Teammate passes observed: 0'}]);
+  assert.doesNotMatch(optional.map(item=>item.text).join(' '),/Complete|must|required|2/);
+  assert.match(exerciseOutcomeText({side:'defence',goal:{type:'defend',maxOpponentShotXG:.12}}),/Any legal defensive plan/);
 });
 
 test('page suspension cancels work and can resume safely after a BFCache return',()=>{

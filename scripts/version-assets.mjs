@@ -63,8 +63,11 @@ const positionsVersion=await versionImports('exercise-positions.js',{'engine.js'
   'exercise-medium.js':mediumVersion,'exercise-tough-attack.js':toughAttackVersion,
   'exercise-tough-mixed.js':toughMixedVersion,'exercise-tough-defence-extra.js':toughDefenceVersion});
 const sessionVersion=await versionImports('exercise-session.js',{'engine.js':engineVersion,'exercise-positions.js':positionsVersion});
+const exerciseAiVersion=await versionImports('exercise-ai.js',{'engine.js':engineVersion});
+const exerciseAiWorkerVersion=await versionImports('exercise-ai-worker.js',{'exercise-ai.js':exerciseAiVersion,'engine.js':engineVersion});
 const exercisesVersion=await versionImports('exercises-app.js',{'engine.js':engineVersion,'exercise-positions.js':positionsVersion,
-  'exercise-session.js':sessionVersion,'evaluation.js':evaluationVersion,'ai-worker.js':workerVersion});
+  'exercise-session.js':sessionVersion,'evaluation.js':evaluationVersion,'exercise-ai.js':exerciseAiVersion,
+  'exercise-ai-worker.js':exerciseAiWorkerVersion});
 const exercisesCssVersion=hash(await readFile(asset('exercises.css'),'utf8'));
 let app=await readFile(asset('app.js'),'utf8');
 app=app.replace(/from ['"]\.\/engine\.js(?:\?v=[^'"]+)?['"]/,`from './engine.js?v=${engineVersion}'`);

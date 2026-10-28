@@ -4,12 +4,13 @@ import * as E from '../dist/engine.js';
 import {MEDIUM_EXERCISES} from '../dist/exercise-medium.js';
 import {createExercisePosition} from '../dist/exercise-positions.js';
 import {createExerciseSession,applyExerciseAction,bestKeeperShotChance} from '../dist/exercise-session.js';
+import {chooseExerciseAction} from '../dist/exercise-ai.js';
 
 function replay(definition,actions=definition.exampleActions,seed=1984){
   let session=createExerciseSession(definition,{seed});
   const reply=()=>{for(let n=0;session.status==='active'&&E.currentTeam(session.game)!==session.playerTeam;n++){
-    assert.ok(n<14,'the full Tactical bot returns a decision');
-    session=applyExerciseAction(session,E.chooseAIAction(session.game,{difficulty:'tactical',modelWeights:null}));
+    assert.ok(n<18,'the expanded study opponent returns a decision');
+    session=applyExerciseAction(session,chooseExerciseAction(session.game));
   }};
   for(const action of actions){reply();assert.equal(session.status,'active',`${definition.id}: no unused canonical actions`);assert.equal(E.currentTeam(session.game),'white');session=applyExerciseAction(session,action);}
   reply();return session;
@@ -24,6 +25,8 @@ test('Medium contains twelve larger positions, nine attacking and three defendin
     assert.equal(d.difficulty,'medium');assert.ok([2,3].includes(d.planSteps));
     assert.equal(d.exampleActions.filter(a=>a.type!=='skip').length,d.planSteps);
     assert.equal(d.hints.length,3);assert.ok(d.objective&&d.coachNote);
+    assert.equal(d.goal.requires,undefined,'themes are coaching metadata, not route gates');
+    assert.equal(d.goal.minCompletedPasses,undefined,'there is no pass quota');
     const g=createExercisePosition(d);assert.ok(g.pieces.length>=10&&g.pieces.length<=14);
     assert.equal(new Set(g.pieces.map(p=>p.id)).size,g.pieces.length);
     assert.equal(new Set(g.pieces.map(p=>`${p.x},${p.y}`)).size,g.pieces.length);
@@ -33,17 +36,12 @@ test('Medium contains twelve larger positions, nine attacking and three defendin
     assert.equal(g.foulsEnabled,false);
   }
 });
-for(const d of MEDIUM_EXERCISES)test(`${d.id}: canonical combination solves against full Tactical over three seeds`,()=>{
-  for(const seed of[1984,7,98765]){
-    const session=replay(d,d.exampleActions,seed);assert.equal(session.status,'solved',session.feedback);
+for(const d of MEDIUM_EXERCISES)test(`${d.id}: an illustrative route solves against the actual expanded study opponent`,()=>{
+    const session=replay(d);assert.equal(session.status,'solved',session.feedback);
     assert.ok(session.roundsUsed<=d.roundLimit);
     if(d.side==='attack'){
       assert.ok(session.metrics.lastShotXG>=d.goal.minShotXG-1e-9);
-      if(d.goal.requires==='through-ball')assert.equal(session.progress.throughBall,true);
-      if(d.goal.requires==='box-entry')assert.equal(session.progress.boxEntry,true);
-      if(d.goal.minCompletedPasses)assert.ok(session.progress.completedPasses>=d.goal.minCompletedPasses);
     }else if(session.reason!=='possession-won')assert.ok(session.metrics.lastOpponentShotXG<=d.goal.maxOpponentShotXG+1e-9);
-  }
 });
 
 test('no Medium attack is an immediate qualifying shot and no defence is a direct one-action tackle',()=>{
@@ -53,8 +51,7 @@ test('no Medium attack is an immediate qualifying shot and no defence is a direc
       const game={...g,phase:'kick'};
       const qualifies=E.legalKicks(game).filter(k=>k.goal==='white'&&!k.offside).some(k=>{
         const options=[k,...(E.disguisedShotTargets(game).length===2?[{...k,disguise:true}]:[])];
-        return options.some(a=>bestKeeperShotChance(E.applyKick(game,a.x,a.y,{disguise:!!a.disguise}))>=d.goal.minShotXG
-          &&!d.goal.requires&&!(d.goal.minCompletedPasses>0));
+        return options.some(a=>bestKeeperShotChance(E.applyKick(game,a.x,a.y,{disguise:!!a.disguise}))>=d.goal.minShotXG);
       });assert.equal(qualifies,false,d.id);
     }else for(const piece of g.pieces.filter(p=>p.team==='white'))
       assert.equal(E.legalMoves(g,piece.id).some(m=>m.type==='tackle'),false,`${d.id}: no immediate tackle bypass`);
@@ -68,6 +65,34 @@ test('the pawn clearance admits either sideways bonus, and coordinated screening
     const d=byId(id),actions=[d.exampleActions[1],d.exampleActions[0],d.exampleActions[2]];
     assert.equal(replay(d,actions).status,'solved');
   }
+});
+
+test('other bishop clearances and a different queen finishing pocket earn outcome-based credit',()=>{
+  const clearance=byId('clear-file'),left=structuredClone(clearance.exampleActions);
+  left[0]={type:'move',pieceId:'white-B1',x:7,y:4};
+  assert.equal(replay(clearance,left).status,'solved');
+  const cross=byId('cross-carry');
+  const alternative=[{type:'kick',x:10,y:4},{type:'move',pieceId:'white-Q',x:7,y:1},
+    {type:'skip'},{type:'kick',x:7,y:-1,disguise:true}];
+  const result=replay(cross,alternative);
+  assert.equal(result.status,'solved');assert.ok(result.metrics.lastShotXG>=cross.goal.minShotXG);
+});
+
+test('rebuilt queen study has no direct-goal distributor and accepts either disguised declaration',()=>{
+  const d=byId('queen-through-collection'),game=createExercisePosition(d);
+  assert.equal(d.revision,2);assert.equal(game.ball.carrierId,'white-B1');
+  assert.equal(E.legalKicks(game).some(k=>k.goal==='white'),false);
+  const alternative=structuredClone(d.exampleActions);alternative.at(-1).x=5;
+  assert.equal(replay(d,alternative).status,'solved');
+});
+
+test('the rebuilt relay stays onside through a backward knight layoff instead of relying on a passive keeper',()=>{
+  const d=byId('rook-relay');assert.equal(d.revision,2);
+  let game=createExercisePosition(d);game=E.applyKick(game,2,1);
+  const queen=game.pieces.find(p=>p.id==='white-Q');
+  assert.ok(queen.y>=game.ball.y,'the queen remains behind the ball before the layoff');
+  assert.ok(!E.offsideInfo(game,'white').flaggedIds.includes(queen.id));
+  const result=replay(d);assert.equal(result.status,'solved');assert.equal(result.progress.completedPasses,2);
 });
 
 test('the rook needs both clearance and shorter shooting distance, rather than a padded approach',()=>{

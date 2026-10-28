@@ -2,11 +2,11 @@
  * Example actions document one native route against the deterministic Tactical
  * bot; session grading evaluates the objective, never this move list.
  */
-import {createGame,applyKick} from './engine.js?v=2c106a991787';
-import {MEDIUM_EXERCISES} from './exercise-medium.js?v=1bc19095a042';
-import {TOUGH_ATTACK_EXERCISES} from './exercise-tough-attack.js?v=b493f4031173';
-import {TOUGH_MIXED_EXERCISES} from './exercise-tough-mixed.js?v=e664cf2804ec';
-import {TOUGH_DEFENCE_EXTRA} from './exercise-tough-defence-extra.js?v=0c545fcea655';
+import {createGame,applyKick} from './engine.js?v=400633f53b46';
+import {MEDIUM_EXERCISES} from './exercise-medium.js?v=99cef099eb96';
+import {TOUGH_ATTACK_EXERCISES} from './exercise-tough-attack.js?v=949ec4b7b046';
+import {TOUGH_MIXED_EXERCISES} from './exercise-tough-mixed.js?v=89545f07558f';
+import {TOUGH_DEFENCE_EXTRA} from './exercise-tough-defence-extra.js?v=70a32beb651c';
 
 const piece=(id,x,y)=>({id,team:id.split('-')[0],type:id.split('-')[1][0],x,y});
 const base=({keeper=[8,0],defender=[12,3]}={})=>[

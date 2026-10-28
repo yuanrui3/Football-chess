@@ -1,6 +1,4 @@
-/** Medium studies: short combinations in larger, contested positions.
- * Examples are illustrative native routes, never prescribed solution strings.
- */
+/** Medium studies: larger positions with outcome-based, non-exclusive teaching lines. */
 export const MEDIUM_EXERCISES = [
   {
     "id": "medium-clear-file",
@@ -128,8 +126,8 @@ export const MEDIUM_EXERCISES = [
     },
     "difficulty": "medium",
     "planSteps": 3,
-    "objective": "Clear the bishop, advance the rook and create a shot worth at least 65%.",
-    "coachNote": "The bishop blocks the rook’s file. Clear it with the off-ball action, then use the separate dribble to shorten the long shot before finishing.",
+    "objective": "Create and take a finish worth at least 65% against the best legal keeper response. Any legal plan can succeed.",
+    "coachNote": "One useful plan: The bishop blocks the rook’s file. Clear it with the off-ball action, then use the separate dribble to shorten the long shot before finishing. Other legal plans that meet the outcome target also earn credit.",
     "hints": [
       "The rook’s file is occupied by a friendly bishop.",
       "Move the bishop away, then advance the ball before shooting.",
@@ -258,13 +256,12 @@ export const MEDIUM_EXERCISES = [
     "goal": {
       "type": "finish",
       "minShotXG": 0.6,
-      "requires": "box-entry",
       "boxEntryMode": "either"
     },
     "difficulty": "medium",
     "planSteps": 3,
-    "objective": "Find the wide queen, enter the box and finish at 60% or better.",
-    "coachNote": "A lateral pass stretches the attack. The queen must improve the tight starting angle before trying to score.",
+    "objective": "Create and take a finish worth at least 60% against the best legal keeper response. Any legal plan can succeed.",
+    "coachNote": "One useful plan: A lateral pass stretches the attack. The queen can improve the tight starting angle before trying to score. Other legal plans that meet the outcome target also earn credit.",
     "hints": [
       "The rook’s wing position does not give it a goal target.",
       "The queen can receive level with the ball, then carry diagonally inward.",
@@ -393,13 +390,12 @@ export const MEDIUM_EXERCISES = [
     "goal": {
       "type": "finish",
       "minShotXG": 0.8,
-      "requires": "box-entry",
       "boxEntryMode": "pass"
     },
     "difficulty": "medium",
     "planSteps": 3,
-    "objective": "Complete the diagonal delivery, evade the keeper’s approach and create an 80% finish.",
-    "coachNote": "Receiving close to goal is not sufficient: the queen should step across into a better angle before the keeper closes the declared target.",
+    "objective": "Create and take a finish worth at least 80% against the best legal keeper response. Any legal plan can succeed.",
+    "coachNote": "One useful plan: Receiving close to goal is not sufficient: the queen should step across into a better angle before the keeper closes the declared target. Other legal plans that meet the outcome target also earn credit.",
     "hints": [
       "The bishop reaches the queen on a long diagonal.",
       "Compare shooting immediately with moving across the front of the keeper.",
@@ -408,7 +404,7 @@ export const MEDIUM_EXERCISES = [
   },
   {
     "id": "medium-rook-relay",
-    "title": "Relay around the pressure",
+    "title": "The knight’s cut-back",
     "theme": "box-entry",
     "side": "attack",
     "playerTeam": "white",
@@ -426,7 +422,7 @@ export const MEDIUM_EXERCISES = [
           "id": "black-K",
           "team": "black",
           "type": "K",
-          "x": 4,
+          "x": 13,
           "y": 0
         },
         {
@@ -489,21 +485,21 @@ export const MEDIUM_EXERCISES = [
           "id": "white-R1",
           "team": "white",
           "type": "R",
-          "x": 1,
+          "x": 2,
           "y": 6
         },
         {
-          "id": "white-R2",
+          "id": "white-N1",
           "team": "white",
-          "type": "R",
-          "x": 1,
-          "y": 2
+          "type": "N",
+          "x": 2,
+          "y": 1
         },
         {
           "id": "white-Q",
           "team": "white",
           "type": "Q",
-          "x": 8,
+          "x": 4,
           "y": 2
         }
       ],
@@ -514,7 +510,15 @@ export const MEDIUM_EXERCISES = [
     "exampleActions": [
       {
         "type": "kick",
-        "x": 1,
+        "x": 2,
+        "y": 1
+      },
+      {
+        "type": "skip"
+      },
+      {
+        "type": "kick",
+        "x": 4,
         "y": 2
       },
       {
@@ -522,33 +526,24 @@ export const MEDIUM_EXERCISES = [
       },
       {
         "type": "kick",
-        "x": 8,
-        "y": 2
-      },
-      {
-        "type": "skip"
-      },
-      {
-        "type": "kick",
-        "x": 8,
-        "y": -1,
-        "disguise": true
+        "x": 7,
+        "y": -1
       }
     ],
     "goal": {
       "type": "finish",
-      "minShotXG": 0.35,
-      "minCompletedPasses": 2
+      "minShotXG": 0.35
     },
     "difficulty": "medium",
     "planSteps": 3,
-    "objective": "Complete two teammate passes, then create a finish worth at least 35%.",
-    "coachNote": "The two rooks link the wing to the central queen. The second pass uses a different direction; watch the knight’s screening reply and consider the disguised finish.",
+    "objective": "Create and take a finish worth at least 35% against the best legal keeper response. Any legal plan can succeed.",
+    "coachNote": "One useful plan links the rook, knight and queen before the stranded keeper can return. The knight’s backward L-shaped layoff bypasses straight-line obstructions and keeps the queen behind the ball, so a defensive offside trap cannot exclude the receiver. Any legal route reaching the outcome target earns credit.",
     "hints": [
-      "The deep rook can connect to its partner on the same file.",
-      "The advanced rook can then switch the ball across the pitch.",
-      "Rb11–Rb15, Rb15–Qi15, then use the queen’s two-target finish."
-    ]
+      "The keeper is away from goal, but the ball still needs a safe legal route to the queen.",
+      "The rook reaches the advanced knight. Look for a backward L-shaped layoff: its receiver stays behind the ball.",
+      "One route is Rc11–Nc16, Nc16–Qe15, then the diagonal H-goal finish. The route is an illustration, not a required sequence."
+    ],
+    "revision": 2
   },
   {
     "id": "medium-pawn-clear",
@@ -670,8 +665,8 @@ export const MEDIUM_EXERCISES = [
     },
     "difficulty": "medium",
     "planSteps": 3,
-    "objective": "Clear the pawn, carry into the open file and finish at 25% or better.",
-    "coachNote": "The shared bonus frees the queen’s path while leaving its ordinary dribble intact. The queen must stop before the keeper can win a close challenge.",
+    "objective": "Create and take a finish worth at least 25% against the best legal keeper response. Any legal plan can succeed.",
+    "coachNote": "One useful plan: The shared bonus frees the queen’s path while leaving its ordinary dribble intact. The queen can stop before the keeper can win a close challenge. Other legal plans that meet the outcome target also earn credit.",
     "hints": [
       "The pawn blocks the queen’s straight dribble.",
       "Use the shared bonus to move it sideways.",
@@ -799,13 +794,12 @@ export const MEDIUM_EXERCISES = [
     ],
     "goal": {
       "type": "finish",
-      "minShotXG": 0.4,
-      "requires": "through-ball"
+      "minShotXG": 0.4
     },
     "difficulty": "medium",
     "planSteps": 3,
-    "objective": "Send a through ball into space, collect with the knight and finish at 40% or better.",
-    "coachNote": "The bishop threads a diagonal just beside the defender. The onside knight collects beyond that line and uses its L-shaped finish.",
+    "objective": "Create and take a finish worth at least 40% against the best legal keeper response. Any legal plan can succeed.",
+    "coachNote": "One useful plan: The bishop threads a diagonal just beside the defender. The onside knight collects beyond that line and uses its L-shaped finish. Other legal plans that meet the outcome target also earn credit.",
     "hints": [
       "The knight is not the pass destination yet.",
       "Send the ball to the empty f16 square beyond the nearby bishop.",
@@ -938,8 +932,8 @@ export const MEDIUM_EXERCISES = [
     },
     "difficulty": "medium",
     "planSteps": 3,
-    "objective": "Clear a teammate from the dribbling route, carry centrally and finish at 25% or better.",
-    "coachNote": "An off-ball bishop move and the queen’s dribble use separate budgets. Clearing the occupied diagonal gives the queen a central h-file finish.",
+    "objective": "Create and take a finish worth at least 25% against the best legal keeper response. Any legal plan can succeed.",
+    "coachNote": "One useful plan: An off-ball bishop move and the queen’s dribble use separate budgets. Clearing the occupied diagonal gives the queen a central h-file finish. Other legal plans that meet the outcome target also earn credit.",
     "hints": [
       "The bishop occupies the queen’s natural inward route.",
       "Move the bishop diagonally away, preserving the queen’s dribble.",
@@ -966,7 +960,7 @@ export const MEDIUM_EXERCISES = [
           "id": "black-K",
           "team": "black",
           "type": "K",
-          "x": 9,
+          "x": 4,
           "y": 0
         },
         {
@@ -1015,7 +1009,7 @@ export const MEDIUM_EXERCISES = [
           "id": "black-B1",
           "team": "black",
           "type": "B",
-          "x": 5,
+          "x": 4,
           "y": 3
         },
         {
@@ -1026,34 +1020,34 @@ export const MEDIUM_EXERCISES = [
           "y": 10
         },
         {
-          "id": "white-R1",
+          "id": "white-B1",
           "team": "white",
-          "type": "R",
-          "x": 6,
+          "type": "B",
+          "x": 3,
           "y": 5
         },
         {
           "id": "white-Q",
           "team": "white",
           "type": "Q",
-          "x": 4,
+          "x": 9,
           "y": 3
         }
       ],
-      "carrierId": "white-R1",
+      "carrierId": "white-B1",
       "phase": "kick",
       "attack": "white"
     },
     "exampleActions": [
       {
         "type": "kick",
-        "x": 6,
+        "x": 7,
         "y": 1
       },
       {
         "type": "move",
         "pieceId": "white-Q",
-        "x": 6,
+        "x": 7,
         "y": 1
       },
       {
@@ -1061,25 +1055,25 @@ export const MEDIUM_EXERCISES = [
       },
       {
         "type": "kick",
-        "x": 6,
+        "x": 7,
         "y": -1,
         "disguise": true
       }
     ],
     "goal": {
       "type": "finish",
-      "minShotXG": 0.55,
-      "requires": "through-ball"
+      "minShotXG": 0.55
     },
     "difficulty": "medium",
     "planSteps": 3,
-    "objective": "Play a through ball, collect with the queen and create a finish worth at least 55%.",
-    "coachNote": "The rook releases the ball before the queen moves beyond the line. A disguised finish can exploit the two goal targets after collection.",
+    "objective": "Create and take a finish worth at least 55% against the best legal keeper response. Any legal plan can succeed.",
+    "coachNote": "One useful plan sends the bishop’s diagonal pass into h16 for an onside queen to collect. The starting bishop has no strong direct goal target; the advanced queen can use either a strong single aim or a two-target finish. Other legal finishes above the target also earn credit.",
     "hints": [
-      "The queen is onside at the moment of release.",
-      "The g16 square is both a rook pass target and a queen collection square.",
-      "Rg12–g16, Qe14–g16, then disguise the G/I finish."
-    ]
+      "Look for a forward diagonal the bishop can deliver beyond the defensive line.",
+      "The queen on j14 can collect h16, while remaining onside at the moment of release.",
+      "One route is Bd12–h16, Qj14–h16 to collect, then compare F and H or disguise the finish. The suggested theme is optional."
+    ],
+    "revision": 2
   },
   {
     "id": "medium-vacate-receiver-lane",
@@ -1204,13 +1198,12 @@ export const MEDIUM_EXERCISES = [
     "goal": {
       "type": "finish",
       "minShotXG": 0.8,
-      "requires": "box-entry",
       "boxEntryMode": "either"
     },
     "difficulty": "medium",
     "planSteps": 3,
-    "objective": "Move the rook, carry into the vacated box square and finish at 80% or better.",
-    "coachNote": "The rook’s supporting position accidentally blocks the best receiving pocket. Repositioning it opens the queen’s inward diagonal.",
+    "objective": "Create and take a finish worth at least 80% against the best legal keeper response. Any legal plan can succeed.",
+    "coachNote": "One useful plan: The rook’s supporting position accidentally blocks the best receiving pocket. Repositioning it opens the queen’s inward diagonal. Other legal plans that meet the outcome target also earn credit.",
     "hints": [
       "A friendly rook occupies the queen’s best box entry.",
       "The rook can move sideways while the queen keeps its separate dribble.",
@@ -1335,8 +1328,8 @@ export const MEDIUM_EXERCISES = [
     },
     "difficulty": "medium",
     "planSteps": 3,
-    "objective": "Use coordinated cover to win possession or leave a finishing chance of 12% or less.",
-    "coachNote": "The rook must account for double-cost box squares: the horizontal move to h3 fits the ten-point budget exactly. The keeper uses its shared bonus before covering H.",
+    "objective": "Win possession, or limit every available immediate finish to 12% or less with sound keeper play. Any legal plan can succeed.",
+    "coachNote": "One useful plan: The rook can account for double-cost box squares: the horizontal move to h3 fits the ten-point budget exactly. The keeper uses its shared bonus before covering H. Other legal plans that meet the outcome target also earn credit.",
     "hints": [
       "The black queen threatens the h-file; direct tackling is unavailable.",
       "Combine an outfield screen with keeper positioning.",
@@ -1454,8 +1447,8 @@ export const MEDIUM_EXERCISES = [
     },
     "difficulty": "medium",
     "planSteps": 3,
-    "objective": "Screen the finish and cover its target, leaving 10% or less.",
-    "coachNote": "The bishop reaches a screening square diagonally. The keeper needs the shared bonus before its later reaction to cover the i-file.",
+    "objective": "Win possession, or limit every available immediate finish to 10% or less with sound keeper play. Any legal plan can succeed.",
+    "coachNote": "One useful plan: The bishop reaches a screening square diagonally. The keeper needs the shared bonus before its later reaction to cover the i-file. Other legal plans that meet the outcome target also earn credit.",
     "hints": [
       "The queen’s direct target is I.",
       "The bishop can enter the shooting line from the side.",
@@ -1574,8 +1567,8 @@ export const MEDIUM_EXERCISES = [
     },
     "difficulty": "medium",
     "planSteps": 2,
-    "objective": "Win possession with coordinated keeper movement, or hold the finish to 15% or less.",
-    "coachNote": "The king can use the shared bonus to approach, then spend the ordinary action tackling. It starts too far away for a direct challenge.",
+    "objective": "Win possession, or limit every available immediate finish to 15% or less with sound keeper play. Any legal plan can succeed.",
+    "coachNote": "One useful plan: The king can use the shared bonus to approach, then spend the ordinary action tackling. It starts too far away for a direct challenge. Other legal plans that meet the outcome target also earn credit.",
     "hints": [
       "The king is two squares from the carrier.",
       "The shared bonus can bring it into tackling range without spending the normal action.",

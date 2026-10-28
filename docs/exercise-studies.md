@@ -4,8 +4,9 @@ The library contains 36 reduced positions in three tiers. The original twelve
 are now Easy, with their IDs and saved results preserved. Each tier contains nine
 attacking studies and three defensive studies. Unused players are deliberately omitted. Every board
 contains both goalkeepers, uses the normal engine and has fouls disabled to keep
-attention on the tactical idea. Opponents use the full published Tactical policy,
-not the Casual policy or a scripted move sequence.
+attention on the tactical idea. Opponents use expanded Tactical study analysis
+with immediate reply checks. This search is bounded; it is not a proof of
+globally optimal play. Match opponents retain their normal profile.
 
 `dist/exercise-positions.js` combines and freezes the catalog; the new tier
 definitions live in `exercise-medium.js`, `exercise-tough-attack.js`,
@@ -35,21 +36,21 @@ Attacking studies require a real shot whose expected goal probability reaches
 the stated threshold after the goalkeeper's best legal response. The native
 model includes angle, distance, blockers and any two-target disguise. A sampled
 save or miss does not invalidate a sufficiently strong chance, and a lucky goal
-does not excuse a weak chance or a missing theme prerequisite.
+does not excuse a weak chance. Every legal route meeting the outcome earns
+credit, including a stronger direct shot, a shorter plan or an unexpected piece.
 
-Through-ball studies additionally require an accurate forward pass into space
-across a nearby outfield defender's line, followed by an onside teammate's
-collection. A self-pass does not meet that objective. Box-entry studies require
-a teammate delivery into the attacking box; the final carrying study explicitly
-also allows an ordinary dribble into the box. Some larger studies explicitly
-require a teammate-pass combination before the finish. Only accurate deliveries
-received by another outfield player count: self-passes and keeper backpasses
-do not. The combination and theme requirements must both be met at release of
-the final shot; neither imposes a prescribed move sequence.
+Themes are optional coaching. Through balls, box entries and teammate-pass
+counts remain observable contributions; none is a gate for completion. The
+engine's normal legality still applies to offside, self-passes, the box and
+compulsory keeper releases. The example line illustrates one useful plan.
 
 Defensive studies accept winning possession before the finish, or reducing the
-opponent's actual finishing chance to the threshold after the student's keeper
-response. They also grade the decision rather than the sampled goal or save.
+opponent's strongest available immediate finish to the threshold. When a shot
+is declared, all legal goal aims and any legal disguise are checked against
+their best keeper responses. The student's actual reaction to the chosen shot
+is also checked. A weak bot aim cannot hand out credit while a stronger legal
+aim was available. An already committed-shot study only tests its declared aim.
+The decision is graded independently of the sampled goal or save.
 
 All studies allow three or four completed possession rounds. Positioning,
 dribbling and bonus subactions do not each spend a round. The shortest example
@@ -57,10 +58,10 @@ Easy lines take one or two rounds; larger studies use the same short horizon.
 The allowance permits alternative sound plans without turning an exercise into
 a full match. Plan steps and possession rounds are different measures.
 
-## Checked Easy teaching lines
+## Earlier Easy examples
 
-The table reports one line with the full Tactical opponent, using the native
-session grader. It is a reproducible teaching route, not a uniqueness claim.
+The table records the original baseline examples before expanded study analysis.
+These historical values are not a claim about the strongest current opposition.
 Finishing values are after the best keeper response to the final declared shot;
 defensive values are after the student's actual response.
 
@@ -80,39 +81,39 @@ defensive values are after the student's actual response.
 | Cover the declared aim | Move the goalkeeper onto the committed shooting file | 19.0% opponent shot | 1 |
 
 <!-- NEW-TIER-TABLES -->
-## New Medium studies
+## Medium study outcomes
 
-| Study | Theme | Plan steps | Pieces | Objective |
+| Study | Coaching theme | Example steps | Pieces | Outcome |
 | --- | --- | ---: | ---: | --- |
-| Open the rook’s long shot | Finishing | 3 | 12 | Clear the bishop, advance the rook and create a shot worth at least 65%. |
-| Switch wide, drive inside | Into the box | 3 | 12 | Find the wide queen, enter the box and finish at 60% or better. |
-| Receive and escape the keeper | Into the box | 3 | 12 | Complete the diagonal delivery, evade the keeper’s approach and create an 80% finish. |
-| Relay around the pressure | Into the box | 3 | 13 | Complete two teammate passes, then create a finish worth at least 35%. |
-| Make room with the pawn | Finishing | 3 | 11 | Clear the pawn, carry into the open file and finish at 25% or better. |
-| Thread the bishop’s pass | Through ball | 3 | 12 | Send a through ball into space, collect with the knight and finish at 40% or better. |
-| Clear the diagonal runway | Finishing | 3 | 12 | Clear a teammate from the dribbling route, carry centrally and finish at 25% or better. |
-| Release the queen into space | Through ball | 3 | 12 | Play a through ball, collect with the queen and create a finish worth at least 55%. |
-| Vacate the finishing pocket | Into the box | 3 | 12 | Move the rook, carry into the vacated box square and finish at 80% or better. |
-| The rook’s weighted retreat | Defence | 3 | 11 | Use coordinated cover to win possession or leave a finishing chance of 12% or less. |
-| Close the diagonal gate | Defence | 3 | 10 | Screen the finish and cover its target, leaving 10% or less. |
-| The keeper’s two-action challenge | Defence | 2 | 11 | Win possession with coordinated keeper movement, or hold the finish to 15% or less. |
+| Open the rook’s long shot | Finishing | 3 | 12 | Create and take a finish worth at least 65% against the best legal keeper response. Any legal plan can succeed. |
+| Switch wide, drive inside | Into the box | 3 | 12 | Create and take a finish worth at least 60% against the best legal keeper response. Any legal plan can succeed. |
+| Receive and escape the keeper | Into the box | 3 | 12 | Create and take a finish worth at least 80% against the best legal keeper response. Any legal plan can succeed. |
+| The knight’s cut-back | Into the box | 3 | 13 | Create and take a finish worth at least 35% against the best legal keeper response. Any legal plan can succeed. |
+| Make room with the pawn | Finishing | 3 | 11 | Create and take a finish worth at least 25% against the best legal keeper response. Any legal plan can succeed. |
+| Thread the bishop’s pass | Through ball | 3 | 12 | Create and take a finish worth at least 40% against the best legal keeper response. Any legal plan can succeed. |
+| Clear the diagonal runway | Finishing | 3 | 12 | Create and take a finish worth at least 25% against the best legal keeper response. Any legal plan can succeed. |
+| Release the queen into space | Through ball | 3 | 12 | Create and take a finish worth at least 55% against the best legal keeper response. Any legal plan can succeed. |
+| Vacate the finishing pocket | Into the box | 3 | 12 | Create and take a finish worth at least 80% against the best legal keeper response. Any legal plan can succeed. |
+| The rook’s weighted retreat | Defence | 3 | 11 | Win possession, or limit every available immediate finish to 12% or less with sound keeper play. Any legal plan can succeed. |
+| Close the diagonal gate | Defence | 3 | 10 | Win possession, or limit every available immediate finish to 10% or less with sound keeper play. Any legal plan can succeed. |
+| The keeper’s two-action challenge | Defence | 2 | 11 | Win possession, or limit every available immediate finish to 15% or less with sound keeper play. Any legal plan can succeed. |
 
-## New Tough studies
+## Tough study outcomes
 
-| Study | Theme | Plan steps | Pieces | Objective |
+| Study | Coaching theme | Example steps | Pieces | Outcome |
 | --- | --- | ---: | ---: | --- |
-| Relay wide, escape the keeper | Into the box | 4 | 14 | Complete two teammate passes, enter the box and create a finish worth at least 15%. |
-| Cross, jump, and chip | Into the box | 4 | 14 | Complete two teammate passes and carry into the box for a finish worth at least 40%. |
-| The jumping wall pass | Into the box | 3 | 14 | Link three players with two passes into the box, then create a finish worth at least 20%. |
-| Through the line, then lay off | Through ball | 4 | 14 | Complete a through ball and a second teammate pass, then attempt a finish worth at least 15%. |
-| Clear the offside runner first | Into the box | 4 | 14 | Remove the offside interference, complete a teammate pass and enter the box for a finish worth at least 10%. |
-| The sweeper’s diagonal outlet | Into the box | 3 | 14 | Build from the advanced king through two teammate passes into the box, then take a finish worth at least 15%. |
-| Unlock the rook battery | Into the box | 4 | 15 | Transfer to the second rook, clear its file and create a box-entry finish worth at least 60%. |
-| Find the protected pocket | Through ball | 4 | 16 | Send a through ball to an onside teammate and finish from a protected pocket at 35% or better. |
-| Clear the delivery diagonal | Into the box | 3 | 14 | Clear the crowded diagonal, deliver to an onside box receiver and create a finish worth at least 35%. |
-| A screen and a keeper route | Defence | 3 | 14 | Coordinate the goalkeeper and pawn to hold the next finish to 12% or less, or win possession. |
-| Open the keeper’s return route | Defence | 3 | 14 | Clear a route back into the box, then hold the close finish to 30% or less, or win possession. |
-| Clear the box gateway | Defence | 3 | 14 | Use the ordinary move to open a box entry, then coordinate the king bonus and shot reaction to hold the finish to 28% or less, or win possession. |
+| Open the rook’s finishing file | Into the box | 4 | 14 | Create and take a finish worth at least 15% against the best keeper response. Any legal route can succeed. |
+| Cross, jump, and chip | Into the box | 4 | 14 | Create and take a finish worth at least 40% against the best keeper response. Passes and box entry are suggestions, not requirements. |
+| Clear the knight’s finishing pocket | Into the box | 4 | 14 | Create and take a finish worth at least 20% against the best keeper response. A stronger legal route earns credit too. |
+| Through the line, then lay off | Through ball | 4 | 14 | Create and take a finish worth at least 15% against the best keeper response. The through-ball theme is optional coaching. |
+| Clear the offside runner first | Into the box | 3 | 14 | Create and take a legal finish worth at least 10% against the best keeper response. Normal offside rules still apply. |
+| The sweeper’s diagonal outlet | Into the box | 3 | 14 | Create and take a finish worth at least 15% against the best keeper response. Any legal buildup from the advanced king is accepted. |
+| Unlock the rook battery | Into the box | 4 | 15 | Create and take a finish worth at least 60% against the best goalkeeper reaction. Any legal plan can earn credit. |
+| Find the protected pocket | Through ball | 4 | 16 | Create and take a finish worth at least 35% against the best goalkeeper reaction. Any legal plan can earn credit. |
+| Clear the delivery diagonal | Into the box | 3 | 14 | Create and take a finish worth at least 35% against the best goalkeeper reaction. Any legal plan can earn credit. |
+| A screen and a keeper route | Defence | 3 | 15 | Hold the opponent’s finishing chance to 12% or less, or win possession. Any legal defensive plan can earn credit. |
+| Open the keeper’s return route | Defence | 3 | 14 | Hold the opponent’s finishing chance to 30% or less, or win possession. Any legal defensive plan can earn credit. |
+| Clear the box gateway | Defence | 3 | 14 | Hold the opponent’s finishing chance to 28% or less, or win possession. Any legal defensive plan can earn credit. |
 
 <!-- END-NEW-TIER-TABLES -->
 
@@ -126,9 +127,8 @@ defensive values are after the student's actual response.
 - The rook screen and king bonus in the defensive coordination study may be
   executed in either order.
 
-The explicit theme prerequisites prevent unrelated long shots or self-passes
-from bypassing the intended learning objective, while the probability-based
-grader accepts other legal routes that meet it.
+Themes never override outcome quality. In particular, a stronger finish cannot
+be rejected for omitting a pass quota or a box-entry badge.
 
 ## Verification
 
@@ -136,15 +136,20 @@ grader accepts other legal routes that meet it.
 Easy IDs, truthful plan-step labels, larger diagram sizes and the real squad
 inventory. The tier-specific tests exercise the new teaching lines, alternatives
 and critical preparation steps. Independent review additionally tries immediate
-shots/tackles and removes preparatory actions to catch padded solutions.
+shots/tackles and tries shorter or stronger legal alternatives. A good shortcut
+is credited; an intrinsically trivial board is rebuilt instead of adding a gate.
 
 `tests/exercise-positions.test.mjs` checks catalog structure, legal occupancy,
-ball metadata, every teaching line against full Tactical over seeds 1984, 7 and
-98765, theme completion and round limits. It also checks the alternative plans
+ball metadata, Easy example lines against the current study opponent and round
+limits. The tier tests cover the new examples and alternative plans. The tests
+also check alternative plans
 above and forces a good finishing shot to miss to verify outcome-independent
 credit. Session tests independently cover chance grading, offside collection,
 limits, immutable state and stopping conditions. No simulation result is used to
 claim these positions have only one solution or that the bot is unbeatable.
+Repeated RNG seeds with the same deterministic policy are not independent
+adversarial replies. Wider reply searches, explicit alternative moves and exact
+immediate shot/keeper checks supply the opponent coverage.
 
 ## Current-round analysis help
 

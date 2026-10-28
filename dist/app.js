@@ -1,10 +1,10 @@
-import {createGame, legalMoves, legalKicks, disguisedShotTargets, applyMove, applyKick, skipMove, chooseAIAction, currentTeam, cornerTakers, selectCornerTaker, BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, BOX_FILES, BOX_DEPTH, CENTRAL_GOAL_FILES, MIDFIELD_RANK, inOwnBox, canOccupySquare, isBox, isGoalMouth, shotChance, shotModel, offsideInfo, offsideFlaggedIds, LONG_TACKLE_RANGE, DRIBBLE_RANGE, FOUL_RULE, STALLING_RULE, PACE_RULE, ACTION_SECONDS, actionTimeout, progressInfo, paceInfo, positionActions, normalizeGame, FORMATION_PRESETS, setStartingFormation} from './engine.js?v=2c106a991787';
+import {createGame, legalMoves, legalKicks, disguisedShotTargets, applyMove, applyKick, skipMove, chooseAIAction, currentTeam, cornerTakers, selectCornerTaker, BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, BOX_FILES, BOX_DEPTH, CENTRAL_GOAL_FILES, MIDFIELD_RANK, inOwnBox, canOccupySquare, isBox, isGoalMouth, shotChance, shotModel, offsideInfo, offsideFlaggedIds, LONG_TACKLE_RANGE, DRIBBLE_RANGE, FOUL_RULE, STALLING_RULE, PACE_RULE, ACTION_SECONDS, actionTimeout, progressInfo, paceInfo, positionActions, normalizeGame, FORMATION_PRESETS, setStartingFormation} from './engine.js?v=400633f53b46';
 import {createMatchClock, restoreMatchClock, tickMatchClock, settleMatchClock, rewindMatchClock} from './match-clock.js?v=1fa32f5eed6c';
-import {buildGoalReplay, restoreGoalReplay, createReplayPlayer} from './goal-replay.js?v=d236edbdb640';
-import {createMatchStats, restoreMatchStats, recordMatchTransition, addPossessionTime, matchStatsSummary, shortPieceId} from './match-stats.js?v=7e3e5aefb0de';
-import {createCommentary} from './commentary.js?v=62aedaaaf135';
+import {buildGoalReplay, restoreGoalReplay, createReplayPlayer} from './goal-replay.js?v=3de482c5c001';
+import {createMatchStats, restoreMatchStats, recordMatchTransition, addPossessionTime, matchStatsSummary, shortPieceId} from './match-stats.js?v=d1546195305a';
+import {createCommentary} from './commentary.js?v=fec74fe680ad';
 import {createParadeeSpeech} from './paradee-speech.js?v=e9d0fc794cfb';
-import {createEvaluation,formatEvaluation} from './evaluation.js?v=a80f32294d6d';
+import {createEvaluation,formatEvaluation} from './evaluation.js?v=4bec8a3d06ec';
 
 const $ = id => document.getElementById(id);
 const normalShotLegend = document.querySelector('.shot-legend').textContent;
@@ -785,7 +785,7 @@ function scheduleAI(){
   },aiPace);
   if(difficulty==='tactical'&&typeof window.Worker==='function'){
     try{
-      aiWorker=new window.Worker(new URL('./ai-worker.js?v=91d748b44efe',import.meta.url),{type:'module',name:'football-chess-tactical'});
+      aiWorker=new window.Worker(new URL('./ai-worker.js?v=ec45f652f6e8',import.meta.url),{type:'module',name:'football-chess-tactical'});
       aiWorker.onmessage=event=>{
         if(!stillCurrent()||event.data?.requestId!==requestId)return;
         const progress=event.data.progress;

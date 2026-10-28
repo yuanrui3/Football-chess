@@ -21,7 +21,7 @@ export function formatEvaluation(state) {
   return `${state.score > 0 ? 'Ivory' : 'Obsidian'} +${Math.abs(state.score).toFixed(2)}`;
 }
 export function createEvaluation({WorkerCtor = globalThis.Worker,onUpdate = ()=>{},
-  workerUrl = new URL('./evaluation-worker.js?v=a562d2a2206a',import.meta.url),setTimer = setTimeout,clearTimer = clearTimeout,
+  workerUrl = new URL('./evaluation-worker.js?v=a10ac921325a',import.meta.url),setTimer = setTimeout,clearTimer = clearTimeout,
   timeoutMs = 12000} = {}) {
   let enabled=false,suspended=false,destroyed=false,worker=null,generation=0,serial=0;
   let latestInput=null,latestKey=null,running=null,pending=null,result=null;

@@ -1,12 +1,14 @@
-import {BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, BOX_FILES, BOX_DEPTH, currentTeam, legalMoves, legalKicks, disguisedShotTargets, cornerTakers, isBox, isGoalMouth, positionActions, applyKick, chooseAIAction} from './engine.js?v=2c106a991787';
-import {EXERCISES} from './exercise-positions.js?v=80d49d7c93f1';
-import {createExerciseSession, applyExerciseAction, bestKeeperShotChance} from './exercise-session.js?v=056f74535c21';
-import {createEvaluation} from './evaluation.js?v=a80f32294d6d';
+import {BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, BOX_FILES, BOX_DEPTH, currentTeam, legalMoves, legalKicks, disguisedShotTargets, cornerTakers, isBox, isGoalMouth, positionActions, applyKick} from './engine.js?v=400633f53b46';
+import {chooseExerciseAction} from './exercise-ai.js?v=d139e7cf8e65';
+import {EXERCISES} from './exercise-positions.js?v=b7bdb42d4f5c';
+import {createExerciseSession, applyExerciseAction, bestKeeperShotChance} from './exercise-session.js?v=bc5ac51ee1b3';
+import {createEvaluation} from './evaluation.js?v=4bec8a3d06ec';
 
 export const EXERCISE_PROGRESS_KEY='football-chess-exercises-v1';
 export const EXERCISE_THEME_LABELS=Object.freeze({'one-on-one':'One on one','through-ball':'Through balls','box-entry':'Into the box',defence:'Defend the finish'});
 export const EXERCISE_DIFFICULTY_LABELS=Object.freeze({easy:'Easy',medium:'Medium',tough:'Tough'});
 export const exerciseDifficulty=definition=>definition.difficulty||'easy';
+export const exerciseRevision=definition=>Number.isInteger(definition?.revision)&&definition.revision>0?definition.revision:1;
 export function filterExercises(catalog=EXERCISES,{theme='all',difficulty='all'}={}){
   return catalog.filter(def=>(theme==='all'||def.theme===theme)&&(difficulty==='all'||exerciseDifficulty(def)===difficulty));
 }
@@ -27,7 +29,7 @@ export function syncExerciseFilters(controller,catalog,filters,loadDefinition,{a
   return selected;
 }
 export function exercisePlanText(definition){
-  return Number.isInteger(definition.planSteps)?`Typical plan: ${definition.planSteps} steps`:'Core tactical idea';
+  return Number.isInteger(definition.planSteps)?`Illustrative plan: ${definition.planSteps} steps`:'Core tactical idea';
 }
 const TEAM={white:'Ivory FC',black:'Obsidian FC'};
 const TYPES={K:'Goalkeeper',Q:'Queen',R:'Rook',B:'Bishop',N:'Knight',P:'Pawn'};
@@ -36,6 +38,19 @@ const FILES='abcdefghijklmn';
 const xy=(x,y)=>`${FILES[x]}${H-y}`;
 const pieceName=p=>`${TYPES[p.type]} ${p.id.split('-')[1]}`;
 const percent=value=>`${Math.round((Number(value)||0)*100)}%`;
+export function exerciseOutcomeText(definition){
+  const goal=definition.goal||{};
+  return goal.type==='defend'||definition.side==='defence'
+    ?`Win possession before the finish, or hold the opponent’s finishing chance to ${percent(goal.maxOpponentShotXG)} or less. Any legal defensive plan can succeed.`
+    :`Create and take any legal shot worth at least ${percent(goal.minShotXG)} against the best keeper reply. Any route to that chance can succeed.`;
+}
+export function exerciseCoachingItems(definition,progress={}){
+  const items=[],goal=definition.goal||{};
+  if(goal.requires==='through-ball')items.push({done:!!progress.throughBall,text:'Through ball collected by an onside teammate'});
+  if(goal.requires==='box-entry')items.push({done:!!progress.boxEntry,text:'Ball reached the attacking box'});
+  if(goal.minCompletedPasses>0)items.push({done:false,text:`Teammate passes observed: ${progress.completedPasses||0}`});
+  return items;
+}
 const ballSVG='<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18" fill="#fff9e9" stroke="#23372f"/><path d="M20 11l9 6-3 10H14l-3-10zM3 17h8M29 17h8M20 11V2M14 27l-5 8M26 27l5 8" fill="#25392e" stroke="#25392e" stroke-width="1.5"/></svg>';
 
 export function exerciseMoveMode(game,mode){
@@ -73,15 +88,27 @@ export function exerciseEvaluationDisplay(value,{complete=false}={}){
 }
 
 export function readExerciseProgress(storage,catalog=EXERCISES){
-  const allowed=new Set(catalog.map(def=>def.id));
-  try{const value=JSON.parse(storage?.getItem(EXERCISE_PROGRESS_KEY)||'null');
-    return {version:1,solved:Object.fromEntries(Object.entries(value?.solved||{}).filter(([id,done])=>allowed.has(id)&&done===true)),lastId:allowed.has(value?.lastId)?value.lastId:null};
-  }catch{return {version:1,solved:{},lastId:null};}
+  const empty=()=>({version:1,solved:{},solvedRevisions:{},previouslySolved:{},lastId:null});
+  try{const value=JSON.parse(storage?.getItem(EXERCISE_PROGRESS_KEY)||'null'),progress=empty();
+    for(const definition of catalog){
+      const id=definition.id;
+      if(value?.solved?.[id]!==true&&value?.previouslySolved?.[id]!==true)continue;
+      const recorded=value?.solvedRevisions?.[id],revision=Number.isInteger(recorded)&&recorded>0?recorded:1;
+      progress.solvedRevisions[id]=revision;
+      if(revision>=exerciseRevision(definition))progress.solved[id]=true;
+      else progress.previouslySolved[id]=true;
+    }
+    progress.lastId=catalog.some(def=>def.id===value?.lastId)?value.lastId:null;
+    return progress;
+  }catch{return empty();}
 }
 export function saveExerciseProgress(storage,progress){try{storage?.setItem(EXERCISE_PROGRESS_KEY,JSON.stringify(progress));return true;}catch{return false;}}
 export function recordExerciseSolved(progress,id,catalog=EXERCISES){
-  if(!catalog.some(def=>def.id===id))return {...progress,solved:{...progress.solved}};
-  return {...progress,version:1,lastId:id,solved:{...progress.solved,[id]:true}};
+  const definition=catalog.find(def=>def.id===id);
+  if(!definition)return {...progress,solved:{...progress.solved}};
+  const previouslySolved={...progress.previouslySolved};delete previouslySolved[id];
+  return {...progress,version:1,lastId:id,solved:{...progress.solved,[id]:true},
+    solvedRevisions:{...progress.solvedRevisions,[id]:exerciseRevision(definition)},previouslySolved};
 }
 
 /** One controller owns one exercise and one Tactical decision at a time.
@@ -89,8 +116,8 @@ export function recordExerciseSolved(progress,id,catalog=EXERCISES){
  * both late worker answers and already scheduled presentation timers.
  */
 export function createExerciseController({definition,makeSession=createExerciseSession,applyAction=applyExerciseAction,
-  workerFactory=typeof Worker==='function'?()=>new Worker(new URL('./ai-worker.js?v=91d748b44efe',import.meta.url),{type:'module',name:'football-chess-exercise-tactical'}):null,
-  chooseTactical=chooseAIAction,selectionSeed=()=>null,now=()=>Date.now(),delayMs=1000,watchdogMs=5000,
+  workerFactory=typeof Worker==='function'?()=>new Worker(new URL('./exercise-ai-worker.js?v=562a4b551350',import.meta.url),{type:'module',name:'football-chess-exercise-study'}):null,
+  chooseTactical=chooseExerciseAction,now=()=>Date.now(),delayMs=1000,watchdogMs=20000,
   setTimer=(fn,ms)=>setTimeout(fn,ms),clearTimer=id=>clearTimeout(id),onChange=()=>{},onError=()=>{}}={}){
   let session=null,started=false,thinking=false,suspended=false,destroyed=false,generation=0,pending=null,lastAction=null;
   const history=[];
@@ -100,7 +127,7 @@ export function createExerciseController({definition,makeSession=createExerciseS
   function isCurrent(token,board){return !destroyed&&!suspended&&started&&session?.status==='active'&&pending?.token===token&&generation===token&&session.game===board&&currentTeam(board)!==session.playerTeam;}
   function scheduleBot(){
     if(destroyed||suspended||!started||session?.status!=='active'||currentTeam(session.game)===session.playerTeam)return;
-    cancel();const token=generation,board=session.game,at=now(),seed=selectionSeed();
+    cancel();const token=generation,board=session.game,at=now();
     pending={token,board,timer:null,watchdog:null,worker:null,ready:false,progress:null};thinking=true;notify();
     const accept=action=>{
       if(!isCurrent(token,board)||pending.ready)return;
@@ -119,7 +146,7 @@ export function createExerciseController({definition,makeSession=createExerciseS
       pending.recovering=true;clearTimer(pending.watchdog);try{pending.worker?.terminate();}catch{}
       pending.timer=setTimer(()=>{
         if(!isCurrent(token,board))return;
-        try{accept(pending.progress||chooseTactical(board,{difficulty:'tactical',modelWeights:null,selectionSeed:seed}));}
+        try{accept(pending.progress||chooseTactical(board));}
         catch(error){cancel();onError(`Tactical analysis is unavailable. Retry the exercise. ${error.message||''}`);notify();}
       },0);
     };
@@ -127,12 +154,12 @@ export function createExerciseController({definition,makeSession=createExerciseS
       try{const worker=workerFactory();pending.worker=worker;
         worker.onmessage=({data})=>{
           if(!isCurrent(token,board)||data?.requestId!==token)return;
-          if(data.progress?.action&&Number.isInteger(data.progress.depth||data.progress.stats?.completedDepth))pending.progress=data.progress.action;
+          if(data.progress?.action&&Number.isInteger(data.progress.depth??data.progress.stats?.completedDepth))pending.progress=data.progress.action;
           if(data.action)accept(data.action);else if(data.error)recover();
         };
         worker.onerror=recover;
         pending.watchdog=setTimer(recover,watchdogMs);
-        worker.postMessage({requestId:token,state:board,difficulty:'tactical',selectionSeed:seed});
+        worker.postMessage({requestId:token,state:board});
       }catch{recover();}
     }else recover();
   }
@@ -191,17 +218,19 @@ export function initExercisePage(){
     $('filteredCount').textContent=`${list.length} ${list.length===1?'exercise':'exercises'} shown`;
     $('nextBtn').disabled=!list.length;
     $('exerciseList').replaceChildren(...list.map(def=>{
-      const index=EXERCISES.indexOf(def),button=document.createElement('button');button.type='button';button.className='exercise-card'+(progress.solved[def.id]?' solved':'');button.dataset.exerciseId=def.id;button.setAttribute('aria-pressed',String(def.id===state?.session.definitionId));
+      const index=EXERCISES.indexOf(def),button=document.createElement('button');button.type='button';button.className='exercise-card'+(progress.solved[def.id]?' solved':progress.previouslySolved[def.id]?' previously-solved':'');button.dataset.exerciseId=def.id;button.setAttribute('aria-pressed',String(def.id===state?.session.definitionId));
       const difficulty=exerciseDifficulty(def),level=EXERCISE_DIFFICULTY_LABELS[difficulty];
-      button.setAttribute('aria-label',`${index+1}. ${def.title}, ${level}, ${EXERCISE_THEME_LABELS[def.theme]}, ${exercisePlanText(def)}, up to ${def.roundLimit} possession rounds${progress.solved[def.id]?', solved':''}`);
+      button.setAttribute('aria-label',`${index+1}. ${def.title}, ${level}, ${EXERCISE_THEME_LABELS[def.theme]}, ${exercisePlanText(def)}, up to ${def.roundLimit} possession rounds${progress.solved[def.id]?', solved':progress.previouslySolved[def.id]?', updated position, previous version solved':''}`);
       const number=document.createElement('span');number.className='exercise-number';number.textContent=progress.solved[def.id]?'✓':String(index+1).padStart(2,'0');
       const copy=document.createElement('span'),badge=document.createElement('span'),title=document.createElement('b'),detail=document.createElement('small');
-      badge.className=`exercise-level ${difficulty}`;badge.textContent=level;title.textContent=def.title;detail.textContent=`${EXERCISE_THEME_LABELS[def.theme]} · ${Number.isInteger(def.planSteps)?`${def.planSteps} steps`:'Core idea'}`;copy.append(badge,title,detail);button.append(number,copy);return button;
+      badge.className=`exercise-level ${difficulty}`;badge.textContent=level;title.textContent=def.title;detail.textContent=`${EXERCISE_THEME_LABELS[def.theme]} · ${Number.isInteger(def.planSteps)?`${def.planSteps} steps`:'Core idea'}`;copy.append(badge,title,detail);
+      if(progress.previouslySolved[def.id]){const revision=document.createElement('small');revision.className='exercise-revision-note';revision.textContent='Updated position · previous version solved';copy.append(revision);}
+      button.append(number,copy);return button;
     }));
     if(!list.length){const empty=document.createElement('p');empty.className='exercise-empty';empty.textContent='No exercises match both filters. Choose another level or theme.';$('exerciseList').append(empty);}
   }
   function phaseCopy(game){
-    if(state.thinking)return ['TACTICAL OPPONENT','The opponent is thinking.','Watch its reply. The next human decision will unlock automatically.'];
+    if(state.thinking)return ['TACTICAL · STUDY ANALYSIS','The opponent is thinking.','Expanded Tactical search is checking its reply. The next human decision will unlock automatically.'];
     if(game.phase==='keeperReact')return ['KEEPER REACTION','Move the keeper or hold.','Choose a highlighted adjacent square, or hold position to resolve the shot.'];
     if(game.phase==='keeperRelease')return ['IMMEDIATE RELEASE','The keeper must kick now.','A teammate passed to the king. Choose a legal pass or shot; it cannot move first.'];
     if(game.phase==='passRun')return ['OPTIONAL RUN','Run the passer, or skip.','This uses your next ordinary off-ball move. It cannot enter a box or collect the ball.'];
@@ -259,21 +288,19 @@ export function initExercisePage(){
       if(playable()&&(isKick(game)||game.phase==='passRun'))selectedId=game.phase==='passRun'?game.passRun?.pieceId:game.ball.carrierId;
       if(playable()&&game.phase==='keeperReact'){selectedId=game.pieces.find(p=>p.type==='K'&&p.team===session.playerTeam)?.id;moveMode='offball';}
     }
-    $('exerciseTitle').textContent=def.title;$('themeLabel').textContent=EXERCISE_THEME_LABELS[def.theme]||'Tactical exercise';$('exerciseObjective').textContent=def.objective;
+    $('exerciseTitle').textContent=def.title;$('themeLabel').textContent=EXERCISE_THEME_LABELS[def.theme]||'Tactical exercise';$('exerciseObjective').textContent=exerciseOutcomeText(def);
     $('difficultyLabel').textContent=EXERCISE_DIFFICULTY_LABELS[exerciseDifficulty(def)];$('difficultyLabel').className=`exercise-level ${exerciseDifficulty(def)}`;
     $('planLength').textContent=`${exercisePlanText(def)} · up to ${def.roundLimit} possession rounds.`;
-    $('qualityGoal').textContent=def.goal.type==='defend'?`Win possession or hold the finishing chance to ${percent(def.goal.maxOpponentShotXG)} or less.`:`Create and take a shot worth at least ${percent(def.goal.minShotXG)} against the best keeper reply.`;
+    $('qualityGoal').textContent='The result earns credit. A shorter or stronger legal alternative is welcome; hints describe one possible idea.';
     $('roundCounter').textContent=`${Math.min(session.roundsUsed,session.roundLimit)} / ${session.roundLimit} rounds`;
     $('sideLabel').textContent=`YOU · ${TEAM[session.playerTeam].toUpperCase()} ${session.playerTeam==='white'?'↑':'↓'}`;
     $('playBtn').hidden=view.started;$('playBtn').disabled=filterBlocked;$('actionPanel').hidden=filterBlocked||!view.started||session.status!=='active';$('feedbackPanel').hidden=filterBlocked||session.status==='active';
     $('undoBtn').disabled=filterBlocked||!view.canUndo;$('retryBtn').disabled=filterBlocked||!view.started&&session.roundsUsed===0;
-    const requirements=[];
-    if(def.goal.requires==='through-ball')requirements.push({done:session.progress.throughBall,text:'Through ball and onside teammate collection'});
-    if(def.goal.requires==='box-entry')requirements.push({done:session.progress.boxEntry,text:def.goal.boxEntryMode==='pass'?'Receive a teammate’s pass in the box':'Enter the box with the ball'});
-    if(def.goal.minCompletedPasses>0)requirements.push({done:session.progress.completedPasses>=def.goal.minCompletedPasses,text:`Complete ${def.goal.minCompletedPasses} outfield teammate ${def.goal.minCompletedPasses===1?'pass':'passes'} (${Math.min(session.progress.completedPasses,def.goal.minCompletedPasses)} / ${def.goal.minCompletedPasses})`});
-    $('requirements').replaceChildren(...requirements.map(r=>{const item=document.createElement('span');item.className=r.done?'done':'';item.textContent=`${r.done?'✓':'○'} ${r.text}`;return item;}));
+    const coaching=exerciseCoachingItems(def,session.progress),coachingNodes=[];
+    if(coaching.length){const label=document.createElement('small');label.className='exercise-coaching-label';label.textContent='Optional coaching · does not affect credit';coachingNodes.push(label);}
+    $('requirements').replaceChildren(...coachingNodes,...coaching.map(r=>{const item=document.createElement('span');item.className=r.done?'done':'';item.textContent=`${r.done?'✓':'○'} ${r.text}`;return item;}));
     const [phase,title,help]=phaseCopy(game);$('phaseLabel').textContent=phase;$('phaseTitle').textContent=title;$('actionHelp').textContent=help;
-    $('boardStatus').textContent=filterBlocked?'No exercises match both filters. The current study is paused; change the level or theme to continue.':!view.started?'Study the position, then Play exercise.':session.status!=='active'?session.feedback:view.thinking?`${TEAM[currentTeam(session.game)]} · Tactical is choosing its reply…`:help;
+    $('boardStatus').textContent=filterBlocked?'No exercises match both filters. The current study is paused; change the level or theme to continue.':!view.started?'Study the position, then Play exercise.':session.status!=='active'?session.feedback:view.thinking?`${TEAM[currentTeam(session.game)]} · Tactical is checking an expanded set of replies…`:help;
     const positional=['attackMove','defendMove'].includes(game.phase),budget=game.positionBudget||{};
     $('positionModes').hidden=!positional||!!game.restart;
     const availability=positional?positionActions(game):null;
@@ -285,8 +312,10 @@ export function initExercisePage(){
     $('endBtn').disabled=!playable()||!(positional||game.phase==='keeperReact'||game.phase==='passRun'||isKick(game)&&!game.ball.carrierId);
     $('endBtn').textContent=game.phase==='keeperReact'?'Hold keeper / resolve →':game.phase==='passRun'?'Skip run →':isKick(game)&&!game.ball.carrierId?'Continue loose-ball play →':'End positioning →';
     if(session.status!=='active'){
-      $('feedbackPanel').dataset.result=session.status;$('feedbackLabel').textContent=session.status==='solved'?'EXERCISE SOLVED':'TRY A DIFFERENT PLAN';$('feedbackTitle').textContent=session.feedbackTitle||(session.status==='solved'?'Good continuation.':'There is a stronger route.');$('feedbackText').textContent=session.feedback;$('reviewPlan').textContent=def.coachNote;
-      const result=session.metrics?.shotResult;$('shotQuality').textContent=result?`Chance against the best keeper reply: ${percent(result.bestReplyXG)}${Number.isFinite(result.actualReplyXG)?` · after the actual reply: ${percent(result.actualReplyXG)}`:''}.`:'';
+      $('feedbackPanel').dataset.result=session.status;$('feedbackLabel').textContent=session.status==='solved'?'EXERCISE SOLVED':'TRY A DIFFERENT PLAN';$('feedbackTitle').textContent=session.feedbackTitle||(session.status==='solved'?'Good continuation.':'Try another continuation.');$('feedbackText').textContent=session.feedback;$('reviewPlan').textContent=def.coachNote?`One possible idea, not a required solution: ${def.coachNote}`:'';
+      const result=session.metrics?.shotResult;$('shotQuality').textContent=result?def.goal.type==='defend'&&Number.isFinite(result.testedThreatXG)
+        ?`Defensive threat checked: ${percent(result.testedThreatXG)} · strongest available shot: ${percent(result.bestOpponentShotXG)} · chosen shot after your reaction: ${percent(result.actualReplyXG)}.`
+        :`Chance against the best keeper reply: ${percent(result.bestReplyXG)}${Number.isFinite(result.actualReplyXG)?` · after the actual reply: ${percent(result.actualReplyXG)}`:''}.`:'';
       if(session.status==='solved'&&!progress.solved[def.id]){progress=recordExerciseSolved(progress,def.id);save();}
     }
     $('hintBtn').disabled=filterBlocked||hintsUsed>=(def.hints?.length||0);$('hintBtn').firstChild.textContent=hintsUsed?`Next hint (${hintsUsed}/${def.hints.length}) `:'Show a hint ';

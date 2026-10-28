@@ -2,9 +2,9 @@
  * objective grades public geometry and shot quality, never a prescribed move
  * string or a favourable sampled goal. All session transitions are immutable.
  */
-import {applyMove,applyKick,skipMove,selectCornerTaker,legalMoves,
-  currentTeam,shotModel,offsideInfo,inOwnBox,MIDFIELD_RANK} from './engine.js?v=2c106a991787';
-import {createExercisePosition} from './exercise-positions.js?v=80d49d7c93f1';
+import {applyMove,applyKick,skipMove,selectCornerTaker,legalMoves,legalKicks,disguisedShotTargets,
+  currentTeam,shotModel,offsideInfo,inOwnBox,MIDFIELD_RANK} from './engine.js?v=400633f53b46';
+import {createExercisePosition} from './exercise-positions.js?v=b7bdb42d4f5c';
 
 const TEAMS=['white','black'];
 const other=team=>team==='white'?'black':'white';
@@ -28,6 +28,25 @@ export function bestKeeperShotChance(pending) {
   if(keeper)for(const move of legalMoves(pending,keeper.id))
     chances.push(shotModel(pending,shot.x,shot.y,move).probability);
   return Math.max(0,Math.min(1,...chances.filter(Number.isFinite)));
+}
+
+/** Strongest immediate legal finish before a target is declared. Each target
+ * gets its own best legal keeper response; a disguise uses its fair mixture.
+ * The preview does not resolve a shot or inspect the future chance seed.
+ */
+export function bestAvailableShotChance(game) {
+  if(!game||!['kick','kickoff','keeperRelease'].includes(game.phase))return 0;
+  const team=currentTeam(game),shots=legalKicks(game).filter(kick=>kick.goal===team&&!kick.offside);
+  const chances=shots.map(kick=>{
+    const pending=applyKick(game,kick.x,kick.y);
+    return pending.phase==='keeperReact'&&pending.pendingShot?.scoringTeam===team?bestKeeperShotChance(pending):0;
+  });
+  const pair=disguisedShotTargets(game);
+  if(pair.length===2) {
+    const pending=applyKick(game,pair[0].x,pair[0].y,{disguise:true});
+    if(pending.phase==='keeperReact'&&pending.pendingShot?.scoringTeam===team)chances.push(bestKeeperShotChance(pending));
+  }
+  return Math.max(0,...chances);
 }
 
 /** A possession round ends at its kick (after any compulsory keeper release),
@@ -60,13 +79,21 @@ function objectiveOf(definition) {
   const minCompletedPasses=source.minCompletedPasses??0;
   if(!Number.isInteger(minCompletedPasses)||minCompletedPasses<0||minCompletedPasses>3)
     throw new RangeError('A combination requires between zero and three completed outfield passes.');
-  return {...source,type,requires,minShotXG,maxOpponentShotXG,boxEntryMode,minCompletedPasses};
+  // Route annotations support coaching only. The result, not the route used to
+  // reach it, decides whether a legal attempt solves the exercise.
+  return {...source,type,requires,minShotXG,maxOpponentShotXG,boxEntryMode,minCompletedPasses,grading:'outcome'};
 }
-function assessment(game,playerTeam,progress) {
+function outcomeObjective(goal) {
+  return goal.type==='finish'
+    ?`Create and take a shot worth at least ${percentage(goal.minShotXG)} against the keeper's best legal response. Any legal route can succeed.`
+    :`Win possession or hold the opponent's next finishing chance to ${percentage(goal.maxOpponentShotXG)} or less.`;
+}
+function assessment(game,playerTeam,progress,strongestAvailableXG=null) {
   const shot=game.pendingShot;
   if(!shot)return null;
+  const bestReplyXG=bestKeeperShotChance(game),opponentShot=shot.shootingTeam===other(playerTeam)&&shot.scoringTeam===other(playerTeam);
   return {shootingTeam:shot.shootingTeam,scoringTeam:shot.scoringTeam,
-    bestReplyXG:bestKeeperShotChance(game),prerequisiteMet:true,
+    bestReplyXG,bestOpponentShotXG:opponentShot?Math.max(bestReplyXG,strongestAvailableXG??bestReplyXG):null,
     throughBall:progress.throughBall,boxEntry:progress.boxEntry,completedPasses:progress.completedPasses,
     playerShot:shot.shootingTeam===playerTeam&&shot.scoringTeam===playerTeam};
 }
@@ -83,12 +110,8 @@ export function createExerciseSession(definition,options={}) {
     game,status:'active',roundLimit,roundsUsed:0,actionCount:0,progress,
     pendingAssessment:game.phase==='keeperReact'?assessment(game,playerTeam,progress):null,
     loosePass:null,reviewGame:null,feedbackTitle:'Find a useful plan',
-    feedback:definition.objective||'Create a strong chance within the round limit.',reason:null,
-    metrics:{bestShotXG:0,lastShotXG:null,lastOpponentShotXG:null,shotCount:0,shotResult:null},events:[]};
-  if(session.pendingAssessment) {
-    session.pendingAssessment.prerequisiteMet=prerequisite(session);
-    session.pendingAssessment.prerequisiteMessage=missingPrerequisite(session);
-  }
+    feedback:outcomeObjective(goal),reason:null,
+    metrics:{bestShotXG:0,lastShotXG:null,lastOpponentShotXG:null,bestOpponentShotXG:null,testedThreatXG:null,shotCount:0,shotResult:null},events:[]};
   return session;
 }
 
@@ -104,24 +127,6 @@ function act(game,action,overrides) {
 }
 function end(session,status,reason,title,message) {
   Object.assign(session,{status,reason,feedbackTitle:title,feedback:message});
-}
-function prerequisite(session,progress=session.progress) {
-  const goal=session.definition.goal;
-  return progress.completedPasses>=goal.minCompletedPasses
-    &&(goal.requires==='through-ball'?progress.throughBall
-      :goal.requires==='box-entry'?progress.boxEntry:true);
-}
-function missingPrerequisite(session) {
-  const goal=session.definition.goal,progress=session.progress,messages=[];
-  if(progress.completedPasses<goal.minCompletedPasses)
-    messages.push(`Complete at least ${goal.minCompletedPasses} teammate passes to outfield players before finishing (${progress.completedPasses} completed). Self-passes and passes to the keeper do not count.`);
-  if(goal.requires==='through-ball'&&!progress.throughBall)
-    messages.push('First play a forward ball through the defensive line into space and have an onside teammate collect it.');
-  if(goal.requires==='box-entry'&&!progress.boxEntry)
-    messages.push(goal.boxEntryMode==='either'
-      ?'First carry into the opposing box or deliver the ball there to a teammate.'
-      :'First deliver the ball into the opposing box to a teammate; a self-pass does not meet this objective.');
-  return messages.join(' ');
 }
 function rememberLoosePass(before,after,playerTeam) {
   const a=after.lastAction,actor=before.pieces.find(piece=>piece.id===a?.pieceId);
@@ -196,23 +201,28 @@ function finishShot(session,before,after) {
     session.metrics.bestShotXG=Math.max(session.metrics.bestShotXG,pending.bestReplyXG);
     if(pending.scoringTeam!==session.playerTeam)
       end(session,'failed','own-goal','Wrong goal','That attempt was aimed at your own goal. Retry and attack the opposite net.');
-    else if(!pending.prerequisiteMet)
-      end(session,'failed','missing-theme','Complete the combination',pending.prerequisiteMessage||missingPrerequisite(session));
     else if(pending.bestReplyXG+1e-9>=goal.minShotXG)
       end(session,'solved','strong-finish','Strong chance created',
-        `Your finish is worth ${percentage(pending.bestReplyXG)} against the keeper's best legal response. Shot quality solves the exercise, even if the sampled shot is saved or misses.`);
+        `Your finish is worth ${percentage(pending.bestReplyXG)} against the keeper's best legal response. Your legal route meets the finishing objective, even if the sampled shot is saved or misses.`);
     else end(session,'failed','weak-finish','Improve the chance',
       `That finish is worth ${percentage(pending.bestReplyXG)} against the keeper's best legal response; the target is ${percentage(goal.minShotXG)}. Look for a better angle, closer receiver or clearer shooting route.`);
     return true;
   }
   if(goal.type==='defend'&&pending.shootingTeam===other(session.playerTeam)
       &&pending.scoringTeam===other(session.playerTeam)) {
+    const strongestAvailableXG=Number.isFinite(pending.bestOpponentShotXG)?pending.bestOpponentShotXG:pending.bestReplyXG;
+    const testedThreatXG=Math.max(actualReplyXG,strongestAvailableXG);
     session.metrics.lastOpponentShotXG=actualReplyXG;
-    if(actualReplyXG<=goal.maxOpponentShotXG+1e-9)
+    session.metrics.bestOpponentShotXG=strongestAvailableXG;
+    session.metrics.testedThreatXG=testedThreatXG;
+    Object.assign(session.metrics.shotResult,{bestOpponentShotXG:strongestAvailableXG,testedThreatXG});
+    if(testedThreatXG<=goal.maxOpponentShotXG+1e-9)
       end(session,'solved','weak-opponent-finish','Danger reduced',
-        `Your defence left a ${percentage(actualReplyXG)} chance, at or below the ${percentage(goal.maxOpponentShotXG)} target. The decision is judged by chance quality, not the sampled goal or save.`);
+        `The tested finishing threat was ${percentage(testedThreatXG)}, at or below the ${percentage(goal.maxOpponentShotXG)} target. This checks the opponent's strongest available aim and your actual keeper response, not the sampled goal or save.`);
     else end(session,'failed','strong-opponent-finish','Too much danger remains',
-      `The opponent still had a ${percentage(actualReplyXG)} chance after your response. Reduce it to ${percentage(goal.maxOpponentShotXG)} or win possession before the finish.`);
+      strongestAvailableXG>actualReplyXG+1e-9
+        ?`The declared shot was worth ${percentage(actualReplyXG)} after your response, but another legal shooting choice offered ${percentage(strongestAvailableXG)} even against its best keeper reply. Limit every available finish to ${percentage(goal.maxOpponentShotXG)} or win possession.`
+        :`The opponent still had a ${percentage(actualReplyXG)} chance after your response. Reduce it to ${percentage(goal.maxOpponentShotXG)} or win possession before the finish.`);
     return true;
   }
   return false;
@@ -231,9 +241,9 @@ export function applyExerciseAction(session,action,overrides={}) {
     result:a.type,roundsUsed:next.roundsUsed,throughBall:next.progress.throughBall,boxEntry:next.progress.boxEntry});
   if(next.events.length>LIMIT_ACTIONS)next.events.shift();
   if(after.phase==='keeperReact'&&before.phase!=='keeperReact') {
-    next.pendingAssessment=assessment(after,next.playerTeam,next.progress);
-    next.pendingAssessment.prerequisiteMet=prerequisite(next);
-    next.pendingAssessment.prerequisiteMessage=missingPrerequisite(next);
+    const opponentShot=after.pendingShot?.shootingTeam===other(next.playerTeam)&&after.pendingShot?.scoringTeam===other(next.playerTeam);
+    next.pendingAssessment=assessment(after,next.playerTeam,next.progress,
+      opponentShot?bestAvailableShotChance(before):null);
     next.feedbackTitle='Keeper responds';
     next.feedback='The shot is committed. Its quality will be checked after the goalkeeper response.';
     return next;
@@ -267,10 +277,10 @@ export function applyExerciseAction(session,action,overrides={}) {
     next.feedback='An onside teammate collected your pass beyond the defensive line. Now create the finishing chance.';
   } else if(next.progress.boxEntry&&!progressBefore.boxEntry) {
     next.feedbackTitle='Ball delivered into the box';
-    next.feedback='The box-entry objective is met. Find a strong finish before the remaining rounds run out.';
+    next.feedback='You found a box entry. Now create a strong finish; other legal finishing routes also count.';
   } else {
     next.feedbackTitle=actor===next.playerTeam?'Plan in progress':'Tactical reply played';
-    next.feedback=`${next.roundLimit-next.roundsUsed} possession rounds remain. ${next.definition.objective||'Improve the position and complete the objective.'}`;
+    next.feedback=`${next.roundLimit-next.roundsUsed} possession rounds remain. ${outcomeObjective(goal)}`;
   }
   return next;
 }

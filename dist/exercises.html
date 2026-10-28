@@ -5,7 +5,7 @@
   <meta name="theme-color" content="#173e35">
   <meta name="description" content="36 Football Chess exercises in Easy, Medium and Tough levels: coordinate your pieces, finish against a Tactical bot or prevent a goal.">
   <title>Football Chess · Tactical exercises</title>
-  <link rel="stylesheet" href="style.css?v=7e245ae5eca4"><link rel="stylesheet" href="exercises.css?v=acf97130d491">
+  <link rel="stylesheet" href="style.css?v=7e245ae5eca4"><link rel="stylesheet" href="exercises.css?v=1c6c94cfd2dd">
 </head>
 <body class="exercises-page">
 <header class="masthead">
@@ -14,7 +14,7 @@
   <a class="text-button exercise-back" href="./">← Back to match</a>
 </header>
 <main class="exercise-main">
-  <div class="page-intro"><div><p class="eyebrow">THE TRAINING GROUND</p><h1>Find the chance.</h1><p class="exercise-intro">Start with Easy. Link two or three steps in Medium, then coordinate three or four in Tough. Every opponent plays Tactical.</p></div><div class="exercise-progress"><strong id="solvedCount">0 / 36</strong><span>EXERCISES SOLVED</span></div></div>
+  <div class="page-intro"><div><p class="eyebrow">THE TRAINING GROUND</p><h1>Find the chance.</h1><p class="exercise-intro">Find your own continuation. Any legal plan meeting the outcome earns credit, including shorter or stronger alternatives. Tactical uses expanded study analysis.</p></div><div class="exercise-progress"><strong id="solvedCount">0 / 36</strong><span>EXERCISES SOLVED</span></div></div>
   <div class="exercise-layout">
     <aside class="exercise-library panel" aria-label="Exercise library">
       <p class="eyebrow">CHOOSE YOUR CHALLENGE</p>
@@ -25,7 +25,7 @@
       </div>
       <p id="filteredCount" class="exercise-filtered-count" aria-live="polite">36 exercises shown</p>
       <div id="exerciseList" class="exercise-list" role="group" aria-label="Choose an exercise"></div>
-      <p class="exercise-library-note">A step is one of your moves, passes or shots. Ending positioning and the bot’s replies do not count. Plan lengths are a guide; other sound routes can work. Study positions omit unused players. Your full match stays saved separately.</p>
+      <p class="exercise-library-note">A step is one of your moves, passes or shots. Ending positioning and the bot’s replies do not count. Plan lengths are a guide, not a minimum. Themes and hints are optional coaching. Earlier completions stay recorded when a position is updated. Study positions omit unused players. Your full match stays saved separately.</p>
     </aside>
     <section class="exercise-board-column" aria-label="Exercise pitch">
       <div class="exercise-board-heading"><span id="sideLabel">YOU · IVORY FC</span><span id="roundCounter">0 / 3 rounds</span></div>
@@ -47,13 +47,13 @@
       <section class="panel exercise-actions" id="actionPanel" hidden><p class="eyebrow" id="phaseLabel">YOUR TURN</p><h3 id="phaseTitle">Shape the play</h3><div class="move-modes" id="positionModes" role="group" aria-label="Positioning action"><button id="offballBtn" type="button" aria-pressed="true">Off ball</button><button id="dribbleBtn" type="button" aria-pressed="false">Dribble</button><button id="bonusBtn" type="button" aria-pressed="false">Pawn / King</button></div><p id="budgetInfo" class="exercise-budget"></p><p id="selectedInfo" class="exercise-selected">Select a piece.</p><label class="exercise-choice" id="passRunChoice" hidden><input id="passRunEnabled" type="checkbox"> Pass &amp; run <small>Uses the next off-ball move</small></label><label class="exercise-choice" id="disguiseChoice" hidden><input id="disguiseEnabled" type="checkbox"> Disguise the shot <small>Two targets, each 50%</small></label><p id="actionHelp"></p><button type="button" class="primary wide" id="endBtn">End positioning <span>→</span></button></section>
       <section class="panel exercise-feedback" id="feedbackPanel" aria-live="polite" hidden><p class="eyebrow" id="feedbackLabel">POSITION REVIEW</p><h3 id="feedbackTitle"></h3><p id="feedbackText"></p><p id="shotQuality"></p><p id="reviewPlan"></p><button id="nextBtn" class="primary wide" type="button">Next exercise <span>→</span></button></section>
       <section class="exercise-hints"><button id="hintBtn" class="text-button" type="button">Show a hint <span>?</span></button><ol id="hintsList"></ol></section>
-      <p class="exercise-grading-note">Several plans can work. Finishing is judged by the chance created against the best keeper reply, not by a lucky goal or an unlucky save. Fouls are off in these studies.</p>
+      <p class="exercise-grading-note">Several plans can work. Finishing is judged by the chance created against the best keeper reply, not by a lucky goal or an unlucky save. Themes, pass counts and example moves never gate credit. The study bot searches more replies; its bounded search is not a proof of perfect play. Fouls are off in these studies.</p>
       <p id="errorMessage" class="exercise-error" role="alert"></p>
       <section class="exercise-last-action" id="lastActionPanel" hidden><p class="eyebrow">LAST ACTION</p><p id="lastActionText"></p></section>
     </aside>
   </div>
 </main>
 <footer><span>FOOTBALL × CHESS</span><p>Find a useful continuation, then answer the Tactical bot’s reply.</p><a href="./">Return to the match ↗</a></footer>
-<script type="module" src="exercises-app.js?v=ddd487e640de"></script>
+<script type="module" src="exercises-app.js?v=fd9d72232f1b"></script>
 </body>
 </html>

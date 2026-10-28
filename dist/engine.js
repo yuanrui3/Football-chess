@@ -2779,13 +2779,18 @@ function tacticalUnsettled(state) {
 // action through chooseAIAction; no analysis state enters a saved match.
 export function analyzeTacticalAction(state, {maxDepth = AI_SEARCH.depth, nodeLimit = AI_SEARCH.nodes, useCache = true, extensions = true, onIteration,
   modelWeights = RL_VALUE_MODEL.enabled ? RL_VALUE_MODEL.weights : null, modelScale = rlDefaultScale(modelWeights), selectionSeed = null,
-  evaluationScope = 'match'} = {}) {
+  evaluationScope = 'match', searchWidths = null} = {}) {
   if (!['match', 'round'].includes(evaluationScope)) throw new Error('Choose match or round analysis.');
   const roundScoped = evaluationScope === 'round';
   modelWeights = rlValidateWeights(modelWeights);
   modelScale = rlValidateScale(modelScale);
   maxDepth = clamp(Math.floor(Number(maxDepth) || 1), 1, 12);
   nodeLimit = clamp(Math.floor(Number(nodeLimit) || 1), 1, 50000);
+  // Study opponents may spend a wider beam. Ordinary playing and evaluation
+  // callers omit this option and retain the original candidate sets exactly.
+  const widths = searchWidths === null ? null : Object.fromEntries(
+    Object.entries({root: AI_SEARCH.roots, position: 3, kick: 2, bonus: 1})
+      .map(([name, fallback]) => [name, clamp(Math.floor(Number(searchWidths?.[name]) || fallback), 1, 64)]));
   const stats = {nodes: 0, completedDepth: 0, cacheHits: 0, extensions: 0, cutoffs: 0, aborted: false,
     ...(roundScoped ? {roundStops: 0, keeperReleaseContinuations: 0} : {})};
   if (!state || state.phase === 'finished') return {action: {type: 'skip'}, value: 0, stats, line: []};
@@ -2828,8 +2833,10 @@ export function analyzeTacticalAction(state, {maxDepth = AI_SEARCH.depth, nodeLi
     const budget = budgetFor(position), owner = position.pieces.find(p => p.id === position.ball.carrierId);
     const pawnOnly = positionalTurn(position) && budget.normalUsed
       && (position.phase !== 'attackMove' || !!position.restart || !owner || budget.dribbleUsed);
-    const width = root ? AI_SEARCH.roots : position.phase === 'keeperReact' || pawnOnly ? 1
-      : ['kick', 'kickoff', 'keeperRelease'].includes(position.phase) ? 2 : 3;
+    const width = widths ? root ? widths.root : position.phase === 'keeperReact' ? 1 : pawnOnly ? widths.bonus
+      : ['kick', 'kickoff', 'keeperRelease'].includes(position.phase) ? widths.kick : widths.position
+      : root ? AI_SEARCH.roots : position.phase === 'keeperReact' || pawnOnly ? 1
+        : ['kick', 'kickoff', 'keeperRelease'].includes(position.phase) ? 2 : 3;
     const key = `${keyFor(position)}|${root ? 'root' : 'inner'}`;
     if (useCache && actionsCache.has(key)) return actionsCache.get(key);
     const actions = rankedTacticalActions(position, width, root);
@@ -2956,6 +2963,13 @@ export function analyzeTacticalAction(state, {maxDepth = AI_SEARCH.depth, nodeLi
 
 function chooseTacticalAction(state, modelWeights, modelScale, selectionSeed) {
   return analyzeTacticalAction(state, {modelWeights, modelScale, selectionSeed}).action;
+}
+
+// Read-only study diagnostics reuse the playing engine's ray geometry and
+// outlet-aware positional value. They do not alter the ordinary bot policy.
+export function studyPositionMetrics(state, team = currentTeam(state)) {
+  return {bestShotXG: tacticalShots(state, state.attack, true),
+    positionValue: tacticalBasePositionValue(state, team)};
 }
 
 export function chooseAIAction(state, {difficulty = 'casual', modelWeights = RL_VALUE_MODEL.enabled ? RL_VALUE_MODEL.weights : null, modelScale = rlDefaultScale(modelWeights), selectionSeed = null} = {}) {

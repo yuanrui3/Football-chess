@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as E from '../dist/engine.js';
-import {createExerciseSession,applyExerciseAction,bestKeeperShotChance,completedExerciseRound} from '../dist/exercise-session.js';
+import {createExerciseSession,applyExerciseAction,bestKeeperShotChance,bestAvailableShotChance,completedExerciseRound} from '../dist/exercise-session.js';
 
 const clone=structuredClone;
 const other=team=>team==='white'?'black':'white';
@@ -40,6 +40,7 @@ test('creation preserves definitions, accepts a stable seed and validates short 
   const d=definition(),before=clone(d),a=createExerciseSession(d,{seed:73}),b=createExerciseSession(d,{seed:73});
   assert.deepEqual(a,b);assert.deepEqual(d,before);assert.equal(a.status,'active');assert.equal(a.roundsUsed,0);
   assert.equal(a.roundLimit,3);assert.equal(a.playerTeam,'white');
+  assert.equal(a.definition.goal.grading,'outcome');
   assert.throws(()=>createExerciseSession({...d,roundLimit:5}),/three or four/);
   assert.throws(()=>createExerciseSession({...d,playerTeam:'purple'}),/valid player team/);
   assert.throws(()=>createExerciseSession({...d,goal:{type:'finish',minShotXG:1.2}}),/probabilities/);
@@ -90,10 +91,12 @@ test('disguised shots are judged by the two-target expectation, not the favourab
   assert.notEqual(left.game.lastAction.goalTarget.x,right.game.lastAction.goalTarget.x);
 });
 
-test('an otherwise strong shot does not bypass the through-ball prerequisite',()=>{
+test('a strong direct finish solves a through-ball study without following its suggested route',()=>{
   const pending=shoot(start({}, {goal:{type:'finish',minShotXG:.35,requires:'through-ball'}}));
-  const result=resolve(pending,{roll:0});assert.equal(result.status,'failed');
-  assert.equal(result.reason,'missing-theme');assert.match(result.feedback,/onside teammate/);
+  const result=resolve(pending,{roll:.9999});assert.equal(result.status,'solved');
+  assert.equal(result.reason,'strong-finish');assert.equal(result.progress.throughBall,false);
+  assert.ok(result.metrics.lastShotXG>=.35);assert.match(result.feedback,/legal route/);
+  assert.doesNotMatch(result.feedback,/must|at least.*passes|First play/i);
 });
 
 function throughPosition() {return start({'white-Q':['B',3,7],'white-N1':['N',5,4],
@@ -152,6 +155,15 @@ test('ordinary dribbling into the box meets an either-entry objective but not a 
   }
 });
 
+test('a strong dribbling finish earns credit even when the coaching theme suggests a pass into the box',()=>{
+  let session=start({'white-Q':['Q',6,4]}, {phase:'attackMove',
+    goal:{type:'finish',requires:'box-entry',boxEntryMode:'pass',minCompletedPasses:2,minShotXG:.1}});
+  session=apply(session,move('white-Q',6,2));assert.equal(session.progress.boxEntry,false);
+  session=toKick(session);session=resolve(shoot(session),{roll:.9999});
+  assert.equal(session.status,'solved');assert.equal(session.progress.completedPasses,0);
+  assert.ok(session.metrics.lastShotXG>=.1);
+});
+
 test('dribble, teammate move and shared bonus are subactions, not three rounds',()=>{
   let session=start({'white-Q':['Q',6,7],'white-R1':['R',4,7],'white-P1':['P',9,10]}, {phase:'attackMove'});
   session=apply(session,move('white-Q',6,6));session=apply(session,move('white-R1',4,6));
@@ -191,6 +203,87 @@ test('defending grades the actual keeper response and accepts sound defence even
   assert.ok(good.metrics.lastOpponentShotXG<=.4);
   const bad=resolve(session,{roll:.99999});assert.notEqual(bad.game.lastAction.type,'goal');
   assert.equal(bad.status,'failed');assert.ok(bad.metrics.lastOpponentShotXG>.4);
+});
+
+function defensiveChoice({keeperX=8,maxThreat=.5,phase='kick',shot}={}) {
+  return start({'white-K':['K',keeperX,16],'white-Q':['Q',0,12],'black-Q':['Q',5,15]},
+    {side:'defence',phase,carrier:'black-Q',attack:'black',shot,
+      goal:{type:'defend',maxOpponentShotXG:maxThreat}});
+}
+function keeperChoices(session) {
+  const game=session.game,keeper=game.pieces.find(p=>p.type==='K'&&p.team===E.currentTeam(game));
+  return [{action:skip,chance:E.shotModel(game).probability},
+    ...(keeper?E.legalMoves(game,keeper.id).map(m=>({action:move(keeper.id,m.x,m.y),chance:E.shotModel(game,game.pendingShot.x,game.pendingShot.y,m).probability})):[])];
+}
+function optimalKeeper(session,overrides={}) {
+  const choice=keeperChoices(session).sort((a,b)=>a.chance-b.chance)[0];
+  return apply(session,choice.action,overrides);
+}
+
+test('the strongest available shot preview checks every legal aim and fair disguise without chance-state mutation',()=>{
+  const source=defensiveChoice({keeperX:5,maxThreat:.65}).game,before=clone(source);
+  const direct=E.legalKicks(source).filter(k=>k.goal==='black'&&!k.offside)
+    .map(k=>bestKeeperShotChance(E.applyKick(source,k.x,k.y)));
+  const pair=E.disguisedShotTargets(source);
+  const disguised=bestKeeperShotChance(E.applyKick(source,pair[0].x,pair[0].y,{disguise:true}));
+  const strongest=bestAvailableShotChance(source);
+  assert.equal(strongest,Math.max(...direct,disguised));
+  assert.ok(disguised>Math.max(...direct)+.2,'the opponent may exploit two-target uncertainty');
+  assert.equal(bestAvailableShotChance({...source,randomState:123456}),strongest);
+  assert.deepEqual(source,before);
+  assert.equal(bestAvailableShotChance({...source,phase:'defendMove'}),0);
+});
+
+test('a bot choosing a weak aim cannot award defensive credit while a stronger legal finish exists',()=>{
+  const source=defensiveChoice(),before=clone(source);
+  const pending=apply(source,kick(7,17));
+  assert.ok(pending.pendingAssessment.bestReplyXG<.5);
+  assert.ok(pending.pendingAssessment.bestOpponentShotXG>.95);
+  const result=optimalKeeper(pending,{roll:.9999});
+  assert.equal(result.status,'failed');assert.equal(result.reason,'strong-opponent-finish');
+  assert.ok(result.metrics.lastOpponentShotXG<.5);
+  assert.ok(result.metrics.bestOpponentShotXG>.95);
+  assert.equal(result.metrics.testedThreatXG,result.metrics.bestOpponentShotXG);
+  assert.match(result.feedback,/another legal shooting choice/);
+  assert.deepEqual(source,before);
+});
+
+test('a defence earns credit when every available shooting choice and the actual keeper response meet the target',()=>{
+  const pending=apply(defensiveChoice({keeperX:5,maxThreat:.65}),kick(5,17));
+  const result=optimalKeeper(pending,{roll:0});
+  assert.equal(result.status,'solved');
+  assert.ok(result.metrics.bestOpponentShotXG>.6&&result.metrics.bestOpponentShotXG<.65);
+  assert.ok(result.metrics.lastOpponentShotXG<.4);
+  assert.equal(result.metrics.testedThreatXG,result.metrics.bestOpponentShotXG);
+});
+
+test('hypothetical optimal cover cannot excuse the student making a poor keeper reaction',()=>{
+  const pending=apply(defensiveChoice({keeperX:5,maxThreat:.65}),kick(5,17));
+  const bad=keeperChoices(pending).sort((a,b)=>b.chance-a.chance)[0];
+  assert.ok(bad.chance>.65);
+  const result=apply(pending,bad.action,{roll:.9999});
+  assert.equal(result.status,'failed');
+  assert.equal(result.metrics.testedThreatXG,result.metrics.lastOpponentShotXG);
+  assert.ok(result.metrics.testedThreatXG>result.metrics.bestOpponentShotXG);
+});
+
+test('defensive target-choice grading keeps disguised shots fair across the sampled target',()=>{
+  const pending=apply(defensiveChoice({keeperX:5,maxThreat:.65}),kick(5,17,true));
+  assert.equal(pending.game.pendingShot.disguised,true);
+  const left=optimalKeeper(pending,{roll:.9999,targetRoll:0}),right=optimalKeeper(pending,{roll:.9999,targetRoll:.99});
+  assert.equal(left.status,'solved');assert.equal(right.status,'solved');
+  assert.equal(left.metrics.bestOpponentShotXG,right.metrics.bestOpponentShotXG);
+  assert.equal(left.metrics.testedThreatXG,right.metrics.testedThreatXG);
+  assert.equal(left.metrics.lastOpponentShotXG,right.metrics.lastOpponentShotXG);
+  assert.notEqual(left.game.lastAction.goalTarget.x,right.game.lastAction.goalTarget.x);
+});
+
+test('an initially committed keeper study does not retroactively reopen the attackers other targets',()=>{
+  const pending=defensiveChoice({phase:'keeperReact',shot:{x:7,y:17}});
+  assert.ok(pending.pendingAssessment.bestOpponentShotXG<.5);
+  assert.equal(pending.pendingAssessment.bestOpponentShotXG,pending.pendingAssessment.bestReplyXG);
+  const result=optimalKeeper(pending,{roll:0});
+  assert.equal(result.status,'solved');assert.ok(result.metrics.testedThreatXG<.5);
 });
 
 test('a clean possession win completes defence before a finish; a failed knight tackle does not',()=>{
@@ -233,11 +326,12 @@ test('pass-and-run uses the next off-ball action without spending a second round
   assert.equal(session.game.positionBudget.normalUsed,true);assert.equal(session.roundsUsed,1);
 });
 
-test('a themed exercise starting with a committed shot cannot invent prerequisite evidence',()=>{
+test('a committed strong shot is graded by its quality without inventing coaching-theme evidence',()=>{
   const session=start({}, {phase:'keeperReact',shot:{x:6,y:-1},
     goal:{type:'finish',minShotXG:.35,requires:'box-entry'}});
-  assert.equal(session.pendingAssessment.prerequisiteMet,false);
-  const result=resolve(session,{roll:0});assert.equal(result.status,'failed');assert.equal(result.reason,'missing-theme');
+  assert.equal(session.pendingAssessment.boxEntry,false);
+  const result=resolve(session,{roll:0});assert.equal(result.status,'solved');assert.equal(result.reason,'strong-finish');
+  assert.equal(result.progress.boxEntry,false);
 });
 
 test('a legal on-restart teammate collection retains the native direct-receipt offside exemption',()=>{
@@ -249,7 +343,7 @@ test('a legal on-restart teammate collection retains the native direct-receipt o
   assert.equal(session.progress.boxEntry,true);assert.equal(session.game.lastAction.type,'move');
 });
 
-test('combination objectives default to zero passes and reject invalid pass counts',()=>{
+test('coaching pass annotations default to zero and retain validated metadata',()=>{
   const d=definition();
   assert.equal(createExerciseSession(d).definition.goal.minCompletedPasses,0);
   for(const minCompletedPasses of [-1,1.5,4,'2',NaN,Infinity])
@@ -258,26 +352,25 @@ test('combination objectives default to zero passes and reject invalid pass coun
     assert.equal(createExerciseSession({...d,goal:{...d.goal,minCompletedPasses}}).definition.goal.minCompletedPasses,minCompletedPasses);
 });
 
-test('two genuine teammate passes qualify a combination before its finishing shot',()=>{
+test('two genuine teammate passes remain tracked as coaching progress before a finishing shot',()=>{
   let session=start({'white-Q':['Q',6,7],'white-R1':['R',6,5],'white-N1':['N',6,1]},
     {goal:{type:'finish',minShotXG:.35,minCompletedPasses:2}});
   session=apply(session,kick(6,5));assert.equal(session.progress.completedPasses,1);
   session=toKick(session);session=apply(session,kick(6,1));assert.equal(session.progress.completedPasses,2);
   session=toKick(session);session=shoot(session,kick(5,-1));
   assert.equal(session.pendingAssessment.completedPasses,2);
-  assert.equal(session.pendingAssessment.prerequisiteMet,true);
   session=resolve(session,{roll:.9999});assert.equal(session.status,'solved');
   assert.equal(session.roundsUsed,3);
 });
 
-test('a lucky direct goal cannot skip a pass combination and receives specific feedback',()=>{
+test('a strong direct finish earns credit without satisfying the suggested pass combination',()=>{
   let session=start({}, {goal:{type:'finish',minShotXG:.35,minCompletedPasses:2}});
   session=shoot(session);const pending=clone(session);
   session=resolve(session,{roll:0});
-  assert.equal(session.game.lastAction.type,'goal');assert.equal(session.status,'failed');
-  assert.equal(session.reason,'missing-theme');assert.match(session.feedback,/at least 2 teammate passes/);
-  assert.match(session.feedback,/0 completed/);assert.doesNotMatch(session.feedback,/opposing box/);
-  assert.equal(pending.pendingAssessment.prerequisiteMet,false);
+  assert.equal(session.game.lastAction.type,'goal');assert.equal(session.status,'solved');
+  assert.equal(session.reason,'strong-finish');assert.equal(session.progress.completedPasses,0);
+  assert.match(session.feedback,/legal route/);assert.doesNotMatch(session.feedback,/at least 2 teammate passes/);
+  assert.equal(pending.pendingAssessment.completedPasses,0);
 });
 
 test('self-pass collections and direct keeper receipts do not inflate combination progress',()=>{
@@ -296,44 +389,41 @@ function combinedThroughPosition() {
     'black-R2':['R',8,4],'black-R1':['R',12,1]},
   {goal:{type:'finish',minShotXG:.1,requires:'through-ball',minCompletedPasses:2},roundLimit:4});
 }
-test('a through-ball collection and a second teammate pass jointly satisfy both prerequisites',()=>{
+test('through-ball and teammate-pass coaching achievements remain available alongside outcome grading',()=>{
   let session=combinedThroughPosition();
   session=apply(session,kick(7,3));session=apply(session,move('white-N1',7,3));
   assert.equal(session.progress.throughBall,true);assert.equal(session.progress.completedPasses,1);
   session=toKick(session);session=apply(session,kick(5,2));
   assert.equal(session.progress.completedPasses,2);
   session=toKick(session);session=shoot(session,kick(8,-1));
-  assert.equal(session.pendingAssessment.prerequisiteMet,true);
   session=resolve(session,{roll:.9999});assert.equal(session.status,'solved');
 });
 
-test('the through-ball badge alone cannot substitute for the required second pass',()=>{
+test('a better through-ball finish is not rejected for omitting the suggested second pass',()=>{
   let session=combinedThroughPosition();
   session=apply(session,kick(7,3));session=apply(session,move('white-N1',7,3));
   session=apply(session,move('white-N1',8,1));session=toKick(session);session=shoot(session,kick(7,-1));
   assert.equal(session.pendingAssessment.throughBall,true);
   assert.equal(session.pendingAssessment.completedPasses,1);
-  assert.equal(session.pendingAssessment.prerequisiteMet,false);
-  session=resolve(session,{roll:0});assert.equal(session.status,'failed');
-  assert.match(session.feedback,/at least 2 teammate passes/);
-  assert.doesNotMatch(session.feedback,/First play a forward ball/);
+  session=resolve(session,{roll:0});assert.equal(session.status,'solved');
+  assert.ok(session.metrics.lastShotXG>=.1);assert.doesNotMatch(session.feedback,/at least 2 teammate passes/);
 });
 
-test('two direct passes do not substitute for a required through ball',()=>{
+test('a sound direct-pass combination solves even without the suggested through-ball badge',()=>{
   let session=start({'white-Q':['Q',6,7],'white-R1':['R',6,5],'white-N1':['N',6,1]},
     {goal:{type:'finish',minShotXG:.35,minCompletedPasses:2,requires:'through-ball'}});
   session=apply(session,kick(6,5));session=toKick(session);session=apply(session,kick(6,1));
   session=toKick(session);session=shoot(session,kick(5,-1));
-  assert.equal(session.pendingAssessment.completedPasses,2);assert.equal(session.pendingAssessment.prerequisiteMet,false);
-  session=resolve(session,{roll:0});assert.equal(session.status,'failed');
-  assert.match(session.feedback,/onside teammate/);assert.doesNotMatch(session.feedback,/at least 2 teammate passes/);
+  assert.equal(session.pendingAssessment.completedPasses,2);assert.equal(session.pendingAssessment.throughBall,false);
+  session=resolve(session,{roll:0});assert.equal(session.status,'solved');
+  assert.ok(session.metrics.lastShotXG>=.35);
 });
 
-test('combination evidence and feedback are fixed when the shot is committed',()=>{
+test('shot-quality evidence stays fixed when later coaching progress changes',()=>{
   const pending=shoot(start({}, {goal:{type:'finish',minShotXG:.35,minCompletedPasses:2}}));
   const altered=clone(pending);altered.progress.completedPasses=2;
   const result=resolve(altered,{roll:0});
-  assert.equal(result.status,'failed');assert.match(result.feedback,/0 completed/);
+  assert.equal(result.status,'solved');assert.equal(result.metrics.lastShotXG,pending.pendingAssessment.bestReplyXG);
   assert.equal(pending.progress.completedPasses,0);
 });
 

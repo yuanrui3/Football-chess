@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import * as E from '../dist/engine.js';
 import {TOUGH_DEFENCE_EXTRA} from '../dist/exercise-tough-defence-extra.js';
 import {createExerciseSession,applyExerciseAction,bestKeeperShotChance} from '../dist/exercise-session.js';
+import {chooseExerciseAction,exerciseFinishes} from '../dist/exercise-ai.js';
 
 function play(def,actions=def.exampleActions,seed=1984){
   let session=createExerciseSession(def,{seed});const trace=[];
@@ -10,7 +11,12 @@ function play(def,actions=def.exampleActions,seed=1984){
     session=applyExerciseAction(session,action);assert.deepEqual(source,before);
     trace.push({action,bot,result:session.game.lastAction?.type});};
   const respond=()=>{for(let allowance=0;session.status==='active'&&E.currentTeam(session.game)!==session.playerTeam;allowance++){
-    assert.ok(allowance<16);apply(E.chooseAIAction(session.game,{difficulty:'tactical'}),true);}};
+    assert.ok(allowance<16);const game=session.game,action=chooseExerciseAction(game);
+    if(action.type==='kick'&&['kick','keeperRelease'].includes(game.phase)){
+      const finishes=exerciseFinishes(game),chosen=finishes.find(f=>f.action.x===action.x&&f.action.y===action.y&&!!f.action.disguise===!!action.disguise);
+      if(chosen)assert.ok(chosen.probability>=finishes[0].probability-1e-9,'the opponent aims at its strongest legal finish');
+    }
+    apply(action,true);}};
   for(const action of actions){respond();assert.equal(session.status,'active');apply(action);}
   respond();return {session,trace};
 }
@@ -30,16 +36,16 @@ test('extra Tough defences use legal crowded diagrams and genuine three/four-ste
   }
 });
 
-for(const d of TOUGH_DEFENCE_EXTRA)test(`${d.id}: full Tactical replies across three seeds`,()=>{
+for(const d of TOUGH_DEFENCE_EXTRA)test(`${d.id}: expanded study replies across three seeds`,()=>{
   for(const seed of [1984,7,98765]){
     const {session,trace}=play(d,d.exampleActions,seed);
     assert.equal(session.status,'solved',`${d.id},${seed}: ${session.feedback}`);
     assert.ok(session.roundsUsed<=d.roundLimit);assert.ok(trace.some(t=>t.bot));
-    assert.ok(session.reason==='possession-won'||session.metrics.lastOpponentShotXG<=d.goal.maxOpponentShotXG);
+    assert.ok(session.reason==='possession-won'||session.metrics.testedThreatXG<=d.goal.maxOpponentShotXG);
   }
 });
 
-test('keeper return needs the clearance, entry, and final reaction',()=>{
+test('the illustrated keeper return obeys blocked entries and rewards a real saving reaction',()=>{
   const d=TOUGH_DEFENCE_EXTRA.find(d=>d.id==='tough-open-the-keepers-return');
   const game=createExerciseSession(d).game;
   assert.equal(E.inOwnBox('white',3,15),false);
@@ -51,7 +57,7 @@ test('keeper return needs the clearance, entry, and final reaction',()=>{
   assert.equal(held.status,'failed');assert.ok(held.metrics.lastOpponentShotXG>.9);
 });
 
-test('the box gateway needs a rook clearance, king bonus entry and a separate reaction',()=>{
+test('different legal rook clearances can open the gateway for an effective defence',()=>{
   const d=TOUGH_DEFENCE_EXTRA.find(d=>d.id==='tough-clear-the-box-gateway'),game=createExerciseSession(d).game;
   assert.equal(E.inOwnBox('white',3,13),false);
   for(const freePawn of [false,true])assert.ok(E.legalMoves(game,'white-K',{freePawn}).every(m=>!E.inOwnBox('white',m.x,m.y)),
@@ -60,8 +66,10 @@ test('the box gateway needs a rook clearance, king bonus entry and a separate re
   assert.throws(()=>play(d,[d.exampleActions[0],d.exampleActions[2]]),/legal move/);
   const held=play(d,[...d.exampleActions.slice(0,2),{type:'skip'}]).session;
   assert.equal(held.status,'failed');assert.ok(held.metrics.lastOpponentShotXG>.9);
-  const alternative=play(d,[{type:'move',pieceId:'white-R1',x:2,y:14},...d.exampleActions.slice(1)]).session;
-  assert.equal(alternative.status,'solved');assert.ok(alternative.metrics.lastOpponentShotXG<.28);
+  for(const x of [2,1]){
+    const alternative=play(d,[{type:'move',pieceId:'white-R1',x,y:14},...d.exampleActions.slice(1)]).session;
+    assert.equal(alternative.status,'solved');assert.ok(alternative.metrics.testedThreatXG<.28);
+  }
 });
 
 test('the gateway has no one/two-action capture or shot-covering shortcut',()=>{

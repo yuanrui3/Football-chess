@@ -2,14 +2,25 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as E from '../dist/engine.js';
 import {TOUGH_MIXED_EXERCISES} from '../dist/exercise-tough-mixed.js';
-import {createExerciseSession,applyExerciseAction} from '../dist/exercise-session.js';
+import {createExerciseSession,applyExerciseAction,bestKeeperShotChance} from '../dist/exercise-session.js';
+import {chooseExerciseAction,exerciseFinishes,exerciseKeeperChance} from '../dist/exercise-ai.js';
 
 const byId=id=>TOUGH_MIXED_EXERCISES.find(d=>d.id===id);
 function play(definition,actions=definition.exampleActions,seed=1984){
   let session=createExerciseSession(definition,{seed}),botActions=0;
   const act=action=>{session=applyExerciseAction(session,action);};
   const respond=()=>{for(let i=0;session.status==='active'&&E.currentTeam(session.game)!==session.playerTeam;i++){
-    assert.ok(i<15,'Tactical must return a decision');act(E.chooseAIAction(session.game,{difficulty:'tactical'}));botActions++;
+    assert.ok(i<15,'the study opponent must return a decision');
+    const game=session.game,action=chooseExerciseAction(game);
+    if(game.phase==='keeperReact'){
+      const chance=E.shotModel(game,game.pendingShot.x,game.pendingShot.y,action.type==='move'?action:undefined).probability;
+      assert.ok(Math.abs(chance-exerciseKeeperChance(game))<1e-9,'every legal keeper response is checked');
+    }
+    if(action.type==='kick'&&['kick','keeperRelease'].includes(game.phase)){
+      const finishes=exerciseFinishes(game),chosen=finishes.find(f=>f.action.x===action.x&&f.action.y===action.y&&!!f.action.disguise===!!action.disguise);
+      if(chosen)assert.ok(chosen.probability>=finishes[0].probability-1e-9,'the opponent uses its strongest available aim');
+    }
+    act(action);botActions++;
   }};
   for(const action of actions){respond();assert.equal(session.status,'active','every example step must actually be played');assert.equal(E.currentTeam(session.game),session.playerTeam);act(action);}
   respond();return {session,botActions};
@@ -33,7 +44,7 @@ test('four crowded mixed Tough studies respect the real squad and stated plan le
     assert.equal(d.hints.length,3);assert.ok(d.coachNote&&d.objective);
   }
 });
-for(const d of TOUGH_MIXED_EXERCISES)test(`${d.id}: full Tactical replies solve the real line over three seeds`,()=>{
+for(const d of TOUGH_MIXED_EXERCISES)test(`${d.id}: expanded study replies solve the real line over three seeds`,()=>{
   for(const seed of [1984,7,98765]){
     const {session,botActions}=play(d,d.exampleActions,seed);
     assert.equal(session.status,'solved',`${seed}: ${session.feedback}`);
@@ -43,14 +54,24 @@ for(const d of TOUGH_MIXED_EXERCISES)test(`${d.id}: full Tactical replies solve 
   }
 });
 
-test('the delivery clearance accepts another safe bishop destination',()=>{
+test('different legal bishop clearances earn the same outcome-based credit',()=>{
   const d=byId('tough-clear-the-delivery-diagonal');
-  const line=d.exampleActions.map((a,i)=>i?{...a}:{type:'move',pieceId:'white-B1',x:11,y:2});
-  assert.equal(play(d,line).session.status,'solved');
+  for(const [x,y]of [[11,2],[12,1]]){
+    const line=d.exampleActions.map((a,i)=>i?{...a}:{type:'move',pieceId:'white-B1',x,y});
+    assert.equal(play(d,line).session.status,'solved');
+  }
 });
 test('the coordinated screen accepts either preparation order',()=>{
   const d=byId('tough-pawn-screen-keeper-route'),[king,pawn,reaction]=d.exampleActions;
   assert.equal(play(d,[pawn,king,reaction]).session.status,'solved');
+});
+test('the pressing cage also accepts a rook screen with the shared king bonus',()=>{
+  const d=byId('tough-pawn-screen-keeper-route');
+  const line=[{type:'move',pieceId:'white-R1',x:7,y:13},
+    {type:'move',pieceId:'white-K',x:6,y:16,freePawn:true},
+    {type:'move',pieceId:'white-K',x:7,y:16}];
+  const result=play(d,line).session;
+  assert.equal(result.status,'solved');assert.ok(result.metrics.testedThreatXG<=d.goal.maxOpponentShotXG);
 });
 test('a defender cannot solve the crowded keeper study by an immediate or bonus-setup tackle',()=>{
   const d=byId('tough-pawn-screen-keeper-route'),game=createExerciseSession(d).game;
@@ -63,14 +84,39 @@ test('a defender cannot solve the crowded keeper study by an immediate or bonus-
     }
   }
 });
-test('both clearance routes require actually clearing their friendly blocker',()=>{
+test('the illustrated straight delivery and dribble remain subject to real blocking rules',()=>{
   const delivery=byId('tough-clear-the-delivery-diagonal');
   assert.throws(()=>play(delivery,delivery.exampleActions.slice(1)),/not a legal kick/);
   const battery=byId('tough-unlock-the-rook-battery');
   assert.throws(()=>play(battery,battery.exampleActions.filter((_,i)=>i!==1)),/not a legal move/);
 });
+test('the rook battery accepts a different supporting bishop destination',()=>{
+  const d=byId('tough-unlock-the-rook-battery'),line=d.exampleActions.map((a,i)=>i===1?{...a,x:7,y:1}:{...a});
+  const result=play(d,line).session;
+  assert.equal(result.status,'solved');assert.ok(result.metrics.lastShotXG>=d.goal.minShotXG);
+});
 test('the new pawn screen is necessary rather than a pawn shuffled along the same shot path',()=>{
   const d=byId('tough-pawn-screen-keeper-route'),[king,,reaction]=d.exampleActions;
   const {session}=play(d,[king,{type:'skip'},reaction]);
   assert.equal(session.status,'failed');assert.ok(session.metrics.lastOpponentShotXG>d.goal.maxOpponentShotXG);
+});
+test('the rebuilt pressing cage has no immediate or two-action finishing defence',()=>{
+  const d=byId('tough-pawn-screen-keeper-route'),initial=createExerciseSession(d).game;
+  const actions=game=>game.pieces.filter(p=>p.team==='white').flatMap(p=>[false,true].flatMap(freePawn=>
+    E.legalMoves(game,p.id,{freePawn}).map(m=>({pieceId:p.id,x:m.x,y:m.y,freePawn}))));
+  const apply=(game,a)=>E.applyMove(game,a.pieceId,a.x,a.y,{freePawn:a.freePawn,roll:0});
+  let checked=0,minChance=1;
+  const inspect=(game,length)=>{
+    assert.equal(game.attack,'black','a one/two-move route does not already win possession');
+    while(game.phase==='defendMove')game=E.skipMove(game);
+    const pending=E.applyKick(game,7,17);
+    const chance=length===1?bestKeeperShotChance(pending):E.shotModel(pending).probability;
+    assert.ok(chance>d.goal.maxOpponentShotXG,'the native strongest H-file threat still exceeds the target');
+    checked++;minChance=Math.min(minChance,chance);
+  };
+  for(const first of actions(initial)){
+    const next=apply(initial,first);inspect(next,1);
+    if(next.phase==='defendMove')for(const second of actions(next))inspect(apply(next,second),2);
+  }
+  assert.ok(checked>1800);assert.ok(minChance>.19);
 });
