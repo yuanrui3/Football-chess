@@ -35,6 +35,7 @@ function harness({mode='watch',stage='setup',game=createGame({mode,seed:101})}={
     game:plain(game),stage,duration:10,remaining:600,foulsEnabled:true,paused:false,
     selectedId:null,lastComputerAction:null,freePawnMode:false,dribbleMode:false,passRunSelected:false,
     history:[],lastGoalReplay:null,replayAutoContinue:false,replayPendingResult:false,
+    evaluation:{reset(){}},
     $:element,FORMATION_PRESETS,setStartingFormation,createGame,W,H,MIDFIELD_RANK,CENTRAL_GOAL_FILES,inOwnBox,canOccupySquare,
     resetVoiceover:()=>calls.push('voice'),cancelAI:()=>calls.push('cancelAI'),cancelShotFlight:()=>calls.push('cancelShot'),
     replayPlayer:{stop:()=>calls.push('stopReplay')},resetClock:()=>calls.push('clock'),

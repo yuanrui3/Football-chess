@@ -48,6 +48,7 @@ function harness() {
       reset() {calls.resets++;},
       setPace() {}, setEnabled() {}, setPlayback() {}, suspend() {},
     },
+    evaluation:{suspend(){}},renderEvaluation(){},
     renderVoiceover() {}, saveVoicePreference() {}, advanceClockNow() {}, save() {},
     toast: text => calls.toasts.push(text),
   });

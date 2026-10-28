@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#173e35">
+  <meta name="description" content="Short Football Chess exercises: finish against a Tactical bot, find a through ball, enter the box or prevent a goal.">
+  <title>Football Chess · Tactical exercises</title>
+  <link rel="stylesheet" href="style.css?v=7e245ae5eca4"><link rel="stylesheet" href="exercises.css?v=ac033e1acd9a">
+</head>
+<body class="exercises-page">
+<header class="masthead">
+  <a class="brand" href="./" aria-label="Football Chess match"><span class="brand-mark">F<span>♞</span>C</span><span>FOOTBALL<br>CHESS</span></a>
+  <div class="masthead-tag">SHORT POSITIONS.<br><b>MORE THAN ONE GOOD PLAN.</b></div>
+  <a class="text-button exercise-back" href="./">← Back to match</a>
+</header>
+<main class="exercise-main">
+  <div class="page-intro"><div><p class="eyebrow">THE TRAINING GROUND</p><h1>Find the chance.</h1><p class="exercise-intro">A clear idea. A Tactical opponent. Three or four rounds to make it work.</p></div><div class="exercise-progress"><strong id="solvedCount">0 / 12</strong><span>EXERCISES SOLVED</span></div></div>
+  <div class="exercise-layout">
+    <aside class="exercise-library panel" aria-label="Exercise library">
+      <p class="eyebrow">CHOOSE A THEME</p>
+      <label class="field-label" for="themeFilter">EXERCISE THEME</label><div class="select-wrap"><select id="themeFilter"><option value="all">All themes</option><option value="one-on-one">One on one</option><option value="through-ball">Through balls</option><option value="box-entry">Into the box</option><option value="defence">Defend the finish</option></select></div>
+      <div id="exerciseList" class="exercise-list" role="group" aria-label="Choose an exercise"></div>
+      <p class="exercise-library-note">Study positions show the pieces that matter. Others are omitted. Your full match stays saved separately.</p>
+    </aside>
+    <section class="exercise-board-column" aria-label="Exercise pitch">
+      <div class="exercise-board-heading"><span id="sideLabel">YOU · IVORY FC</span><span id="roundCounter">0 / 3 rounds</span></div>
+      <div class="exercise-board-wrap">
+        <aside id="evaluationRail" class="exercise-evaluation" aria-label="Engine position estimate" hidden><div class="exercise-evaluation-track"><span id="evaluationFill"></span></div><strong id="evaluationScore">—</strong></aside>
+        <section class="pitch-area" id="exercisePitch">
+          <div class="goal-wrap goal-top"><div class="goal-net"></div><div id="goalTop" class="goal-targets" role="group" aria-label="Obsidian goal targets"></div></div>
+          <div class="board-surround"><div class="rank-labels" id="ranks" aria-hidden="true"></div><div class="pitch"><div class="squares" id="exerciseBoard" role="grid" aria-label="14 by 17 Football Chess exercise"></div><svg class="pitch-markings" viewBox="0 0 1400 1700" aria-hidden="true"><rect x="3" y="3" width="1394" height="1694" rx="1"/><path d="M0 850H1400M400 0V300H1000V0M400 1700V1400H1000V1700"/><circle cx="700" cy="850" r="110"/></svg><svg id="actionTrace" class="exercise-action-trace" viewBox="0 0 1400 1700" aria-hidden="true"></svg></div></div>
+          <div class="file-labels" id="files" aria-hidden="true"></div>
+          <div class="goal-wrap goal-bottom"><div class="goal-net"></div><div id="goalBottom" class="goal-targets" role="group" aria-label="Ivory goal targets"></div></div>
+        </section>
+      </div>
+      <p id="boardStatus" class="exercise-board-status" aria-live="polite">Select Play exercise when you are ready.</p>
+      <div class="exercise-board-tools"><button id="undoBtn" type="button" class="utility-button" disabled>↶ Undo decision</button><button id="retryBtn" type="button" class="utility-button">↻ Retry</button><label class="exercise-analysis-toggle"><input type="checkbox" id="analysisEnabled"> Engine estimate <small>optional help</small></label></div>
+      <p id="evaluationInfo" class="exercise-evaluation-info" hidden>Heuristic advantage for Ivory, not a goal probability.</p>
+    </section>
+    <aside class="exercise-coach" aria-label="Exercise objective and actions">
+      <section class="panel exercise-objective"><p class="eyebrow" id="themeLabel">FINISHING</p><h2 id="exerciseTitle">Choose an exercise</h2><p id="exerciseObjective"></p><p id="qualityGoal" class="exercise-quality"></p><div class="exercise-requirements" id="requirements"></div><button type="button" id="playBtn" class="primary wide">Play exercise <span>→</span></button></section>
+      <section class="panel exercise-actions" id="actionPanel" hidden><p class="eyebrow" id="phaseLabel">YOUR TURN</p><h3 id="phaseTitle">Shape the play</h3><div class="move-modes" id="positionModes" role="group" aria-label="Positioning action"><button id="offballBtn" type="button" aria-pressed="true">Off ball</button><button id="dribbleBtn" type="button" aria-pressed="false">Dribble</button><button id="bonusBtn" type="button" aria-pressed="false">Pawn / King</button></div><p id="budgetInfo" class="exercise-budget"></p><p id="selectedInfo" class="exercise-selected">Select a piece.</p><label class="exercise-choice" id="passRunChoice" hidden><input id="passRunEnabled" type="checkbox"> Pass &amp; run <small>Uses the next off-ball move</small></label><label class="exercise-choice" id="disguiseChoice" hidden><input id="disguiseEnabled" type="checkbox"> Disguise the shot <small>Two targets, each 50%</small></label><p id="actionHelp"></p><button type="button" class="primary wide" id="endBtn">End positioning <span>→</span></button></section>
+      <section class="panel exercise-feedback" id="feedbackPanel" aria-live="polite" hidden><p class="eyebrow" id="feedbackLabel">POSITION REVIEW</p><h3 id="feedbackTitle"></h3><p id="feedbackText"></p><p id="shotQuality"></p><p id="reviewPlan"></p><button id="nextBtn" class="primary wide" type="button">Next exercise <span>→</span></button></section>
+      <section class="exercise-hints"><button id="hintBtn" class="text-button" type="button">Show a hint <span>?</span></button><ol id="hintsList"></ol></section>
+      <p class="exercise-grading-note">Several plans can work. Finishing is judged by the chance created against the best keeper reply, not by a lucky goal or an unlucky save. Fouls are off in these studies.</p>
+      <p id="errorMessage" class="exercise-error" role="alert"></p>
+      <section class="exercise-last-action" id="lastActionPanel" hidden><p class="eyebrow">LAST ACTION</p><p id="lastActionText"></p></section>
+    </aside>
+  </div>
+</main>
+<footer><span>FOOTBALL × CHESS</span><p>Find a useful continuation, then answer the Tactical bot’s reply.</p><a href="./">Return to the match ↗</a></footer>
+<script type="module" src="exercises-app.js?v=c2fc82dd82e6"></script>
+</body>
+</html>

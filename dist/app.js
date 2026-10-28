@@ -4,6 +4,7 @@ import {buildGoalReplay, restoreGoalReplay, createReplayPlayer} from './goal-rep
 import {createMatchStats, restoreMatchStats, recordMatchTransition, addPossessionTime, matchStatsSummary, shortPieceId} from './match-stats.js?v=05bccf6f9744';
 import {createCommentary} from './commentary.js?v=7ff721be47b9';
 import {createParadeeSpeech} from './paradee-speech.js?v=e9d0fc794cfb';
+import {createEvaluation,formatEvaluation} from './evaluation.js?v=521504a912c4';
 
 const $ = id => document.getElementById(id);
 const normalShotLegend = document.querySelector('.shot-legend').textContent;
@@ -12,6 +13,7 @@ const SYMBOLS = {K:'♚',Q:'♛',R:'♜',B:'♝',N:'♞',P:'♟'};
 const TEAM = {white:'Ivory FC',black:'Obsidian FC'};
 const STORE = 'football-chess-match-v4';
 const VOICE_STORE = 'football-chess-voiceover-v1';
+const EVALUATION_STORE = 'football-chess-analysis-v1';
 const SAVE_GEOMETRY = {width:W,height:H,boxWidth:BOX_FILES.length,boxDepth:BOX_DEPTH};
 const AI_PACES = [3000,1800,600];
 const MOVE_PATTERNS={K:'One square in any direction',Q:'Up to 10 movement points straight or diagonally',R:'Up to 10 movement points horizontally or vertically',B:'Up to 10 movement points diagonally',N:'One L-shaped jump over other pieces',P:'One square forward, back, left, or right'};
@@ -45,6 +47,10 @@ let lastGoalReplay=null,replayAutoContinue=false,replayPendingResult=false;
 let matchStats=createMatchStats();
 let shotFlight=null,shotFlightGeneration=0;
 let voiceEnabled=false,voiceActivated=false,voiceLastCaption='',voiceLastContext='',voiceCaptionDemo=false,voiceLifecycle=null,voicePreferredId='',voicePlayback='library',voiceOptionsKey='',commentary=null,voiceTestRequest=0;
+let evaluationEnabled=false;
+try{evaluationEnabled=JSON.parse(localStorage.getItem(EVALUATION_STORE)||'false')===true;}catch{}
+const evaluation=createEvaluation({onUpdate:paintEvaluation});
+evaluation.setEnabled(evaluationEnabled);
 try{const preference=JSON.parse(localStorage.getItem(VOICE_STORE)||'null');voiceEnabled=preference?.enabled===true;voicePreferredId=typeof preference?.voiceId==='string'?preference.voiceId:'';voicePlayback=['device','recorded'].includes(preference?.playback)?preference.playback:preference?.playbackVersion===3&&['library','local'].includes(preference.playback)?preference.playback:'library';}catch{}
 try {
   const saved=JSON.parse(localStorage.getItem(STORE)||'null');
@@ -104,6 +110,24 @@ commentary=createCommentary({speechSynthesis:window.speechSynthesis,Utterance:wi
   onVoicesChanged(){if(commentary){applyVoicePreference();renderVoiceover();}}});
 commentary.setPlayback(voicePlayback);
 applyVoicePreference();
+
+function paintEvaluation(state=evaluation.getState()){
+  const visible=evaluationEnabled;
+  $('evaluationToggle').textContent=visible?'Analysis on':'Analysis off';
+  $('evaluationToggle').setAttribute('aria-pressed',String(visible));
+  $('evaluationRail').hidden=!visible;
+  document.querySelector('.pitch-area').classList.toggle('analysis-visible',visible);
+  $('evaluationScore').textContent=visible?formatEvaluation(state):'—';
+  $('evaluationIvory').style.height=`${Math.max(0,Math.min(1,state.share??.5))*100}%`;
+  $('evaluationRail').setAttribute('aria-label',visible?`Advantage estimate: ${formatEvaluation(state)}. Engine units, not win probability.`:'Advantage analysis is off.');
+  $('evaluationNote').textContent=!visible?'Optional Tactical estimate. Not xG or win probability.':shotFlight&&!shotFlight.revealed?'Shot in flight · estimate held until the result is visible.':state.status==='unavailable'?(state.error||'Analysis is unavailable. Toggle off and on to retry.'):state.terminal?'Match result.':state.status==='suspended'?'Analysis paused while this page is hidden.':`${state.status==='thinking'||state.status==='queued'?'Analysing · ':''}Depth ${state.depth||0} · ${state.nodes||0} nodes · Engine estimate`;
+}
+function renderEvaluation(){
+  // The committed game already contains a hidden shot result during animation.
+  // Hold the last public estimate instead of sending that future state.
+  if(document.hidden || shotFlight&&!shotFlight.revealed){evaluation.suspend();paintEvaluation();return;}
+  evaluation.update(game);evaluation.resume();paintEvaluation();
+}
 
 function applyVoicePreference(){const state=commentary.getState();if(voicePreferredId&&state.voices.some(voice=>voice.id===voicePreferredId)&&state.voiceId!==voicePreferredId)commentary.setVoice(voicePreferredId);}
 
@@ -458,6 +482,7 @@ function resetKickDetails(){
 }
 function render(){
   syncVoiceover();
+  renderEvaluation();
   if(shotFlight||stage!=='playing'||paused||anyDialog()||!isComputer())cancelAI();
   const acting=currentTeam(game),kicking=kickPhase(),positioning=positionPhase(),reacting=game.phase==='keeperReact',running=passRunPhase(),choosingCorner=cornerSelectPhase(),actions=positionActions(game),budget=actions.budget,watching=game.mode==='watch';
   if(stage==='playing'&&choosingCorner){selectedId=null;freePawnMode=false;dribbleMode=false;}
@@ -635,6 +660,7 @@ function revealShotFlight(){
   flight.element.setAttribute('aria-label',flight.caption);flight.element.querySelector('.shot-flight-caption').textContent=flight.caption;
   flight.toastOutcome();paintShotFlight();updateClock();
   announceShotImpact(flight);
+  renderEvaluation();
 }
 function announceShotImpact(flight){const transition=flight.voiceTransition;if(!transition)return;flight.voiceTransition=null;commentary.observe(transition.before,transition.after,{stats:transition.stats,pace:aiPace});}
 function paintShotFlight(){
@@ -849,7 +875,8 @@ function changeStartingFormation(team,preset){
   selectedId=null;lastComputerAction=null;freePawnMode=false;dribbleMode=false;passRunSelected=false;
   history=[];matchStats=createMatchStats();render();save();
 }
-function refreshSetup(){if(stage!=='setup')return;resetVoiceover();cancelAI();replayPlayer.stop();lastGoalReplay=null;replayAutoContinue=false;replayPendingResult=false;game=createGame({foulsEnabled,mode:$('mode').value,minutes:Number($('duration').value)||10,kickoff:$('kickoff').value,formations:startingFormations()});duration=Number($('duration').value);resetClock();selectedId=null;lastComputerAction=null;freePawnMode=false;dribbleMode=false;passRunSelected=false;history=[];matchStats=createMatchStats();render();save();}
+function refreshSetup(){if(stage!=='setup')return;evaluation.reset();resetVoiceover();cancelAI();replayPlayer.stop();lastGoalReplay=null;replayAutoContinue=false;replayPendingResult=false;game=createGame({foulsEnabled,mode:$('mode').value,minutes:Number($('duration').value)||10,kickoff:$('kickoff').value,formations:startingFormations()});duration=Number($('duration').value);resetClock();selectedId=null;lastComputerAction=null;freePawnMode=false;dribbleMode=false;passRunSelected=false;history=[];matchStats=createMatchStats();render();save();}
+$('evaluationToggle').addEventListener('click',()=>{evaluationEnabled=!evaluationEnabled;try{localStorage.setItem(EVALUATION_STORE,JSON.stringify(evaluationEnabled));}catch{}evaluation.setEnabled(evaluationEnabled);renderEvaluation();});
 $('aiPace').addEventListener('change',()=>{const value=Number($('aiPace').value);aiPace=AI_PACES.includes(value)?value:3000;render();save();});
 $('voiceToggle').addEventListener('click',()=>{if(aiPace!==3000)return;voiceTestRequest++;voiceEnabled=!voiceEnabled;voiceActivated=voiceEnabled;commentary.setPace(aiPace);commentary.setEnabled(voiceEnabled);saveVoicePreference();syncVoiceover();if(voiceEnabled){prepareLocalVoice();commentary.confirmEnabled();}});
 $('voicePlayback').addEventListener('change',()=>{if(aiPace!==3000||$('voicePlayback').disabled)return;const mode=$('voicePlayback').value;if(!['library','local','recorded','device'].includes(mode))return;voiceTestRequest++;commentary.suspend();voicePlayback=mode;commentary.setPlayback(mode);voiceLastCaption='';voiceCaptionDemo=false;if(voiceEnabled)activateVoiceover();saveVoicePreference();renderVoiceover();});
@@ -889,7 +916,7 @@ $('pauseBtn').addEventListener('click',()=>{
   paused=true;lastTick=Date.now();render();showPauseStats();save();
 });
 $('pauseStatsResumeBtn').addEventListener('click',resumePausedMatch);
-$('undoBtn').addEventListener('click',()=>{if(!history.length||stage!=='playing'||anyDialog()||advanceClockNow())return;resetVoiceover();cancelShotFlight();cancelAI();let entry=history.pop();if(game.mode==='solo')while(entry.actor!=='white'&&history.length)entry=history.pop();game=upgradeSavedGame(entry.game);passRunSelected=!!entry.passRunSelected&&['kick','kickoff','keeperRelease'].includes(game.phase);disguiseSelected=entry.disguiseSelected!==false;foulsEnabled=game.foulsEnabled===true;matchStats=restoreMatchStats(entry.matchStats,game,{partial:true});if(lastGoalReplay&&(game.score.white<lastGoalReplay.score.white||game.score.black<lastGoalReplay.score.black))lastGoalReplay=null;if(game.mode==='watch')paused=true;restoreClock(rewindMatchClock(clockSnapshot(),entry.clock,{actionSeconds:ACTION_SECONDS}));selectedId=null;lastComputerAction=null;freePawnMode=false;dribbleMode=false;lastTick=Date.now();render();save();toast(game.mode==='watch'?'Last computer action undone. Press Resume to continue.':'Last move undone.');});
+$('undoBtn').addEventListener('click',()=>{if(!history.length||stage!=='playing'||anyDialog()||advanceClockNow())return;evaluation.reset();resetVoiceover();cancelShotFlight();cancelAI();let entry=history.pop();if(game.mode==='solo')while(entry.actor!=='white'&&history.length)entry=history.pop();game=upgradeSavedGame(entry.game);passRunSelected=!!entry.passRunSelected&&['kick','kickoff','keeperRelease'].includes(game.phase);disguiseSelected=entry.disguiseSelected!==false;foulsEnabled=game.foulsEnabled===true;matchStats=restoreMatchStats(entry.matchStats,game,{partial:true});if(lastGoalReplay&&(game.score.white<lastGoalReplay.score.white||game.score.black<lastGoalReplay.score.black))lastGoalReplay=null;if(game.mode==='watch')paused=true;restoreClock(rewindMatchClock(clockSnapshot(),entry.clock,{actionSeconds:ACTION_SECONDS}));selectedId=null;lastComputerAction=null;freePawnMode=false;dribbleMode=false;lastTick=Date.now();render();save();toast(game.mode==='watch'?'Last computer action undone. Press Resume to continue.':'Last move undone.');});
 $('flipBtn').addEventListener('click',()=>{flipped=!flipped;render();save();});
 $('replayBtn').addEventListener('click',()=>openGoalReplay());
 function finishMatch({replayGoal=false}={}){if(stage!=='playing'||shotFlight)return;flushClockElapsed();cancelAI();stage='finished';paused=false;game.phase='finished';selectedId=null;if(replayGoal&&lastGoalReplay){replayPendingResult=true;openGoalReplay({automatic:true});}else{render();save();showResult();}}
@@ -997,7 +1024,7 @@ function renderMatchStats(){
 function showResult(){const forfeited=game.finishReason==='forfeit',winner=forfeited&&['white','black'].includes(game.winner)?game.winner:game.score.white===game.score.black?null:game.score.white>game.score.black?'white':'black';$('resultTitle').textContent=winner?TEAM[winner]+(forfeited?' wins by forfeit.':' wins.'):'Honours even.';$('resultScore').textContent=`${game.score.white} : ${game.score.black}`;$('resultText').textContent=forfeited?`${TEAM[game.winner==='white'?'black':'white']} has fewer than seven active players. The score shown is the actual score when play stopped.`:winner?'A well-played match. The next move is a fresh start.':'Nothing between the sides. Settle it in a rematch.';renderMatchStats();if(!$('resultDialog').open)$('resultDialog').showModal();}
 $('finishBtn').addEventListener('click',()=>{if(stage==='playing'&&duration===0)finishMatch();});
 $('statsBtn').addEventListener('click',()=>{if(stage==='playing'&&paused){showPauseStats();return;}if(stage==='finished'&&!shotFlight){commentary.suspend();showResult();renderVoiceover();}});
-function newMatch(){resetVoiceover();cancelShotFlight();cancelAI();replayPlayer.stop();replayAutoContinue=false;replayPendingResult=false;lastGoalReplay=null;stage='setup';paused=false;for(const dialog of document.querySelectorAll('dialog[open]'))dialog.close();resetClock();selectedId=null;lastComputerAction=null;freePawnMode=false;dribbleMode=false;passRunSelected=false;history=[];game=createGame({foulsEnabled,mode:game.mode,minutes:duration||10,kickoff:$('kickoff').value,formations:startingFormations()});matchStats=createMatchStats();render();save();}
+function newMatch(){evaluation.reset();resetVoiceover();cancelShotFlight();cancelAI();replayPlayer.stop();replayAutoContinue=false;replayPendingResult=false;lastGoalReplay=null;stage='setup';paused=false;for(const dialog of document.querySelectorAll('dialog[open]'))dialog.close();resetClock();selectedId=null;lastComputerAction=null;freePawnMode=false;dribbleMode=false;passRunSelected=false;history=[];game=createGame({foulsEnabled,mode:game.mode,minutes:duration||10,kickoff:$('kickoff').value,formations:startingFormations()});matchStats=createMatchStats();render();save();}
 $('newBtn').addEventListener('click',()=>{if(stage==='playing'){if(advanceClockNow())return;$('confirmDialog').showModal();syncVoiceover();syncShotFlightPlayback();cancelAI();updateClock();}else newMatch();});$('confirmNewBtn').addEventListener('click',newMatch);$('rematchBtn').addEventListener('click',newMatch);
 function openRules(){advanceClockNow();commentary.suspend();$('rulesDialog').showModal();syncVoiceover();syncShotFlightPlayback();cancelAI();updateClock();}
 $('rulesBtn').addEventListener('click',openRules);$('detailsBtn').addEventListener('click',openRules);
@@ -1005,8 +1032,9 @@ for(const el of document.querySelectorAll('[data-close]'))el.addEventListener('c
 for(const dialog of document.querySelectorAll('dialog')){dialog.addEventListener('close',()=>{if(dialog.id==='replayDialog'){replayPlayer.stop();replayAutoContinue=false;const showFinalResult=replayPendingResult;replayPendingResult=false;if(showFinalResult&&stage==='finished')showResult();}lastTick=Date.now();render();});dialog.addEventListener('click',event=>{if(event.target===dialog){const r=dialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)dialog.close();}});}
 setInterval(()=>{advanceClockNow();},250);
 setInterval(()=>{if(stage==='playing'&&voiceEnabled&&voiceActivated&&aiPace===3000&&!paused&&!anyDialog()&&!shotFlight&&!document.hidden)commentary.tick(game,{stats:matchStatsSummary(matchStats)});},1000);
-setInterval(()=>{if(stage==='playing')save();},5000);window.addEventListener('pagehide',()=>{voiceTestRequest++;voiceActivated=false;voiceLifecycle=null;commentary.setEnabled(false);renderVoiceover();advanceClockNow();save();});
-document.addEventListener('visibilitychange',()=>{if(document.hidden){voiceTestRequest++;commentary.suspend();}syncVoiceover();});
+setInterval(()=>{if(stage==='playing')save();},5000);window.addEventListener('pagehide',()=>{evaluation.suspend();voiceTestRequest++;voiceActivated=false;voiceLifecycle=null;commentary.setEnabled(false);renderVoiceover();advanceClockNow();save();});
+document.addEventListener('visibilitychange',()=>{if(document.hidden){voiceTestRequest++;commentary.suspend();}syncVoiceover();renderEvaluation();});
+window.addEventListener('pageshow',()=>renderEvaluation());
 render();
 if(stage==='playing'&&paused)toast('Your match is restored. Press Resume to continue.');
 else if(legacyMatch){toast('The 14×17 pitch needs a fresh match. Your settings are retained.');save();}
