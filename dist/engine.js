@@ -247,21 +247,76 @@ function finishKickProgress(state, source, backPass, interception) {
   else completeAttackingRound(state, source);
 }
 
-function formation(kickoff) {
-  // A box screen, wide rooks, opposite-colour bishops and a forward knight.
-  // Rotate the complete shape for the other side; only the kickoff queen moves.
-  const white = {
-    K: [CENTRAL_GOAL_FILES[0], BOARD_HEIGHT - 2], Q: [CENTRAL_GOAL_FILES[0], BOARD_HEIGHT - 5],
-    R1: [1, BOARD_HEIGHT - 4], R2: [BOARD_WIDTH - 2, BOARD_HEIGHT - 4],
-    B1: [2, BOARD_HEIGHT - 5], B2: [BOARD_WIDTH - 3, BOARD_HEIGHT - 5],
-    N1: [3, MIDFIELD_RANK + 1], N2: [BOARD_WIDTH - 5, MIDFIELD_RANK + 2],
-    P1: [CENTRAL_GOAL_FILES[0] - 1, BOARD_HEIGHT - BOX_DEPTH - 1],
-    P2: [CENTRAL_GOAL_FILES[1], BOARD_HEIGHT - BOX_DEPTH - 1],
-    P3: [BOX_FILES.at(-1), BOARD_HEIGHT - BOX_DEPTH - 1]
-  };
-  const locations = {white, black: Object.fromEntries(Object.entries(white).map(([id, [x, y]]) => [id, [BOARD_WIDTH - 1 - x, BOARD_HEIGHT - 1 - y]]))};
+const formationPreset = (name, description, strength, tradeoff, positions) => Object.freeze({
+  name, description, strength, tradeoff,
+  positions: Object.freeze(Object.fromEntries(Object.entries(positions).map(([id, coordinates]) => [id, Object.freeze(coordinates)])))
+});
+// These are starting positions, not AI policies or extra movement allowances.
+// Coordinates describe Ivory; Obsidian uses the same shape rotated 180 degrees.
+export const FORMATION_PRESETS = Object.freeze({
+  aggressive: formationPreset('Aggressive', 'Higher support for early attacks.',
+    'Closer midfield support and earlier wing options.',
+    'More space behind the supporting line on turnovers.', {
+      K: [6, 15], Q: [6, 10], R1: [1, 12], R2: [12, 12],
+      B1: [4, 10], B2: [11, 12], N1: [3, 9], N2: [9, 10],
+      P1: [5, 13], P2: [7, 13], P3: [9, 13]
+    }),
+  neutral: formationPreset('Neutral', 'Balanced midfield links and defensive cover.',
+    'Forward knight outlets with a three-pawn screen.',
+    'Neither the closest attacking support nor the deepest cover.', {
+      K: [6, 15], Q: [6, 12], R1: [1, 13], R2: [12, 13],
+      B1: [2, 12], B2: [11, 12], N1: [3, 9], N2: [9, 10],
+      P1: [5, 13], P2: [7, 13], P3: [9, 13]
+    }),
+  defensive: formationPreset('Defensive', 'A compact screen with shorter build-up links.',
+    'Linked receivers and deeper cover near your box.',
+    'Crowded build-up lanes and more ground to reach midfield.', {
+      K: [6, 15], Q: [6, 13], R1: [1, 13], R2: [12, 13],
+      B1: [2, 13], B2: [11, 13], N1: [4, 11], N2: [9, 11],
+      P1: [5, 13], P2: [7, 13], P3: [9, 13]
+    })
+});
+const validFormation = preset => typeof preset === 'string' && Object.hasOwn(FORMATION_PRESETS, preset);
+const formationSelections = formations => Object.fromEntries(TEAMS.map(team => [team, validFormation(formations?.[team]) ? formations[team] : 'neutral']));
+
+function formation(kickoff, formations) {
+  const selected = formationSelections(formations);
+  const locations = Object.fromEntries(TEAMS.map(team => [team, Object.fromEntries(
+    Object.entries(FORMATION_PRESETS[selected[team]].positions).map(([id, [x, y]]) => [id,
+      team === 'white' ? [x, y] : [BOARD_WIDTH - 1 - x, BOARD_HEIGHT - 1 - y]])
+  )]));
   locations[kickoff].Q = [CENTRAL_GOAL_FILES[kickoff === 'white' ? 0 : 1], MIDFIELD_RANK];
   return TEAMS.flatMap(team => SQUAD.map(id => ({id: `${team}-${id}`, team, type: id[0], x: locations[team][id][0], y: locations[team][id][1]})));
+}
+
+// Setup-only helper: the app additionally checks its pre-match stage because
+// kickoff also occurs after a goal. Reset only the requested side, so changing
+// an opponent's preset never discards a manually arranged friendly formation.
+export function setStartingFormation(state, team, preset) {
+  if (!TEAMS.includes(team)) throw new RangeError('Choose Ivory or Obsidian for the starting formation.');
+  if (!validFormation(preset)) throw new RangeError('Choose Aggressive, Neutral, or Defensive.');
+  if (state?.phase !== 'kickoff') throw new Error('Starting formations may only be arranged before kickoff.');
+  const next = copy(state);
+  next.formations = {...formationSelections(state.formations), [team]: preset};
+  const full = formation(next.attack, next.formations);
+  next.pieces = next.pieces.map(piece => {
+    if (piece.team !== team) return piece;
+    const home = full.find(candidate => candidate.id === piece.id);
+    if (!home) return piece;
+    const spot = piece.replacementKeeper ? full.find(candidate => candidate.id === `${team}-K`) : home;
+    return {...piece, x: spot.x, y: spot.y};
+  });
+  if (next.attack === team) {
+    const candidates = next.pieces.filter(piece => piece.team === team);
+    const carrier = candidates.find(piece => piece.id === `${team}-Q` && piece.type !== 'K')
+      || candidates.find(piece => piece.type !== 'K') || candidates[0];
+    if (!carrier) throw new Error('The kickoff team needs an active player.');
+    Object.assign(carrier, {x: CENTRAL_GOAL_FILES[team === 'white' ? 0 : 1], y: MIDFIELD_RANK});
+    next.ball = {x: carrier.x, y: carrier.y, carrierId: carrier.id};
+    next.ballProgress = freshProgress(next);
+    next.paceControl = null;
+  }
+  return next;
 }
 
 function disciplineFor(state) {
@@ -272,7 +327,7 @@ function disciplineFor(state) {
 }
 
 function resetActiveFormation(state, kickoff) {
-  const active = new Map(state.pieces.map(piece => [piece.id, piece])), full = formation(kickoff);
+  const active = new Map(state.pieces.map(piece => [piece.id, piece])), full = formation(kickoff, state.formations);
   const pieces = full.filter(piece => active.has(piece.id)).map(piece => {
     const previous = active.get(piece.id);
     if (!previous.replacementKeeper) return {...piece};
@@ -360,12 +415,13 @@ function nextRoll(state, override) {
   return override === undefined ? state.randomState / 4294967296 : override;
 }
 
-export function createGame({mode = 'solo', minutes = 10, kickoff = 'white', seed = Date.now(), foulsEnabled = false} = {}) {
+export function createGame({mode = 'solo', minutes = 10, kickoff = 'white', seed = Date.now(), foulsEnabled = false, formations} = {}) {
   kickoff = TEAMS.includes(kickoff) ? kickoff : 'white';
-  const pieces = formation(kickoff);
+  formations = formationSelections(formations);
+  const pieces = formation(kickoff, formations);
   const carrier = pieces.find(p => p.id === `${kickoff}-Q`);
   return {
-    pieces, ball: {x: carrier.x, y: carrier.y, carrierId: carrier.id},
+    pieces, formations, ball: {x: carrier.x, y: carrier.y, carrierId: carrier.id},
     attack: kickoff, phase: 'kickoff', positionBudget: freshBudget(), pendingShot: null, releaseReason: null,
     score: {white: 0, black: 0}, turn: 1, randomState: normalizeSeed(seed),
     log: [`${title(kickoff)} has kick-off. Kick the ball to begin.`], lastAction: null,
@@ -658,6 +714,7 @@ export function normalizeGame(state) {
     throw new RangeError(`This saved match uses a different pitch size. Start a new ${BOARD_WIDTH} × ${BOARD_HEIGHT} match.`);
   }
   const next = copy(state);
+  next.formations = formationSelections(state.formations);
   next.foulsEnabled = next.foulsEnabled === true;
   next.sentOff = Array.isArray(next.sentOff) ? next.sentOff : [];
   next.discipline = disciplineFor(next);
