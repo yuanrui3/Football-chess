@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import * as E from '../dist/engine.js';
-import {createExerciseController,readExerciseProgress,saveExerciseProgress,recordExerciseSolved,EXERCISE_PROGRESS_KEY,exerciseMoveMode,exerciseStartingPiece,syncExerciseEvaluation,filterExercises,selectFilteredExercise,nextFilteredExercise,exerciseDifficulty,exercisePlanText,syncExerciseFilters} from '../dist/exercises-app.js';
+import {createExerciseController,readExerciseProgress,saveExerciseProgress,recordExerciseSolved,EXERCISE_PROGRESS_KEY,exerciseMoveMode,exerciseStartingPiece,syncExerciseEvaluation,exerciseEvaluationDisplay,filterExercises,selectFilteredExercise,nextFilteredExercise,exerciseDifficulty,exercisePlanText,syncExerciseFilters} from '../dist/exercises-app.js';
 
 const def={id:'fixture',title:'A finishing study',playerTeam:'white',roundLimit:3};
 function harness({worker=true,botFirst=false,solve=false,deterministic=false}={}){
@@ -210,6 +210,36 @@ test('terminal exercise reviews freeze analysis without submitting a synthetic s
   assert.deepEqual(calls,[['update',game],['resume']],'Undo or Retry resumes analysis of the actual current board only');
   calls.length=0;syncExerciseEvaluation(evaluation,{...view,session:{...view.session,status:'active'},thinking:true});
   assert.deepEqual(calls,[['suspend'],['update',game]]);
+});
+
+test('a strong completed iteration paints its real exercise fill while further analysis continues',()=>{
+  const value={enabled:true,status:'thinking',score:1.6,share:.96,depth:4,nodes:800};
+  const provisional=exerciseEvaluationDisplay(value),ready=exerciseEvaluationDisplay({...value,status:'ready'});
+  assert.equal(provisional.available,true);assert.equal(provisional.share,.96);assert.equal(provisional.scoreText,'+1.60');
+  assert.match(provisional.info,/Provisional estimate · last available analysis/);assert.match(provisional.info,/depth 4, 800 nodes/);
+  assert.equal(ready.share,provisional.share);assert.match(ready.info,/^Current-round estimate/);
+});
+
+test('retained exercise estimates stay visible with an explicit held or updating label',()=>{
+  const value={enabled:true,status:'suspended',score:-.7,share:.1,depth:3,nodes:400};
+  const held=exerciseEvaluationDisplay(value),queued=exerciseEvaluationDisplay({...value,status:'queued'});
+  assert.equal(held.share,.1);assert.equal(held.scoreText,'-0.70');assert.match(held.info,/Last available estimate/);assert.match(held.info,/Held while analysis is paused/);
+  assert.equal(queued.share,.1);assert.match(queued.info,/Last available estimate/);assert.match(queued.info,/Updating for the next decision/);
+  const complete=exerciseEvaluationDisplay(value,{complete:true});
+  assert.equal(complete.share,.1);assert.match(complete.info,/Last available decision estimate · exercise complete/);
+});
+
+test('exercise analysis never fabricates a neutral score when none is available or analysis is off',()=>{
+  for(const status of ['thinking','queued','suspended','ready']){
+    const missing=exerciseEvaluationDisplay({enabled:true,status,score:null,share:.96});
+    assert.equal(missing.available,false);assert.equal(missing.share,.5);assert.equal(missing.scoreText,'…');
+  }
+  for(const status of ['off','unavailable']){
+    const hidden=exerciseEvaluationDisplay({enabled:status!=='off',status,score:1.6,share:.96});
+    assert.equal(hidden.available,false);assert.equal(hidden.share,.5);assert.equal(hidden.scoreText,'—');
+  }
+  const complete=exerciseEvaluationDisplay({enabled:true,status:'suspended',score:null,share:.5},{complete:true});
+  assert.equal(complete.scoreText,'—');assert.match(complete.info,/No estimate was available/);
 });
 
 test('starting a defensive exercise selects the human keeper rather than the opposing shooter',()=>{

@@ -7,7 +7,7 @@ import {evaluatePosition,evaluationNumbers,EVALUATION_GOAL_UNIT} from '../dist/e
 import {createEvaluation,evaluationPositionKey,evaluationSnapshot,formatEvaluation} from '../dist/evaluation.js';
 
 const fresh=()=>createGame({seed:271});
-const reply=(score,extra={})=>({whiteValue:score*2000,score,share:.5+.48*Math.tanh(score/1.5),depth:4,nodes:800,sideToMove:'white',terminal:false,...extra});
+const reply=(score,extra={})=>({...evaluationNumbers(score*2000,'white',{completedDepth:4,nodes:800}),...extra});
 function harness({WorkerAvailable=true}={}){
   const workers=[],updates=[],timers=new Map();let serial=0;
   class Worker {
@@ -130,6 +130,30 @@ test('current shot and keeper geometry change the round estimate, but irrelevant
   remote.pieces.push({id:'black-P1',team:'black',type:'P',x:13,y:15});
   const options={evaluationScope:'round',maxDepth:1,nodeLimit:1,modelWeights:null,modelScale:80};
   assert.equal(analyzeTacticalAction(position,options).value,analyzeTacticalAction(remote,options).value);
+});
+
+test('clear scoring chances have strong visual contrast while a quiet kickoff stays close to the centre',()=>{
+  const clear=evaluatePosition(applyKick(roundDiagram({keeperX:9}),6,-1));
+  const covered=evaluatePosition(applyKick(roundDiagram({keeperX:6}),6,-1));
+  const screened=evaluatePosition(applyKick(roundDiagram({keeperX:9,blocker:true}),6,-1));
+  assert.ok(clear.score>.9&&clear.score<1.05,'the native round value detects the near-certain finish');
+  assert.ok(clear.share>.94&&clear.share<.99,'a near-certain finish must look decisively asymmetric');
+  assert.ok(clear.share>screened.share&&screened.share>covered.share,'the bar preserves the keeper and blocker ordering');
+  assert.ok(clear.share-covered.share>.15,'proper keeper coverage must make a visible difference');
+  const kickoff=evaluatePosition(fresh());
+  assert.ok(Math.abs(kickoff.share-.5)<.08,'ordinary possession alone must not look like a decisive finish');
+});
+
+test('an equivalent Obsidian scoring chance produces the opposite bar with the same strength',()=>{
+  const original=roundDiagram({keeperX:9}),mirror=structuredClone(original);
+  const swap=id=>id.startsWith('white-')?id.replace('white-','black-'):id.replace('black-','white-');
+  mirror.pieces=original.pieces.map(p=>({...p,id:swap(p.id),team:p.team==='white'?'black':'white',x:13-p.x,y:16-p.y}));
+  mirror.ball={x:13-original.ball.x,y:16-original.ball.y,carrierId:swap(original.ball.carrierId)};
+  mirror.attack='black';mirror.ballProgress={...mirror.ballProgress,team:'black',anchorY:16-original.ballProgress.anchorY};
+  const ivory=evaluatePosition(applyKick(original,6,-1)),obsidian=evaluatePosition(applyKick(mirror,7,17));
+  assert.ok(obsidian.share<.06,'a near-certain Obsidian finish must favor the dark side');
+  assert.ok(Math.abs(ivory.score+obsidian.score)<1e-8);
+  assert.ok(Math.abs(ivory.share+obsidian.share-1)<1e-8);
 });
 
 test('a resolved penalty values only this round goal or stop, without kickoff formations or a counterattack',()=>{

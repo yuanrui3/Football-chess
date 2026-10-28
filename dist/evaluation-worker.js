@@ -2,11 +2,15 @@
 import {analyzeTacticalAction,currentTeam} from './engine.js?v=2c106a991787';
 
 export const EVALUATION_GOAL_UNIT = 2000;
+// A single round's useful values are about 0–1 goal units. The former 1.5
+// scale left even a near-certain finish looking close to the midpoint.
+// This controls visual contrast only; it is not a probability conversion.
+export const EVALUATION_DISPLAY_SCALE = 0.5;
 export function evaluationNumbers(value, actor, stats = {}) {
   if (!Number.isFinite(value) || !['white','black'].includes(actor)) throw new Error('The position could not be evaluated.');
   const whiteValue = actor === 'white' ? value : -value;
   const score = whiteValue / EVALUATION_GOAL_UNIT;
-  return {whiteValue,score,share:0.5 + 0.48 * Math.tanh(score / 1.5),
+  return {whiteValue,score,share:0.5 + 0.48 * Math.tanh(score / EVALUATION_DISPLAY_SCALE),
     depth:Number.isInteger(stats.completedDepth)?stats.completedDepth:0,
     nodes:Number.isInteger(stats.nodes)?stats.nodes:0,sideToMove:actor,terminal:false,scope:'round',roundActive:true};
 }

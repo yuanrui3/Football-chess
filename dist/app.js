@@ -4,7 +4,7 @@ import {buildGoalReplay, restoreGoalReplay, createReplayPlayer} from './goal-rep
 import {createMatchStats, restoreMatchStats, recordMatchTransition, addPossessionTime, matchStatsSummary, shortPieceId} from './match-stats.js?v=7e3e5aefb0de';
 import {createCommentary} from './commentary.js?v=62aedaaaf135';
 import {createParadeeSpeech} from './paradee-speech.js?v=e9d0fc794cfb';
-import {createEvaluation,formatEvaluation} from './evaluation.js?v=cf50f77ce2d1';
+import {createEvaluation,formatEvaluation} from './evaluation.js?v=a80f32294d6d';
 
 const $ = id => document.getElementById(id);
 const normalShotLegend = document.querySelector('.shot-legend').textContent;

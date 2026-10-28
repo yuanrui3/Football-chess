@@ -1,7 +1,7 @@
 import {BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, BOX_FILES, BOX_DEPTH, currentTeam, legalMoves, legalKicks, disguisedShotTargets, cornerTakers, isBox, isGoalMouth, positionActions, applyKick, chooseAIAction} from './engine.js?v=2c106a991787';
 import {EXERCISES} from './exercise-positions.js?v=80d49d7c93f1';
 import {createExerciseSession, applyExerciseAction, bestKeeperShotChance} from './exercise-session.js?v=056f74535c21';
-import {createEvaluation} from './evaluation.js?v=cf50f77ce2d1';
+import {createEvaluation} from './evaluation.js?v=a80f32294d6d';
 
 export const EXERCISE_PROGRESS_KEY='football-chess-exercises-v1';
 export const EXERCISE_THEME_LABELS=Object.freeze({'one-on-one':'One on one','through-ball':'Through balls','box-entry':'Into the box',defence:'Defend the finish'});
@@ -52,6 +52,24 @@ export function syncExerciseEvaluation(evaluation,view){
   if(view.session.status!=='active'){evaluation.suspend();return;}
   if(view.thinking||view.suspended){evaluation.suspend();evaluation.update(view.session.game);}
   else{evaluation.update(view.session.game);evaluation.resume();}
+}
+
+/** Completed iterations are useful before the final worker reply. Retained
+ * estimates must be labelled as held instead of looking freshly analysed. */
+export function exerciseEvaluationDisplay(value,{complete=false}={}){
+  const available=value.enabled&&['ready','thinking','queued','suspended'].includes(value.status)
+    &&Number.isFinite(value.score)&&Number.isFinite(value.share);
+  const detail=available?`Ivory perspective · depth ${value.depth}, ${value.nodes} nodes. Heuristic round units, not xG or a win percentage.`:'';
+  let info;
+  if(complete)info=`Last available decision estimate · exercise complete${available?` · ${detail}`:'. No estimate was available.'}`;
+  else if(!value.enabled||value.status==='off')info='Current-round analysis is off.';
+  else if(value.status==='unavailable')info='Current-round estimate unavailable. The exercise can continue.';
+  else if(value.status==='ready'&&available)info=`Current-round estimate · ${detail}`;
+  else if(value.status==='thinking'&&available)info=`Provisional estimate · last available analysis · ${detail} Updating this round’s attack and defence.`;
+  else if(available)info=`Last available estimate · ${detail} ${value.status==='suspended'?'Held while analysis is paused.':'Updating for the next decision.'}`;
+  else info=value.status==='suspended'?'Analysis paused; the estimate resumes at the next decision.':'Analysing this round’s attack and defence…';
+  return {available,share:available?Math.max(0,Math.min(1,value.share)):.5,
+    scoreText:available?`${value.score>0?'+':''}${value.score.toFixed(2)}`:complete||['off','unavailable'].includes(value.status)?'—':'…',info};
 }
 
 export function readExerciseProgress(storage,catalog=EXERCISES){
@@ -283,11 +301,11 @@ export function initExercisePage(){
   }
   controller=createExerciseController({onChange:render,onError:text=>{$('errorMessage').textContent=text;}});
   function renderEvaluation(value){
-    const complete=state?.session.status!=='active',available=Number.isFinite(value.score)&&(complete||value.status==='ready');
+    const display=exerciseEvaluationDisplay(value,{complete:state?.session.status!=='active'});
     $('evaluationRail').hidden=!value.enabled;$('evaluationInfo').hidden=!value.enabled;
-    $('evaluationFill').style.height=`${available?Math.max(0,Math.min(1,value.share??.5))*100:50}%`;
-    $('evaluationScore').textContent=available?`${value.score>0?'+':''}${value.score.toFixed(2)}`:complete||value.status==='unavailable'?'—':'…';
-    $('evaluationInfo').textContent=complete?`Last decision in this round · exercise complete${available?` · depth ${value.depth}, ${value.nodes} nodes`:''}. Heuristic round units, not xG or a win percentage.`:value.status==='ready'?`Current-round estimate · Ivory perspective · depth ${value.depth}, ${value.nodes} nodes. Heuristic round units, not xG or a win percentage.`:value.status==='unavailable'?'Current-round estimate unavailable. The exercise can continue.':value.status==='suspended'?'The Tactical opponent is thinking; analysis resumes at your next decision.':'Analysing this round’s attack and defence…';
+    $('evaluationFill').style.height=`${display.share*100}%`;
+    $('evaluationScore').textContent=display.scoreText;
+    $('evaluationInfo').textContent=display.info;
   }
   evaluation=createEvaluation({onUpdate:renderEvaluation});
   $('exerciseList').addEventListener('click',event=>{const id=event.target.closest('[data-exercise-id]')?.dataset.exerciseId;const def=EXERCISES.find(def=>def.id===id);if(def)loadDefinition(def);});
