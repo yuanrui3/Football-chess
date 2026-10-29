@@ -74,10 +74,11 @@ function harness({pref = {enabled: true}, mode = 'solo', actor = 'black', diffic
     globalThis.setPaused=value=>{paused=value;};
     globalThis.setShotFlight=value=>{shotFlight=value?{}:null;};
     globalThis.setActor=value=>{game.actor=value;};
+    globalThis.setClock=(left,total)=>{remaining=left;duration=total/60;};
     globalThis.selectDifficulty=(id,value)=>{$(id).value=value;$(id).listeners.change();};
   `, context);
   return {elements, storage, storageReads, timers, workers, calls, commits, saves, applied, seedDraws:()=>seedDraws,
-    inspect: () => context.inspect(), start: () => context.start(), cancel: () => context.cancel(), setPaused: value => context.setPaused(value), setDialog: value => {dialogOpen = value;}, setShotFlight: value => context.setShotFlight(value), setActor: value => context.setActor(value),
+    inspect: () => context.inspect(), start: () => context.start(), cancel: () => context.cancel(), setPaused: value => context.setPaused(value), setDialog: value => {dialogOpen = value;}, setShotFlight: value => context.setShotFlight(value), setActor: value => context.setActor(value), setClock: (left,total) => context.setClock(left,total),
     selectDifficulty: (id, value) => context.selectDifficulty(id, value),
     fire(ms) {const pending = [...timers].filter(([, timer]) => timer.ms === ms); assert.equal(pending.length, 1, `one ${ms} ms timer`); const [id, timer] = pending[0]; timers.delete(id); timer.fn();}
   };
@@ -98,7 +99,7 @@ for (const pref of [{enabled: true}, {enabled: false}, {enabled: 'yes'}, null]) 
   test(`handcrafted fallback forces null weights despite old preference ${JSON.stringify(pref)}`, () => {
     const ui = harness({pref, hasWorker: false});
     ui.start(); ui.fire(3000);
-    assert.deepEqual(ui.calls, [{difficulty: 'tactical', modelWeights: null, selectionSeed:selectionSeedBase}]);
+    assert.deepEqual(ui.calls, [{difficulty: 'tactical', modelWeights: null, selectionSeed:selectionSeedBase, matchContext:{durationSeconds:600,remainingSeconds:600}}]);
     assert.equal(ui.commits.length, 1);
   });
 }
@@ -125,7 +126,7 @@ test('cancelled worker results cannot commit or change the match', () => {
   assert.equal(ui.commits.length, 0);
   ui.selectDifficulty('aiDifficulty', 'casual');
   ui.fire(3000);
-  assert.deepEqual(ui.calls, [{difficulty: 'casual', modelWeights: null}]);
+  assert.deepEqual(ui.calls, [{difficulty: 'casual', modelWeights: null, matchContext:{durationSeconds:600,remainingSeconds:600}}]);
 });
 
 test('worker errors and watchdog fallback cannot reactivate learned weights', () => {
@@ -135,7 +136,7 @@ test('worker errors and watchdog fallback cannot reactivate learned weights', ()
     if (failure === 'message') worker.onmessage({data: {requestId, error: 'search failed'}});
     else if (failure === 'error') worker.onerror({preventDefault() {}});
     else ui.fire(4000);
-    assert.deepEqual(ui.calls, [{difficulty: failure === 'watchdog' ? 'casual' : 'tactical', modelWeights: null, selectionSeed:selectionSeedBase}]);
+    assert.deepEqual(ui.calls, [{difficulty: failure === 'watchdog' ? 'casual' : 'tactical', modelWeights: null, selectionSeed:selectionSeedBase, matchContext:{durationSeconds:600,remainingSeconds:600}}]);
     assert.equal(ui.commits.length, 1);
     assert.equal(worker.terminated, true);
   }
@@ -181,7 +182,7 @@ test('wrong request IDs and incomplete iteration progress never become a timeout
   worker.onmessage(progress(requestId, 1.5));
   assert.equal(ui.commits.length, 0);
   ui.fire(4000);
-  assert.deepEqual(ui.calls, [{difficulty: 'casual', modelWeights: null, selectionSeed:selectionSeedBase}]);
+  assert.deepEqual(ui.calls, [{difficulty: 'casual', modelWeights: null, selectionSeed:selectionSeedBase, matchContext:{durationSeconds:600,remainingSeconds:600}}]);
   assert.equal(ui.applied.length, 0);
 });
 
@@ -191,7 +192,7 @@ test('paused or cancelled requests ignore progress and cannot commit a stored an
     const worker = ui.workers[0], callback = worker.onmessage, requestId = worker.messages[0].requestId;
     if (paused) {
       ui.setPaused(true); callback(progress(requestId, 3)); ui.setPaused(false); ui.fire(4000);
-      assert.deepEqual(ui.calls, [{difficulty: 'casual', modelWeights: null, selectionSeed:selectionSeedBase}]);
+      assert.deepEqual(ui.calls, [{difficulty: 'casual', modelWeights: null, selectionSeed:selectionSeedBase, matchContext:{durationSeconds:600,remainingSeconds:600}}]);
     } else {
       callback(progress(requestId, 1)); ui.cancel(); callback(progress(requestId, 3));
       assert.equal(ui.timers.size, 0);
@@ -300,7 +301,7 @@ test('an early worker failure defers synchronous fallback until the pace expires
   assert.equal(ui.calls.length, 0);
   assert.equal(ui.commits.length, 0);
   ui.fire(3000);
-  assert.deepEqual(ui.calls, [{difficulty: 'tactical', modelWeights: null, selectionSeed:selectionSeedBase}]);
+  assert.deepEqual(ui.calls, [{difficulty: 'tactical', modelWeights: null, selectionSeed:selectionSeedBase, matchContext:{durationSeconds:600,remainingSeconds:600}}]);
   assert.equal(ui.commits.length, 1);
 });
 
@@ -338,4 +339,34 @@ test('one separate Tactical seed is captured per decision and shared by worker a
   ui.cancel();ui.start();
   assert.equal(ui.workers.at(-1).messages[0].selectionSeed,selectionSeedBase+1,'a fresh decision gets a fresh seed');
   assert.equal(ui.inspect().game.randomState,19,'AI variety never consumes match outcome randomness');
+});
+
+test('the live clock reaches worker and recovery equally without entering saved match state',()=>{
+  for(const actor of ['white','black']){
+    const ui=harness({mode:'watch',actor,difficulty:'tactical',whiteDifficulty:'tactical'});
+    ui.setClock(45,600);ui.start();ui.fire(3000);
+    const first=ui.workers[0].messages[0];
+    assert.deepEqual(first.matchContext,{durationSeconds:600,remainingSeconds:45});
+    assert.equal(Object.hasOwn(first.state,'aiMatchContext'),false);
+    ui.workers[0].onerror({preventDefault(){}});
+    assert.deepEqual(ui.calls[0].matchContext,first.matchContext);
+    assert.equal(Object.hasOwn(ui.inspect().game,'aiMatchContext'),false);
+    assert.equal(ui.inspect().remaining,45);
+  }
+});
+
+test('untimed Casual recovery receives a mild score context without a fictitious countdown',()=>{
+  const ui=harness({difficulty:'casual',hasWorker:false});ui.setClock(0,0);ui.start();ui.fire(3000);
+  assert.deepEqual(ui.calls[0].matchContext,{durationSeconds:0,remainingSeconds:null});
+});
+
+test('both worker policies receive the same explicit public clock context',()=>{
+  const source=worker.replace(/^import[^\n]+\n/,''),matchContext={durationSeconds:300,remainingSeconds:18};
+  for(const difficulty of ['casual','tactical']){
+    const calls=[],messages=[],self={postMessage:m=>messages.push(m)};
+    const choose=(state,options)=>{calls.push(plain(options.matchContext));return{action:{type:'skip'}};};
+    vm.runInNewContext(source,{self,chooseAIAction:(state,options)=>choose(state,options).action,analyzeTacticalAction:choose});
+    self.onmessage({data:{requestId:12,state:{},difficulty,matchContext}});
+    assert.deepEqual(calls,[matchContext]);assert.equal(messages[0].action.type,'skip');
+  }
 });

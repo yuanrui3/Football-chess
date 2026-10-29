@@ -64,6 +64,44 @@ const positionalTurn = state => state.phase === 'attackMove' || state.phase === 
 const budgetFor = state => ({normalUsed: !!state.positionBudget?.normalUsed, pawnUsed: !!state.positionBudget?.pawnUsed, dribbleUsed: state.positionBudget?.dribbleUsed === undefined ? !!state.positionBudget?.normalUsed : !!state.positionBudget.dribbleUsed});
 const attackingCarrier = (state, piece) => state.phase === 'attackMove' && !state.restart && piece?.id === state.ball.carrierId && piece.team === state.attack;
 const clamp = (number, minimum, maximum) => Math.max(minimum, Math.min(maximum, number));
+
+// Match management is a small, optional preference adjustment, not a rule or
+// probability change. The live clock is supplied separately by the caller.
+// One goal changes relevant weights by 2% early to 6% late; two or more goals
+// cap that change at 12%. Untimed play uses a mild 3% change per goal.
+export const MATCH_TACTICS = Object.freeze({early: 0.04, late: 0.12, untimed: 0.06, goalCap: 2});
+function normalizedMatchContext(context) {
+  if (!context || typeof context !== 'object' || !Number.isFinite(context.durationSeconds) || context.durationSeconds < 0) return null;
+  if (context.durationSeconds === 0) return context.remainingSeconds === null || context.remainingSeconds === undefined
+    ? {durationSeconds: 0, remainingSeconds: null} : null;
+  if (!Number.isFinite(context.remainingSeconds) || context.remainingSeconds < 0 || context.remainingSeconds > context.durationSeconds) return null;
+  return {durationSeconds: context.durationSeconds, remainingSeconds: context.remainingSeconds};
+}
+export function matchTacticsProfile(state, team, matchContext = state?.aiMatchContext) {
+  const context = normalizedMatchContext(matchContext);
+  const score = state?.score;
+  const difference = TEAMS.includes(team) && Number.isFinite(score?.[team]) && Number.isFinite(score?.[other(team)])
+    ? score[team] - score[other(team)] : 0;
+  const late = context?.durationSeconds > 0 ? (1 - context.remainingSeconds / context.durationSeconds) ** 2 : 0;
+  const scale = !context ? 0 : context.durationSeconds === 0 ? MATCH_TACTICS.untimed
+    : MATCH_TACTICS.early + (MATCH_TACTICS.late - MATCH_TACTICS.early) * late;
+  const aggression = context && difference ? -Math.sign(difference) * Math.min(MATCH_TACTICS.goalCap, Math.abs(difference)) / MATCH_TACTICS.goalCap * scale : 0;
+  return {mode: aggression > 0 ? 'chasing' : aggression < 0 ? 'protecting' : 'balanced', aggression, late,
+    progress: 1 + aggression, support: 1 + aggression, risk: 1 - aggression,
+    cover: 1 - aggression, press: 1 + aggression, shot: 1 + aggression / 2, control: 1 - aggression / 2};
+}
+function withMatchContext(state, context) {
+  const normalized = normalizedMatchContext(context);
+  if (!state) return state;
+  if (normalized) return {...state, aiMatchContext: normalized};
+  // Only this call's explicit options may opt a public decision into match
+  // management. Internal search successors keep their context directly.
+  if (Object.prototype.hasOwnProperty.call(state, 'aiMatchContext')) {
+    const {aiMatchContext, ...plain} = state;
+    return plain;
+  }
+  return state;
+}
 export const inOwnBox = (team, x, y) => inside(x, y) && BOX_FILES.includes(x) && (team === 'black' ? y < BOX_DEPTH : team === 'white' ? y >= BOARD_HEIGHT - BOX_DEPTH : false);
 
 // A loose pass can survive several positioning actions, which overwrite
@@ -1626,7 +1664,7 @@ function attackingShotRank(state, kick, team) {
   const chance = reactedShotChance(state, kick);
   // A token attempt from the other end of the pitch is usually a giveaway,
   // even when it clears the progress clock. Keep genuine finishes attractive.
-  return chance * 2000 - (chance < 0.04 ? 850 : 90);
+  return chance * 2000 * matchTacticsProfile(state, team).shot - (chance < 0.04 ? 850 : 90);
 }
 
 // Public geometry, rather than geometric proximity alone, decides who can
@@ -1638,10 +1676,11 @@ function receivingState(state, receiver) {
 function receiverValue(state, receiver, canDribble = true) {
   const projected = receivingState(state, receiver);
   const risk = tacticalTackleRisk(projected, receiver);
-  return 75 + tacticalShots(projected, receiver.team, true) * 320
+  const management = matchTacticsProfile(state, receiver.team);
+  return 75 * management.control + tacticalShots(projected, receiver.team, true) * 320 * management.support
     + ({Q: 20, R: 13, B: 12, N: 26, P: 0, K: -30})[receiver.type]
     - Math.max(0, Math.abs(receiver.x - BOARD_CENTER_X) - 2) * 18
-    - risk * (canDribble ? 45 : 460) + wideAttackValue(projected, receiver) * 0.6;
+    - risk * (canDribble ? 45 : 460) * management.risk + wideAttackValue(projected, receiver) * 0.6 * management.support;
 }
 
 function passLane(state, carrier, target) {
@@ -1686,14 +1725,15 @@ function kickValue(state, kick, team) {
   if (kick.offside) return -10000;
   if (kick.goal) return attackingShotRank(state, kick, team);
   const carrier = state.pieces.find(p => p.id === state.ball.carrierId), receiver = state.pieces.find(p => p.id === kick.receiverId);
+  const management = matchTacticsProfile(state, team);
   const progress = Math.max(3, goalDistance(team, carrier.y)) - Math.max(3, goalDistance(team, kick.y));
-  let value = progress * 10 + BOARD_CENTER_X - Math.abs(kick.x - BOARD_CENTER_X);
+  let value = progress * 10 * management.progress + BOARD_CENTER_X - Math.abs(kick.x - BOARD_CENTER_X);
   if (receiver) {
     if (receiver.team !== team) return -900 - progress;
     value += receiverValue(state, receiver);
   } else value += spacePassValue(state, kick, team);
   value += progressRank(state, team, kick.y, receiver?.type !== 'K');
-  return value * kick.accuracy - (1 - kick.accuracy) * 200;
+  return value * kick.accuracy - (1 - kick.accuracy) * 200 * management.risk;
 }
 
 function projectedMove(state, piece, move) {
@@ -1765,6 +1805,7 @@ function moveValue(state, projected, piece, move, team, beforeThreat) {
   if (flagged(state, piece) && (move.type === 'tackle' || !state.ball.carrierId && state.ball.x === move.x && state.ball.y === move.y)) return -12000;
   if (move.type === 'tackle') return 12000 * (move.tackleProbability ?? 1) + tacticalShots(projected, team, true) * 500 - tacticalTackleRisk(projected, carrier) * 80;
   const forward = goalDistance(team, piece.y) - goalDistance(team, move.y);
+  const management = matchTacticsProfile(state, team);
   let value = 0;
   if (carrier?.team === team) value += (currentBoxKnights(state).length - currentBoxKnights(projected).length) * 16000;
   if (!state.ball.carrierId) {
@@ -1776,22 +1817,22 @@ function moveValue(state, projected, piece, move, team, beforeThreat) {
   } else if (carrier?.team === team) {
     if (carrier.id === piece.id) {
       const originalCarrier = state.pieces.find(p => p.id === piece.id);
-      value += forward * 11 + (tacticalShots(projected, team, true) - tacticalShots(state, team, true)) * 650;
+      value += forward * 11 * management.progress + (tacticalShots(projected, team, true) - tacticalShots(state, team, true)) * 650 * management.shot;
       value += progressRank(state, team, move.y);
-      value += (tacticalTackleRisk(state, originalCarrier) - tacticalTackleRisk(projected, carrier)) * 680;
+      value += (tacticalTackleRisk(state, originalCarrier) - tacticalTackleRisk(projected, carrier)) * 680 * management.risk;
     } else {
       const originalCarrier = state.pieces.find(p => p.id === state.ball.carrierId);
-      value += supportPotential(projected, afterPiece, carrier) - supportPotential(state, piece, originalCarrier);
-      value += (wideCrossingSupport(projected, carrier).best - wideCrossingSupport(state, originalCarrier).best) * 240;
-      value += (tacticalTackleRisk(state, originalCarrier) - tacticalTackleRisk(projected, carrier)) * 450;
-      value += forward * 0.6 + (distance(piece, carrier) - distance(afterPiece, carrier)) * 0.4;
+      value += (supportPotential(projected, afterPiece, carrier) - supportPotential(state, piece, originalCarrier)) * management.support;
+      value += (wideCrossingSupport(projected, carrier).best - wideCrossingSupport(state, originalCarrier).best) * 240 * management.support;
+      value += (tacticalTackleRisk(state, originalCarrier) - tacticalTackleRisk(projected, carrier)) * 450 * management.risk;
+      value += forward * 0.6 * management.progress + (distance(piece, carrier) - distance(afterPiece, carrier)) * 0.4;
       if (piece.type === 'K') value += keeperHomeValue(afterPiece) - keeperHomeValue(piece);
     }
   } else if (carrier) {
-    value += (distance(piece, carrier) - distance(afterPiece, carrier)) * (piece.type === 'K' ? 0.5 : 3);
-    value += (beforeThreat - tacticalShots(projected, carrier.team, true)) * 1300;
+    value += (distance(piece, carrier) - distance(afterPiece, carrier)) * (piece.type === 'K' ? 0.5 : 3 * management.press);
+    value += (beforeThreat - tacticalShots(projected, carrier.team, true)) * 1300 * management.cover;
     const threats = passThreats(state, state.pieces.find(p => p.id === state.ball.carrierId));
-    value += (passExposure(state, state.pieces.find(p => p.id === state.ball.carrierId), threats) - passExposure(projected, carrier, threats)) * 900;
+    value += (passExposure(state, state.pieces.find(p => p.id === state.ball.carrierId), threats) - passExposure(projected, carrier, threats)) * 900 * management.cover;
     if (canTackle(projected, afterPiece, carrier)) value += 12;
     if (piece.type === 'K') value += keeperHomeValue(afterPiece) - keeperHomeValue(piece);
   }
@@ -2485,6 +2526,7 @@ function tacticalBasePositionValue(state, team) {
   }
   if (!carrier) return value + looseBallValue(state, team) * 0.35;
   const sign = carrier.team === team ? 1 : -1;
+  const management = matchTacticsProfile(state, carrier.team), defence = matchTacticsProfile(state, other(carrier.team));
   const risk = tacticalTackleRisk(state, carrier);
   // A dangerous-looking pass is less valuable when the opponent can win the
   // receiver immediately. Actual tackles in the tree still use their real odds.
@@ -2492,8 +2534,8 @@ function tacticalBasePositionValue(state, team) {
   const kickNow = ['kick', 'kickoff', 'keeperRelease', 'keeperReact'].includes(state.phase);
   const canEscape = state.phase === 'attackMove' && !budgetFor(state).dribbleUsed && !state.restart;
   const challengePending = state.phase === 'attackMove' || state.phase === 'defendMove' && !budgetFor(state).normalUsed;
-  let possession = 215 + (BOARD_HEIGHT - Math.max(3, goalDistance(carrier.team, carrier.y))) * 7;
-  possession += threat * 450 - risk * (kickNow || !challengePending ? 0 : canEscape ? 65 : 520);
+  let possession = 215 * management.control + (BOARD_HEIGHT - Math.max(3, goalDistance(carrier.team, carrier.y))) * 7 * management.progress;
+  possession += threat * 450 * management.shot - risk * (kickNow || !challengePending ? 0 : canEscape ? 65 : 520) * management.risk;
   possession += carrier.type === 'N' ? 24 : carrier.type === 'K' ? -20 : 0;
   if (!state.restart && state.phase !== 'kickoff') {
     const pace = paceFor(state);
@@ -2510,17 +2552,17 @@ function tacticalBasePositionValue(state, team) {
   }
   const support = state.pieces.filter(piece => piece.team === carrier.team && piece.id !== carrier.id && piece.type !== 'K')
     .map(piece => distance(piece, carrier)).sort((a, b) => a - b).slice(0, 2);
-  possession += support.reduce((sum, length) => sum + Math.max(0, 5 - length) * 3, 0);
+  possession += support.reduce((sum, length) => sum + Math.max(0, 5 - length) * 3, 0) * management.support;
   // A nearby teammate only helps if the ball can actually reach them. Reward
   // several onside outlets and support on both flanks, with diminishing returns.
   const outlets = state.pieces.filter(piece => piece.team === carrier.team && piece.id !== carrier.id && piece.type !== 'K'
     && onsideAtKick(state, piece, carrier) && passLane(state, carrier, piece));
   const outletAccuracy = length => state.restart?.type === 'throwIn' ? throwAccuracy(length) : passAccuracy(length);
-  possession += Math.min(3, outlets.reduce((sum, piece) => sum + outletAccuracy(distance(piece, carrier)), 0)) * 12;
-  if (outlets.some(piece => piece.x < carrier.x) && outlets.some(piece => piece.x > carrier.x)) possession += 10;
+  possession += Math.min(3, outlets.reduce((sum, piece) => sum + outletAccuracy(distance(piece, carrier)), 0)) * 12 * management.support;
+  if (outlets.some(piece => piece.x < carrier.x) && outlets.some(piece => piece.x > carrier.x)) possession += 10 * management.support;
   const finishingOutlets = tacticalOutlets(state, carrier);
-  possession += finishingOutlets.best * 250 + finishingOutlets.second * 60;
-  possession += wideAttackValue(state, carrier);
+  possession += (finishingOutlets.best * 250 + finishingOutlets.second * 60) * management.support;
+  possession += wideAttackValue(state, carrier) * management.support;
   // An end-line run needs a finish or a central outlet. Reaching the deepest
   // row alone should not outweigh an attack that can actually reach the goal.
   const centralOutlet = outlets.some(piece => Math.abs(piece.x - BOARD_CENTER_X) <= 2.5 && goalDistance(piece.team, piece.y) <= 6);
@@ -2532,7 +2574,7 @@ function tacticalBasePositionValue(state, team) {
     && Math.abs(piece.x - carrier.x) <= 2
     && (carrier.team === 'white' ? piece.y < carrier.y : piece.y > carrier.y)
     && distance(piece, carrier) <= 5).length;
-  possession -= Math.min(2, cover) * 12;
+  possession -= Math.min(2, cover) * 12 * defence.cover;
   value += sign * possession * 0.35;
   for (const keeper of state.pieces.filter(piece => piece.type === 'K')) {
     const positioning = keeperHomeValue(keeper);
@@ -2545,11 +2587,12 @@ function tacticalMoveRank(state, piece, move, beforeThreat, fast = false, threat
   if (forbiddenPaceCarry(state, piece, move)) return -16000;
   const projected = projectedMove(state, piece, move);
   const carrier = projected.pieces.find(p => p.id === projected.ball.carrierId), moved = projected.pieces.find(p => p.id === piece.id);
+  const management = matchTacticsProfile(state, piece.team);
   if (!fast) {
     let rank = moveValue(state, projected, piece, move, piece.team, beforeThreat);
     if (carrier?.team === piece.team && carrier.id !== piece.id) {
       const previous = state.pieces.find(p => p.id === state.ball.carrierId);
-      rank += (tacticalOutlets(projected, carrier).best - tacticalOutlets(state, previous).best) * 850;
+      rank += (tacticalOutlets(projected, carrier).best - tacticalOutlets(state, previous).best) * 850 * management.support;
     }
     return rank;
   }
@@ -2560,14 +2603,14 @@ function tacticalMoveRank(state, piece, move, beforeThreat, fast = false, threat
     ? 1000 + tacticalShots(projected, piece.team, true) * 600 - tacticalTackleRisk(projected, moved) * 160
     : (distance(piece, state.ball) - distance(moved, state.ball)) * 12 + home;
   if (carrier?.team === piece.team) {
-    if (carrier.id === piece.id) return (Math.max(3, goalDistance(piece.team, piece.y)) - Math.max(3, goalDistance(piece.team, move.y))) * 10
-      + (tacticalShots(projected, piece.team, true) - tacticalShots(state, piece.team, true)) * 700
-      + (tacticalTackleRisk(state, piece) - tacticalTackleRisk(projected, carrier)) * 680 + progressRank(state, piece.team, move.y);
+    if (carrier.id === piece.id) return (Math.max(3, goalDistance(piece.team, piece.y)) - Math.max(3, goalDistance(piece.team, move.y))) * 10 * management.progress
+      + (tacticalShots(projected, piece.team, true) - tacticalShots(state, piece.team, true)) * 700 * management.shot
+      + (tacticalTackleRisk(state, piece) - tacticalTackleRisk(projected, carrier)) * 680 * management.risk + progressRank(state, piece.team, move.y);
     const original = state.pieces.find(p => p.id === carrier.id);
-    return supportPotential(projected, moved, carrier) - supportPotential(state, piece, original)
-      + (wideCrossingSupport(projected, carrier).best - wideCrossingSupport(state, original).best) * 240
-      + (tacticalOutlets(projected, carrier).best - tacticalOutlets(state, original).best) * 850
-      + (tacticalTackleRisk(state, original) - tacticalTackleRisk(projected, carrier)) * 450
+    return (supportPotential(projected, moved, carrier) - supportPotential(state, piece, original)) * management.support
+      + (wideCrossingSupport(projected, carrier).best - wideCrossingSupport(state, original).best) * 240 * management.support
+      + (tacticalOutlets(projected, carrier).best - tacticalOutlets(state, original).best) * 850 * management.support
+      + (tacticalTackleRisk(state, original) - tacticalTackleRisk(projected, carrier)) * 450 * management.risk
       + home;
   }
   if (!carrier) return 0;
@@ -2580,8 +2623,8 @@ function tacticalMoveRank(state, piece, move, beforeThreat, fast = false, threat
     if (!receiver || occupant && occupant.id !== receiver.id || !onsideAtKick(projected, receiver, carrier) || !passLane(projected, carrier, threat)
       || threat.collect && !canCollect(projected, receiver, threat)) covered += threat.probability * threat.accuracy;
   }
-  return (beforeThreat - tacticalShots(projected, carrier.team, true)) * 1300 + covered * 650
-    + (distance(piece, carrier) - distance(moved, carrier)) * 3
+  return (beforeThreat - tacticalShots(projected, carrier.team, true)) * 1300 * management.cover + covered * 650 * management.cover
+    + (distance(piece, carrier) - distance(moved, carrier)) * 3 * management.press
     + (canTackle(projected, moved, carrier) ? 15 : 0) + home;
 }
 
@@ -2779,7 +2822,7 @@ function tacticalUnsettled(state) {
 // action through chooseAIAction; no analysis state enters a saved match.
 export function analyzeTacticalAction(state, {maxDepth = AI_SEARCH.depth, nodeLimit = AI_SEARCH.nodes, useCache = true, extensions = true, onIteration,
   modelWeights = RL_VALUE_MODEL.enabled ? RL_VALUE_MODEL.weights : null, modelScale = rlDefaultScale(modelWeights), selectionSeed = null,
-  evaluationScope = 'match', searchWidths = null} = {}) {
+  evaluationScope = 'match', searchWidths = null, matchContext = null} = {}) {
   if (!['match', 'round'].includes(evaluationScope)) throw new Error('Choose match or round analysis.');
   const roundScoped = evaluationScope === 'round';
   modelWeights = rlValidateWeights(modelWeights);
@@ -2796,7 +2839,8 @@ export function analyzeTacticalAction(state, {maxDepth = AI_SEARCH.depth, nodeLi
   if (!state || state.phase === 'finished') return {action: {type: 'skip'}, value: 0, stats, line: []};
   // The optional display scope evaluates this round, independent of the match
   // score. Playing bots retain the original match search and its exact leaves.
-  const source = roundScoped ? {...planningState(state), score: {white: 0, black: 0}} : planningState(state);
+  const source = roundScoped ? {...planningState(state), score: {white: 0, black: 0}, aiMatchContext: null}
+    : planningState(withMatchContext(state, matchContext));
   const team = currentTeam(source), roundAttack = source.attack;
   const roundEnded = position => position.attack !== roundAttack
     || position.turn !== source.turn && position.phase !== 'keeperRelease';
@@ -2961,8 +3005,8 @@ export function analyzeTacticalAction(state, {maxDepth = AI_SEARCH.depth, nodeLi
     ...(completed.variety ? {variety: completed.variety} : {})};
 }
 
-function chooseTacticalAction(state, modelWeights, modelScale, selectionSeed) {
-  return analyzeTacticalAction(state, {modelWeights, modelScale, selectionSeed}).action;
+function chooseTacticalAction(state, modelWeights, modelScale, selectionSeed, matchContext) {
+  return analyzeTacticalAction(state, {modelWeights, modelScale, selectionSeed, matchContext}).action;
 }
 
 // Read-only study diagnostics reuse the playing engine's ray geometry and
@@ -2972,9 +3016,9 @@ export function studyPositionMetrics(state, team = currentTeam(state)) {
     positionValue: tacticalBasePositionValue(state, team)};
 }
 
-export function chooseAIAction(state, {difficulty = 'casual', modelWeights = RL_VALUE_MODEL.enabled ? RL_VALUE_MODEL.weights : null, modelScale = rlDefaultScale(modelWeights), selectionSeed = null} = {}) {
+export function chooseAIAction(state, {difficulty = 'casual', modelWeights = RL_VALUE_MODEL.enabled ? RL_VALUE_MODEL.weights : null, modelScale = rlDefaultScale(modelWeights), selectionSeed = null, matchContext = null} = {}) {
   // Keep geometry reuse within a decision, while allowing custom setups or
   // API callers to edit an existing state object between decisions.
   if (state && typeof state === 'object') { passThreatCache.delete(state); tacticalOutletCache.delete(state); crossingSupportCache.delete(state); }
-  return difficulty === 'tactical' ? chooseTacticalAction(state, modelWeights, modelScale, selectionSeed) : chooseCasualAction(state);
+  return difficulty === 'tactical' ? chooseTacticalAction(state, modelWeights, modelScale, selectionSeed, matchContext) : chooseCasualAction(withMatchContext(state, matchContext));
 }

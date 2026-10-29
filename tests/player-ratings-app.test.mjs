@@ -46,10 +46,23 @@ test('the full-time pitch uses committed match contributions and a new match cle
   const h=report(game,stats);h.show();
   const scorer=h.renders[0].summary.players.find(p=>p.pieceId==='white-Q');
   assert.ok(scorer.rating>6);assert.ok(scorer.actions>0);
+  assert.equal(scorer.goals,1);assert.equal(scorer.assists,0);
   assert.equal(h.$('resultScore').textContent,'1 : 0');
   h.context.game={...createGame({seed:20}),phase:'finished'};h.context.matchStats=createMatchStats();h.show();
   assert.ok(h.renders.at(-1).summary.players.every(p=>p.rating===6));
   assert.equal(h.$('resultScore').textContent,'0 : 0');
+});
+
+test('goal and boot badges use actual scorer and assist records, including partial rating history',()=>{
+  const game={...createGame({seed:22}),phase:'finished',score:{white:2,black:1}},stats=createMatchStats({partial:true});
+  const goal={team:'white',scorerId:'white-Q',assistId:'white-P2',ownGoal:false,turn:4,matchSeconds:60,origin:null,target:null,distance:null};
+  stats.goals=[goal,{...goal,turn:8,matchSeconds:120},{...goal,team:'black',assistId:null,ownGoal:true,turn:10,matchSeconds:150}];
+  const h=report(game,stats);h.show();
+  const players=h.renders[0].summary.players,q=players.find(p=>p.pieceId==='white-Q'),pawn=players.find(p=>p.pieceId==='white-P2');
+  assert.equal(q.goals,2,'an own goal is excluded from the scorer’s ball count');
+  assert.equal(pawn.assists,2);assert.equal(pawn.goals,0);
+  assert.equal(q.rating,6,'actual goal icons do not fabricate missing performance telemetry');
+  assert.ok(players.filter(p=>!['white-Q','white-P2'].includes(p.pieceId)).every(p=>p.goals===0&&p.assists===0));
 });
 
 test('old finished matches retain their result and explicitly identify incomplete rating history',()=>{

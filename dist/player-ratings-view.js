@@ -11,6 +11,8 @@ const SLOTS = [
   ['Q', 50, 11],
 ];
 const number = value => Number.isFinite(value) ? value : 0;
+const count = value => Number.isSafeInteger(value) && value >= 0 ? value : 0;
+const contributionLabel = (value, noun) => `${value} ${noun}${value === 1 ? '' : 's'}`;
 const ratingText = value => Number.isFinite(value) ? value.toFixed(1) : '—';
 const signed = value => `${value >= 0 ? '+' : '−'}${Math.abs(value).toFixed(2)}`;
 const ratingBand = value => !Number.isFinite(value) ? 'unrated' : value >= 8 ? 'excellent' : value >= 7 ? 'strong' : value < 5.5 ? 'low' : 'steady';
@@ -27,6 +29,7 @@ export function ratingsPitchPlayers(summary = {}) {
       type: NAMES[record?.type] ? record.type : shortId[0],
       rating: Number.isFinite(record?.rating) ? Math.max(1, Math.min(10, record.rating)) : null,
       impact: number(record?.impact), actions: Math.max(0, Math.floor(number(record?.actions))),
+      goals: count(record?.goals), assists: count(record?.assists),
       notes: Array.isArray(record?.notes) ? record.notes.filter(note => typeof note === 'string') : [],
       sentOff: record?.sentOff === true,
     };
@@ -49,12 +52,44 @@ export function renderPlayerRatings(container, summary = {}) {
     parent.append(node);
     return node;
   };
+  const boot = parent => {
+    const ns = 'http://www.w3.org/2000/svg', svg = document.createElementNS(ns, 'svg');
+    svg.setAttribute('viewBox', '0 0 24 20');
+    svg.setAttribute('class', 'player-rating-boot');
+    svg.setAttribute('aria-hidden', 'true');
+    svg.setAttribute('focusable', 'false');
+    const path = document.createElementNS(ns, 'path');
+    path.setAttribute('d', 'M3 2h7l1.4 5 4 2.5 5 1.3q1.6 .4 1.6 2.2v2H2v-4.5l1-2Z M8 5h3 M9 7h3 M11 9l2-1 M5 15v2 M10 15v2 M17 15v2 M21 15v2');
+    path.setAttribute('fill', 'none');
+    path.setAttribute('stroke', 'currentColor');
+    path.setAttribute('stroke-width', '1.6');
+    path.setAttribute('stroke-linecap', 'round');
+    path.setAttribute('stroke-linejoin', 'round');
+    svg.append(path); parent.append(svg); return svg;
+  };
+  const contributionIcon = (parent, kind, value) => {
+    const label = contributionLabel(value, kind === 'goals' ? 'goal' : 'assist');
+    const badge = make('span', `player-rating-contribution ${kind}`, undefined, parent);
+    badge.setAttribute('title', label);
+    badge.setAttribute('aria-hidden', 'true');
+    if (kind === 'goals') make('span', 'player-rating-ball', '⚽', badge);
+    else boot(badge);
+    if (value > 1) make('span', 'player-rating-contribution-count', value > 99 ? '99+' : String(value), badge);
+  };
   container.replaceChildren();
   container.classList.add('player-ratings');
   container.setAttribute('aria-label', 'End-of-match player ratings');
   const players = ratingsPitchPlayers(summary), best = ratingsPlayerOfMatch(players);
   make('h3', 'player-ratings-title', 'Player ratings');
   make('p', 'player-ratings-intro', 'Out of 10, relative to each piece’s abilities. 6.0 is the starting rating; quiet pieces stay near it.');
+  const legend = make('p', 'player-ratings-contribution-legend');
+  const goalLegend = make('span', '', undefined, legend);
+  make('span', 'player-rating-ball', '⚽', goalLegend).setAttribute('aria-hidden', 'true');
+  make('span', '', 'Goals', goalLegend);
+  const assistLegend = make('span', '', undefined, legend); boot(assistLegend);
+  make('span', '', 'Assists', assistLegend);
+  make('span', 'player-ratings-recorded-note', 'Recorded match contributions', legend);
+  if (summary.legacyMethod) make('p', 'player-ratings-legacy', 'These ratings use the earlier method. Start a new match for updated ability-relative ratings.');
   if (summary.partial) make('p', 'player-ratings-partial', 'Partial ratings: only actions recorded since this update are included.');
   if (best) {
     const award = make('p', 'player-ratings-award');
@@ -80,6 +115,8 @@ export function renderPlayerRatings(container, summary = {}) {
     make('p', 'player-ratings-detail-meta', Number.isFinite(player.rating)
       ? `Impact ${signed(player.impact)} · ${player.actions} recorded action${player.actions === 1 ? '' : 's'}${player.sentOff ? ' · Sent off' : ''}`
       : 'No performance record is available for this piece.', detail);
+    if (player.goals || player.assists) make('p', 'player-ratings-detail-contributions',
+      [player.goals ? contributionLabel(player.goals, 'goal') : '', player.assists ? contributionLabel(player.assists, 'assist') : ''].filter(Boolean).join(' · '), detail);
     const notes = make('ul', 'player-ratings-detail-notes', undefined, detail);
     for (const note of player.notes.length ? player.notes : [player.actions ? 'Rating accounts for this piece’s recorded contributions and native abilities.' : 'Limited involvement. No extra credit for an unused piece.']) make('li', '', note, notes);
     make('p', 'player-ratings-impact-note', 'Impact shows the contribution before adjustment for piece abilities. Ratings are a game heuristic.', detail);
@@ -99,17 +136,20 @@ export function renderPlayerRatings(container, summary = {}) {
     make('span', 'ratings-box bottom', undefined, markings);
     make('span', 'ratings-centre', undefined, markings);
     for (const player of players.filter(player => player.team === team)) {
-      const button = make('button', `player-rating-piece ${team}${player.sentOff ? ' sent-off' : ''}${player.pieceId === best?.pieceId ? ' player-of-match' : ''}`, undefined, pitch);
+      const button = make('button', `player-rating-piece ${team}${player.goals || player.assists ? ' has-contributions' : ''}${player.sentOff ? ' sent-off' : ''}${player.pieceId === best?.pieceId ? ' player-of-match' : ''}`, undefined, pitch);
       button.type = 'button';
       button.dataset.pieceId = player.pieceId;
       button.style.left = `${player.x}%`;
       button.style.top = `${player.y}%`;
       button.setAttribute('aria-pressed', 'false');
-      button.setAttribute('aria-label', `${TEAM_NAMES[team]} ${NAMES[player.type]} ${player.shortId}, ${Number.isFinite(player.rating) ? `${ratingText(player.rating)} out of 10` : 'rating unavailable'}${player.sentOff ? ', sent off' : ''}${player.pieceId === best?.pieceId ? `, ${summary.partial ? 'top recorded rating' : 'player of the match'}` : ''}. Show rating details.`);
+      button.setAttribute('aria-label', `${TEAM_NAMES[team]} ${NAMES[player.type]} ${player.shortId}, ${Number.isFinite(player.rating) ? `${ratingText(player.rating)} out of 10` : 'rating unavailable'}${player.goals ? `, ${contributionLabel(player.goals, 'goal')}` : ''}${player.assists ? `, ${contributionLabel(player.assists, 'assist')}` : ''}${player.sentOff ? ', sent off' : ''}${player.pieceId === best?.pieceId ? `, ${summary.partial ? 'top recorded rating' : 'player of the match'}` : ''}. Show rating details.`);
       const identity = make('span', 'player-rating-identity', undefined, button);
       make('span', 'player-rating-symbol', SYMBOLS[player.type], identity).setAttribute('aria-hidden', 'true');
       make('span', 'player-rating-id', player.shortId, identity);
-      make('strong', `player-rating-score ${ratingBand(player.rating)}`, ratingText(player.rating), button);
+      const scoreLine = make('span', 'player-rating-score-line', undefined, button);
+      make('strong', `player-rating-score ${ratingBand(player.rating)}`, ratingText(player.rating), scoreLine);
+      if (player.goals) contributionIcon(scoreLine, 'goals', player.goals);
+      if (player.assists) contributionIcon(scoreLine, 'assists', player.assists);
       if (player.sentOff) make('span', 'player-rating-dismissal', 'OFF', button);
       else if (player.pieceId === best?.pieceId) make('span', 'player-rating-best', '★', button).setAttribute('aria-hidden', 'true');
       button.addEventListener('click', () => select(player));

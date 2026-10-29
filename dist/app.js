@@ -1,12 +1,12 @@
-import {createGame, legalMoves, legalKicks, disguisedShotTargets, applyMove, applyKick, skipMove, chooseAIAction, currentTeam, cornerTakers, selectCornerTaker, BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, BOX_FILES, BOX_DEPTH, CENTRAL_GOAL_FILES, MIDFIELD_RANK, inOwnBox, canOccupySquare, isBox, isGoalMouth, shotChance, shotModel, offsideInfo, offsideFlaggedIds, LONG_TACKLE_RANGE, DRIBBLE_RANGE, FOUL_RULE, STALLING_RULE, PACE_RULE, ACTION_SECONDS, actionTimeout, progressInfo, paceInfo, positionActions, normalizeGame, FORMATION_PRESETS, setStartingFormation} from './engine.js?v=400633f53b46';
+import {createGame, legalMoves, legalKicks, disguisedShotTargets, applyMove, applyKick, skipMove, chooseAIAction, currentTeam, cornerTakers, selectCornerTaker, BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, BOX_FILES, BOX_DEPTH, CENTRAL_GOAL_FILES, MIDFIELD_RANK, inOwnBox, canOccupySquare, isBox, isGoalMouth, shotChance, shotModel, offsideInfo, offsideFlaggedIds, LONG_TACKLE_RANGE, DRIBBLE_RANGE, FOUL_RULE, STALLING_RULE, PACE_RULE, ACTION_SECONDS, actionTimeout, progressInfo, paceInfo, positionActions, normalizeGame, FORMATION_PRESETS, setStartingFormation} from './engine.js?v=ce954d531b88';
 import {createMatchClock, restoreMatchClock, tickMatchClock, settleMatchClock, rewindMatchClock} from './match-clock.js?v=1fa32f5eed6c';
-import {buildGoalReplay, restoreGoalReplay, createReplayPlayer} from './goal-replay.js?v=3de482c5c001';
-import {createMatchStats, restoreMatchStats, recordMatchTransition, addPossessionTime, matchStatsSummary, shortPieceId} from './match-stats.js?v=54523595ce99';
-import {playerRatingsSummary} from './player-ratings.js?v=f7496ad9dd1a';
-import {renderPlayerRatings} from './player-ratings-view.js?v=a7da7c715d72';
-import {createCommentary} from './commentary.js?v=fec74fe680ad';
+import {buildGoalReplay, restoreGoalReplay, createReplayPlayer} from './goal-replay.js?v=5358206f0770';
+import {createMatchStats, restoreMatchStats, recordMatchTransition, addPossessionTime, matchStatsSummary, shortPieceId} from './match-stats.js?v=7de4d3e03d9f';
+import {playerRatingsSummary} from './player-ratings.js?v=4633d8a0d6ab';
+import {renderPlayerRatings} from './player-ratings-view.js?v=b80c606821f7';
+import {createCommentary} from './commentary.js?v=a445c8353831';
 import {createParadeeSpeech} from './paradee-speech.js?v=e9d0fc794cfb';
-import {createEvaluation,formatEvaluation} from './evaluation.js?v=4bec8a3d06ec';
+import {createEvaluation,formatEvaluation} from './evaluation.js?v=0737281e7e7f';
 
 const $ = id => document.getElementById(id);
 const normalShotLegend = document.querySelector('.shot-legend').textContent;
@@ -764,6 +764,7 @@ function animateComputerMove(action){
 function scheduleAI(){
   if(shotFlight||stage!=='playing'||paused||anyDialog()||!isComputer()||aiTimer!==null||aiWorker)return;
   const requestId=aiGeneration,actor=currentTeam(game),difficulty=computerDifficulty(actor);
+  const matchContext={durationSeconds:duration*60,remainingSeconds:duration>0?Math.max(0,remaining):null};
   // Separate decision noise never consumes the match's shooting/foul RNG.
   const selectionSeed=difficulty==='tactical'?(()=>{try{return window.crypto.getRandomValues(new Uint32Array(1))[0]||1;}catch{return (Math.random()*0x100000000)>>>0||1;}})():undefined;
   let completedAI=null,completedDepth=0,paceElapsed=false,pendingAction=null,deferredFallback=null;
@@ -778,7 +779,7 @@ function scheduleAI(){
   const fallback=(level=difficulty)=>{
     if(!stillCurrent())return;stopAIWorker();
     if(!paceElapsed){deferredFallback=level;return;}
-    try{receive(chooseAIAction(game,{difficulty:level,modelWeights:null,selectionSeed}));}catch(err){fail(err);}
+    try{receive(chooseAIAction(game,{difficulty:level,modelWeights:null,selectionSeed,matchContext}));}catch(err){fail(err);}
   };
   const completedOrFallback=(level=difficulty)=>{if(completedAI)receive(completedAI);else fallback(level);};
   aiTimer=setTimeout(()=>{
@@ -787,7 +788,7 @@ function scheduleAI(){
   },aiPace);
   if(difficulty==='tactical'&&typeof window.Worker==='function'){
     try{
-      aiWorker=new window.Worker(new URL('./ai-worker.js?v=ec45f652f6e8',import.meta.url),{type:'module',name:'football-chess-tactical'});
+      aiWorker=new window.Worker(new URL('./ai-worker.js?v=0123c230b1b0',import.meta.url),{type:'module',name:'football-chess-tactical'});
       aiWorker.onmessage=event=>{
         if(!stillCurrent()||event.data?.requestId!==requestId)return;
         const progress=event.data.progress;
@@ -800,7 +801,7 @@ function scheduleAI(){
       };
       aiWorker.onerror=event=>{event.preventDefault?.();completedOrFallback();};
       aiWatchdog=setTimeout(()=>completedOrFallback('casual'),4000);
-      aiWorker.postMessage({requestId,state:game,difficulty,selectionSeed});
+      aiWorker.postMessage({requestId,state:game,difficulty,selectionSeed,matchContext});
     }catch{fallback();}
   }
 }
@@ -1006,7 +1007,12 @@ function resumePausedMatch(){
 }
 function renderMatchStats(){
   const summary=matchStatsSummary(matchStats),white=summary.teams.white,black=summary.teams.black;
-  renderPlayerRatings($('playerRatings'),playerRatingsSummary(matchStats.playerRatings,game));
+  const ratings=playerRatingsSummary(matchStats.playerRatings,game);
+  for(const player of ratings.players){
+    player.goals=summary.scorers.find(item=>item.pieceId===player.pieceId)?.count||0;
+    player.assists=summary.assists.find(item=>item.pieceId===player.pieceId)?.count||0;
+  }
+  renderPlayerRatings($('playerRatings'),ratings);
   const rows=[['Shots',white.shots,black.shots],['On target',white.onTarget,black.onTarget],['Corners',white.corners,black.corners],['Fouls',white.fouls||0,black.fouls||0],['Yellow cards',white.yellowCards||0,black.yellowCards||0],['Red cards',white.redCards||0,black.redCards||0],['Possession',white.possessionPercent===null?'—':`${Math.round(white.possessionPercent)}%`,black.possessionPercent===null?'—':`${100-Math.round(white.possessionPercent)}%`]];
   $('matchStatsRows').innerHTML=rows.map(([label,w,b])=>`<tr><td>${w}</td><th scope="row">${label}</th><td>${b}</td></tr>`).join('');
   $('statsPartial').hidden=!summary.partial;

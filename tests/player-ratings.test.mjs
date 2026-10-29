@@ -21,6 +21,7 @@ function tracked(game){
     player(id){return playerRatingsSummary(this.stats.playerRatings,this.game).players.find(p=>p.pieceId===id);}};
 }
 const record=(before,after)=>recordPlayerRatings(createPlayerRatings(),before,after);
+const directThreat=game=>Math.max(0,...E.legalKicks({...game,phase:'kick'}).filter(k=>k.goal===game.attack&&!k.offside).map(k=>E.shotModel(game,k.x,k.y).probability));
 
  test('an untouched full squad has stable IDs, neutral grades and no invented impact',()=>{
   const g=E.createGame({seed:7}),summary=playerRatingsSummary(createPlayerRatings(),g);
@@ -58,8 +59,9 @@ test('shot declaration, resolution and duplicate recording count one attempt and
   assert.equal(recordPlayerRatings(ledger,before,run.game),ledger,'an identical transition is idempotent');
 });
 
-test('chance quality matters more than the native sampled save or goal',()=>{
-  const g=fixture([p('white-R1',6,5)],'white-R1',{phase:'kick'}),pending=E.applyKick(g,6,-1),base=record(g,pending);
+test('earlier rating records retain their original chance-first result weighting',()=>{
+  const g=fixture([p('white-R1',6,5)],'white-R1',{phase:'kick'}),pending=E.applyKick(g,6,-1),legacy=createPlayerRatings();legacy.version=1;
+  const base=recordPlayerRatings(legacy,g,pending);
   const goal=E.skipMove(pending,{roll:0}),model=E.shotModel(pending),save=E.skipMove(pending,{roll:model.probability+model.keeperCornerProbability+model.keeperReboundProbability+model.caughtSaveProbability/2});
   assert.equal(save.lastAction.type,'save');
   const good=playerRatingsSummary(recordPlayerRatings(base,pending,goal),goal).players.find(p=>p.pieceId==='white-R1');
@@ -104,12 +106,36 @@ test('keeper stops are credited by difficulty and a teammate’s backward shot i
 
 test('penalty conversion uses the same native80% expectation for pawn and queen',()=>{
   const result=id=>{const g=fixture([p(id,6,5)],id,{phase:'kick'});g.restart={type:'penalty',team:'white',takerId:id};const n=E.applyKick(g,6,-1),a=E.skipMove(n,{roll:0});return playerRatingsSummary(recordPlayerRatings(record(g,n),n,a),a).players.find(p=>p.pieceId===id);};
-  const pawn=result('white-P1'),queen=result('white-Q');assert.equal(pawn.rating,queen.rating);assert.ok(pawn.rating<6.3);
+  const pawn=result('white-P1'),queen=result('white-Q');assert.equal(pawn.rating,queen.rating);assert.ok(pawn.rating<=6.3);
+});
+
+test('equal native shooting difficulty gives pawn and queen the same missed-chance debit',()=>{
+  const result=id=>{
+    const g=fixture([p(id,7,2)],id,{phase:'kick'}),pending=E.applyKick(g,7,-1),model=E.shotModel(pending);
+    const saved=E.skipMove(pending,{roll:model.probability+model.keeperCornerProbability+model.keeperReboundProbability+model.caughtSaveProbability/2});
+    assert.equal(saved.lastAction.type,'save');
+    const ledger=recordPlayerRatings(record(g,pending),pending,saved);
+    return {xg:model.probability,merit:ledger.players[id].merit,player:playerRatingsSummary(ledger,saved).players.find(p=>p.pieceId===id)};
+  };
+  const pawn=result('white-P1'),queen=result('white-Q');assert.equal(pawn.xg,queen.xg);
+  assert.ok(pawn.xg>=.35);assert.ok(pawn.player.rating<6);assert.equal(pawn.player.rating,queen.player.rating);
+  assert.ok(Math.abs(pawn.merit-queen.merit)<1e-9,'less powerful pieces are not punished more for the same native chance');
+});
+
+test('equal native lost-duel risk gives pawn and queen the same context-weighted debit',()=>{
+  const result=id=>{
+    const g=fixture([p(id,3,9),p('black-N1',4,8)],'black-N1',{phase:'defendMove',attack:'black'});
+    const move=E.legalMoves(g,id).find(m=>m.type==='tackle');assert.equal(move.tackleProbability,.5);
+    const n=E.applyMove(g,id,move.x,move.y,{roll:.8});assert.equal(n.lastAction.type,'tackleMiss');
+    const ledger=record(g,n);return {merit:ledger.players[id].merit,player:playerRatingsSummary(ledger,n).players.find(p=>p.pieceId===id)};
+  };
+  const pawn=result('white-P1'),queen=result('white-Q');assert.ok(pawn.player.rating<6);assert.equal(pawn.player.rating,queen.player.rating);
+  assert.ok(Math.abs(pawn.merit-queen.merit)<1e-9);
 });
 
 test('own-goal blame follows stable shooting identity and never credits the opponent’s phantom scorer',()=>{
   const run=tracked(fixture([p('white-R1',6,12)],'white-R1',{phase:'kick'}));run.kick(6,17).step(E.skipMove(run.game,{roll:0}));
-  assert.equal(run.game.lastAction.type,'goal');assert.equal(run.stats.goals[0].team,'black');assert.equal(run.player('white-R1').notes.some(n=>/goal/.test(n)),false);assert.ok(run.player('white-R1').rating<6);
+  assert.equal(run.game.lastAction.type,'goal');assert.equal(run.stats.goals[0].team,'black');assert.equal(run.player('white-R1').metrics.ownGoals,1);assert.ok(run.player('white-R1').notes.includes('1 own goal'));assert.ok(run.player('white-R1').rating<6);
   assert.equal(run.stats.playerRatings.players['white-R1'].counts.goals,0);
 });
 
@@ -166,9 +192,39 @@ test('routine best legal keeper reactions earn no exceptional execution bonus an
     return choice.move.type==='hold'?E.skipMove(pending,{roll}):E.applyMove(pending,keeper.id,choice.move.x,choice.move.y,{roll});};
   const good=resolve(best),poor=resolve(worst);assert.equal(good.lastAction.type,'save');assert.equal(poor.lastAction.type,'save');
   const goodLedger=recordPlayerRatings(base,pending,good),poorLedger=recordPlayerRatings(base,pending,poor);
-  const expectedSaveResidual=.12*(1-best.model.saveGivenOnTarget)/.20;
-  assert.ok(Math.abs(goodLedger.players[keeper.id].parts.goalkeeping-expectedSaveResidual)<1e-9,'best execution gets only its modest sampled-save residual');
+  const expectedSaveResidual=.80*best.model.probability/(best.model.probability+best.model.saveProbability);
+  assert.ok(Math.abs(goodLedger.players[keeper.id].parts.goalkeeping-expectedSaveResidual)<1e-9,'best execution earns performance credit only for its on-target expected goals prevented');
   assert.ok(poorLedger.players[keeper.id].merit<goodLedger.players[keeper.id].merit,'saving the same shot does not hide a worse native coverage decision');
+});
+
+for(const freePawn of [false,true])test(`ordinary keeper ${freePawn?'bonus':'normal'} coverage uses its native legal positioning baseline`,()=>{
+  const g=fixture([p('white-R1',7,2)],'white-R1',{phase:'defendMove'}),id='black-K';
+  if(freePawn)g.positionBudget={normalUsed:true,pawnUsed:false,dribbleUsed:false};
+  const choices=E.legalMoves(g,id,{freePawn}).filter(move=>move.type!=='tackle')
+    .map(move=>({move,next:E.applyMove(g,id,move.x,move.y,{freePawn})}))
+    .map(choice=>({...choice,threat:directThreat(choice.next)})).sort((a,b)=>a.threat-b.threat);
+  const best=choices[0],worst=choices.at(-1);assert.ok(best.threat<directThreat(g)-.02);
+  const bestLedger=record(g,best.next),bestPlayer=playerRatingsSummary(bestLedger,best.next).players.find(p=>p.pieceId===id);
+  assert.equal(bestLedger.version,2);assert.ok(bestPlayer.impact>0,'ordinary coverage remains real raw impact');
+  assert.equal(bestPlayer.rating,6,'a routine best legal coverage move is expected, not an exceptional performance');
+  assert.ok(Math.abs(bestLedger.players[id].parts.defending)<1e-9);
+  assert.ok(worst.threat>best.threat+.02);
+  const poorLedger=record(g,worst.next);assert.ok(poorLedger.players[id].merit<0,'worse available coverage is still a meaningful error');
+  const summary=playerRatingsSummary(bestLedger,best.next);assert.equal(summary.methodVersion,2);assert.equal(summary.legacyMethod,false);
+  if(freePawn)assert.equal(E.legalMoves(g,id).length,0,'the bonus baseline does not invent an already spent normal move');
+});
+
+test('earlier rating methods retain their original score, continuation and save identity',()=>{
+  const g=fixture([p('white-R1',7,2)],'white-R1',{phase:'defendMove'}),n=E.applyMove(g,'black-K',7,0,{freePawn:true});
+  const legacy=createPlayerRatings();legacy.version=1;
+  const old=recordPlayerRatings(legacy,g,n),summary=playerRatingsSummary(old,n),king=summary.players.find(p=>p.pieceId==='black-K');
+  assert.equal(old.version,1);assert.equal(summary.methodVersion,1);assert.equal(summary.legacyMethod,true);
+  assert.equal(king.rating,6.8,'an already earned earlier-method rating is not silently recalculated');
+  const saved=JSON.parse(JSON.stringify(old)),restored=restorePlayerRatings(saved,n);assert.deepEqual(restored,old);
+  assert.deepEqual(playerRatingsSummary(restored,n),summary);
+  const next=E.skipMove(n),continued=recordPlayerRatings(restored,n,next);
+  assert.equal(continued.version,1);assert.equal(playerRatingsSummary(continued,next).players.find(p=>p.pieceId==='black-K').rating,6.8);
+  assert.equal(createPlayerRatings().version,2,'only new matches start the revised rating method');
 });
 
 test('disguised shots use the fair pre-reveal mixture for either sampled goal target',()=>{
