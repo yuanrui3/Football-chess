@@ -1,7 +1,7 @@
 /** Public match commentary: read-only board geometry, never seeds, hidden targets or AI search. */
 import {COMMENTARY_CLIPS} from './commentary-clips.js?v=29cbe0d352e1';
-import {ADAM_EVENT_CLIPS, ADAM_TACTICAL_CLIPS} from './adam-commentary-clips.js';
-import {HUGO_COMMENTARY_CLIPS, hugoCommentaryClip} from './hugo-commentary-clips.js?v=cfaced2e3dd2';
+import {ADAM_EVENT_CLIPS, ADAM_TACTICAL_CLIPS} from './adam-commentary-clips.js?v=1ef9528198cd';
+import {HUGO_COMMENTARY_CLIPS, hugoCommentaryClip} from './hugo-commentary-clips.js?v=8c44ba9a4c7c';
 import {commentaryStatsLines} from './commentary-stats.js?v=510d8a0ad598';
 import {createTacticalCommentary} from './commentary-tactics.js?v=f7eecf4a3c13';
 import {commentaryPositionFacts, commentaryTransitionFact} from './commentary-spatial.js?v=b9e380b0851d';

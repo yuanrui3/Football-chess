@@ -3,6 +3,7 @@
 
 Usage: python3 scripts/assemble-adam-commentary.py --results /absolute/results.json
 The results file is private build input; temporary asset URLs never enter dist.
+Each result accepts an HTTPS url or an absolute localPath from an asset export.
 Generation is deliberately separate, so resuming this command spends no credits.
 """
 import argparse
@@ -64,7 +65,8 @@ def main():
             for rid in entry["recordingIds"]}
     if used != set(recordings):
         raise ValueError("Plan must contain exactly its used recording IDs")
-    missing = [rid for rid in recordings if not results.get(rid, {}).get("url")]
+    missing = [rid for rid in recordings if not any(results.get(rid, {}).get(key)
+               for key in ("url", "localPath"))]
     if missing and not args.download_only:
         raise ValueError(f"Missing completed audio results: {', '.join(missing)}")
     if args.download_only:
@@ -91,12 +93,20 @@ def main():
             if measured["sha256"] == cached.get("sha256"):
                 metadata = measured
         if metadata is None:
-            url = results[rid]["url"]
-            if not isinstance(url, str) or not url.startswith("https://"):
-                raise ValueError(f"Expected an HTTPS audio result for {rid}")
-            raw = args.results.parent / f"{rid}.raw.mp3"
+            local_path = results[rid].get("localPath")
+            if local_path:
+                raw = Path(local_path)
+                if not raw.is_absolute() or not raw.is_file():
+                    raise ValueError(f"Expected an existing absolute localPath for {rid}")
+                if raw.resolve() == destination.resolve():
+                    raise ValueError(f"Source and normalized output must differ for {rid}")
+            else:
+                url = results[rid].get("url")
+                if not isinstance(url, str) or not url.startswith("https://"):
+                    raise ValueError(f"Expected an HTTPS audio result for {rid}")
+                raw = args.results.parent / f"{rid}.raw.mp3"
             normalized = output / f"{rid}.tmp.mp3"
-            for attempt in range(3):
+            for attempt in range(0 if local_path else 3):
                 try:
                     with urllib.request.urlopen(url, timeout=90) as response:
                         raw.write_bytes(response.read())
@@ -118,7 +128,8 @@ def main():
                 metadata = probe(normalized)
                 normalized.replace(destination)
             finally:
-                raw.unlink(missing_ok=True)
+                if not local_path:
+                    raw.unlink(missing_ok=True)
                 normalized.unlink(missing_ok=True)
         with lock:
             cache[rid] = {**metadata, "profile": PROFILE}

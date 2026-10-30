@@ -4,7 +4,7 @@ import {buildGoalReplay, restoreGoalReplay, createReplayPlayer} from './goal-rep
 import {createMatchStats, restoreMatchStats, recordMatchTransition, addPossessionTime, matchStatsSummary, shortPieceId} from './match-stats.js?v=581cc6138571';
 import {playerRatingsSummary} from './player-ratings.js?v=dd82ea8417c0';
 import {renderPlayerRatings} from './player-ratings-view.js?v=b80c606821f7';
-import {createCommentary} from './commentary.js?v=0298a11313a9';
+import {createCommentary} from './commentary.js?v=ec635e50cd82';
 import {createParadeeSpeech} from './paradee-speech.js?v=e9d0fc794cfb';
 import {createEvaluation,formatEvaluation} from './evaluation.js?v=b35b0f046187';
 
