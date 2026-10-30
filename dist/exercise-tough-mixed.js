@@ -6,11 +6,11 @@ const skip=()=>({type:'skip'});
 const attackingSupport=()=>[piece('white-K',6,16),piece('black-K',6,0),piece('black-R1',13,0),piece('black-R2',0,0),piece('black-B1',11,1),piece('black-N1',8,2),piece('black-P1',8,3),piece('white-P1',5,7),piece('white-P2',9,8),piece('white-B2',10,9),piece('white-N2',2,10)];
 export const TOUGH_MIXED_EXERCISES=[
  {
-  id:'tough-unlock-the-rook-battery',title:'Unlock the rook battery',difficulty:'tough',planSteps:4,revision:2,theme:'box-entry',side:'attack',playerTeam:'white',roundLimit:4,
-  objective:'Create and take a finish worth at least 20% against the best goalkeeper reaction. Any legal plan can earn credit.',
-  coachNote:'The keeper begins centrally on g17. One useful plan transfers to the second rook, clears its file and carries only to the edge of the box. That keeps the ball beyond a bonus-assisted king challenge while improving the rook’s shooting distance. The resulting chance is about 22% against proper cover, rather than an almost open goal.',
+  id:'tough-unlock-the-rook-battery',title:'Unlock the rook battery',difficulty:'tough',planSteps:4,revision:3,theme:'box-entry',side:'attack',playerTeam:'white',roundLimit:4,
+  objective:'Create and take a finish worth at least 17% against the best goalkeeper reaction. Any legal plan can earn credit.',
+  coachNote:'The keeper begins centrally on g17. One useful plan transfers to the second rook, clears its file and carries only to the edge of the box. That keeps the ball beyond a bonus-assisted king challenge while improving the rook’s shooting distance. The resulting chance is about 18% against proper cover, rather than an almost open goal.',
   hints:['The wide rook has no direct finish. Its teammate can use the f-file, once the friendly bishop leaves it.','Clearance and dribbling have separate allowances. Carrying all the way beside this central keeper would expose the ball.','One plan is Rc13–Rf13, Bf14–g15, Rf13–f14, then the F-goal shot after positioning ends.'],
-  goal:{type:'finish',minShotXG:.20},
+  goal:{type:'finish',minShotXG:.17},
   position:{pieces:[piece('white-K',6,16),piece('black-K',6,0),piece('black-R1',13,0),piece('black-R2',0,0),piece('black-B1',11,1),piece('black-N1',1,8),piece('black-P1',11,10),piece('white-P1',5,7),piece('white-P2',9,8),piece('white-B2',10,9),piece('white-N2',2,10),piece('white-R1',2,4),piece('white-R2',5,4),piece('white-B1',5,3),piece('white-N1',6,1)],carrierId:'white-R1',phase:'kick',attack:'white'},
   exampleActions:[kick(5,4),move('white-B1',6,2),move('white-R2',5,3),skip(),kick(5,-1)]
  },

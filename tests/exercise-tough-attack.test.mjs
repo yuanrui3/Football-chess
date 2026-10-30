@@ -72,7 +72,7 @@ test('different support and offside-clearance choices earn the same outcome cred
   const buildup=byId('tough-sweeper-to-bishop'),alternative=structuredClone(buildup.exampleActions);
   alternative[1]={type:'move',pieceId:'white-Q',x:10,y:6};
   const first=replay(buildup,alternative).session;
-  assert.equal(first.status,'solved');assert.ok(first.metrics.lastShotXG>=.15);
+  assert.equal(first.status,'solved');assert.ok(first.metrics.lastShotXG>=buildup.goal.minShotXG);
   const offside=byId('tough-clear-offside-runner'),second=structuredClone(offside.exampleActions);
   second[0]={type:'move',pieceId:'white-N1',x:3,y:0};
   assert.equal(replay(offside,second).session.status,'solved');

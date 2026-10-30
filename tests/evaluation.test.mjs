@@ -129,7 +129,8 @@ test('current shot and keeper geometry change the round estimate, but irrelevant
   const position=roundDiagram(),remote=structuredClone(position);
   remote.pieces.push({id:'black-P1',team:'black',type:'P',x:13,y:15});
   const options={evaluationScope:'round',maxDepth:1,nodeLimit:1,modelWeights:null,modelScale:80};
-  assert.equal(analyzeTacticalAction(position,options).value,analyzeTacticalAction(remote,options).value);
+  assert.ok(Math.abs(analyzeTacticalAction(position,options).value-analyzeTacticalAction(remote,options).value)<1e-10,
+    'irrelevant material cannot change the round value beyond floating-point summation noise');
 });
 
 test('clear scoring chances have strong visual contrast while a quiet kickoff stays close to the centre',()=>{

@@ -2,10 +2,10 @@
  * Example actions document one native route against the deterministic Tactical
  * bot; session grading evaluates the objective, never this move list.
  */
-import {createGame,applyKick} from './engine.js?v=ce954d531b88';
-import {MEDIUM_EXERCISES} from './exercise-medium.js?v=ee45439da825';
-import {TOUGH_ATTACK_EXERCISES} from './exercise-tough-attack.js?v=2b2d7a3f4d9b';
-import {TOUGH_MIXED_EXERCISES} from './exercise-tough-mixed.js?v=62e78193c9e1';
+import {createGame,applyKick} from './engine.js?v=2510a03aa4e2';
+import {MEDIUM_EXERCISES} from './exercise-medium.js?v=058ae5d6ae6e';
+import {TOUGH_ATTACK_EXERCISES} from './exercise-tough-attack.js?v=29b11d9a3e19';
+import {TOUGH_MIXED_EXERCISES} from './exercise-tough-mixed.js?v=c7478b669f7b';
 import {TOUGH_DEFENCE_EXTRA} from './exercise-tough-defence-extra.js?v=b5c068a8f4ca';
 
 const piece=(id,x,y)=>({id,team:id.split('-')[0],type:id.split('-')[1][0],x,y});
@@ -24,7 +24,7 @@ const definitions=[
     id:'pick-the-open-file',title:'Take the central finish',revision:2,theme:'one-on-one',side:'attack',playerTeam:'white',roundLimit:3,
     objective:'Create and take any legal finish worth at least 25% against the best keeper reply.',
     coachNote:'The keeper starts centrally on g17. A close central shot is a useful chance even against proper goalkeeping; it is not an empty-net finish. The ordinary shot, rather than a favourable sampled goal, meets this outcome.',
-    hints:['The keeper is in a normal central position.','The queen already has a close legal shot; another pass is not compulsory.','From g15, the direct G-goal shot is worth about 29% against the best keeper reaction.'],
+    hints:['The keeper is in a normal central position.','The queen already has a close legal shot; another pass is not compulsory.','From g15, the direct G-goal shot is worth about 26% against the best keeper reaction.'],
     goal:finish(.25),
     position:position([...base({defender:[13,1]}),piece('white-Q',6,2)],'white-Q'),
     exampleActions:[kick(6,-1)],
@@ -93,11 +93,11 @@ const definitions=[
     exampleActions:[kick(7,2),move('white-Q',8,1),skip(),kick(8,-1)],
   },
   {
-    id:'carry-inward',title:'Carry inward, then finish',revision:2,theme:'box-entry',side:'attack',playerTeam:'white',roundLimit:3,
-    objective:'Create and take any legal finish worth at least 25% against the best keeper reply.',
+    id:'carry-inward',title:'Carry inward, then finish',revision:3,theme:'box-entry',side:'attack',playerTeam:'white',roundLimit:3,
+    objective:'Create and take any legal finish worth at least 24% against the best keeper reply.',
     coachNote:'The central keeper is protected by a rook near h16. That defender also restricts a direct king challenge as the queen comes inward. The wide initial shot is poor; carrying to i15 creates a real choice of goal targets against the keeper and covering pieces. Any legal finish meeting the target counts.',
     hints:['The queen’s initial wide shot has a tight angle.','The defender beside the keeper affects its access squares as well as the ball’s route.','A carry from k13 to i15 opens an I-file finish. Compare the direct aim with the legal two-target disguise before shooting.'],
-    goal:finish(.25,'box-entry','either'),
+    goal:finish(.24,'box-entry','either'),
     position:position([...base(),piece('black-R2',7,1),piece('white-Q',10,4)],'white-Q','attackMove'),
     exampleActions:[move('white-Q',8,2),skip(),kick(8,-1)],
   },

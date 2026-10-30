@@ -21,13 +21,14 @@ export const PACE_RULE = Object.freeze({maxDribbleRounds: 4, repetitionOccurrenc
 // Tunable board-game parameters, not fitted football statistics. Distance is in
 // board squares and time is in abstract units set by ballSpeed.
 export const SHOT_MODEL = Object.freeze({
-  version: 15, ballSpeed: 6, blockPerDefender: 0.45, blockCornerShare: 0.85, knightGoalMultiplier: 1, finishingAccuracyMultiplier: 1.15,
+  version: 16, ballSpeed: 6, blockPerDefender: 0.45, blockCornerShare: 0.85, knightGoalMultiplier: 1, finishingAccuracyMultiplier: 1.15,
   parryInPlayShare: 0.20, reboundBoxMargin: 2,
   targetBase: 0.98, distanceDecay: 0.018, distancePenaltyStart: 3, longShotDecay: 0.06, rookLongShotDecay: 0.03, minOnTarget: 0.01, maxOnTarget: 0.98,
   angleFloor: 0.65, angleWeight: 0.35, postAngleFloor: 0.10, postAngleWeight: 0.90, postAngleExponent: 1.5,
   wideAngleStartDegrees: 45, wideAngleFullDegrees: 90, wideAngleAccuracyBonus: 0.25,
   centralLaneAccuracyBonus: 0.15,
   boxRadius: 0.4, boxDiveSpeed: 1.3, boxReactionDelay: 0.15, boxMaxSave: 0.90,
+  rushRange: 6, rushRadius: 0.9, rushMaxSave: 0.20,
   outsideRadius: 0, outsideDiveSpeed: 0, outsideReactionDelay: 0, outsideMaxSave: 0,
   readinessBase: 0.35, readinessTime: 0.45,
   impactSpeedDecay: 0.08, parryMin: 0.05, parrySpeedWeight: 0.60, parryStretchWeight: 0.25, parryMax: 0.90
@@ -984,7 +985,7 @@ function singleShotModel(state, x = state?.pendingShot?.x, y = state?.pendingSho
     probability: 0, goalProbability: 0, baseGoalProbability: 0, scoringMultiplier: 1, saveProbability: 0, missProbability: 1, penalty,
     onTargetProbability: 0, baseOnTargetProbability: 0, saveGivenOnTarget: 0, cornerProbability: 0, keeperCornerProbability: 0, keeperReboundProbability: 0, caughtSaveProbability: 0, blockerIds: [], blockerPositions: [], blockProbability: 0, blockOutProbability: 0, blockCornerProbability: 0, blockPossessionProbability: 0, arrivalSpeed: 0, keeperStretch: 0, parryGivenSave: 0, distance: 0, shotAngleDegrees: 0,
     goalDepth: 0, goalOpeningDegrees: 0, centralGoalOpeningDegrees: 0, goalOpeningRatio: 0, postAngleFactor: 0, wideAngleFactor: 1, centralLaneFactor: 1, finishingAccuracyMultiplier: SHOT_MODEL.finishingAccuracyMultiplier, shooterType, distancePenaltyRate: 0,
-    keeperPathDistance: 0, timeToKeeper: 0, reach: 0, keeperInBox: false,
+    keeperPathDistance: 0, keeperDistance: 0, timeToKeeper: 0, reach: 0, rushCoverage: 0, keeperInBox: false,
     closestPoint: {...origin}, keeperPosition: null, origin, target, modelVersion: SHOT_MODEL.version
   };
   if (!scoringTeam || !validOrigin) return invalid;
@@ -1031,8 +1032,24 @@ function singleShotModel(state, x = state?.pendingShot?.x, y = state?.pendingSho
   const delay = keeperInBox ? SHOT_MODEL.boxReactionDelay : 0;
   const maxSave = keeperInBox ? SHOT_MODEL.boxMaxSave : 0;
   const reach = keeperInBox ? radius + diveSpeed * Math.max(0, timeToKeeper - delay) : 0;
-  const readiness = maxSave * (1 - Math.exp(-(SHOT_MODEL.readinessBase + timeToKeeper) / SHOT_MODEL.readinessTime));
-  const saveGivenOnTarget = keeperInBox && reach > 0 && rawProjection >= 0 ? clamp(readiness * Math.exp(-((clearance / reach) ** 2)), 0, 1) : 0;
+  const ownGoalY = defendingTeam === 'black' ? 0 : BOARD_HEIGHT - 1;
+  const advanceDepth = keeperInBox ? Math.abs(keeper.y - ownGoalY) : 0;
+  // A keeper already stepping out can set its blocking stance before the kick.
+  // Preserve same-file goal-line preparedness instead of making that keeper
+  // less ready purely for advancing. Actual flight time still limits diving.
+  const preparednessTime = timeToKeeper + advanceDepth * Math.abs(uy) / SHOT_MODEL.ballSpeed;
+  const readiness = maxSave * (1 - Math.exp(-(SHOT_MODEL.readinessBase + preparednessTime) / SHOT_MODEL.readinessTime));
+  const reactionSave = keeperInBox && reach > 0 && rawProjection >= 0 ? clamp(readiness * Math.exp(-((clearance / reach) ** 2)), 0, 1) : 0;
+  // Flight-time diving alone perversely makes a keeper on the shot line worse
+  // when it closes down. Add the separate, pre-set body/angle coverage of a
+  // close-range rush. It fades smoothly to zero at six squares and requires
+  // advance off the goal line, alignment, and a position ahead of the shooter.
+  const keeperDistance = keeper ? Math.hypot(keeper.x - origin.x, keeper.y - origin.y) : 0;
+  const advance = clamp(advanceDepth / (BOX_DEPTH - 1), 0, 1);
+  const proximity = Math.max(0, 1 - (keeperDistance / SHOT_MODEL.rushRange) ** 2);
+  const rushCoverage = keeperInBox && rawProjection > 0 && rawProjection < length
+    ? SHOT_MODEL.rushMaxSave * advance * proximity * Math.exp(-((clearance / SHOT_MODEL.rushRadius) ** 2)) : 0;
+  const saveGivenOnTarget = clamp(reactionSave + (1 - reactionSave) * rushCoverage, 0, maxSave);
   const blockers = shooterType === 'N' ? [] : shotBodies(pieces, origin, target, shooterId, defendingKeeper?.id, keeper)
     .filter(piece => piece.team !== shootingTeam && !(piece.type === 'K' && inOwnBox(piece.team, piece.x, piece.y)));
   const rawBlockProbability = 1 - (1 - SHOT_MODEL.blockPerDefender) ** blockers.length;
@@ -1066,7 +1083,7 @@ function singleShotModel(state, x = state?.pendingShot?.x, y = state?.pendingSho
     arrivalSpeed, keeperStretch, parryGivenSave, onTargetProbability: goalProbability + saveProbability, saveGivenOnTarget: goalProbability + saveProbability > 0 ? saveProbability / (goalProbability + saveProbability) : 0,
     distance: length, shotAngleDegrees: Math.acos(angleCos) * 180 / Math.PI,
     goalDepth, goalOpeningDegrees: openingDegrees, centralGoalOpeningDegrees: centralGoalOpening * 180 / Math.PI, goalOpeningRatio, postAngleFactor, wideAngleFactor, centralLaneFactor, finishingAccuracyMultiplier: SHOT_MODEL.finishingAccuracyMultiplier, shooterType, distancePenaltyRate,
-    keeperPathDistance: clearance, timeToKeeper, reach, keeperInBox,
+    keeperPathDistance: clearance, keeperDistance, timeToKeeper, reach, rushCoverage, keeperInBox,
     closestPoint, keeperPosition: keeper, origin, target, modelVersion: SHOT_MODEL.version, penalty
   };
   if (!penalty) return result;
@@ -1074,7 +1091,7 @@ function singleShotModel(state, x = state?.pendingShot?.x, y = state?.pendingSho
   return {...result, probability: FOUL_RULE.penaltyGoal, goalProbability: FOUL_RULE.penaltyGoal, baseGoalProbability: FOUL_RULE.penaltyGoal, scoringMultiplier: 1,
     saveProbability: penaltySave, caughtSaveProbability: penaltySave, missProbability: keeperInBox ? 0 : FOUL_RULE.penaltyFailure,
     baseOnTargetProbability: FOUL_RULE.penaltyGoal + penaltySave, onTargetProbability: FOUL_RULE.penaltyGoal + penaltySave, saveGivenOnTarget: penaltySave / (FOUL_RULE.penaltyGoal + penaltySave),
-    cornerProbability: 0, keeperCornerProbability: 0, keeperReboundProbability: 0, parryGivenSave: 0, blockerIds: [], blockerPositions: [], blockProbability: 0, blockOutProbability: 0, blockCornerProbability: 0, blockPossessionProbability: 0};
+    cornerProbability: 0, keeperCornerProbability: 0, keeperReboundProbability: 0, parryGivenSave: 0, rushCoverage: 0, blockerIds: [], blockerPositions: [], blockProbability: 0, blockOutProbability: 0, blockCornerProbability: 0, blockPossessionProbability: 0};
 }
 
 // A disguised declaration contains two public possibilities, never a selected
@@ -1261,9 +1278,9 @@ function resolveShot(next, {roll, targetRoll, keeperMove, landing} = {}) {
   const outcomeRoll = nextRoll(next, roll);
   const keeperCornerEnd = probability + details.keeperCornerProbability;
   const keeperReboundEnd = keeperCornerEnd + details.keeperReboundProbability;
-  const caughtEnd = probability + details.saveProbability;
-  const wideEnd = 1 - details.blockProbability;
-  const blockOutEnd = 1 - details.blockPossessionProbability;
+  const caughtEnd = keeperReboundEnd + details.caughtSaveProbability;
+  const wideEnd = caughtEnd + details.missProbability;
+  const blockOutEnd = wideEnd + details.blockOutProbability;
   const outcome = outcomeRoll < probability ? 'goal' : outcomeRoll < keeperCornerEnd ? 'keeperCorner'
     : outcomeRoll < keeperReboundEnd ? 'keeperRebound' : outcomeRoll < caughtEnd ? 'saved'
       : outcomeRoll < wideEnd ? 'wide' : outcomeRoll < blockOutEnd ? 'blockOut' : 'blocked';

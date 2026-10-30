@@ -86,7 +86,9 @@ test('Tactical converts a credible finish instead of perpetually valuing a backw
  // Development game 1632189751, action193. The previous policy controlled
  // possession for 240 actions without a shot, and recycled this very finish.
  for(const s of [previousDeferredFinish(),mirror(previousDeferredFinish())]){
-  const before=clone(s),chance=receivedShotChance(s);assert.ok(chance>.12&&chance<.14);
+  // Model 16's prepared keeper rush makes this roughly 11.6%, rather than the
+  // earlier 13%; it remains a credible finish the policy should actually take.
+  const before=clone(s),chance=receivedShotChance(s);assert.ok(chance>.11&&chance<.12);
   const report=E.analyzeTacticalAction(s),kick=E.legalKicks(s).find(k=>k.x===report.action.x&&k.y===report.action.y);
   assert.equal(kick?.goal,s.attack,'take the credible finish after the real keeper reply and block risk');
   assert.deepEqual(s,before,'planning does not spend outcomes or edit the live snapshot');

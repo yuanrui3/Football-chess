@@ -156,6 +156,26 @@ Repeated RNG seeds with the same deterministic policy are not independent
 adversarial replies. Wider reply searches, explicit alternative moves and exact
 immediate shot/keeper checks supply the opponent coverage.
 
+### Keeper-rush model 16 compatibility
+
+The rush correction changes finishing probabilities while keeping all study
+positions, example actions and the expanded opponent policy intact. Eight
+Medium studies now target 17% rather than 20%; their illustrative finishes are
+17.41–18.64% against the best keeper reply, from no initial legal shot. The
+Tough rook battery likewise changes from 20% to 17% (17.54% actual). The two
+Tough supported long-shot examples change from 15% to 13% (13.52% actual,
+initially no legal finish). The Easy inward carry accepts the alternative
+24.04% disguised finish as well as its 25.87% direct aim, with a 24% target.
+These revisions preserve outcome-based alternatives and the original plan
+lengths; no move sequence or pass quota is imposed.
+
+The two Tough far-post defensive studies still require all three preparations:
+their original screened replies are 9.30%, below the 10% target, while the best
+enumerated route using at most two actions leaves 13.91%. Their starting
+keepers and lesson targets therefore do not need changing. The offside study
+still creates 10.25% through a real body block and meets its original 10%
+target; its board is also unchanged.
+
 ## Current-round analysis help
 
 The optional bar now measures the current round's attack against defence.

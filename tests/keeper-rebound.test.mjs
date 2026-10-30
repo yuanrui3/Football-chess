@@ -39,17 +39,40 @@ function declare(s) {
 }
 const reboundRoll = model => model.goalProbability + model.keeperCornerProbability + model.keeperReboundProbability / 2;
 function rebound(s, landing) {return E.skipMove(s, {roll: reboundRoll(E.shotModel(s)), ...(landing ? {landing} : {})});}
+function revisedPreSplitSave(old, model) {
+  const goalLineY = old.target.y < 0 ? 0 : E.BOARD_HEIGHT - 1;
+  const depth = Math.abs(old.keeperPosition.y - goalLineY);
+  const directionY = Math.abs(old.target.y - old.origin.y) / old.distance;
+  const stanceTime = old.timeToKeeper + depth * directionY / E.SHOT_MODEL.ballSpeed;
+  const readiness = time => E.SHOT_MODEL.boxMaxSave *
+    (1 - Math.exp(-(E.SHOT_MODEL.readinessBase + time) / E.SHOT_MODEL.readinessTime));
+  const stanceSave = old.saveGivenOnTarget * readiness(stanceTime) / readiness(old.timeToKeeper);
+  const conditional = Math.min(E.SHOT_MODEL.boxMaxSave,
+    stanceSave + (1 - stanceSave) * model.rushCoverage);
+  return {conditional, save: old.onTargetProbability * conditional};
+}
 
 for (const team of ['white', 'black']) {
-  test(`${team}: in-play rebounds split existing parries without changing goal or caught-save chances`, () => {
+  test(`${team}: in-play rebounds split revised keeper parries without altering the save mass`, () => {
     const pending = declare(fixture(team)), before = structuredClone(pending), model = E.shotModel(pending), old = Previous.shotModel(pending);
     assert.equal(E.SHOT_MODEL.parryInPlayShare, .20);
-    close(model.goalProbability, old.goalProbability, 'goals unchanged');
-    close(model.caughtSaveProbability, old.caughtSaveProbability, 'catches unchanged');
-    close(model.saveProbability, old.saveProbability, 'all saves unchanged');
+    // Model 16 preserves a rushing keeper's set stance and adds smothering.
+    // Adjust the frozen pre-rebound save model for both changes before checking
+    // the split, which must redistribute only saves, never goal/wide/block mass.
+    const {conditional: expectedSaveGivenTarget, save: expectedSave} = revisedPreSplitSave(old, model);
+    const unsplitParry = expectedSave * old.parryGivenSave;
+    assert.ok(model.rushCoverage > 0, 'the fixture exercises the new rush rather than silently avoiding it');
+    close(model.timeToKeeper, old.timeToKeeper, 'actual flight time unchanged');
+    close(model.reach, old.reach, 'diving reach still uses actual flight time');
+    close(model.parryGivenSave, old.parryGivenSave, 'arrival pace and stretch still use actual flight time');
+    close(model.goalProbability, old.onTargetProbability * (1 - expectedSaveGivenTarget), 'goal mass uses the revised save odds');
+    close(model.saveProbability, expectedSave, 'all revised saves preserved');
+    close(model.caughtSaveProbability, expectedSave - unsplitParry, 'catches exclude only revised parries');
+    close(model.missProbability, old.missProbability, 'wide mass unchanged');
+    close(model.blockProbability, old.blockProbability, 'body-block mass unchanged');
     close(model.keeperReboundProbability, model.saveProbability * model.parryGivenSave * .20);
     close(model.keeperCornerProbability, model.saveProbability * model.parryGivenSave * .80);
-    close(model.keeperReboundProbability + model.keeperCornerProbability, old.keeperCornerProbability);
+    close(model.keeperReboundProbability + model.keeperCornerProbability, unsplitParry);
     close(masses(model).reduce((sum, p) => sum + p, 0), 1);
     assert.ok(masses(model).every(p => p >= 0 && p <= 1));
     assert.deepEqual(pending, before, 'probability queries remain pure');
@@ -149,9 +172,10 @@ for (const team of ['white', 'black']) {
     const pending = E.applyKick(s, aim.x, aim.y), model = E.shotModel(pending), old = Previous.shotModel(pending);
     assert.equal(pending.pendingShot.shootingTeam, team);
     assert.equal(pending.pendingShot.defendingTeam, team, 'the shot is toward the shooter’s own keeper');
+    const {save: expectedSave} = revisedPreSplitSave(old, model);
     close(model.keeperReboundProbability, 0);
-    close(model.keeperCornerProbability, old.keeperCornerProbability, 'old backward-shot parries remain unchanged');
-    close(model.caughtSaveProbability, old.caughtSaveProbability);
+    close(model.keeperCornerProbability, expectedSave * old.parryGivenSave, 'backward-shot parries all remain out of play');
+    close(model.caughtSaveProbability, expectedSave * (1 - old.parryGivenSave));
     assert.ok(model.caughtSaveProbability > 0);
     const caughtRoll = model.goalProbability + model.keeperCornerProbability + model.caughtSaveProbability / 2;
     const caught = E.skipMove(pending, {roll: caughtRoll});

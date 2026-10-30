@@ -122,18 +122,18 @@ export const MEDIUM_EXERCISES = [
     ],
     "goal": {
       "type": "finish",
-      "minShotXG": 0.2
+      "minShotXG": 0.17
     },
     "difficulty": "medium",
     "planSteps": 3,
-    "objective": "Create a finish worth at least 20%. Any legal plan meeting the target earns credit.",
-    "coachNote": "The goalkeeper starts centrally on h17. Clearing the friendly bishop opens a shorter carrying route for the rook; an i14 finish is worth about 22% against the best reply. The 20% target rewards the improved distance, not an abandoned goal.",
+    "objective": "Create a finish worth at least 17%. Any legal plan meeting the target earns credit.",
+    "coachNote": "The goalkeeper starts centrally on h17. Clearing the friendly bishop opens a shorter carrying route for the rook; an i14 finish is worth about 18% against the best reply. The 17% target rewards the improved distance, not an abandoned goal. The estimate includes the keeper’s best close-range rush.",
     "hints": [
       "The keeper is properly set. Improve the rook’s position before shooting.",
       "The friendly bishop occupies the rook’s forward file. Use the ordinary move to clear it, keeping the dribble available.",
       "One plan is Bi12–j13, Ri11–i14, then the I-goal shot after ending positioning."
     ],
-    "revision": 2
+    "revision": 3
   },
   {
     "id": "medium-cross-carry",
@@ -261,7 +261,7 @@ export const MEDIUM_EXERCISES = [
     "difficulty": "medium",
     "planSteps": 3,
     "objective": "Create a finish worth at least 25%. Any legal plan meeting the target earns credit.",
-    "coachNote": "The keeper shades the near post on f17 while the ball is on the b-file. A long switch changes the angle of attack; the queen can then carry into an i15 pocket and create about 29%. The 25% target can also be reached by another sufficiently strong legal continuation.",
+    "coachNote": "The keeper shades the near post on f17 while the ball is on the b-file. A long switch changes the angle of attack; the queen can then carry into an i15 pocket and create about 26%. The 25% target can also be reached by another sufficiently strong legal continuation.",
     "hints": [
       "Width is useful when the ball changes the point of attack.",
       "Switch to the queen on k13, then look for an inward diagonal carry that stays away from the keeper’s immediate challenge.",
@@ -390,18 +390,18 @@ export const MEDIUM_EXERCISES = [
     ],
     "goal": {
       "type": "finish",
-      "minShotXG": 0.2
+      "minShotXG": 0.17
     },
     "difficulty": "medium",
     "planSteps": 3,
-    "objective": "Create a finish worth at least 20%. Any legal plan meeting the target earns credit.",
-    "coachNote": "The keeper remains central on g17. The bishop’s accurate diagonal launch reaches the wide queen; a carry to i14 produces about 22% while staying beyond an immediate king tackle. The 20% target reflects a covered but worthwhile box-edge finish.",
+    "objective": "Create a finish worth at least 17%. Any legal plan meeting the target earns credit.",
+    "coachNote": "The keeper remains central on g17. The bishop’s accurate diagonal launch reaches the wide queen; a carry to i14 produces about 17% while staying beyond an immediate king tackle. The 17% target reflects a covered but worthwhile box-edge finish. The estimate includes the keeper’s best close-range rush.",
     "hints": [
       "The bishop has no direct finish. Find the queen on its long diagonal.",
       "After receiving, the queen can change the angle before the defender’s positioning reply.",
       "One plan is Bd3–Ql11, Ql11–i14, then the I-goal shot."
     ],
-    "revision": 2
+    "revision": 3
   },
   {
     "id": "medium-rook-relay",
@@ -531,18 +531,18 @@ export const MEDIUM_EXERCISES = [
     ],
     "goal": {
       "type": "finish",
-      "minShotXG": 0.2
+      "minShotXG": 0.17
     },
     "difficulty": "medium",
     "planSteps": 3,
-    "objective": "Create a finish worth at least 20%. Any legal plan meeting the target earns credit.",
-    "coachNote": "Both keepers start centrally. The forward rook receives on i13 and advances to the edge of the box on i14, producing about 22% against a set keeper. The rear rook’s initial shot is weaker than the 20% objective; another sound handover or finish can also earn credit.",
+    "objective": "Create a finish worth at least 17%. Any legal plan meeting the target earns credit.",
+    "coachNote": "Both keepers start centrally. The forward rook receives on i13 and advances to the edge of the box on i14, producing about 18% against a set keeper. The rear rook’s initial shot is weaker than the 17% objective; another sound handover or finish can also earn credit. The estimate includes the keeper’s best close-range rush.",
     "hints": [
       "The forward rook is a closer shooting platform on the same file.",
       "A teammate receipt leaves its separate dribble available. The queen is behind the ball and does not invite an offside trap.",
       "One route is Ri11–Ri13, Ri13–i14, then the I-goal shot after positioning."
     ],
-    "revision": 3
+    "revision": 4
   },
   {
     "id": "medium-pawn-clear",
@@ -660,18 +660,18 @@ export const MEDIUM_EXERCISES = [
     ],
     "goal": {
       "type": "finish",
-      "minShotXG": 0.2
+      "minShotXG": 0.17
     },
     "difficulty": "medium",
     "planSteps": 3,
-    "objective": "Create a finish worth at least 20%. Any legal plan meeting the target earns credit.",
-    "coachNote": "The goalkeeper starts centrally on h17. Moving the pawn opens h14 for the queen; stopping at the box edge avoids a guaranteed close-range king challenge and creates about 23%. The 20% target rewards space and support rather than keeper displacement.",
+    "objective": "Create a finish worth at least 17%. Any legal plan meeting the target earns credit.",
+    "coachNote": "The goalkeeper starts centrally on h17. Moving the pawn opens h14 for the queen; stopping at the box edge avoids a guaranteed close-range king challenge and creates about 19%. The 17% target rewards space and support rather than keeper displacement. The estimate includes the keeper’s best close-range rush.",
     "hints": [
       "The friendly pawn occupies the useful next carrying square.",
       "Use the shared pawn bonus before dribbling. The queen does not need to enter the deepest part of the box.",
       "One plan is Ph14–i14 as the bonus, Qh13–h14, then the H-goal shot."
     ],
-    "revision": 2
+    "revision": 3
   },
   {
     "id": "medium-through-collect-finish",
@@ -794,18 +794,18 @@ export const MEDIUM_EXERCISES = [
     ],
     "goal": {
       "type": "finish",
-      "minShotXG": 0.2
+      "minShotXG": 0.17
     },
     "difficulty": "medium",
     "planSteps": 3,
-    "objective": "Create a finish worth at least 20%. Any legal plan meeting the target earns credit.",
-    "coachNote": "The central g17 keeper faces a genuine forward delivery. The rook collects in space beyond the nearby bishop’s line and shoots from f14, where the best keeper reply leaves about 22%. The 20% target accepts any legal plan of comparable quality.",
+    "objective": "Create a finish worth at least 17%. Any legal plan meeting the target earns credit.",
+    "coachNote": "The central g17 keeper faces a genuine forward delivery. The rook collects in space beyond the nearby bishop’s line and shoots from f14, where the best keeper reply leaves about 18%. The 17% target accepts any legal plan of comparable quality. The estimate includes the keeper’s best close-range rush.",
     "hints": [
       "Send the bishop’s pass into empty space, not onto the rook’s present square.",
       "The rook can collect up its own file while staying onside at release.",
       "One plan is Bb10–f14, Rf12–f14 to collect, then the F-goal finish after positioning."
     ],
-    "revision": 2
+    "revision": 3
   },
   {
     "id": "medium-clear-and-carry",
@@ -929,18 +929,18 @@ export const MEDIUM_EXERCISES = [
     ],
     "goal": {
       "type": "finish",
-      "minShotXG": 0.2
+      "minShotXG": 0.17
     },
     "difficulty": "medium",
     "planSteps": 3,
-    "objective": "Create a finish worth at least 20%. Any legal plan meeting the target earns credit.",
-    "coachNote": "The keeper starts naturally on h17. The bishop interrupts the queen’s diagonal route to i14; clearing it makes a22% box-edge finish possible. The 20% target leaves room for other safe carrying routes and useful support moves.",
+    "objective": "Create a finish worth at least 17%. Any legal plan meeting the target earns credit.",
+    "coachNote": "The keeper starts naturally on h17. The bishop interrupts the queen’s diagonal route to i14; clearing it makes a 17% box-edge finish possible. The 17% target leaves room for other safe carrying routes and useful support moves. The estimate includes the keeper’s best close-range rush.",
     "hints": [
       "The queen has a useful inward carrying diagonal, interrupted by its own bishop.",
       "Clear the bishop with the ordinary move, preserving the queen’s dribble.",
       "One plan is Bj13–i12, Qk12–i14, then the I-goal shot."
     ],
-    "revision": 2
+    "revision": 3
   },
   {
     "id": "medium-queen-through-collection",
@@ -1063,18 +1063,18 @@ export const MEDIUM_EXERCISES = [
     ],
     "goal": {
       "type": "finish",
-      "minShotXG": 0.2
+      "minShotXG": 0.17
     },
     "difficulty": "medium",
     "planSteps": 3,
-    "objective": "Create a finish worth at least 20%. Any legal plan meeting the target earns credit.",
-    "coachNote": "The keeper starts centrally on g17 rather than at an artificial far post. The bishop leads an onside queen into i14; collecting and shooting there creates about 22%. The 20% objective accepts a different legal route if it makes an equally useful finish.",
+    "objective": "Create a finish worth at least 17%. Any legal plan meeting the target earns credit.",
+    "coachNote": "The keeper starts centrally on g17 rather than at an artificial far post. The bishop leads an onside queen into i14; collecting and shooting there creates about 17%. The 17% objective accepts a different legal route if it makes an equally useful finish. The estimate includes the keeper’s best close-range rush.",
     "hints": [
       "The distributor has no direct goal line. Look for a diagonal leading pass.",
       "The queen can collect the ball at the box edge without dribbling into an immediate keeper challenge.",
       "One route is Bd9–i14, Qk12–i14 to collect, then the I-goal finish."
     ],
-    "revision": 3
+    "revision": 4
   },
   {
     "id": "medium-vacate-receiver-lane",
@@ -1198,18 +1198,18 @@ export const MEDIUM_EXERCISES = [
     ],
     "goal": {
       "type": "finish",
-      "minShotXG": 0.2
+      "minShotXG": 0.17
     },
     "difficulty": "medium",
     "planSteps": 3,
-    "objective": "Create a finish worth at least 20%. Any legal plan meeting the target earns credit.",
-    "coachNote": "The goalkeeper is set on h17. A teammate currently occupies i14, so vacating that pocket lets the queen carry in and create about 22%. The 20% outcome does not require the example rook destination or a particular pass count.",
+    "objective": "Create a finish worth at least 17%. Any legal plan meeting the target earns credit.",
+    "coachNote": "The goalkeeper is set on h17. A teammate currently occupies i14, so vacating that pocket lets the queen carry in and create about 17%. The 17% outcome does not require the example rook destination or a particular pass count. The estimate includes the keeper’s best close-range rush.",
     "hints": [
       "The best receiving pocket is occupied by a friendly rook.",
       "Move that rook away with the ordinary action, then use the queen’s separate dribble.",
       "One plan is Ri14–k14, Qk12–i14, then the I-goal shot."
     ],
-    "revision": 2
+    "revision": 3
   },
   {
     "id": "medium-def-screen-rook",
