@@ -21,7 +21,7 @@ export const PACE_RULE = Object.freeze({maxDribbleRounds: 4, repetitionOccurrenc
 // Tunable board-game parameters, not fitted football statistics. Distance is in
 // board squares and time is in abstract units set by ballSpeed.
 export const SHOT_MODEL = Object.freeze({
-  version: 16, ballSpeed: 6, blockPerDefender: 0.45, blockCornerShare: 0.85, knightGoalMultiplier: 1, finishingAccuracyMultiplier: 1.15,
+  version: 17, ballSpeed: 6, blockPerDefender: 0.45, blockCornerShare: 0.85, knightGoalMultiplier: 1, finishingAccuracyMultiplier: 1.15,
   parryInPlayShare: 0.20, reboundBoxMargin: 2,
   targetBase: 0.98, distanceDecay: 0.018, distancePenaltyStart: 3, longShotDecay: 0.06, rookLongShotDecay: 0.03, minOnTarget: 0.01, maxOnTarget: 0.98,
   angleFloor: 0.65, angleWeight: 0.35, postAngleFloor: 0.10, postAngleWeight: 0.90, postAngleExponent: 1.5,
@@ -31,7 +31,7 @@ export const SHOT_MODEL = Object.freeze({
   rushRange: 6, rushRadius: 0.9, rushMaxSave: 0.20,
   outsideRadius: 0, outsideDiveSpeed: 0, outsideReactionDelay: 0, outsideMaxSave: 0,
   readinessBase: 0.35, readinessTime: 0.45,
-  impactSpeedDecay: 0.08, parryMin: 0.05, parrySpeedWeight: 0.60, parryStretchWeight: 0.25, parryMax: 0.90
+  impactSpeedDecay: 0.08, parryMin: 0.05, parrySpeedWeight: 0.60, parryStretchWeight: 0.25, parryRushWeight: 0.45, parryMax: 0.90
 });
 
 const TEAMS = ['white', 'black'];
@@ -983,7 +983,7 @@ function singleShotModel(state, x = state?.pendingShot?.x, y = state?.pendingSho
   const target = scoringTeam ? {x, y: scoringTeam === 'white' ? -0.5 : BOARD_HEIGHT - 0.5} : {x: 0, y: 0};
   const invalid = {
     probability: 0, goalProbability: 0, baseGoalProbability: 0, scoringMultiplier: 1, saveProbability: 0, missProbability: 1, penalty,
-    onTargetProbability: 0, baseOnTargetProbability: 0, saveGivenOnTarget: 0, cornerProbability: 0, keeperCornerProbability: 0, keeperReboundProbability: 0, caughtSaveProbability: 0, blockerIds: [], blockerPositions: [], blockProbability: 0, blockOutProbability: 0, blockCornerProbability: 0, blockPossessionProbability: 0, arrivalSpeed: 0, keeperStretch: 0, parryGivenSave: 0, distance: 0, shotAngleDegrees: 0,
+    onTargetProbability: 0, baseOnTargetProbability: 0, saveGivenOnTarget: 0, cornerProbability: 0, keeperCornerProbability: 0, keeperReboundProbability: 0, caughtSaveProbability: 0, blockerIds: [], blockerPositions: [], blockProbability: 0, blockOutProbability: 0, blockCornerProbability: 0, blockPossessionProbability: 0, arrivalSpeed: 0, keeperStretch: 0, rushParryBonus: 0, parryGivenSave: 0, distance: 0, shotAngleDegrees: 0,
     goalDepth: 0, goalOpeningDegrees: 0, centralGoalOpeningDegrees: 0, goalOpeningRatio: 0, postAngleFactor: 0, wideAngleFactor: 1, centralLaneFactor: 1, finishingAccuracyMultiplier: SHOT_MODEL.finishingAccuracyMultiplier, shooterType, distancePenaltyRate: 0,
     keeperPathDistance: 0, keeperDistance: 0, timeToKeeper: 0, reach: 0, rushCoverage: 0, keeperInBox: false,
     closestPoint: {...origin}, keeperPosition: null, origin, target, modelVersion: SHOT_MODEL.version
@@ -1066,7 +1066,12 @@ function singleShotModel(state, x = state?.pendingShot?.x, y = state?.pendingSho
   // This splits already-stopped shots without changing goal or wide odds.
   const arrivalSpeed = keeper ? SHOT_MODEL.ballSpeed * Math.exp(-SHOT_MODEL.impactSpeedDecay * projection) : 0;
   const keeperStretch = keeper && reach > 0 ? clamp(clearance / reach, 0, 1) : 0;
-  const parryGivenSave = saveProbability > 0 ? clamp(SHOT_MODEL.parryMin + SHOT_MODEL.parrySpeedWeight * (arrivalSpeed / SHOT_MODEL.ballSpeed) ** 2 + SHOT_MODEL.parryStretchWeight * keeperStretch, SHOT_MODEL.parryMin, SHOT_MODEL.parryMax) : 0;
+  // Closing down wins coverage at the expense of secure handling: a close
+  // smother is more likely to be a parry than a clean catch. This only moves
+  // probability within keeper saves, preserving the declared shot's xG.
+  const rushParryBonus = saveProbability > 0 && SHOT_MODEL.rushMaxSave > 0
+    ? SHOT_MODEL.parryRushWeight * clamp(rushCoverage / SHOT_MODEL.rushMaxSave, 0, 1) : 0;
+  const parryGivenSave = saveProbability > 0 ? clamp(SHOT_MODEL.parryMin + SHOT_MODEL.parrySpeedWeight * (arrivalSpeed / SHOT_MODEL.ballSpeed) ** 2 + SHOT_MODEL.parryStretchWeight * keeperStretch + rushParryBonus, SHOT_MODEL.parryMin, SHOT_MODEL.parryMax) : 0;
   const parryProbability = saveProbability * parryGivenSave;
   // Teammate backward kicks keep their compulsory-release pipeline; live
   // goalkeeper spills are saves of an opponent's shot.
@@ -1080,7 +1085,7 @@ function singleShotModel(state, x = state?.pendingShot?.x, y = state?.pendingSho
     probability: goalProbability, goalProbability, baseGoalProbability, scoringMultiplier, saveProbability,
     missProbability, baseOnTargetProbability: onTarget, cornerProbability, keeperCornerProbability, keeperReboundProbability, caughtSaveProbability: saveProbability - parryProbability,
     blockerIds: blockers.map(piece => piece.id), blockerPositions: blockers.map(({id, x, y}) => ({id, x, y})), blockProbability, blockOutProbability, blockCornerProbability, blockPossessionProbability,
-    arrivalSpeed, keeperStretch, parryGivenSave, onTargetProbability: goalProbability + saveProbability, saveGivenOnTarget: goalProbability + saveProbability > 0 ? saveProbability / (goalProbability + saveProbability) : 0,
+    arrivalSpeed, keeperStretch, rushParryBonus, parryGivenSave, onTargetProbability: goalProbability + saveProbability, saveGivenOnTarget: goalProbability + saveProbability > 0 ? saveProbability / (goalProbability + saveProbability) : 0,
     distance: length, shotAngleDegrees: Math.acos(angleCos) * 180 / Math.PI,
     goalDepth, goalOpeningDegrees: openingDegrees, centralGoalOpeningDegrees: centralGoalOpening * 180 / Math.PI, goalOpeningRatio, postAngleFactor, wideAngleFactor, centralLaneFactor, finishingAccuracyMultiplier: SHOT_MODEL.finishingAccuracyMultiplier, shooterType, distancePenaltyRate,
     keeperPathDistance: clearance, keeperDistance, timeToKeeper, reach, rushCoverage, keeperInBox,
@@ -1091,7 +1096,7 @@ function singleShotModel(state, x = state?.pendingShot?.x, y = state?.pendingSho
   return {...result, probability: FOUL_RULE.penaltyGoal, goalProbability: FOUL_RULE.penaltyGoal, baseGoalProbability: FOUL_RULE.penaltyGoal, scoringMultiplier: 1,
     saveProbability: penaltySave, caughtSaveProbability: penaltySave, missProbability: keeperInBox ? 0 : FOUL_RULE.penaltyFailure,
     baseOnTargetProbability: FOUL_RULE.penaltyGoal + penaltySave, onTargetProbability: FOUL_RULE.penaltyGoal + penaltySave, saveGivenOnTarget: penaltySave / (FOUL_RULE.penaltyGoal + penaltySave),
-    cornerProbability: 0, keeperCornerProbability: 0, keeperReboundProbability: 0, parryGivenSave: 0, rushCoverage: 0, blockerIds: [], blockerPositions: [], blockProbability: 0, blockOutProbability: 0, blockCornerProbability: 0, blockPossessionProbability: 0};
+    cornerProbability: 0, keeperCornerProbability: 0, keeperReboundProbability: 0, parryGivenSave: 0, rushParryBonus: 0, rushCoverage: 0, blockerIds: [], blockerPositions: [], blockProbability: 0, blockOutProbability: 0, blockCornerProbability: 0, blockPossessionProbability: 0};
 }
 
 // A disguised declaration contains two public possibilities, never a selected

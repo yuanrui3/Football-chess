@@ -2,8 +2,8 @@
 import {COMMENTARY_CLIPS} from './commentary-clips.js?v=29cbe0d352e1';
 import {HUGO_COMMENTARY_CLIPS, hugoCommentaryClip} from './hugo-commentary-clips.js?v=cfaced2e3dd2';
 import {commentaryStatsLines} from './commentary-stats.js?v=510d8a0ad598';
-import {createTacticalCommentary} from './commentary-tactics.js?v=d38bf401c2de';
-import {commentaryPositionFacts, commentaryTransitionFact} from './commentary-spatial.js?v=45b5e21d2ea5';
+import {createTacticalCommentary} from './commentary-tactics.js?v=f7eecf4a3c13';
+import {commentaryPositionFacts, commentaryTransitionFact} from './commentary-spatial.js?v=b9e380b0851d';
 const TEAM_NAMES = {white: 'Ivory', black: 'Obsidian'};
 const PIECE_NAMES = {K: 'keeper', Q: 'queen', R: 'rook', B: 'bishop', N: 'knight', P: 'pawn'};
 const NUMBERS = {'1': 'one', '2': 'two', '3': 'three'};

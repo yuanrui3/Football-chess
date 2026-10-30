@@ -1,6 +1,6 @@
 /** Match records are independent of engine decisions and replay playback. */
-import {BOARD_WIDTH, BOARD_HEIGHT, GOAL_FILES, BOX_FILES, BOX_DEPTH} from './engine.js?v=2510a03aa4e2';
-import {createPlayerRatings,restorePlayerRatings,recordPlayerRatings} from './player-ratings.js?v=ffec1e90d992';
+import {BOARD_WIDTH, BOARD_HEIGHT, GOAL_FILES, BOX_FILES, BOX_DEPTH} from './engine.js?v=8a5f49b765ee';
+import {createPlayerRatings,restorePlayerRatings,recordPlayerRatings} from './player-ratings.js?v=33c693c9f6b6';
 const TEAMS = ['white', 'black'];
 const SHOT_RESULTS = ['goal', 'save', 'shotMiss', 'blockedShot'];
 const IDS = /^(white|black)-(K|Q|[RBN][12]|P[123])$/;

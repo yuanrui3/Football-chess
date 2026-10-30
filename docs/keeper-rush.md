@@ -46,3 +46,33 @@ Historical completed rating totals and replayed shot records are retained.
 Regression tests cover both teams, aligned rook origins three through six,
 wrong angles, bypassed and outside keepers, AI reaction choice, legal shot
 resolution, probability conservation, disguise, penalties and reload purity.
+
+## Model 17: handling a rushed save
+
+A close smother gives up secure handling. Model 17 adds up to 45 percentage
+points to the existing conditional parry rate, scaled by the same aligned,
+close-range rush intensity used for smothering. The total parry rate remains
+capped at 90%, leaving at least a 10% conditional catch chance:
+
+```
+rush-parry-bonus = .45 * clamp(rush-coverage / .20, 0, 1)
+parry-if-saved = clamp(speed-and-stretch-parry + rush-parry-bonus, .05, .90)
+hold-if-saved = 1 - parry-if-saved
+```
+
+For the same legal rook shot from (6,4), conditional holding chances are:
+
+| Keeper square | Hold if saved |
+| --- | ---: |
+| (6,0), goal line | 63.36% |
+| (6,1), one forward | 41.00% |
+| (6,2), two forward | 11.43% |
+
+These are conditional on a keeper save, not percentages of all shots. Goal
+odds, total save odds, wide shots and defender blocks remain exactly those of
+model 16. The extra parry mass comes only from catches. Of opponent-shot
+parries, the existing 20% loose / 80% corner split still applies, and native
+loose-ball landings remain uniform over legal empty rebound squares.
+Teammate backward-shot parries remain out of play; a caught back-pass still
+requires immediate release. Penalties retain fixed 80% goal / 20% catch when
+the keeper is in its box. Disguised shots evaluate each target before averaging.

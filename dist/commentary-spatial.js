@@ -1,7 +1,7 @@
 /** Technical commentary from public geometry and committed actions only.
  * No search, random draws, hidden shot targets, or rule mutations occur here.
  */
-import {BOARD_WIDTH, BOARD_HEIGHT, BOARD_CENTER_X, TYPES, rlBoardGeometry, legalKicks, legalMoves, inOwnBox} from './engine.js?v=2510a03aa4e2';
+import {BOARD_WIDTH, BOARD_HEIGHT, BOARD_CENTER_X, TYPES, rlBoardGeometry, legalKicks, legalMoves, inOwnBox} from './engine.js?v=8a5f49b765ee';
 
 const TEAMS = ['white', 'black'];
 const NAMES = {white: 'Ivory', black: 'Obsidian'};

@@ -60,11 +60,12 @@ for (const team of ['white', 'black']) {
     // Adjust the frozen pre-rebound save model for both changes before checking
     // the split, which must redistribute only saves, never goal/wide/block mass.
     const {conditional: expectedSaveGivenTarget, save: expectedSave} = revisedPreSplitSave(old, model);
-    const unsplitParry = expectedSave * old.parryGivenSave;
+    const expectedParry = Math.min(.90, old.parryGivenSave + .45 * model.rushCoverage / .20);
+    const unsplitParry = expectedSave * expectedParry;
     assert.ok(model.rushCoverage > 0, 'the fixture exercises the new rush rather than silently avoiding it');
     close(model.timeToKeeper, old.timeToKeeper, 'actual flight time unchanged');
     close(model.reach, old.reach, 'diving reach still uses actual flight time');
-    close(model.parryGivenSave, old.parryGivenSave, 'arrival pace and stretch still use actual flight time');
+    close(model.parryGivenSave, expectedParry, 'rush handling risk adds to actual arrival pace and stretch');
     close(model.goalProbability, old.onTargetProbability * (1 - expectedSaveGivenTarget), 'goal mass uses the revised save odds');
     close(model.saveProbability, expectedSave, 'all revised saves preserved');
     close(model.caughtSaveProbability, expectedSave - unsplitParry, 'catches exclude only revised parries');
@@ -174,8 +175,9 @@ for (const team of ['white', 'black']) {
     assert.equal(pending.pendingShot.defendingTeam, team, 'the shot is toward the shooter’s own keeper');
     const {save: expectedSave} = revisedPreSplitSave(old, model);
     close(model.keeperReboundProbability, 0);
-    close(model.keeperCornerProbability, expectedSave * old.parryGivenSave, 'backward-shot parries all remain out of play');
-    close(model.caughtSaveProbability, expectedSave * (1 - old.parryGivenSave));
+    const expectedParry = Math.min(.90, old.parryGivenSave + .45 * model.rushCoverage / .20);
+    close(model.keeperCornerProbability, expectedSave * expectedParry, 'backward-shot parries all remain out of play');
+    close(model.caughtSaveProbability, expectedSave * (1 - expectedParry));
     assert.ok(model.caughtSaveProbability > 0);
     const caughtRoll = model.goalProbability + model.keeperCornerProbability + model.caughtSaveProbability / 2;
     const caught = E.skipMove(pending, {roll: caughtRoll});

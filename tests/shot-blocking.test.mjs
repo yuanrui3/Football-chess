@@ -43,7 +43,7 @@ function integrity(s) {
 }
 
 test('shot blocking has an explicit tunable model and safe invalid metadata', () => {
-  assert.equal(E.SHOT_MODEL.version, 16); assert.equal(E.SHOT_MODEL.blockPerDefender, .45); assert.equal(E.SHOT_MODEL.blockCornerShare, .85);
+  assert.equal(E.SHOT_MODEL.version, 17); assert.equal(E.SHOT_MODEL.blockPerDefender, .45); assert.equal(E.SHOT_MODEL.blockCornerShare, .85);
   const m = E.shotModel(null); assert.deepEqual(m.blockerIds, []); assert.deepEqual(m.blockerPositions, []);
   for (const key of ['blockProbability', 'blockOutProbability', 'blockCornerProbability', 'blockPossessionProbability', 'keeperCornerProbability', 'keeperReboundProbability']) assert.equal(m[key], 0);
   close(masses(m).reduce((a, b) => a + b, 0), 1);
