@@ -88,8 +88,8 @@ candidate. Unpredictable scatter and a knight losing a native 50% challenge
 alone are not labelled as clear errors. This deliberately omits ambiguous
 chains instead of inventing individual blame.
 
-New matches now use rating ledger version 3, described below. Valid version-1
-and version-2 saves retain their earlier formulas and expose `legacyMethod:
+New matches now use rating ledger version 4, described below. Valid version-1,
+version-2 and version-3 saves retain their earlier formulas and expose `legacyMethod:
 true`; continuing such a match keeps one consistent method. The view labels it
 as an earlier method. Missing or invalid rating history is separately labelled
 partial.
@@ -156,6 +156,60 @@ improved from 4.5 to 6.2. Continuing method-2 ledgers matched the frozen earlier
 implementation exactly after every action; outfield grades and contributions
 were unchanged. This small, action-limited audit diagnoses the mechanism and
 checks preservation, not population calibration or predicted full-time grades.
+
+## Method 4: fair keeper ratings over long matches
+
+Ordinary goalkeeper positioning now uses net threat change within a decision
+sequence: the same round, attacking side, carrier and ball square. A correction
+within that sequence refunds the earlier deduction, but cannot produce positive
+positioning merit. A shot declaration, turnover or restart closes the sequence.
+The cost is capped at 0.12 performance points per sequence and 0.35 for the match.
+These limits apply only to ordinary coverage: failed tackles, fouls, dangerous
+turnovers and actual shot-stopping performance keep their separate contributions.
+
+The existing assessed on-target xG balance already removes difficulty caused by
+a worse keeper reaction. Method 4 removes the additional reaction deduction that
+charged the decision twice. Shot-stopping credit remains 1.8 times a positive
+cumulative balance or 0.60 times a negative one. Its cumulative increments bypass
+the generic positive-action cap, so reversing shot order cannot change the total
+credit through clipping. Wides, body blocks and back-passes still give no save
+credit. There is no automatic save-count bonus, clean-sheet bonus or ranking floor.
+
+Keeper negative merit now maps to `6 + 5*tanh(m/5)`, giving the same unit slope
+near neutral as positive merit. Outfield curves are unchanged. Quiet keepers
+remain at 6.0; genuinely poor performance still grades below six. Emergency
+keepers use the same correction. Saved positioning context survives reload and
+Undo. A new match is required for method 4; valid earlier ledgers retain their
+original grades and continuation rules rather than reconstructing missing history.
+
+A paired audit replayed 12 native Casual games of 1,200 actions each through the
+frozen method-3 and current methods, including four games from two additional
+seeds. Fouls were disabled to isolate the rating mechanisms. Every outfield
+summary matched exactly at each checkpoint, and continued method-3 ledgers
+matched the frozen implementation after every one of the 14,400 actions.
+
+| Piece | Method 3 mean | Method 4 mean |
+| --- | ---: | ---: |
+| Goalkeeper | 6.09 | 6.60 |
+| Queen | 7.84 | 7.84 |
+| Rook | 6.94 | 6.94 |
+| Bishop | 6.66 | 6.66 |
+| Knight | 6.58 | 6.58 |
+| Pawn | 6.64 | 6.64 |
+
+The eight keepers in the additional-seed games improved from 5.95 to 6.54 on
+average. Across all games, nine keepers with positive factual xG prevented
+improved from 7.29 to 7.46. The reproduced three-save, one-concession example
+rose from 5.5 to 6.7 with +0.14 xG prevented. Poor performances still scored as
+low as 4.4. This bounded audit supports the correction; it is not a population
+calibration or a claim that keepers should always outrank every outfielder.
+
+Validation: 191 targeted tests, including 12 new regressions for refunds,
+sequence and match caps, save/Undo, invalid telemetry, legacy preservation,
+shot-order invariance, no double reaction charge, and strong/poor performance.
+Browser QA verified the audited example in the native full-time report.
+Reproduce the comparison with `node scripts/audit-keeper-ratings-v4.mjs`;
+raw results, the frozen baseline and example match are in `docs/keeper-ratings-v4/`.
 
 ## Goal and assist badges
 

@@ -182,7 +182,7 @@ test('vacating a defensive screen or abandoning the goalkeeper box loses measure
   assert.ok(abandoned.players['white-K'].merit<0);assert.ok(playerRatingsSummary(abandoned,n).players.find(p=>p.pieceId==='white-K').rating<6);
 });
 
-test('routine best legal keeper reactions earn no exceptional execution bonus and worse coverage is penalized',()=>{
+test('keeper reaction credit uses native difficulty and cannot reward deliberately worse coverage',()=>{
   const g=fixture([p('white-R1',7,5)],'white-R1',{phase:'kick'}),pending=E.applyKick(g,7,-1),base=record(g,pending);
   const keeper=pending.pieces.find(p=>p.id==='black-K');
   const choices=[{type:'hold',x:keeper.x,y:keeper.y},...E.legalMoves(pending,keeper.id).map(move=>({...move,type:'move'}))]
@@ -194,7 +194,7 @@ test('routine best legal keeper reactions earn no exceptional execution bonus an
   const goodLedger=recordPlayerRatings(base,pending,good),poorLedger=recordPlayerRatings(base,pending,poor);
   const expectedSaveResidual=1.8*best.model.probability/(best.model.probability+best.model.saveProbability);
   assert.ok(Math.abs(goodLedger.players[keeper.id].parts.goalkeeping-expectedSaveResidual)<1e-9,'best execution earns performance credit only for its on-target expected goals prevented');
-  assert.ok(poorLedger.players[keeper.id].merit<goodLedger.players[keeper.id].merit,'saving the same shot does not hide a worse native coverage decision');
+  assert.ok(poorLedger.players[keeper.id].merit<=goodLedger.players[keeper.id].merit,'self-created difficulty cannot improve credit for saving the same shot');
 });
 
 for(const freePawn of [false,true])test(`ordinary keeper ${freePawn?'bonus':'normal'} coverage uses its native legal positioning baseline`,()=>{
@@ -205,12 +205,12 @@ for(const freePawn of [false,true])test(`ordinary keeper ${freePawn?'bonus':'nor
     .map(choice=>({...choice,threat:directThreat(choice.next)})).sort((a,b)=>a.threat-b.threat);
   const best=choices[0],worst=choices.at(-1);assert.ok(best.threat<directThreat(g)-.02);
   const bestLedger=record(g,best.next),bestPlayer=playerRatingsSummary(bestLedger,best.next).players.find(p=>p.pieceId===id);
-  assert.equal(bestLedger.version,3);assert.ok(bestPlayer.impact>0,'ordinary coverage remains real raw impact');
+  assert.equal(bestLedger.version,4);assert.ok(bestPlayer.impact>0,'ordinary coverage remains real raw impact');
   assert.equal(bestPlayer.rating,6,'a routine best legal coverage move is expected, not an exceptional performance');
   assert.ok(Math.abs(bestLedger.players[id].parts.defending)<1e-9);
   assert.ok(worst.threat>best.threat+.02);
   const poorLedger=record(g,worst.next);assert.ok(poorLedger.players[id].merit<0,'worse available coverage is still a meaningful error');
-  const summary=playerRatingsSummary(bestLedger,best.next);assert.equal(summary.methodVersion,3);assert.equal(summary.legacyMethod,false);
+  const summary=playerRatingsSummary(bestLedger,best.next);assert.equal(summary.methodVersion,4);assert.equal(summary.legacyMethod,false);
   if(freePawn)assert.equal(E.legalMoves(g,id).length,0,'the bonus baseline does not invent an already spent normal move');
 });
 
@@ -224,7 +224,7 @@ test('earlier rating methods retain their original score, continuation and save 
   assert.deepEqual(playerRatingsSummary(restored,n),summary);
   const next=E.skipMove(n),continued=recordPlayerRatings(restored,n,next);
   assert.equal(continued.version,1);assert.equal(playerRatingsSummary(continued,next).players.find(p=>p.pieceId==='black-K').rating,6.8);
-  assert.equal(createPlayerRatings().version,3,'only new matches start the revised rating method');
+  assert.equal(createPlayerRatings().version,4,'only new matches start the revised rating method');
 });
 
 test('disguised shots use the fair pre-reveal mixture for either sampled goal target',()=>{

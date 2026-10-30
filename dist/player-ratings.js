@@ -15,7 +15,9 @@
  * duels. Keeper performance uses conditional on-target xG prevented; ordinary
  * best legal positioning is its native expectation. Method3 increases useful
  * shot-stopping credit and distinguishes a worsening position from a forgone
- * optimal improvement. Method1/2 records keep their original calculation so a
+ * optimal improvement. Method4 bounds recoverable positioning deductions and
+ * gives keeper losses the same initial rating sensitivity as positive merit.
+ * Method1/2/3 records keep their original calculation so a
  * finished or resumed older match is never silently regraded.
  * Missing old telemetry starts a partial record; it is never reconstructed from
  * a scorer list or the last80 undo states.
@@ -24,8 +26,8 @@ import {BOARD_WIDTH, BOARD_HEIGHT, DRIBBLE_RANGE, GOAL_FILES, inOwnBox, legalKic
 
 const IDS=/^(white|black)-(K|Q|[RBN][12]|P[123])$/;
 const TEAMS=['white','black'],TYPES=['K','Q','R','B','N','P'];
-const METHOD_VERSION=3;
-const supportedLedger=saved=>[1,2,METHOD_VERSION].includes(saved?.version);
+const METHOD_VERSION=4;
+const supportedLedger=saved=>[1,2,3,METHOD_VERSION].includes(saved?.version);
 const CATEGORIES=['progress','creation','finishing','defending','goalkeeping','mistakes'];
 const COUNTS=['goals','shots','xG','createdXG','tackles','tackleAttempts','interceptions','screens','support','saves','fouls','yellowCards','redCards','turnovers','progressSquares'];
 const V2_COUNTS=['assists','keyPasses','bigChancesCreated','bigChancesMissed','duelsLost','lineClearances','penaltiesCommitted','penaltySaves','keeperXGFaced','goalsConceded','xGPrevented','errorsLeadingGoals','ownGoals'];
@@ -50,6 +52,13 @@ const progress=(team,p)=>point(p)?team==='white'?BOARD_HEIGHT-1-p.y:p.y:0;
 const emptyCounts=version=>Object.fromEntries([...COUNTS,...(version>=2?V2_COUNTS:[]),...(version>=3?V3_COUNTS:[])].map(key=>[key,0]));
 const emptyParts=()=>Object.fromEntries(CATEGORIES.map(key=>[key,0]));
 const frontier=()=>({team:null,depth:0,threat:0,support:{}});
+// Ordinary coverage is a secondary rating signal. Recovering the position in
+// the same attack must cancel its deduction, without generating positive merit.
+const KEEPER_POSITION_SEQUENCE_CAP=.12,KEEPER_POSITION_MATCH_CAP=.35;
+const emptyKeeperPosition=()=>({key:null,netThreat:0,sequenceCost:0,totalCost:0});
+const validKeeperPosition=p=>p&&(p.key===null||typeof p.key==='string')&&finite(p.netThreat)&&Math.abs(p.netThreat)<=1e7
+  &&finite(p.sequenceCost)&&p.sequenceCost>=0&&p.sequenceCost<=KEEPER_POSITION_SEQUENCE_CAP
+  &&finite(p.totalCost)&&p.totalCost>=p.sequenceCost-1e-9&&p.totalCost<1e7;
 
 export function createPlayerRatings({partial=false}={}){
   return {version:METHOD_VERSION,partial:!!partial,transitions:0,players:{},frontier:frontier(),roundKey:null,caps:{},lastKey:null,errorCandidate:null};
@@ -57,6 +66,7 @@ export function createPlayerRatings({partial=false}={}){
 function ensure(ledger,p){
   if(!p||!validId(p.id)||!TYPES.includes(p.type)||p.team!==teamOf(p.id))return null;
   const player=ledger.players[p.id]||={pieceId:p.id,team:p.team,type:p.type,nativeType:typeOf(p.id),start:point(p),actions:0,impact:0,merit:0,parts:emptyParts(),counts:emptyCounts(ledger.version)};
+  if(ledger.version>=4&&!player.keeperPosition)player.keeperPosition=emptyKeeperPosition();
   player.type=p.type;return player;
 }
 function roster(ledger,game){for(const p of [...(game?.sentOff||[]),...(game?.pieces||[])])ensure(ledger,p);}
@@ -69,7 +79,8 @@ function validRecord(p,id,version){
     &&(version<2||V2_COUNTS.every(k=>finite(p.counts?.[k])&&(k==='xGPrevented'||p.counts[k]>=0)&&Math.abs(p.counts[k])<1e7)
       &&Math.abs(p.counts.xGPrevented-(p.counts.keeperXGFaced-p.counts.goalsConceded))<1e-6)
     &&(version<3||V3_COUNTS.every(k=>finite(p.counts?.[k])&&Math.abs(p.counts[k])<1e7)
-      &&p.counts.keeperAdjustedXGPrevented<=p.counts.xGPrevented+1e-6);
+      &&p.counts.keeperAdjustedXGPrevented<=p.counts.xGPrevented+1e-6)
+    &&(version<4||validKeeperPosition(p.keeperPosition));
 }
 const validError=c=>c===null||c&&validId(c.pieceId)&&teamOf(c.pieceId)===c.team&&Number.isInteger(c.turn)&&c.turn>=0&&Number.isInteger(c.passes)&&c.passes>=0&&c.passes<=1;
 export function restorePlayerRatings(saved,game,{partial=true}={}){
@@ -86,13 +97,30 @@ export function restorePlayerRatings(saved,game,{partial=true}={}){
   if(valid)return copy(saved);
   const fresh=createPlayerRatings({partial});roster(fresh,game);return fresh;
 }
-function add(ledger,p,category,impact,merit){
+function add(ledger,p,category,impact,merit,{uncapped=false}={}){
   if(!p||!finite(impact)||!finite(merit))return;
-  if(merit>0){
+  if(merit>0&&!uncapped){
     const key=`${p.pieceId}:${category}`,used=ledger.caps[key]||0,available=Math.max(0,1.5-used),fraction=merit?Math.min(1,available/merit):1;
     impact*=fraction;merit*=fraction;ledger.caps[key]=used+merit;
   }
   p.impact+=impact;p.merit+=merit;p.parts[category]+=merit;
+}
+function recordKeeperPosition(ledger,player,before,oldThreat,newThreat){
+  const position=player.keeperPosition;
+  // A new turn, carrier, ball square or restart starts a separate decision.
+  // A shot declaration also closes the sequence below: later recovery cannot
+  // erase a positioning decision already exposed to a shot.
+  const key=JSON.stringify([before.turn,before.attack,before.ball.carrierId,before.ball.x,before.ball.y]);
+  if(position.key!==key){position.key=key;position.netThreat=0;position.sequenceCost=0;}
+  const priorCost=position.totalCost;
+  position.netThreat+=newThreat-oldThreat;
+  const cost=Math.min(KEEPER_POSITION_SEQUENCE_CAP,Math.max(0,position.netThreat)*.3/ALLOWANCE.K.defending);
+  position.totalCost=Math.max(0,position.totalCost+cost-position.sequenceCost);
+  position.sequenceCost=cost;
+  const merit=Math.min(KEEPER_POSITION_MATCH_CAP,priorCost)-Math.min(KEEPER_POSITION_MATCH_CAP,position.totalCost);
+  // A refund is restoration of an earlier debit, not an award subject to the
+  // positive-work cap. Total positional merit can never exceed zero.
+  add(ledger,player,'defending',.3*(oldThreat-newThreat),merit,{uncapped:true});
 }
 function award(ledger,p,category,impact){add(ledger,p,category,impact,impact/(ALLOWANCE[p?.type]?.[category]||.22));}
 function shooting(game){return {...game,phase:'kick'};}
@@ -152,6 +180,8 @@ export function recordPlayerRatings(saved,before,after,{assistId=null,passProvid
   if(action.type==='stalling'&&before.phase==='keeperReact'&&['goal','save','shotMiss','blockedShot'].includes(action.triggeringAction?.type))action=action.triggeringAction;
   const key=transitionKey(before,after,action);if(key===ledger.lastKey)return saved;
   roster(ledger,before);roster(ledger,after);
+  if(ledger.version>=4&&(action.type==='shotAttempt'||after.attack!==before.attack||after.restart||['kickoff','finished'].includes(after.phase)))
+    for(const player of Object.values(ledger.players))player.keeperPosition.key=null;
   const roundKey=`${before.turn}:${before.attack}`;
   if(ledger.roundKey!==roundKey){ledger.roundKey=roundKey;ledger.caps={};}
   if(ledger.frontier.team!==before.attack)resetFrontier(ledger,before);
@@ -271,7 +301,10 @@ export function recordPlayerRatings(saved,before,after,{assistId=null,passProvid
             // when total prevention is still below expectation.
             performance=grade(next)-grade(prior);
           }
-          add(ledger,keeper,'goalkeeping',.25*coverage+.20*prevented,1.25*reaction+performance);
+          // Assessed prevention already removes self-created difficulty. Do
+          // not debit the same reaction again. Cumulative balance increments
+          // must not be clipped: that would make event order change the grade.
+          add(ledger,keeper,'goalkeeping',.25*coverage+.20*prevented,(ledger.version>=4?0:1.25*reaction)+performance,{uncapped:ledger.version>=4});
         }
       }
     }
@@ -335,7 +368,8 @@ export function recordPlayerRatings(saved,before,after,{assistId=null,passProvid
       // would have improved coverage more. Method3 debits only a position
       // that actually worsens the available threat; no positive move farming.
       const relative=Math.max(-.5,(ledger.version===2?best:oldThreat)-newThreat);
-      add(ledger,actor,'defending',.3*(oldThreat-newThreat),.3*(ledger.version===2?relative:Math.min(0,relative))/ALLOWANCE.K.defending);
+      if(ledger.version>=4)recordKeeperPosition(ledger,actor,before,oldThreat,newThreat);
+      else add(ledger,actor,'defending',.3*(oldThreat-newThreat),.3*(ledger.version===2?relative:Math.min(0,relative))/ALLOWANCE.K.defending);
       if(delta>.02)actor.counts.screens++;
     }else if(Math.abs(delta)>.02){award(ledger,actor,same?'creation':'defending',.3*delta);if(!same&&delta>0)actor.counts.screens++;}
     if(same){
@@ -354,7 +388,8 @@ export function playerRatingsSummary(saved,game){
   const ledger=supportedLedger(saved)?copy(saved):createPlayerRatings({partial:true});roster(ledger,game);
   const sentOff=new Set((game?.sentOff||[]).map(p=>p.id));
   const players=Object.values(ledger.players).map(p=>{
-    const rating=clamp(6+(p.merit>=0?4*Math.tanh(p.merit/4):5*Math.tanh(p.merit/2.5)),1,10);
+    const keeperCurve=ledger.version>=4&&(p.type==='K'||p.counts.saves+p.counts.goalsConceded>0);
+    const rating=clamp(6+(p.merit>=0?4*Math.tanh(p.merit/4):5*Math.tanh(p.merit/(keeperCurve?5:2.5))),1,10);
     const notes=[];const c=p.counts;
     if(c.goals)notes.push(`${c.goals} goal${c.goals===1?'':'s'}`);
     if(ledger.version>=2&&c.assists)notes.push(`${c.assists} assist${c.assists===1?'':'s'}`);
@@ -370,6 +405,8 @@ export function playerRatingsSummary(saved,game){
     if(c.screens)notes.push('Reduced shooting lanes');
     if(c.support)notes.push('Provided receiving support');
     if(c.saves)notes.push(`${c.saves} save${c.saves===1?'':'s'}`);
+    if(ledger.version>=4&&p.actions>0&&(p.type==='K'||c.saves+c.goalsConceded>0))
+      notes.push(`Positioning deduction: ${Math.min(KEEPER_POSITION_MATCH_CAP,p.keeperPosition.totalCost).toFixed(2)} / ${KEEPER_POSITION_MATCH_CAP.toFixed(2)} maximum performance points`);
     if(ledger.version>=2){
       if(c.keeperXGFaced||c.goalsConceded){
         notes.push(`${c.keeperXGFaced.toFixed(2)} on-target xG faced; ${c.goalsConceded} goal${c.goalsConceded===1?'':'s'} conceded`);

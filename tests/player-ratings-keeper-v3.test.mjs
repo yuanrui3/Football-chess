@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import * as E from '../dist/engine.js';
 import * as R from '../dist/player-ratings.js';
 
+const makeV3=()=>{const ledger=R.createPlayerRatings();ledger.version=3;return ledger;};
 const piece=(id,x,y)=>({id,team:id.split('-')[0],type:id.split('-')[1][0],x,y});
 const close=(a,b)=>assert.ok(Math.abs(a-b)<1e-9,`${a} ≈ ${b}`);
 function fixture({x=7,y=2,keeperX=6,turn=1,penalty=false,phase='kick'}={}){
@@ -25,29 +26,29 @@ function resolve(g,ledger,{goal=false,penalty=false}={}){
 }
 
 test('method3 makes a useful native save and penalty save more visible without free baseline points',()=>{
- assert.equal(R.createPlayerRatings().version,3);
+ assert.equal(makeV3().version,3);
  for(const penalty of [false,true]){
-  const game=fixture({penalty}),old=R.createPlayerRatings();old.version=2;
-  const previous=resolve(game,old),current=resolve(game,R.createPlayerRatings());
+  const game=fixture({penalty}),old=makeV3();old.version=2;
+  const previous=resolve(game,old),current=resolve(game,makeV3());
   assert.ok(current.player.rating>previous.player.rating);
   close(current.player.metrics.xGPrevented,previous.player.metrics.xGPrevented);
   assert.equal(current.player.metrics.saves,1);
   if(penalty){assert.equal(current.player.metrics.penaltySaves,1);assert.ok(current.player.rating>=7.3);}
  }
- const quiet=R.playerRatingsSummary(R.createPlayerRatings(),E.createGame());
+ const quiet=R.playerRatingsSummary(makeV3(),E.createGame());
  assert.ok(quiet.players.every(p=>p.rating===6&&p.impact===0));
 });
 
 test('an isolated goal still loses merit, with blame tempered for an unavoidable high-xG chance',()=>{
- const goal=resolve(fixture(),R.createPlayerRatings(),{goal:true});
+ const goal=resolve(fixture(),makeV3(),{goal:true});
  assert.ok(goal.player.rating<6);assert.ok(goal.player.metrics.xGPrevented<0);
- const old=R.createPlayerRatings();old.version=2;
+ const old=makeV3();old.version=2;
  const previous=resolve(fixture(),old,{goal:true});
  assert.ok(goal.player.rating>previous.player.rating,'a sampled concession is not punished more harshly than the earlier method');
 });
 
 test('below-expectation aggregate stopping remains negative even after several successful saves',()=>{
- let ledger=R.createPlayerRatings(),result;
+ let ledger=makeV3(),result;
  for(const [index,goal]of [false,false,true].entries()){
   result=resolve(fixture({turn:index*3+1}),ledger,{goal});ledger=result.ledger;
  }
@@ -63,15 +64,15 @@ test('a useful but nonoptimal keeper reposition does not incur a fictitious miss
  const before=threat(g),moves=E.legalMoves(g,'black-K').filter(m=>m.type!=='tackle').map(m=>({m,next:E.applyMove(g,'black-K',m.x,m.y)}));
  const best=Math.min(...moves.map(o=>threat(o.next))),choice=moves.find(o=>threat(o.next)<before-.01&&threat(o.next)>best+.005);
  assert.ok(choice,'there is a real improvement that is not the best available square');
- const old=R.createPlayerRatings();old.version=2;
- const oldResult=R.recordPlayerRatings(old,g,choice.next),current=R.recordPlayerRatings(R.createPlayerRatings(),g,choice.next);
+ const old=makeV3();old.version=2;
+ const oldResult=R.recordPlayerRatings(old,g,choice.next),current=R.recordPlayerRatings(makeV3(),g,choice.next);
  assert.ok(oldResult.players['black-K'].parts.defending<0);
  assert.equal(current.players['black-K'].parts.defending,0,'useful positioning is routine, never free positive merit');
  assert.ok(current.players['black-K'].impact>0);
 });
 
 test('method2 snapshots remain intact and continue with their original save coefficient',()=>{
- const old=R.createPlayerRatings();old.version=2;
+ const old=makeV3();old.version=2;
  const first=resolve(fixture(),old),snapshot=structuredClone(first.ledger);
  const restored=R.restorePlayerRatings(snapshot,first.game);
  assert.deepEqual(restored,snapshot);
@@ -85,10 +86,10 @@ test('method2 snapshots remain intact and continue with their original save coef
 });
 
 test('method3 signed cumulative assessment is restored without regrading and rejects invalid telemetry',()=>{
- const result=resolve(fixture(),R.createPlayerRatings(),{goal:true});
+ const result=resolve(fixture(),makeV3(),{goal:true});
  assert.ok(result.player.metrics.keeperAdjustedXGPrevented<0);
  assert.deepEqual(R.restorePlayerRatings(structuredClone(result.ledger),result.game),result.ledger);
  const bad=structuredClone(result.ledger);bad.players['black-K'].counts.keeperAdjustedXGPrevented=NaN;
- const fresh=R.restorePlayerRatings(bad,result.game);assert.equal(fresh.partial,true);assert.equal(fresh.version,3);
+ const fresh=R.restorePlayerRatings(bad,result.game);assert.equal(fresh.partial,true);assert.equal(fresh.version,4);
  assert.equal(fresh.players['black-K'].merit,0);
 });
