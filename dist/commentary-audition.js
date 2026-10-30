@@ -1,4 +1,4 @@
-import {AUDITION_CLIPS} from './commentary-audition-clips.js?v=1c932a0a4de7';
+import {AUDITION_CLIPS} from './commentary-audition-clips.js?v=c393399c404e';
 
 // A single media element owns playback. Only its natural ended event starts
 // the gap before another sentence; clip metadata never acts as a cutoff timer.
@@ -73,8 +73,8 @@ export function createAuditionPlayer({clips, audio, setTimer = setTimeout, clear
 function mountAudition() {
   const $ = id => document.getElementById(id);
   const names = [...new Set(AUDITION_CLIPS.map(clip => clip.voice))];
-  const descriptions = {Kirk: 'British · textured and animated', Tom: 'British · assured and authoritative', Mark: 'American · bright and excited'};
-  const icons = {Kirk: '♜', Tom: '♝', Mark: '♞'};
+  const descriptions = {Adam: 'British · warm, upbeat and clear', David: 'British · natural radio delivery', Leo: 'Latino voice · English commentary'};
+  const icons = {Adam: '♜', David: '♝', Leo: '♞'};
   const situationNames = {analysis: 'Building an attack', danger: 'The defence opens', save: 'A save or loose ball', goal: 'The goal call'};
   const controls = new Map(), groups = new Map();
   function el(tag, className, text) {
