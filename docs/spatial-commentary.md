@@ -23,7 +23,7 @@ Native pass generation supplies receiver and offside flags. Read-only board geom
 
 ## Larger tactical analysis
 
-`dist/commentary-tactics.js` records only committed public actions. Sequences detect genuine regains followed by forward progress, completed passes switching between opposite flanks, short combinations involving several pieces, territorial gains and sustained final-third possession. Formation assessments require six stable completed rounds within a rolling ten-round window: width on both wings, central congestion, a genuinely compact defensive block, a high line, isolated carriers, pawns screening in front of the box, and pieces balancing ahead of and behind the ball. These are descriptions of observed shape, not a conventional formation name or a claim about a manager’s intent.
+`dist/commentary-tactics.js` records only committed public actions. Sequences detect genuine regains followed by forward progress, completed passes switching between opposite flanks, short combinations involving several pieces, territorial gains and sustained final-third possession. Existing attacking-shape and compact-block assessments require six stable completed rounds within a rolling ten-round window: width on both wings, central congestion, a genuinely compact defensive block, isolated carriers, pawns screening in front of the box, and pieces balancing ahead of and behind the ball. These are descriptions of observed shape, not a conventional formation name or a claim about a manager’s intent.
 
 Individual assessments use bounded recent events tied to a stable piece ID: at least two completed forward passes or carries totalling six forward squares, two successful tackles, two verified assists, two goals, three forward possession losses, or three genuine keeper saves. A lost stochastic outcome does not become a numerical player rating. Goal and assist credit requires a verified current scoring transition; old saved totals are not imported as new performances. The caption context identifies the assessed team and player; the spoken caption still matches the recording exactly. No pass accuracy metric is introduced.
 
@@ -58,7 +58,7 @@ and observed actions:
 | Wing overload | Two completed rounds with three nearby attackers on the same wing outnumbering nearby defenders and a legal onside central crossing receiver. The delivery must have genuine inward width and a receiver near the attacking goal. |
 | Pawn pressing trap | An actual defensive bonus pawn step, followed by that pawn's legal ordinary diagonal tackle winning possession. An offered setup or evaded tackle does not qualify. |
 | Counter-press | A genuine open-play loss followed by a nearby clean tackle or interception regain within a short action/round window, before the opponent advances three squares. Restarts and goals clear this window. |
-| Open-file attack | A legal off-ball teammate move removes a physical friendly obstruction in front of a carrier rook, making a previously illegal opponent-goal shot available on that file. |
+| Cleared shooting lane | A legal teammate move removes a friendly obstruction in front of a carrier rook. The newly available opponent-goal shot must have no native shot blockers and no remaining outfield piece on the forward file. This is checked again before playback. |
 | Keeper distribution | An accurate goal-kick pass actually bypasses one player and reaches a teammate beyond halfway. An ordinary backpass or a clear unlofted launch is not this pattern. |
 
 This connects football ideas of support, overloads and pressing with chess ideas
@@ -77,3 +77,5 @@ Pause opens current match stats with Resume and Keep paused controls. The Match 
 ## Sentence completion and playback timing
 
 Hugo is never stopped because a word-count estimate has elapsed. Local synthesis reports its actual PCM duration and audio-clock position; recordings are monitored by media-time progress after playback begins. Natural playback completion releases the latest pending reaction. A stalled source can still be cleaned up, and an unknown legacy adapter has a generous failure guard. Scheduled Match sample cues use the same sentence protection, so loading latency cannot make its five-second cue cut the introductory recording. Explicit user stops remain immediate.
+
+High lines and joint midfield congestion use a separate three-completed-round history across possession changes. See `adam-commentary.md` for exact geometric thresholds. All shape checks also inspect the current board, so old snapshots cannot keep a now-invalid observation eligible. Support commentary describes a clear pass between two pieces, never an open whole file.

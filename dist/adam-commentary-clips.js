@@ -770,30 +770,6 @@ const recordings = Object.freeze(Object.fromEntries([
     "path": "./audio/adam/adam_e87ae61de8c0da2e.mp3?v=30e8f121c67f"
   },
   {
-    "id": "adam_28e8a27a50ffcf77",
-    "text": "The queen had support along an open vertical file.",
-    "durationMs": 3631,
-    "bytes": 58558,
-    "sha256": "8067092de3a6eb42eb7099632167c2ce1aa1988e985c873451696abc5fa9601c",
-    "path": "./audio/adam/adam_28e8a27a50ffcf77.mp3?v=8067092de3a6"
-  },
-  {
-    "id": "adam_b2ff6e4c7d951fde",
-    "text": "The queen had support along an open horizontal rank.",
-    "durationMs": 3709,
-    "bytes": 59812,
-    "sha256": "5ce91d5a5819f0aa5a5d33fb129699881fa353a768ad4cccfa974fb2dfadd6ff",
-    "path": "./audio/adam/adam_b2ff6e4c7d951fde.mp3?v=5ce91d5a5819"
-  },
-  {
-    "id": "adam_3155b525c9c95274",
-    "text": "The queen had support along an open diagonal.",
-    "durationMs": 3004,
-    "bytes": 48527,
-    "sha256": "cc401f86c70b380af315370813e6a3384fbe6ff0e95e2a00863c87082142728c",
-    "path": "./audio/adam/adam_3155b525c9c95274.mp3?v=cc401f86c70b"
-  },
-  {
     "id": "adam_0bef834d2db074cd",
     "text": "The queen was one on one with the keeper!",
     "durationMs": 2769,
@@ -906,22 +882,6 @@ const recordings = Object.freeze(Object.fromEntries([
     "path": "./audio/adam/adam_890679c415409e75.mp3?v=e31c5f391ffd"
   },
   {
-    "id": "adam_5c8d4d0118bd8a35",
-    "text": "The rook had support along an open vertical file.",
-    "durationMs": 3631,
-    "bytes": 58558,
-    "sha256": "d3f7a90a7be4ecd8b640baded7479323133204474486ed17e538f43540b65f59",
-    "path": "./audio/adam/adam_5c8d4d0118bd8a35.mp3?v=d3f7a90a7be4"
-  },
-  {
-    "id": "adam_e971134f6d31dc96",
-    "text": "The rook had support along an open horizontal rank.",
-    "durationMs": 3631,
-    "bytes": 58558,
-    "sha256": "a76f80816717cacf2ff1c5395ee7e3de881bc837ff0afa7c16ec571ded0ca583",
-    "path": "./audio/adam/adam_e971134f6d31dc96.mp3?v=a76f80816717"
-  },
-  {
     "id": "adam_44b1af31d3df6513",
     "text": "The rook was one on one with the keeper!",
     "durationMs": 2691,
@@ -1032,14 +992,6 @@ const recordings = Object.freeze(Object.fromEntries([
     "bytes": 62319,
     "sha256": "28e4ea046340fbe5c4f3936db79eaf467c9021d0a68b94f1904b87353ba12216",
     "path": "./audio/adam/adam_a42acadda86fc301.mp3?v=28e4ea046340"
-  },
-  {
-    "id": "adam_9f6b45fce77a323a",
-    "text": "The bishop had support along an open diagonal.",
-    "durationMs": 3082,
-    "bytes": 49781,
-    "sha256": "fc98c5d2726cf7c442aad3f7bc12d388bf35dc0e00e143ae075966962ccb63f4",
-    "path": "./audio/adam/adam_9f6b45fce77a323a.mp3?v=fc98c5d2726c"
   },
   {
     "id": "adam_e8aa03e5f71f6e7c",
@@ -1272,22 +1224,6 @@ const recordings = Object.freeze(Object.fromEntries([
     "bytes": 61066,
     "sha256": "8433aaa7ef26640a89a15bed24a497df56e7a624153f3240b1ed50fbe9214baf",
     "path": "./audio/adam/adam_16bdbf10308894c8.mp3?v=8433aaa7ef26"
-  },
-  {
-    "id": "adam_d5678a693fd82cdd",
-    "text": "The pawn had support along an open vertical file.",
-    "durationMs": 3396,
-    "bytes": 54796,
-    "sha256": "8382131292b35bd1dbb0723f910a96bfcb084b13d418a26fb62a6e46ac6afcfe",
-    "path": "./audio/adam/adam_d5678a693fd82cdd.mp3?v=8382131292b3"
-  },
-  {
-    "id": "adam_65613cd19188494f",
-    "text": "The pawn had support along an open horizontal rank.",
-    "durationMs": 3474,
-    "bytes": 56050,
-    "sha256": "37df491ffdf31d9720f95d4f0ccd44129f946f17bbe42d9292877503614527b0",
-    "path": "./audio/adam/adam_65613cd19188494f.mp3?v=37df491ffdf3"
   },
   {
     "id": "adam_236aa29080edca14",
@@ -2920,6 +2856,62 @@ const recordings = Object.freeze(Object.fromEntries([
     "bytes": 58558,
     "sha256": "8a265bb19d5360526cf47ac4d0e09965875b22c95d99a262a2b2c764e03e9105",
     "path": "./audio/adam/adam_ab04658b507a1366.mp3?v=8a265bb19d53"
+  },
+  {
+    "id": "adam_342e1698bdc8ef1c",
+    "text": "The queen had a clear pass to a nearby teammate.",
+    "durationMs": 3161,
+    "bytes": 51035,
+    "sha256": "6ed1ebdb7693770a1f68e4ff2607b338e93f5e5ba399ee0af4e97d7bf9d91c9f",
+    "path": "./audio/adam/adam_342e1698bdc8ef1c.mp3?v=6ed1ebdb7693"
+  },
+  {
+    "id": "adam_87826d763e7a39f3",
+    "text": "The rook had a clear pass to a nearby teammate.",
+    "durationMs": 3239,
+    "bytes": 52288,
+    "sha256": "5a7a8ef7fda8f0667a022453d3f5aebc2d92619b9806da81a14c8976d8347a79",
+    "path": "./audio/adam/adam_87826d763e7a39f3.mp3?v=5a7a8ef7fda8"
+  },
+  {
+    "id": "adam_9fffa980717be789",
+    "text": "The bishop had a clear pass to a nearby teammate.",
+    "durationMs": 3318,
+    "bytes": 53542,
+    "sha256": "3e3ce0307f64a1da692dbc03011eb3716a1d689dd5e3d984b923c50323c82999",
+    "path": "./audio/adam/adam_9fffa980717be789.mp3?v=3e3ce0307f64"
+  },
+  {
+    "id": "adam_94cc6573f3c088d6",
+    "text": "The pawn had a clear pass to a nearby teammate.",
+    "durationMs": 3161,
+    "bytes": 51035,
+    "sha256": "b597b7856802d4fdbf76889b76d3ba247436edf22d52171f9ce25a06e1604979",
+    "path": "./audio/adam/adam_94cc6573f3c088d6.mp3?v=b597b7856802"
+  },
+  {
+    "id": "adam_c90138a2a6ac77f3",
+    "text": "Ivory maintained a high defensive line, leaving space behind their outfield players.",
+    "durationMs": 5329,
+    "bytes": 85725,
+    "sha256": "1ee5771b981b333048c25fc73ab2a0083fe8ed11ce489b00570b13f703d2359c",
+    "path": "./audio/adam/adam_c90138a2a6ac77f3.mp3?v=1ee5771b981b"
+  },
+  {
+    "id": "adam_7a728e2f3c268447",
+    "text": "Obsidian maintained a high defensive line, leaving space behind their outfield players.",
+    "durationMs": 5486,
+    "bytes": 88233,
+    "sha256": "c30989a5099b47e852bfc72d9e4a4ec1121ce60108b795a8b7051168218ce8a5",
+    "path": "./audio/adam/adam_7a728e2f3c268447.mp3?v=c30989a5099b"
+  },
+  {
+    "id": "adam_5dd9f4414d220380",
+    "text": "The centre of the pitch was crowded, with both sides packing players around halfway.",
+    "durationMs": 5486,
+    "bytes": 88233,
+    "sha256": "2f7aaee7e0a073253b00706f3361bf017a617a89cafea1fd7d6f526031582530",
+    "path": "./audio/adam/adam_5dd9f4414d220380.mp3?v=2f7aaee7e0a0"
   }
 ].map(record => [record.id,
   Object.freeze({...record, src:new URL(record.path, import.meta.url).href})])));
@@ -3430,30 +3422,27 @@ const definitions = {
       ]
     },
     "support_queen_vertical": {
-      "key": "support_queen_vertical",
-      "text": "The queen had support along an open vertical file.",
+      "text": "The queen had a clear pass to a nearby teammate.",
       "delivery": "normal",
       "snapshot": true,
       "recordingIds": [
-        "adam_28e8a27a50ffcf77"
+        "adam_342e1698bdc8ef1c"
       ]
     },
     "support_queen_horizontal": {
-      "key": "support_queen_horizontal",
-      "text": "The queen had support along an open horizontal rank.",
+      "text": "The queen had a clear pass to a nearby teammate.",
       "delivery": "normal",
       "snapshot": true,
       "recordingIds": [
-        "adam_b2ff6e4c7d951fde"
+        "adam_342e1698bdc8ef1c"
       ]
     },
     "support_queen_diagonal": {
-      "key": "support_queen_diagonal",
-      "text": "The queen had support along an open diagonal.",
+      "text": "The queen had a clear pass to a nearby teammate.",
       "delivery": "normal",
       "snapshot": true,
       "recordingIds": [
-        "adam_3155b525c9c95274"
+        "adam_342e1698bdc8ef1c"
       ]
     },
     "one_on_one_queen": {
@@ -3583,21 +3572,19 @@ const definitions = {
       ]
     },
     "support_rook_vertical": {
-      "key": "support_rook_vertical",
-      "text": "The rook had support along an open vertical file.",
+      "text": "The rook had a clear pass to a nearby teammate.",
       "delivery": "normal",
       "snapshot": true,
       "recordingIds": [
-        "adam_5c8d4d0118bd8a35"
+        "adam_87826d763e7a39f3"
       ]
     },
     "support_rook_horizontal": {
-      "key": "support_rook_horizontal",
-      "text": "The rook had support along an open horizontal rank.",
+      "text": "The rook had a clear pass to a nearby teammate.",
       "delivery": "normal",
       "snapshot": true,
       "recordingIds": [
-        "adam_e971134f6d31dc96"
+        "adam_87826d763e7a39f3"
       ]
     },
     "one_on_one_rook": {
@@ -3727,12 +3714,11 @@ const definitions = {
       ]
     },
     "support_bishop_diagonal": {
-      "key": "support_bishop_diagonal",
-      "text": "The bishop had support along an open diagonal.",
+      "text": "The bishop had a clear pass to a nearby teammate.",
       "delivery": "normal",
       "snapshot": true,
       "recordingIds": [
-        "adam_9f6b45fce77a323a"
+        "adam_9fffa980717be789"
       ]
     },
     "one_on_one_bishop": {
@@ -3997,21 +3983,19 @@ const definitions = {
       ]
     },
     "support_pawn_vertical": {
-      "key": "support_pawn_vertical",
-      "text": "The pawn had support along an open vertical file.",
+      "text": "The pawn had a clear pass to a nearby teammate.",
       "delivery": "normal",
       "snapshot": true,
       "recordingIds": [
-        "adam_d5678a693fd82cdd"
+        "adam_94cc6573f3c088d6"
       ]
     },
     "support_pawn_horizontal": {
-      "key": "support_pawn_horizontal",
-      "text": "The pawn had support along an open horizontal rank.",
+      "text": "The pawn had a clear pass to a nearby teammate.",
       "delivery": "normal",
       "snapshot": true,
       "recordingIds": [
-        "adam_65613cd19188494f"
+        "adam_94cc6573f3c088d6"
       ]
     },
     "one_on_one_pawn": {
@@ -6088,6 +6072,30 @@ const definitions = {
       "snapshot": true,
       "recordingIds": [
         "adam_ab04658b507a1366"
+      ]
+    },
+    "shape_high_line_white": {
+      "text": "Ivory maintained a high defensive line, leaving space behind their outfield players.",
+      "delivery": "normal",
+      "snapshot": true,
+      "recordingIds": [
+        "adam_c90138a2a6ac77f3"
+      ]
+    },
+    "shape_high_line_black": {
+      "text": "Obsidian maintained a high defensive line, leaving space behind their outfield players.",
+      "delivery": "normal",
+      "snapshot": true,
+      "recordingIds": [
+        "adam_7a728e2f3c268447"
+      ]
+    },
+    "shape_midfield_crowded": {
+      "text": "The centre of the pitch was crowded, with both sides packing players around halfway.",
+      "delivery": "normal",
+      "snapshot": true,
+      "recordingIds": [
+        "adam_5dd9f4414d220380"
       ]
     }
   }

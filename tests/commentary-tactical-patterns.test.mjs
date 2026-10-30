@@ -147,6 +147,21 @@ for(const team of ['white','black']) {
     const to=spot(team,4,2);state=h.observe(state,E.applyMove(state,own(team,'P1'),to.x,to.y,{freePawn:true}));
     assert.equal(h.has(state,'tactic_file_attack'),false);
   });
+  test(`${team}: removing one friendly obstruction does not clear remaining enemy shot traffic`,()=>{
+    const h=observer();let state=fixture({'white-R1':['R',6,4],'white-P1':['P',6,3],
+      'black-P1':['P',6,2],'black-R2':['R',12,1]}, {team,phase:'attackMove',carrier:'white-R1'});
+    const to=spot(team,5,3);state=h.observe(state,E.applyMove(state,own(team,'P1'),to.x,to.y,{freePawn:true}));
+    const shots=E.legalKicks({...state,phase:'kick'}).filter(k=>k.goal===team&&!k.offside);
+    assert.ok(shots.length);assert.ok(shots.some(k=>k.shotModel.blockerIds.length));
+    assert.equal(h.has(state,'tactic_file_attack'),false);
+  });
+  test(`${team}: a cleared rook shot cannot begin a delayed call after the lane closes`,()=>{
+    const h=observer();let state=fixture({'white-R1':['R',6,3],'white-P1':['P',6,2],'black-R2':['R',12,1]}, {team,phase:'attackMove',carrier:'white-R1'});
+    const to=spot(team,5,2);state=h.observe(state,E.applyMove(state,own(team,'P1'),to.x,to.y,{freePawn:true}));
+    assert.equal(h.has(state,'tactic_file_attack'),true);
+    const closed=structuredClone(state);Object.assign(closed.pieces.find(p=>p.id===own(other(team),'R2')),spot(team,6,1));
+    assert.equal(h.has(closed,'tactic_file_attack'),false);
+  });
   test(`${team}: keeper distribution identifies a completed native loft beyond halfway`,()=>{
     const restart={type:'goalKick',team:'white',takerId:'white-K',spot:{x:6,y:15}};
     const h=observer();let state=fixture({'white-K':['K',6,15],'white-P1':['P',6,13],'white-R1':['R',6,7]}, {team,carrier:'white-K',restart});

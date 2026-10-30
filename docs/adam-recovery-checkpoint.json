@@ -1,7 +1,7 @@
 {
   "status": "audio-library-complete",
-  "recordingsPlanned": 365,
-  "recordingsDownloaded": 365,
+  "recordingsPlanned": 364,
+  "recordingsDownloaded": 364,
   "recordingsMissing": 0,
   "recoveredExistingRecordings": 329,
   "newRecordingsCompleted": 36,
@@ -13,9 +13,16 @@
   },
   "provenance": "adam-commentary-provenance.json",
   "verification": {
-    "audioAssets": "365 files decoded, measured and hashed; 365 distinct digests",
-    "catalog": "55 event keys, 302 tactical keys, 395 bindings",
+    "audioAssets": "364 Adam files decoded, measured and hashed; all 305 legacy Hugo clips verified",
+    "catalog": "55 event keys, 305 tactical keys, 398 bindings",
     "browser": "Adam test voice and match sample play; watch match at Relaxed pace loads; pause and mute stop playback; changing pace disables commentary; returning to Relaxed preserves Off",
-    "regression": "317 commentary, preference, factual-selection and asset tests passed"
+    "regression": "329 commentary, preference, positional-accuracy and asset tests passed"
+  },
+  "positionalAccuracyUpdate": {
+    "replacedSupportBindings": 8,
+    "newAdamSentences": 7,
+    "highLineRounds": 3,
+    "midfieldCongestionRounds": 3,
+    "rechecksCurrentGeometry": true
   }
 }

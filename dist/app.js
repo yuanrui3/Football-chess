@@ -4,7 +4,7 @@ import {buildGoalReplay, restoreGoalReplay, createReplayPlayer} from './goal-rep
 import {createMatchStats, restoreMatchStats, recordMatchTransition, addPossessionTime, matchStatsSummary, shortPieceId} from './match-stats.js?v=581cc6138571';
 import {playerRatingsSummary} from './player-ratings.js?v=dd82ea8417c0';
 import {renderPlayerRatings} from './player-ratings-view.js?v=b80c606821f7';
-import {createCommentary} from './commentary.js?v=ec635e50cd82';
+import {createCommentary} from './commentary.js?v=f51f885e13a6';
 import {createParadeeSpeech} from './paradee-speech.js?v=e9d0fc794cfb';
 import {createEvaluation,formatEvaluation} from './evaluation.js?v=b35b0f046187';
 
@@ -134,6 +134,7 @@ function renderEvaluation(){
 function applyVoicePreference(){const state=commentary.getState();if(voicePreferredId&&state.voices.some(voice=>voice.id===voicePreferredId)&&state.voiceId!==voicePreferredId)commentary.setVoice(voicePreferredId);}
 
 function commentaryContext(event){
+  if(event?.tactical && event.clipKey==='shape_midfield_crowded')return `Both teams · Crowded midfield${Number.isInteger(event.tactical.centralPlayers)?' · '+event.tactical.centralPlayers+' central players':''}`;
   if(!TEAM[event?.team])return '';
   if(event.statsCommentary){
     const value=event.statsCommentary,details=[];
@@ -142,8 +143,8 @@ function commentaryContext(event){
     return `${TEAM[event.team]} · ${details.join(' · ')}`;
   }
   if(!event.tactical)return '';
-  const topics={tactic_control:'Midfield control',tactic_wing_overload:'Wing overload',tactic_pawn_trap:'Pawn pressing trap',tactic_counterpress:'Counter-press',tactic_file_attack:'Open-file attack',tactic_keeper_launch:'Keeper distribution',tactic_counter:'Counterattack',tactic_switch:'Switching play',tactic_combinations:'Passing combinations',tactic_pressure:'Sustained pressure',tactic_centre:'Central progression',tactic_wide:'Wing progression',tactic_patient:'Slow progression'};
-  const category=topics[event.clipKey]||(event.clipKey?.startsWith('performance_')?'Player performance':event.clipKey?.startsWith('shape_')?'Team shape':'Team tactics');
+  const topics={tactic_control:'Midfield control',tactic_wing_overload:'Wing overload',tactic_pawn_trap:'Pawn pressing trap',tactic_counterpress:'Counter-press',tactic_file_attack:'Cleared shooting lane',tactic_keeper_launch:'Keeper distribution',tactic_counter:'Counterattack',tactic_switch:'Switching play',tactic_combinations:'Passing combinations',tactic_pressure:'Sustained pressure',tactic_centre:'Central progression',tactic_wide:'Wing progression',tactic_patient:'Slow progression'};
+  const category=event.tactical.label||topics[event.clipKey]||(event.clipKey?.startsWith('performance_')?'Player performance':event.clipKey?.startsWith('shape_')?'Team shape':'Team tactics');
   return `${TEAM[event.team]}${event.tactical.pieceId?' · '+shortPieceId(event.tactical.pieceId):''} · ${category}`;
 }
 

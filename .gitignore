@@ -1,2 +1,5 @@
 
 simulation-results/
+
+# Incomplete audio normalization output
+dist/audio/adam/*.tmp.mp3

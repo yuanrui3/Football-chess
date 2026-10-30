@@ -18,7 +18,6 @@ const central = p => Math.abs(p.x - BOARD_CENTER_X) <= 2.5;
 const wide = p => Math.abs(p.x - BOARD_CENTER_X) >= 3.5;
 const role = piece => `${ROLES[piece?.type] || 'player'}${NUMBERS[/([123])$/.exec(piece?.id || '')?.[1]] ? ` ${NUMBERS[/([123])$/.exec(piece.id)[1]]}` : ''}`;
 const named = piece => `${NAMES[piece.team]}'s ${role(piece)}`;
-const laneName = (a, b) => a.x === b.x ? 'vertical file' : a.y === b.y ? 'horizontal rank' : 'diagonal';
 
 function validState(state) {
   if (!state || !TEAMS.includes(state.attack) || !['attackMove', 'defendMove', 'kick', 'passRun'].includes(state.phase)
@@ -156,7 +155,7 @@ export function commentaryPositionFacts(state) {
       if (distance(carrier, receiver) <= 5) facts.push(liveFact('support', carrier.team,
         carrier.type === 'N'
           ? `${named(receiver)} offers the ${role(carrier)} an L-shaped jumping pass.`
-          : `${named(receiver)} supports the ${role(carrier)} along an open ${laneName(carrier, receiver)}.`, [carrier.id, receiver.id],
+          : `${named(carrier)} has a clear pass to the nearby ${role(receiver)}.`, [carrier.id, receiver.id],
         {pieceId: carrier.id, receiverId: receiver.id, supporterId: receiver.id}));
     }
     return facts;

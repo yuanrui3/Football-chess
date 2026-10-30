@@ -9,13 +9,13 @@
   },
   "stats": {
     "eventKeys": 55,
-    "tacticKeys": 302,
-    "uniqueRecordings": 365,
+    "tacticKeys": 305,
+    "uniqueRecordings": 364,
     "additionalVariantBindings": 38,
-    "taggedCharacters": 24332,
+    "taggedCharacters": 24368,
     "maxTaggedCharacters": 104,
-    "estimatedObservedV4Credits": 366,
-    "conservativePer50CharacterCredits": 707
+    "estimatedObservedV4Credits": 364,
+    "conservativePer50CharacterCredits": 708
   },
   "notes": [
     "Recordings are ordered with event calls and their variants first; common tactical calls precede statistics.",
@@ -698,1887 +698,1880 @@
       "priority": 95
     },
     {
-      "id": "adam_28e8a27a50ffcf77",
-      "text": "The queen had support along an open vertical file.",
-      "taggedText": "[conversational] The queen had support along an open vertical file.",
-      "delivery": "normal",
-      "priority": 96
-    },
-    {
-      "id": "adam_b2ff6e4c7d951fde",
-      "text": "The queen had support along an open horizontal rank.",
-      "taggedText": "[conversational] The queen had support along an open horizontal rank.",
-      "delivery": "normal",
-      "priority": 97
-    },
-    {
-      "id": "adam_3155b525c9c95274",
-      "text": "The queen had support along an open diagonal.",
-      "taggedText": "[conversational] The queen had support along an open diagonal.",
-      "delivery": "normal",
-      "priority": 98
-    },
-    {
       "id": "adam_0bef834d2db074cd",
       "text": "The queen was one on one with the keeper!",
       "taggedText": "[excited] The queen was one on one with the keeper!",
       "delivery": "urgent",
-      "priority": 99
+      "priority": 96
     },
     {
       "id": "adam_918dcf868097ca34",
       "text": "The queen could cross to a teammate in the middle.",
       "taggedText": "[conversational] The queen could cross to a teammate in the middle.",
       "delivery": "normal",
-      "priority": 100
+      "priority": 97
     },
     {
       "id": "adam_5e6784885cc0fb12",
       "text": "A cross into the middle, finding the queen.",
       "taggedText": "[conversational] A cross into the middle, finding the queen.",
       "delivery": "normal",
-      "priority": 101
+      "priority": 98
     },
     {
       "id": "adam_d38a0f290d75802e",
       "text": "A cutback into the middle, finding the queen.",
       "taggedText": "[conversational] A cutback into the middle, finding the queen.",
       "delivery": "normal",
-      "priority": 102
+      "priority": 99
     },
     {
       "id": "adam_ec5f6eed6138ff82",
       "text": "A through ball! The onside queen had a route to collect.",
       "taggedText": "[excited] A through ball! The onside queen had a route to collect.",
       "delivery": "urgent",
-      "priority": 103
+      "priority": 100
     },
     {
       "id": "adam_9cb6bc224604cca3",
       "text": "A one-two! The queen received the return after its run.",
       "taggedText": "[conversational] A one-two! The queen received the return after its run.",
       "delivery": "normal",
-      "priority": 104
+      "priority": 101
     },
     {
       "id": "adam_93f959bb557cf170",
       "text": "The queen linked the passes, receiving and moving it on.",
       "taggedText": "[conversational] The queen linked the passes, receiving and moving it on.",
       "delivery": "normal",
-      "priority": 105
+      "priority": 102
     },
     {
       "id": "adam_f7d00f8830a12cf3",
       "text": "The queen made a forward run and was available for a pass.",
       "taggedText": "[conversational] The queen made a forward run and was available for a pass.",
       "delivery": "normal",
-      "priority": 106
+      "priority": 103
     },
     {
       "id": "adam_82a0f2a6efcd4949",
       "text": "The queen carried forward into space, beyond immediate tackling threats.",
       "taggedText": "[conversational] The queen carried forward into space, beyond immediate tackling threats.",
       "delivery": "normal",
-      "priority": 107
+      "priority": 104
     },
     {
       "id": "adam_a84d01db12fb782e",
       "text": "The queen ran after passing; the queen kept possession.",
       "taggedText": "[conversational] The queen ran after passing; the queen kept possession.",
       "delivery": "normal",
-      "priority": 108
+      "priority": 105
     },
     {
       "id": "adam_64155a340272933e",
       "text": "The queen ran after passing; the rook kept possession.",
       "taggedText": "[conversational] The queen ran after passing; the rook kept possession.",
       "delivery": "normal",
-      "priority": 109
+      "priority": 106
     },
     {
       "id": "adam_1cd71ef33fd9362f",
       "text": "The queen ran after passing; the bishop kept possession.",
       "taggedText": "[conversational] The queen ran after passing; the bishop kept possession.",
       "delivery": "normal",
-      "priority": 110
+      "priority": 107
     },
     {
       "id": "adam_d3531c71e8aedf51",
       "text": "The queen ran after passing; the knight kept possession.",
       "taggedText": "[conversational] The queen ran after passing; the knight kept possession.",
       "delivery": "normal",
-      "priority": 111
+      "priority": 108
     },
     {
       "id": "adam_890679c415409e75",
       "text": "The queen ran after passing; the pawn kept possession.",
       "taggedText": "[conversational] The queen ran after passing; the pawn kept possession.",
       "delivery": "normal",
-      "priority": 112
-    },
-    {
-      "id": "adam_5c8d4d0118bd8a35",
-      "text": "The rook had support along an open vertical file.",
-      "taggedText": "[conversational] The rook had support along an open vertical file.",
-      "delivery": "normal",
-      "priority": 113
-    },
-    {
-      "id": "adam_e971134f6d31dc96",
-      "text": "The rook had support along an open horizontal rank.",
-      "taggedText": "[conversational] The rook had support along an open horizontal rank.",
-      "delivery": "normal",
-      "priority": 114
+      "priority": 109
     },
     {
       "id": "adam_44b1af31d3df6513",
       "text": "The rook was one on one with the keeper!",
       "taggedText": "[excited] The rook was one on one with the keeper!",
       "delivery": "urgent",
-      "priority": 115
+      "priority": 110
     },
     {
       "id": "adam_f1817542578f176c",
       "text": "The rook could cross to a teammate in the middle.",
       "taggedText": "[conversational] The rook could cross to a teammate in the middle.",
       "delivery": "normal",
-      "priority": 116
+      "priority": 111
     },
     {
       "id": "adam_732ddca48f23b5df",
       "text": "A cross into the middle, finding the rook.",
       "taggedText": "[conversational] A cross into the middle, finding the rook.",
       "delivery": "normal",
-      "priority": 117
+      "priority": 112
     },
     {
       "id": "adam_4848566dc6c9c4bb",
       "text": "A cutback into the middle, finding the rook.",
       "taggedText": "[conversational] A cutback into the middle, finding the rook.",
       "delivery": "normal",
-      "priority": 118
+      "priority": 113
     },
     {
       "id": "adam_80e620d111af1a43",
       "text": "A through ball! The onside rook had a route to collect.",
       "taggedText": "[excited] A through ball! The onside rook had a route to collect.",
       "delivery": "urgent",
-      "priority": 119
+      "priority": 114
     },
     {
       "id": "adam_5cb2df8c57db5280",
       "text": "A one-two! The rook received the return after its run.",
       "taggedText": "[conversational] A one-two! The rook received the return after its run.",
       "delivery": "normal",
-      "priority": 120
+      "priority": 115
     },
     {
       "id": "adam_d2493ef97b68f58c",
       "text": "The rook linked the passes, receiving and moving it on.",
       "taggedText": "[conversational] The rook linked the passes, receiving and moving it on.",
       "delivery": "normal",
-      "priority": 121
+      "priority": 116
     },
     {
       "id": "adam_e551f230e0bb7c09",
       "text": "The rook made a forward run and was available for a pass.",
       "taggedText": "[conversational] The rook made a forward run and was available for a pass.",
       "delivery": "normal",
-      "priority": 122
+      "priority": 117
     },
     {
       "id": "adam_66c448b3ade9a40b",
       "text": "The rook carried forward into space, beyond immediate tackling threats.",
       "taggedText": "[conversational] The rook carried forward into space, beyond immediate tackling threats.",
       "delivery": "normal",
-      "priority": 123
+      "priority": 118
     },
     {
       "id": "adam_a29e6fdb38977c7d",
       "text": "The rook ran after passing; the queen kept possession.",
       "taggedText": "[conversational] The rook ran after passing; the queen kept possession.",
       "delivery": "normal",
-      "priority": 124
+      "priority": 119
     },
     {
       "id": "adam_4204b1f6388cf326",
       "text": "The rook ran after passing; the rook kept possession.",
       "taggedText": "[conversational] The rook ran after passing; the rook kept possession.",
       "delivery": "normal",
-      "priority": 125
+      "priority": 120
     },
     {
       "id": "adam_2a1470652c3fec44",
       "text": "The rook ran after passing; the bishop kept possession.",
       "taggedText": "[conversational] The rook ran after passing; the bishop kept possession.",
       "delivery": "normal",
-      "priority": 126
+      "priority": 121
     },
     {
       "id": "adam_7ec401640b881143",
       "text": "The rook ran after passing; the knight kept possession.",
       "taggedText": "[conversational] The rook ran after passing; the knight kept possession.",
       "delivery": "normal",
-      "priority": 127
+      "priority": 122
     },
     {
       "id": "adam_a42acadda86fc301",
       "text": "The rook ran after passing; the pawn kept possession.",
       "taggedText": "[conversational] The rook ran after passing; the pawn kept possession.",
       "delivery": "normal",
-      "priority": 128
-    },
-    {
-      "id": "adam_9f6b45fce77a323a",
-      "text": "The bishop had support along an open diagonal.",
-      "taggedText": "[conversational] The bishop had support along an open diagonal.",
-      "delivery": "normal",
-      "priority": 129
+      "priority": 123
     },
     {
       "id": "adam_e8aa03e5f71f6e7c",
       "text": "The bishop was one on one with the keeper!",
       "taggedText": "[excited] The bishop was one on one with the keeper!",
       "delivery": "urgent",
-      "priority": 130
+      "priority": 124
     },
     {
       "id": "adam_d67012fa5e733590",
       "text": "The bishop could cross to a teammate in the middle.",
       "taggedText": "[conversational] The bishop could cross to a teammate in the middle.",
       "delivery": "normal",
-      "priority": 131
+      "priority": 125
     },
     {
       "id": "adam_f5ef57162e80f58e",
       "text": "A cross into the middle, finding the bishop.",
       "taggedText": "[conversational] A cross into the middle, finding the bishop.",
       "delivery": "normal",
-      "priority": 132
+      "priority": 126
     },
     {
       "id": "adam_a1a882f78f0c51d2",
       "text": "A cutback into the middle, finding the bishop.",
       "taggedText": "[conversational] A cutback into the middle, finding the bishop.",
       "delivery": "normal",
-      "priority": 133
+      "priority": 127
     },
     {
       "id": "adam_136c40ce2899f1b6",
       "text": "A through ball! The onside bishop had a route to collect.",
       "taggedText": "[excited] A through ball! The onside bishop had a route to collect.",
       "delivery": "urgent",
-      "priority": 134
+      "priority": 128
     },
     {
       "id": "adam_fb0a09e2c1b565b8",
       "text": "A one-two! The bishop received the return after its run.",
       "taggedText": "[conversational] A one-two! The bishop received the return after its run.",
       "delivery": "normal",
-      "priority": 135
+      "priority": 129
     },
     {
       "id": "adam_39ef91cdfce0f1bb",
       "text": "The bishop linked the passes, receiving and moving it on.",
       "taggedText": "[conversational] The bishop linked the passes, receiving and moving it on.",
       "delivery": "normal",
-      "priority": 136
+      "priority": 130
     },
     {
       "id": "adam_c3bb3156b1788a06",
       "text": "The bishop made a forward run and was available for a pass.",
       "taggedText": "[conversational] The bishop made a forward run and was available for a pass.",
       "delivery": "normal",
-      "priority": 137
+      "priority": 131
     },
     {
       "id": "adam_7f338b8f5d570268",
       "text": "The bishop carried forward into space, beyond immediate tackling threats.",
       "taggedText": "[conversational] The bishop carried forward into space, beyond immediate tackling threats.",
       "delivery": "normal",
-      "priority": 138
+      "priority": 132
     },
     {
       "id": "adam_ef8a593f3eeaeeb4",
       "text": "The bishop ran after passing; the queen kept possession.",
       "taggedText": "[conversational] The bishop ran after passing; the queen kept possession.",
       "delivery": "normal",
-      "priority": 139
+      "priority": 133
     },
     {
       "id": "adam_7aa89e3659bcb5b9",
       "text": "The bishop ran after passing; the rook kept possession.",
       "taggedText": "[conversational] The bishop ran after passing; the rook kept possession.",
       "delivery": "normal",
-      "priority": 140
+      "priority": 134
     },
     {
       "id": "adam_53968593fd3bd3a0",
       "text": "The bishop ran after passing; the bishop kept possession.",
       "taggedText": "[conversational] The bishop ran after passing; the bishop kept possession.",
       "delivery": "normal",
-      "priority": 141
+      "priority": 135
     },
     {
       "id": "adam_1a9e2cd20a52deb8",
       "text": "The bishop ran after passing; the knight kept possession.",
       "taggedText": "[conversational] The bishop ran after passing; the knight kept possession.",
       "delivery": "normal",
-      "priority": 142
+      "priority": 136
     },
     {
       "id": "adam_8037f2563bbc5fc4",
       "text": "The bishop ran after passing; the pawn kept possession.",
       "taggedText": "[conversational] The bishop ran after passing; the pawn kept possession.",
       "delivery": "normal",
-      "priority": 143
+      "priority": 137
     },
     {
       "id": "adam_f3144ce3e4c4db4e",
       "text": "The knight had an L-shaped jumping pass to a teammate.",
       "taggedText": "[conversational] The knight had an L-shaped jumping pass to a teammate.",
       "delivery": "normal",
-      "priority": 144
+      "priority": 138
     },
     {
       "id": "adam_aa6a4d607645f789",
       "text": "The knight was one on one with the keeper!",
       "taggedText": "[excited] The knight was one on one with the keeper!",
       "delivery": "urgent",
-      "priority": 145
+      "priority": 139
     },
     {
       "id": "adam_65374aad5f9b9cd4",
       "text": "The knight could cross to a teammate in the middle.",
       "taggedText": "[conversational] The knight could cross to a teammate in the middle.",
       "delivery": "normal",
-      "priority": 146
+      "priority": 140
     },
     {
       "id": "adam_807cfeb4a685a5d3",
       "text": "A cross into the middle, finding the knight.",
       "taggedText": "[conversational] A cross into the middle, finding the knight.",
       "delivery": "normal",
-      "priority": 147
+      "priority": 141
     },
     {
       "id": "adam_d0d5ef09061f9632",
       "text": "A cutback into the middle, finding the knight.",
       "taggedText": "[conversational] A cutback into the middle, finding the knight.",
       "delivery": "normal",
-      "priority": 148
+      "priority": 142
     },
     {
       "id": "adam_87835c20c7d88f51",
       "text": "A through ball! The onside knight had a route to collect.",
       "taggedText": "[excited] A through ball! The onside knight had a route to collect.",
       "delivery": "urgent",
-      "priority": 149
+      "priority": 143
     },
     {
       "id": "adam_122c71241d36f80f",
       "text": "A one-two! The knight received the return after its run.",
       "taggedText": "[conversational] A one-two! The knight received the return after its run.",
       "delivery": "normal",
-      "priority": 150
+      "priority": 144
     },
     {
       "id": "adam_ba25b446487e1aae",
       "text": "The knight linked the passes, receiving and moving it on.",
       "taggedText": "[conversational] The knight linked the passes, receiving and moving it on.",
       "delivery": "normal",
-      "priority": 151
+      "priority": 145
     },
     {
       "id": "adam_e0678cbe0e49a527",
       "text": "The knight made a forward run and was available for a pass.",
       "taggedText": "[conversational] The knight made a forward run and was available for a pass.",
       "delivery": "normal",
-      "priority": 152
+      "priority": 146
     },
     {
       "id": "adam_250386c0a0c7a3eb",
       "text": "The knight carried forward into space, beyond immediate tackling threats.",
       "taggedText": "[conversational] The knight carried forward into space, beyond immediate tackling threats.",
       "delivery": "normal",
-      "priority": 153
+      "priority": 147
     },
     {
       "id": "adam_bef9e77d084f2061",
       "text": "The knight ran after passing; the queen kept possession.",
       "taggedText": "[conversational] The knight ran after passing; the queen kept possession.",
       "delivery": "normal",
-      "priority": 154
+      "priority": 148
     },
     {
       "id": "adam_054274b3d796ab79",
       "text": "The knight ran after passing; the rook kept possession.",
       "taggedText": "[conversational] The knight ran after passing; the rook kept possession.",
       "delivery": "normal",
-      "priority": 155
+      "priority": 149
     },
     {
       "id": "adam_9cf62dbfbb5b2d81",
       "text": "The knight ran after passing; the bishop kept possession.",
       "taggedText": "[conversational] The knight ran after passing; the bishop kept possession.",
       "delivery": "normal",
-      "priority": 156
+      "priority": 150
     },
     {
       "id": "adam_62b8995ca1e68b32",
       "text": "The knight ran after passing; the knight kept possession.",
       "taggedText": "[conversational] The knight ran after passing; the knight kept possession.",
       "delivery": "normal",
-      "priority": 157
+      "priority": 151
     },
     {
       "id": "adam_16bdbf10308894c8",
       "text": "The knight ran after passing; the pawn kept possession.",
       "taggedText": "[conversational] The knight ran after passing; the pawn kept possession.",
       "delivery": "normal",
-      "priority": 158
-    },
-    {
-      "id": "adam_d5678a693fd82cdd",
-      "text": "The pawn had support along an open vertical file.",
-      "taggedText": "[conversational] The pawn had support along an open vertical file.",
-      "delivery": "normal",
-      "priority": 159
-    },
-    {
-      "id": "adam_65613cd19188494f",
-      "text": "The pawn had support along an open horizontal rank.",
-      "taggedText": "[conversational] The pawn had support along an open horizontal rank.",
-      "delivery": "normal",
-      "priority": 160
+      "priority": 152
     },
     {
       "id": "adam_236aa29080edca14",
       "text": "The pawn was one on one with the keeper!",
       "taggedText": "[excited] The pawn was one on one with the keeper!",
       "delivery": "urgent",
-      "priority": 161
+      "priority": 153
     },
     {
       "id": "adam_ae1ec6487236ac1e",
       "text": "The pawn could cross to a teammate in the middle.",
       "taggedText": "[conversational] The pawn could cross to a teammate in the middle.",
       "delivery": "normal",
-      "priority": 162
+      "priority": 154
     },
     {
       "id": "adam_6277dbc66cf36136",
       "text": "A cross into the middle, finding the pawn.",
       "taggedText": "[conversational] A cross into the middle, finding the pawn.",
       "delivery": "normal",
-      "priority": 163
+      "priority": 155
     },
     {
       "id": "adam_b6039934cd171f4c",
       "text": "A cutback into the middle, finding the pawn.",
       "taggedText": "[conversational] A cutback into the middle, finding the pawn.",
       "delivery": "normal",
-      "priority": 164
+      "priority": 156
     },
     {
       "id": "adam_53e02d71d73c7479",
       "text": "A through ball! The onside pawn had a route to collect.",
       "taggedText": "[excited] A through ball! The onside pawn had a route to collect.",
       "delivery": "urgent",
-      "priority": 165
+      "priority": 157
     },
     {
       "id": "adam_4087b7a93d514c69",
       "text": "A one-two! The pawn received the return after its run.",
       "taggedText": "[conversational] A one-two! The pawn received the return after its run.",
       "delivery": "normal",
-      "priority": 166
+      "priority": 158
     },
     {
       "id": "adam_0a524b3fc97a93c0",
       "text": "The pawn linked the passes, receiving and moving it on.",
       "taggedText": "[conversational] The pawn linked the passes, receiving and moving it on.",
       "delivery": "normal",
-      "priority": 167
+      "priority": 159
     },
     {
       "id": "adam_ddae5c2ce3102d1f",
       "text": "The pawn made a forward run and was available for a pass.",
       "taggedText": "[conversational] The pawn made a forward run and was available for a pass.",
       "delivery": "normal",
-      "priority": 168
+      "priority": 160
     },
     {
       "id": "adam_3dc60b873724dded",
       "text": "The pawn carried forward into space, beyond immediate tackling threats.",
       "taggedText": "[conversational] The pawn carried forward into space, beyond immediate tackling threats.",
       "delivery": "normal",
-      "priority": 169
+      "priority": 161
     },
     {
       "id": "adam_8ed906519618015b",
       "text": "The pawn ran after passing; the queen kept possession.",
       "taggedText": "[conversational] The pawn ran after passing; the queen kept possession.",
       "delivery": "normal",
-      "priority": 170
+      "priority": 162
     },
     {
       "id": "adam_739cd0c1672932f4",
       "text": "The pawn ran after passing; the rook kept possession.",
       "taggedText": "[conversational] The pawn ran after passing; the rook kept possession.",
       "delivery": "normal",
-      "priority": 171
+      "priority": 163
     },
     {
       "id": "adam_f812ccbb88bf25df",
       "text": "The pawn ran after passing; the bishop kept possession.",
       "taggedText": "[conversational] The pawn ran after passing; the bishop kept possession.",
       "delivery": "normal",
-      "priority": 172
+      "priority": 164
     },
     {
       "id": "adam_875b75c827035a98",
       "text": "The pawn ran after passing; the knight kept possession.",
       "taggedText": "[conversational] The pawn ran after passing; the knight kept possession.",
       "delivery": "normal",
-      "priority": 173
+      "priority": 165
     },
     {
       "id": "adam_45dc69dfdcad63f7",
       "text": "The pawn ran after passing; the pawn kept possession.",
       "taggedText": "[conversational] The pawn ran after passing; the pawn kept possession.",
       "delivery": "normal",
-      "priority": 174
+      "priority": 166
     },
     {
       "id": "adam_3bc75ba05832dd5f",
       "text": "The queen had the ball carrier under pressure!",
       "taggedText": "[excited] The queen had the ball carrier under pressure!",
       "delivery": "urgent",
-      "priority": 175
+      "priority": 167
     },
     {
       "id": "adam_203e7242192a1af5",
       "text": "The queen screened the passing lane to a teammate.",
       "taggedText": "[conversational] The queen screened the passing lane to a teammate.",
       "delivery": "normal",
-      "priority": 176
+      "priority": 168
     },
     {
       "id": "adam_7ab417fe8f6c2ea3",
       "text": "The queen screened a shooting lane. The attack faced traffic.",
       "taggedText": "[conversational] The queen screened a shooting lane. The attack faced traffic.",
       "delivery": "normal",
-      "priority": 177
+      "priority": 169
     },
     {
       "id": "adam_8f1742179ff99150",
       "text": "The queen closed down the carrier, moving into tackling range.",
       "taggedText": "[conversational] The queen closed down the carrier, moving into tackling range.",
       "delivery": "normal",
-      "priority": 178
+      "priority": 170
     },
     {
       "id": "adam_b46d528e21a06c3a",
       "text": "The queen cut the ball carrier’s passing lane to a teammate.",
       "taggedText": "[conversational] The queen cut the ball carrier’s passing lane to a teammate.",
       "delivery": "normal",
-      "priority": 179
+      "priority": 171
     },
     {
       "id": "adam_bcc5649009d6e467",
       "text": "The rook had the ball carrier under pressure!",
       "taggedText": "[excited] The rook had the ball carrier under pressure!",
       "delivery": "urgent",
-      "priority": 180
+      "priority": 172
     },
     {
       "id": "adam_2de8764aa2ac12a4",
       "text": "The rook screened the passing lane to a teammate.",
       "taggedText": "[conversational] The rook screened the passing lane to a teammate.",
       "delivery": "normal",
-      "priority": 181
+      "priority": 173
     },
     {
       "id": "adam_9a08d721a9199f5a",
       "text": "The rook screened a shooting lane. The attack faced traffic.",
       "taggedText": "[conversational] The rook screened a shooting lane. The attack faced traffic.",
       "delivery": "normal",
-      "priority": 182
+      "priority": 174
     },
     {
       "id": "adam_abd798b33f2055ef",
       "text": "The rook closed down the carrier, moving into tackling range.",
       "taggedText": "[conversational] The rook closed down the carrier, moving into tackling range.",
       "delivery": "normal",
-      "priority": 183
+      "priority": 175
     },
     {
       "id": "adam_da3f2333846c1cca",
       "text": "The rook cut the ball carrier’s passing lane to a teammate.",
       "taggedText": "[conversational] The rook cut the ball carrier’s passing lane to a teammate.",
       "delivery": "normal",
-      "priority": 184
+      "priority": 176
     },
     {
       "id": "adam_ee1709aed6e5d9a0",
       "text": "The bishop had the ball carrier under pressure!",
       "taggedText": "[excited] The bishop had the ball carrier under pressure!",
       "delivery": "urgent",
-      "priority": 185
+      "priority": 177
     },
     {
       "id": "adam_1796938a27e66c0f",
       "text": "The bishop screened the passing lane to a teammate.",
       "taggedText": "[conversational] The bishop screened the passing lane to a teammate.",
       "delivery": "normal",
-      "priority": 186
+      "priority": 178
     },
     {
       "id": "adam_0563fd4cddd322c4",
       "text": "The bishop screened a shooting lane. The attack faced traffic.",
       "taggedText": "[conversational] The bishop screened a shooting lane. The attack faced traffic.",
       "delivery": "normal",
-      "priority": 187
+      "priority": 179
     },
     {
       "id": "adam_4385ab5d05eb45b6",
       "text": "The bishop closed down the carrier, moving into tackling range.",
       "taggedText": "[conversational] The bishop closed down the carrier, moving into tackling range.",
       "delivery": "normal",
-      "priority": 188
+      "priority": 180
     },
     {
       "id": "adam_f2244def615a3c5f",
       "text": "The bishop cut the ball carrier’s passing lane to a teammate.",
       "taggedText": "[conversational] The bishop cut the ball carrier’s passing lane to a teammate.",
       "delivery": "normal",
-      "priority": 189
+      "priority": 181
     },
     {
       "id": "adam_66d009712f3cc31d",
       "text": "The knight had the ball carrier under pressure!",
       "taggedText": "[excited] The knight had the ball carrier under pressure!",
       "delivery": "urgent",
-      "priority": 190
+      "priority": 182
     },
     {
       "id": "adam_dadb6106503b17f0",
       "text": "The knight screened the passing lane to a teammate.",
       "taggedText": "[conversational] The knight screened the passing lane to a teammate.",
       "delivery": "normal",
-      "priority": 191
+      "priority": 183
     },
     {
       "id": "adam_07a8623d1112bfbb",
       "text": "The knight screened a shooting lane. The attack faced traffic.",
       "taggedText": "[conversational] The knight screened a shooting lane. The attack faced traffic.",
       "delivery": "normal",
-      "priority": 192
+      "priority": 184
     },
     {
       "id": "adam_ccb4db888de8dcb2",
       "text": "The knight closed down the carrier, moving into tackling range.",
       "taggedText": "[conversational] The knight closed down the carrier, moving into tackling range.",
       "delivery": "normal",
-      "priority": 193
+      "priority": 185
     },
     {
       "id": "adam_e1ee16b61a3d84e2",
       "text": "The knight cut the ball carrier’s passing lane to a teammate.",
       "taggedText": "[conversational] The knight cut the ball carrier’s passing lane to a teammate.",
       "delivery": "normal",
-      "priority": 194
+      "priority": 186
     },
     {
       "id": "adam_484778c729c5b93c",
       "text": "The pawn had the ball carrier under pressure!",
       "taggedText": "[excited] The pawn had the ball carrier under pressure!",
       "delivery": "urgent",
-      "priority": 195
+      "priority": 187
     },
     {
       "id": "adam_6ea1449c39c73675",
       "text": "The pawn screened the passing lane to a teammate.",
       "taggedText": "[conversational] The pawn screened the passing lane to a teammate.",
       "delivery": "normal",
-      "priority": 196
+      "priority": 188
     },
     {
       "id": "adam_0b957abdfa414128",
       "text": "The pawn screened a shooting lane. The attack faced traffic.",
       "taggedText": "[conversational] The pawn screened a shooting lane. The attack faced traffic.",
       "delivery": "normal",
-      "priority": 197
+      "priority": 189
     },
     {
       "id": "adam_8b8e836d5d99096d",
       "text": "The pawn closed down the carrier, moving into tackling range.",
       "taggedText": "[conversational] The pawn closed down the carrier, moving into tackling range.",
       "delivery": "normal",
-      "priority": 198
+      "priority": 190
     },
     {
       "id": "adam_fd17023174e84276",
       "text": "The pawn cut the ball carrier’s passing lane to a teammate.",
       "taggedText": "[conversational] The pawn cut the ball carrier’s passing lane to a teammate.",
       "delivery": "normal",
-      "priority": 199
+      "priority": 191
     },
     {
       "id": "adam_563080e0c00e57f9",
       "text": "The keeper had the ball carrier under pressure!",
       "taggedText": "[excited] The keeper had the ball carrier under pressure!",
       "delivery": "urgent",
-      "priority": 200
+      "priority": 192
     },
     {
       "id": "adam_be97eb6042ffb8c7",
       "text": "The keeper screened the passing lane to a teammate.",
       "taggedText": "[conversational] The keeper screened the passing lane to a teammate.",
       "delivery": "normal",
-      "priority": 201
+      "priority": 193
     },
     {
       "id": "adam_55851c68029ed97b",
       "text": "The keeper screened a shooting lane. The attack faced traffic.",
       "taggedText": "[conversational] The keeper screened a shooting lane. The attack faced traffic.",
       "delivery": "normal",
-      "priority": 202
+      "priority": 194
     },
     {
       "id": "adam_00c68982e1b94157",
       "text": "The keeper closed down the carrier, moving into tackling range.",
       "taggedText": "[conversational] The keeper closed down the carrier, moving into tackling range.",
       "delivery": "normal",
-      "priority": 203
+      "priority": 195
     },
     {
       "id": "adam_6527f3de9e3a2525",
       "text": "The keeper cut the ball carrier’s passing lane to a teammate.",
       "taggedText": "[conversational] The keeper cut the ball carrier’s passing lane to a teammate.",
       "delivery": "normal",
-      "priority": 204
+      "priority": 196
     },
     {
       "id": "adam_80903c0dcac2203b",
       "text": "The pawn had a free step for a diagonal challenge.",
       "taggedText": "[conversational] The pawn had a free step for a diagonal challenge.",
       "delivery": "normal",
-      "priority": 205
+      "priority": 197
     },
     {
       "id": "adam_5cfed6ac8bc968f5",
       "text": "A cross into the middle. The ball stayed loose.",
       "taggedText": "[conversational] A cross into the middle. The ball stayed loose.",
       "delivery": "normal",
-      "priority": 206
+      "priority": 198
     },
     {
       "id": "adam_20ec9f212f4fb7b1",
       "text": "A cutback into the middle. The ball stayed loose.",
       "taggedText": "[conversational] A cutback into the middle. The ball stayed loose.",
       "delivery": "normal",
-      "priority": 207
+      "priority": 199
     },
     {
       "id": "adam_cec76514625ff56a",
       "text": "They controlled midfield with connected pieces and more than one passing route.",
       "taggedText": "[conversational] They controlled midfield with connected pieces and more than one passing route.",
       "delivery": "normal",
-      "priority": 208
+      "priority": 200
     },
     {
       "id": "adam_875236c8ea0af3af",
       "text": "They built numbers on the wing, with a central receiver available for the cross.",
       "taggedText": "[conversational] They built numbers on the wing, with a central receiver available for the cross.",
       "delivery": "normal",
-      "priority": 209
+      "priority": 201
     },
     {
       "id": "adam_3e7e7e4d62151cad",
       "text": "The pawn used its free step, then won the ball with a diagonal tackle. A clever pressing trap!",
       "taggedText": "[excited] The pawn used its free step, then won the ball with a diagonal tackle. A clever pressing trap!",
       "delivery": "urgent",
-      "priority": 210
+      "priority": 202
     },
     {
       "id": "adam_7ee1040b4c0b9dfd",
       "text": "They won the ball back near where they lost it. Quick counter-pressing!",
       "taggedText": "[excited] They won the ball back near where they lost it. Quick counter-pressing!",
       "delivery": "urgent",
-      "priority": 211
+      "priority": 203
     },
     {
       "id": "adam_4d58565a7de98d0b",
       "text": "They cleared a shooting file for the rook, opening a direct route to goal.",
       "taggedText": "[conversational] They cleared a shooting file for the rook, opening a direct route to goal.",
       "delivery": "normal",
-      "priority": 212
+      "priority": 204
     },
     {
       "id": "adam_d410912deb9ab1e0",
       "text": "The keeper lifted the ball over a player and found a teammate beyond halfway.",
       "taggedText": "[conversational] The keeper lifted the ball over a player and found a teammate beyond halfway.",
       "delivery": "normal",
-      "priority": 213
+      "priority": 205
     },
     {
       "id": "adam_3d8ec8e261fcb347",
       "text": "They won it back and drove forward quickly on the counterattack!",
       "taggedText": "[excited] They won it back and drove forward quickly on the counterattack!",
       "delivery": "urgent",
-      "priority": 214
+      "priority": 206
     },
     {
       "id": "adam_6685518281329fe4",
       "text": "They switched the attack across the pitch, changing the passing angle.",
       "taggedText": "[conversational] They switched the attack across the pitch, changing the passing angle.",
       "delivery": "normal",
-      "priority": 215
+      "priority": 207
     },
     {
       "id": "adam_b52d46fa5a362752",
       "text": "Short passes linked different pieces and kept the ball moving.",
       "taggedText": "[conversational] Short passes linked different pieces and kept the ball moving.",
       "delivery": "normal",
-      "priority": 216
+      "priority": 208
     },
     {
       "id": "adam_17c3740cea58e090",
       "text": "They kept possession in the final third over several rounds.",
       "taggedText": "[conversational] They kept possession in the final third over several rounds.",
       "delivery": "normal",
-      "priority": 217
+      "priority": 209
     },
     {
       "id": "adam_f111ec504d36230f",
       "text": "They progressed through the centre, gaining ground through the central files.",
       "taggedText": "[conversational] They progressed through the centre, gaining ground through the central files.",
       "delivery": "normal",
-      "priority": 218
+      "priority": 210
     },
     {
       "id": "adam_243111b6373552d3",
       "text": "They advanced along the wing, making use of the outer files.",
       "taggedText": "[conversational] They advanced along the wing, making use of the outer files.",
       "delivery": "normal",
-      "priority": 219
+      "priority": 211
     },
     {
       "id": "adam_6724fb80c7304e45",
       "text": "They circulated the ball but made little progress over recent rounds.",
       "taggedText": "[conversational] They circulated the ball but made little progress over recent rounds.",
       "delivery": "normal",
-      "priority": 220
+      "priority": 212
     },
     {
       "id": "adam_e5b49cdd2f5f304b",
       "text": "Their attacking shape provided width on both sides of the pitch.",
       "taggedText": "[conversational] Their attacking shape provided width on both sides of the pitch.",
       "delivery": "normal",
-      "priority": 221
+      "priority": 213
     },
     {
       "id": "adam_0edb4f5c255d5df1",
       "text": "Their defensive block stayed compact, with several pieces protecting central space.",
       "taggedText": "[conversational] Their defensive block stayed compact, with several pieces protecting central space.",
       "delivery": "normal",
-      "priority": 222
+      "priority": 214
     },
     {
       "id": "adam_9b4e4f244fb37fb4",
       "text": "Their attack clustered centrally, leaving little width across the pitch.",
       "taggedText": "[conversational] Their attack clustered centrally, leaving little width across the pitch.",
       "delivery": "normal",
-      "priority": 223
+      "priority": 215
     },
     {
       "id": "adam_4ab3da7b7179ec47",
       "text": "Their defensive line stayed high, leaving space behind the outfield pieces.",
       "taggedText": "[conversational] Their defensive line stayed high, leaving space behind the outfield pieces.",
       "delivery": "normal",
-      "priority": 224
+      "priority": 216
     },
     {
       "id": "adam_ce4b17b11557402f",
       "text": "Their teammates remained far from the ball carrier over several rounds.",
       "taggedText": "[conversational] Their teammates remained far from the ball carrier over several rounds.",
       "delivery": "normal",
-      "priority": 225
+      "priority": 217
     },
     {
       "id": "adam_4479e59e3428ae52",
       "text": "Their pawns stayed across the front of the box, screening central space.",
       "taggedText": "[conversational] Their pawns stayed across the front of the box, screening central space.",
       "delivery": "normal",
-      "priority": 226
+      "priority": 218
     },
     {
       "id": "adam_1e9cf99f878b8e5d",
       "text": "Their shape kept pieces behind the ball while others advanced.",
       "taggedText": "[conversational] Their shape kept pieces behind the ball while others advanced.",
       "delivery": "normal",
-      "priority": 227
+      "priority": 219
     },
     {
       "id": "adam_761dd5d8e87fbece",
       "text": "The keeper made repeated saves and kept those shots out.",
       "taggedText": "[conversational] The keeper made repeated saves and kept those shots out.",
       "delivery": "normal",
-      "priority": 228
+      "priority": 220
     },
     {
       "id": "adam_009391c20a05c1bf",
       "text": "The queen gained ground with repeated forward carries.",
       "taggedText": "[conversational] The queen gained ground with repeated forward carries.",
       "delivery": "normal",
-      "priority": 229
+      "priority": 221
     },
     {
       "id": "adam_2be16d7197126c4d",
       "text": "The queen repeatedly moved the ball forward with completed passes.",
       "taggedText": "[conversational] The queen repeatedly moved the ball forward with completed passes.",
       "delivery": "normal",
-      "priority": 230
+      "priority": 222
     },
     {
       "id": "adam_df07ab6136d95ec0",
       "text": "The queen won possession with repeated successful tackles.",
       "taggedText": "[conversational] The queen won possession with repeated successful tackles.",
       "delivery": "normal",
-      "priority": 231
+      "priority": 223
     },
     {
       "id": "adam_8a0f101aeac345ed",
       "text": "The queen supplied repeated assists, helping turn attacks into goals.",
       "taggedText": "[conversational] The queen supplied repeated assists, helping turn attacks into goals.",
       "delivery": "normal",
-      "priority": 232
+      "priority": 224
     },
     {
       "id": "adam_31c19908922af0c4",
       "text": "The queen scored more than once, finishing those chances.",
       "taggedText": "[conversational] The queen scored more than once, finishing those chances.",
       "delivery": "normal",
-      "priority": 233
+      "priority": 225
     },
     {
       "id": "adam_24bd5f3cc95762cb",
       "text": "The queen lost possession repeatedly while trying to advance the ball.",
       "taggedText": "[conversational] The queen lost possession repeatedly while trying to advance the ball.",
       "delivery": "normal",
-      "priority": 234
+      "priority": 226
     },
     {
       "id": "adam_baace939f405d777",
       "text": "The rook gained ground with repeated forward carries.",
       "taggedText": "[conversational] The rook gained ground with repeated forward carries.",
       "delivery": "normal",
-      "priority": 235
+      "priority": 227
     },
     {
       "id": "adam_46b4338c9047c3c8",
       "text": "The rook repeatedly moved the ball forward with completed passes.",
       "taggedText": "[conversational] The rook repeatedly moved the ball forward with completed passes.",
       "delivery": "normal",
-      "priority": 236
+      "priority": 228
     },
     {
       "id": "adam_430a016a1aafb2cd",
       "text": "The rook won possession with repeated successful tackles.",
       "taggedText": "[conversational] The rook won possession with repeated successful tackles.",
       "delivery": "normal",
-      "priority": 237
+      "priority": 229
     },
     {
       "id": "adam_c1d1181c12d2d8b3",
       "text": "The rook supplied repeated assists, helping turn attacks into goals.",
       "taggedText": "[conversational] The rook supplied repeated assists, helping turn attacks into goals.",
       "delivery": "normal",
-      "priority": 238
+      "priority": 230
     },
     {
       "id": "adam_ee06b85a2571098d",
       "text": "The rook scored more than once, finishing those chances.",
       "taggedText": "[conversational] The rook scored more than once, finishing those chances.",
       "delivery": "normal",
-      "priority": 239
+      "priority": 231
     },
     {
       "id": "adam_400c5e2f9ef9daab",
       "text": "The rook lost possession repeatedly while trying to advance the ball.",
       "taggedText": "[conversational] The rook lost possession repeatedly while trying to advance the ball.",
       "delivery": "normal",
-      "priority": 240
+      "priority": 232
     },
     {
       "id": "adam_a54cf823d273c34b",
       "text": "The bishop gained ground with repeated forward carries.",
       "taggedText": "[conversational] The bishop gained ground with repeated forward carries.",
       "delivery": "normal",
-      "priority": 241
+      "priority": 233
     },
     {
       "id": "adam_1f05ff9e7dbefbb8",
       "text": "The bishop repeatedly moved the ball forward with completed passes.",
       "taggedText": "[conversational] The bishop repeatedly moved the ball forward with completed passes.",
       "delivery": "normal",
-      "priority": 242
+      "priority": 234
     },
     {
       "id": "adam_e213538f15c600c0",
       "text": "The bishop won possession with repeated successful tackles.",
       "taggedText": "[conversational] The bishop won possession with repeated successful tackles.",
       "delivery": "normal",
-      "priority": 243
+      "priority": 235
     },
     {
       "id": "adam_44a88c8fbecf14df",
       "text": "The bishop supplied repeated assists, helping turn attacks into goals.",
       "taggedText": "[conversational] The bishop supplied repeated assists, helping turn attacks into goals.",
       "delivery": "normal",
-      "priority": 244
+      "priority": 236
     },
     {
       "id": "adam_a7b2bd7a5388f9c5",
       "text": "The bishop scored more than once, finishing those chances.",
       "taggedText": "[conversational] The bishop scored more than once, finishing those chances.",
       "delivery": "normal",
-      "priority": 245
+      "priority": 237
     },
     {
       "id": "adam_6563bd1e6753f26e",
       "text": "The bishop lost possession repeatedly while trying to advance the ball.",
       "taggedText": "[conversational] The bishop lost possession repeatedly while trying to advance the ball.",
       "delivery": "normal",
-      "priority": 246
+      "priority": 238
     },
     {
       "id": "adam_6d832715812d6cd0",
       "text": "The knight gained ground with repeated forward carries.",
       "taggedText": "[conversational] The knight gained ground with repeated forward carries.",
       "delivery": "normal",
-      "priority": 247
+      "priority": 239
     },
     {
       "id": "adam_f52b31e7cfa39a13",
       "text": "The knight repeatedly moved the ball forward with completed passes.",
       "taggedText": "[conversational] The knight repeatedly moved the ball forward with completed passes.",
       "delivery": "normal",
-      "priority": 248
+      "priority": 240
     },
     {
       "id": "adam_fce97385b85c2eec",
       "text": "The knight won possession with repeated successful tackles.",
       "taggedText": "[conversational] The knight won possession with repeated successful tackles.",
       "delivery": "normal",
-      "priority": 249
+      "priority": 241
     },
     {
       "id": "adam_e7dc746eb26bef0d",
       "text": "The knight supplied repeated assists, helping turn attacks into goals.",
       "taggedText": "[conversational] The knight supplied repeated assists, helping turn attacks into goals.",
       "delivery": "normal",
-      "priority": 250
+      "priority": 242
     },
     {
       "id": "adam_f95cea5a633be486",
       "text": "The knight scored more than once, finishing those chances.",
       "taggedText": "[conversational] The knight scored more than once, finishing those chances.",
       "delivery": "normal",
-      "priority": 251
+      "priority": 243
     },
     {
       "id": "adam_d78955851d46c12f",
       "text": "The knight lost possession repeatedly while trying to advance the ball.",
       "taggedText": "[conversational] The knight lost possession repeatedly while trying to advance the ball.",
       "delivery": "normal",
-      "priority": 252
+      "priority": 244
     },
     {
       "id": "adam_7f56ea74c7145e71",
       "text": "The pawn gained ground with repeated forward carries.",
       "taggedText": "[conversational] The pawn gained ground with repeated forward carries.",
       "delivery": "normal",
-      "priority": 253
+      "priority": 245
     },
     {
       "id": "adam_43d2a8c6c5e9f57e",
       "text": "The pawn repeatedly moved the ball forward with completed passes.",
       "taggedText": "[conversational] The pawn repeatedly moved the ball forward with completed passes.",
       "delivery": "normal",
-      "priority": 254
+      "priority": 246
     },
     {
       "id": "adam_096b3268e2280049",
       "text": "The pawn won possession with repeated successful tackles.",
       "taggedText": "[conversational] The pawn won possession with repeated successful tackles.",
       "delivery": "normal",
-      "priority": 255
+      "priority": 247
     },
     {
       "id": "adam_51581457ad1eb44d",
       "text": "The pawn supplied repeated assists, helping turn attacks into goals.",
       "taggedText": "[conversational] The pawn supplied repeated assists, helping turn attacks into goals.",
       "delivery": "normal",
-      "priority": 256
+      "priority": 248
     },
     {
       "id": "adam_5f417f9c2109b8e3",
       "text": "The pawn scored more than once, finishing those chances.",
       "taggedText": "[conversational] The pawn scored more than once, finishing those chances.",
       "delivery": "normal",
-      "priority": 257
+      "priority": 249
     },
     {
       "id": "adam_22058665812d8af7",
       "text": "The pawn lost possession repeatedly while trying to advance the ball.",
       "taggedText": "[conversational] The pawn lost possession repeatedly while trying to advance the ball.",
       "delivery": "normal",
-      "priority": 258
+      "priority": 250
     },
     {
       "id": "adam_01405a9e00019f0e",
       "text": "Ivory have taken zero shots so far.",
       "taggedText": "[conversational] Ivory have taken zero shots so far.",
       "delivery": "normal",
-      "priority": 259
+      "priority": 251
     },
     {
       "id": "adam_1cb8f63a1e74cb9b",
       "text": "Ivory have taken one shot so far.",
       "taggedText": "[conversational] Ivory have taken one shot so far.",
       "delivery": "normal",
-      "priority": 260
+      "priority": 252
     },
     {
       "id": "adam_3c85946e3a5e90db",
       "text": "Ivory have taken two shots so far.",
       "taggedText": "[conversational] Ivory have taken two shots so far.",
       "delivery": "normal",
-      "priority": 261
+      "priority": 253
     },
     {
       "id": "adam_1882c0b187001825",
       "text": "Ivory have taken three shots so far.",
       "taggedText": "[conversational] Ivory have taken three shots so far.",
       "delivery": "normal",
-      "priority": 262
+      "priority": 254
     },
     {
       "id": "adam_a6e4bceba04501a9",
       "text": "Ivory have taken four shots so far.",
       "taggedText": "[conversational] Ivory have taken four shots so far.",
       "delivery": "normal",
-      "priority": 263
+      "priority": 255
     },
     {
       "id": "adam_8f14b71ababfcddd",
       "text": "Ivory have taken five shots so far.",
       "taggedText": "[conversational] Ivory have taken five shots so far.",
       "delivery": "normal",
-      "priority": 264
+      "priority": 256
     },
     {
       "id": "adam_514eb379e02a5263",
       "text": "Ivory have taken six shots so far.",
       "taggedText": "[conversational] Ivory have taken six shots so far.",
       "delivery": "normal",
-      "priority": 265
+      "priority": 257
     },
     {
       "id": "adam_abd3587721a28243",
       "text": "Ivory have taken seven shots so far.",
       "taggedText": "[conversational] Ivory have taken seven shots so far.",
       "delivery": "normal",
-      "priority": 266
+      "priority": 258
     },
     {
       "id": "adam_af0d37bafef02ebb",
       "text": "Ivory have taken eight shots so far.",
       "taggedText": "[conversational] Ivory have taken eight shots so far.",
       "delivery": "normal",
-      "priority": 267
+      "priority": 259
     },
     {
       "id": "adam_96345adf48cbd9bc",
       "text": "Ivory have taken nine shots so far.",
       "taggedText": "[conversational] Ivory have taken nine shots so far.",
       "delivery": "normal",
-      "priority": 268
+      "priority": 260
     },
     {
       "id": "adam_5b634327724e70b3",
       "text": "Ivory have taken ten shots so far.",
       "taggedText": "[conversational] Ivory have taken ten shots so far.",
       "delivery": "normal",
-      "priority": 269
+      "priority": 261
     },
     {
       "id": "adam_995209d7138a7b26",
       "text": "Ivory have taken eleven shots so far.",
       "taggedText": "[conversational] Ivory have taken eleven shots so far.",
       "delivery": "normal",
-      "priority": 270
+      "priority": 262
     },
     {
       "id": "adam_aa4bc28d4068531b",
       "text": "Ivory have taken twelve shots so far.",
       "taggedText": "[conversational] Ivory have taken twelve shots so far.",
       "delivery": "normal",
-      "priority": 271
+      "priority": 263
     },
     {
       "id": "adam_30739dd29bbe6468",
       "text": "Ivory have taken thirteen shots so far.",
       "taggedText": "[conversational] Ivory have taken thirteen shots so far.",
       "delivery": "normal",
-      "priority": 272
+      "priority": 264
     },
     {
       "id": "adam_781749800254fc30",
       "text": "Ivory have taken fourteen shots so far.",
       "taggedText": "[conversational] Ivory have taken fourteen shots so far.",
       "delivery": "normal",
-      "priority": 273
+      "priority": 265
     },
     {
       "id": "adam_4b6299beb92b8c77",
       "text": "Ivory have taken fifteen shots so far.",
       "taggedText": "[conversational] Ivory have taken fifteen shots so far.",
       "delivery": "normal",
-      "priority": 274
+      "priority": 266
     },
     {
       "id": "adam_1a5463b5a0b8546c",
       "text": "Ivory have taken sixteen shots so far.",
       "taggedText": "[conversational] Ivory have taken sixteen shots so far.",
       "delivery": "normal",
-      "priority": 275
+      "priority": 267
     },
     {
       "id": "adam_46d24cb0b615e831",
       "text": "Ivory have taken seventeen shots so far.",
       "taggedText": "[conversational] Ivory have taken seventeen shots so far.",
       "delivery": "normal",
-      "priority": 276
+      "priority": 268
     },
     {
       "id": "adam_2940816756123227",
       "text": "Ivory have taken eighteen shots so far.",
       "taggedText": "[conversational] Ivory have taken eighteen shots so far.",
       "delivery": "normal",
-      "priority": 277
+      "priority": 269
     },
     {
       "id": "adam_de1d57f2a71183d8",
       "text": "Ivory have taken nineteen shots so far.",
       "taggedText": "[conversational] Ivory have taken nineteen shots so far.",
       "delivery": "normal",
-      "priority": 278
+      "priority": 270
     },
     {
       "id": "adam_fd548673b203ec9c",
       "text": "Ivory have taken twenty shots so far.",
       "taggedText": "[conversational] Ivory have taken twenty shots so far.",
       "delivery": "normal",
-      "priority": 279
+      "priority": 271
     },
     {
       "id": "adam_cf2a3dbce0029b18",
       "text": "Ivory have taken twenty one shots so far.",
       "taggedText": "[conversational] Ivory have taken twenty one shots so far.",
       "delivery": "normal",
-      "priority": 280
+      "priority": 272
     },
     {
       "id": "adam_b7f754820a9af098",
       "text": "Ivory have taken twenty two shots so far.",
       "taggedText": "[conversational] Ivory have taken twenty two shots so far.",
       "delivery": "normal",
-      "priority": 281
+      "priority": 273
     },
     {
       "id": "adam_086adf77b8d3b239",
       "text": "Ivory have taken twenty three shots so far.",
       "taggedText": "[conversational] Ivory have taken twenty three shots so far.",
       "delivery": "normal",
-      "priority": 282
+      "priority": 274
     },
     {
       "id": "adam_a82c9be7d2d5bc68",
       "text": "Ivory have taken twenty four shots so far.",
       "taggedText": "[conversational] Ivory have taken twenty four shots so far.",
       "delivery": "normal",
-      "priority": 283
+      "priority": 275
     },
     {
       "id": "adam_4912118d1b523181",
       "text": "Ivory have taken twenty five shots so far.",
       "taggedText": "[conversational] Ivory have taken twenty five shots so far.",
       "delivery": "normal",
-      "priority": 284
+      "priority": 276
     },
     {
       "id": "adam_b3e6902ab2262011",
       "text": "Ivory have taken twenty six shots so far.",
       "taggedText": "[conversational] Ivory have taken twenty six shots so far.",
       "delivery": "normal",
-      "priority": 285
+      "priority": 277
     },
     {
       "id": "adam_7e7fee8e49c5bbed",
       "text": "Ivory have taken twenty seven shots so far.",
       "taggedText": "[conversational] Ivory have taken twenty seven shots so far.",
       "delivery": "normal",
-      "priority": 286
+      "priority": 278
     },
     {
       "id": "adam_b94d91add5ab6ecd",
       "text": "Ivory have taken twenty eight shots so far.",
       "taggedText": "[conversational] Ivory have taken twenty eight shots so far.",
       "delivery": "normal",
-      "priority": 287
+      "priority": 279
     },
     {
       "id": "adam_b5d4e162d3fcc599",
       "text": "Ivory have taken twenty nine shots so far.",
       "taggedText": "[conversational] Ivory have taken twenty nine shots so far.",
       "delivery": "normal",
-      "priority": 288
+      "priority": 280
     },
     {
       "id": "adam_976ec7e447a3166c",
       "text": "Ivory have taken thirty shots so far.",
       "taggedText": "[conversational] Ivory have taken thirty shots so far.",
       "delivery": "normal",
-      "priority": 289
+      "priority": 281
     },
     {
       "id": "adam_03c9eb60384c0283",
       "text": "Ivory have taken more than thirty shots so far.",
       "taggedText": "[conversational] Ivory have taken more than thirty shots so far.",
       "delivery": "normal",
-      "priority": 290
+      "priority": 282
     },
     {
       "id": "adam_035b9039825c8249",
       "text": "Ivory have had about zero percent of the ball.",
       "taggedText": "[conversational] Ivory have had about zero percent of the ball.",
       "delivery": "normal",
-      "priority": 291
+      "priority": 283
     },
     {
       "id": "adam_02ec6b72199bfd99",
       "text": "Ivory have had about five percent of the ball.",
       "taggedText": "[conversational] Ivory have had about five percent of the ball.",
       "delivery": "normal",
-      "priority": 292
+      "priority": 284
     },
     {
       "id": "adam_926b22f9ab18c7fd",
       "text": "Ivory have had about ten percent of the ball.",
       "taggedText": "[conversational] Ivory have had about ten percent of the ball.",
       "delivery": "normal",
-      "priority": 293
+      "priority": 285
     },
     {
       "id": "adam_45eaa1de06ccf9d4",
       "text": "Ivory have had about fifteen percent of the ball.",
       "taggedText": "[conversational] Ivory have had about fifteen percent of the ball.",
       "delivery": "normal",
-      "priority": 294
+      "priority": 286
     },
     {
       "id": "adam_13aee6323d0550b1",
       "text": "Ivory have had about twenty percent of the ball.",
       "taggedText": "[conversational] Ivory have had about twenty percent of the ball.",
       "delivery": "normal",
-      "priority": 295
+      "priority": 287
     },
     {
       "id": "adam_36bfd0142843670f",
       "text": "Ivory have had about twenty five percent of the ball.",
       "taggedText": "[conversational] Ivory have had about twenty five percent of the ball.",
       "delivery": "normal",
-      "priority": 296
+      "priority": 288
     },
     {
       "id": "adam_6acdf4adc614e065",
       "text": "Ivory have had about thirty percent of the ball.",
       "taggedText": "[conversational] Ivory have had about thirty percent of the ball.",
       "delivery": "normal",
-      "priority": 297
+      "priority": 289
     },
     {
       "id": "adam_3665671891f86d3d",
       "text": "Ivory have had about thirty five percent of the ball.",
       "taggedText": "[conversational] Ivory have had about thirty five percent of the ball.",
       "delivery": "normal",
-      "priority": 298
+      "priority": 290
     },
     {
       "id": "adam_bf86f355f60fe1cb",
       "text": "Ivory have had about forty percent of the ball.",
       "taggedText": "[conversational] Ivory have had about forty percent of the ball.",
       "delivery": "normal",
-      "priority": 299
+      "priority": 291
     },
     {
       "id": "adam_9c85f070896a908c",
       "text": "Ivory have had about forty five percent of the ball.",
       "taggedText": "[conversational] Ivory have had about forty five percent of the ball.",
       "delivery": "normal",
-      "priority": 300
+      "priority": 292
     },
     {
       "id": "adam_b7ff4832ef7568b4",
       "text": "Ivory have had about fifty percent of the ball.",
       "taggedText": "[conversational] Ivory have had about fifty percent of the ball.",
       "delivery": "normal",
-      "priority": 301
+      "priority": 293
     },
     {
       "id": "adam_7be206c99136d855",
       "text": "Ivory have had about fifty five percent of the ball.",
       "taggedText": "[conversational] Ivory have had about fifty five percent of the ball.",
       "delivery": "normal",
-      "priority": 302
+      "priority": 294
     },
     {
       "id": "adam_fc60f08bb689bef5",
       "text": "Ivory have had about sixty percent of the ball.",
       "taggedText": "[conversational] Ivory have had about sixty percent of the ball.",
       "delivery": "normal",
-      "priority": 303
+      "priority": 295
     },
     {
       "id": "adam_6b26126abfb333fe",
       "text": "Ivory have had about sixty five percent of the ball.",
       "taggedText": "[conversational] Ivory have had about sixty five percent of the ball.",
       "delivery": "normal",
-      "priority": 304
+      "priority": 296
     },
     {
       "id": "adam_1962ae857c974401",
       "text": "Ivory have had about seventy percent of the ball.",
       "taggedText": "[conversational] Ivory have had about seventy percent of the ball.",
       "delivery": "normal",
-      "priority": 305
+      "priority": 297
     },
     {
       "id": "adam_480c2bf6cd6a0e36",
       "text": "Ivory have had about seventy five percent of the ball.",
       "taggedText": "[conversational] Ivory have had about seventy five percent of the ball.",
       "delivery": "normal",
-      "priority": 306
+      "priority": 298
     },
     {
       "id": "adam_9c5d5058295f0c98",
       "text": "Ivory have had about eighty percent of the ball.",
       "taggedText": "[conversational] Ivory have had about eighty percent of the ball.",
       "delivery": "normal",
-      "priority": 307
+      "priority": 299
     },
     {
       "id": "adam_c66a91d41a2e6d97",
       "text": "Ivory have had about eighty five percent of the ball.",
       "taggedText": "[conversational] Ivory have had about eighty five percent of the ball.",
       "delivery": "normal",
-      "priority": 308
+      "priority": 300
     },
     {
       "id": "adam_9f3c42f2b2e1d760",
       "text": "Ivory have had about ninety percent of the ball.",
       "taggedText": "[conversational] Ivory have had about ninety percent of the ball.",
       "delivery": "normal",
-      "priority": 309
+      "priority": 301
     },
     {
       "id": "adam_c217ad529b7245cd",
       "text": "Ivory have had about ninety five percent of the ball.",
       "taggedText": "[conversational] Ivory have had about ninety five percent of the ball.",
       "delivery": "normal",
-      "priority": 310
+      "priority": 302
     },
     {
       "id": "adam_fbf2949a2da8dab1",
       "text": "Ivory have had about one hundred percent of the ball.",
       "taggedText": "[conversational] Ivory have had about one hundred percent of the ball.",
       "delivery": "normal",
-      "priority": 311
+      "priority": 303
     },
     {
       "id": "adam_c74143eea6975c20",
       "text": "Obsidian have taken zero shots so far.",
       "taggedText": "[conversational] Obsidian have taken zero shots so far.",
       "delivery": "normal",
-      "priority": 312
+      "priority": 304
     },
     {
       "id": "adam_1166eb255b9d2d52",
       "text": "Obsidian have taken one shot so far.",
       "taggedText": "[conversational] Obsidian have taken one shot so far.",
       "delivery": "normal",
-      "priority": 313
+      "priority": 305
     },
     {
       "id": "adam_718852376276debe",
       "text": "Obsidian have taken two shots so far.",
       "taggedText": "[conversational] Obsidian have taken two shots so far.",
       "delivery": "normal",
-      "priority": 314
+      "priority": 306
     },
     {
       "id": "adam_f04de85863e28003",
       "text": "Obsidian have taken three shots so far.",
       "taggedText": "[conversational] Obsidian have taken three shots so far.",
       "delivery": "normal",
-      "priority": 315
+      "priority": 307
     },
     {
       "id": "adam_26986d1d2e7abcf7",
       "text": "Obsidian have taken four shots so far.",
       "taggedText": "[conversational] Obsidian have taken four shots so far.",
       "delivery": "normal",
-      "priority": 316
+      "priority": 308
     },
     {
       "id": "adam_a40b1709ff4b136b",
       "text": "Obsidian have taken five shots so far.",
       "taggedText": "[conversational] Obsidian have taken five shots so far.",
       "delivery": "normal",
-      "priority": 317
+      "priority": 309
     },
     {
       "id": "adam_04340abbbe4966ee",
       "text": "Obsidian have taken six shots so far.",
       "taggedText": "[conversational] Obsidian have taken six shots so far.",
       "delivery": "normal",
-      "priority": 318
+      "priority": 310
     },
     {
       "id": "adam_1a45743b5cdca7a7",
       "text": "Obsidian have taken seven shots so far.",
       "taggedText": "[conversational] Obsidian have taken seven shots so far.",
       "delivery": "normal",
-      "priority": 319
+      "priority": 311
     },
     {
       "id": "adam_b6a46d046df0b7d0",
       "text": "Obsidian have taken eight shots so far.",
       "taggedText": "[conversational] Obsidian have taken eight shots so far.",
       "delivery": "normal",
-      "priority": 320
+      "priority": 312
     },
     {
       "id": "adam_a5debcceb39ad99a",
       "text": "Obsidian have taken nine shots so far.",
       "taggedText": "[conversational] Obsidian have taken nine shots so far.",
       "delivery": "normal",
-      "priority": 321
+      "priority": 313
     },
     {
       "id": "adam_d781281ac8d37161",
       "text": "Obsidian have taken ten shots so far.",
       "taggedText": "[conversational] Obsidian have taken ten shots so far.",
       "delivery": "normal",
-      "priority": 322
+      "priority": 314
     },
     {
       "id": "adam_cff08ecbd1989b15",
       "text": "Obsidian have taken eleven shots so far.",
       "taggedText": "[conversational] Obsidian have taken eleven shots so far.",
       "delivery": "normal",
-      "priority": 323
+      "priority": 315
     },
     {
       "id": "adam_f9bfb1da85b59429",
       "text": "Obsidian have taken twelve shots so far.",
       "taggedText": "[conversational] Obsidian have taken twelve shots so far.",
       "delivery": "normal",
-      "priority": 324
+      "priority": 316
     },
     {
       "id": "adam_8b4f9e97f834699b",
       "text": "Obsidian have taken thirteen shots so far.",
       "taggedText": "[conversational] Obsidian have taken thirteen shots so far.",
       "delivery": "normal",
-      "priority": 325
+      "priority": 317
     },
     {
       "id": "adam_0bc49e5d7514ca3a",
       "text": "Obsidian have taken fourteen shots so far.",
       "taggedText": "[conversational] Obsidian have taken fourteen shots so far.",
       "delivery": "normal",
-      "priority": 326
+      "priority": 318
     },
     {
       "id": "adam_977673e04f9fe76b",
       "text": "Obsidian have taken fifteen shots so far.",
       "taggedText": "[conversational] Obsidian have taken fifteen shots so far.",
       "delivery": "normal",
-      "priority": 327
+      "priority": 319
     },
     {
       "id": "adam_fcd9fba911b2ca8a",
       "text": "Obsidian have taken sixteen shots so far.",
       "taggedText": "[conversational] Obsidian have taken sixteen shots so far.",
       "delivery": "normal",
-      "priority": 328
+      "priority": 320
     },
     {
       "id": "adam_e3cc50644b275d96",
       "text": "Obsidian have taken seventeen shots so far.",
       "taggedText": "[conversational] Obsidian have taken seventeen shots so far.",
       "delivery": "normal",
-      "priority": 329
+      "priority": 321
     },
     {
       "id": "adam_865566d7a50c37e3",
       "text": "Obsidian have taken eighteen shots so far.",
       "taggedText": "[conversational] Obsidian have taken eighteen shots so far.",
       "delivery": "normal",
-      "priority": 330
+      "priority": 322
     },
     {
       "id": "adam_106b9fa9b97cb68a",
       "text": "Obsidian have taken nineteen shots so far.",
       "taggedText": "[conversational] Obsidian have taken nineteen shots so far.",
       "delivery": "normal",
-      "priority": 331
+      "priority": 323
     },
     {
       "id": "adam_3290259ccfafebc0",
       "text": "Obsidian have taken twenty shots so far.",
       "taggedText": "[conversational] Obsidian have taken twenty shots so far.",
       "delivery": "normal",
-      "priority": 332
+      "priority": 324
     },
     {
       "id": "adam_6b7cfa430e8519ad",
       "text": "Obsidian have taken twenty one shots so far.",
       "taggedText": "[conversational] Obsidian have taken twenty one shots so far.",
       "delivery": "normal",
-      "priority": 333
+      "priority": 325
     },
     {
       "id": "adam_ae43b1bbc2d1a424",
       "text": "Obsidian have taken twenty two shots so far.",
       "taggedText": "[conversational] Obsidian have taken twenty two shots so far.",
       "delivery": "normal",
-      "priority": 334
+      "priority": 326
     },
     {
       "id": "adam_210b9efd7d297a21",
       "text": "Obsidian have taken twenty three shots so far.",
       "taggedText": "[conversational] Obsidian have taken twenty three shots so far.",
       "delivery": "normal",
-      "priority": 335
+      "priority": 327
     },
     {
       "id": "adam_ebc7844212b4be30",
       "text": "Obsidian have taken twenty four shots so far.",
       "taggedText": "[conversational] Obsidian have taken twenty four shots so far.",
       "delivery": "normal",
-      "priority": 336
+      "priority": 328
     },
     {
       "id": "adam_ec580b3944acc791",
       "text": "Obsidian have taken twenty five shots so far.",
       "taggedText": "[conversational] Obsidian have taken twenty five shots so far.",
       "delivery": "normal",
-      "priority": 337
+      "priority": 329
     },
     {
       "id": "adam_c0159b8d0b1aef90",
       "text": "Obsidian have taken twenty six shots so far.",
       "taggedText": "[conversational] Obsidian have taken twenty six shots so far.",
       "delivery": "normal",
-      "priority": 338
+      "priority": 330
     },
     {
       "id": "adam_a11eead1cdfcd860",
       "text": "Obsidian have taken twenty seven shots so far.",
       "taggedText": "[conversational] Obsidian have taken twenty seven shots so far.",
       "delivery": "normal",
-      "priority": 339
+      "priority": 331
     },
     {
       "id": "adam_1d02f4f616911955",
       "text": "Obsidian have taken twenty eight shots so far.",
       "taggedText": "[conversational] Obsidian have taken twenty eight shots so far.",
       "delivery": "normal",
-      "priority": 340
+      "priority": 332
     },
     {
       "id": "adam_f34919ef81c5e6f7",
       "text": "Obsidian have taken twenty nine shots so far.",
       "taggedText": "[conversational] Obsidian have taken twenty nine shots so far.",
       "delivery": "normal",
-      "priority": 341
+      "priority": 333
     },
     {
       "id": "adam_653c612c16576304",
       "text": "Obsidian have taken thirty shots so far.",
       "taggedText": "[conversational] Obsidian have taken thirty shots so far.",
       "delivery": "normal",
-      "priority": 342
+      "priority": 334
     },
     {
       "id": "adam_2976b24e0304757f",
       "text": "Obsidian have taken more than thirty shots so far.",
       "taggedText": "[conversational] Obsidian have taken more than thirty shots so far.",
       "delivery": "normal",
-      "priority": 343
+      "priority": 335
     },
     {
       "id": "adam_c1a45f005320266c",
       "text": "Obsidian have had about zero percent of the ball.",
       "taggedText": "[conversational] Obsidian have had about zero percent of the ball.",
       "delivery": "normal",
-      "priority": 344
+      "priority": 336
     },
     {
       "id": "adam_ed3ae131cd1673fb",
       "text": "Obsidian have had about five percent of the ball.",
       "taggedText": "[conversational] Obsidian have had about five percent of the ball.",
       "delivery": "normal",
-      "priority": 345
+      "priority": 337
     },
     {
       "id": "adam_2e9cc9be5ffa1022",
       "text": "Obsidian have had about ten percent of the ball.",
       "taggedText": "[conversational] Obsidian have had about ten percent of the ball.",
       "delivery": "normal",
-      "priority": 346
+      "priority": 338
     },
     {
       "id": "adam_3f6e2676d8be625d",
       "text": "Obsidian have had about fifteen percent of the ball.",
       "taggedText": "[conversational] Obsidian have had about fifteen percent of the ball.",
       "delivery": "normal",
-      "priority": 347
+      "priority": 339
     },
     {
       "id": "adam_74fde76b6f888580",
       "text": "Obsidian have had about twenty percent of the ball.",
       "taggedText": "[conversational] Obsidian have had about twenty percent of the ball.",
       "delivery": "normal",
-      "priority": 348
+      "priority": 340
     },
     {
       "id": "adam_0054cfdb7e2a480e",
       "text": "Obsidian have had about twenty five percent of the ball.",
       "taggedText": "[conversational] Obsidian have had about twenty five percent of the ball.",
       "delivery": "normal",
-      "priority": 349
+      "priority": 341
     },
     {
       "id": "adam_5046b0c23b4e9323",
       "text": "Obsidian have had about thirty percent of the ball.",
       "taggedText": "[conversational] Obsidian have had about thirty percent of the ball.",
       "delivery": "normal",
-      "priority": 350
+      "priority": 342
     },
     {
       "id": "adam_0ef9cb4990de935c",
       "text": "Obsidian have had about thirty five percent of the ball.",
       "taggedText": "[conversational] Obsidian have had about thirty five percent of the ball.",
       "delivery": "normal",
-      "priority": 351
+      "priority": 343
     },
     {
       "id": "adam_c659a76ee22411af",
       "text": "Obsidian have had about forty percent of the ball.",
       "taggedText": "[conversational] Obsidian have had about forty percent of the ball.",
       "delivery": "normal",
-      "priority": 352
+      "priority": 344
     },
     {
       "id": "adam_c93b9d31e3334779",
       "text": "Obsidian have had about forty five percent of the ball.",
       "taggedText": "[conversational] Obsidian have had about forty five percent of the ball.",
       "delivery": "normal",
-      "priority": 353
+      "priority": 345
     },
     {
       "id": "adam_e7e79af5ba7d4930",
       "text": "Obsidian have had about fifty percent of the ball.",
       "taggedText": "[conversational] Obsidian have had about fifty percent of the ball.",
       "delivery": "normal",
-      "priority": 354
+      "priority": 346
     },
     {
       "id": "adam_646f43afaef18d46",
       "text": "Obsidian have had about fifty five percent of the ball.",
       "taggedText": "[conversational] Obsidian have had about fifty five percent of the ball.",
       "delivery": "normal",
-      "priority": 355
+      "priority": 347
     },
     {
       "id": "adam_bc27c32da3995cfd",
       "text": "Obsidian have had about sixty percent of the ball.",
       "taggedText": "[conversational] Obsidian have had about sixty percent of the ball.",
       "delivery": "normal",
-      "priority": 356
+      "priority": 348
     },
     {
       "id": "adam_089f1585d6e281c2",
       "text": "Obsidian have had about sixty five percent of the ball.",
       "taggedText": "[conversational] Obsidian have had about sixty five percent of the ball.",
       "delivery": "normal",
-      "priority": 357
+      "priority": 349
     },
     {
       "id": "adam_792d901c9d0f114d",
       "text": "Obsidian have had about seventy percent of the ball.",
       "taggedText": "[conversational] Obsidian have had about seventy percent of the ball.",
       "delivery": "normal",
-      "priority": 358
+      "priority": 350
     },
     {
       "id": "adam_a5a721adcffe3c5e",
       "text": "Obsidian have had about seventy five percent of the ball.",
       "taggedText": "[conversational] Obsidian have had about seventy five percent of the ball.",
       "delivery": "normal",
-      "priority": 359
+      "priority": 351
     },
     {
       "id": "adam_c3ebcd17cd21ca38",
       "text": "Obsidian have had about eighty percent of the ball.",
       "taggedText": "[conversational] Obsidian have had about eighty percent of the ball.",
       "delivery": "normal",
-      "priority": 360
+      "priority": 352
     },
     {
       "id": "adam_d8db493a223187d4",
       "text": "Obsidian have had about eighty five percent of the ball.",
       "taggedText": "[conversational] Obsidian have had about eighty five percent of the ball.",
       "delivery": "normal",
-      "priority": 361
+      "priority": 353
     },
     {
       "id": "adam_58471d4018d13bfb",
       "text": "Obsidian have had about ninety percent of the ball.",
       "taggedText": "[conversational] Obsidian have had about ninety percent of the ball.",
       "delivery": "normal",
-      "priority": 362
+      "priority": 354
     },
     {
       "id": "adam_3a40c72b59caab0c",
       "text": "Obsidian have had about ninety five percent of the ball.",
       "taggedText": "[conversational] Obsidian have had about ninety five percent of the ball.",
       "delivery": "normal",
-      "priority": 363
+      "priority": 355
     },
     {
       "id": "adam_ab04658b507a1366",
       "text": "Obsidian have had about one hundred percent of the ball.",
       "taggedText": "[conversational] Obsidian have had about one hundred percent of the ball.",
       "delivery": "normal",
-      "priority": 364
+      "priority": 356
+    },
+    {
+      "id": "adam_342e1698bdc8ef1c",
+      "text": "The queen had a clear pass to a nearby teammate.",
+      "taggedText": "[conversational] The queen had a clear pass to a nearby teammate.",
+      "delivery": "normal",
+      "priority": 357
+    },
+    {
+      "id": "adam_87826d763e7a39f3",
+      "text": "The rook had a clear pass to a nearby teammate.",
+      "taggedText": "[conversational] The rook had a clear pass to a nearby teammate.",
+      "delivery": "normal",
+      "priority": 358
+    },
+    {
+      "id": "adam_9fffa980717be789",
+      "text": "The bishop had a clear pass to a nearby teammate.",
+      "taggedText": "[conversational] The bishop had a clear pass to a nearby teammate.",
+      "delivery": "normal",
+      "priority": 359
+    },
+    {
+      "id": "adam_94cc6573f3c088d6",
+      "text": "The pawn had a clear pass to a nearby teammate.",
+      "taggedText": "[conversational] The pawn had a clear pass to a nearby teammate.",
+      "delivery": "normal",
+      "priority": 360
+    },
+    {
+      "id": "adam_c90138a2a6ac77f3",
+      "text": "Ivory maintained a high defensive line, leaving space behind their outfield players.",
+      "taggedText": "[conversational] Ivory maintained a high defensive line, leaving space behind their outfield players.",
+      "delivery": "normal",
+      "priority": 361
+    },
+    {
+      "id": "adam_7a728e2f3c268447",
+      "text": "Obsidian maintained a high defensive line, leaving space behind their outfield players.",
+      "taggedText": "[conversational] Obsidian maintained a high defensive line, leaving space behind their outfield players.",
+      "delivery": "normal",
+      "priority": 362
+    },
+    {
+      "id": "adam_5dd9f4414d220380",
+      "text": "The centre of the pitch was crowded, with both sides packing players around halfway.",
+      "taggedText": "[conversational] The centre of the pitch was crowded, with both sides packing players around halfway.",
+      "delivery": "normal",
+      "priority": 363
     }
   ],
   "events": {
@@ -3087,30 +3080,27 @@
       ]
     },
     "support_queen_vertical": {
-      "key": "support_queen_vertical",
-      "text": "The queen had support along an open vertical file.",
+      "text": "The queen had a clear pass to a nearby teammate.",
       "delivery": "normal",
       "snapshot": true,
       "recordingIds": [
-        "adam_28e8a27a50ffcf77"
+        "adam_342e1698bdc8ef1c"
       ]
     },
     "support_queen_horizontal": {
-      "key": "support_queen_horizontal",
-      "text": "The queen had support along an open horizontal rank.",
+      "text": "The queen had a clear pass to a nearby teammate.",
       "delivery": "normal",
       "snapshot": true,
       "recordingIds": [
-        "adam_b2ff6e4c7d951fde"
+        "adam_342e1698bdc8ef1c"
       ]
     },
     "support_queen_diagonal": {
-      "key": "support_queen_diagonal",
-      "text": "The queen had support along an open diagonal.",
+      "text": "The queen had a clear pass to a nearby teammate.",
       "delivery": "normal",
       "snapshot": true,
       "recordingIds": [
-        "adam_3155b525c9c95274"
+        "adam_342e1698bdc8ef1c"
       ]
     },
     "one_on_one_queen": {
@@ -3240,21 +3230,19 @@
       ]
     },
     "support_rook_vertical": {
-      "key": "support_rook_vertical",
-      "text": "The rook had support along an open vertical file.",
+      "text": "The rook had a clear pass to a nearby teammate.",
       "delivery": "normal",
       "snapshot": true,
       "recordingIds": [
-        "adam_5c8d4d0118bd8a35"
+        "adam_87826d763e7a39f3"
       ]
     },
     "support_rook_horizontal": {
-      "key": "support_rook_horizontal",
-      "text": "The rook had support along an open horizontal rank.",
+      "text": "The rook had a clear pass to a nearby teammate.",
       "delivery": "normal",
       "snapshot": true,
       "recordingIds": [
-        "adam_e971134f6d31dc96"
+        "adam_87826d763e7a39f3"
       ]
     },
     "one_on_one_rook": {
@@ -3384,12 +3372,11 @@
       ]
     },
     "support_bishop_diagonal": {
-      "key": "support_bishop_diagonal",
-      "text": "The bishop had support along an open diagonal.",
+      "text": "The bishop had a clear pass to a nearby teammate.",
       "delivery": "normal",
       "snapshot": true,
       "recordingIds": [
-        "adam_9f6b45fce77a323a"
+        "adam_9fffa980717be789"
       ]
     },
     "one_on_one_bishop": {
@@ -3654,21 +3641,19 @@
       ]
     },
     "support_pawn_vertical": {
-      "key": "support_pawn_vertical",
-      "text": "The pawn had support along an open vertical file.",
+      "text": "The pawn had a clear pass to a nearby teammate.",
       "delivery": "normal",
       "snapshot": true,
       "recordingIds": [
-        "adam_d5678a693fd82cdd"
+        "adam_94cc6573f3c088d6"
       ]
     },
     "support_pawn_horizontal": {
-      "key": "support_pawn_horizontal",
-      "text": "The pawn had support along an open horizontal rank.",
+      "text": "The pawn had a clear pass to a nearby teammate.",
       "delivery": "normal",
       "snapshot": true,
       "recordingIds": [
-        "adam_65613cd19188494f"
+        "adam_94cc6573f3c088d6"
       ]
     },
     "one_on_one_pawn": {
@@ -5746,6 +5731,31 @@
       "recordingIds": [
         "adam_ab04658b507a1366"
       ]
+    },
+    "shape_high_line_white": {
+      "text": "Ivory maintained a high defensive line, leaving space behind their outfield players.",
+      "delivery": "normal",
+      "snapshot": true,
+      "recordingIds": [
+        "adam_c90138a2a6ac77f3"
+      ]
+    },
+    "shape_high_line_black": {
+      "text": "Obsidian maintained a high defensive line, leaving space behind their outfield players.",
+      "delivery": "normal",
+      "snapshot": true,
+      "recordingIds": [
+        "adam_7a728e2f3c268447"
+      ]
+    },
+    "shape_midfield_crowded": {
+      "text": "The centre of the pitch was crowded, with both sides packing players around halfway.",
+      "delivery": "normal",
+      "snapshot": true,
+      "recordingIds": [
+        "adam_5dd9f4414d220380"
+      ]
     }
-  }
+  },
+  "updated": "2026-10-30"
 }

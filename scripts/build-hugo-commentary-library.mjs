@@ -35,7 +35,7 @@ for (const role of roles) {
     ? ['vertical', 'horizontal'] : role === 'bishop' ? ['diagonal'] : ['jump'];
   for (const lane of lanes) add(`support_${role}_${lane}`, lane === 'jump'
     ? 'The knight had an L-shaped jumping pass to a teammate.'
-    : `The ${role} had support along an open ${lane === 'vertical' ? 'vertical file' : lane === 'horizontal' ? 'horizontal rank' : 'diagonal'}.`);
+    : `The ${role} had a clear pass to a nearby teammate.`);
   add(`one_on_one_${role}`, `The ${role} was one on one with the keeper!`, 'urgent');
   add(`cross_support_${role}`, `The ${role} could cross to a teammate in the middle.`);
   add(`cross_${role}`, `A cross into the middle, finding the ${role}.`);
@@ -77,7 +77,7 @@ const ROLE = Object.freeze({Q:'queen', R:'rook', B:'bishop', N:'knight', P:'pawn
  * No names, hidden decisions, game search, random draws, or tactical inference occur here.
  * null means use the existing fallback rather than make an unsupported claim.
  */
-export function hugoCommentaryClip(line, state) {
+export function hugoCommentaryClip(line, state, catalog = HUGO_COMMENTARY_CLIPS) {
   if (!line || line.kind !== 'trend') return null;
   const alias = {enable:'hugo_enable', test:'hugo_test', demo:'hugo_demo'};
   let key = alias[line.clipKey] || line.clipKey;
@@ -123,7 +123,7 @@ export function hugoCommentaryClip(line, state) {
       }
     }
   }
-  const clip = HUGO_COMMENTARY_CLIPS[key];
+  const clip = catalog[key];
   return clip?.ready && clip.durationMs > 0 && clip.sha256 ? clip : null;
 }
 `;

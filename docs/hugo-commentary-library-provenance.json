@@ -1,12 +1,12 @@
 {
   "feature": "Prepared whole-sentence Hugo technical match commentary",
   "status": "complete",
-  "plannedClips": 302,
-  "completedClips": 302,
+  "plannedClips": 305,
+  "completedClips": 305,
   "buildStarted": "2026-10-19T23:45:18.219Z",
-  "updatedAt": "2026-10-28T03:07:39.685Z",
+  "updatedAt": "2026-10-30T17:27:21.181Z",
   "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
-  "scriptsSha256": "0bd721d1aa83c92c971e93bd5b7fbe36cae21c6d75dc876bb492c101fdff93ee",
+  "scriptsSha256": "846b15f2f9deef86f1d9786e2f290544e1384f5da261b2bc6be876978ebab823",
   "model": {
     "repository": "https://huggingface.co/KittenML/kitten-tts-nano-0.8-int8",
     "revision": "84781d74e29ee25217551556398b42f80593a813",
@@ -112,14 +112,14 @@
     "routine": "Exact project-authored trend texts from dist/commentary-clips.js",
     "tactical": {
       "file": "dist/commentary-tactics.js",
-      "definitionsSha256": "83b515d6e5c96e1ce4a809eaee6a52aad6a5ee05f4084728d01f771fd7882d13"
+      "definitionsSha256": "4c2d9fbb539672fca9e22cab85f779358de3a07e92e757ce6046b408e86be5a4"
     },
     "statistics": {
       "file": "dist/commentary-stats.js",
       "definitionsSha256": "9760b8aabf4471f58d8d6c8f183ac5c2aff6828e63d149d35b5e5c1dc4a144cc"
     },
     "generator": "scripts/build-hugo-commentary-library.mjs",
-    "generatorSha256": "db120b5690f931458fb7abcb6820a5326f2e4fc96c0d6185e34a6d66435bddb7"
+    "generatorSha256": "ac8aa51e0ceb9fd5378d87e74d8fd07d490347c257394a4f6f69e5c8ca0a78ad"
   },
   "selection": "Current fact IDs select past-tense piece-role snapshots; tactical evidence selects rolling-analysis sentences. Team-named statistics are whole sentences; no names, IDs or numbers are spliced into recordings. Shot/result/goal calls remain outside this library.",
   "workerInitialization": [
@@ -248,6 +248,26 @@
       "worker": 2,
       "initializationMs": 1612.333362,
       "passStarted": "2026-10-28T03:07:29.592Z"
+    },
+    {
+      "worker": 1,
+      "initializationMs": 2177.9559,
+      "passStarted": "2026-10-30T17:27:08.440Z"
+    },
+    {
+      "worker": 2,
+      "initializationMs": 2175.1173160000003,
+      "passStarted": "2026-10-30T17:27:08.440Z"
+    },
+    {
+      "worker": 3,
+      "initializationMs": 2179.7405900000003,
+      "passStarted": "2026-10-30T17:27:08.440Z"
+    },
+    {
+      "worker": 4,
+      "initializationMs": 2170.255037,
+      "passStarted": "2026-10-30T17:27:08.440Z"
     }
   ],
   "clips": [
@@ -337,87 +357,87 @@
     },
     {
       "key": "support_queen_vertical",
-      "text": "The queen had support along an open vertical file.",
+      "text": "The queen had a clear pass to a nearby teammate.",
       "delivery": "normal",
       "snapshot": true,
       "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
-      "sha256": "d01f3f00bbafbf035e5f76e0bc3aef78e79986bfd344cdd834e4a54c776f87f4",
-      "bytes": 24045,
-      "durationMs": 2976,
+      "sha256": "de6608965c736734406c1924f2d3707fc25011e791cf760ec939e1f66444e232",
+      "bytes": 21357,
+      "durationMs": 2640,
       "decodedAudio": {
-        "samples": 69940,
-        "rms": 0.10682725506954217,
-        "peak": 0.7957277894020081,
+        "samples": 62000,
+        "rms": 0.08934318604103288,
+        "peak": 0.799677848815918,
         "nonFinite": 0
       },
       "sampleRate": 24000,
       "channels": 1,
       "inputAudio": {
-        "samples": 69940,
-        "rms": 0.09659215037666141,
-        "peak": 0.7188429832458496,
+        "samples": 62000,
+        "rms": 0.10036526120291184,
+        "peak": 0.8959748148918152,
         "nonFinite": 0
       },
-      "inferenceMs": 1730.482989,
-      "modelDurationMs": 2914,
+      "inferenceMs": 2410.9543810000005,
+      "modelDurationMs": 2583,
       "voice": "Hugo",
       "file": "dist/audio/hugo/support_queen_vertical.mp3",
       "ready": true
     },
     {
       "key": "support_queen_horizontal",
-      "text": "The queen had support along an open horizontal rank.",
+      "text": "The queen had a clear pass to a nearby teammate.",
       "delivery": "normal",
       "snapshot": true,
       "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
-      "sha256": "b55378c21478d10bdc06808c643357f7ac80a9bf3bf56d6e2aa6c3fedf7d8a27",
-      "bytes": 25197,
-      "durationMs": 3120,
+      "sha256": "5be9787af4ea64a90b4e310154dbda222116ca35e7f111bd1bfce466122b1801",
+      "bytes": 21357,
+      "durationMs": 2640,
       "decodedAudio": {
-        "samples": 73199,
-        "rms": 0.1494005049112457,
-        "peak": 0.8037433624267578,
+        "samples": 61927,
+        "rms": 0.09192350090621397,
+        "peak": 0.797362208366394,
         "nonFinite": 0
       },
       "sampleRate": 24000,
       "channels": 1,
       "inputAudio": {
-        "samples": 73159,
-        "rms": 0.10154378845775237,
-        "peak": 0.7668004631996155,
+        "samples": 61927,
+        "rms": 0.10007052793695471,
+        "peak": 0.8677390813827515,
         "nonFinite": 0
       },
-      "inferenceMs": 1738.7828829999999,
-      "modelDurationMs": 3048,
+      "inferenceMs": 2418.098423,
+      "modelDurationMs": 2580,
       "voice": "Hugo",
       "file": "dist/audio/hugo/support_queen_horizontal.mp3",
       "ready": true
     },
     {
       "key": "support_queen_diagonal",
-      "text": "The queen had support along an open diagonal.",
+      "text": "The queen had a clear pass to a nearby teammate.",
       "delivery": "normal",
       "snapshot": true,
       "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
-      "sha256": "ffe3c44dea22a58c99dfacbfa7434158bb4fae525896801b153d503592037450",
-      "bytes": 25197,
-      "durationMs": 3120,
+      "sha256": "ddbc932ddee009817632e51fa6b886d6001a5b1205b231aa357234a65e032391",
+      "bytes": 21357,
+      "durationMs": 2640,
       "decodedAudio": {
-        "samples": 73294,
-        "rms": 0.1499414440351218,
-        "peak": 0.8060953617095947,
+        "samples": 61995,
+        "rms": 0.09036386920152485,
+        "peak": 0.7943830490112305,
         "nonFinite": 0
       },
       "sampleRate": 24000,
       "channels": 1,
       "inputAudio": {
-        "samples": 73294,
-        "rms": 0.10921682319783908,
-        "peak": 0.8066798448562622,
+        "samples": 61995,
+        "rms": 0.10037433993722003,
+        "peak": 0.8834050893783569,
         "nonFinite": 0
       },
-      "inferenceMs": 1744.9879539999997,
-      "modelDurationMs": 3054,
+      "inferenceMs": 2468.1042260000004,
+      "modelDurationMs": 2583,
       "voice": "Hugo",
       "file": "dist/audio/hugo/support_queen_diagonal.mp3",
       "ready": true
@@ -830,58 +850,58 @@
     },
     {
       "key": "support_rook_vertical",
-      "text": "The rook had support along an open vertical file.",
+      "text": "The rook had a clear pass to a nearby teammate.",
       "delivery": "normal",
       "snapshot": true,
       "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
-      "sha256": "f61662f7e5325109f261fe410559c9d91e7272999e209677b707bfe15ac2eee4",
-      "bytes": 25005,
-      "durationMs": 3096,
+      "sha256": "88713490375974e864653dbb78eb77906c317c00ce5d9aeb2e08251bbe4f46a2",
+      "bytes": 26157,
+      "durationMs": 3240,
       "decodedAudio": {
-        "samples": 73112,
-        "rms": 0.15407829005031318,
-        "peak": 0.8111192584037781,
+        "samples": 76200,
+        "rms": 0.14819875802348376,
+        "peak": 0.8144856691360474,
         "nonFinite": 0
       },
       "sampleRate": 24000,
       "channels": 1,
       "inputAudio": {
-        "samples": 73112,
-        "rms": 0.10659887363054586,
-        "peak": 0.8377699255943298,
+        "samples": 76200,
+        "rms": 0.10561104789035966,
+        "peak": 0.8735377192497253,
         "nonFinite": 0
       },
-      "inferenceMs": 1807.593018,
-      "modelDurationMs": 3046,
+      "inferenceMs": 2852.945758,
+      "modelDurationMs": 3175,
       "voice": "Hugo",
       "file": "dist/audio/hugo/support_rook_vertical.mp3",
       "ready": true
     },
     {
       "key": "support_rook_horizontal",
-      "text": "The rook had support along an open horizontal rank.",
+      "text": "The rook had a clear pass to a nearby teammate.",
       "delivery": "normal",
       "snapshot": true,
       "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
-      "sha256": "752def8b1f60c939a8a47d2807db136bdce867e651da38b728512c11d41bd87c",
-      "bytes": 24045,
-      "durationMs": 2976,
+      "sha256": "b34a260fb2d32300bb42a48c8e2bce3566399db1f2b80ca806954ccfa7b26ba6",
+      "bytes": 26157,
+      "durationMs": 3240,
       "decodedAudio": {
-        "samples": 70232,
-        "rms": 0.11362343997506213,
-        "peak": 0.7994117140769958,
+        "samples": 76200,
+        "rms": 0.14431658241399403,
+        "peak": 0.8056234121322632,
         "nonFinite": 0
       },
       "sampleRate": 24000,
       "channels": 1,
       "inputAudio": {
-        "samples": 70232,
-        "rms": 0.10716216930364572,
-        "peak": 0.7531126141548157,
+        "samples": 76200,
+        "rms": 0.10619607965691975,
+        "peak": 0.9823340177536011,
         "nonFinite": 0
       },
-      "inferenceMs": 1745.024766,
-      "modelDurationMs": 2926,
+      "inferenceMs": 2860.6687649999994,
+      "modelDurationMs": 3175,
       "voice": "Hugo",
       "file": "dist/audio/hugo/support_rook_horizontal.mp3",
       "ready": true
@@ -1294,29 +1314,29 @@
     },
     {
       "key": "support_bishop_diagonal",
-      "text": "The bishop had support along an open diagonal.",
+      "text": "The bishop had a clear pass to a nearby teammate.",
       "delivery": "normal",
       "snapshot": true,
       "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
-      "sha256": "7229b8b256a88f8828b24b82c90d4171a0b81a9edf85c9f7870d2eb8aca083d7",
-      "bytes": 25197,
-      "durationMs": 3120,
+      "sha256": "dd1b404794b0628dc80e83ea0dcdaf2aedd4f383bf0e4a857a321b88eaa66c56",
+      "bytes": 22509,
+      "durationMs": 2784,
       "decodedAudio": {
-        "samples": 73367,
-        "rms": 0.14689326763751392,
-        "peak": 0.8085479736328125,
+        "samples": 65527,
+        "rms": 0.09587066254812376,
+        "peak": 0.7975473403930664,
         "nonFinite": 0
       },
       "sampleRate": 24000,
       "channels": 1,
       "inputAudio": {
-        "samples": 73367,
-        "rms": 0.10934238737988765,
-        "peak": 0.8482242226600647,
+        "samples": 65527,
+        "rms": 0.10013996768936413,
+        "peak": 0.8337000012397766,
         "nonFinite": 0
       },
-      "inferenceMs": 1985.1545479999995,
-      "modelDurationMs": 3057,
+      "inferenceMs": 2570.1586310000002,
+      "modelDurationMs": 2730,
       "voice": "Hugo",
       "file": "dist/audio/hugo/support_bishop_diagonal.mp3",
       "ready": true
@@ -2164,58 +2184,58 @@
     },
     {
       "key": "support_pawn_vertical",
-      "text": "The pawn had support along an open vertical file.",
+      "text": "The pawn had a clear pass to a nearby teammate.",
       "delivery": "normal",
       "snapshot": true,
       "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
-      "sha256": "a15754ddb48f018c03dae0d04d37135ba8d9ce5cec07d968c4db16a37f8f62db",
-      "bytes": 25005,
-      "durationMs": 3096,
+      "sha256": "f44584d6c5b003803e343b56470ae8a7cdffd96b5283d1bb7cbee9e45a4a4b32",
+      "bytes": 22317,
+      "durationMs": 2760,
       "decodedAudio": {
-        "samples": 73117,
-        "rms": 0.14972721276328296,
-        "peak": 0.8099852800369263,
+        "samples": 64920,
+        "rms": 0.09879011064842427,
+        "peak": 0.7787811756134033,
         "nonFinite": 0
       },
       "sampleRate": 24000,
       "channels": 1,
       "inputAudio": {
-        "samples": 73117,
-        "rms": 0.10949084292682784,
-        "peak": 0.8012571930885315,
+        "samples": 64920,
+        "rms": 0.10024623776222417,
+        "peak": 0.8100256323814392,
         "nonFinite": 0
       },
-      "inferenceMs": 1735.6851669999996,
-      "modelDurationMs": 3047,
+      "inferenceMs": 2546.6696250000005,
+      "modelDurationMs": 2705,
       "voice": "Hugo",
       "file": "dist/audio/hugo/support_pawn_vertical.mp3",
       "ready": true
     },
     {
       "key": "support_pawn_horizontal",
-      "text": "The pawn had support along an open horizontal rank.",
+      "text": "The pawn had a clear pass to a nearby teammate.",
       "delivery": "normal",
       "snapshot": true,
       "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
-      "sha256": "81acb751a47e2fb9dc00a2247d8867b285f77d7aa4be972e2420576bc38be574",
-      "bytes": 30573,
-      "durationMs": 3792,
+      "sha256": "fd155e9f01ac765f721ab2a416dcbff8125adf0110ba87ec7ac28e191ba9f860",
+      "bytes": 22317,
+      "durationMs": 2760,
       "decodedAudio": {
-        "samples": 89416,
-        "rms": 0.15221703088112046,
-        "peak": 0.8129944801330566,
+        "samples": 64929,
+        "rms": 0.10006618047641767,
+        "peak": 0.7984454035758972,
         "nonFinite": 0
       },
       "sampleRate": 24000,
       "channels": 1,
       "inputAudio": {
-        "samples": 89416,
-        "rms": 0.11499982531346267,
-        "peak": 0.8052928447723389,
+        "samples": 64929,
+        "rms": 0.10057178104761533,
+        "peak": 0.8032946586608887,
         "nonFinite": 0
       },
-      "inferenceMs": 1969.3352749999995,
-      "modelDurationMs": 3726,
+      "inferenceMs": 2441.4170239999994,
+      "modelDurationMs": 2705,
       "voice": "Hugo",
       "file": "dist/audio/hugo/support_pawn_horizontal.mp3",
       "ready": true
@@ -4914,6 +4934,93 @@
       "modelDurationMs": 3952,
       "voice": "Hugo",
       "file": "dist/audio/hugo/shape_high_line.mp3",
+      "ready": true
+    },
+    {
+      "key": "shape_high_line_white",
+      "text": "Ivory maintained a high defensive line, leaving space behind their outfield players.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "ab280ef677f3916ef2d0bd1d6b5b37019806f2ac9070e743b5d9ae8a1925e402",
+      "bytes": 39021,
+      "durationMs": 4848,
+      "decodedAudio": {
+        "samples": 114795,
+        "rms": 0.1586987939866527,
+        "peak": 0.8183832168579102,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 114795,
+        "rms": 0.11271762649876842,
+        "peak": 0.9138447046279907,
+        "nonFinite": 0
+      },
+      "inferenceMs": 3839.1901070000004,
+      "modelDurationMs": 4783,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/shape_high_line_white.mp3",
+      "ready": true
+    },
+    {
+      "key": "shape_high_line_black",
+      "text": "Obsidian maintained a high defensive line, leaving space behind their outfield players.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "bd1a397daf9fd57e9ea5de908347df5b238f15bc7a9d9cd843db6397a84d72e1",
+      "bytes": 40365,
+      "durationMs": 5016,
+      "decodedAudio": {
+        "samples": 118936,
+        "rms": 0.1571697078879947,
+        "peak": 0.8108465075492859,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 118936,
+        "rms": 0.10949647462423363,
+        "peak": 0.8382049798965454,
+        "nonFinite": 0
+      },
+      "inferenceMs": 3897.82698,
+      "modelDurationMs": 4956,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/shape_high_line_black.mp3",
+      "ready": true
+    },
+    {
+      "key": "shape_midfield_crowded",
+      "text": "The centre of the pitch was crowded, with both sides packing players around halfway.",
+      "delivery": "normal",
+      "snapshot": true,
+      "identity": "2c60ebdd2bc90bf66f4ee7bd5407d477ec7a12c64544c2ab406d756c89bf7f4e",
+      "sha256": "164d3e6deb57648679c4dff06e45cda2638b49f94850f45ec5bd5a59f2093dfd",
+      "bytes": 37293,
+      "durationMs": 4632,
+      "decodedAudio": {
+        "samples": 109800,
+        "rms": 0.13998139045245686,
+        "peak": 0.8085380792617798,
+        "nonFinite": 0
+      },
+      "sampleRate": 24000,
+      "channels": 1,
+      "inputAudio": {
+        "samples": 109800,
+        "rms": 0.10813028066613954,
+        "peak": 0.9331384301185608,
+        "nonFinite": 0
+      },
+      "inferenceMs": 4021.1512789999997,
+      "modelDurationMs": 4575,
+      "voice": "Hugo",
+      "file": "dist/audio/hugo/shape_midfield_crowded.mp3",
       "ready": true
     },
     {

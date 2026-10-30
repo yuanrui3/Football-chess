@@ -102,8 +102,8 @@ test('Hugo voices a past-tense observation while retaining the exact current fac
   const caption = beginSpatial(h, state);
   assert.equal(h.jobs.length, 1);
   assert.equal(h.jobs[0].text, caption.text);
-  assert.equal(h.jobs[0].text, "Ivory's rook one supported the queen along an open vertical file.");
-  assert.equal(caption.event.spatial.text, "Ivory's rook one supports the queen along an open vertical file.");
+  assert.equal(h.jobs[0].text, "Ivory's queen had a clear pass to the nearby rook one.");
+  assert.equal(caption.event.spatial.text, "Ivory's queen has a clear pass to the nearby rook one.");
   assert.match(caption.text, /queen|rook/i);
   assert.equal(caption.event.snapshot, true);
   assert.equal(h.audios.length, 0); assert.equal(h.deviceCalls.length, 0);
@@ -301,21 +301,22 @@ test('moving the named supporter off its passing line cancels stale spatial spee
   h.controller.destroy();
 });
 
-test('a still-valid support pair cancels its old sentence when the passing lane changes shape', async () => {
+test('a generic passing-option call stays truthful when a still-clear lane changes direction', async () => {
   const before = position(), h = harness(), caption = beginSpatial(h, before), job = h.jobs[0];
   assert.equal(caption.event.spatial.type, 'support');
-  assert.match(caption.text, /vertical file/);
+  assert.match(caption.text, /clear pass/);
+  assert.doesNotMatch(caption.text, /open.*file|open.*diagonal/);
   const after = E.applyMove(before, 'white-R1', 9, 5);
   const changed = commentaryPositionFacts(after).find(fact => fact.key === caption.event.spatial.key);
   assert.ok(changed, 'the same carrier/supporter relationship still has an open native pass');
-  assert.match(changed.text, /diagonal/);
-  assert.notEqual(changed.text, caption.text, 'the previous vertical-file wording is no longer true');
+  assert.equal(changed.text, caption.event.spatial.text, 'the generic passing-option claim remains true');
   h.controller.observe(before, after);
-  assert.equal(h.local.cancels, 1);
+  assert.equal(h.local.cancels, 0);
   const textAfterMove = h.captions.at(-1).text;
-  job.settings.onPlaying(); job.resolve({spoken: true}); await flush();
+  job.settings.onPlaying();
   assert.equal(h.captions.at(-1).text, textAfterMove);
-  assert.equal(h.controller.getState().audioStatus === 'playing', false);
+  assert.equal(h.controller.getState().audioStatus, 'playing');
+  job.resolve({spoken:true});await flush();
   assert.equal(h.audios.length, 0); assert.equal(h.deviceCalls.length, 0);
   h.controller.destroy();
 });

@@ -1,10 +1,10 @@
 /** Public match commentary: read-only board geometry, never seeds, hidden targets or AI search. */
 import {COMMENTARY_CLIPS} from './commentary-clips.js?v=29cbe0d352e1';
-import {ADAM_EVENT_CLIPS, ADAM_TACTICAL_CLIPS} from './adam-commentary-clips.js?v=1ef9528198cd';
-import {HUGO_COMMENTARY_CLIPS, hugoCommentaryClip} from './hugo-commentary-clips.js?v=8c44ba9a4c7c';
+import {ADAM_EVENT_CLIPS, ADAM_TACTICAL_CLIPS} from './adam-commentary-clips.js?v=90a523129fe0';
+import {HUGO_COMMENTARY_CLIPS, hugoCommentaryClip} from './hugo-commentary-clips.js?v=85e8e7c77765';
 import {commentaryStatsLines} from './commentary-stats.js?v=510d8a0ad598';
-import {createTacticalCommentary} from './commentary-tactics.js?v=f7eecf4a3c13';
-import {commentaryPositionFacts, commentaryTransitionFact} from './commentary-spatial.js?v=b9e380b0851d';
+import {createTacticalCommentary} from './commentary-tactics.js?v=f10d1af5b577';
+import {commentaryPositionFacts, commentaryTransitionFact} from './commentary-spatial.js?v=3cf3e98a2222';
 const TEAM_NAMES = {white: 'Ivory', black: 'Obsidian'};
 const PIECE_NAMES = {K: 'keeper', Q: 'queen', R: 'rook', B: 'bishop', N: 'knight', P: 'pawn'};
 const NUMBERS = {'1': 'one', '2': 'two', '3': 'three'};
@@ -97,7 +97,7 @@ function restartLine(restart) {
 function localObservationText(line) {
   if (!line.spatial?.live) return line.text;
   switch (line.spatial.type) {
-    case 'support': return line.text.replace(' supports ', ' supported ').replace(' offers ', ' offered ');
+    case 'support': return line.text.replace(' supports ', ' supported ').replace(' offers ', ' offered ').replace(' has a clear pass ', ' had a clear pass ');
     case 'oneOnOne': return line.text.replace(' is one on one ', ' was one on one ');
     case 'pressing': return line.text.replace(' has the ', ' had the ');
     case 'pawnSetup': return line.text.replace(' can use ', ' could use ');

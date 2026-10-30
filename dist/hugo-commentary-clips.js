@@ -29,33 +29,33 @@ const entries = [
   },
   {
     "key": "support_queen_vertical",
-    "text": "The queen had support along an open vertical file.",
+    "text": "The queen had a clear pass to a nearby teammate.",
     "delivery": "normal",
     "snapshot": true,
     "voice": "Hugo",
     "ready": true,
-    "durationMs": 2976,
-    "sha256": "d01f3f00bbafbf035e5f76e0bc3aef78e79986bfd344cdd834e4a54c776f87f4"
+    "durationMs": 2640,
+    "sha256": "de6608965c736734406c1924f2d3707fc25011e791cf760ec939e1f66444e232"
   },
   {
     "key": "support_queen_horizontal",
-    "text": "The queen had support along an open horizontal rank.",
+    "text": "The queen had a clear pass to a nearby teammate.",
     "delivery": "normal",
     "snapshot": true,
     "voice": "Hugo",
     "ready": true,
-    "durationMs": 3120,
-    "sha256": "b55378c21478d10bdc06808c643357f7ac80a9bf3bf56d6e2aa6c3fedf7d8a27"
+    "durationMs": 2640,
+    "sha256": "5be9787af4ea64a90b4e310154dbda222116ca35e7f111bd1bfce466122b1801"
   },
   {
     "key": "support_queen_diagonal",
-    "text": "The queen had support along an open diagonal.",
+    "text": "The queen had a clear pass to a nearby teammate.",
     "delivery": "normal",
     "snapshot": true,
     "voice": "Hugo",
     "ready": true,
-    "durationMs": 3120,
-    "sha256": "ffe3c44dea22a58c99dfacbfa7434158bb4fae525896801b153d503592037450"
+    "durationMs": 2640,
+    "sha256": "ddbc932ddee009817632e51fa6b886d6001a5b1205b231aa357234a65e032391"
   },
   {
     "key": "one_on_one_queen",
@@ -199,23 +199,23 @@ const entries = [
   },
   {
     "key": "support_rook_vertical",
-    "text": "The rook had support along an open vertical file.",
+    "text": "The rook had a clear pass to a nearby teammate.",
     "delivery": "normal",
     "snapshot": true,
     "voice": "Hugo",
     "ready": true,
-    "durationMs": 3096,
-    "sha256": "f61662f7e5325109f261fe410559c9d91e7272999e209677b707bfe15ac2eee4"
+    "durationMs": 3240,
+    "sha256": "88713490375974e864653dbb78eb77906c317c00ce5d9aeb2e08251bbe4f46a2"
   },
   {
     "key": "support_rook_horizontal",
-    "text": "The rook had support along an open horizontal rank.",
+    "text": "The rook had a clear pass to a nearby teammate.",
     "delivery": "normal",
     "snapshot": true,
     "voice": "Hugo",
     "ready": true,
-    "durationMs": 2976,
-    "sha256": "752def8b1f60c939a8a47d2807db136bdce867e651da38b728512c11d41bd87c"
+    "durationMs": 3240,
+    "sha256": "b34a260fb2d32300bb42a48c8e2bce3566399db1f2b80ca806954ccfa7b26ba6"
   },
   {
     "key": "one_on_one_rook",
@@ -359,13 +359,13 @@ const entries = [
   },
   {
     "key": "support_bishop_diagonal",
-    "text": "The bishop had support along an open diagonal.",
+    "text": "The bishop had a clear pass to a nearby teammate.",
     "delivery": "normal",
     "snapshot": true,
     "voice": "Hugo",
     "ready": true,
-    "durationMs": 3120,
-    "sha256": "7229b8b256a88f8828b24b82c90d4171a0b81a9edf85c9f7870d2eb8aca083d7"
+    "durationMs": 2784,
+    "sha256": "dd1b404794b0628dc80e83ea0dcdaf2aedd4f383bf0e4a857a321b88eaa66c56"
   },
   {
     "key": "one_on_one_bishop",
@@ -659,23 +659,23 @@ const entries = [
   },
   {
     "key": "support_pawn_vertical",
-    "text": "The pawn had support along an open vertical file.",
+    "text": "The pawn had a clear pass to a nearby teammate.",
     "delivery": "normal",
     "snapshot": true,
     "voice": "Hugo",
     "ready": true,
-    "durationMs": 3096,
-    "sha256": "a15754ddb48f018c03dae0d04d37135ba8d9ce5cec07d968c4db16a37f8f62db"
+    "durationMs": 2760,
+    "sha256": "f44584d6c5b003803e343b56470ae8a7cdffd96b5283d1bb7cbee9e45a4a4b32"
   },
   {
     "key": "support_pawn_horizontal",
-    "text": "The pawn had support along an open horizontal rank.",
+    "text": "The pawn had a clear pass to a nearby teammate.",
     "delivery": "normal",
     "snapshot": true,
     "voice": "Hugo",
     "ready": true,
-    "durationMs": 3792,
-    "sha256": "81acb751a47e2fb9dc00a2247d8867b285f77d7aa4be972e2420576bc38be574"
+    "durationMs": 2760,
+    "sha256": "fd155e9f01ac765f721ab2a416dcbff8125adf0110ba87ec7ac28e191ba9f860"
   },
   {
     "key": "one_on_one_pawn",
@@ -1586,6 +1586,36 @@ const entries = [
     "ready": true,
     "durationMs": 4008,
     "sha256": "556299e3ed226fdec50f301e5752c845ecbcfcf271e45c3fff495db215445f2e"
+  },
+  {
+    "key": "shape_high_line_white",
+    "text": "Ivory maintained a high defensive line, leaving space behind their outfield players.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 4848,
+    "sha256": "ab280ef677f3916ef2d0bd1d6b5b37019806f2ac9070e743b5d9ae8a1925e402"
+  },
+  {
+    "key": "shape_high_line_black",
+    "text": "Obsidian maintained a high defensive line, leaving space behind their outfield players.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 5016,
+    "sha256": "bd1a397daf9fd57e9ea5de908347df5b238f15bc7a9d9cd843db6397a84d72e1"
+  },
+  {
+    "key": "shape_midfield_crowded",
+    "text": "The centre of the pitch was crowded, with both sides packing players around halfway.",
+    "delivery": "normal",
+    "snapshot": true,
+    "voice": "Hugo",
+    "ready": true,
+    "durationMs": 4632,
+    "sha256": "164d3e6deb57648679c4dff06e45cda2638b49f94850f45ec5bd5a59f2093dfd"
   },
   {
     "key": "shape_isolated",

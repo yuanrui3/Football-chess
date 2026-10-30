@@ -45,7 +45,7 @@ function sample(a,s,n=6) {
 const keys=(a,s)=>a.lines(s).map(l=>l.clipKey);
 
 test('script bank is finite, immutable and exact; calls are historical observations without ratings',()=>{
-  assert.equal(Object.keys(TACTICAL_COMMENTARY_SCRIPTS).length,51);
+  assert.equal(Object.keys(TACTICAL_COMMENTARY_SCRIPTS).length,54);
   assert.ok(Object.isFrozen(TACTICAL_COMMENTARY_SCRIPTS));
   for(const v of Object.values(TACTICAL_COMMENTARY_SCRIPTS)) {
     assert.ok(v.text&&['normal','urgent'].includes(v.delivery));

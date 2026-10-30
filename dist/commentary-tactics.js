@@ -23,6 +23,9 @@ const scripts = {
   shape_compact: {text:'Their defensive block stayed compact, with several pieces protecting central space.', delivery:'normal'},
   shape_crowded: {text:'Their attack clustered centrally, leaving little width across the pitch.', delivery:'normal'},
   shape_high_line: {text:'Their defensive line stayed high, leaving space behind the outfield pieces.', delivery:'normal'},
+  shape_high_line_white: {text:'Ivory maintained a high defensive line, leaving space behind their outfield players.', delivery:'normal'},
+  shape_high_line_black: {text:'Obsidian maintained a high defensive line, leaving space behind their outfield players.', delivery:'normal'},
+  shape_midfield_crowded: {text:'The centre of the pitch was crowded, with both sides packing players around halfway.', delivery:'normal'},
   shape_isolated: {text:'Their teammates remained far from the ball carrier over several rounds.', delivery:'normal'},
   shape_pawns: {text:'Their pawns stayed across the front of the box, screening central space.', delivery:'normal'},
   shape_balance: {text:'Their shape kept pieces behind the ball while others advanced.', delivery:'normal'},
@@ -56,8 +59,42 @@ const heldBy = (state,team) => !!state?.ball?.carrierId && state.pieces?.some(p=
   && p.team===team && p.x===state.ball.x && p.y===state.ball.y);
 const pieceRole = id => ROLES[/^(?:white|black)-([KQRBNP])/.exec(id || '')?.[1]];
 const PATTERN_LABELS = Object.freeze({tactic_control:'Midfield control',tactic_wing_overload:'Wing overload',
-  tactic_pawn_trap:'Pawn pressing trap',tactic_counterpress:'Counter-press',tactic_file_attack:'Open-file attack',
-  tactic_keeper_launch:'Keeper distribution'});
+  tactic_pawn_trap:'Pawn pressing trap',tactic_counterpress:'Counter-press',tactic_file_attack:'Cleared shooting lane',
+  tactic_keeper_launch:'Keeper distribution',shape_high_line_white:'Ivory high line',shape_high_line_black:'Obsidian high line',
+  shape_midfield_crowded:'Crowded midfield'});
+
+// Shape is independent of possession. Observe several completed rounds, then
+// check the current board again before offering (or starting) a recording.
+function validDistribution(state) {
+  const pieces=state?.pieces;
+  return activeState(state) && Array.isArray(pieces) && pieces.length>0
+    && pieces.every(p=>p && typeof p.id==='string' && isTeam(p.team) && ROLES[p.type] && point(p))
+    && new Set(pieces.map(p=>p.id)).size===pieces.length
+    && new Set(pieces.map(p=>`${p.x},${p.y}`)).size===pieces.length;
+}
+function distribution(state) {
+  if(!validDistribution(state)) return null;
+  const players=state.pieces.filter(p=>p.type!=='K'),high={};
+  for(const team of TEAMS) {
+    const side=players.filter(p=>p.team===team),back=Math.min(...side.map(p=>progress(team,p)));
+    const line=side.filter(p=>progress(team,p)<=back+2);
+    high[team]=side.length>=6 && back>=Math.floor((BOARD_HEIGHT-1)/2)-2
+      && line.length>=3 && Math.max(...line.map(p=>p.x))-Math.min(...line.map(p=>p.x))>=4
+      ? {minimumHomeDistance:back,linePieceIds:line.map(p=>p.id).sort()} : null;
+  }
+  const middle=players.filter(p=>central(p) && Math.abs(p.y-(BOARD_HEIGHT-1)/2)<=2);
+  const counts=Object.fromEntries(TEAMS.map(team=>[team,middle.filter(p=>p.team===team).length]));
+  return {high,crowded:players.length>=12 && middle.length>=8 && counts.white>=3 && counts.black>=3
+    ? {centralPlayers:middle.length,whitePlayers:counts.white,blackPlayers:counts.black} : null};
+}
+
+function clearRookShot(state,rookId,target) {
+  const rook=state.pieces?.find(p=>p.id===rookId && p.type==='R');
+  if(!rook || state.ball?.carrierId!==rook.id || state.attack!==rook.team) return false;
+  const kick=nativeKicks(state).find(k=>k.goal===rook.team && !k.offside && k.x===target.x && k.y===target.y);
+  return !!kick && Array.isArray(kick.shotModel?.blockerIds) && !kick.shotModel.blockerIds.length
+    && !state.pieces.some(p=>p.id!==rook.id && p.type!=='K' && p.x===rook.x && gain(rook.team,rook,p)>0);
+}
 
 // Read-only native previews preserve blockers, kicking patterns and kick-time
 // offside. Nearness alone is never evidence of a usable passing connection.
@@ -104,12 +141,15 @@ export function createTacticalCommentary() {
   let pawnSetup=null;
   const seen = new Set(), snapshots = [], possession = [], events = [];
   const patterns=[],losses=new Map();
+  const distributionHistory=[];
+  let lastDistributionRound=null;
   const goalSeen = new Set();
   function clearSequence() {snapshots.length=0; possession.length=0; turnover=null; lastRound=null;}
   function reset() {
     serial=round=0; lastRound=null; turnover=null; lastAttack=null;
     seen.clear(); snapshots.length=0; possession.length=0; events.length=0; goalSeen.clear();
     patterns.length=0;losses.clear();pawnSetup=null;
+    distributionHistory.length=0;lastDistributionRound=null;
   }
   function addEvent(type,pieceId,details={}) {
     if (!pieceRole(pieceId) || !isTeam(teamOf(pieceId))) return;
@@ -147,6 +187,9 @@ export function createTacticalCommentary() {
       && ['tackle','interception','move','save','blockedShot'].includes(a.type)
       && !(a.type==='save' && a.backPass) && point(after.ball) && heldBy(after,after.attack);
     if(resetSequence || before.restart || before.phase==='kickoff') {patterns.length=0;losses.clear();pawnSetup=null;}
+    if(resetSequence || before.restart || before.phase==='kickoff' || !validDistribution(after)) {
+      distributionHistory.length=0;lastDistributionRound=null;
+    }
     if(changed) patterns.length=0;
     for(const lost of losses.values()) if(before.attack!==lost.team && after.attack===before.attack && point(after.ball))
       lost.opponentAdvance=Math.max(lost.opponentAdvance,gain(before.attack,lost.from,after.ball));
@@ -181,7 +224,7 @@ export function createTacticalCommentary() {
       if(sameRook && after.ball.carrierId===rook.id && actor.x===rook.x && gain(rook.team,rook,actor)>0) {
         const oldShots=nativeKicks(before).filter(k=>k.goal===rook.team && !k.offside);
         const opened=nativeKicks(after).find(k=>k.goal===rook.team && !k.offside && !oldShots.some(old=>old.x===k.x && old.y===k.y));
-        if(opened) addPattern('tactic_file_attack',rook.team,{pieceId:rook.id,clearingPieceId:actor.id,
+        if(opened && clearRookShot(after,rook.id,opened)) addPattern('tactic_file_attack',rook.team,{pieceId:rook.id,clearingPieceId:actor.id,
           goalTarget:{x:opened.x,y:opened.y},clearedFrom:{...a.from},clearedTo:{...a.to}},89);
       }
     }
@@ -226,6 +269,10 @@ export function createTacticalCommentary() {
     if(completedRound && activeState(after)) {
       const roundKey=[after.turn,after.attack].join(':');
       if(roundKey!==lastRound) {round++;lastRound=roundKey;snapshots.push(snapshot(after,round,serial));}
+      if(validDistribution(after) && after.turn!==lastDistributionRound) {
+        lastDistributionRound=after.turn;distributionHistory.push(distribution(after));
+        if(distributionHistory.length>3) distributionHistory.shift();
+      }
     }
     while(snapshots.length>10) snapshots.shift();
     while(possession.length>18 || possession[0] && round-possession[0].round>6) possession.shift();
@@ -250,8 +297,16 @@ export function createTacticalCommentary() {
         && round-turnover.round>=1 && round-turnover.round<=3)
       add('tactic_counter',team,{rounds:round-turnover.round,forwardGain:gain(team,turnover.from,state.ball),turnoverSerial:turnover.serial},100);
     const passes=possession.filter(p=>p.team===team && round-p.round<=4 && p.receiverId),lastPass=passes.at(-1);
-    for(const pattern of patterns) if(pattern.team===team)
+    for(const pattern of patterns) if(pattern.team===team && (pattern.key!=='tactic_file_attack'
+        || clearRookShot(state,pattern.evidence.pieceId,pattern.evidence.goalTarget)))
       add(pattern.key,team,{...pattern.evidence,patternSerial:pattern.serial},pattern.rank);
+    const currentDistribution=distribution(state);
+    if(distributionHistory.length===3 && currentDistribution) {
+      for(const side of TEAMS) if(currentDistribution.high[side] && distributionHistory.every(s=>s.high[side]))
+        add(`shape_high_line_${side}`,side,{rounds:3,...currentDistribution.high[side]},78);
+      if(currentDistribution.crowded && distributionHistory.every(s=>s.crowded))
+        add('shape_midfield_crowded',null,{rounds:3,...currentDistribution.crowded},79);
+    }
     const lastThree=recent.slice(-3),middle=s=>central(s.ball) && progress(team,s.ball)>=5 && progress(team,s.ball)<=11;
     const connected=passes.slice(-3);
     if(lastThree.length===3 && lastThree.every(s=>heldBy(s,team) && middle(s) && s.geometry.outletIds.length>=2)
@@ -283,15 +338,13 @@ export function createTacticalCommentary() {
       const attackPieces=s=>s.pieces.filter(p=>p.team===team && p.type!=='K');
       const defendTeam=team==='white'?'black':'white';
       const defendPieces=s=>s.pieces.filter(p=>p.team===defendTeam && p.type!=='K');
-      const stable=predicate=>recent.length>=6 && recent.every(predicate);
+      const stable=predicate=>recent.length>=6 && recent.every(predicate) && predicate(state);
       if(stable(s=>{const advanced=attackPieces(s).filter(p=>progress(team,p)>=BOARD_HEIGHT/2);return advanced.some(p=>flank(p)<0)&&advanced.some(p=>flank(p)>0);}))
         add('shape_wide',team,{rounds:6},67);
       if(stable(s=>{const advanced=attackPieces(s).filter(p=>progress(team,p)>=BOARD_HEIGHT/2);return advanced.length>=4&&advanced.every(central);}))
         add('shape_crowded',team,{rounds:6},68);
       if(stable(s=>{const pieces=defendPieces(s).filter(p=>progress(defendTeam,p)<=8);return pieces.length>=4&&pieces.filter(central).length>=4&&Math.max(...pieces.map(p=>p.y))-Math.min(...pieces.map(p=>p.y))<=4&&Math.max(...pieces.map(p=>p.x))-Math.min(...pieces.map(p=>p.x))<=6;}))
         add('shape_compact',defendTeam,{rounds:6},64);
-      if(stable(s=>{const pieces=defendPieces(s);return pieces.length>=6&&pieces.every(p=>progress(defendTeam,p)>=6);}))
-        add('shape_high_line',defendTeam,{rounds:6,minimumHomeDistance:6},69);
       if(stable(s=>{const teammates=attackPieces(s).filter(p=>p.id!==s.ball.carrierId);return heldBy(s,team)&&teammates.length>0&&teammates.every(p=>distance(p,s.ball)>4);}))
         add('shape_isolated',team,{rounds:6,minimumTeammateDistance:5},70);
       if(stable(s=>{const pawns=s.pieces.filter(p=>p.team===defendTeam&&p.type==='P'&&BOX_FILES.includes(p.x)
@@ -316,7 +369,7 @@ export function createTacticalCommentary() {
       if(count('goal')>=2)add(`performance_finisher_${role}`,callTeam,{pieceId,goals:count('goal')},91);
       if(count('loss')>=3)add(`performance_wasteful_${role}`,callTeam,{pieceId,forwardPossessionLosses:count('loss')},60);
     }
-    return output.sort((a,b)=>b.tactical.rank-a.tactical.rank||a.clipKey.localeCompare(b.clipKey)||a.team.localeCompare(b.team));
+    return output.sort((a,b)=>b.tactical.rank-a.tactical.rank||a.clipKey.localeCompare(b.clipKey)||String(a.team).localeCompare(String(b.team)));
   }
   return {observe,lines,reset};
 }
