@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#214f3b">
+  <meta name="description" content="Compare three male Football Chess commentary voices across tactical analysis, danger, saves and goals. Twelve complete recorded calls.">
+  <title>Football Chess · Commentary audition</title>
+  <link rel="stylesheet" href="style.css?v=7e245ae5eca4">
+  <link rel="stylesheet" href="commentary-audition.css?v=153a8294068b">
+</head>
+<body class="audition-page">
+<header class="masthead">
+  <a class="brand" href="./" aria-label="Football Chess match"><span class="brand-mark">F<span>♞</span>C</span><span>FOOTBALL<br>CHESS</span></a>
+  <div class="masthead-tag">READ THE GAME.<br><b>FEEL THE MOMENT.</b></div>
+  <a class="text-button audition-back" href="./">← Back to match</a>
+</header>
+<main class="audition-main">
+  <section class="audition-intro">
+    <div><p class="eyebrow">THE COMMENTARY BOX · VOICE AUDITION</p><h1>A voice for every<br>turn of the match.</h1><p class="audition-lead">Measured when the play needs reading. Urgent when the defence opens. Full of feeling when the finish arrives.</p></div>
+    <div class="audition-count"><strong>12</strong><span>COMPLETE CALLS<br>3 MALE VOICES · 4 SITUATIONS</span></div>
+  </section>
+  <section class="audition-listen" aria-labelledby="listenTitle">
+    <div><p class="eyebrow">COMPARE THE SAME SCRIPT</p><h2 id="listenTitle">Listen for the change in energy.</h2><p>These are scripted audition situations. Choose a voice, then hear its four calls in order. Every sentence plays to its natural end, with a three-second gap between calls.</p></div>
+    <div class="audition-sequence-controls"><label class="field-label" for="auditionVoice">VOICE TO COMPARE</label><div class="select-wrap"><select id="auditionVoice" aria-label="Voice to compare"></select></div><div class="audition-buttons"><button class="primary" id="playSequence" type="button">Play four-call sample <span>→</span></button><button class="utility-button" id="stopAudition" type="button" disabled>Stop</button></div></div>
+  </section>
+  <section class="audition-player" aria-label="Audition player">
+    <div class="audition-now"><p id="auditionStatus" class="eyebrow" role="status" aria-live="polite">READY WHEN YOU ARE</p><p id="auditionCaption">Pick any call below, or play a full voice sample.</p></div>
+    <audio id="auditionAudio" controls preload="none" aria-label="Selected commentary recording">Your browser does not support audio playback. Use a recording’s download link instead.</audio>
+  </section>
+  <p id="auditionError" class="audition-error" role="alert" hidden></p>
+  <div id="auditionVoices" class="audition-voices" aria-label="Twelve commentary recordings"></div>
+  <section class="audition-notes"><div><p class="eyebrow">WHAT TO LISTEN FOR</p><h2>Analysis. Anticipation. Release.</h2></div><div><p>Compare clarity on tactical phrases, the lift before a dangerous chance, and whether the goal call sounds earned. The same words make differences in delivery easier to hear.</p><p>This audition does not change your live match commentator. In-game commentary remains optional and available only at Relaxed · 3 seconds. A chosen voice can become a larger recorded library after review.</p></div></section>
+  <noscript><p class="audition-error">Enable JavaScript to compare the recorded calls.</p></noscript>
+</main>
+<footer><span>FOOTBALL × CHESS</span><p>Read the shape. Find the finish. Hear the moment.</p><a href="./">Return to the match ↗</a></footer>
+<script type="module" src="commentary-audition.js?v=31ff59b4088c"></script>
+</body>
+</html>

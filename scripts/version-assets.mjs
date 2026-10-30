@@ -85,6 +85,15 @@ app=app.replace(/from ['"]\.\/paradee-speech\.js(?:\?v=[^'"]+)?['"]/,`from './pa
 app=app.replace(/from ['"]\.\/evaluation\.js(?:\?v=[^'"]+)?['"]/,`from './evaluation.js?v=${evaluationVersion}'`);
 await writeFile(asset('app.js'),app);
 const appVersion=hash(app),cssVersion=hash(await readFile(asset('style.css'),'utf8'));
+// Keep the self-contained voice audition on the same cache-safe asset graph.
+const auditionClipsVersion=hash(await readFile(asset('commentary-audition-clips.js'),'utf8'));
+const auditionVersion=await versionImports('commentary-audition.js',{'commentary-audition-clips.js':auditionClipsVersion});
+const auditionCssVersion=hash(await readFile(asset('commentary-audition.css'),'utf8'));
+let auditionHtml=await readFile(asset('commentary-audition.html'),'utf8');
+auditionHtml=auditionHtml.replace(/href="style\.css(?:\?v=[^"]+)?"/,`href="style.css?v=${cssVersion}"`)
+  .replace(/href="commentary-audition\.css(?:\?v=[^"]+)?"/,`href="commentary-audition.css?v=${auditionCssVersion}"`)
+  .replace(/src="commentary-audition\.js(?:\?v=[^"]+)?"/,`src="commentary-audition.js?v=${auditionVersion}"`);
+await writeFile(asset('commentary-audition.html'),auditionHtml);
 let html=await readFile(asset('index.html'),'utf8');
 html=html.replace(/href="style\.css(?:\?v=[^"]+)?"/,`href="style.css?v=${cssVersion}"`)
   .replace(/href="player-ratings\.css(?:\?v=[^"]+)?"/,`href="player-ratings.css?v=${ratingsCssVersion}"`)

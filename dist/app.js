@@ -1,8 +1,8 @@
 import {createGame, legalMoves, legalKicks, disguisedShotTargets, applyMove, applyKick, skipMove, chooseAIAction, currentTeam, cornerTakers, selectCornerTaker, BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, BOX_FILES, BOX_DEPTH, CENTRAL_GOAL_FILES, MIDFIELD_RANK, inOwnBox, canOccupySquare, isBox, isGoalMouth, shotChance, shotModel, offsideInfo, offsideFlaggedIds, LONG_TACKLE_RANGE, DRIBBLE_RANGE, FOUL_RULE, STALLING_RULE, PACE_RULE, ACTION_SECONDS, actionTimeout, progressInfo, paceInfo, positionActions, normalizeGame, FORMATION_PRESETS, setStartingFormation} from './engine.js?v=8a5f49b765ee';
 import {createMatchClock, restoreMatchClock, tickMatchClock, settleMatchClock, rewindMatchClock} from './match-clock.js?v=1fa32f5eed6c';
 import {buildGoalReplay, restoreGoalReplay, createReplayPlayer} from './goal-replay.js?v=5928905d59ce';
-import {createMatchStats, restoreMatchStats, recordMatchTransition, addPossessionTime, matchStatsSummary, shortPieceId} from './match-stats.js?v=1494cb28cdaf';
-import {playerRatingsSummary} from './player-ratings.js?v=33c693c9f6b6';
+import {createMatchStats, restoreMatchStats, recordMatchTransition, addPossessionTime, matchStatsSummary, shortPieceId} from './match-stats.js?v=581cc6138571';
+import {playerRatingsSummary} from './player-ratings.js?v=dd82ea8417c0';
 import {renderPlayerRatings} from './player-ratings-view.js?v=b80c606821f7';
 import {createCommentary} from './commentary.js?v=0298a11313a9';
 import {createParadeeSpeech} from './paradee-speech.js?v=e9d0fc794cfb';

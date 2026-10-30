@@ -88,10 +88,74 @@ candidate. Unpredictable scatter and a knight losing a native 50% challenge
 alone are not labelled as clear errors. This deliberately omits ambiguous
 chains instead of inventing individual blame.
 
-New matches use rating ledger version 2. Valid version-1 saves retain their
-earlier formula and expose `legacyMethod: true`; continuing such a match keeps
-one consistent method. The view labels it as an earlier method. Missing or
-invalid rating history is separately labelled partial.
+New matches now use rating ledger version 3, described below. Valid version-1
+and version-2 saves retain their earlier formulas and expose `legacyMethod:
+true`; continuing such a match keeps one consistent method. The view labels it
+as an earlier method. Missing or invalid rating history is separately labelled
+partial.
+
+## Method 3: keeper performance and useful positioning
+
+The method-2 audit exposed two ways keepers could be underrated. A useful
+ordinary reposition could lose merit just because another legal square would
+have improved coverage still more. Meanwhile keeper shot-stopping merit used
+an unnormalized 0.80 multiplier on xG prevented; useful outfield contributions
+used much smaller role allowances, and the shared rating curve penalizes a
+negative balance more steeply than it rewards a positive one.
+
+Method 3 changes only keeper assessment:
+
+- Ordinary off-ball keeper moves earn no positive execution merit. A move
+  loses merit only if it actually increases the opponent's immediate shooting
+  threat relative to holding position. Giving up a better possible improvement
+  is no longer treated as a missed save. Leaving the box or opening the goal
+  can still lose credit. Repeated repositioning cannot farm positive grades.
+- Shot reactions are still compared with the best legal keeper reaction.
+  Difficulty caused by choosing worse coverage is removed from assessed xG
+  prevention, and the existing explicit reaction penalty remains.
+- The cumulative assessed xG balance is worth `1.8 * balance` when positive,
+  and `0.60 * balance` when negative. Each shot records the change in that
+  cumulative value. This rewards useful stops more visibly while tempering
+  stochastic concessions. Applying the weights to the cumulative balance
+  prevents several routine saves from hiding below-expectation goalkeeping.
+
+Factual on-target xG faced, goals conceded and signed xG prevented are
+unchanged. The extra signed `keeperAdjustedXGPrevented` counter persists the
+assessment after removing self-created difficulty. Save count itself adds no
+flat grade bonus. An 80%-xG penalty save receives much more credit than an easy
+stop, without awarding a type-specific starting grade or a clean-sheet bonus.
+All quiet players still start at 6.0, and outfield grading is unchanged.
+
+For a native best-reaction rook stop worth 0.268 on-target xG, the keeper rises
+from 6.2 in method 2 to 6.5 in method 3. An isolated penalty save rises from
+6.6 to 7.4. Conceding the same best-reaction rook chance still grades below
+baseline. Two such saves followed by one goal have a negative cumulative xG
+balance and negative goalkeeping merit, rather than manufacturing an above-
+expectation performance from raw save count.
+
+Ledger versions 1 and 2 remain readable and continue with their original
+formula. Existing finished grades are never recomputed. Start a new match for
+method 3; restore and Undo preserve its signed assessment exactly.
+
+A bounded replay audit used the exact same 2,880 committed actions from eight
+Casual trials: seeds 91001–91004 with both kickoffs, 360 actions each, fouls
+off. Actual match-stat assist/provider tracking was retained. Sixteen keeper
+records contained eight saves and ten conceded goals:
+
+| Keeper group | Records | Method 2 mean | Method 3 mean |
+| --- | ---: | ---: | ---: |
+| Positive factual xG prevented | 5 | 5.94 | 6.54 |
+| Negative factual xG prevented | 6 | 4.32 | 4.80 |
+| Zero faced/prevented xG | 5 | 5.98 | 6.14 |
+| All keepers | 16 | 5.34 | 5.76 |
+
+The zero-xG group can still earn distribution credit or lose credit for an
+actual positioning error. No neutral grade was raised automatically. One
+keeper with three saves, one goal conceded and +0.40 factual xG prevented
+improved from 4.5 to 6.2. Continuing method-2 ledgers matched the frozen earlier
+implementation exactly after every action; outfield grades and contributions
+were unchanged. This small, action-limited audit diagnoses the mechanism and
+checks preservation, not population calibration or predicted full-time grades.
 
 ## Goal and assist badges
 

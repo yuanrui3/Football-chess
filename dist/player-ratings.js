@@ -13,7 +13,9 @@
  * per-round category caps and a meaningful-shot floor suppress loop farming.
  * Method2 credits chances created while debiting missed big chances and lost
  * duels. Keeper performance uses conditional on-target xG prevented; ordinary
- * best legal positioning is its native expectation. Method1 records keep their original calculation so a
+ * best legal positioning is its native expectation. Method3 increases useful
+ * shot-stopping credit and distinguishes a worsening position from a forgone
+ * optimal improvement. Method1/2 records keep their original calculation so a
  * finished or resumed older match is never silently regraded.
  * Missing old telemetry starts a partial record; it is never reconstructed from
  * a scorer list or the last80 undo states.
@@ -22,11 +24,12 @@ import {BOARD_WIDTH, BOARD_HEIGHT, DRIBBLE_RANGE, GOAL_FILES, inOwnBox, legalKic
 
 const IDS=/^(white|black)-(K|Q|[RBN][12]|P[123])$/;
 const TEAMS=['white','black'],TYPES=['K','Q','R','B','N','P'];
-const METHOD_VERSION=2;
-const supportedLedger=saved=>[1,METHOD_VERSION].includes(saved?.version);
+const METHOD_VERSION=3;
+const supportedLedger=saved=>[1,2,METHOD_VERSION].includes(saved?.version);
 const CATEGORIES=['progress','creation','finishing','defending','goalkeeping','mistakes'];
 const COUNTS=['goals','shots','xG','createdXG','tackles','tackleAttempts','interceptions','screens','support','saves','fouls','yellowCards','redCards','turnovers','progressSquares'];
 const V2_COUNTS=['assists','keyPasses','bigChancesCreated','bigChancesMissed','duelsLost','lineClearances','penaltiesCommitted','penaltySaves','keeperXGFaced','goalsConceded','xGPrevented','errorsLeadingGoals','ownGoals'];
+const V3_COUNTS=['keeperAdjustedXGPrevented'];
 // This threshold describes a big chance in this game's probability model; it
 // is not a calibrated real-football provider's definition.
 const BIG_CHANCE_XG=.35;
@@ -44,7 +47,7 @@ const typeOf=id=>validId(id)?id.split('-')[1][0]:null;
 const other=team=>team==='white'?'black':'white';
 const point=p=>p&&Number.isInteger(p.x)&&Number.isInteger(p.y)&&p.x>=0&&p.x<BOARD_WIDTH&&p.y>=0&&p.y<BOARD_HEIGHT?{x:p.x,y:p.y}:null;
 const progress=(team,p)=>point(p)?team==='white'?BOARD_HEIGHT-1-p.y:p.y:0;
-const emptyCounts=version=>Object.fromEntries([...COUNTS,...(version>=2?V2_COUNTS:[])].map(key=>[key,0]));
+const emptyCounts=version=>Object.fromEntries([...COUNTS,...(version>=2?V2_COUNTS:[]),...(version>=3?V3_COUNTS:[])].map(key=>[key,0]));
 const emptyParts=()=>Object.fromEntries(CATEGORIES.map(key=>[key,0]));
 const frontier=()=>({team:null,depth:0,threat:0,support:{}});
 
@@ -64,7 +67,9 @@ function validRecord(p,id,version){
     &&CATEGORIES.every(k=>finite(p.parts?.[k])&&Math.abs(p.parts[k])<1e7)
     &&COUNTS.every(k=>finite(p.counts?.[k])&&p.counts[k]>=0&&p.counts[k]<1e7)
     &&(version<2||V2_COUNTS.every(k=>finite(p.counts?.[k])&&(k==='xGPrevented'||p.counts[k]>=0)&&Math.abs(p.counts[k])<1e7)
-      &&Math.abs(p.counts.xGPrevented-(p.counts.keeperXGFaced-p.counts.goalsConceded))<1e-6);
+      &&Math.abs(p.counts.xGPrevented-(p.counts.keeperXGFaced-p.counts.goalsConceded))<1e-6)
+    &&(version<3||V3_COUNTS.every(k=>finite(p.counts?.[k])&&Math.abs(p.counts[k])<1e7)
+      &&p.counts.keeperAdjustedXGPrevented<=p.counts.xGPrevented+1e-6);
 }
 const validError=c=>c===null||c&&validId(c.pieceId)&&teamOf(c.pieceId)===c.team&&Number.isInteger(c.turn)&&c.turn>=0&&Number.isInteger(c.passes)&&c.passes>=0&&c.passes<=1;
 export function restorePlayerRatings(saved,game,{partial=true}={}){
@@ -250,7 +255,23 @@ export function recordPlayerRatings(saved,before,after,{assistId=null,passProvid
           // A poor reaction must not manufacture a "harder" save and then earn
           // a better grade for surviving it. Keep the factual metric, remove
           // only that self-created difficulty from the execution assessment.
-          add(ledger,keeper,'goalkeeping',.25*coverage+.20*prevented,1.25*reaction+.80*(prevented-selfCreatedDifficulty));
+          const adjustedPrevention=prevented-selfCreatedDifficulty;
+          // Other roles receive credit for useful completed work, while the
+          // earlier keeper residual was near zero in expectation and then met
+          // the steeper negative grade curve. Reward actual xG-weighted stops
+          // more clearly, with tempered blame for a sampled concession.
+          let performance=.80*adjustedPrevention;
+          if(ledger.version>=3){
+            const prior=keeper.counts.keeperAdjustedXGPrevented;
+            const next=prior+adjustedPrevention;
+            const grade=value=>(value>=0?1.8:.60)*value;
+            keeper.counts.keeperAdjustedXGPrevented=next;
+            // Assess the cumulative signed balance, not each shot's sign:
+            // two routine stops must not outweigh a costly conceded goal
+            // when total prevention is still below expectation.
+            performance=grade(next)-grade(prior);
+          }
+          add(ledger,keeper,'goalkeeping',.25*coverage+.20*prevented,1.25*reaction+performance);
         }
       }
     }
@@ -303,15 +324,18 @@ export function recordPlayerRatings(saved,before,after,{assistId=null,passProvid
     // including the shared bonus, just as a routine best shot reaction is.
     if(!same&&actor.type==='K'&&ledger.version>=2){
       let best=oldThreat;
-      for(const move of legalMoves(before,actor.pieceId,{freePawn:!!action.freePawn})){
+      for(const move of ledger.version===2?legalMoves(before,actor.pieceId,{freePawn:!!action.freePawn}):[]){
         // Tackles receive their separate probability-aware contribution. Only
         // legal off-ball keeper positions compete with this positioning move.
         if(move.type==='tackle')continue;
         const candidate={...before,pieces:before.pieces.map(p=>p.id===actor.pieceId?{...p,x:move.x,y:move.y}:p)};
         best=Math.min(best,bestThreat(candidate));
       }
-      const relative=Math.max(-.5,best-newThreat);
-      add(ledger,actor,'defending',.3*(oldThreat-newThreat),.3*relative/ALLOWANCE.K.defending);
+      // A normal move is not a missed save merely because another square
+      // would have improved coverage more. Method3 debits only a position
+      // that actually worsens the available threat; no positive move farming.
+      const relative=Math.max(-.5,(ledger.version===2?best:oldThreat)-newThreat);
+      add(ledger,actor,'defending',.3*(oldThreat-newThreat),.3*(ledger.version===2?relative:Math.min(0,relative))/ALLOWANCE.K.defending);
       if(delta>.02)actor.counts.screens++;
     }else if(Math.abs(delta)>.02){award(ledger,actor,same?'creation':'defending',.3*delta);if(!same&&delta>0)actor.counts.screens++;}
     if(same){
@@ -366,5 +390,5 @@ export function playerRatingsSummary(saved,game){
       notes,sentOff:sentOff.has(p.pieceId),start:p.start,involvement:p.actions<2?'Limited involvement':'Recorded involvement',
       ...(ledger.version>=2?{metrics:copy(c)}:{})};
   }).sort((a,b)=>a.team.localeCompare(b.team)||a.pieceId.localeCompare(b.pieceId));
-  return {partial:ledger.partial,methodVersion:ledger.version,legacyMethod:ledger.version===1,players};
+  return {partial:ledger.partial,methodVersion:ledger.version,legacyMethod:ledger.version<METHOD_VERSION,players};
 }
