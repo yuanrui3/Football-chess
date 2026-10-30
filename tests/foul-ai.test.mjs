@@ -65,7 +65,7 @@ test('penalty chance trees use exactly the fixed80/20 real goal and catch/miss t
   const outcomes=internal.tacticalSuccessors(pending,{type:'skip'});assertMass(outcomes);assert.deepEqual(outcomes.map(o=>o.probability),[.8,.2]);
   assert.equal(outcomes[0].state.score.white,1);assert.equal(outcomes[0].state.phase,'kickoff');
   if(outside){assert.equal(outcomes[1].state.restart.type,'goalKick');assert.equal(outcomes[1].state.attack,'black');}
-  else{assert.equal(outcomes[1].state.ball.carrierId,'black-K');assert.equal(outcomes[1].state.phase,'attackMove');}
+  else{assert.equal(outcomes[1].state.ball.carrierId,'black-K');assert.equal(outcomes[1].state.phase,'keeperRelease');assert.equal(outcomes[1].state.releaseReason,'catch');}
   assert.deepEqual(E.legalMoves(pending,'black-K'),[]);assert.deepEqual(pending,before);
  }
 });

@@ -3,8 +3,8 @@
  * string or a favourable sampled goal. All session transitions are immutable.
  */
 import {applyMove,applyKick,skipMove,selectCornerTaker,legalMoves,legalKicks,disguisedShotTargets,
-  currentTeam,shotModel,offsideInfo,inOwnBox,MIDFIELD_RANK} from './engine.js?v=8a5f49b765ee';
-import {createExercisePosition} from './exercise-positions.js?v=d4576fb8d435';
+  currentTeam,shotModel,offsideInfo,inOwnBox,MIDFIELD_RANK} from './engine.js?v=466456fd862d';
+import {createExercisePosition} from './exercise-positions.js?v=7235327e9218';
 
 const TEAMS=['white','black'];
 const other=team=>team==='white'?'black':'white';
@@ -54,7 +54,7 @@ export function bestAvailableShotChance(game) {
  * Individual dribbles, off-ball moves and bonuses do not spend separate rounds.
  */
 export function completedExerciseRound(before,after) {
-  if(!before||!after||before===after||before.restart||before.phase==='kickoff')return false;
+  if(!before||!after||before===after||before.restart||before.phase==='kickoff'||after.lastAction?.heldCatch)return false;
   if(before.phase==='keeperReact')return after.phase!=='keeperReact';
   if(['kick','keeperRelease'].includes(before.phase)) {
     if(['keeperReact','keeperRelease'].includes(after.phase))return false;

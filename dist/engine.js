@@ -9,7 +9,7 @@ export const CENTRAL_GOAL_FILES = Object.freeze([6, 7]);
 export const MIDFIELD_RANK = Math.floor(BOARD_HEIGHT / 2);
 export const BOARD_CENTER_X = (BOARD_WIDTH - 1) / 2;
 export const FILE_LABELS = 'abcdefghijklmn';
-export const RULES_VERSION = 19;
+export const RULES_VERSION = 20;
 export const ALLOW_OUTFIELD_BOXES = true;
 export const LONG_TACKLE_RANGE = 5;
 export const MOVE_RANGE = 10;
@@ -104,6 +104,15 @@ function withMatchContext(state, context) {
   return state;
 }
 export const inOwnBox = (team, x, y) => inside(x, y) && BOX_FILES.includes(x) && (team === 'black' ? y < BOX_DEPTH : team === 'white' ? y >= BOARD_HEIGHT - BOX_DEPTH : false);
+
+// A clean catch offers one optional kick before either side can reposition.
+// Holding declines that option and restores the ordinary positioning round.
+export function canQuickRelease(state) {
+  if (state?.phase !== 'keeperRelease' || state.releaseReason !== 'catch' || state.restart) return false;
+  const keeper = state.pieces?.find(piece => piece.id === state.ball?.carrierId);
+  return !!keeper && keeper.type === 'K' && keeper.team === state.attack
+    && keeper.x === state.ball.x && keeper.y === state.ball.y && inOwnBox(keeper.team, keeper.x, keeper.y);
+}
 
 // A loose pass can survive several positioning actions, which overwrite
 // lastAction. Keep its kicker separately until somebody controls the ball.
@@ -842,6 +851,10 @@ export function normalizeGame(state) {
   // Repair saved games and undo snapshots without displacing players, taking
   // an action, consuming randomness, or changing a declared shot's origin.
   repairForbiddenBoxPieces(next);
+  if (next.releaseReason === 'catch' && !canQuickRelease(next)) {
+    if (next.phase === 'keeperRelease') beginPosition(next);
+    else next.releaseReason = null;
+  }
   if (!next.restart && next.phase === 'keeperRelease' && next.releaseReason === 'goalKick') {
     const carrier = next.pieces.find(piece => piece.id === next.ball.carrierId);
     const team = carrier?.team || next.attack;
@@ -1344,11 +1357,13 @@ function resolveShot(next, {roll, targetRoll, keeperMove, landing} = {}) {
     if (teammateBackPass) {
       next.phase = 'keeperRelease'; next.releaseReason = 'backPass';
       next.ballProgress = {...progressFor(next), pendingRelease: true};
+    } else if (!sameTeamSave && keeper) {
+      next.phase = 'keeperRelease'; next.releaseReason = 'catch';
     }
     next.lastAction = {...common, type: 'save', team: shot.defendingTeam, keeperId: keeper?.id, to: destination, path: [...shot.path.slice(0, -1), destination], outcome: 'saved', ...(teammateBackPass ? {backPass:true} : {})};
     addLog(next, teammateBackPass
       ? `${title(shot.defendingTeam)} goalkeeper catches a teammate’s backward kick and must immediately release the ball.`
-      : `${title(shot.defendingTeam)} goalkeeper saves (${Math.round(probability * 100)}% scoring chance). ${title(shot.defendingTeam)} takes possession.`);
+      : `${title(shot.defendingTeam)} goalkeeper saves (${Math.round(probability * 100)}% scoring chance). ${title(shot.defendingTeam)} takes possession.${!sameTeamSave && keeper ? ' Distribute now before either team repositions, or hold and organise.' : ''}`);
     if (sameTeamSave && !teammateBackPass) completeAttackingRound(next, next);
   } else if (outcome === 'wide') {
     let missedLanding = {x: shot.x, y: shot.y};
@@ -1497,6 +1512,13 @@ export function applyMove(state, pieceId, x, y, {freePawn = false, roll, targetR
 }
 
 export function skipMove(state, {roll, targetRoll, landing} = {}) {
+  if (canQuickRelease(state)) {
+    const next = copy(state);
+    beginPosition(next);
+    next.lastAction = {type: 'skip', team: state.attack, phase: 'keeperRelease', heldCatch: true};
+    addLog(next, `${title(state.attack)} goalkeeper holds the catch and organises. The normal positioning round begins.`);
+    return next;
+  }
   if (state.phase === 'passRun') {
     const next = copy(state);
     beginPosition(next);
@@ -1540,6 +1562,12 @@ export const endPositionTurn = skipMove;
 export function actionTimeout(state) {
   const team = currentTeam(state);
   if (!TEAMS.includes(team)) return copy(state);
+  if (canQuickRelease(state)) {
+    const next = skipMove(state);
+    next.lastAction.timedOutTeam = team;
+    addLog(next, `${title(team)} runs out of quick-distribution time and holds the catch. Regular positioning remains available.`);
+    return next;
+  }
   if (state.phase === 'cornerSelect') {
     const action = chooseAIAction(state, {difficulty: 'casual'});
     const next = selectCornerTaker(state, action.pieceId);
@@ -1913,6 +1941,10 @@ function chooseCasualAction(state) {
     }
     if (finish) best = finish;
     const receiver = state.pieces.find(piece => piece.id === best?.receiverId);
+    // Casual uses the tempo bonus for a reliable, onside outlet, otherwise
+    // retaining all ordinary movement choices is safer than forcing a punt.
+    if (canQuickRelease(state) && !finish && (!best || best.offside || best.accuracy < 1
+        || receiver?.team !== team || receiver.type === 'K')) return {type: 'skip'};
     return best ? {type: 'kick', x: best.x, y: best.y, ...(best.disguise ? {disguise: true} : {}), ...(receiver?.team === team && receiver.type !== 'K' ? {passRun: true} : {})} : {type: 'skip'};
   }
   if (!positionalTurn(state) && state.phase !== 'passRun') return {type: 'skip'};
@@ -2670,6 +2702,7 @@ function rankedTacticalActions(state, width, root = false) {
       // optional pass-run/decline phase that spends a search ply on no new right.
       return {action: {type: 'kick', x: kick.x, y: kick.y, ...(kick.disguise ? {disguise: true} : {})}, rank: tacticalKickRank(state, kick, team), category: kick.goal ? 'shot' : kick.receiverId ? 'pass' : 'space'};
     });
+    if (canQuickRelease(state)) candidates.push({action: {type: 'skip'}, rank: 0, category: 'hold'});
   } else if (positionalTurn(state) || state.phase === 'passRun') {
     const carrier = state.pieces.find(piece => piece.id === state.ball.carrierId);
     const beforeThreat = carrier && carrier.team !== team ? tacticalShots(state, carrier.team, true) : 0;
@@ -2690,7 +2723,7 @@ function rankedTacticalActions(state, width, root = false) {
   // A greedy shot-blocking rank must never prune every possession-winning
   // reply. Likewise, consider an actual shot alongside a pass in kicking turns.
   if (!root && width > 1) {
-    const categories = positionalTurn(state) ? ['tackle', 'tackleSetup', 'safeDribble', 'boxRun', 'support'] : ['shot', 'pass'];
+    const categories = canQuickRelease(state) ? ['pass', 'hold'] : positionalTurn(state) ? ['tackle', 'tackleSetup', 'safeDribble', 'boxRun', 'support'] : ['shot', 'pass'];
     shortlist = [];
     for (const category of categories) {
       const candidate = candidates.find(entry => entry.category === category);
@@ -2702,7 +2735,7 @@ function rankedTacticalActions(state, width, root = false) {
   // Root diversity gives both a safe pass and a shot, or a supporting move and
   // a dribble, a chance to survive the inexpensive first-stage ranking.
   if (root) {
-    const wanted = positionalTurn(state) ? ['tackleSetup', 'pawn', 'boxRun', 'support', 'safeDribble', 'dribble', 'tackle'] : ['shot', 'pass', 'space'];
+    const wanted = canQuickRelease(state) ? ['pass', 'hold', 'space', 'shot'] : positionalTurn(state) ? ['tackleSetup', 'pawn', 'boxRun', 'support', 'safeDribble', 'dribble', 'tackle'] : ['shot', 'pass', 'space'];
     shortlist = [];
     for (const category of wanted) {
       const candidate = candidates.find(entry => entry.category === category);

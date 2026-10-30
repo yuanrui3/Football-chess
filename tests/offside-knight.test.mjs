@@ -278,6 +278,7 @@ function savedShotWithFlaggedRunner(team) {
 test('an actual goalkeeper save retains the shot-time offside snapshot for a runner challenging the saved ball', () => {
   for (const team of ['white', 'black']) {
     let state = savedShotWithFlaggedRunner(team);
+    state = skipMove(state); // Decline the optional quick distribution.
     state = skipMove(state);
     const id = idFor('white-N1', team), tackle = legalMoves(state, id).find(move => move.type === 'tackle');
     assert.ok(tackle);
@@ -289,7 +290,9 @@ test('an actual goalkeeper save retains the shot-time offside snapshot for a run
 test('the goalkeeper deliberately dribbling after a save resets the old offside snapshot', () => {
   for (const team of ['white', 'black']) {
     const saved = savedShotWithFlaggedRunner(team), target = pointFor([6, 0], team);
-    const next = applyMove(saved, idFor('black-K', team), target.x, target.y);
+    const held = skipMove(saved);
+    assert.deepEqual(held.offside, saved.offside, 'holding is not deliberate ball play');
+    const next = applyMove(held, idFor('black-K', team), target.x, target.y);
     assert.equal(next.offside, null);
     assert.equal(next.ball.carrierId, idFor('black-K', team));
   }

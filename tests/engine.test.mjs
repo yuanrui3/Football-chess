@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  BOARD_WIDTH, BOARD_HEIGHT, GOAL_FILES, BOX_FILES, BOX_DEPTH, SHOT_MODEL, isBox, isGoalMouth, keeperReboundTargets, canOccupySquare,
+  BOARD_WIDTH, BOARD_HEIGHT, GOAL_FILES, BOX_FILES, BOX_DEPTH, SHOT_MODEL, RULES_VERSION, isBox, isGoalMouth, keeperReboundTargets, canOccupySquare,
   createGame, legalMoves, legalKicks, applyMove, applyKick,
   skipMove, chooseAIAction, currentTeam, shotChance, shotModel, passAccuracy, positionActions, cornerTakers, selectCornerTaker,
 } from '../dist/engine.js';
@@ -63,7 +63,7 @@ function assertIntegrity(state) {
   }
   if (state.phase === 'keeperReact') assert.ok(state.pendingShot, 'reaction must retain the declared shot');
   if (state.phase === 'keeperRelease') {
-    assert.equal(state.releaseReason, 'backPass');
+    assert.ok(['backPass', 'catch'].includes(state.releaseReason));
     assert.equal(state.pieces.find(p => p.id === state.ball.carrierId)?.type, 'K');
     assert.deepEqual(legalMoves(state, state.ball.carrierId), []);
   } else assert.equal(state.releaseReason, null, 'release reasons are cleared after the forced kick');
@@ -609,7 +609,7 @@ test('goal declarations wait for the defending goalkeeper before resolving the s
   assert.equal(reaction.phase, 'keeperReact');
   assert.equal(currentTeam(reaction), 'black');
   assert.ok(reaction.pendingShot);
-  assert.equal(reaction.rulesVersion,19);
+  assert.equal(reaction.rulesVersion,RULES_VERSION);
   assert.deepEqual(reaction.pendingShot.from, { x: 5, y: 4 });
   assert.equal(reaction.lastAction.shotModel.modelVersion,17);
   assert.deepEqual(reaction.lastAction.shotModel, shotModel(state, 5, -1));
@@ -630,7 +630,8 @@ test('goalkeeper reaction is one empty adjacent step and changes the final shot 
   const result = applyMove(reaction,'black-K',7,0,{roll:after.probability+after.cornerProbability + after.keeperReboundProbability + after.caughtSaveProbability/2});
   assert.deepEqual(result.score, { white: 0, black: 0 });
   assert.equal(result.ball.carrierId, 'black-K');
-  assert.equal(result.phase, 'attackMove');
+  assert.equal(result.phase, 'keeperRelease');
+  assert.equal(result.releaseReason, 'catch');
   assert.deepEqual(result.lastAction.shotModel.origin, { x: 5, y: 4 }, 'keeper movement cannot change the declared origin');
   assert.deepEqual(result.lastAction.shotModel, after);
   assert.deepEqual(result.lastAction.keeperMove, { pieceId: 'black-K', from: { x: 8, y: 0 }, to: { x: 7, y: 0 } });
@@ -1001,10 +1002,10 @@ test('one seeded shot roll partitions exact goal, parried corner, live rebound, 
       assert.deepEqual(result.positionBudget, freshBudget());
     } else {
       assert.equal(result.attack, 'black');
-      assert.equal(result.phase, 'attackMove', 'caught saves and goal kicks permit positioning');
+      assert.equal(result.phase, outcome === 'saved' ? 'keeperRelease' : 'attackMove', 'catches offer quick distribution; goal kicks require positioning');
       assert.equal(result.ball.carrierId, 'black-K');
       assert.equal(result.lastAction.type, outcome === 'saved' ? 'save' : 'shotMiss');
-      assert.equal(result.releaseReason, null);
+      assert.equal(result.releaseReason, outcome === 'saved' ? 'catch' : null);
       if (outcome === 'saved') {
         assert.equal(result.restart, null);
         assert.deepEqual(result.pieces, reaction.pieces, 'a caught save preserves all piece positions');

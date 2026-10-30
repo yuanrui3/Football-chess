@@ -98,7 +98,7 @@ export function runMatch({rules=baseline,whitePolicy=rules,blackPolicy=rules,whi
         if(shotResult.type==='goal')shooting.penaltyGoals++;else shooting.penaltyFailures++;
         if(shotResult.type==='save'&&shotResult.outcome==='saved')stats[shot.defendingTeam].penaltiesSaved++;
       }
-      if(pendingShotRound&&state.phase!=='keeperRelease')shooting.completedOrdinaryRounds++;
+      if(pendingShotRound&&(state.phase!=='keeperRelease'||state.releaseReason==='catch'))shooting.completedOrdinaryRounds++;
       if(state.score[shot.scoringTeam]>before.score[shot.scoringTeam]){
         stats[shot.scoringTeam].goals+=state.score[shot.scoringTeam]-before.score[shot.scoringTeam];
         const scoringRole=shooting.role[shot.shooterType||before.pieces.find(p=>p.id===shot.shooterId)?.type];

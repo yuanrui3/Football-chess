@@ -1,4 +1,4 @@
-import {analyzeExerciseAction} from './exercise-ai.js?v=a7271c449462';
+import {analyzeExerciseAction} from './exercise-ai.js?v=ddff9abaf7b5';
 
 if(typeof self!=='undefined')self.onmessage=({data})=>{
   const {requestId,state}=data||{};

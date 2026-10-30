@@ -63,7 +63,7 @@ export function settleMatchClock(clock, before, next, {timedOut = false, timed =
     : nextChance(clock.finalChance, before, next);
   const updated = {...clock, actionRemaining: actionSeconds, finalChance};
   return {clock: updated,
-    finish: updated.fullTimePending && !finalChance && !RELEASE_PHASES.includes(next.phase)};
+    finish: updated.fullTimePending && !finalChance && (!RELEASE_PHASES.includes(next.phase) || next.phase === 'keeperRelease' && next.releaseReason === 'catch')};
 }
 
 // Undo may restore board state, but cannot manufacture thinking or match time.

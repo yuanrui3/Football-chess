@@ -112,7 +112,7 @@ function assertIntegrity(state) {
   }
   if (state.phase === 'keeperReact') assert.ok(state.pendingShot);
   if (state.phase === 'keeperRelease') {
-    assert.equal(state.releaseReason, 'backPass');
+    assert.ok(['backPass', 'catch'].includes(state.releaseReason));
     assert.equal(state.pieces.find(piece => piece.id === state.ball.carrierId)?.type, 'K');
   } else assert.equal(state.releaseReason, null);
   if (state.restart) {
@@ -167,7 +167,7 @@ function applyAction(state, action, overrides = {}) {
     return applyKick(state, action.x, action.y, overrides);
   }
   assert.equal(action.type, 'skip');
-  assert.ok(['attackMove', 'defendMove', 'keeperReact'].includes(state.phase) || !state.ball.carrierId, 'AI only skips a skippable phase');
+  assert.ok(['attackMove', 'defendMove', 'keeperReact'].includes(state.phase) || state.phase === 'keeperRelease' && state.releaseReason === 'catch' || !state.ball.carrierId, 'AI only skips a skippable phase');
   return skipMove(state, overrides);
 }
 
@@ -198,7 +198,7 @@ for (const difficulty of DIFFICULTIES) {
       timings.push(performance.now() - start);
       const next = applyAction(state, action);
       assertIntegrity(next);
-      if (state.phase === 'keeperRelease') assert.equal(action.type, 'kick', `${name}: release cannot be delayed`);
+      if (state.phase === 'keeperRelease' && state.releaseReason === 'backPass') assert.equal(action.type, 'kick', `${name}: release cannot be delayed`);
       if (['attackMove', 'defendMove'].includes(state.phase) && action.type === 'move') {
         if (action.freePawn) {
           assert.equal(state.positionBudget.pawnUsed, false, `${name}: spent bonus move cannot be reused`);
