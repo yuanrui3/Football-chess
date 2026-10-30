@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {ratingsPitchPlayers, ratingsPlayerOfMatch, renderPlayerRatings} from '../dist/player-ratings-view.js';
+import {createPlayerHeatmaps} from '../dist/player-heatmaps.js';
 
 class Element {
   constructor(tagName, document) {
@@ -121,4 +122,41 @@ test('earlier rating methods are labelled without treating a complete match as p
   assert.match(text(root), /Player of the match/);
   renderPlayerRatings(root, {methodVersion: 2, legacyMethod: false, players: []});
   assert.doesNotMatch(text(root), /earlier method/);
+});
+
+test('selecting any outfield player shows their recorded map; switching to a keeper removes it', () => {
+  const root = new Element('section', document), heatmaps = createPlayerHeatmaps();
+  heatmaps.players['white-P1'] = {'118': 3000, '132': 1000};
+  heatmaps.players['black-Q'] = {'212': 2000};
+  renderPlayerRatings(root, {players: [player('white-P1', 8, 5, 1)]}, heatmaps);
+  const buttons = descendants(root).filter(n => n.tagName === 'button');
+  for (const button of buttons) {
+    button.listeners.click();
+    const maps = descendants(root).filter(n => n.className === 'player-heatmap');
+    assert.equal(maps.length, button.dataset.pieceId.endsWith('-K') ? 0 : 1);
+  }
+  buttons.find(n => n.dataset.pieceId === 'white-P1').listeners.click();
+  assert.match(text(root), /0m 4s recorded · 2 squares/);
+  assert.match(text(root), /g9 · 0m 3s · 75.0%/);
+  buttons.find(n => n.dataset.pieceId === 'black-Q').listeners.click();
+  const svg = descendants(root).find(n => n.attrs.class === 'player-heatmap-pitch');
+  assert.match(svg.attrs['aria-label'], /black-Q heatmap, attacking upwards/);
+  const cell = descendants(svg).find(n => n.attrs['data-square'] === 'c2');
+  assert.equal(cell.attrs.x, '11'); assert.equal(cell.attrs.y, '1');
+  assert.doesNotMatch(text(root), /75.0%/);
+  buttons.find(n => n.dataset.pieceId === 'black-K').listeners.click();
+  assert.equal(descendants(root).some(n => n.className === 'player-heatmap'), false);
+});
+
+test('missing and partial heatmaps are labelled, and a new report clears the previous map', () => {
+  const root = new Element('section', document), summary = {players: [player('white-P1', 8, 5, 1)]};
+  renderPlayerRatings(root, summary);
+  assert.match(text(root), /No heatmap was recorded for this player/);
+  assert.equal(descendants(root).some(n => n.attrs.class === 'player-heatmap-pitch'), false);
+  const heatmaps = createPlayerHeatmaps({partial: true});heatmaps.players['white-P1'] = {'118': 3000};
+  renderPlayerRatings(root, summary, heatmaps);
+  assert.match(text(root), /Partial heatmap/);assert.match(text(root), /0m 3s recorded/);
+  renderPlayerRatings(root, summary, createPlayerHeatmaps());
+  assert.doesNotMatch(text(root), /Partial heatmap|0m 3s recorded/);
+  assert.match(text(root), /No active playing time was recorded/);
 });

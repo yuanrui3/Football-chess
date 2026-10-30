@@ -1,6 +1,7 @@
 /** Match records are independent of engine decisions and replay playback. */
 import {BOARD_WIDTH, BOARD_HEIGHT, GOAL_FILES, BOX_FILES, BOX_DEPTH} from './engine.js?v=466456fd862d';
 import {createPlayerRatings,restorePlayerRatings,recordPlayerRatings} from './player-ratings.js?v=646ddc9b110e';
+import {createPlayerHeatmaps,restorePlayerHeatmaps,addPlayerHeatmapTime} from './player-heatmaps.js?v=65f92585f952';
 const TEAMS = ['white', 'black'];
 const SHOT_RESULTS = ['goal', 'save', 'shotMiss', 'blockedShot'];
 const IDS = /^(white|black)-(K|Q|[RBN][12]|P[123])$/;
@@ -35,13 +36,14 @@ export const shortPieceId = id => isId(id) ? id.split('-')[1] : 'Unknown';
 export function createMatchStats({partial = false, baselineScore = {white: 0, black: 0}} = {}) {
   return {version: 2, pitch: {width: BOARD_WIDTH, height: BOARD_HEIGHT}, partial: !!partial, baselineScore: scoreOf(baselineScore),
     teams: {white: emptyTeam(), black: emptyTeam()}, goals: [], foulEvents: [], lastPass: null, pendingShot: null,
-    playerRatings:createPlayerRatings({partial})};
+    playerRatings:createPlayerRatings({partial}), playerHeatmaps:createPlayerHeatmaps({partial})};
 }
 
 export function restoreMatchStats(saved, game, {partial = true} = {}) {
   const fallback = () => {
     const stats = createMatchStats({partial, baselineScore: partial ? game?.score : undefined});
     stats.playerRatings=restorePlayerRatings(null,game,{partial});
+    stats.playerHeatmaps=restorePlayerHeatmaps(null,{partial});
     // A restored old match can already have a committed shot in flight. Its
     // known attempt belongs in the partial record so a save cannot exceed shots.
     const shot = game?.pendingShot;
@@ -65,6 +67,7 @@ export function restoreMatchStats(saved, game, {partial = true} = {}) {
       && saved.baselineScore[team] + saved.goals.filter(goal => goal.team === team).length === (game?.score?.[team] ?? 0))) return fallback();
   const restored = createMatchStats({partial: saved.partial, baselineScore: saved.baselineScore});
   restored.playerRatings=restorePlayerRatings(saved.playerRatings,game,{partial:!saved.playerRatings||saved.partial});
+  restored.playerHeatmaps=restorePlayerHeatmaps(saved.playerHeatmaps,{partial});
   for (const team of TEAMS) for (const key of ['shots', 'onTarget', 'corners', 'possessionMs', 'fouls', 'yellowCards', 'redCards']) restored.teams[team][key] = saved.teams[team][key] ?? 0;
   // Stable player identity and the credited side decide whether a goal is an
   // own goal. Older pending-shot saves could lose shootingTeam and persist a
@@ -94,6 +97,7 @@ export function addPossessionTime(stats, game, elapsedMs) {
   if (!finite(elapsedMs) || !elapsedMs || !isTeam(game?.attack) || game.restart || ['kickoff', 'finished'].includes(game.phase)) return stats;
   const next = copy(stats);
   next.teams[game.attack].possessionMs += elapsedMs;
+  next.playerHeatmaps = addPlayerHeatmapTime(stats.playerHeatmaps, game, elapsedMs);
   return next;
 }
 

@@ -1,4 +1,5 @@
 /** End-of-match ratings review. This is a lineup diagram, not final locations. */
+import {renderPlayerHeatmap} from './player-heatmaps.js?v=65f92585f952';
 const TEAMS = ['white', 'black'];
 const TEAM_NAMES = {white: 'Ivory FC', black: 'Obsidian FC'};
 const NAMES = {K: 'Goalkeeper', Q: 'Queen', R: 'Rook', B: 'Bishop', N: 'Knight', P: 'Pawn'};
@@ -42,7 +43,7 @@ export function ratingsPlayerOfMatch(players) {
     .sort((a, b) => b.rating - a.rating || b.impact - a.impact || b.actions - a.actions || a.pieceId.localeCompare(b.pieceId))[0] || null;
 }
 
-export function renderPlayerRatings(container, summary = {}) {
+export function renderPlayerRatings(container, summary = {}, heatmaps) {
   if (!container) return;
   const document = container.ownerDocument;
   const make = (tag, className, text, parent = container) => {
@@ -82,6 +83,7 @@ export function renderPlayerRatings(container, summary = {}) {
   const players = ratingsPitchPlayers(summary), best = ratingsPlayerOfMatch(players);
   make('h3', 'player-ratings-title', 'Player ratings');
   make('p', 'player-ratings-intro', 'Out of 10, relative to each piece’s abilities. 6.0 is the starting rating; quiet pieces stay near it.');
+  make('p', 'player-ratings-heatmap-hint', 'Select an outfield player to see their heatmap and rating details.');
   const legend = make('p', 'player-ratings-contribution-legend');
   const goalLegend = make('span', '', undefined, legend);
   make('span', 'player-rating-ball', '⚽', goalLegend).setAttribute('aria-hidden', 'true');
@@ -112,6 +114,7 @@ export function renderPlayerRatings(container, summary = {}) {
     const heading = make('div', 'player-ratings-detail-heading', undefined, detail);
     make('h4', '', `${TEAM_NAMES[player.team]} · ${NAMES[player.type]} ${player.shortId}`, heading);
     make('strong', `player-rating-score ${ratingBand(player.rating)}`, ratingText(player.rating), heading);
+    if (player.type !== 'K') renderPlayerHeatmap(detail, heatmaps, player.pieceId);
     make('p', 'player-ratings-detail-meta', Number.isFinite(player.rating)
       ? `Impact ${signed(player.impact)} · ${player.actions} recorded action${player.actions === 1 ? '' : 's'}${player.sentOff ? ' · Sent off' : ''}`
       : 'No performance record is available for this piece.', detail);
@@ -142,7 +145,7 @@ export function renderPlayerRatings(container, summary = {}) {
       button.style.left = `${player.x}%`;
       button.style.top = `${player.y}%`;
       button.setAttribute('aria-pressed', 'false');
-      button.setAttribute('aria-label', `${TEAM_NAMES[team]} ${NAMES[player.type]} ${player.shortId}, ${Number.isFinite(player.rating) ? `${ratingText(player.rating)} out of 10` : 'rating unavailable'}${player.goals ? `, ${contributionLabel(player.goals, 'goal')}` : ''}${player.assists ? `, ${contributionLabel(player.assists, 'assist')}` : ''}${player.sentOff ? ', sent off' : ''}${player.pieceId === best?.pieceId ? `, ${summary.partial ? 'top recorded rating' : 'player of the match'}` : ''}. Show rating details.`);
+      button.setAttribute('aria-label', `${TEAM_NAMES[team]} ${NAMES[player.type]} ${player.shortId}, ${Number.isFinite(player.rating) ? `${ratingText(player.rating)} out of 10` : 'rating unavailable'}${player.goals ? `, ${contributionLabel(player.goals, 'goal')}` : ''}${player.assists ? `, ${contributionLabel(player.assists, 'assist')}` : ''}${player.sentOff ? ', sent off' : ''}${player.pieceId === best?.pieceId ? `, ${summary.partial ? 'top recorded rating' : 'player of the match'}` : ''}. Show ${player.type === 'K' ? 'rating details' : 'heatmap and rating details'}.`);
       const identity = make('span', 'player-rating-identity', undefined, button);
       make('span', 'player-rating-symbol', SYMBOLS[player.type], identity).setAttribute('aria-hidden', 'true');
       make('span', 'player-rating-id', player.shortId, identity);
@@ -152,11 +155,11 @@ export function renderPlayerRatings(container, summary = {}) {
       if (player.assists) contributionIcon(scoreLine, 'assists', player.assists);
       if (player.sentOff) make('span', 'player-rating-dismissal', 'OFF', button);
       else if (player.pieceId === best?.pieceId) make('span', 'player-rating-best', '★', button).setAttribute('aria-hidden', 'true');
-      button.addEventListener('click', () => select(player));
+      button.addEventListener('click', () => {select(player); detail.scrollIntoView?.({behavior: 'smooth', block: 'nearest'});});
       buttons.set(player.pieceId, button);
     }
   }
-  make('p', 'player-ratings-lineup-note', 'Lineup positions are arranged for review, not the final squares. Select a piece to see its contribution.');
+  make('p', 'player-ratings-lineup-note', 'Lineup positions are arranged for review, not the final squares. Outfield players have heatmaps; goalkeepers have rating details only.');
   container.append(detail);
   select(best || [...players].sort((a, b) => b.actions - a.actions || a.pieceId.localeCompare(b.pieceId))[0]);
 }

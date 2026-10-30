@@ -8,3 +8,13 @@
 .player-rating-piece.has-contributions .player-rating-score{min-width:28px;padding:4px 3px;font-size:11px}@media(max-width:580px){.player-rating-piece.has-contributions .player-rating-score{min-width:31px;font-size:12px}.player-rating-piece.has-contributions .player-rating-score-line{gap:2px}}
 
 .player-ratings-legacy{font-size:10px;line-height:1.6;background:#e6ebdf;border-left:2px solid #7c9271;padding:9px 11px;margin:0 0 12px;color:#42523b}
+
+/* Actual post-match occupancy, separate from the review lineup above. */
+.player-ratings .player-ratings-heatmap-hint{font-size:11px;line-height:1.6;font-weight:700;margin:0 0 14px;color:#314f3b}
+.player-heatmap{margin:13px 0 16px;padding:12px 0;border-top:1px solid #cad4bf;border-bottom:1px solid #cad4bf}
+.player-heatmap-title{font-size:12px;margin:0 0 10px}.player-heatmap-layout{display:grid;grid-template-columns:minmax(0,205px) minmax(0,1fr);gap:18px;align-items:center}
+.player-heatmap-figure{min-width:0}.player-ratings .player-heatmap-direction{font-size:9px;font-weight:700;letter-spacing:1.5px;text-align:center;margin:0 0 5px;color:#3f5d48}
+.player-heatmap-pitch{display:block;width:100%;height:auto;aspect-ratio:14.3/17.3;border-radius:3px}
+.player-ratings .player-heatmap-total{font-size:11px;font-weight:700;line-height:1.6;margin:0 0 12px}.player-heatmap-legend{display:flex;align-items:center;gap:7px;font-size:9px;white-space:nowrap}.player-heatmap-legend i{height:8px;min-width:36px;flex:1;border-radius:4px;background:linear-gradient(90deg,hsl(55 92% 75%),hsl(0 92% 45%))}
+.player-heatmap-info h6{font-size:10px;margin:15px 0 6px}.player-ratings .player-heatmap-squares{padding-left:17px;margin:0;line-height:1.7;font-size:10px;font-variant-numeric:tabular-nums}.player-ratings .player-heatmap-note{font-size:9px;line-height:1.6;color:#52654b;margin:12px 0 0}.player-ratings .player-heatmap-empty,.player-ratings .player-heatmap-partial{font-size:10px;line-height:1.7;margin:0 0 10px}.player-heatmap-partial{background:#f3e8ce;border-left:2px solid #bd9759;padding:8px}
+@media(max-width:420px){.player-heatmap-layout{grid-template-columns:1fr;gap:12px}.player-heatmap-figure{max-width:205px;width:100%;margin:auto}.player-heatmap-info{width:100%}}

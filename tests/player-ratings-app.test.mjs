@@ -18,7 +18,7 @@ function report(game,stats){
   };
   const context=vm.createContext({game,matchStats:stats,$,TEAM:{white:'Ivory FC',black:'Obsidian FC'},
     matchStatsSummary,shortPieceId,playerRatingsSummary,
-    renderPlayerRatings:(container,summary)=>renders.push({container,summary}),renderGoalMap:()=>{},
+    renderPlayerRatings:(container,summary,heatmaps)=>renders.push({container,summary,heatmaps}),renderGoalMap:()=>{},
     coord:(x,y)=>`${String.fromCharCode(97+x)}${17-y}`});
   vm.runInContext(source.slice(start,end),context);
   return {$,renders,context,show:()=>vm.runInContext('showResult()',context)};
@@ -29,6 +29,7 @@ test('full time automatically includes both complete rating lineups without chan
   const before=JSON.stringify({game,stats}),h=report(game,stats);h.show();
   assert.equal(h.$('resultDialog').open,true);
   assert.equal(h.renders.length,1);assert.equal(h.renders[0].container.id,'playerRatings');
+  assert.deepEqual(h.renders[0].heatmaps,stats.playerHeatmaps);
   const players=h.renders[0].summary.players;
   assert.equal(players.length,22);assert.equal(new Set(players.map(p=>p.pieceId)).size,22);
   assert.ok(players.every(p=>p.rating===6));
