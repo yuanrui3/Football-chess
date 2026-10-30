@@ -1,0 +1,426 @@
+{
+  "status": "incomplete-do-not-deploy",
+  "recordingsPlanned": 365,
+  "recordingsDownloaded": 50,
+  "recordingsMissing": 315,
+  "voice": {
+    "name": "Adam",
+    "voiceId": "DEFpwxCUkrj3WAbTDRTZ",
+    "model": "eleven_v4",
+    "speed": 1.05
+  },
+  "recordings": [
+    {
+      "id": "adam_fcd9fba911b2ca8a",
+      "taskId": "e48fc8d3-eb14-4927-b0ec-ceb963cc7ce2",
+      "durationMs": 3318,
+      "bytes": 53542,
+      "sha256": "fadec0afb27f4efabe7337e0b2d899c81ae90bec93a9457ef4b6438075e77a7e",
+      "profile": "loudnorm I=-16 TP=-1.5 LRA=11; mono 44100Hz 128kbps MP3"
+    },
+    {
+      "id": "adam_e3cc50644b275d96",
+      "taskId": "728395d7-5ca1-4a64-841f-f7170721fc86",
+      "durationMs": 3396,
+      "bytes": 54796,
+      "sha256": "e558cb688a21781c4c4c5d59c83af207d2fccbbea06b96943f52102b35afa6ca",
+      "profile": "loudnorm I=-16 TP=-1.5 LRA=11; mono 44100Hz 128kbps MP3"
+    },
+    {
+      "id": "adam_977673e04f9fe76b",
+      "taskId": "9205172c-49f2-4540-b005-5729ba5f7bf3",
+      "durationMs": 3239,
+      "bytes": 52288,
+      "sha256": "6b5ab0e2cbd57a0b7bd8c6e6c672dc3030be74f44795dff102debf241f98cec6",
+      "profile": "loudnorm I=-16 TP=-1.5 LRA=11; mono 44100Hz 128kbps MP3"
+    },
+    {
+      "id": "adam_0bc49e5d7514ca3a",
+      "taskId": "acd8746b-7739-4b73-b78e-54df6e804812",
+      "durationMs": 3239,
+      "bytes": 52288,
+      "sha256": "3508cda8d1a56f7fe1c4a64d7f5a5ff21bb2ddc2983e703e025d6017370b0a25",
+      "profile": "loudnorm I=-16 TP=-1.5 LRA=11; mono 44100Hz 128kbps MP3"
+    },
+    {
+      "id": "adam_8b4f9e97f834699b",
+      "taskId": "cdda99ca-968e-4a57-8812-d2da854f3744",
+      "durationMs": 3318,
+      "bytes": 53542,
+      "sha256": "f1be29777f6fb495081bf2c0bf1f5f47a113b07658da9bdca8f990a6ec1dcb43",
+      "profile": "loudnorm I=-16 TP=-1.5 LRA=11; mono 44100Hz 128kbps MP3"
+    },
+    {
+      "id": "adam_f9bfb1da85b59429",
+      "taskId": "280aaa63-aa92-4da0-8a60-fd9caf9bcd82",
+      "durationMs": 3004,
+      "bytes": 48527,
+      "sha256": "997b185abf91b5ed83c2c256c598a0020db159937c78dc773afb33a5778f7adf",
+      "profile": "loudnorm I=-16 TP=-1.5 LRA=11; mono 44100Hz 128kbps MP3"
+    },
+    {
+      "id": "adam_cff08ecbd1989b15",
+      "taskId": "7564fc98-d165-4514-89d4-f8417a73295f",
+      "durationMs": 3239,
+      "bytes": 52288,
+      "sha256": "ea27b2f5d439d273dd93b5d4d22ab5b5f01f304a840bf84ce68d2bb45a453332",
+      "profile": "loudnorm I=-16 TP=-1.5 LRA=11; mono 44100Hz 128kbps MP3"
+    },
+    {
+      "id": "adam_d781281ac8d37161",
+      "taskId": "935662bf-25af-48c6-b57b-9bf173154021",
+      "durationMs": 3004,
+      "bytes": 48527,
+      "sha256": "02f497a0fe28d04354e168fa16a3eadc0a434969dc36914c9e4e29fa2af4178a",
+      "profile": "loudnorm I=-16 TP=-1.5 LRA=11; mono 44100Hz 128kbps MP3"
+    },
+    {
+      "id": "adam_a5debcceb39ad99a",
+      "taskId": "ee0f9c30-79fd-4f7d-9cf7-2ab7bb64ed9d",
+      "durationMs": 3004,
+      "bytes": 48527,
+      "sha256": "ae347c27d1753e38f6c8802e87b97643cc770a0c2e0d144c0ff5ef1089088a11",
+      "profile": "loudnorm I=-16 TP=-1.5 LRA=11; mono 44100Hz 128kbps MP3"
+    },
+    {
+      "id": "adam_1a45743b5cdca7a7",
+      "taskId": "e2853984-d3c6-4dc2-81a5-ff8598ab4a74",
+      "durationMs": 3004,
+      "bytes": 48527,
+      "sha256": "b93ff315977a60faa10f28e7b14e27148643eb4cb4b0723a16c28eec24be33d4",
+      "profile": "loudnorm I=-16 TP=-1.5 LRA=11; mono 44100Hz 128kbps MP3"
+    },
+    {
+      "id": "adam_b6a46d046df0b7d0",
+      "taskId": "305d4de1-24ad-4a03-a875-c23b327215cc",
+      "durationMs": 2926,
+      "bytes": 47273,
+      "sha256": "b3bcd62cc14bdd6f00b52afb5fd101af12ccd2685c2460cec0fac7a8230d91e5",
+      "profile": "loudnorm I=-16 TP=-1.5 LRA=11; mono 44100Hz 128kbps MP3"
+    },
+    {
+      "id": "adam_04340abbbe4966ee",
+      "taskId": "63edf482-a445-4bb0-adf9-c1eace31a7f1",
+      "durationMs": 2926,
+      "bytes": 47273,
+      "sha256": "88b9c29e9fe86eb173c8d378682f6ad3c6a4597234dab659c0ce9f7569d28ecd",
+      "profile": "loudnorm I=-16 TP=-1.5 LRA=11; mono 44100Hz 128kbps MP3"
+    },
+    {
+      "id": "adam_a40b1709ff4b136b",
+      "taskId": "7e680df0-450c-47c6-8873-2c313ac03172",
+      "durationMs": 3004,
+      "bytes": 48527,
+      "sha256": "82c0aeb6f416134349f6306f8939e79c00ef23bd4c401b24b4260347522160a0",
+      "profile": "loudnorm I=-16 TP=-1.5 LRA=11; mono 44100Hz 128kbps MP3"
+    },
+    {
+      "id": "adam_26986d1d2e7abcf7",
+      "taskId": "2af75838-d992-4426-9dfa-f05b30f53a75",
+      "durationMs": 3004,
+      "bytes": 48527,
+      "sha256": "74ae18d490a36257ed637d4ea4900480ad3b7300c388ce7e0049b12643edf244",
+      "profile": "loudnorm I=-16 TP=-1.5 LRA=11; mono 44100Hz 128kbps MP3"
+    },
+    {
+      "id": "adam_f04de85863e28003",
+      "taskId": "b5e45b4a-86d5-4f37-a17f-c5e7c913c8c9",
+      "durationMs": 2926,
+      "bytes": 47273,
+      "sha256": "4596b3950cabee6dbfdf85f53e014f20e262282f33ee3ad93a7432102d7ed5d8",
+      "profile": "loudnorm I=-16 TP=-1.5 LRA=11; mono 44100Hz 128kbps MP3"
+    },
+    {
+      "id": "adam_718852376276debe",
+      "taskId": "bbf77299-841a-4771-9292-1d92d7fd575b",
+      "durationMs": 2847,
+      "bytes": 46019,
+      "sha256": "791517d82ddd7925bd4cc1cd8ecc2b05888cd02fea16de7167203d3780631c60",
+      "profile": "loudnorm I=-16 TP=-1.5 LRA=11; mono 44100Hz 128kbps MP3"
+    },
+    {
+      "id": "adam_c74143eea6975c20",
+      "taskId": "85182834-d6ac-4787-bfba-62cf805bf086",
+      "durationMs": 3082,
+      "bytes": 49781,
+      "sha256": "ba7c29e6d599575b74457ab4d13a60c92ceb70dd343219bcdef0c452e50dc1b0",
+      "profile": "loudnorm I=-16 TP=-1.5 LRA=11; mono 44100Hz 128kbps MP3"
+    },
+    {
+      "id": "adam_1166eb255b9d2d52",
+      "taskId": "e613f0bf-adff-4119-9078-5528b3b18b0b",
+      "durationMs": 2847,
+      "bytes": 46019,
+      "sha256": "e2a8a3b5d537d68b8a98c8fa33d80dbefa41456f353241765c0a43c39299de96",
+      "profile": "loudnorm I=-16 TP=-1.5 LRA=11; mono 44100Hz 128kbps MP3"
+    },
+    {
+      "id": "adam_fbf2949a2da8dab1",
+      "taskId": "60d8c8ab-f2e1-41b3-bcec-a9f76c6f1039",
+      "durationMs": 3631,
+      "bytes": 58558,
+      "sha256": "159f5911d64083bd15316f3516d25c78ac2b8aa91cb46a8abb95e8967b2a9c5d",
+      "profile": "loudnorm I=-16 TP=-1.5 LRA=11; mono 44100Hz 128kbps MP3"
+    },
+    {
+      "id": "adam_c217ad529b7245cd",
+      "taskId": "5da72887-3302-46a7-b48a-bf889126fede",
+      "durationMs": 3631,
+      "bytes": 58558,
+      "sha256": "5b61ab34de1a886d4ddcdfa0c6b3bbeef8594d0f9533296c3fd58c8954764235",
+      "profile": "loudnorm I=-16 TP=-1.5 LRA=11; mono 44100Hz 128kbps MP3"
+    },
+    {
+      "id": "adam_9f3c42f2b2e1d760",
+      "taskId": "2121cb05-b731-4a81-a241-e122d24d7e34",
+      "durationMs": 3239,
+      "bytes": 52288,
+      "sha256": "f6a434bdf7e2bca069d86eb79a487888b47f0c0e48a6fafd7d154dc231cb2b46",
+      "profile": "loudnorm I=-16 TP=-1.5 LRA=11; mono 44100Hz 128kbps MP3"
+    },
+    {
+      "id": "adam_c66a91d41a2e6d97",
+      "taskId": "1a490c1c-1214-4326-85d0-ed356e32bcdc",
+      "durationMs": 3553,
+      "bytes": 57304,
+      "sha256": "16f8d93aef92f6242a9474b65393167136377f00439ed0cdb31315147c574ce3",
+      "profile": "loudnorm I=-16 TP=-1.5 LRA=11; mono 44100Hz 128kbps MP3"
+    },
+    {
+      "id": "adam_9c5d5058295f0c98",
+      "taskId": "5372e873-4aef-46ae-9763-07da27ae520d",
+      "durationMs": 3082,
+      "bytes": 49781,
+      "sha256": "6f104fce6aeef4807bc86bcf4cd7f420c31a3db5303f726476c597381ecf042f",
+      "profile": "loudnorm I=-16 TP=-1.5 LRA=11; mono 44100Hz 128kbps MP3"
+    },
+    {
+      "id": "adam_480c2bf6cd6a0e36",
+      "taskId": "23b5d3bf-5f09-41ee-ac5d-aee45c0558c4",
+      "durationMs": 3709,
+      "bytes": 59812,
+      "sha256": "535f85fd46ba5b7b3fb44634310502da438588cd7a85898ff4423eb1c2b8f298",
+      "profile": "loudnorm I=-16 TP=-1.5 LRA=11; mono 44100Hz 128kbps MP3"
+    },
+    {
+      "id": "adam_1962ae857c974401",
+      "taskId": "ab1a5661-a116-483f-81e6-e681bf745985",
+      "durationMs": 3318,
+      "bytes": 53542,
+      "sha256": "f309846d1217ef8ad59bb08aecbc7d61a5bf5f9ab98f3ebe55f732795e0896ca",
+      "profile": "loudnorm I=-16 TP=-1.5 LRA=11; mono 44100Hz 128kbps MP3"
+    },
+    {
+      "id": "adam_6b26126abfb333fe",
+      "taskId": "dfffbb94-9f7a-4f84-a4b2-22d2db6c50d8",
+      "durationMs": 3709,
+      "bytes": 59812,
+      "sha256": "12e2e0e4767df1ce277d0acdb363f9678ef4cab8d1618e1df6c7ff62309975b4",
+      "profile": "loudnorm I=-16 TP=-1.5 LRA=11; mono 44100Hz 128kbps MP3"
+    },
+    {
+      "id": "adam_fc60f08bb689bef5",
+      "taskId": "549dba28-2445-4d61-bbc2-3bae779e43fc",
+      "durationMs": 3082,
+      "bytes": 49781,
+      "sha256": "49c8619e02856638843d38ff59570e060fd12bd2d53c3fa51ad5c10d01511ce5",
+      "profile": "loudnorm I=-16 TP=-1.5 LRA=11; mono 44100Hz 128kbps MP3"
+    },
+    {
+      "id": "adam_7be206c99136d855",
+      "taskId": "c1899e9d-2d19-4dbc-82ce-37304d64ec9f",
+      "durationMs": 3631,
+      "bytes": 58558,
+      "sha256": "5b98943db5752b1e1cbe877d4a503594aa0f944d9444472ec951844b41cc0166",
+      "profile": "loudnorm I=-16 TP=-1.5 LRA=11; mono 44100Hz 128kbps MP3"
+    },
+    {
+      "id": "adam_3665671891f86d3d",
+      "taskId": "cf70f793-5f93-47bd-93d6-7310c9243395",
+      "durationMs": 3474,
+      "bytes": 56050,
+      "sha256": "fcb80e06720c7627f0f54848510e867b779602736808afd0f6fdb748e7c746ac",
+      "profile": "loudnorm I=-16 TP=-1.5 LRA=11; mono 44100Hz 128kbps MP3"
+    },
+    {
+      "id": "adam_b7ff4832ef7568b4",
+      "taskId": "c4cd0c00-f3ef-41ff-bcca-0b0af81a36b8",
+      "durationMs": 3082,
+      "bytes": 49781,
+      "sha256": "e40641f575f8668531ebead62cb4a849e8c3bb6c54e7508c71d265a95eaf289a",
+      "profile": "loudnorm I=-16 TP=-1.5 LRA=11; mono 44100Hz 128kbps MP3"
+    },
+    {
+      "id": "adam_6acdf4adc614e065",
+      "taskId": "7379f580-ce72-47d9-a797-9b5844fba6af",
+      "durationMs": 3082,
+      "bytes": 49781,
+      "sha256": "a9b646abc0ab06e0b167089737fe80a2456bf425655ad3f9dababf11e4f340da",
+      "profile": "loudnorm I=-16 TP=-1.5 LRA=11; mono 44100Hz 128kbps MP3"
+    },
+    {
+      "id": "adam_bf86f355f60fe1cb",
+      "taskId": "70a6834f-c80f-4db8-980f-4bed84876b02",
+      "durationMs": 3161,
+      "bytes": 51035,
+      "sha256": "7f408ee7657ef3248d5e633489c2790de106b437cf45e2122f840d16cf6e13b9",
+      "profile": "loudnorm I=-16 TP=-1.5 LRA=11; mono 44100Hz 128kbps MP3"
+    },
+    {
+      "id": "adam_9c85f070896a908c",
+      "taskId": "fd04d020-293e-461c-bdf8-0a742d18c328",
+      "durationMs": 3474,
+      "bytes": 56050,
+      "sha256": "5bb2ce0622d5b4f682844e50a8fa64982d2dbb07ac876ea7facefd63adc04f60",
+      "profile": "loudnorm I=-16 TP=-1.5 LRA=11; mono 44100Hz 128kbps MP3"
+    },
+    {
+      "id": "adam_36bfd0142843670f",
+      "taskId": "6f99b8fd-9ee8-476a-b135-43e314652d2e",
+      "durationMs": 3161,
+      "bytes": 51035,
+      "sha256": "16399410c604feef7a64deffbe3cbf3e1bb4dc349cc5ba75f3a6a3ac449696e6",
+      "profile": "loudnorm I=-16 TP=-1.5 LRA=11; mono 44100Hz 128kbps MP3"
+    },
+    {
+      "id": "adam_13aee6323d0550b1",
+      "taskId": "0990dcdf-a40e-4863-90b0-d21c67e64707",
+      "durationMs": 3161,
+      "bytes": 51035,
+      "sha256": "caee95b42719d2ac1a97af8d232b7e1ad7d2a58ae57af2963d56dccd635204a7",
+      "profile": "loudnorm I=-16 TP=-1.5 LRA=11; mono 44100Hz 128kbps MP3"
+    },
+    {
+      "id": "adam_45eaa1de06ccf9d4",
+      "taskId": "a8c1ad4d-a989-4587-8bf6-ed2cdf448050",
+      "durationMs": 3318,
+      "bytes": 53542,
+      "sha256": "3b890ceff2312cf06a48a22586e5e1c5e456da7d88ad0f5d06b498bb6a712156",
+      "profile": "loudnorm I=-16 TP=-1.5 LRA=11; mono 44100Hz 128kbps MP3"
+    },
+    {
+      "id": "adam_926b22f9ab18c7fd",
+      "taskId": "6d1e648a-def6-4615-9952-8797972c2de3",
+      "durationMs": 3082,
+      "bytes": 49781,
+      "sha256": "081953be5cc6b9c03d81426cf1e7acc7ff89ec0b68c4f910e1553c8e7ac321a9",
+      "profile": "loudnorm I=-16 TP=-1.5 LRA=11; mono 44100Hz 128kbps MP3"
+    },
+    {
+      "id": "adam_02ec6b72199bfd99",
+      "taskId": "741e22c1-4ca7-4e54-8554-088fb1b3a245",
+      "durationMs": 3082,
+      "bytes": 49781,
+      "sha256": "0e47a0b4db76517e9e9feadc0cb8b2d2bfae2479ee4733632d7752275b8e747f",
+      "profile": "loudnorm I=-16 TP=-1.5 LRA=11; mono 44100Hz 128kbps MP3"
+    },
+    {
+      "id": "adam_035b9039825c8249",
+      "taskId": "a656e137-8f16-426f-abfd-18a9b5d98a0e",
+      "durationMs": 3239,
+      "bytes": 52288,
+      "sha256": "ba301b738aaa130e73a07f497c0c57862a7ddd723687a3036094b840cb910ca6",
+      "profile": "loudnorm I=-16 TP=-1.5 LRA=11; mono 44100Hz 128kbps MP3"
+    },
+    {
+      "id": "adam_03c9eb60384c0283",
+      "taskId": "a0acbb0e-d6ca-4cae-929a-b128fd14da22",
+      "durationMs": 3396,
+      "bytes": 54796,
+      "sha256": "bd1f14b6ec1b8aa0e7f01e252aff12c81936d2cf269f577508f29e383ea11456",
+      "profile": "loudnorm I=-16 TP=-1.5 LRA=11; mono 44100Hz 128kbps MP3"
+    },
+    {
+      "id": "adam_976ec7e447a3166c",
+      "taskId": "ddc37924-ec0d-4db3-b173-33710fcb8f91",
+      "durationMs": 3082,
+      "bytes": 49781,
+      "sha256": "4c59cbccb588e1aecdca285988fb310054f562481deb7dde1add78aafc62e628",
+      "profile": "loudnorm I=-16 TP=-1.5 LRA=11; mono 44100Hz 128kbps MP3"
+    },
+    {
+      "id": "adam_b5d4e162d3fcc599",
+      "taskId": "85e298c9-93dd-4666-82eb-262b3bdb8419",
+      "durationMs": 3318,
+      "bytes": 53542,
+      "sha256": "d02dc9cd0d08ed0eed7356d19a8520b5a1ec0dc1901d8ab867871ac63118c3a7",
+      "profile": "loudnorm I=-16 TP=-1.5 LRA=11; mono 44100Hz 128kbps MP3"
+    },
+    {
+      "id": "adam_b94d91add5ab6ecd",
+      "taskId": "a66b5b29-7082-482c-a38d-31310d814988",
+      "durationMs": 3161,
+      "bytes": 51035,
+      "sha256": "2ebcde83ff8d1feedb430d09c183d9142300045b92d59dc98e673e6d5b9ccbcc",
+      "profile": "loudnorm I=-16 TP=-1.5 LRA=11; mono 44100Hz 128kbps MP3"
+    },
+    {
+      "id": "adam_7e7fee8e49c5bbed",
+      "taskId": "cf65b154-c024-4578-a106-71c6360fdb50",
+      "durationMs": 3396,
+      "bytes": 54796,
+      "sha256": "e57bbb50bc196280a4d042d18ff4c4c372f7573a356164d76258dc83097aaef8",
+      "profile": "loudnorm I=-16 TP=-1.5 LRA=11; mono 44100Hz 128kbps MP3"
+    },
+    {
+      "id": "adam_b3e6902ab2262011",
+      "taskId": "cb594cb3-8771-4c00-a1a8-24883b4e6183",
+      "durationMs": 3396,
+      "bytes": 54796,
+      "sha256": "4c09f797f8f4bb292b4168f46459a2c228dc6d724ab00f1ce2daae6370a3403d",
+      "profile": "loudnorm I=-16 TP=-1.5 LRA=11; mono 44100Hz 128kbps MP3"
+    },
+    {
+      "id": "adam_a82c9be7d2d5bc68",
+      "taskId": "d5d8e199-3960-4864-9e8e-86c7adc0efa0",
+      "durationMs": 3318,
+      "bytes": 53542,
+      "sha256": "4a2b841ce80dd8a7cc536b55e5837178582d51fefb9144807ec77eb6992d74ec",
+      "profile": "loudnorm I=-16 TP=-1.5 LRA=11; mono 44100Hz 128kbps MP3"
+    },
+    {
+      "id": "adam_4912118d1b523181",
+      "taskId": "250f6a73-8cac-41ae-8b8a-03edc75946b1",
+      "durationMs": 3396,
+      "bytes": 54796,
+      "sha256": "26f4282abd2c7326389a0912a61169239a5da9d59cec96fe8dfc9a425444801a",
+      "profile": "loudnorm I=-16 TP=-1.5 LRA=11; mono 44100Hz 128kbps MP3"
+    },
+    {
+      "id": "adam_086adf77b8d3b239",
+      "taskId": "83dd74c0-90f1-4a86-8d3a-71f3c0cee468",
+      "durationMs": 3318,
+      "bytes": 53542,
+      "sha256": "ae95511e8943ba4a91d3081f58e675e6af1712faf9d3d834be5c16defc354cee",
+      "profile": "loudnorm I=-16 TP=-1.5 LRA=11; mono 44100Hz 128kbps MP3"
+    },
+    {
+      "id": "adam_136c40ce2899f1b6",
+      "taskId": "82f9bbce-71d3-4307-97f1-c838760349e2",
+      "durationMs": 4127,
+      "bytes": 66499,
+      "sha256": "9fb2e57a8657f36db52231db98e37ccb4bccfbbef825241048e52bfaa2c8614e",
+      "profile": "loudnorm I=-16 TP=-1.5 LRA=11; mono 44100Hz 128kbps MP3"
+    },
+    {
+      "id": "adam_fb0a09e2c1b565b8",
+      "taskId": "a10fec3f-b3f4-4f61-8cf1-28e82699b1ee",
+      "durationMs": 4049,
+      "bytes": 65245,
+      "sha256": "15054b3e9ee6bddf65de8b10e4627dbb9c318fe72583ca58360285a8b47b8035",
+      "profile": "loudnorm I=-16 TP=-1.5 LRA=11; mono 44100Hz 128kbps MP3"
+    }
+  ],
+  "nextSteps": [
+    "Recover 315 older Adam asset URLs from Runway. Existing connector returns only latest 50; browser login awaiting Google phone confirmation.",
+    "Merge recovered results with the 50 existing results. Run assemble-adam-commentary.py without --download-only to build complete catalog.",
+    "Run node scripts/version-assets.mjs, all Adam asset and commentary tests, browser playback QA, then publish existing Site."
+  ],
+  "validation": {
+    "commentaryRegressionTests": 314,
+    "pass": 314,
+    "fullAssetCoverage": "pending"
+  },
+  "siteProjectId": "appgprj_6ad121ca83d881919f43587a12b58ffc",
+  "siteSourceBase": "8a20e85bfbb2c13d0e8fdc7a3783927aadaec3c5"
+}

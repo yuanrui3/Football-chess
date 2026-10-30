@@ -27,11 +27,13 @@ const ratingsViewVersion=hash(await readFile(asset('player-ratings-view.js'),'ut
 const ratingsCssVersion=hash(await readFile(asset('player-ratings.css'),'utf8'));
 const statsVersion=await versionImports('match-stats.js',{'engine.js':engineVersion,'player-ratings.js':playerRatingsVersion});
 const commentaryClipsVersion=hash(await readFile(asset('commentary-clips.js'),'utf8'));
+const adamCommentaryVersion=hash(await readFile(asset('adam-commentary-clips.js'),'utf8'));
 const hugoCommentaryVersion=hash(await readFile(asset('hugo-commentary-clips.js'),'utf8'));
 const commentarySpatialVersion=await versionEngineImport('commentary-spatial.js');
 const commentaryTacticsVersion=await versionEngineImport('commentary-tactics.js');
 const commentaryStatsVersion=hash(await readFile(asset('commentary-stats.js'),'utf8'));
 let commentary=await readFile(asset('commentary.js'),'utf8');
+commentary=commentary.replace(/from ['"]\.\/adam-commentary-clips\.js(?:\?v=[^'"]+)?['"]/,`from './adam-commentary-clips.js?v=${adamCommentaryVersion}'`);
 commentary=commentary.replace(/from ['"]\.\/commentary-clips\.js(?:\?v=[^'"]+)?['"]/,`from './commentary-clips.js?v=${commentaryClipsVersion}'`);
 commentary=commentary.replace(/from ['"]\.\/hugo-commentary-clips\.js(?:\?v=[^'"]+)?['"]/,`from './hugo-commentary-clips.js?v=${hugoCommentaryVersion}'`);
 commentary=commentary.replace(/from ['"]\.\/commentary-spatial\.js(?:\?v=[^'"]+)?['"]/,`from './commentary-spatial.js?v=${commentarySpatialVersion}'`);

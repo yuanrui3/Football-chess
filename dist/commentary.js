@@ -1,5 +1,6 @@
 /** Public match commentary: read-only board geometry, never seeds, hidden targets or AI search. */
 import {COMMENTARY_CLIPS} from './commentary-clips.js?v=29cbe0d352e1';
+import {ADAM_EVENT_CLIPS, ADAM_TACTICAL_CLIPS} from './adam-commentary-clips.js';
 import {HUGO_COMMENTARY_CLIPS, hugoCommentaryClip} from './hugo-commentary-clips.js?v=cfaced2e3dd2';
 import {commentaryStatsLines} from './commentary-stats.js?v=510d8a0ad598';
 import {createTacticalCommentary} from './commentary-tactics.js?v=f7eecf4a3c13';
@@ -300,6 +301,7 @@ export const COMMENTARY_DEMO = Object.freeze([
 export function createCommentary({speechSynthesis = globalThis.speechSynthesis,
   Utterance = globalThis.SpeechSynthesisUtterance, AudioCtor = globalThis.Audio, clips = COMMENTARY_CLIPS,
   localSpeech = null, hugoClips = HUGO_COMMENTARY_CLIPS, selectHugoClip = hugoCommentaryClip,
+  adamClips = ADAM_EVENT_CLIPS, adamTacticalClips = ADAM_TACTICAL_CLIPS,
   onCaption = () => {}, onVoicesChanged = () => {}, onPlaybackChanged = () => {}, now = () => Date.now(),
   setTimer = (fn, delay) => setTimeout(fn, delay), clearTimer = id => clearTimeout(id)} = {}) {
   let enabled = false, destroyed = false, epoch = 0, pace = 1200, active = null, watchdog = null;
@@ -311,6 +313,23 @@ export function createCommentary({speechSynthesis = globalThis.speechSynthesis,
   const speechSupported = !!(speechSynthesis && typeof speechSynthesis.speak === 'function' && typeof Utterance === 'function');
   const recordedSupported = typeof AudioCtor === 'function' && Object.values(clips).some(clip => clip?.src && clip?.text);
   const librarySupported = typeof AudioCtor === 'function' && Object.values(hugoClips).some(clip => clip?.src && clip?.text);
+  const adamSupported = typeof AudioCtor === 'function' && [...Object.values(adamClips), ...Object.values(adamTacticalClips)].some(clip => clip?.src && clip?.text);
+  const adamVariantHistory = new Map(), adamRecentSources = [];
+  function adamVariant(base) {
+    if (!base) return null;
+    const choices = [base, ...(base.variants || [])].filter((clip, index, all) => clip?.src && clip?.text
+      && all.findIndex(other => other?.src === clip.src) === index);
+    if (!choices.length) return null;
+    const last = adamVariantHistory.get(base.key), start = (choices.findIndex(clip => clip.src === last) + 1) % choices.length;
+    const rotated = [...choices.slice(start), ...choices.slice(0, start)];
+    return rotated.find(clip => !adamRecentSources.includes(clip.src)) || rotated[0];
+  }
+  function rememberAdamVariant(base, clip) {
+    if (!base || !clip) return;
+    adamVariantHistory.set(base.key, clip.src);
+    if (adamVariantHistory.size > 120) adamVariantHistory.delete(adamVariantHistory.keys().next().value);
+    adamRecentSources.push(clip.src); if (adamRecentSources.length > 16) adamRecentSources.shift();
+  }
   const localSupported = !!(localSpeech && typeof localSpeech.speak === 'function' && typeof localSpeech.load === 'function');
   let playback = localSupported ? 'local' : recordedSupported ? 'recorded' : 'device', audioStatus = 'idle', warming = null;
   let availableVoices = [], voiceOptions = [], chosenVoiceId = null, selectedVoice = null;
@@ -391,7 +410,7 @@ export function createCommentary({speechSynthesis = globalThis.speechSynthesis,
   }
   const hugoInProgress = () => !!active?.started
     && ['recorded', 'local'].includes(active.transport)
-    && (active.event.voice === 'Hugo' || active.transport === 'local');
+    && (active.event.voice === 'Hugo' || active.event.voice === 'Adam' || active.transport === 'local');
   function updatePosition(state) {
     const previousAttack = latestState?.attack;
     latestState = state;
@@ -456,6 +475,7 @@ export function createCommentary({speechSynthesis = globalThis.speechSynthesis,
     if (!demoCall && finite(line.createdAt) && at - line.createdAt > ttl) return false;
     if (spoken.has(line.id)) return false;
     if (explicit && pendingReaction) return false;
+    if (!explicit && hugoInProgress() && active.event.voice === 'Adam' && line.kind === 'trend') return false;
     if (!explicit && line.priority >= COMMENTARY_PRIORITY.attempt && hugoInProgress()) {
       if (pendingReaction?.line.id === line.id || pendingReaction && pendingReaction.line.priority > line.priority) return false;
       // One bounded slot: a final result replaces its now-obsolete shot call.
@@ -475,13 +495,17 @@ export function createCommentary({speechSynthesis = globalThis.speechSynthesis,
       && localSupported && localState().ready;
     const libraryKey = {enable: 'hugo_enable', test: 'hugo_test', demo: 'hugo_demo'}[line.clipKey] || line.clipKey;
     const hugoClip = playback === 'library' ? selectHugoClip({...line, clipKey: libraryKey}, latestState) : null;
-    const clip = playback === 'library' ? hugoClip || clips[line.keeperRebound ? 'loose_ball' : line.clipKey]
+    const adamBase = playback === 'adam'
+      ? selectHugoClip({...line, clipKey: libraryKey}, latestState, adamTacticalClips)
+        || adamClips[line.keeperRebound ? 'loose_ball' : line.clipKey] : null;
+    const clip = playback === 'adam' ? adamVariant(adamBase)
+      : playback === 'library' ? hugoClip || clips[line.keeperRebound ? 'loose_ball' : line.clipKey]
       : playback === 'recorded' || playback === 'local' ? clips[line.clipKey] : null;
     let text = useLocal ? localObservationText(line) : clip?.text || (pace < 700 && line.kind === 'trend' && line.shortText ? line.shortText : line.text);
     if (!demoCall && !explicit && line.kind === 'trend' && text === lastText) return false;
     cancelActive();
-    const token = {}, spokenEvent = {...line, text, snapshot: playback === 'library' && clip?.snapshot === true || useLocal && !!line.spatial,
-      ...(useLocal ? {voice: 'Hugo'} : clip ? {voice: hugoClip ? 'Hugo' : 'Tom'} : {})};
+    const token = {}, spokenEvent = {...line, text, snapshot: ['library', 'adam'].includes(playback) && clip?.snapshot === true || useLocal && !!line.spatial,
+      ...(playback === 'adam' && clip ? {voice: 'Adam'} : useLocal ? {voice: 'Hugo'} : clip ? {voice: hugoClip ? 'Hugo' : 'Tom'} : {})};
     active = {token, event: spokenEvent, transport: 'caption'};
     remember(spoken, line.id); lastSpoken = at; lastText = text;
     if (line.spatial) {
@@ -546,7 +570,7 @@ export function createCommentary({speechSynthesis = globalThis.speechSynthesis,
       if (active?.token !== token) return;
       // The male commentary mode must not silently substitute an arbitrary
       // browser voice when both local synthesis and the saved call fail.
-      if (playback === 'local' || playback === 'library') {status('unavailable'); return;}
+      if (playback === 'local' || playback === 'library' || playback === 'adam') {status('unavailable'); return;}
       if (!deviceSupported()) {status('unavailable'); return;}
       active.transport = 'device';
       status(fallback ? 'fallback' : 'playing');
@@ -571,7 +595,7 @@ export function createCommentary({speechSynthesis = globalThis.speechSynthesis,
         // Generic recordings cannot announce the live names or score from the proposed line.
         text = clip.text; lastText = text; active.event = {...line, text}; caption(text, active.event);
       }
-      if (!clip || !(playback === 'library' ? librarySupported || recordedSupported : recordedSupported)) {armWatchdog(); device(playback !== 'device'); return;}
+      if (!clip || !(playback === 'adam' ? adamSupported : playback === 'library' ? librarySupported || recordedSupported : recordedSupported)) {armWatchdog(); device(playback !== 'device'); return;}
       let audio;
       function fallback() {
         if (active?.token !== token || active.transport !== 'recorded') return;
@@ -590,6 +614,7 @@ export function createCommentary({speechSynthesis = globalThis.speechSynthesis,
           if (active?.token !== token || active.transport !== 'recorded') {stopAudio(audio); return;}
           if (!active.started && !demoCall && (!claimCurrent(line) || finite(line.createdAt) && now() - line.createdAt > ttl)) {cancelActive(); return;}
           const firstStart = !active.started; active.started = true;
+          if (firstStart && playback === 'adam') rememberAdamVariant(adamBase, clip);
           clearTimer(active.loadTimer); status('playing');
           if (firstStart) armWatchdog({durationMs: Number.isFinite(audio.duration) && audio.duration > 0 ? audio.duration * 1000 : clip.durationMs});
         };
@@ -629,7 +654,7 @@ export function createCommentary({speechSynthesis = globalThis.speechSynthesis,
           if (result?.spoken) finish(token); else fallbackLocal();
         }, fallbackLocal);
       } catch {fallbackLocal();}
-    } else if (playback === 'recorded' || playback === 'local' || playback === 'library') recorded();
+    } else if (playback === 'recorded' || playback === 'local' || playback === 'library' || playback === 'adam') recorded();
     else {armWatchdog(); device();}
     return true;
   }
@@ -719,7 +744,7 @@ export function createCommentary({speechSynthesis = globalThis.speechSynthesis,
       return warming;
     },
     setPlayback(value) {
-      if (!['recorded', 'device', 'local', 'library'].includes(value)) return false;
+      if (!['recorded', 'device', 'local', 'library', 'adam'].includes(value)) return false;
       if (playback !== value) {stopDemo(); cancelActive(); playback = value; status('idle');}
       return true;
     },
@@ -741,10 +766,10 @@ export function createCommentary({speechSynthesis = globalThis.speechSynthesis,
       const end = setTimer(() => {demoTimers.delete(end); demo = false;}, 25000);
       demoTimers.add(end); return true;
     },
-    getState: () => ({enabled, supported: playback === 'library' ? librarySupported || recordedSupported : playback === 'local' ? (localSupported && localState().supported !== false) || recordedSupported : playback === 'recorded' ? recordedSupported || deviceSupported() : deviceSupported(),
-      playback, pendingReaction: pendingReaction?.line.kind || null, recordedSupported, librarySupported, localSupported: localSupported && localState().supported !== false, localState: localState(), audioStatus, speaking: !!active, demo, pace, allowed: pace === COMMENTARY_PACE,
+    getState: () => ({enabled, supported: playback === 'adam' ? adamSupported : playback === 'library' ? librarySupported || recordedSupported : playback === 'local' ? (localSupported && localState().supported !== false) || recordedSupported : playback === 'recorded' ? recordedSupported || deviceSupported() : deviceSupported(),
+      playback, pendingReaction: pendingReaction?.line.kind || null, recordedSupported, librarySupported, adamSupported, localSupported: localSupported && localState().supported !== false, localState: localState(), audioStatus, speaking: !!active, demo, pace, allowed: pace === COMMENTARY_PACE,
       voices: voiceOptions.map(voice => ({...voice})), voiceId: selectedVoice ? voiceId(selectedVoice) : null,
-      voiceName: selectedVoice?.name || null,
+      voiceName: playback === 'adam' ? 'Adam' : selectedVoice?.name || null,
       quality: selectedVoice ? /natural|neural/i.test(selectedVoice.name) ? 'natural' : voiceRank(selectedVoice) >= 70 ? 'enhanced' : 'standard' : 'unavailable'}),
     destroy() {reset(); enabled = false; destroyed = true;
       try {localSpeech?.destroy?.();} catch {}

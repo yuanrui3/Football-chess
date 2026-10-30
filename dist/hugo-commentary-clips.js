@@ -2995,7 +2995,7 @@ const ROLE = Object.freeze({Q:'queen', R:'rook', B:'bishop', N:'knight', P:'pawn
  * No names, hidden decisions, game search, random draws, or tactical inference occur here.
  * null means use the existing fallback rather than make an unsupported claim.
  */
-export function hugoCommentaryClip(line, state) {
+export function hugoCommentaryClip(line, state, catalog = HUGO_COMMENTARY_CLIPS) {
   if (!line || line.kind !== 'trend') return null;
   const alias = {enable:'hugo_enable', test:'hugo_test', demo:'hugo_demo'};
   let key = alias[line.clipKey] || line.clipKey;
@@ -3041,6 +3041,6 @@ export function hugoCommentaryClip(line, state) {
       }
     }
   }
-  const clip = HUGO_COMMENTARY_CLIPS[key];
+  const clip = catalog[key];
   return clip?.ready && clip.durationMs > 0 && clip.sha256 ? clip : null;
 }
