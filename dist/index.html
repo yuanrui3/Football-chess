@@ -6,7 +6,7 @@
   <meta name="description" content="Football tactics meet chess. Play an eleven-a-side tactical match on a 14 by 17 pitch, with goalkeeper reactions, shot odds, and chess-inspired football.">
   <title>Football Chess · The beautiful game, one move at a time</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23214f3b'/%3E%3Ctext x='32' y='48' font-size='47' text-anchor='middle' fill='%23dbef84'%3E♞%3C/text%3E%3C/svg%3E">
-  <link rel="stylesheet" href="style.css?v=9b4aaa7d73f4">
+  <link rel="stylesheet" href="style.css?v=d829db409425">
   <link rel="stylesheet" href="player-ratings.css?v=0f5442ed5df9">
 </head>
 <body>
@@ -176,7 +176,7 @@
   <h2 id="matchFilesTitle">Save it. Play it back.</h2>
   <p id="matchFileSummary"></p>
   <div class="match-file-actions"><button class="primary" id="saveMatchBtn">Download compact match ↓</button><button class="utility-button" id="saveMatchJsonBtn">Download JSON</button><button class="utility-button" id="watchMatchBtn">Replay this match</button></div>
-  <p class="match-file-help">Compact .fcmatch files use compressed JSON. Both formats preserve the recorded moves, shots, goals and cards.</p>
+  <p class="match-file-help">Compact .fcmatch files use compressed JSON. Both formats preserve the recorded moves, shots, goals, cards and match statistics.</p>
   <label class="match-file-upload" for="loadMatchFile"><b>Open a saved match</b><span>Choose a .fcmatch or .json file to watch it here.</span><input type="file" id="loadMatchFile" accept=".fcmatch,.json,.gz,.txt,application/json,application/gzip"></label>
   <a id="matchDownloadLink" class="match-download-link" hidden download></a>
   <p id="matchFileStatus" class="match-file-status" role="status" aria-live="polite"></p>
@@ -189,6 +189,7 @@
   <p class="replay-details" id="replayDetails"></p>
   <div class="replay-controls"><button type="button" class="utility-button" id="replayPrevBtn" aria-label="Previous replay step">←</button><button type="button" class="primary" id="replayPlayBtn" aria-pressed="false">▶ Play</button><button type="button" class="utility-button" id="replayNextBtn" aria-label="Next replay step">→</button><button type="button" class="utility-button" id="replayRestartBtn">↶ Restart</button><span id="replayStep">0 / 0</span></div>
   <div class="replay-options"><label for="replaySpeed">Playback speed</label><select id="replaySpeed"><option value="1">1×</option><option value="2">2×</option><option value="4">4×</option><option value="8">8×</option></select><select id="replayGoals" aria-label="Jump to a recorded goal" hidden></select></div>
+  <div class="replay-review-controls"><button class="utility-button" id="replayStatsBtn" hidden>Match stats &amp; analysis</button><button class="utility-button" id="replayGoalClipBtn" hidden>Replay this goal</button><button class="utility-button" id="replayReturnBtn" hidden>← Back to match replay</button><label id="replayAutoGoalsLabel" hidden><input id="replayAutoGoals" type="checkbox" checked> Automatic goal replays</label></div>
   <label class="replay-timeline" for="replayScrub"><span>Replay timeline</span><input type="range" id="replayScrub" min="0" max="1" value="0" step="1"></label>
   <p class="replay-caption" id="replayCaption" aria-live="polite"></p>
   <div class="replay-field" aria-label="Recorded match playback">
@@ -200,6 +201,12 @@
   </div>
   <p class="replay-legend"><span><i></i> Recorded action path</span><span><i class="keeper"></i> Keeper reaction</span></p>
   <div class="replay-footer"><small>The match and its clocks are paused during the replay.</small><button class="primary" data-close="replayDialog">Continue match <span>→</span></button></div>
+</dialog>
+<dialog id="savedReportDialog" aria-labelledby="savedReportTitle">
+  <div class="dialog-heading"><p class="eyebrow">SAVED MATCH REVIEW</p><button class="icon-button" data-close="savedReportDialog" aria-label="Close saved match report">×</button></div>
+  <h2 id="savedReportTitle">Saved match report</h2><p id="savedReportScore" class="saved-report-score"></p>
+  <p id="savedReportCoverage" class="stats-notice"></p><div id="savedReportContent"></div>
+  <button class="primary wide" data-close="savedReportDialog">Back to replay →</button>
 </dialog>
 <dialog id="pauseStatsDialog" aria-labelledby="pauseStatsTitle" aria-describedby="pauseStatsClock">
   <div class="dialog-heading"><p class="eyebrow">MATCH IN PROGRESS</p><button class="icon-button" data-close="pauseStatsDialog" aria-label="Close stats and keep match paused">×</button></div>
@@ -214,6 +221,7 @@
   <div class="dialog-actions pause-stats-actions"><button class="utility-button" data-close="pauseStatsDialog">Keep paused</button><button class="primary" id="pauseStatsResumeBtn">Resume match <span>→</span></button></div>
 </dialog>
 <dialog id="resultDialog" aria-labelledby="resultTitle"><div class="dialog-heading"><p class="eyebrow">THE FINAL WHISTLE</p><button class="icon-button" data-close="resultDialog" aria-label="Close result">×</button></div><div class="result-ball" aria-hidden="true">⚽</div><h2 id="resultTitle">Honours even.</h2><p id="resultScore" class="result-score">0 : 0</p><p id="resultText"></p>
+  <section id="postMatchAnalysis" class="match-analysis" aria-label="Post-match analysis"></section>
   <section id="playerRatings" class="player-ratings" aria-label="Full-time player ratings"></section>
   <section class="match-stats" aria-label="Match statistics">
     <p id="statsPartial" class="stats-notice" hidden>Stats recorded from this update.</p>
@@ -232,6 +240,6 @@
   <button class="primary wide" id="rematchBtn">Play another match <span>↗</span></button>
 </dialog>
 <dialog id="confirmDialog"><div class="dialog-heading"><p class="eyebrow">START FRESH</p><button class="icon-button" data-close="confirmDialog" aria-label="Cancel">×</button></div><h2>A new game?</h2><p>Your current match will be replaced.</p><div class="dialog-actions"><button class="utility-button" data-close="confirmDialog">Keep playing</button><button class="primary" id="confirmNewBtn">New match ↗</button></div></dialog>
-<script type="module" src="app.js?v=d84a32259245"></script>
+<script type="module" src="app.js?v=ef984fd23c4a"></script>
 </body>
 </html>

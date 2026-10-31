@@ -274,7 +274,7 @@ export function buildGoalReplay(history,before,after){
 export {recordFrame as captureReplayFrame,validFrame as validReplayFrame,validRosterTransition};
 
 /** A separate board and timer: playback never touches the live game or clock. */
-export function createReplayPlayer({onComplete=()=>{},onInteract=()=>{}}={}){
+export function createReplayPlayer({onComplete=()=>{},onInteract=()=>{},onGoal=()=>false,onFrame=()=>{}}={}){
   const $=id=>document.getElementById(id),pitch=$('replayPitch'),board=$('replayBoard'),overlay=$('replayOverlay'),ball=$('replayBall');
   const tokens=new Map(),animations=new Set();
   let replay=null,index=0,timer=null,playing=false,completed=false,speed=1;
@@ -333,13 +333,15 @@ export function createReplayPlayer({onComplete=()=>{},onInteract=()=>{}}={}){
     }else if(action?.path?.length>1)line(action.path,'replay-action-line');
     if(action?.keeperMove)line([action.keeperMove.from,action.keeperMove.to],'replay-keeper-line');
     $('replayMoment').textContent=goal?'GOAL':replay.kind==='match'&&index===replay.frames.length-1&&replay.finished?'FULL TIME':action?.type==='foul'?action.card==='red'?'RED CARD':action.card==='yellow'?'YELLOW CARD':'FOUL':action?.penalty?'PENALTY':action?.type==='shotAttempt'?'SHOT DECLARED':action?.lofted?'LOFTED PASS':'BUILD-UP';
-    controls();
+    controls();onFrame({replay,index,playing,speed});
   }
   function schedule(){
     clearTimer();if(!playing||!replay)return;
     timer=setTimeout(()=>{
       timer=null;if(!playing)return;
-      if(index===replay.frames.length-1){playing=false;controls();if(!completed){completed=true;onComplete();}return;}
+      if(replay.kind==='match'&&replay.frames[index].action?.type==='goal'&&[-1,H].includes(replay.frames[index].ball.y)
+        &&onGoal({replay,index,playing,speed}))return;
+      if(index===replay.frames.length-1){playing=false;controls();if(!completed){completed=true;onComplete({replay,index});}return;}
       const previous=replay.frames[index];index++;renderFrame(previous);schedule();
     },(index===replay.frames.length-1?1600:1050)/speed);
   }
@@ -352,9 +354,10 @@ export function createReplayPlayer({onComplete=()=>{},onInteract=()=>{}}={}){
   $('replaySpeed')?.addEventListener('change',()=>manual(()=>{speed=[1,2,4,8].includes(Number($('replaySpeed').value))?Number($('replaySpeed').value):1;schedule();}));
   $('replayGoals')?.addEventListener('change',()=>manual(()=>{playing=false;index=Math.max(0,Math.min(replay.frames.length-1,Number($('replayGoals').value)||0));renderFrame();}));
   return {
-    load(value,{autoplay=true,normalize=restoreGoalReplay}={}){
-      clearTimer();clearAnimations();replay=normalize(value);playing=false;index=0;completed=false;speed=1;if(!replay)return false;
-      if($('replaySpeed'))$('replaySpeed').value='1';
+    load(value,{autoplay=true,normalize=restoreGoalReplay,startIndex=0,playbackSpeed=1}={}){
+      clearTimer();clearAnimations();replay=normalize(value);playing=false;completed=false;if(!replay)return false;
+      index=Math.max(0,Math.min(replay.frames.length-1,Math.trunc(startIndex)||0));speed=[1,2,4,8].includes(playbackSpeed)?playbackSpeed:1;
+      if($('replaySpeed'))$('replaySpeed').value=String(speed);
       if($('replayKind'))$('replayKind').textContent=replay.kind==='match'?'MATCH REPLAY':'GOAL REPLAY';
       if($('replayGoals')){
         $('replayGoals').replaceChildren();
@@ -375,6 +378,7 @@ export function createReplayPlayer({onComplete=()=>{},onInteract=()=>{}}={}){
       $('replayDetails').textContent=`${TEAM[replay.shootingTeam]} ${shooter?NAMES[shooter.type].toLowerCase():'player'} · ${chance}`;
       $('replayScrub').max=String(replay.frames.length-1);playing=!!autoplay;renderFrame();schedule();return true;
     },
+    snapshot(){return {replay,index,playing,speed};},
     stop(){clearTimer();clearAnimations();playing=false;controls();}
   };
 }

@@ -4,6 +4,7 @@ import {createGame,applyKick,applyMove,skipMove,legalKicks,legalMoves,canOccupyS
 import {buildGoalReplay,restoreGoalReplay,createReplayPlayer} from '../dist/goal-replay.js';
 
 import {createMatchRecording,appendMatchRecording,matchReplay} from '../dist/match-archive.js';
+import {recordedGoalClip} from '../dist/match-analysis.js';
 
 const clone=value=>structuredClone(value);
 function fixture({team='white',ownGoal=false,knight=false,keeperFrom=null,extraPositions={}}={}){
@@ -603,4 +604,36 @@ test('whole-match player shows goals before the last frame, goal jumps and full 
     dom.nodes.replaySpeed.value='4';dom.nodes.replaySpeed.fire('change');
     player.stop();
   }finally{globalThis.document=old;}
+});
+
+test('automatic goal replay resumes the saved match and completes only once',()=>{
+  const {state,before,after}=recordedGoal(),recording=createMatchRecording(state);
+  appendMatchRecording(recording,state,before);appendMatchRecording(recording,before,after);recording.finished=true;
+  const replay=matchReplay(recording),dom=replayDOM();
+  const previous={document:globalThis.document,window:globalThis.window,setTimeout:globalThis.setTimeout,clearTimeout:globalThis.clearTimeout};
+  let tick=null,returnTo=null,goals=0,completed=0;
+  globalThis.document=dom.document;globalThis.window={matchMedia:()=>({matches:false})};
+  globalThis.setTimeout=callback=>{tick=callback;return 1;};globalThis.clearTimeout=()=>{tick=null;};
+  try{
+    const player=createReplayPlayer({
+      onGoal(snapshot){
+        goals++;returnTo=snapshot;
+        assert.equal(snapshot.speed,8);
+        player.load(recordedGoalClip(snapshot.replay,snapshot.index),{normalize:value=>value});
+        return true;
+      },
+      onComplete({replay:finished}){
+        if(returnTo){
+          assert.equal(finished.kind,'goal');const saved=returnTo;returnTo=null;
+          player.load(saved.replay,{normalize:value=>value,startIndex:saved.index+1,playbackSpeed:saved.speed});
+        }else{assert.equal(finished.kind,'match');completed++;}
+      }
+    });
+    assert.ok(player.load(replay,{normalize:value=>value,playbackSpeed:8}));
+    for(let count=0;tick&&count<20;count++){const next=tick;tick=null;next();}
+    assert.equal(goals,1);assert.equal(completed,1);assert.equal(tick,null);
+    assert.equal(player.snapshot().index,replay.frames.length-1);
+    assert.equal(player.snapshot().speed,8);assert.equal(player.snapshot().playing,false);
+    player.stop();
+  }finally{for(const [name,value] of Object.entries(previous)){if(value===undefined)delete globalThis[name];else globalThis[name]=value;}}
 });

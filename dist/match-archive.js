@@ -1,7 +1,8 @@
 // Portable recordings contain observed positions and outcomes, never AI seeds.
 // Delta frames remove unchanged pieces; gzip removes repeated field names.
 import {BOARD_WIDTH as W,BOARD_HEIGHT as H,RULES_VERSION} from './engine.js?v=bc58e8823cbc';
-import {captureReplayFrame,validReplayFrame,validRosterTransition,buildGoalReplay} from './goal-replay.js?v=03fa5949276e';
+import {captureReplayFrame,validReplayFrame,validRosterTransition,buildGoalReplay} from './goal-replay.js?v=756c713355c1';
+import {restoreArchiveStatistics} from './archive-statistics.js?v=c1008bd99b24';
 
 export const MATCH_FORMAT='football-chess-match';
 export const MAX_RECORDING_STEPS=20000;
@@ -73,15 +74,26 @@ export function restoreMatchRecording(value){
     latest.set(recording,frames[0]);
     // Re-encode only the known fields. Imported objects never reach the UI.
     for(const frame of frames.slice(1))pushFrame(recording,frame);
+    const statistics=restoreArchiveStatistics(value.statistics,frames.at(-1));
+    if(statistics)recording.statistics=statistics;
     return recording;
   }catch{return null;}
 }
 export function matchReplay(value){
-  try{const frames=framesOf(value);return {kind:'match',frames,score:{...frames.at(-1).score},partial:value.partial,finished:value.finished,capped:value.capped};}catch{return null;}
+  try{const frames=framesOf(value);return {kind:'match',frames,score:{...frames.at(-1).score},partial:value.partial,finished:value.finished,capped:value.capped,statistics:restoreArchiveStatistics(value.statistics,frames.at(-1))};}catch{return null;}
+}
+export function recordingWithStatistics(recording,statistics,game){
+  const value={...recording};delete value.statistics;
+  if(!recording.capped&&recordingMatchesGame(recording,game)){
+    const restored=restoreArchiveStatistics(statistics,captureReplayFrame(game));
+    if(restored)value.statistics=restored;
+  }
+  latest.set(value,latest.get(recording));return value;
 }
 export function rewindMatchRecording(recording,length){
   if(!Number.isInteger(length)||length<0||length>recording.steps.length)return false;
   recording.steps.length=length;recording.finished=false;recording.capped=false;
+  delete recording.statistics;
   latest.set(recording,framesOf(recording).at(-1));return true;
 }
 export function recordingMatchesGame(recording,game){
@@ -94,7 +106,7 @@ export function recordingFromLegacy(value){
   if(states.some(state=>!state||state.boardDimensions?.width!==W||state.boardDimensions?.height!==H||state.rulesVersion<14||state.rulesVersion>RULES_VERSION))throw failure();
   const recording=createMatchRecording(states[0],{partial:true,finished:value.stage==='finished'});
   for(let i=1;i<states.length;i++)appendMatchRecording(recording,states[i-1],states[i]);
-  const restored=restoreMatchRecording(recording);if(!restored)throw failure();return restored;
+  const restored=restoreMatchRecording(recording);if(!restored)throw failure();return recordingWithStatistics(restored,value.matchStats,value.game);
 }
 export async function encodeMatchFile(recording,{compressed=true}={}){
   if(!restoreMatchRecording(recording))throw failure();
@@ -120,6 +132,6 @@ export async function readMatchFile(file){
   let value;try{value=JSON.parse(text);}catch{throw new Error('The match file does not contain valid JSON.');}
   if(value?.format===MATCH_FORMAT){const recording=restoreMatchRecording(value);if(!recording)throw failure();return recording;}
   // The old device save contains only the recent undo history.
-  if(value?.recording){const recording=restoreMatchRecording(value.recording);if(recording)return recording;}
+  if(value?.recording){const recording=restoreMatchRecording(value.recording);if(recording)return value.game?recordingWithStatistics(recording,value.matchStats||recording.statistics,value.game):recording;}
   try{return recordingFromLegacy(value);}catch{throw failure();}
 }

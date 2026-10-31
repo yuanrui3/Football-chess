@@ -13,7 +13,7 @@ function section(start,end){
 }
 const code=[
   section("$('pauseBtn').addEventListener('click'","$('undoBtn').addEventListener('click'"),
-  section('function pauseStatsSnapshot(){','function renderMatchStats(){'),
+  section('function pauseStatsSnapshot(){','function renderMatchStats('),
   section("for(const el of document.querySelectorAll('[data-close]'))","setInterval(()=>{advanceClockNow();},250);"),
 ].join('\n');
 function fixture(){

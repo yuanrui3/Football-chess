@@ -1,13 +1,14 @@
 import {createGame, canQuickRelease, legalMoves, legalKicks, disguisedShotTargets, applyMove, applyKick, skipMove, chooseAIAction, currentTeam, cornerTakers, selectCornerTaker, BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, BOX_FILES, BOX_DEPTH, CENTRAL_GOAL_FILES, MIDFIELD_RANK, inOwnBox, canOccupySquare, isBox, isGoalMouth, shotChance, shotModel, offsideInfo, offsideFlaggedIds, LONG_TACKLE_RANGE, DRIBBLE_RANGE, FOUL_RULE, STALLING_RULE, PACE_RULE, ACTION_SECONDS, actionTimeout, progressInfo, paceInfo, positionActions, normalizeGame, FORMATION_PRESETS, setStartingFormation} from './engine.js?v=bc58e8823cbc';
 import {createMatchClock, restoreMatchClock, tickMatchClock, settleMatchClock, rewindMatchClock} from './match-clock.js?v=edcd4f433b39';
-import {buildGoalReplay, restoreGoalReplay, createReplayPlayer} from './goal-replay.js?v=03fa5949276e';
-import {createMatchRecording,appendMatchRecording,restoreMatchRecording,rewindMatchRecording,recordingMatchesGame,recordingFromLegacy,matchReplay,encodeMatchFile,readMatchFile} from './match-archive.js?v=e69cc9cde9af';
+import {buildGoalReplay, restoreGoalReplay, createReplayPlayer} from './goal-replay.js?v=756c713355c1';
+import {createMatchRecording,appendMatchRecording,restoreMatchRecording,rewindMatchRecording,recordingMatchesGame,recordingFromLegacy,matchReplay,encodeMatchFile,readMatchFile,recordingWithStatistics} from './match-archive.js?v=10c6f2bf706d';
 import {createMatchStats, restoreMatchStats, recordMatchTransition, addPossessionTime, matchStatsSummary, shortPieceId} from './match-stats.js?v=3310fe94a6e9';
 import {playerRatingsSummary} from './player-ratings.js?v=f0bf44c20e32';
 import {renderPlayerRatings} from './player-ratings-view.js?v=0509d617ebe2';
 import {createCommentary} from './commentary.js?v=301a929ae77e';
 import {createParadeeSpeech} from './paradee-speech.js?v=e9d0fc794cfb';
 import {createEvaluation,formatEvaluation} from './evaluation.js?v=9477bc2cb051';
+import {analyseMatch,renderMatchAnalysis,recordedGoalIndices,recordedGoalClip} from './match-analysis.js?v=6f2c949b7fef';
 
 const $ = id => document.getElementById(id);
 const normalShotLegend = document.querySelector('.shot-legend').textContent;
@@ -49,6 +50,8 @@ let aiWorker=null,aiWatchdog=null,aiGeneration=0;
 let lastGoalReplay=null,replayAutoContinue=false,replayPendingResult=false;
 let matchStats=createMatchStats();
 let matchRecording=null,matchFileBusy=false,matchDownloadUrl=null;
+let savedMatchReplay=null,goalClipReturn=null,savedMatchReport=null;
+const replayedGoals=new Set();
 let shotFlight=null,shotFlightGeneration=0;
 let voiceEnabled=false,voiceActivated=false,voiceLastCaption='',voiceLastContext='',voiceCaptionDemo=false,voiceLifecycle=null,voicePreferredId='',voicePlayback='adam',voiceOptionsKey='',commentary=null,voiceTestRequest=0;
 let evaluationEnabled=false;
@@ -113,8 +116,15 @@ $('mode').value=game.mode;$('duration').value=String(duration);$('kickoff').valu
 $('aiDifficulty').value=aiDifficulty;
 $('whiteDifficulty').value=whiteDifficulty;$('foulsEnabled').checked=foulsEnabled;
 const replayPlayer=createReplayPlayer({
-  onComplete(){if(replayAutoContinue&&$('replayDialog').hasAttribute('open'))$('replayDialog').close();},
-  onInteract(){replayAutoContinue=false;commentary?.suspend();renderVoiceover();}
+  onComplete({replay}){if(goalClipReturn){returnToRecordedMatch();return;}if(replay?.kind==='match'){openSavedMatchReport();return;}if(replayAutoContinue&&$('replayDialog').hasAttribute('open'))$('replayDialog').close();},
+  onInteract(){replayAutoContinue=false;if(goalClipReturn)goalClipReturn.playing=false;commentary?.suspend();renderVoiceover();},
+  onGoal(snapshot){if(savedMatchReplay&&$('replayAutoGoals').checked&&!replayedGoals.has(snapshot.index)){replayedGoals.add(snapshot.index);return openRecordedGoal(snapshot.index,{automatic:true});}return false;},
+  onFrame({replay,index}){
+    const full=replay?.kind==='match';if(full&&index===0)replayedGoals.clear();
+    $('replayStatsBtn').hidden=!savedMatchReplay;$('replayGoalClipBtn').hidden=!full;
+    $('replayGoalClipBtn').disabled=!full||!recordedGoalIndices(replay).some(i=>i<=index);
+    $('replayReturnBtn').hidden=!goalClipReturn;$('replayAutoGoalsLabel').hidden=!full;
+  }
 });
 const localSpeech=createParadeeSpeech({onState(){if(commentary)renderVoiceover();}});
 commentary=createCommentary({speechSynthesis:window.speechSynthesis,Utterance:window.SpeechSynthesisUtterance,localSpeech,
@@ -776,6 +786,7 @@ function openGoalReplay({automatic=false}={}){
   if(!automatic&&stage==='playing'&&advanceClockNow())return;
   if(anyDialog())return;
   cancelAI();replayAutoContinue=automatic;
+  savedMatchReplay=null;goalClipReturn=null;savedMatchReport=null;replayedGoals.clear();
   commentary.suspend({preserveGoal:automatic,preserveHugo:automatic});
   $('replayDialog').showModal();replayPlayer.load(lastGoalReplay,{autoplay:true});
   lastTick=Date.now();render();save();
@@ -786,7 +797,7 @@ function openMatchFiles(){
   cancelAI();commentary.suspend();replayAutoContinue=false;
   save();
   const recording=matchRecording;
-  $('matchFileSummary').textContent=`Ivory ${game.score.white}–${game.score.black} Obsidian · ${recording.steps.length} recorded steps. ${recording.capped?'Recording limit reached; only the recorded portion can be saved.':recording.partial?'Partial recording: earlier play is unavailable.':'Recording from kickoff.'}`;
+  $('matchFileSummary').textContent=`Ivory ${game.score.white}–${game.score.black} Obsidian · ${recording.steps.length} recorded step${recording.steps.length===1?'':'s'}. ${recording.capped?'Recording limit reached; only the recorded portion can be saved.':recording.partial?'Partial recording: earlier play is unavailable.':'Recording from kickoff.'}`;
   $('matchFileStatus').textContent='';
   $('matchDownloadLink').hidden=true;
   $('saveMatchBtn').disabled=stage==='setup';$('saveMatchJsonBtn').disabled=stage==='setup';$('watchMatchBtn').disabled=stage==='setup';
@@ -794,17 +805,48 @@ function openMatchFiles(){
 }
 function showMatchRecording(recording){
   replayAutoContinue=false;commentary.suspend();cancelAI();
+  savedMatchReplay=matchReplay(recording);goalClipReturn=null;savedMatchReport=null;replayedGoals.clear();
+  if(!savedMatchReplay)throw new Error('This recording cannot be replayed.');
   $('replayDialog').showModal();
-  if(!replayPlayer.load(recording,{autoplay:false,normalize:matchReplay})){
+  if(!replayPlayer.load(savedMatchReplay,{autoplay:false,normalize:value=>value})){
     $('replayDialog').close();throw new Error('This recording cannot be replayed.');
   }
   lastTick=Date.now();render();
+}
+function openRecordedGoal(index,{automatic=false}={}){
+  if(!savedMatchReplay)return false;
+  const clip=recordedGoalClip(savedMatchReplay,index);if(!clip)return false;
+  const snapshot=replayPlayer.snapshot();
+  goalClipReturn={...snapshot,index:automatic?Math.min(index+1,savedMatchReplay.frames.length-1):snapshot.index,playing:automatic&&snapshot.playing};
+  replayPlayer.load(clip,{autoplay:true,normalize:value=>value});return true;
+}
+function returnToRecordedMatch(){
+  if(!goalClipReturn)return;
+  const snapshot=goalClipReturn;goalClipReturn=null;
+  replayPlayer.load(savedMatchReplay,{autoplay:snapshot.playing,normalize:value=>value,startIndex:snapshot.index,playbackSpeed:snapshot.speed});
+}
+function openSavedMatchReport(){
+  if(!savedMatchReplay)return;
+  replayPlayer.stop();savedMatchReport=savedMatchReport||analyseMatch(savedMatchReplay);
+  const report=savedMatchReport;
+  if(!$('archivePlayerRatings')){
+    for(const source of [$('postMatchAnalysis'),$('playerRatings'),$('resultDialog').querySelector('.match-stats')]){
+      const clone=source.cloneNode(true);
+      for(const node of [clone,...clone.querySelectorAll('[id]')])if(node.id)node.id='archive'+node.id[0].toUpperCase()+node.id.slice(1);
+      $('savedReportContent').append(clone);
+    }
+  }
+  $('savedReportTitle').textContent=savedMatchReplay.finished?'Saved match · Full time':'Saved match · In progress';
+  $('savedReportScore').textContent=`Ivory ${savedMatchReplay.score.white}–${savedMatchReplay.score.black} Obsidian`;
+  $('savedReportCoverage').textContent=report.coverage;
+  renderMatchStats({stats:report.raw,state:report.game,prefix:'archive',report});
+  if(!$('savedReportDialog').open)$('savedReportDialog').showModal();
 }
 async function downloadMatch(compressed){
   if(matchFileBusy)return;
   matchFileBusy=true;$('matchFileStatus').textContent='Preparing your recording…';
   try{
-    const {blob,extension}=await encodeMatchFile(matchRecording,{compressed});
+    const {blob,extension}=await encodeMatchFile(recordingWithStatistics(matchRecording,matchStats,game),{compressed});
     if(matchDownloadUrl)URL.revokeObjectURL(matchDownloadUrl);
     matchDownloadUrl=URL.createObjectURL(blob);const link=$('matchDownloadLink');
     link.href=matchDownloadUrl;link.download=`football-chess-${game.score.white}-${game.score.black}-${new Date().toISOString().slice(0,10)}.${extension}`;
@@ -817,7 +859,10 @@ $('matchFilesBtn').addEventListener('click',openMatchFiles);
 $('resultMatchFilesBtn').addEventListener('click',openMatchFiles);
 $('saveMatchBtn').addEventListener('click',()=>downloadMatch(true));
 $('saveMatchJsonBtn').addEventListener('click',()=>downloadMatch(false));
-$('watchMatchBtn').addEventListener('click',()=>{try{showMatchRecording(matchRecording);}catch(error){$('matchFileStatus').textContent=error.message;}});
+$('watchMatchBtn').addEventListener('click',()=>{try{showMatchRecording(recordingWithStatistics(matchRecording,matchStats,game));}catch(error){$('matchFileStatus').textContent=error.message;}});
+$('replayStatsBtn').addEventListener('click',openSavedMatchReport);
+$('replayReturnBtn').addEventListener('click',returnToRecordedMatch);
+$('replayGoalClipBtn').addEventListener('click',()=>{const index=recordedGoalIndices(savedMatchReplay).filter(i=>i<=replayPlayer.snapshot().index).at(-1);if(index!==undefined)openRecordedGoal(index);});
 $('loadMatchFile').addEventListener('change',async()=>{
   const input=$('loadMatchFile'),file=input.files?.[0];if(!file||matchFileBusy)return;
   matchFileBusy=true;$('matchFileStatus').textContent='Reading the recording…';input.disabled=true;
@@ -1000,11 +1045,13 @@ $('undoBtn').addEventListener('click',()=>{if(!history.length||stage!=='playing'
 $('flipBtn').addEventListener('click',()=>{flipped=!flipped;render();save();});
 $('replayBtn').addEventListener('click',()=>openGoalReplay());
 function finishMatch({replayGoal=false}={}){if(stage!=='playing'||shotFlight)return;flushClockElapsed();cancelAI();stage='finished';paused=false;game.phase='finished';selectedId=null;if(replayGoal&&lastGoalReplay){replayPendingResult=true;openGoalReplay({automatic:true});}else{render();save();showResult();}}
-function renderGoalMap(summary){
-  const NS='http://www.w3.org/2000/svg',svg=$('statsGoalMap');
+function renderGoalMap(summary,prefix=''){
+  const view=id=>$(prefix?prefix+id[0].toUpperCase()+id.slice(1):id);
+  const NS='http://www.w3.org/2000/svg',svg=view('statsGoalMap');
   svg.replaceChildren();
   const draw=(tag,attrs={},parent=svg,text='')=>{const node=document.createElementNS(NS,tag);for(const [key,value] of Object.entries(attrs))node.setAttribute(key,String(value));if(text)node.textContent=text;parent.append(node);return node;};
-  draw('title',{id:'statsMapTitle'},svg,'Goal origins at both ends of the pitch');
+  svg.setAttribute('aria-labelledby',prefix?prefix+'StatsMapTitle':'statsMapTitle');
+  draw('title',{id:prefix?prefix+'StatsMapTitle':'statsMapTitle'},svg,'Goal origins at both ends of the pitch');
   draw('desc',{},svg,'Each marker shows the original pitch square where the scoring shot was taken. Ivory FC attacks the upper goal and Obsidian FC attacks the lower goal.');
   const cell=20,left=30,top=30,width=W*cell,height=H*cell,centreX=left+width/2,centreY=top+height/2,boxX=left+BOX_FILES[0]*cell,boxWidth=BOX_FILES.length*cell,depth=BOX_DEPTH*cell,goalX=left+GOAL_FILES[0]*cell,goalWidth=GOAL_FILES.length*cell;
   svg.setAttribute('viewBox',`0 0 ${width+60} ${height+80}`);
@@ -1023,9 +1070,9 @@ function renderGoalMap(summary){
   const groups=new Map();
   summary.goals.forEach((goal,index)=>{const origin=goal.origin;if(!origin)return;const key=`${origin.x},${origin.y}`;if(!groups.has(key))groups.set(key,{origin,goals:[]});groups.get(key).goals.push({goal,index});});
   let selectedMarker=null;
-  const timeOf=goal=>goal.matchSeconds===null?`Round ${goal.turn}`:`${Math.floor(goal.matchSeconds/60)}:${String(Math.floor(goal.matchSeconds%60)).padStart(2,'0')}`;
+  const timeOf=goal=>goal.recordedStep?`Recorded step ${goal.recordedStep}`:goal.matchSeconds===null?`Round ${goal.turn}`:`${Math.floor(goal.matchSeconds/60)}:${String(Math.floor(goal.matchSeconds%60)).padStart(2,'0')}`;
   const describe=({goal,index})=>`Goal ${index+1}: ${TEAM[goal.team]}, ${shortPieceId(goal.scorerId)}${goal.ownGoal?` own goal by ${TEAM[goal.scorerId.split('-')[0]]}`:''}, ${timeOf(goal)}, shot from ${coord(goal.origin.x,goal.origin.y)}${goal.distance!==null?`, ${goal.distance.toFixed(1)} squares`:''}`;
-  const select=(group,marker)=>{if(selectedMarker)selectedMarker.classList.remove('selected');selectedMarker=marker;marker.classList.add('selected');$('statsMapSelectionTitle').textContent=`${group.goals.length} goal${group.goals.length===1?'':'s'} from this square`;$('statsMapSelection').innerHTML=group.goals.map(({goal,index})=>`<li><span class="stats-team-dot ${goal.team}" aria-hidden="true"></span><span><b>${TEAM[goal.team]} · ${shortPieceId(goal.scorerId)}${goal.ownGoal?' (OG)':''}</b><small>${timeOf(goal)} · From ${coord(goal.origin.x,goal.origin.y)}${goal.distance!==null?` · ${goal.distance.toFixed(1)} squares`:''}${goal.ownGoal?` · By ${TEAM[goal.scorerId.split('-')[0]]}`:''}</small></span></li>`).join('');};
+  const select=(group,marker)=>{if(selectedMarker)selectedMarker.classList.remove('selected');selectedMarker=marker;marker.classList.add('selected');view('statsMapSelectionTitle').textContent=`${group.goals.length} goal${group.goals.length===1?'':'s'} from this square`;view('statsMapSelection').innerHTML=group.goals.map(({goal,index})=>`<li><span class="stats-team-dot ${goal.team}" aria-hidden="true"></span><span><b>${TEAM[goal.team]} · ${shortPieceId(goal.scorerId)}${goal.ownGoal?' (OG)':''}</b><small>${timeOf(goal)} · From ${coord(goal.origin.x,goal.origin.y)}${goal.distance!==null?` · ${goal.distance.toFixed(1)} squares`:''}${goal.ownGoal?` · By ${TEAM[goal.scorerId.split('-')[0]]}`:''}</small></span></li>`).join('');};
   for(const group of groups.values()){
     const {origin,goals}=group,x=left+(origin.x+0.5)*cell,y=top+(origin.y+0.5)*cell,teams=new Set(goals.map(({goal})=>goal.team)),mixed=teams.size>1,team=goals[0].goal.team;
     const detail=goals.map(describe).join('; '),marker=draw('g',{class:`stats-map-marker ${mixed?'mixed':team}${goals.some(({goal})=>goal.ownGoal)?' own-goal':''}`,tabindex:0,role:'button','aria-label':`${goals.length} goal${goals.length===1?'':'s'} from this square. ${detail}. Show goal details.`,'data-goal-count':goals.length,'data-origin-x':goals[0].goal.origin.x,'data-origin-y':goals[0].goal.origin.y,'data-pitch-x':origin.x,'data-pitch-y':origin.y});
@@ -1035,11 +1082,11 @@ function renderGoalMap(summary){
     marker.addEventListener('click',()=>select(group,marker));marker.addEventListener('focus',()=>select(group,marker));marker.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();select(group,marker);}});
     if(!selectedMarker)select(group,marker);
   }
-  if(!groups.size){$('statsMapSelectionTitle').textContent='Goal origin details';$('statsMapSelection').innerHTML='<li class="stats-empty">No goal locations recorded.</li>';}
+  if(!groups.size){view('statsMapSelectionTitle').textContent='Goal origin details';view('statsMapSelection').innerHTML='<li class="stats-empty">No goal locations recorded.</li>';}
   const info=summary.goalLocations;
-  $('statsMapNote').textContent=`${info.known} goal${info.known===1?'':'s'} mapped.${info.unknown?` ${info.unknown} goal${info.unknown===1?' has':'s have'} no recorded location.`:''} Original pitch positions: Ivory attacks the upper goal; Obsidian attacks the lower goal. Select a marker for scorer IDs and times; a number groups goals from the same square.`;
+  view('statsMapNote').textContent=`${info.known} goal${info.known===1?'':'s'} mapped.${info.unknown?` ${info.unknown} goal${info.unknown===1?' has':'s have'} no recorded location.`:''} Original pitch positions: Ivory attacks the upper goal; Obsidian attacks the lower goal. Select a marker for scorer IDs and times; a number groups goals from the same square.`;
   const zones=[['Inside keeper box','box'],['Central approach','central'],['Wide close','wide'],['Further out','distant']];
-  $('statsGoalZoneRows').innerHTML=zones.map(([label,key])=>`<tr><td>${info.byTeam.white.zones[key]}</td><th scope="row">${label}</th><td>${info.byTeam.black.zones[key]}</td></tr>`).join('');
+  view('statsGoalZoneRows').innerHTML=zones.map(([label,key])=>`<tr><td>${info.byTeam.white.zones[key]}</td><th scope="row">${label}</th><td>${info.byTeam.black.zones[key]}</td></tr>`).join('');
 }
 // A paused shot retains the same pre-impact score/statistics as the pitch.
 function pauseStatsSnapshot(){
@@ -1082,30 +1129,37 @@ function resumePausedMatch(){
   if(voiceEnabled&&voiceActivated)commentary.confirmEnabled();
   return true;
 }
-function renderMatchStats(){
-  const summary=matchStatsSummary(matchStats),white=summary.teams.white,black=summary.teams.black;
-  const ratings=playerRatingsSummary(matchStats.playerRatings,game);
+function renderMatchStats({stats=matchStats,state=game,prefix='',report=null}={}){
+  const view=id=>$(prefix?prefix+id[0].toUpperCase()+id.slice(1):id);
+  report=report||analyseMatch(matchReplay(recordingWithStatistics(matchRecording,matchStats,game)));
+  renderMatchAnalysis(view('postMatchAnalysis'),report);
+  const summary=matchStatsSummary(stats),white=summary.teams.white,black=summary.teams.black;
+  const ratings=playerRatingsSummary(stats.playerRatings,state);
   for(const player of ratings.players){
     player.goals=summary.scorers.find(item=>item.pieceId===player.pieceId)?.count||0;
     player.assists=summary.assists.find(item=>item.pieceId===player.pieceId)?.count||0;
   }
-  renderPlayerRatings($('playerRatings'),ratings,matchStats.playerHeatmaps);
+  renderPlayerRatings(view('playerRatings'),ratings,stats.playerHeatmaps);
   const rows=[['Shots',white.shots,black.shots],['On target',white.onTarget,black.onTarget],['Corners',white.corners,black.corners],['Fouls',white.fouls||0,black.fouls||0],['Yellow cards',white.yellowCards||0,black.yellowCards||0],['Red cards',white.redCards||0,black.redCards||0],['Possession',white.possessionPercent===null?'—':`${Math.round(white.possessionPercent)}%`,black.possessionPercent===null?'—':`${100-Math.round(white.possessionPercent)}%`]];
-  $('matchStatsRows').innerHTML=rows.map(([label,w,b])=>`<tr><td>${w}</td><th scope="row">${label}</th><td>${b}</td></tr>`).join('');
-  $('statsPartial').hidden=!summary.partial;
-  $('statsPossessionNote').textContent='Possession measures active play time, including loose balls and shots in flight. Pauses, replays, kickoff and restart preparation are excluded.';
-  renderGoalMap(summary);
+  view('matchStatsRows').innerHTML=rows.map(([label,w,b])=>`<tr><td>${w}</td><th scope="row">${label}</th><td>${b}</td></tr>`).join('');
+  view('statsPartial').hidden=!summary.partial;
+  view('statsPossessionNote').textContent='Possession measures active play time, including loose balls and shots in flight. Pauses, replays, kickoff and restart preparation are excluded.';
+  renderGoalMap(summary,prefix);
   const contributions=(items,empty)=>items.length?items.map(item=>`<li><span class="stats-team-dot ${item.team}" aria-hidden="true"></span><span>${TEAM[item.team]} · <b>${shortPieceId(item.pieceId)}</b></span><strong>${item.count}</strong></li>`).join(''):`<li class="stats-empty">${empty}</li>`;
-  $('statsScorers').innerHTML=contributions(summary.scorers,'No recorded goals.');
-  $('statsAssists').innerHTML=contributions(summary.assists,'No recorded assists.');
-  $('statsFoulMode').textContent=game.foulsEnabled?'Fouls and cards enabled.':'Fouls and cards disabled for this match.';
-  $('statsSentOff').innerHTML=game.sentOff?.length?game.sentOff.map(piece=>`<li><span class="stats-team-dot ${piece.team}" aria-hidden="true"></span><span>${TEAM[piece.team]} · <b>${shortPieceId(piece.id)}</b><small>${piece.reason==='secondYellow'?'Second yellow card':'Red card'}</small></span></li>`).join(''):'<li class="stats-empty">No players sent off.</li>';
-  $('statsGoalLog').innerHTML=summary.goals.length?summary.goals.map(goal=>{
-    const time=goal.matchSeconds===null?`Round ${goal.turn}`:`${Math.floor(goal.matchSeconds/60)}:${String(Math.floor(goal.matchSeconds%60)).padStart(2,'0')}`;
-    return `<li><time>${time}</time><span><b>${TEAM[goal.team]} · ${shortPieceId(goal.scorerId)}${goal.ownGoal?' (own goal)':''}</b><small>${goal.ownGoal?`By ${TEAM[goal.scorerId.split('-')[0]]}`:goal.assistId?`Assist: ${shortPieceId(goal.assistId)}`:'Unassisted'}${goal.origin?` · From ${coord(goal.origin.x,goal.origin.y)}${goal.distance!==null?` · ${goal.distance.toFixed(1)} squares`:''}`:' · Location not recorded'}</small></span></li>`;
+  view('statsScorers').innerHTML=contributions(summary.scorers,'No recorded goals.');
+  view('statsAssists').innerHTML=contributions(summary.assists,'No recorded assists.');
+  view('statsFoulMode').textContent=state.foulsEnabled?'Fouls and cards enabled.':'Fouls and cards disabled for this match.';
+  view('statsSentOff').innerHTML=state.sentOff?.length?state.sentOff.map(piece=>`<li><span class="stats-team-dot ${piece.team}" aria-hidden="true"></span><span>${TEAM[piece.team]} · <b>${shortPieceId(piece.id)}</b><small>${piece.reason==='secondYellow'?'Second yellow card':'Red card'}</small></span></li>`).join(''):'<li class="stats-empty">No players sent off.</li>';
+  view('statsGoalLog').innerHTML=summary.goals.length?summary.goals.map(goal=>{
+    const time=goal.recordedStep?`Recorded step ${goal.recordedStep}`:goal.matchSeconds===null?`Round ${goal.turn}`:`${Math.floor(goal.matchSeconds/60)}:${String(Math.floor(goal.matchSeconds%60)).padStart(2,'0')}`;
+    return `<li><time>${time}</time><span><b>${TEAM[goal.team]} · ${shortPieceId(goal.scorerId)}${goal.ownGoal?' (own goal)':''}</b><small>${goal.ownGoal?`By ${TEAM[goal.scorerId.split('-')[0]]}`:goal.assistId?`Assist: ${shortPieceId(goal.assistId)}`:report?.original===false?'Assist not recorded':'Unassisted'}${goal.origin?` · From ${coord(goal.origin.x,goal.origin.y)}${goal.distance!==null?` · ${goal.distance.toFixed(1)} squares`:''}`:' · Location not recorded'}</small></span></li>`;
   }).join(''):'<li class="stats-empty">No recorded goals.</li>';
+  if(prefix){
+    view('playerRatings').hidden=!report.original;view('statsFoulMode').hidden=true;
+    if(!report.original){view('statsPossessionNote').textContent='Possession time was not saved. Corners count only identifiable events in the recording.';view('statsAssists').textContent='Assists were not saved in this older recording.';}
+  }
   const earlier=summary.baselineScore.white+summary.baselineScore.black;
-  $('statsPartial').textContent=`Stats recorded from this update.${earlier?` ${earlier} earlier goal${earlier===1?' has':'s have'} no recorded scorer.`:''}`;
+  view('statsPartial').textContent=`Stats recorded from this update.${earlier?` ${earlier} earlier goal${earlier===1?' has':'s have'} no recorded scorer.`:''}`;
 }
 function showResult(){const forfeited=game.finishReason==='forfeit',winner=forfeited&&['white','black'].includes(game.winner)?game.winner:game.score.white===game.score.black?null:game.score.white>game.score.black?'white':'black';$('resultTitle').textContent=winner?TEAM[winner]+(forfeited?' wins by forfeit.':' wins.'):'Honours even.';$('resultScore').textContent=`${game.score.white} : ${game.score.black}`;$('resultText').textContent=forfeited?`${TEAM[game.winner==='white'?'black':'white']} has fewer than seven active players. The score shown is the actual score when play stopped.`:winner?'A well-played match. The next move is a fresh start.':'Nothing between the sides. Settle it in a rematch.';renderMatchStats();if(!$('resultDialog').open)$('resultDialog').showModal();}
 $('finishBtn').addEventListener('click',()=>{if(stage==='playing'&&duration===0)finishMatch();});

@@ -7,7 +7,7 @@ import {createMatchStats,restoreMatchStats,recordMatchTransition,matchStatsSumma
 import {playerRatingsSummary} from '../dist/player-ratings.js';
 
 const source=await readFile(new URL('../dist/app.js',import.meta.url),'utf8');
-const start=source.indexOf('function renderMatchStats(){');
+const start=source.indexOf('function renderMatchStats(');
 const end=source.indexOf("$('finishBtn').addEventListener",start);
 assert.ok(start>=0&&end>start);
 function report(game,stats){
@@ -18,6 +18,7 @@ function report(game,stats){
   };
   const context=vm.createContext({game,matchStats:stats,$,TEAM:{white:'Ivory FC',black:'Obsidian FC'},
     matchStatsSummary,shortPieceId,playerRatingsSummary,
+    matchRecording:{},recordingWithStatistics:()=>null,matchReplay:()=>null,analyseMatch:()=>null,renderMatchAnalysis:()=>{},
     renderPlayerRatings:(container,summary,heatmaps)=>renders.push({container,summary,heatmaps}),renderGoalMap:()=>{},
     coord:(x,y)=>`${String.fromCharCode(97+x)}${17-y}`});
   vm.runInContext(source.slice(start,end),context);

@@ -129,3 +129,18 @@
 #resultMatchFilesBtn{margin:14px 0 10px}
 
 .match-download-link{display:block;margin-top:14px;color:#254e33;font-size:13px;overflow-wrap:anywhere}.match-download-link[hidden]{display:none}
+
+/* Full-time and saved-match review */
+.match-analysis{border:1px solid #c9d2b8;border-left:4px solid #507447;background:#f1f3e9;padding:20px 22px;margin:22px 0;text-align:left;border-radius:5px}
+.match-analysis>.eyebrow{font-size:10px;letter-spacing:.14em;margin:0 0 8px;color:#58704c}
+.match-analysis h3{font-size:21px;line-height:1.2;margin:0 0 12px;color:#204b35}
+.match-analysis p{font-size:13px;line-height:1.65;color:#344a3c;margin:9px 0}
+.match-analysis details{border-top:1px solid #d7ddcd;padding-top:11px;margin-top:16px}
+.match-analysis summary{cursor:pointer;font-size:12px;font-weight:600;color:#507447}
+.match-analysis details p{font-size:11px;color:#677262}
+.replay-review-controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0 14px}
+.replay-review-controls label{display:flex;align-items:center;gap:6px;font-size:11px;color:#586858}
+.replay-review-controls [hidden]{display:none}
+#savedReportDialog{width:min(720px,calc(100vw - 28px));max-width:720px}
+.saved-report-score{font-size:22px;font-weight:600;color:#214a36;margin:8px 0 14px}
+@media(max-width:480px){.match-analysis{padding:16px}.match-analysis h3{font-size:19px}.replay-review-controls .utility-button{font-size:11px}}

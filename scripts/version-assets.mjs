@@ -22,12 +22,14 @@ async function versionEngineImport(name){
   return hash(source);
 }
 const replayVersion=await versionEngineImport('goal-replay.js');
-const archiveVersion=await versionImports('match-archive.js',{'engine.js':engineVersion,'goal-replay.js':replayVersion});
 const playerRatingsVersion=await versionEngineImport('player-ratings.js');
 const heatmapsVersion=await versionEngineImport('player-heatmaps.js');
 const ratingsViewVersion=await versionImports('player-ratings-view.js',{'player-heatmaps.js':heatmapsVersion});
 const ratingsCssVersion=hash(await readFile(asset('player-ratings.css'),'utf8'));
 const statsVersion=await versionImports('match-stats.js',{'engine.js':engineVersion,'player-ratings.js':playerRatingsVersion,'player-heatmaps.js':heatmapsVersion});
+const archiveStatsVersion=await versionImports('archive-statistics.js',{'match-stats.js':statsVersion});
+const archiveVersion=await versionImports('match-archive.js',{'engine.js':engineVersion,'goal-replay.js':replayVersion,'archive-statistics.js':archiveStatsVersion});
+const analysisVersion=await versionImports('match-analysis.js',{'engine.js':engineVersion,'match-stats.js':statsVersion});
 const commentaryClipsVersion=hash(await readFile(asset('commentary-clips.js'),'utf8'));
 const adamCommentaryVersion=hash(await readFile(asset('adam-commentary-clips.js'),'utf8'));
 const hugoCommentaryVersion=hash(await readFile(asset('hugo-commentary-clips.js'),'utf8'));
@@ -82,6 +84,7 @@ app=app.replace(/['"]\.\/ai-worker\.js(?:\?v=[^'"]+)?['"]/,`'./ai-worker.js?v=${
 app=app.replace(/from ['"]\.\/match-clock\.js(?:\?v=[^'"]+)?['"]/,`from './match-clock.js?v=${clockVersion}'`);
 app=app.replace(/from ['"]\.\/goal-replay\.js(?:\?v=[^'"]+)?['"]/,`from './goal-replay.js?v=${replayVersion}'`);
 app=app.replace(/from ['"]\.\/match-archive\.js(?:\?v=[^'"]+)?['"]/,`from './match-archive.js?v=${archiveVersion}'`);
+app=app.replace(/from ['"]\.\/match-analysis\.js(?:\?v=[^'"]+)?['"]/,`from './match-analysis.js?v=${analysisVersion}'`);
 app=app.replace(/from ['"]\.\/match-stats\.js(?:\?v=[^'"]+)?['"]/,`from './match-stats.js?v=${statsVersion}'`);
 app=app.replace(/from ['"]\.\/player-ratings\.js(?:\?v=[^'"]+)?['"]/,`from './player-ratings.js?v=${playerRatingsVersion}'`);
 app=app.replace(/from ['"]\.\/player-ratings-view\.js(?:\?v=[^'"]+)?['"]/,`from './player-ratings-view.js?v=${ratingsViewVersion}'`);
