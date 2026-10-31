@@ -360,7 +360,11 @@ export function initExercisePage(){
     if(solutionPlayer?.getState().active)leaveSolution({resume:false});
     evaluation?.setEnabled(false);evaluation?.reset();$('analysisEnabled').checked=false;$('evaluationRail').hidden=true;$('evaluationInfo').hidden=true;
     selectedId=null;moveMode='offball';hintsUsed=0;passRun=false;disguise=false;lastBoard=null;$('errorMessage').textContent='';
-    controller.load(def);progress={...progress,lastId:def.id};save();
+    controller.load(def);
+    // A solution holds the old attempt suspended. A newly selected exercise
+    // must release that hold, while still respecting hidden-page/filter pauses.
+    if(!filterBlocked&&!document.hidden)controller.resume();
+    progress={...progress,lastId:def.id};save();
   }
   controller=createExerciseController({onChange:view=>{if(!solutionPlayer?.getState().active)render(view);},onError:text=>{$('errorMessage').textContent=text;}});
   function renderEvaluation(value){
