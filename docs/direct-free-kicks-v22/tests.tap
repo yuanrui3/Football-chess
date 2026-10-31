@@ -1,0 +1,2410 @@
+TAP version 13
+# Subtest: white: legal direct free kicks double scoring for every piece type
+ok 1 - white: legal direct free kicks double scoring for every piece type
+  ---
+  duration_ms: 18.944623
+  type: 'test'
+  ...
+# Subtest: white: walls, long range and every keeper reaction retain the same twofold bonus
+ok 2 - white: walls, long range and every keeper reaction retain the same twofold bonus
+  ---
+  duration_ms: 39.811557
+  type: 'test'
+  ...
+# Subtest: white: scoring caps at 100% without negative or leftover failure probability
+ok 3 - white: scoring caps at 100% without negative or leftover failure probability
+  ---
+  duration_ms: 1.117341
+  type: 'test'
+  ...
+# Subtest: white: penalties, corners, indirect restarts and own-goal attempts receive no free-kick bonus
+ok 4 - white: penalties, corners, indirect restarts and own-goal attempts receive no free-kick bonus
+  ---
+  duration_ms: 1.770163
+  type: 'test'
+  ...
+# Subtest: white: passing from the restart ends the bonus before the receiver shoots
+ok 5 - white: passing from the restart ends the bonus before the receiver shoots
+  ---
+  duration_ms: 2.285459
+  type: 'test'
+  ...
+# Subtest: white: save/reload and match xG retain the declared direct-free-kick chance
+ok 6 - white: save/reload and match xG retain the declared direct-free-kick chance
+  ---
+  duration_ms: 10.547498
+  type: 'test'
+  ...
+# Subtest: white: disguised shots boost each endpoint and Tactical uses the correct chance branches
+ok 7 - white: disguised shots boost each endpoint and Tactical uses the correct chance branches
+  ---
+  duration_ms: 40.33266
+  type: 'test'
+  ...
+# Subtest: black: legal direct free kicks double scoring for every piece type
+ok 8 - black: legal direct free kicks double scoring for every piece type
+  ---
+  duration_ms: 6.002971
+  type: 'test'
+  ...
+# Subtest: black: walls, long range and every keeper reaction retain the same twofold bonus
+ok 9 - black: walls, long range and every keeper reaction retain the same twofold bonus
+  ---
+  duration_ms: 23.170481
+  type: 'test'
+  ...
+# Subtest: black: scoring caps at 100% without negative or leftover failure probability
+ok 10 - black: scoring caps at 100% without negative or leftover failure probability
+  ---
+  duration_ms: 3.025247
+  type: 'test'
+  ...
+# Subtest: black: penalties, corners, indirect restarts and own-goal attempts receive no free-kick bonus
+ok 11 - black: penalties, corners, indirect restarts and own-goal attempts receive no free-kick bonus
+  ---
+  duration_ms: 2.373802
+  type: 'test'
+  ...
+# Subtest: black: passing from the restart ends the bonus before the receiver shoots
+ok 12 - black: passing from the restart ends the bonus before the receiver shoots
+  ---
+  duration_ms: 2.646021
+  type: 'test'
+  ...
+# Subtest: black: save/reload and match xG retain the declared direct-free-kick chance
+ok 13 - black: save/reload and match xG retain the declared direct-free-kick chance
+  ---
+  duration_ms: 4.191176
+  type: 'test'
+  ...
+# Subtest: black: disguised shots boost each endpoint and Tactical uses the correct chance branches
+ok 14 - black: disguised shots boost each endpoint and Tactical uses the correct chance branches
+  ---
+  duration_ms: 31.129585
+  type: 'test'
+  ...
+# Subtest: white Q: disguise reuses exactly two legal native goal targets and leaves state unchanged
+ok 15 - white Q: disguise reuses exactly two legal native goal targets and leaves state unchanged
+  ---
+  duration_ms: 20.740333
+  type: 'test'
+  ...
+# Subtest: white Q: every keeper preview is the exact 50/50 mixture of the ordinary shot models
+ok 16 - white Q: every keeper preview is the exact 50/50 mixture of the ordinary shot models
+  ---
+  duration_ms: 10.680083
+  type: 'test'
+  ...
+# Subtest: white Q: target selection occurs after reaction, consumes one extra draw, and reports only the actual trajectory
+ok 17 - white Q: target selection occurs after reaction, consumes one extra draw, and reports only the actual trajectory
+  ---
+  duration_ms: 12.790614
+  type: 'test'
+  ...
+# Subtest: white Q: save restoration and Undo retain the public pair, not a sampled target
+ok 18 - white Q: save restoration and Undo retain the public pair, not a sampled target
+  ---
+  duration_ms: 8.79331
+  type: 'test'
+  ...
+# Subtest: white Q: a disguised attempt counts once and records the actual resolved goal endpoint
+ok 19 - white Q: a disguised attempt counts once and records the actual resolved goal endpoint
+  ---
+  duration_ms: 14.637712
+  type: 'test'
+  ...
+# Subtest: white N: disguise reuses exactly two legal native goal targets and leaves state unchanged
+ok 20 - white N: disguise reuses exactly two legal native goal targets and leaves state unchanged
+  ---
+  duration_ms: 2.038036
+  type: 'test'
+  ...
+# Subtest: white N: every keeper preview is the exact 50/50 mixture of the ordinary shot models
+ok 21 - white N: every keeper preview is the exact 50/50 mixture of the ordinary shot models
+  ---
+  duration_ms: 3.431673
+  type: 'test'
+  ...
+# Subtest: white N: target selection occurs after reaction, consumes one extra draw, and reports only the actual trajectory
+ok 22 - white N: target selection occurs after reaction, consumes one extra draw, and reports only the actual trajectory
+  ---
+  duration_ms: 6.188281
+  type: 'test'
+  ...
+# Subtest: white N: save restoration and Undo retain the public pair, not a sampled target
+ok 23 - white N: save restoration and Undo retain the public pair, not a sampled target
+  ---
+  duration_ms: 7.478726
+  type: 'test'
+  ...
+# Subtest: white N: a disguised attempt counts once and records the actual resolved goal endpoint
+ok 24 - white N: a disguised attempt counts once and records the actual resolved goal endpoint
+  ---
+  duration_ms: 9.062294
+  type: 'test'
+  ...
+# Subtest: black Q: disguise reuses exactly two legal native goal targets and leaves state unchanged
+ok 25 - black Q: disguise reuses exactly two legal native goal targets and leaves state unchanged
+  ---
+  duration_ms: 2.478418
+  type: 'test'
+  ...
+# Subtest: black Q: every keeper preview is the exact 50/50 mixture of the ordinary shot models
+ok 26 - black Q: every keeper preview is the exact 50/50 mixture of the ordinary shot models
+  ---
+  duration_ms: 4.2477
+  type: 'test'
+  ...
+# Subtest: black Q: target selection occurs after reaction, consumes one extra draw, and reports only the actual trajectory
+ok 27 - black Q: target selection occurs after reaction, consumes one extra draw, and reports only the actual trajectory
+  ---
+  duration_ms: 8.618772
+  type: 'test'
+  ...
+# Subtest: black Q: save restoration and Undo retain the public pair, not a sampled target
+ok 28 - black Q: save restoration and Undo retain the public pair, not a sampled target
+  ---
+  duration_ms: 2.182404
+  type: 'test'
+  ...
+# Subtest: black Q: a disguised attempt counts once and records the actual resolved goal endpoint
+ok 29 - black Q: a disguised attempt counts once and records the actual resolved goal endpoint
+  ---
+  duration_ms: 11.997991
+  type: 'test'
+  ...
+# Subtest: black N: disguise reuses exactly two legal native goal targets and leaves state unchanged
+ok 30 - black N: disguise reuses exactly two legal native goal targets and leaves state unchanged
+  ---
+  duration_ms: 1.53528
+  type: 'test'
+  ...
+# Subtest: black N: every keeper preview is the exact 50/50 mixture of the ordinary shot models
+ok 31 - black N: every keeper preview is the exact 50/50 mixture of the ordinary shot models
+  ---
+  duration_ms: 2.748344
+  type: 'test'
+  ...
+# Subtest: black N: target selection occurs after reaction, consumes one extra draw, and reports only the actual trajectory
+ok 32 - black N: target selection occurs after reaction, consumes one extra draw, and reports only the actual trajectory
+  ---
+  duration_ms: 7.504871
+  type: 'test'
+  ...
+# Subtest: black N: save restoration and Undo retain the public pair, not a sampled target
+ok 33 - black N: save restoration and Undo retain the public pair, not a sampled target
+  ---
+  duration_ms: 1.791796
+  type: 'test'
+  ...
+# Subtest: black N: a disguised attempt counts once and records the actual resolved goal endpoint
+ok 34 - black N: a disguised attempt counts once and records the actual resolved goal endpoint
+  ---
+  duration_ms: 10.139034
+  type: 'test'
+  ...
+# Subtest: disguise requires two legal opponent-goal targets and cannot create movement, shot rays or penalty powers
+ok 35 - disguise requires two legal opponent-goal targets and cannot create movement, shot rays or penalty powers
+  ---
+  duration_ms: 9.133652
+  type: 'test'
+  ...
+# Subtest: white: malformed saved target pairs cannot invent illegal rays or preserve a claimed hidden endpoint
+ok 36 - white: malformed saved target pairs cannot invent illegal rays or preserve a claimed hidden endpoint
+  ---
+  duration_ms: 5.839817
+  type: 'test'
+  ...
+# Subtest: white: both blocker outcomes retain the 15% possession / 85% corner split after target selection
+ok 37 - white: both blocker outcomes retain the 15% possession / 85% corner split after target selection
+  ---
+  duration_ms: 6.318562
+  type: 'test'
+  ...
+# Subtest: white: normal parries and deflections take their corner side from the aimed goal file
+ok 38 - white: normal parries and deflections take their corner side from the aimed goal file
+  ---
+  duration_ms: 1.584754
+  type: 'test'
+  ...
+# Subtest: white: a disguised parry uses the actual chosen endpoint for the corner side
+ok 39 - white: a disguised parry uses the actual chosen endpoint for the corner side
+  ---
+  duration_ms: 3.70203
+  type: 'test'
+  ...
+# Subtest: black: malformed saved target pairs cannot invent illegal rays or preserve a claimed hidden endpoint
+ok 40 - black: malformed saved target pairs cannot invent illegal rays or preserve a claimed hidden endpoint
+  ---
+  duration_ms: 4.272608
+  type: 'test'
+  ...
+# Subtest: black: both blocker outcomes retain the 15% possession / 85% corner split after target selection
+ok 41 - black: both blocker outcomes retain the 15% possession / 85% corner split after target selection
+  ---
+  duration_ms: 2.283816
+  type: 'test'
+  ...
+# Subtest: black: normal parries and deflections take their corner side from the aimed goal file
+ok 42 - black: normal parries and deflections take their corner side from the aimed goal file
+  ---
+  duration_ms: 1.237582
+  type: 'test'
+  ...
+# Subtest: black: a disguised parry uses the actual chosen endpoint for the corner side
+ok 43 - black: a disguised parry uses the actual chosen endpoint for the corner side
+  ---
+  duration_ms: 1.939858
+  type: 'test'
+  ...
+# Subtest: white: tactical planning enumerates target × outcome without peeking at the seed
+ok 44 - white: tactical planning enumerates target × outcome without peeking at the seed
+  ---
+  duration_ms: 125.632744
+  type: 'test'
+  ...
+# Subtest: black: tactical planning enumerates target × outcome without peeking at the seed
+ok 45 - black: tactical planning enumerates target × outcome without peeking at the seed
+  ---
+  duration_ms: 83.699776
+  type: 'test'
+  ...
+# Subtest: both keeper bots defend the aggregate probability instead of the declaration’s first endpoint
+ok 46 - both keeper bots defend the aggregate probability instead of the declaration’s first endpoint
+  ---
+  duration_ms: 83.108166
+  type: 'test'
+  ...
+# Subtest: white Q: uncertainty improves a real finish and both attacker bots can choose it
+ok 47 - white Q: uncertainty improves a real finish and both attacker bots can choose it
+  ---
+  duration_ms: 884.198589
+  type: 'test'
+  ...
+# Subtest: white N: uncertainty improves a real finish and both attacker bots can choose it
+ok 48 - white N: uncertainty improves a real finish and both attacker bots can choose it
+  ---
+  duration_ms: 324.475031
+  type: 'test'
+  ...
+# Subtest: black Q: uncertainty improves a real finish and both attacker bots can choose it
+ok 49 - black Q: uncertainty improves a real finish and both attacker bots can choose it
+  ---
+  duration_ms: 559.835199
+  type: 'test'
+  ...
+# Subtest: black N: uncertainty improves a real finish and both attacker bots can choose it
+ok 50 - black N: uncertainty improves a real finish and both attacker bots can choose it
+  ---
+  duration_ms: 234.310327
+  type: 'test'
+  ...
+# Subtest: white: disguise cannot bypass an offside knight’s involvement inside the box
+ok 51 - white: disguise cannot bypass an offside knight’s involvement inside the box
+  ---
+  duration_ms: 2.277826
+  type: 'test'
+  ...
+# Subtest: black: disguise cannot bypass an offside knight’s involvement inside the box
+ok 52 - black: disguise cannot bypass an offside knight’s involvement inside the box
+  ---
+  duration_ms: 1.411944
+  type: 'test'
+  ...
+# Subtest: white: valid saved pair paths and distances are rebuilt from the immutable shot origin
+ok 53 - white: valid saved pair paths and distances are rebuilt from the immutable shot origin
+  ---
+  duration_ms: 2.983428
+  type: 'test'
+  ...
+# Subtest: black: valid saved pair paths and distances are rebuilt from the immutable shot origin
+ok 54 - black: valid saved pair paths and distances are rebuilt from the immutable shot origin
+  ---
+  duration_ms: 1.932767
+  type: 'test'
+  ...
+# Subtest: white: saved pair metadata cannot retarget an authoritative ordinary own-goal declaration
+ok 55 - white: saved pair metadata cannot retarget an authoritative ordinary own-goal declaration
+  ---
+  duration_ms: 2.032847
+  type: 'test'
+  ...
+# Subtest: black: saved pair metadata cannot retarget an authoritative ordinary own-goal declaration
+ok 56 - black: saved pair metadata cannot retarget an authoritative ordinary own-goal declaration
+  ---
+  duration_ms: 2.398397
+  type: 'test'
+  ...
+# Subtest: pitch constants distinguish four-wide goals from six-wide three-deep keeper boxes
+ok 57 - pitch constants distinguish four-wide goals from six-wide three-deep keeper boxes
+  ---
+  duration_ms: 6.885329
+  type: 'test'
+  ...
+# Subtest: both modes and kickoff teams create eleven players per side with the requested roster
+ok 58 - both modes and kickoff teams create eleven players per side with the requested roster
+  ---
+  duration_ms: 8.120558
+  type: 'test'
+  ...
+# Subtest: kickoff opens a fresh positioning budget and skip ends a positional turn
+ok 59 - kickoff opens a fresh positioning budget and skip ends a positional turn
+  ---
+  duration_ms: 4.527371
+  type: 'test'
+  ...
+# Subtest: a carrier dribble preserves the independent no-ball and bonus pawn options
+ok 60 - a carrier dribble preserves the independent no-ball and bonus pawn options
+  ---
+  duration_ms: 2.480021
+  type: 'test'
+  ...
+# Subtest: bonus pawn can be used before dribbling and a no-ball move can finish the turn
+ok 61 - bonus pawn can be used before dribbling and a no-ball move can finish the turn
+  ---
+  duration_ms: 0.860966
+  type: 'test'
+  ...
+# Subtest: one pawn may take both its bonus and normal moves but cannot take either twice
+ok 62 - one pawn may take both its bonus and normal moves but cannot take either twice
+  ---
+  duration_ms: 0.522165
+  type: 'test'
+  ...
+# Subtest: both teams receive a free pawn option in their positioning turn
+ok 63 - both teams receive a free pawn option in their positioning turn
+  ---
+  duration_ms: 2.887253
+  type: 'test'
+  ...
+# Subtest: pawns move one square forward, backward, left and right for both teams
+ok 64 - pawns move one square forward, backward, left and right for both teams
+  ---
+  duration_ms: 0.883699
+  type: 'test'
+  ...
+# Subtest: pawns tackle one diagonal square forward or backward for both teams
+ok 65 - pawns tackle one diagonal square forward or backward for both teams
+  ---
+  duration_ms: 4.463115
+  type: 'test'
+  ...
+# Subtest: backward pawn tackles on knights retain the 50 percent success rule
+ok 66 - backward pawn tackles on knights retain the 50 percent success rule
+  ---
+  duration_ms: 2.856247
+  type: 'test'
+  ...
+# Subtest: pawn tackling gains backward diagonals without gaining cardinal or longer reach
+ok 67 - pawn tackling gains backward diagonals without gaining cardinal or longer reach
+  ---
+  duration_ms: 2.996999
+  type: 'test'
+  ...
+# Subtest: a bonus pawn is restricted to empty cardinal squares and cannot tackle
+ok 68 - a bonus pawn is restricted to empty cardinal squares and cannot tackle
+  ---
+  duration_ms: 0.545951
+  type: 'test'
+  ...
+# Subtest: wrong-team, blocked, and invalid bonus actions reject without mutating input
+ok 69 - wrong-team, blocked, and invalid bonus actions reject without mutating input
+  ---
+  duration_ms: 1.545255
+  type: 'test'
+  ...
+# Subtest: rook, bishop and queen retain ten-square movement and uncapped passing after shorter tackle reach
+ok 70 - rook, bishop and queen retain ten-square movement and uncapped passing after shorter tackle reach
+  ---
+  duration_ms: 4.121671
+  type: 'test'
+  ...
+# Subtest: queen, rook and bishop tackle reach is five squares to the carrier for both teams
+ok 71 - queen, rook and bishop tackle reach is five squares to the carrier for both teams
+  ---
+  duration_ms: 6.507702
+  type: 'test'
+  ...
+# Subtest: five-square tackles against knights retain their 50% success rate
+ok 72 - five-square tackles against knights retain their 50% success rate
+  ---
+  duration_ms: 5.997734
+  type: 'test'
+  ...
+# Subtest: tackling transfers possession without capturing and resets all positioning actions
+ok 73 - tackling transfers possession without capturing and resets all positioning actions
+  ---
+  duration_ms: 0.654034
+  type: 'test'
+  ...
+# Subtest: players without the ball cannot be captured or tackled
+ok 74 - players without the ball cannot be captured or tackled
+  ---
+  duration_ms: 0.452682
+  type: 'test'
+  ...
+# Subtest: knights dribble over intervening defenders and carry the ball to an empty L destination
+ok 75 - knights dribble over intervening defenders and carry the ball to an empty L destination
+  ---
+  duration_ms: 0.569276
+  type: 'test'
+  ...
+# Subtest: every opposing piece type can attempt a reachable knight tackle at 50%
+ok 76 - every opposing piece type can attempt a reachable knight tackle at 50%
+  ---
+  duration_ms: 2.161722
+  type: 'test'
+  ...
+# Subtest: knight tackle probability boundaries resolve possession without capturing either player
+ok 77 - knight tackle probability boundaries resolve possession without capturing either player
+  ---
+  duration_ms: 1.824755
+  type: 'test'
+  ...
+# Subtest: a failed knight tackle spends the normal action and retains the available free pawn action
+ok 78 - a failed knight tackle spends the normal action and retains the available free pawn action
+  ---
+  duration_ms: 2.035322
+  type: 'test'
+  ...
+# Subtest: a knight tackle after the bonus pawn action starts a new attack on success or ends defense on failure
+ok 79 - a knight tackle after the bonus pawn action starts a new attack on success or ends defense on failure
+  ---
+  duration_ms: 0.334824
+  type: 'test'
+  ...
+# Subtest: knight tackle seeds reproduce either outcome and previews and AI planning consume no randomness
+ok 80 - knight tackle seeds reproduce either outcome and previews and AI planning consume no randomness
+  ---
+  duration_ms: 81.856412
+  type: 'test'
+  ...
+# Subtest: blocked and unreachable knight challenges are rejected before consuming randomness
+ok 81 - blocked and unreachable knight challenges are rejected before consuming randomness
+  ---
+  duration_ms: 0.836388
+  type: 'test'
+  ...
+# Subtest: outfield players can enter either box off the ball or carrying; kings enter only their own
+ok 82 - outfield players can enter either box off the ball or carrying; kings enter only their own
+  ---
+  duration_ms: 1.777704
+  type: 'test'
+  ...
+# Subtest: ordinary passes stop at the first teammate or opposing interceptor
+ok 83 - ordinary passes stop at the first teammate or opposing interceptor
+  ---
+  duration_ms: 1.281548
+  type: 'test'
+  ...
+# Subtest: passing into a goal area alone never scores
+ok 84 - passing into a goal area alone never scores
+  ---
+  duration_ms: 0.717319
+  type: 'test'
+  ...
+# Subtest: pass accuracy is certain through ten squares then falls by ten points to a 25% floor
+ok 85 - pass accuracy is certain through ten squares then falls by ten points to a 25% floor
+  ---
+  duration_ms: 0.852743
+  type: 'test'
+  ...
+# Subtest: an accurate onside long pass arrives below its probability threshold and fails at that threshold
+ok 86 - an accurate onside long pass arrives below its probability threshold and fails at that threshold
+  ---
+  duration_ms: 1.313286
+  type: 'test'
+  ...
+# Subtest: long pass failure is seeded, reproducible and preserves its input
+ok 87 - long pass failure is seeded, reproducible and preserves its input
+  ---
+  duration_ms: 2.631038
+  type: 'test'
+  ...
+# Subtest: kings receive a teammate pass only for an immediate release kick
+ok 88 - kings receive a teammate pass only for an immediate release kick
+  ---
+  duration_ms: 2.005848
+  type: 'test'
+  ...
+# Subtest: an opposing king intercepting an ordinary pass may hold the ball normally
+ok 89 - an opposing king intercepting an ordinary pass may hold the ball normally
+  ---
+  duration_ms: 0.592932
+  type: 'test'
+  ...
+# Subtest: goal declarations wait for the defending goalkeeper before resolving the score
+ok 90 - goal declarations wait for the defending goalkeeper before resolving the score
+  ---
+  duration_ms: 0.77797
+  type: 'test'
+  ...
+# Subtest: goalkeeper reaction is one empty adjacent step and changes the final shot probability
+ok 91 - goalkeeper reaction is one empty adjacent step and changes the final shot probability
+  ---
+  duration_ms: 1.853028
+  type: 'test'
+  ...
+# Subtest: a goalkeeper standing on a shot ray does not prevent selecting the net
+ok 92 - a goalkeeper standing on a shot ray does not prevent selecting the net
+  ---
+  duration_ms: 0.905392
+  type: 'test'
+  ...
+# Subtest: outfield players intercept ordinary passes and give shots a probabilistic block before the net
+ok 93 - outfield players intercept ordinary passes and give shots a probabilistic block before the net
+  ---
+  duration_ms: 1.054346
+  type: 'test'
+  ...
+# Subtest: the shot preview exposes Euclidean distance, goal-plane geometry and complete probabilities
+ok 94 - the shot preview exposes Euclidean distance, goal-plane geometry and complete probabilities
+  ---
+  duration_ms: 0.561585
+  type: 'test'
+  ...
+# Subtest: close shots are more dangerous while longer flight gives a fixed keeper more reach
+ok 95 - close shots are more dangerous while longer flight gives a fixed keeper more reach
+  ---
+  duration_ms: 0.277397
+  type: 'test'
+  ...
+# Subtest: extra distance pressure starts beyond three squares with a shared close-shot distance curve
+ok 96 - extra distance pressure starts beyond three squares with a shared close-shot distance curve
+  ---
+  duration_ms: 0.620223
+  type: 'test'
+  ...
+# Subtest: central straight shots lose accuracy progressively with range and settle at the one-percent floor
+ok 97 - central straight shots lose accuracy progressively with range and settle at the one-percent floor
+  ---
+  duration_ms: 1.451533
+  type: 'test'
+  ...
+# Subtest: an ordinary midfield shot retains strong range pressure before and after keeper reaction
+ok 98 - an ordinary midfield shot retains strong range pressure before and after keeper reaction
+  ---
+  duration_ms: 0.804821
+  type: 'test'
+  ...
+# Subtest: stopped close shots arrive faster and are more likely to be parried than equally aligned distant shots
+ok 99 - stopped close shots arrive faster and are more likely to be parried than equally aligned distant shots
+  ---
+  duration_ms: 0.469917
+  type: 'test'
+  ...
+# Subtest: a keeper stretching to the same-speed shot parries a greater share of saves than an aligned keeper
+ok 100 - a keeper stretching to the same-speed shot parries a greater share of saves than an aligned keeper
+  ---
+  duration_ms: 0.255504
+  type: 'test'
+  ...
+# Subtest: parry splitting preserves the established goal, total-save and miss probabilities
+ok 101 - parry splitting preserves the established goal, total-save and miss probabilities
+  ---
+  duration_ms: 0.484118
+  type: 'test'
+  ...
+# Subtest: parry rates stay capped in the own box and outside or absent keepers cannot generate saves or corners
+ok 102 - parry rates stay capped in the own box and outside or absent keepers cannot generate saves or corners
+  ---
+  duration_ms: 0.956839
+  type: 'test'
+  ...
+# Subtest: knight finishing uses shared base scoring with conditional parry physics and total probability mass
+ok 103 - knight finishing uses shared base scoring with conditional parry physics and total probability mass
+  ---
+  duration_ms: 0.944851
+  type: 'test'
+  ...
+# Subtest: a shot farther from the keeper is more likely to score without probability tiers
+ok 104 - a shot farther from the keeper is more likely to score without probability tiers
+  ---
+  duration_ms: 0.242294
+  type: 'test'
+  ...
+# Subtest: mirror-image shots have matching geometry and probabilities at either goal
+ok 105 - mirror-image shots have matching geometry and probabilities at either goal
+  ---
+  duration_ms: 0.31239
+  type: 'test'
+  ...
+# Subtest: angled shots have a lower on-target probability than straight shots
+ok 106 - angled shots have a lower on-target probability than straight shots
+  ---
+  duration_ms: 0.292881
+  type: 'test'
+  ...
+# Subtest: the keeper is compared with the finite shot segment and cannot save from behind the shooter
+ok 107 - the keeper is compared with the finite shot segment and cannot save from behind the shooter
+  ---
+  duration_ms: 0.236937
+  type: 'test'
+  ...
+# Subtest: only the defending keeper own box grants any saving reach or readiness
+ok 108 - only the defending keeper own box grants any saving reach or readiness
+  ---
+  duration_ms: 0.173431
+  type: 'test'
+  ...
+# Subtest: shot model probabilities stay finite and total one across all goals and keeper squares
+ok 109 - shot model probabilities stay finite and total one across all goals and keeper squares
+  ---
+  duration_ms: 1.709712
+  type: 'test'
+  ...
+# Subtest: one seeded shot roll partitions exact goal, parried corner, live rebound, caught save and wide boundaries
+ok 110 - one seeded shot roll partitions exact goal, parried corner, live rebound, caught save and wide boundaries
+  ---
+  duration_ms: 12.055368
+  type: 'test'
+  ...
+# Subtest: a wide shot gives both teams protected positioning before the defending king passes
+ok 111 - a wide shot gives both teams protected positioning before the defending king passes
+  ---
+  duration_ms: 3.734378
+  type: 'test'
+  ...
+# Subtest: keeper AI chooses the reaction with the smallest current shot probability
+ok 112 - keeper AI chooses the reaction with the smallest current shot probability
+  ---
+  duration_ms: 1.161547
+  type: 'test'
+  ...
+# Subtest: the lower goal credits black and restarts with white kickoff
+ok 113 - the lower goal credits black and restarts with white kickoff
+  ---
+  duration_ms: 0.718
+  type: 'test'
+  ...
+# Subtest: a loose ball can be collected and defensive collection resets all positioning actions
+ok 114 - a loose ball can be collected and defensive collection resets all positioning actions
+  ---
+  duration_ms: 0.817009
+  type: 'test'
+  ...
+# Subtest: loose ball positioning rounds can end without entering an impossible kick phase
+ok 115 - loose ball positioning rounds can end without entering an impossible kick phase
+  ---
+  duration_ms: 0.364289
+  type: 'test'
+  ...
+# Subtest: knight kicks still hop in an L over intervening pieces
+ok 116 - knight kicks still hop in an L over intervening pieces
+  ---
+  duration_ms: 0.277267
+  type: 'test'
+  ...
+# Subtest: knights score only when a single L-shaped kick lands on a goal square
+ok 117 - knights score only when a single L-shaped kick lands on a goal square
+  ---
+  duration_ms: 3.303891
+  type: 'test'
+  ...
+# Subtest: king kicks can travel beyond one square while positional king moves cannot
+ok 118 - king kicks can travel beyond one square while positional king moves cannot
+  ---
+  duration_ms: 0.663258
+  type: 'test'
+  ...
+# Subtest: pawns can kick in all four cardinal directions and are never stranded at the far border
+ok 119 - pawns can kick in all four cardinal directions and are never stranded at the far border
+  ---
+  duration_ms: 3.741509
+  type: 'test'
+  ...
+# Subtest: legal previews and AI choices do not mutate state or consume seeded randomness
+ok 120 - legal previews and AI choices do not mutate state or consume seeded randomness
+  ---
+  duration_ms: 118.924101
+  type: 'test'
+  ...
+# Subtest: identical seeds yield identical random match histories
+ok 121 - identical seeds yield identical random match histories
+  ---
+  duration_ms: 1802.160294
+  type: 'test'
+  ...
+# Subtest: AI returns legal actions in keeper reaction and forced release phases
+ok 122 - AI returns legal actions in keeper reaction and forced release phases
+  ---
+  duration_ms: 3.38977
+  type: 'test'
+  ...
+# Subtest: AI remains legal across extended play, every phase and the expanded positioning budget
+ok 123 - AI remains legal across extended play, every phase and the expanded positioning budget
+  ---
+  duration_ms: 4380.422729
+  type: 'test'
+  ...
+# Subtest: a declared shot consumes randomness only after its goalkeeper reaction resolves
+ok 124 - a declared shot consumes randomness only after its goalkeeper reaction resolves
+  ---
+  duration_ms: 0.944481
+  type: 'test'
+  ...
+# Subtest: different seeds produce reproducible goals, corners, live rebounds, caught saves and wide shots
+ok 125 - different seeds produce reproducible goals, corners, live rebounds, caught saves and wide shots
+  ---
+  duration_ms: 13.667753
+  type: 'test'
+  ...
+# Subtest: an own goal credits the other side and gives the conceding side kickoff
+ok 126 - an own goal credits the other side and gives the conceding side kickoff
+  ---
+  duration_ms: 0.594675
+  type: 'test'
+  ...
+# Subtest: real AI chance branches enumerate mutually exclusive foul/card and conditional knight outcomes
+ok 127 - real AI chance branches enumerate mutually exclusive foul/card and conditional knight outcomes
+  ---
+  duration_ms: 23.502579
+  type: 'test'
+  ...
+# Subtest: second-yellow branches and all discipline-dependent futures have distinct cache keys
+ok 128 - second-yellow branches and all discipline-dependent futures have distinct cache keys
+  ---
+  duration_ms: 6.179106
+  type: 'test'
+  ...
+# Subtest: disabled Fouls keeps deterministic normal tackles and only the old knight chance pair
+ok 129 - disabled Fouls keeps deterministic normal tackles and only the old knight chance pair
+  ---
+  duration_ms: 1.043109
+  type: 'test'
+  ...
+# Subtest: penalty chance trees use exactly the fixed80/20 real goal and catch/miss transitions
+ok 130 - penalty chance trees use exactly the fixed80/20 real goal and catch/miss transitions
+  ---
+  duration_ms: 23.085803
+  type: 'test'
+  ...
+# Subtest: red-card forfeit branches are terminal and bounded Tactical analysis remains finite and pure
+ok 131 - red-card forfeit branches are terminal and bounded Tactical analysis remains finite and pure
+  ---
+  duration_ms: 705.62131
+  type: 'test'
+  ...
+# Subtest: editing a warning in place never reuses a previous Tactical result or consumes the live seed
+ok 132 - editing a warning in place never reuses a previous Tactical result or consumes the live seed
+  ---
+  duration_ms: 1238.809028
+  type: 'test'
+  ...
+# Subtest: AI enumerates an opted-in pass run only on the successful controlled-pass branch
+ok 133 - AI enumerates an opted-in pass run only on the successful controlled-pass branch
+  ---
+  duration_ms: 15.746281
+  type: 'test'
+  ...
+# Subtest: both bots resolve a pass-run choice legally without peeking at the live seed
+ok 134 - both bots resolve a pass-run choice legally without peeking at the live seed
+  ---
+  duration_ms: 694.426522
+  type: 'test'
+  ...
+# Subtest: white: a foul free kick survives the final whistle through preparation and shot resolution
+ok 135 - white: a foul free kick survives the final whistle through preparation and shot resolution
+  ---
+  duration_ms: 26.693319
+  type: 'test'
+  ...
+# Subtest: white: a foul penalty survives the final whistle through preparation and shot resolution
+ok 136 - white: a foul penalty survives the final whistle through preparation and shot resolution
+  ---
+  duration_ms: 5.977999
+  type: 'test'
+  ...
+# Subtest: black: a foul free kick survives the final whistle through preparation and shot resolution
+ok 137 - black: a foul free kick survives the final whistle through preparation and shot resolution
+  ---
+  duration_ms: 4.884329
+  type: 'test'
+  ...
+# Subtest: black: a foul penalty survives the final whistle through preparation and shot resolution
+ok 138 - black: a foul penalty survives the final whistle through preparation and shot resolution
+  ---
+  duration_ms: 2.65846
+  type: 'test'
+  ...
+# Subtest: a foul awarded just before zero preserves the protected attack after the clock expires
+ok 139 - a foul awarded just before zero preserves the protected attack after the clock expires
+  ---
+  duration_ms: 3.278703
+  type: 'test'
+  ...
+# Subtest: a foul penalty miss or catch ends the final chance after its shot resolves
+ok 140 - a foul penalty miss or catch ends the final chance after its shot resolves
+  ---
+  duration_ms: 1.548099
+  type: 'test'
+  ...
+# Subtest: public simulation opts into fouls explicitly while default and initial-state modes are preserved
+ok 141 - public simulation opts into fouls explicitly while default and initial-state modes are preserved
+  ---
+  duration_ms: 11.774035
+  type: 'test'
+  ...
+# Subtest: seeded red foul is counted independently from the tackle and protected restart
+ok 142 - seeded red foul is counted independently from the tackle and protected restart
+  ---
+  duration_ms: 18.007812
+  type: 'test'
+  ...
+# Subtest: seeded yellow foul is counted independently from the tackle and protected restart
+ok 143 - seeded yellow foul is counted independently from the tackle and protected restart
+  ---
+  duration_ms: 4.357015
+  type: 'test'
+  ...
+# Subtest: seeded plain foul is counted independently from the tackle and protected restart
+ok 144 - seeded plain foul is counted independently from the tackle and protected restart
+  ---
+  duration_ms: 2.023144
+  type: 'test'
+  ...
+# Subtest: a second yellow records its yellow and red, removes one player and preserves the card ledger
+ok 145 - a second yellow records its yellow and red, removes one player and preserves the card ledger
+  ---
+  duration_ms: 3.377682
+  type: 'test'
+  ...
+# Subtest: a dismissed goalkeeper is replaced by an active player with its original ID
+ok 146 - a dismissed goalkeeper is replaced by an active player with its original ID
+  ---
+  duration_ms: 2.947495
+  type: 'test'
+  ...
+# Subtest: a penalty goal is an opponent-goal attempt with complete separate penalty counters
+ok 147 - a penalty goal is an opponent-goal attempt with complete separate penalty counters
+  ---
+  duration_ms: 10.41505
+  type: 'test'
+  ...
+# Subtest: a penalty save is an opponent-goal attempt with complete separate penalty counters
+ok 148 - a penalty save is an opponent-goal attempt with complete separate penalty counters
+  ---
+  duration_ms: 10.895642
+  type: 'test'
+  ...
+# Subtest: a goal reset retains all dismissals instead of resurrecting the full squad
+ok 149 - a goal reset retains all dismissals instead of resurrecting the full squad
+  ---
+  duration_ms: 4.648474
+  type: 'test'
+  ...
+# Subtest: falling below seven players ends by forfeit and is not reported as a scoreless draw
+ok 150 - falling below seven players ends by forfeit and is not reported as a scoreless draw
+  ---
+  duration_ms: 3.036919
+  type: 'test'
+  ...
+# Subtest: integrity validation rejects invalid initial cards, duplicate IDs and undersized live teams before policy execution
+ok 151 - integrity validation rejects invalid initial cards, duplicate IDs and undersized live teams before policy execution
+  ---
+  duration_ms: 1.112985
+  type: 'test'
+  ...
+# Subtest: integrity validation detects resurrection even if a faulty policy module erases the dismissal ledger
+ok 152 - integrity validation detects resurrection even if a faulty policy module erases the dismissal ledger
+  ---
+  duration_ms: 1.466566
+  type: 'test'
+  ...
+# Subtest: public simulation forwards passRun and preserves the next normal allowance
+ok 153 - public simulation forwards passRun and preserves the next normal allowance
+  ---
+  duration_ms: 5.050809
+  type: 'test'
+  ...
+# Subtest: public simulation forwards passRun and spends the next normal allowance
+ok 154 - public simulation forwards passRun and spends the next normal allowance
+  ---
+  duration_ms: 2.36657
+  type: 'test'
+  ...
+# Subtest: the public CLI accepts --fouls and an explicit --fouls=false
+ok 155 - the public CLI accepts --fouls and an explicit --fouls=false
+  ---
+  duration_ms: 214.841122
+  type: 'test'
+  ...
+# Subtest: white: tackle draw partitions 2% red, 5% yellow, 3% uncarded fouls and 90% clean challenges
+ok 156 - white: tackle draw partitions 2% red, 5% yellow, 3% uncarded fouls and 90% clean challenges
+  ---
+  duration_ms: 25.381627
+  type: 'test'
+  ...
+# Subtest: white: clean knight tackles remain 50% conditional on no foul
+ok 157 - white: clean knight tackles remain 50% conditional on no foul
+  ---
+  duration_ms: 4.63302
+  type: 'test'
+  ...
+# Subtest: white: disabling Fouls preserves certain ordinary tackles and the old random stream
+ok 158 - white: disabling Fouls preserves certain ordinary tackles and the old random stream
+  ---
+  duration_ms: 0.495055
+  type: 'test'
+  ...
+# Subtest: white: a second yellow dismisses the same stable player once
+ok 159 - white: a second yellow dismisses the same stable player once
+  ---
+  duration_ms: 3.078271
+  type: 'test'
+  ...
+# Subtest: white: a foul at the carrier contact square in the defender box becomes a fixed 80% penalty
+ok 160 - white: a foul at the carrier contact square in the defender box becomes a fixed 80% penalty
+  ---
+  duration_ms: 11.448104
+  type: 'test'
+  ...
+# Subtest: white: a penalty still has 80% scoring odds with the king outside its own box and cannot grant an outside save
+ok 161 - white: a penalty still has 80% scoring odds with the king outside its own box and cannot grant an outside save
+  ---
+  duration_ms: 3.652977
+  type: 'test'
+  ...
+# Subtest: white: red cards survive a penalty goal and the new kickoff formation
+ok 162 - white: red cards survive a penalty goal and the new kickoff formation
+  ---
+  duration_ms: 2.160951
+  type: 'test'
+  ...
+# Subtest: white: a dismissed king gets an automatic replacement with a stable original player ID
+ok 163 - white: a dismissed king gets an automatic replacement with a stable original player ID
+  ---
+  duration_ms: 6.952481
+  type: 'test'
+  ...
+# Subtest: white: a foul in the attacking team's own box remains a free kick
+ok 164 - white: a foul in the attacking team's own box remains a free kick
+  ---
+  duration_ms: 1.183401
+  type: 'test'
+  ...
+# Subtest: white: falling below seven active players ends the match without inventing goals
+ok 165 - white: falling below seven active players ends the match without inventing goals
+  ---
+  duration_ms: 2.26623
+  type: 'test'
+  ...
+# Subtest: black: tackle draw partitions 2% red, 5% yellow, 3% uncarded fouls and 90% clean challenges
+ok 166 - black: tackle draw partitions 2% red, 5% yellow, 3% uncarded fouls and 90% clean challenges
+  ---
+  duration_ms: 7.479733
+  type: 'test'
+  ...
+# Subtest: black: clean knight tackles remain 50% conditional on no foul
+ok 167 - black: clean knight tackles remain 50% conditional on no foul
+  ---
+  duration_ms: 4.232187
+  type: 'test'
+  ...
+# Subtest: black: disabling Fouls preserves certain ordinary tackles and the old random stream
+ok 168 - black: disabling Fouls preserves certain ordinary tackles and the old random stream
+  ---
+  duration_ms: 0.393902
+  type: 'test'
+  ...
+# Subtest: black: a second yellow dismisses the same stable player once
+ok 169 - black: a second yellow dismisses the same stable player once
+  ---
+  duration_ms: 1.737795
+  type: 'test'
+  ...
+# Subtest: black: a foul at the carrier contact square in the defender box becomes a fixed 80% penalty
+ok 170 - black: a foul at the carrier contact square in the defender box becomes a fixed 80% penalty
+  ---
+  duration_ms: 4.448453
+  type: 'test'
+  ...
+# Subtest: black: a penalty still has 80% scoring odds with the king outside its own box and cannot grant an outside save
+ok 171 - black: a penalty still has 80% scoring odds with the king outside its own box and cannot grant an outside save
+  ---
+  duration_ms: 1.582971
+  type: 'test'
+  ...
+# Subtest: black: red cards survive a penalty goal and the new kickoff formation
+ok 172 - black: red cards survive a penalty goal and the new kickoff formation
+  ---
+  duration_ms: 1.954921
+  type: 'test'
+  ...
+# Subtest: black: a dismissed king gets an automatic replacement with a stable original player ID
+ok 173 - black: a dismissed king gets an automatic replacement with a stable original player ID
+  ---
+  duration_ms: 2.272208
+  type: 'test'
+  ...
+# Subtest: black: a foul in the attacking team's own box remains a free kick
+ok 174 - black: a foul in the attacking team's own box remains a free kick
+  ---
+  duration_ms: 1.437532
+  type: 'test'
+  ...
+# Subtest: black: falling below seven active players ends the match without inventing goals
+ok 175 - black: falling below seven active players ends the match without inventing goals
+  ---
+  duration_ms: 3.127365
+  type: 'test'
+  ...
+# Subtest: current-board older saves restore with Fouls disabled and no invented cards
+ok 176 - current-board older saves restore with Fouls disabled and no invented cards
+  ---
+  duration_ms: 0.635186
+  type: 'test'
+  ...
+# Subtest: goal recording preserves actual pre-goal positions, shot path and final score
+ok 177 - goal recording preserves actual pre-goal positions, shot path and final score
+  ---
+  duration_ms: 32.925386
+  type: 'test'
+  ...
+# Subtest: keeper reaction in the scoring frame comes from the recorded move
+ok 178 - keeper reaction in the scoring frame comes from the recorded move
+  ---
+  duration_ms: 9.430038
+  type: 'test'
+  ...
+# Subtest: a lofted restart in the real goal build-up keeps its bypass metadata through storage
+ok 179 - a lofted restart in the real goal build-up keeps its bypass metadata through storage
+  ---
+  duration_ms: 14.992126
+  type: 'test'
+  ...
+# Subtest: white goal identifies shooter and scoring team separately
+ok 180 - white goal identifies shooter and scoring team separately
+  ---
+  duration_ms: 2.30607
+  type: 'test'
+  ...
+# Subtest: white own goal identifies shooter and scoring team separately
+ok 181 - white own goal identifies shooter and scoring team separately
+  ---
+  duration_ms: 2.142854
+  type: 'test'
+  ...
+# Subtest: black goal identifies shooter and scoring team separately
+ok 182 - black goal identifies shooter and scoring team separately
+  ---
+  duration_ms: 1.923974
+  type: 'test'
+  ...
+# Subtest: black own goal identifies shooter and scoring team separately
+ok 183 - black own goal identifies shooter and scoring team separately
+  ---
+  duration_ms: 1.765897
+  type: 'test'
+  ...
+# Subtest: knight L-shaped goal records its actual jump without inventing a ray
+ok 184 - knight L-shaped goal records its actual jump without inventing a ray
+  ---
+  duration_ms: 1.916363
+  type: 'test'
+  ...
+# Subtest: outside-box king replay correctly describes the lack of goalkeeper reaction
+ok 185 - outside-box king replay correctly describes the lack of goalkeeper reaction
+  ---
+  duration_ms: 4.649856
+  type: 'test'
+  ...
+# Subtest: building and restoring replay are pure and clones cannot mutate match snapshots
+ok 186 - building and restoring replay are pure and clones cannot mutate match snapshots
+  ---
+  duration_ms: 5.890622
+  type: 'test'
+  ...
+# Subtest: recording caps build-up at twelve frames including the goal freeze
+ok 187 - recording caps build-up at twelve frames including the goal freeze
+  ---
+  duration_ms: 6.92587
+  type: 'test'
+  ...
+# Subtest: build-up stops at the previous score change and malformed legacy snapshot
+ok 188 - build-up stops at the previous score change and malformed legacy snapshot
+  ---
+  duration_ms: 6.222391
+  type: 'test'
+  ...
+# Subtest: replay survives JSON storage with a bounded known schema
+ok 189 - replay survives JSON storage with a bounded known schema
+  ---
+  duration_ms: 5.964032
+  type: 'test'
+  ...
+# Subtest: replay geometry identifies the expanded pitch, separate goal and keeper-box widths
+ok 190 - replay geometry identifies the expanded pitch, separate goal and keeper-box widths
+  ---
+  duration_ms: 7.144979
+  type: 'test'
+  ...
+# Subtest: goal capture excludes wrong-size and unstamped historical matches even when their coordinates fit
+ok 191 - goal capture excludes wrong-size and unstamped historical matches even when their coordinates fit
+  ---
+  duration_ms: 3.05756
+  type: 'test'
+  ...
+# Subtest: own keeper may occupy the new box wings, which are not extra goal mouths
+ok 192 - own keeper may occupy the new box wings, which are not extra goal mouths
+  ---
+  duration_ms: 6.564728
+  type: 'test'
+  ...
+# Subtest: recordings accept every outfield type in either six-wide three-deep box under the selected rules
+ok 193 - recordings accept every outfield type in either six-wide three-deep box under the selected rules
+  ---
+  duration_ms: 39.353236
+  type: 'test'
+  ...
+# Subtest: a reaction can leave an own-box wing but cannot begin outside the keeper box
+ok 194 - a reaction can leave an own-box wing but cannot begin outside the keeper box
+  ---
+  duration_ms: 1.56161
+  type: 'test'
+  ...
+# Subtest: a real defender block remains visible in a later goal replay and survives JSON storage
+ok 195 - a real defender block remains visible in a later goal replay and survives JSON storage
+  ---
+  duration_ms: 4.645479
+  type: 'test'
+  ...
+# Subtest: a real block out for a corner remains in the next goal replay
+ok 196 - a real block out for a corner remains in the next goal replay
+  ---
+  duration_ms: 17.967081
+  type: 'test'
+  ...
+# Subtest: a real block out for a goal kick remains in the next goal replay
+ok 197 - a real block out for a goal kick remains in the next goal replay
+  ---
+  duration_ms: 3.852286
+  type: 'test'
+  ...
+# Subtest: stored replay rejects malformed geometry, scores, ownership and excessive data
+ok 198 - stored replay rejects malformed geometry, scores, ownership and excessive data
+  ---
+  duration_ms: 12.067445
+  type: 'test'
+  ...
+# Subtest: non-goals and missing pending-shot evidence do not create replays
+ok 199 - non-goals and missing pending-shot evidence do not create replays
+  ---
+  duration_ms: 2.446811
+  type: 'test'
+  ...
+# Subtest: white: a red card and penalty goal keep the real reduced roster through JSON storage
+ok 200 - white: a red card and penalty goal keep the real reduced roster through JSON storage
+  ---
+  duration_ms: 17.515312
+  type: 'test'
+  ...
+# Subtest: white: a dismissed goalkeeper is replaced under its teammate's original ID and can react later
+ok 201 - white: a dismissed goalkeeper is replaced under its teammate's original ID and can react later
+  ---
+  duration_ms: 13.829211
+  type: 'test'
+  ...
+# Subtest: white: plain fouls and yellow cards retain their distinct captions and on-field roles
+ok 202 - white: plain fouls and yellow cards retain their distinct captions and on-field roles
+  ---
+  duration_ms: 9.199797
+  type: 'test'
+  ...
+# Subtest: black: a red card and penalty goal keep the real reduced roster through JSON storage
+ok 203 - black: a red card and penalty goal keep the real reduced roster through JSON storage
+  ---
+  duration_ms: 3.647969
+  type: 'test'
+  ...
+# Subtest: black: a dismissed goalkeeper is replaced under its teammate's original ID and can react later
+ok 204 - black: a dismissed goalkeeper is replaced under its teammate's original ID and can react later
+  ---
+  duration_ms: 4.541032
+  type: 'test'
+  ...
+# Subtest: black: plain fouls and yellow cards retain their distinct captions and on-field roles
+ok 205 - black: plain fouls and yellow cards retain their distinct captions and on-field roles
+  ---
+  duration_ms: 15.83264
+  type: 'test'
+  ...
+# Subtest: a real second yellow produces one dismissal and preserves its two-card ledger
+ok 206 - a real second yellow produces one dismissal and preserves its two-card ledger
+  ---
+  duration_ms: 5.09153
+  type: 'test'
+  ...
+# Subtest: a full legacy schema-two replay without card or role metadata still restores safely
+ok 207 - a full legacy schema-two replay without card or role metadata still restores safely
+  ---
+  duration_ms: 2.855847
+  type: 'test'
+  ...
+# Subtest: same-size historical goal-front occupants remain in their recorded cells after the live rule reserves them for the keeper
+ok 208 - same-size historical goal-front occupants remain in their recorded cells after the live rule reserves them for the keeper
+  ---
+  duration_ms: 1.721249
+  type: 'test'
+  ...
+# Subtest: a seven-a-side goal remains recordable with all eight departed original IDs accounted for
+ok 209 - a seven-a-side goal remains recordable with all eight departed original IDs accounted for
+  ---
+  duration_ms: 1.583733
+  type: 'test'
+  ...
+# Subtest: stored card replays reject missing ledgers, resurrected players and invented keeper promotions
+ok 210 - stored card replays reject missing ledgers, resurrected players and invented keeper promotions
+  ---
+  duration_ms: 10.067717
+  type: 'test'
+  ...
+# Subtest: scrubbing a keeper dismissal hides the departed ID, changes the retained pawn role and reverses both
+ok 211 - scrubbing a keeper dismissal hides the departed ID, changes the retained pawn role and reverses both
+  ---
+  duration_ms: 7.902209
+  type: 'test'
+  ...
+# Subtest: replay shows and clears yellow-card badges while penalty frames use their own label and odds
+ok 212 - replay shows and clears yellow-card badges while penalty frames use their own label and odds
+  ---
+  duration_ms: 4.110254
+  type: 'test'
+  ...
+# Subtest: white queen replay declares two possibilities and records only the actual goal trajectory
+ok 213 - white queen replay declares two possibilities and records only the actual goal trajectory
+  ---
+  duration_ms: 15.293849
+  type: 'test'
+  ...
+# Subtest: white knight replay declares two possibilities and records only the actual goal trajectory
+ok 214 - white knight replay declares two possibilities and records only the actual goal trajectory
+  ---
+  duration_ms: 3.334176
+  type: 'test'
+  ...
+# Subtest: black queen replay declares two possibilities and records only the actual goal trajectory
+ok 215 - black queen replay declares two possibilities and records only the actual goal trajectory
+  ---
+  duration_ms: 1.712757
+  type: 'test'
+  ...
+# Subtest: black knight replay declares two possibilities and records only the actual goal trajectory
+ok 216 - black knight replay declares two possibilities and records only the actual goal trajectory
+  ---
+  duration_ms: 1.262038
+  type: 'test'
+  ...
+# Subtest: disguised replay scrub shows both declared paths, then only the actual resolved path
+ok 217 - disguised replay scrub shows both declared paths, then only the actual resolved path
+  ---
+  duration_ms: 4.686371
+  type: 'test'
+  ...
+# Subtest: stored disguised replay rejects revealed declarations, invalid target pairs and forged chosen indices
+ok 218 - stored disguised replay rejects revealed declarations, invalid target pairs and forged chosen indices
+  ---
+  duration_ms: 9.154399
+  type: 'test'
+  ...
+# Subtest: a keeper spill in a later goal build-up preserves its live landing and validates recording
+ok 219 - a keeper spill in a later goal build-up preserves its live landing and validates recording
+  ---
+  duration_ms: 5.872315
+  type: 'test'
+  ...
+# Subtest: white knight native replay animation lands at the actual engine goal file
+ok 220 - white knight native replay animation lands at the actual engine goal file
+  ---
+  duration_ms: 4.83598
+  type: 'test'
+  ...
+# Subtest: white knight disguised replay animation lands at the actual engine goal file
+ok 221 - white knight disguised replay animation lands at the actual engine goal file
+  ---
+  duration_ms: 4.173979
+  type: 'test'
+  ...
+# Subtest: white knight own goal replay animation lands at the actual engine goal file
+ok 222 - white knight own goal replay animation lands at the actual engine goal file
+  ---
+  duration_ms: 2.897509
+  type: 'test'
+  ...
+# Subtest: black knight native replay animation lands at the actual engine goal file
+ok 223 - black knight native replay animation lands at the actual engine goal file
+  ---
+  duration_ms: 10.25569
+  type: 'test'
+  ...
+# Subtest: black knight disguised replay animation lands at the actual engine goal file
+ok 224 - black knight disguised replay animation lands at the actual engine goal file
+  ---
+  duration_ms: 6.175912
+  type: 'test'
+  ...
+# Subtest: black knight own goal replay animation lands at the actual engine goal file
+ok 225 - black knight own goal replay animation lands at the actual engine goal file
+  ---
+  duration_ms: 3.952096
+  type: 'test'
+  ...
+# Subtest: white: in-play rebounds split revised keeper parries without altering the save mass
+ok 226 - white: in-play rebounds split revised keeper parries without altering the save mass
+  ---
+  duration_ms: 11.785211
+  type: 'test'
+  ...
+# Subtest: white: rebound targets are exactly uniform empty squares near the defending box
+ok 227 - white: rebound targets are exactly uniform empty squares near the defending box
+  ---
+  duration_ms: 2.511238
+  type: 'test'
+  ...
+# Subtest: white: a keeper rebound leaves a playable loose ball and preserves shot-time offside
+ok 228 - white: a keeper rebound leaves a playable loose ball and preserves shot-time offside
+  ---
+  duration_ms: 4.417697
+  type: 'test'
+  ...
+# Subtest: white: originally offside runner cannot collect a keeper rebound; the shooter can
+ok 229 - white: originally offside runner cannot collect a keeper rebound; the shooter can
+  ---
+  duration_ms: 8.185165
+  type: 'test'
+  ...
+# Subtest: white: rebound sampling is seeded and survives reload; invalid forced landings are rejected
+ok 230 - white: rebound sampling is seeded and survives reload; invalid forced landings are rejected
+  ---
+  duration_ms: 17.09538
+  type: 'test'
+  ...
+# Subtest: white: keeper reactions change occupied rebound squares before resolution
+ok 231 - white: keeper reactions change occupied rebound squares before resolution
+  ---
+  duration_ms: 5.324541
+  type: 'test'
+  ...
+# Subtest: white: penalties have no keeper-rebound branch
+ok 232 - white: penalties have no keeper-rebound branch
+  ---
+  duration_ms: 6.031674
+  type: 'test'
+  ...
+# Subtest: white: a teammate's backward shot cannot create a keeper rebound or evade immediate release
+ok 233 - white: a teammate's backward shot cannot create a keeper rebound or evade immediate release
+  ---
+  duration_ms: 2.271126
+  type: 'test'
+  ...
+# Subtest: black: in-play rebounds split revised keeper parries without altering the save mass
+ok 234 - black: in-play rebounds split revised keeper parries without altering the save mass
+  ---
+  duration_ms: 1.582901
+  type: 'test'
+  ...
+# Subtest: black: rebound targets are exactly uniform empty squares near the defending box
+ok 235 - black: rebound targets are exactly uniform empty squares near the defending box
+  ---
+  duration_ms: 1.733017
+  type: 'test'
+  ...
+# Subtest: black: a keeper rebound leaves a playable loose ball and preserves shot-time offside
+ok 236 - black: a keeper rebound leaves a playable loose ball and preserves shot-time offside
+  ---
+  duration_ms: 1.873358
+  type: 'test'
+  ...
+# Subtest: black: originally offside runner cannot collect a keeper rebound; the shooter can
+ok 237 - black: originally offside runner cannot collect a keeper rebound; the shooter can
+  ---
+  duration_ms: 1.88068
+  type: 'test'
+  ...
+# Subtest: black: rebound sampling is seeded and survives reload; invalid forced landings are rejected
+ok 238 - black: rebound sampling is seeded and survives reload; invalid forced landings are rejected
+  ---
+  duration_ms: 10.596161
+  type: 'test'
+  ...
+# Subtest: black: keeper reactions change occupied rebound squares before resolution
+ok 239 - black: keeper reactions change occupied rebound squares before resolution
+  ---
+  duration_ms: 1.193186
+  type: 'test'
+  ...
+# Subtest: black: penalties have no keeper-rebound branch
+ok 240 - black: penalties have no keeper-rebound branch
+  ---
+  duration_ms: 0.451039
+  type: 'test'
+  ...
+# Subtest: black: a teammate's backward shot cannot create a keeper rebound or evade immediate release
+ok 241 - black: a teammate's backward shot cannot create a keeper rebound or evade immediate release
+  ---
+  duration_ms: 3.211462
+  type: 'test'
+  ...
+# Subtest: shot model is current and outside-keeper save parameters are zero
+ok 242 - shot model is current and outside-keeper save parameters are zero
+  ---
+  duration_ms: 2.714675
+  type: 'test'
+  ...
+# Subtest: white: own-box boundaries alone enable probabilistic saves
+ok 243 - white: own-box boundaries alone enable probabilistic saves
+  ---
+  duration_ms: 13.161502
+  type: 'test'
+  ...
+# Subtest: white: outside king intercepts ordinary passes and probabilistically blocks shots
+ok 244 - white: outside king intercepts ordinary passes and probabilistically blocks shots
+  ---
+  duration_ms: 11.077206
+  type: 'test'
+  ...
+# Subtest: white: own-box king on a shot ray retains its keeper role
+ok 245 - white: own-box king on a shot ray retains its keeper role
+  ---
+  duration_ms: 1.095728
+  type: 'test'
+  ...
+# Subtest: white: outside king cannot react, even one step from its own box
+ok 246 - white: outside king cannot react, even one step from its own box
+  ---
+  duration_ms: 19.067758
+  type: 'test'
+  ...
+# Subtest: white: ordinary re-entry restores keeper saves and reactions
+ok 247 - white: ordinary re-entry restores keeper saves and reactions
+  ---
+  duration_ms: 1.526887
+  type: 'test'
+  ...
+# Subtest: white: outside king keeps ordinary one-square move and pass capabilities
+ok 248 - white: outside king keeps ordinary one-square move and pass capabilities
+  ---
+  duration_ms: 0.992844
+  type: 'test'
+  ...
+# Subtest: black: own-box boundaries alone enable probabilistic saves
+ok 249 - black: own-box boundaries alone enable probabilistic saves
+  ---
+  duration_ms: 4.534683
+  type: 'test'
+  ...
+# Subtest: black: outside king intercepts ordinary passes and probabilistically blocks shots
+ok 250 - black: outside king intercepts ordinary passes and probabilistically blocks shots
+  ---
+  duration_ms: 1.703894
+  type: 'test'
+  ...
+# Subtest: black: own-box king on a shot ray retains its keeper role
+ok 251 - black: own-box king on a shot ray retains its keeper role
+  ---
+  duration_ms: 1.235369
+  type: 'test'
+  ...
+# Subtest: black: outside king cannot react, even one step from its own box
+ok 252 - black: outside king cannot react, even one step from its own box
+  ---
+  duration_ms: 6.141369
+  type: 'test'
+  ...
+# Subtest: black: ordinary re-entry restores keeper saves and reactions
+ok 253 - black: ordinary re-entry restores keeper saves and reactions
+  ---
+  duration_ms: 0.66425
+  type: 'test'
+  ...
+# Subtest: black: outside king keeps ordinary one-square move and pass capabilities
+ok 254 - black: outside king keeps ordinary one-square move and pass capabilities
+  ---
+  duration_ms: 0.424599
+  type: 'test'
+  ...
+# Subtest: restoration drops an assist candidate whose receiver no longer controls the ball
+ok 255 - restoration drops an assist candidate whose receiver no longer controls the ball
+  ---
+  duration_ms: 31.232858
+  type: 'test'
+  ...
+# Subtest: new match statistics begin complete with zero counts and no possession percentage
+ok 256 - new match statistics begin complete with zero counts and no possession percentage
+  ---
+  duration_ms: 1.688471
+  type: 'test'
+  ...
+# Subtest: white declared shot and actual goal count once with stable scorer ID
+ok 257 - white declared shot and actual goal count once with stable scorer ID
+  ---
+  duration_ms: 11.86349
+  type: 'test'
+  ...
+# Subtest: black declared shot and actual goal count once with stable scorer ID
+ok 258 - black declared shot and actual goal count once with stable scorer ID
+  ---
+  duration_ms: 6.40092
+  type: 'test'
+  ...
+# Subtest: a caught save is one shot on target and no corner or goal
+ok 259 - a caught save is one shot on target and no corner or goal
+  ---
+  duration_ms: 5.513876
+  type: 'test'
+  ...
+# Subtest: a parried shot awards one attacking corner, never a second shot during restart setup
+ok 260 - a parried shot awards one attacking corner, never a second shot during restart setup
+  ---
+  duration_ms: 14.547526
+  type: 'test'
+  ...
+# Subtest: an actual wide shot is a shot but is not on target or a corner
+ok 261 - an actual wide shot is a shot but is not on target or a corner
+  ---
+  duration_ms: 5.109758
+  type: 'test'
+  ...
+# Subtest: white long pass over its own end line awards the opponent a corner without a shot
+ok 262 - white long pass over its own end line awards the opponent a corner without a shot
+  ---
+  duration_ms: 2.298879
+  type: 'test'
+  ...
+# Subtest: black long pass over its own end line awards the opponent a corner without a shot
+ok 263 - black long pass over its own end line awards the opponent a corner without a shot
+  ---
+  duration_ms: 1.278634
+  type: 'test'
+  ...
+# Subtest: white accurate direct pass earns one assist through positioning
+ok 264 - white accurate direct pass earns one assist through positioning
+  ---
+  duration_ms: 6.74644
+  type: 'test'
+  ...
+# Subtest: white accurate pass into space and teammate collection earns one assist through positioning
+ok 265 - white accurate pass into space and teammate collection earns one assist through positioning
+  ---
+  duration_ms: 9.562256
+  type: 'test'
+  ...
+# Subtest: black accurate direct pass earns one assist through positioning
+ok 266 - black accurate direct pass earns one assist through positioning
+  ---
+  duration_ms: 5.837923
+  type: 'test'
+  ...
+# Subtest: black accurate pass into space and teammate collection earns one assist through positioning
+ok 267 - black accurate pass into space and teammate collection earns one assist through positioning
+  ---
+  duration_ms: 9.078848
+  type: 'test'
+  ...
+# Subtest: the latest accurate teammate pass receives the assist; earlier providers do not
+ok 268 - the latest accurate teammate pass receives the assist; earlier providers do not
+  ---
+  duration_ms: 10.84066
+  type: 'test'
+  ...
+# Subtest: the receiver may dribble before scoring without losing a valid assist
+ok 269 - the receiver may dribble before scoring without losing a valid assist
+  ---
+  duration_ms: 6.448181
+  type: 'test'
+  ...
+# Subtest: a collected self pass never creates an assist
+ok 270 - a collected self pass never creates an assist
+  ---
+  duration_ms: 9.522546
+  type: 'test'
+  ...
+# Subtest: an inaccurate long pass collected by a teammate is not an assist
+ok 271 - an inaccurate long pass collected by a teammate is not an assist
+  ---
+  duration_ms: 7.069556
+  type: 'test'
+  ...
+# Subtest: an inaccurate pass landing directly on the scorer does not create an assist
+ok 272 - an inaccurate pass landing directly on the scorer does not create an assist
+  ---
+  duration_ms: 7.19821
+  type: 'test'
+  ...
+# Subtest: losing and regaining the ball clears the prior assist provider
+ok 273 - losing and regaining the ball clears the prior assist provider
+  ---
+  duration_ms: 12.451605
+  type: 'test'
+  ...
+# Subtest: a restart clears the assist chain even before the restart is taken
+ok 274 - a restart clears the assist chain even before the restart is taken
+  ---
+  duration_ms: 14.431902
+  type: 'test'
+  ...
+# Subtest: a saved shot clears the previous assist, so a later regained ball is a new attack
+ok 275 - a saved shot clears the previous assist, so a later regained ball is a new attack
+  ---
+  duration_ms: 3.541709
+  type: 'test'
+  ...
+# Subtest: own goals identify the responsible piece and scoring side without awarding an assist
+ok 276 - own goals identify the responsible piece and scoring side without awarding an assist
+  ---
+  duration_ms: 1.267707
+  type: 'test'
+  ...
+# Subtest: separate pieces of the same type retain distinct goal identities
+ok 277 - separate pieces of the same type retain distinct goal identities
+  ---
+  duration_ms: 4.265667
+  type: 'test'
+  ...
+# Subtest: possession accrues elapsed controlled-ball time for the attacker, including opponent thinking time
+ok 278 - possession accrues elapsed controlled-ball time for the attacker, including opponent thinking time
+  ---
+  duration_ms: 1.312675
+  type: 'test'
+  ...
+# Subtest: kickoffs, protected restarts and finished games do not accrue possession
+ok 279 - kickoffs, protected restarts and finished games do not accrue possession
+  ---
+  duration_ms: 0.307332
+  type: 'test'
+  ...
+# Subtest: loose passes and shot flight retain the attacking team possession until opponent control
+ok 280 - loose passes and shot flight retain the attacking team possession until opponent control
+  ---
+  duration_ms: 1.044702
+  type: 'test'
+  ...
+# Subtest: statistics and a pending assist survive a JSON save/reload and cloned undo snapshot
+ok 281 - statistics and a pending assist survive a JSON save/reload and cloned undo snapshot
+  ---
+  duration_ms: 6.938303
+  type: 'test'
+  ...
+# Subtest: a pending shot remains one shot after a JSON save/reload before keeper reaction
+ok 282 - a pending shot remains one shot after a JSON save/reload before keeper reaction
+  ---
+  duration_ms: 4.91858
+  type: 'test'
+  ...
+# Subtest: legacy saves report partial tracking and preserve the known score as a baseline
+ok 283 - legacy saves report partial tracking and preserve the known score as a baseline
+  ---
+  duration_ms: 2.44584
+  type: 'test'
+  ...
+# Subtest: malformed statistics cannot inject unknown players, impossible counts, or invalid elapsed time
+ok 284 - malformed statistics cannot inject unknown players, impossible counts, or invalid elapsed time
+  ---
+  duration_ms: 5.953016
+  type: 'test'
+  ...
+# Subtest: goal and assist summary aggregates counts by individual stable IDs
+ok 285 - goal and assist summary aggregates counts by individual stable IDs
+  ---
+  duration_ms: 8.6677
+  type: 'test'
+  ...
+# Subtest: a legacy save during keeper reaction remains internally valid after goal
+ok 286 - a legacy save during keeper reaction remains internally valid after goal
+  ---
+  duration_ms: 7.385982
+  type: 'test'
+  ...
+# Subtest: a legacy save during keeper reaction remains internally valid after saved
+ok 287 - a legacy save during keeper reaction remains internally valid after saved
+  ---
+  duration_ms: 3.437411
+  type: 'test'
+  ...
+# Subtest: a legacy save during keeper reaction remains internally valid after wide
+ok 288 - a legacy save during keeper reaction remains internally valid after wide
+  ---
+  duration_ms: 3.570962
+  type: 'test'
+  ...
+# Subtest: an offside intervention aborts the attempted shot without inventing a shot statistic
+ok 289 - an offside intervention aborts the attempted shot without inventing a shot statistic
+  ---
+  duration_ms: 2.046529
+  type: 'test'
+  ...
+# Subtest: an evaded tackle preserves the valid assist to a knight that then scores
+ok 290 - an evaded tackle preserves the valid assist to a knight that then scores
+  ---
+  duration_ms: 7.112201
+  type: 'test'
+  ...
+# Subtest: the goalkeeper can earn an assist through its mandatory immediate back-pass release
+ok 291 - the goalkeeper can earn an assist through its mandatory immediate back-pass release
+  ---
+  duration_ms: 5.059362
+  type: 'test'
+  ...
+# Subtest: white goal records the actual declaration origin through a keeper reaction and kickoff reset
+ok 292 - white goal records the actual declaration origin through a keeper reaction and kickoff reset
+  ---
+  duration_ms: 2.823317
+  type: 'test'
+  ...
+# Subtest: black goal records the actual declaration origin through a keeper reaction and kickoff reset
+ok 293 - black goal records the actual declaration origin through a keeper reaction and kickoff reset
+  ---
+  duration_ms: 2.617278
+  type: 'test'
+  ...
+# Subtest: a goal after a dribble uses the final shooting square rather than the pass receiving square
+ok 294 - a goal after a dribble uses the final shooting square rather than the pass receiving square
+  ---
+  duration_ms: 7.449307
+  type: 'test'
+  ...
+# Subtest: own-goal origin and target remain actual pitch coordinates and normalize toward the credited goal
+ok 295 - own-goal origin and target remain actual pitch coordinates and normalize toward the credited goal
+  ---
+  duration_ms: 1.700378
+  type: 'test'
+  ...
+# Subtest: mirrored goals normalize to the same attacking position without mutating the goal records
+ok 296 - mirrored goals normalize to the same attacking position without mutating the goal records
+  ---
+  duration_ms: 4.026979
+  type: 'test'
+  ...
+# Subtest: current-pitch recorded goals without location fields remain unmapped rather than using kickoff positions
+ok 297 - current-pitch recorded goals without location fields remain unmapped rather than using kickoff positions
+  ---
+  duration_ms: 4.789085
+  type: 'test'
+  ...
+# Subtest: invalid saved goal-location fields are dropped individually without discarding counters or goals
+ok 298 - invalid saved goal-location fields are dropped individually without discarding counters or goals
+  ---
+  duration_ms: 17.498647
+  type: 'test'
+  ...
+# Subtest: pending shot location survives JSON restoration and missing legacy metadata uses known declaration evidence
+ok 299 - pending shot location survives JSON restoration and missing legacy metadata uses known declaration evidence
+  ---
+  duration_ms: 6.153489
+  type: 'test'
+  ...
+# Subtest: goal-map summaries clone locations and restoring an undo snapshot removes the undone marker
+ok 300 - goal-map summaries clone locations and restoring an undo snapshot removes the undone marker
+  ---
+  duration_ms: 8.795162
+  type: 'test'
+  ...
+# Subtest: unmapped goals reject invalid stored distances while valid geometry recomputes physical distance
+ok 301 - unmapped goals reject invalid stored distances while valid geometry recomputes physical distance
+  ---
+  duration_ms: 7.499954
+  type: 'test'
+  ...
+# Subtest: location-zone totals classify actual goals and identify unknown legacy origins
+ok 302 - location-zone totals classify actual goals and identify unknown legacy origins
+  ---
+  duration_ms: 10.025373
+  type: 'test'
+  ...
+# Subtest: statistics schema records the pitch and refuses to reinterpret old-pitch records
+ok 303 - statistics schema records the pitch and refuses to reinterpret old-pitch records
+  ---
+  duration_ms: 3.032183
+  type: 'test'
+  ...
+# Subtest: new-pitch far-edge coordinates survive restoration while the next file and rank are rejected
+ok 304 - new-pitch far-edge coordinates survive restoration while the next file and rank are rejected
+  ---
+  duration_ms: 5.134936
+  type: 'test'
+  ...
+# Subtest: white goal from box wing file 4 maps inside the six-file box
+ok 305 - white goal from box wing file 4 maps inside the six-file box
+  ---
+  duration_ms: 1.760258
+  type: 'test'
+  ...
+# Subtest: white goal from box wing file 9 maps inside the six-file box
+ok 306 - white goal from box wing file 9 maps inside the six-file box
+  ---
+  duration_ms: 1.697033
+  type: 'test'
+  ...
+# Subtest: black goal from box wing file 4 maps inside the six-file box
+ok 307 - black goal from box wing file 4 maps inside the six-file box
+  ---
+  duration_ms: 1.832648
+  type: 'test'
+  ...
+# Subtest: black goal from box wing file 9 maps inside the six-file box
+ok 308 - black goal from box wing file 9 maps inside the six-file box
+  ---
+  duration_ms: 1.768591
+  type: 'test'
+  ...
+# Subtest: white defender-block corner resolves one shot without an on-target shot or assist
+ok 309 - white defender-block corner resolves one shot without an on-target shot or assist
+  ---
+  duration_ms: 8.901011
+  type: 'test'
+  ...
+# Subtest: white defender-block blocked resolves one shot without an on-target shot or assist
+ok 310 - white defender-block blocked resolves one shot without an on-target shot or assist
+  ---
+  duration_ms: 5.256628
+  type: 'test'
+  ...
+# Subtest: black defender-block corner resolves one shot without an on-target shot or assist
+ok 311 - black defender-block corner resolves one shot without an on-target shot or assist
+  ---
+  duration_ms: 9.052449
+  type: 'test'
+  ...
+# Subtest: black defender-block blocked resolves one shot without an on-target shot or assist
+ok 312 - black defender-block blocked resolves one shot without an on-target shot or assist
+  ---
+  duration_ms: 5.719165
+  type: 'test'
+  ...
+# Subtest: white own-goal-target block out awards a goal kick without a corner, shot, or phantom scorer
+ok 313 - white own-goal-target block out awards a goal kick without a corner, shot, or phantom scorer
+  ---
+  duration_ms: 6.23452
+  type: 'test'
+  ...
+# Subtest: black own-goal-target block out awards a goal kick without a corner, shot, or phantom scorer
+ok 314 - black own-goal-target block out awards a goal kick without a corner, shot, or phantom scorer
+  ---
+  duration_ms: 2.486411
+  type: 'test'
+  ...
+# Subtest: white a stalling-wrapped same-team own-goal catch clears the pending shot without inflating soccer statistics
+ok 315 - white a stalling-wrapped same-team own-goal catch clears the pending shot without inflating soccer statistics
+  ---
+  duration_ms: 3.424512
+  type: 'test'
+  ...
+# Subtest: black a stalling-wrapped same-team own-goal catch clears the pending shot without inflating soccer statistics
+ok 316 - black a stalling-wrapped same-team own-goal catch clears the pending shot without inflating soccer statistics
+  ---
+  duration_ms: 2.669937
+  type: 'test'
+  ...
+# Subtest: schema-two saves from before foul tracking restore zero disciplinary counts without losing existing statistics
+ok 317 - schema-two saves from before foul tracking restore zero disciplinary counts without losing existing statistics
+  ---
+  duration_ms: 2.617408
+  type: 'test'
+  ...
+# Subtest: white attack: actual plain foul records the offending side and stable player IDs
+ok 318 - white attack: actual plain foul records the offending side and stable player IDs
+  ---
+  duration_ms: 2.780152
+  type: 'test'
+  ...
+# Subtest: white attack: actual yellow foul records the offending side and stable player IDs
+ok 319 - white attack: actual yellow foul records the offending side and stable player IDs
+  ---
+  duration_ms: 3.420476
+  type: 'test'
+  ...
+# Subtest: white attack: actual red foul records the offending side and stable player IDs
+ok 320 - white attack: actual red foul records the offending side and stable player IDs
+  ---
+  duration_ms: 2.126139
+  type: 'test'
+  ...
+# Subtest: black attack: actual plain foul records the offending side and stable player IDs
+ok 321 - black attack: actual plain foul records the offending side and stable player IDs
+  ---
+  duration_ms: 1.836032
+  type: 'test'
+  ...
+# Subtest: black attack: actual yellow foul records the offending side and stable player IDs
+ok 322 - black attack: actual yellow foul records the offending side and stable player IDs
+  ---
+  duration_ms: 1.795622
+  type: 'test'
+  ...
+# Subtest: black attack: actual red foul records the offending side and stable player IDs
+ok 323 - black attack: actual red foul records the offending side and stable player IDs
+  ---
+  duration_ms: 1.783473
+  type: 'test'
+  ...
+# Subtest: white attack: a second yellow contributes a second caution and one dismissal
+ok 324 - white attack: a second yellow contributes a second caution and one dismissal
+  ---
+  duration_ms: 3.86169
+  type: 'test'
+  ...
+# Subtest: black attack: a second yellow contributes a second caution and one dismissal
+ok 325 - black attack: a second yellow contributes a second caution and one dismissal
+  ---
+  duration_ms: 2.821014
+  type: 'test'
+  ...
+# Subtest: disabled successful tackle adds no disciplinary event
+ok 326 - disabled successful tackle adds no disciplinary event
+  ---
+  duration_ms: 1.038994
+  type: 'test'
+  ...
+# Subtest: enabled clean successful tackle adds no disciplinary event
+ok 327 - enabled clean successful tackle adds no disciplinary event
+  ---
+  duration_ms: 1.373767
+  type: 'test'
+  ...
+# Subtest: white awarded penalty goal is one normal shot without a build-up assist
+ok 328 - white awarded penalty goal is one normal shot without a build-up assist
+  ---
+  duration_ms: 9.633048
+  type: 'test'
+  ...
+# Subtest: white awarded penalty saved is one normal shot without a build-up assist
+ok 329 - white awarded penalty saved is one normal shot without a build-up assist
+  ---
+  duration_ms: 5.973758
+  type: 'test'
+  ...
+# Subtest: black awarded penalty goal is one normal shot without a build-up assist
+ok 330 - black awarded penalty goal is one normal shot without a build-up assist
+  ---
+  duration_ms: 10.62524
+  type: 'test'
+  ...
+# Subtest: black awarded penalty saved is one normal shot without a build-up assist
+ok 331 - black awarded penalty saved is one normal shot without a build-up assist
+  ---
+  duration_ms: 6.594842
+  type: 'test'
+  ...
+# Subtest: white red-carded keeper keeps its own event ID while the replacement keeper preserves another stable ID
+ok 332 - white red-carded keeper keeps its own event ID while the replacement keeper preserves another stable ID
+  ---
+  duration_ms: 3.915285
+  type: 'test'
+  ...
+# Subtest: black red-carded keeper keeps its own event ID while the replacement keeper preserves another stable ID
+ok 333 - black red-carded keeper keeps its own event ID while the replacement keeper preserves another stable ID
+  ---
+  duration_ms: 2.834054
+  type: 'test'
+  ...
+# Subtest: a scorer remains credited after that same stable player ID is sent off
+ok 334 - a scorer remains credited after that same stable player ID is sent off
+  ---
+  duration_ms: 6.060839
+  type: 'test'
+  ...
+# Subtest: white forfeit below seven active opponents adds no invented goals
+ok 335 - white forfeit below seven active opponents adds no invented goals
+  ---
+  duration_ms: 3.12363
+  type: 'test'
+  ...
+# Subtest: black forfeit below seven active opponents adds no invented goals
+ok 336 - black forfeit below seven active opponents adds no invented goals
+  ---
+  duration_ms: 2.055923
+  type: 'test'
+  ...
+# Subtest: Undo and restart repositioning preserve exactly one foul and card event
+ok 337 - Undo and restart repositioning preserve exactly one foul and card event
+  ---
+  duration_ms: 9.021963
+  type: 'test'
+  ...
+# Subtest: malformed saved disciplinary counters and event references are rejected safely
+ok 338 - malformed saved disciplinary counters and event references are rejected safely
+  ---
+  duration_ms: 4.489123
+  type: 'test'
+  ...
+# Subtest: white P3 opponent-goal finish is an ordinary scorer, never an own goal
+ok 339 - white P3 opponent-goal finish is an ordinary scorer, never an own goal
+  ---
+  duration_ms: 3.155277
+  type: 'test'
+  ...
+# Subtest: black P3 opponent-goal finish is an ordinary scorer, never an own goal
+ok 340 - black P3 opponent-goal finish is an ordinary scorer, never an own goal
+  ---
+  duration_ms: 3.249308
+  type: 'test'
+  ...
+# Subtest: white restored P3 shot missing redundant shooting team still records an ordinary goal
+ok 341 - white restored P3 shot missing redundant shooting team still records an ordinary goal
+  ---
+  duration_ms: 2.480071
+  type: 'test'
+  ...
+# Subtest: black restored P3 shot missing redundant shooting team still records an ordinary goal
+ok 342 - black restored P3 shot missing redundant shooting team still records an ordinary goal
+  ---
+  duration_ms: 2.089714
+  type: 'test'
+  ...
+# Subtest: white statistics ignore a contradictory own-goal action flag when scorer and beneficiary match
+ok 343 - white statistics ignore a contradictory own-goal action flag when scorer and beneficiary match
+  ---
+  duration_ms: 1.669081
+  type: 'test'
+  ...
+# Subtest: black statistics ignore a contradictory own-goal action flag when scorer and beneficiary match
+ok 344 - black statistics ignore a contradictory own-goal action flag when scorer and beneficiary match
+  ---
+  duration_ms: 1.959919
+  type: 'test'
+  ...
+# Subtest: white historical false own-goal record restores scorer and only proven minimum shot counters
+ok 345 - white historical false own-goal record restores scorer and only proven minimum shot counters
+  ---
+  duration_ms: 4.222753
+  type: 'test'
+  ...
+# Subtest: black historical false own-goal record restores scorer and only proven minimum shot counters
+ok 346 - black historical false own-goal record restores scorer and only proven minimum shot counters
+  ---
+  duration_ms: 3.419515
+  type: 'test'
+  ...
+# Subtest: historical cross-team own goal remains an own goal even if its redundant flag says otherwise
+ok 347 - historical cross-team own goal remains an own goal even if its redundant flag says otherwise
+  ---
+  duration_ms: 2.477227
+  type: 'test'
+  ...
+# Subtest: white Q disguised goal counts one attempt and maps the actual second target after reload
+ok 348 - white Q disguised goal counts one attempt and maps the actual second target after reload
+  ---
+  duration_ms: 5.287626
+  type: 'test'
+  ...
+# Subtest: white N1 disguised goal counts one attempt and maps the actual second target after reload
+ok 349 - white N1 disguised goal counts one attempt and maps the actual second target after reload
+  ---
+  duration_ms: 4.237906
+  type: 'test'
+  ...
+# Subtest: black Q disguised goal counts one attempt and maps the actual second target after reload
+ok 350 - black Q disguised goal counts one attempt and maps the actual second target after reload
+  ---
+  duration_ms: 3.94123
+  type: 'test'
+  ...
+# Subtest: black N1 disguised goal counts one attempt and maps the actual second target after reload
+ok 351 - black N1 disguised goal counts one attempt and maps the actual second target after reload
+  ---
+  duration_ms: 4.808364
+  type: 'test'
+  ...
+# Subtest: white keeper spill is one on-target shot without corner or possession award
+ok 352 - white keeper spill is one on-target shot without corner or possession award
+  ---
+  duration_ms: 3.310932
+  type: 'test'
+  ...
+# Subtest: black keeper spill is one on-target shot without corner or possession award
+ok 353 - black keeper spill is one on-target shot without corner or possession award
+  ---
+  duration_ms: 1.644785
+  type: 'test'
+  ...
+# Subtest: correcting a keeper position in the same sequence fully refunds the original deduction
+ok 354 - correcting a keeper position in the same sequence fully refunds the original deduction
+  ---
+  duration_ms: 21.115629
+  type: 'test'
+  ...
+# Subtest: repeated movement cycles cannot farm positive ratings or accumulate phantom penalties
+ok 355 - repeated movement cycles cannot farm positive ratings or accumulate phantom penalties
+  ---
+  duration_ms: 38.171894
+  type: 'test'
+  ...
+# Subtest: ordinary positioning costs at most .12 per sequence and .35 over a long match
+ok 356 - ordinary positioning costs at most .12 per sequence and .35 over a long match
+  ---
+  duration_ms: 23.467467
+  type: 'test'
+  ...
+# Subtest: a new round cannot refund a positioning decision from an earlier round
+ok 357 - a new round cannot refund a positioning decision from an earlier round
+  ---
+  duration_ms: 0.775137
+  type: 'test'
+  ...
+# Subtest: shot declaration closes the refundable positioning sequence
+ok 358 - shot declaration closes the refundable positioning sequence
+  ---
+  duration_ms: 4.633941
+  type: 'test'
+  ...
+# Subtest: save and undo preserve a pending positioning refund exactly
+ok 359 - save and undo preserve a pending positioning refund exactly
+  ---
+  duration_ms: 7.492413
+  type: 'test'
+  ...
+# Subtest: invalid positioning telemetry starts a partial record instead of granting a refund
+ok 360 - invalid positioning telemetry starts a partial record instead of granting a refund
+  ---
+  duration_ms: 6.370124
+  type: 'test'
+  ...
+# Subtest: method3 saves retain their original grades, formulas and pending history
+ok 361 - method3 saves retain their original grades, formulas and pending history
+  ---
+  duration_ms: 1.839438
+  type: 'test'
+  ...
+# Subtest: negative keeper merit has the same initial sensitivity as positive credit, while outfield curves remain unchanged
+ok 362 - negative keeper merit has the same initial sensitivity as positive credit, while outfield curves remain unchanged
+  ---
+  duration_ms: 3.673202
+  type: 'test'
+  ...
+# Subtest: strong stopping outranks routine outfield play while poor stopping can still grade below six
+ok 363 - strong stopping outranks routine outfield play while poor stopping can still grade below six
+  ---
+  duration_ms: 17.724977
+  type: 'test'
+  ...
+# Subtest: cumulative stopping credit is independent of shot order, including saves above the old positive cap
+ok 364 - cumulative stopping credit is independent of shot order, including saves above the old positive cap
+  ---
+  duration_ms: 13.108262
+  type: 'test'
+  ...
+# Subtest: keeper reactions do not debit self-created difficulty twice
+ok 365 - keeper reactions do not debit self-created difficulty twice
+  ---
+  duration_ms: 0.906224
+  type: 'test'
+  ...
+# Subtest: current model has stronger post penalties, the rook distance curve and the central-lane reward
+ok 366 - current model has stronger post penalties, the rook distance curve and the central-lane reward
+  ---
+  duration_ms: 1.643603
+  type: 'test'
+  ...
+# Subtest: white: a legal wide queen finish has a stronger physical opening penalty
+ok 367 - white: a legal wide queen finish has a stronger physical opening penalty
+  ---
+  duration_ms: 7.492042
+  type: 'test'
+  ...
+# Subtest: white: visible opening depends on the origin rather than which legal post is aimed at
+ok 368 - white: visible opening depends on the origin rather than which legal post is aimed at
+  ---
+  duration_ms: 0.508706
+  type: 'test'
+  ...
+# Subtest: white: central distant shots retain a normalized opening close to one
+ok 369 - white: central distant shots retain a normalized opening close to one
+  ---
+  duration_ms: 2.104336
+  type: 'test'
+  ...
+# Subtest: white: rooks gain range accuracy with identical close finishing and keeper geometry
+ok 370 - white: rooks gain range accuracy with identical close finishing and keeper geometry
+  ---
+  duration_ms: 4.698228
+  type: 'test'
+  ...
+# Subtest: white: knight finishing follows the selected multiplier without changing its distance curve
+ok 371 - white: knight finishing follows the selected multiplier without changing its distance curve
+  ---
+  duration_ms: 0.390437
+  type: 'test'
+  ...
+# Subtest: white: accuracy decreases between its close cap and far floor for every piece
+ok 372 - white: accuracy decreases between its close cap and far floor for every piece
+  ---
+  duration_ms: 6.390915
+  type: 'test'
+  ...
+# Subtest: white: declared shooter identity survives a different carrier and legacy ID fallback
+ok 373 - white: declared shooter identity survives a different carrier and legacy ID fallback
+  ---
+  duration_ms: 2.652461
+  type: 'test'
+  ...
+# Subtest: white: reload and keeper resolution preserve committed origin and seeded outcomes
+ok 374 - white: reload and keeper resolution preserve committed origin and seeded outcomes
+  ---
+  duration_ms: 5.125762
+  type: 'test'
+  ...
+# Subtest: black: a legal wide queen finish has a stronger physical opening penalty
+ok 375 - black: a legal wide queen finish has a stronger physical opening penalty
+  ---
+  duration_ms: 0.745031
+  type: 'test'
+  ...
+# Subtest: black: visible opening depends on the origin rather than which legal post is aimed at
+ok 376 - black: visible opening depends on the origin rather than which legal post is aimed at
+  ---
+  duration_ms: 1.485525
+  type: 'test'
+  ...
+# Subtest: black: central distant shots retain a normalized opening close to one
+ok 377 - black: central distant shots retain a normalized opening close to one
+  ---
+  duration_ms: 0.933204
+  type: 'test'
+  ...
+# Subtest: black: rooks gain range accuracy with identical close finishing and keeper geometry
+ok 378 - black: rooks gain range accuracy with identical close finishing and keeper geometry
+  ---
+  duration_ms: 4.073499
+  type: 'test'
+  ...
+# Subtest: black: knight finishing follows the selected multiplier without changing its distance curve
+ok 379 - black: knight finishing follows the selected multiplier without changing its distance curve
+  ---
+  duration_ms: 0.300903
+  type: 'test'
+  ...
+# Subtest: black: accuracy decreases between its close cap and far floor for every piece
+ok 380 - black: accuracy decreases between its close cap and far floor for every piece
+  ---
+  duration_ms: 6.105906
+  type: 'test'
+  ...
+# Subtest: black: declared shooter identity survives a different carrier and legacy ID fallback
+ok 381 - black: declared shooter identity survives a different carrier and legacy ID fallback
+  ---
+  duration_ms: 4.236525
+  type: 'test'
+  ...
+# Subtest: black: reload and keeper resolution preserve committed origin and seeded outcomes
+ok 382 - black: reload and keeper resolution preserve committed origin and seeded outcomes
+  ---
+  duration_ms: 4.824278
+  type: 'test'
+  ...
+# Subtest: horizontal and half-turn reflections retain all model probabilities and physical geometry
+ok 383 - horizontal and half-turn reflections retain all model probabilities and physical geometry
+  ---
+  duration_ms: 6.582954
+  type: 'test'
+  ...
+# Subtest: invalid shot previews remain finite, conserve mass and expose no scoring opportunity
+ok 384 - invalid shot previews remain finite, conserve mass and expose no scoring opportunity
+  ---
+  duration_ms: 0.474394
+  type: 'test'
+  ...
+# Subtest: shot blocking has an explicit tunable model and safe invalid metadata
+ok 385 - shot blocking has an explicit tunable model and safe invalid metadata
+  ---
+  duration_ms: 2.242323
+  type: 'test'
+  ...
+# Subtest: white: zero, one and two defenders multiply unblocked goal/save/miss mass without changing geometry
+ok 386 - white: zero, one and two defenders multiply unblocked goal/save/miss mass without changing geometry
+  ---
+  duration_ms: 10.068047
+  type: 'test'
+  ...
+# Subtest: white: seven real outcomes use exact disjoint probability boundaries and deterministic draws
+ok 387 - white: seven real outcomes use exact disjoint probability boundaries and deterministic draws
+  ---
+  duration_ms: 16.019501
+  type: 'test'
+  ...
+# Subtest: white: opponents permit shots but still intercept ordinary passes and teammates hard-stop shots
+ok 388 - white: opponents permit shots but still intercept ordinary passes and teammates hard-stop shots
+  ---
+  duration_ms: 1.537934
+  type: 'test'
+  ...
+# Subtest: white: physical segment crossings catch bodies absent from the grid-center ray; native knight shots lob over them
+ok 389 - white: physical segment crossings catch bodies absent from the grid-center ray; native knight shots lob over them
+  ---
+  duration_ms: 2.136685
+  type: 'test'
+  ...
+# Subtest: white: keeper reaction overrides remove its old square and count its new outside-box square as an ordinary blocker
+ok 390 - white: keeper reaction overrides remove its old square and count its new outside-box square as an ordinary blocker
+  ---
+  duration_ms: 1.25007
+  type: 'test'
+  ...
+# Subtest: white: pending save restoration refreshes blocker odds without changing declaration, input or randomness
+ok 391 - white: pending save restoration refreshes blocker odds without changing declaration, input or randomness
+  ---
+  duration_ms: 4.049172
+  type: 'test'
+  ...
+# Subtest: white: an opponent deflecting an own-goal attempt follows actual last-touch goal-kick rules
+ok 392 - white: an opponent deflecting an own-goal attempt follows actual last-touch goal-kick rules
+  ---
+  duration_ms: 2.449545
+  type: 'test'
+  ...
+# Subtest: black: zero, one and two defenders multiply unblocked goal/save/miss mass without changing geometry
+ok 393 - black: zero, one and two defenders multiply unblocked goal/save/miss mass without changing geometry
+  ---
+  duration_ms: 3.049157
+  type: 'test'
+  ...
+# Subtest: black: seven real outcomes use exact disjoint probability boundaries and deterministic draws
+ok 394 - black: seven real outcomes use exact disjoint probability boundaries and deterministic draws
+  ---
+  duration_ms: 7.262556
+  type: 'test'
+  ...
+# Subtest: black: opponents permit shots but still intercept ordinary passes and teammates hard-stop shots
+ok 395 - black: opponents permit shots but still intercept ordinary passes and teammates hard-stop shots
+  ---
+  duration_ms: 1.95401
+  type: 'test'
+  ...
+# Subtest: black: physical segment crossings catch bodies absent from the grid-center ray; native knight shots lob over them
+ok 396 - black: physical segment crossings catch bodies absent from the grid-center ray; native knight shots lob over them
+  ---
+  duration_ms: 2.249294
+  type: 'test'
+  ...
+# Subtest: black: keeper reaction overrides remove its old square and count its new outside-box square as an ordinary blocker
+ok 397 - black: keeper reaction overrides remove its old square and count its new outside-box square as an ordinary blocker
+  ---
+  duration_ms: 1.158132
+  type: 'test'
+  ...
+# Subtest: black: pending save restoration refreshes blocker odds without changing declaration, input or randomness
+ok 398 - black: pending save restoration refreshes blocker odds without changing declaration, input or randomness
+  ---
+  duration_ms: 1.478785
+  type: 'test'
+  ...
+# Subtest: black: an opponent deflecting an own-goal attempt follows actual last-touch goal-kick rules
+ok 399 - black: an opponent deflecting an own-goal attempt follows actual last-touch goal-kick rules
+  ---
+  duration_ms: 1.231143
+  type: 'test'
+  ...
+# Subtest: Tactical chance search with blockers stays pure, seed-blind and cache-equivalent
+ok 400 - Tactical chance search with blockers stays pure, seed-blind and cache-equivalent
+  ---
+  duration_ms: 138.935463
+  type: 'test'
+  ...
+1..400
+# tests 400
+# suites 0
+# pass 400
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 6667.108489

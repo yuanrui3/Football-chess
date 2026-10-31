@@ -36,7 +36,7 @@ function foulFixture({team='white',inside=true,keeper=false}={}){
   const state=createGame({mode:'local',seed:89317,foulsEnabled:true}),other=team==='white'?'black':'white';
   const cy=inside?BOX_DEPTH-1:BOX_DEPTH,offenderId=`${other}-${keeper?'K':'R1'}`,carrierId=`${team}-Q`;
   const rotate=([x,y])=>team==='white'?{x,y}:{x:W-1-x,y:H-1-y};
-  const placements={'white-K':[6,H-2],'black-K':[6,0],'white-Q':[6,cy],[`black-${keeper?'K':'R1'}`]:[6,keeper?cy-1:cy+2]};
+  const placements={'white-K':[6,H-2],'black-K':[6,0],'black-B2':[1,1],'white-Q':[6,cy],[`black-${keeper?'K':'R1'}`]:[6,keeper?cy-1:cy+2]};
   const used=new Set(Object.values(placements).map(p=>p.join())),parking=Array.from({length:H},(_,y)=>[[0,y],[W-1,y]]).flat();
   for(const piece of state.pieces){
     const at=placements[piece.id]||parking.find(p=>!used.has(p.join()));used.add(at.join());Object.assign(piece,rotate(at));

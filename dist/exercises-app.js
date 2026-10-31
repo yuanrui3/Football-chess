@@ -1,8 +1,8 @@
-import {BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, BOX_FILES, BOX_DEPTH, currentTeam, canQuickRelease, legalMoves, legalKicks, disguisedShotTargets, cornerTakers, isBox, isGoalMouth, positionActions, applyKick} from './engine.js?v=663af4ea26d5';
-import {chooseExerciseAction} from './exercise-ai.js?v=0e745716af21';
-import {EXERCISES} from './exercise-positions.js?v=e60af8b818cb';
-import {createExerciseSession, applyExerciseAction, bestKeeperShotChance} from './exercise-session.js?v=e2c8bfe47e9d';
-import {createEvaluation} from './evaluation.js?v=095163d2ff6c';
+import {BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, BOX_FILES, BOX_DEPTH, currentTeam, canQuickRelease, legalMoves, legalKicks, disguisedShotTargets, cornerTakers, isBox, isGoalMouth, positionActions, applyKick} from './engine.js?v=bc58e8823cbc';
+import {chooseExerciseAction} from './exercise-ai.js?v=6318b72b3ad6';
+import {EXERCISES} from './exercise-positions.js?v=67887493e45d';
+import {createExerciseSession, applyExerciseAction, bestKeeperShotChance} from './exercise-session.js?v=9f74b59a08c4';
+import {createEvaluation} from './evaluation.js?v=9477bc2cb051';
 
 export const EXERCISE_PROGRESS_KEY='football-chess-exercises-v1';
 export const EXERCISE_THEME_LABELS=Object.freeze({'one-on-one':'One on one','through-ball':'Through balls','box-entry':'Into the box',defence:'Defend the finish'});
@@ -116,7 +116,7 @@ export function recordExerciseSolved(progress,id,catalog=EXERCISES){
  * both late worker answers and already scheduled presentation timers.
  */
 export function createExerciseController({definition,makeSession=createExerciseSession,applyAction=applyExerciseAction,
-  workerFactory=typeof Worker==='function'?()=>new Worker(new URL('./exercise-ai-worker.js?v=f7126a8a90ef',import.meta.url),{type:'module',name:'football-chess-exercise-study'}):null,
+  workerFactory=typeof Worker==='function'?()=>new Worker(new URL('./exercise-ai-worker.js?v=934fb3d22b80',import.meta.url),{type:'module',name:'football-chess-exercise-study'}):null,
   chooseTactical=chooseExerciseAction,now=()=>Date.now(),delayMs=1000,watchdogMs=20000,
   setTimer=(fn,ms)=>setTimeout(fn,ms),clearTimer=id=>clearTimeout(id),onChange=()=>{},onError=()=>{}}={}){
   let session=null,started=false,thinking=false,suspended=false,destroyed=false,generation=0,pending=null,lastAction=null;

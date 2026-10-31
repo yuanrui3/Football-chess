@@ -3,8 +3,8 @@
  * string or a favourable sampled goal. All session transitions are immutable.
  */
 import {applyMove,applyKick,skipMove,selectCornerTaker,legalMoves,legalKicks,disguisedShotTargets,
-  currentTeam,shotModel,offsideInfo,inOwnBox,MIDFIELD_RANK} from './engine.js?v=663af4ea26d5';
-import {createExercisePosition} from './exercise-positions.js?v=e60af8b818cb';
+  currentTeam,shotModel,offsideInfo,inOwnBox,MIDFIELD_RANK} from './engine.js?v=bc58e8823cbc';
+import {createExercisePosition} from './exercise-positions.js?v=67887493e45d';
 
 const TEAMS=['white','black'];
 const other=team=>team==='white'?'black':'white';

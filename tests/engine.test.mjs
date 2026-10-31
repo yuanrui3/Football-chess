@@ -611,7 +611,7 @@ test('goal declarations wait for the defending goalkeeper before resolving the s
   assert.ok(reaction.pendingShot);
   assert.equal(reaction.rulesVersion,RULES_VERSION);
   assert.deepEqual(reaction.pendingShot.from, { x: 5, y: 4 });
-  assert.equal(reaction.lastAction.shotModel.modelVersion,17);
+  assert.equal(reaction.lastAction.shotModel.modelVersion,18);
   assert.deepEqual(reaction.lastAction.shotModel, shotModel(state, 5, -1));
   assert.deepEqual(reaction.score, { white: 0, black: 0 });
   assert.deepEqual(legalKicks(reaction), []);
@@ -671,7 +671,7 @@ test('outfield players intercept ordinary passes and give shots a probabilistic 
 test('the shot preview exposes Euclidean distance, goal-plane geometry and complete probabilities', () => {
   const state = fixture({ phase: 'kick', positions: { 'white-R1': [5, 6], 'black-K': [6, 0] } });
   const model = shotModel(state, 5, -1);
-  assert.equal(model.modelVersion,17);
+  assert.equal(model.modelVersion,18);
   assert.equal(SHOT_MODEL.finishingAccuracyMultiplier,1.15);
   assert.equal(model.finishingAccuracyMultiplier,1.15);
   assert.deepEqual(model.origin, { x: 5, y: 6 });
@@ -710,7 +710,7 @@ test('close shots are more dangerous while longer flight gives a fixed keeper mo
 });
 
 test('extra distance pressure starts beyond three squares with a shared close-shot distance curve', () => {
-  assert.equal(SHOT_MODEL.version,17);
+  assert.equal(SHOT_MODEL.version,18);
   assert.equal(SHOT_MODEL.distancePenaltyStart, 3);
   assert.equal(SHOT_MODEL.longShotDecay, .06);
   assert.equal(SHOT_MODEL.minOnTarget, .01);
@@ -937,7 +937,7 @@ test('shot model probabilities stay finite and total one across all goals and ke
       const state=fixture({phase:'kick',attack,carrier:shooter,positions:{[shooter]:origin,[keeper]:[6,attack==='white'?0:BOARD_HEIGHT-1]}});
       for(const x of GOAL_FILES)for(const position of [{x:4,y:0},{x:9,y:1},{x:10,y:8},{x:4,y:BOARD_HEIGHT-1}]){
         const model=shotModel(state,x,attack==='white'?-1:BOARD_HEIGHT,position);
-        assert.equal(model.modelVersion,17);assert.ok(model.distance>0,'each sampled goal is the current external goal plane');
+        assert.equal(model.modelVersion,18);assert.ok(model.distance>0,'each sampled goal is the current external goal plane');
         for (const key of ['probability', 'saveProbability', 'missProbability', 'onTargetProbability', 'saveGivenOnTarget', 'keeperStretch', 'parryGivenSave', 'cornerProbability', 'keeperReboundProbability', 'caughtSaveProbability']) assert.ok(Number.isFinite(model[key]) && model[key] >= 0 && model[key] <= 1, key);
         for (const key of ['distance', 'keeperPathDistance', 'timeToKeeper', 'reach', 'shotAngleDegrees']) assert.ok(Number.isFinite(model[key]) && model[key] >= 0, key);
         almostEqual(model.goalProbability + model.saveProbability + model.missProbability + model.blockProbability, 1);
