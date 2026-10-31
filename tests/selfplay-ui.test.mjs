@@ -28,12 +28,13 @@ const bootstrap = section('const $ = id', 'let lastGoalReplay=');
 const controls = ["$('aiDifficulty').addEventListener('change'", "$('whiteDifficulty').addEventListener('change'"].map(line).join('\n');
 const computerHelpers = section('function isComputer(', 'function blocked(');
 const cancelHelpers = section('function stopAIWorker(', 'function teamLabel(');
+const coachControls = section('function renderCoachControls(){', '\nfunction render(){');
 const scheduling = section('function scheduleAI(){', 'function drawPreview(').replaceAll('import.meta.url', JSON.stringify(appURL.href));
 
 function harness({pref = {enabled: true}, mode = 'solo', actor = 'black', difficulty = 'tactical', whiteDifficulty = 'casual', hasWorker = true} = {}) {
-  const elements = Object.fromEntries(['aiDifficulty', 'whiteDifficulty'].map(id => [id, {
+  const elements = Object.fromEntries(['aiDifficulty', 'whiteDifficulty','coachPanel',...['White','Black'].flatMap(side=>['Row','Status','Toggle','Step','Difficulty'].map(part=>'coach'+side+part))].map(id => [id, {
     value: id === 'aiDifficulty' ? difficulty : whiteDifficulty,
-    listeners: {}, addEventListener(kind, listener) {this.listeners[kind] = listener;}
+    setAttribute(key,value){this[key]=value;}, listeners: {}, addEventListener(kind, listener) {this.listeners[kind] = listener;}
   }]));
   const storage = new Map([[oldPreferenceKey, JSON.stringify(pref)]]), storageReads = [];
   let timerId = 0, dialogOpen = false, seedDraws = 0;
@@ -56,7 +57,7 @@ function harness({pref = {enabled: true}, mode = 'solo', actor = 'black', diffic
     skipMove: game => ({...game, turn: game.turn + 1}),
     applyMove(game, pieceId, x, y, options) {applied.push({pieceId,x,y,...options}); return {...game,turn:game.turn+1,ball:{x,y,carrierId:pieceId}};},
     commit: game => commits.push(plain(game)), capture: state => plain(state), captureSave: state => saves.push(plain(state)),
-    toast: () => {},
+    toast: () => {}, advanceClockNow:()=>false,
   });
   vm.runInContext(`
     ${bootstrap}
@@ -68,6 +69,11 @@ function harness({pref = {enabled: true}, mode = 'solo', actor = 'black', diffic
     function render(){scheduleAI();}
     function save(){captureSave({game,remaining,actionRemaining,voiceEnabled,aiPace,paused});}
     ${controls}
+    ${coachControls}
+    globalThis.delegate=(team,on)=>setCoachControl(team,on);
+    globalThis.step=team=>requestCoachAction(team);
+    globalThis.canCoach=team=>canCoachTeam(team);
+    globalThis.coachState=()=>capture({coach,coachStep,coachDifficulty});
     globalThis.inspect=()=>capture({game,remaining,actionRemaining,voiceEnabled,aiPace,paused,aiGeneration});
     globalThis.start=()=>{stage='playing';render();};
     globalThis.cancel=()=>cancelAI();
@@ -79,6 +85,7 @@ function harness({pref = {enabled: true}, mode = 'solo', actor = 'black', diffic
   `, context);
   return {elements, storage, storageReads, timers, workers, calls, commits, saves, applied, seedDraws:()=>seedDraws,
     inspect: () => context.inspect(), start: () => context.start(), cancel: () => context.cancel(), setPaused: value => context.setPaused(value), setDialog: value => {dialogOpen = value;}, setShotFlight: value => context.setShotFlight(value), setActor: value => context.setActor(value), setClock: (left,total) => context.setClock(left,total),
+    delegate:(team,on)=>context.delegate(team,on), step:team=>context.step(team), canCoach:team=>context.canCoach(team), coachState:()=>context.coachState(),
     selectDifficulty: (id, value) => context.selectDifficulty(id, value),
     fire(ms) {const pending = [...timers].filter(([, timer]) => timer.ms === ms); assert.equal(pending.length, 1, `one ${ms} ms timer`); const [id, timer] = pending[0]; timers.delete(id); timer.fn();}
   };
@@ -369,4 +376,34 @@ test('both worker policies receive the same explicit public clock context',()=>{
     self.onmessage({data:{requestId:12,state:{},difficulty,matchContext}});
     assert.deepEqual(calls,[matchContext]);assert.equal(messages[0].action.type,'skip');
   }
+});
+
+
+test('Coach mode delegates human sides independently with native Tactical defaults',()=>{
+  for(const mode of ['solo','local','watch'])for(const actor of ['white','black']){
+    const ui=harness({mode,actor});ui.start();
+    const eligible=mode==='local'||mode==='solo'&&actor==='white';
+    assert.equal(ui.canCoach(actor),eligible);ui.delegate(actor,true);
+    assert.equal(ui.coachState().coach[actor],eligible);
+    if(eligible){assert.equal(ui.workers.length,1);assert.equal(ui.workers[0].messages[0].difficulty,'tactical');assert.equal(ui.coachState().coach[actor==='white'?'black':'white'],false);}
+  }
+});
+test('Take over cancels queued, partial and completed bot answers without resetting clocks',()=>{
+  for(const phase of ['thinking','progress','cached']){
+    const ui=harness({mode:'local',actor:'white'});ui.start();ui.setClock(221,600);ui.delegate('white',true);
+    const worker=ui.workers[0], callback=worker.onmessage,id=worker.messages[0].requestId;
+    if(phase==='progress')callback(progress(id,2));
+    if(phase==='cached')callback({data:{requestId:id,action:{type:'skip'}}});
+    const before=ui.inspect();ui.delegate('white',false);
+    callback({data:{requestId:id,action:{type:'skip'}}});
+    assert.equal(ui.timers.size,0);assert.equal(ui.commits.length,0);assert.equal(worker.terminated,true);
+    assert.equal(ui.inspect().remaining,before.remaining);assert.equal(ui.inspect().actionRemaining,before.actionRemaining);assert.equal(ui.coachState().coach.white,false);
+  }
+});
+test('Single-action help is limited to the acting human side and can be cancelled',()=>{
+  const ui=harness({mode:'local',actor:'black'});ui.start();ui.step('white');assert.equal(ui.workers.length,0);
+  ui.setDialog(true);ui.step('black');assert.equal(ui.workers.length,0);ui.setDialog(false);
+  ui.setShotFlight(true);ui.step('black');assert.equal(ui.workers.length,0);ui.setShotFlight(false);
+  ui.setPaused(true);ui.step('black');assert.equal(ui.inspect().paused,false);assert.equal(ui.coachState().coachStep,'black');assert.equal(ui.coachState().coach.black,false);
+  ui.delegate('black',false);assert.equal(ui.coachState().coachStep,null);assert.equal(ui.timers.size,0);
 });

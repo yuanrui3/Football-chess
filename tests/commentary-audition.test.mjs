@@ -114,7 +114,7 @@ test('audition explicitly separates scripted examples from the live match and us
   assert.equal((html.match(/<audio\b/g) || []).length, 1);
   assert.match(html, /scripted audition situations/); assert.match(html, /does not change your live match commentator/);
   assert.match(html, /Relaxed · 3 seconds/); assert.match(html, /natural end/);
-  assert.match(main, /href="\.\/commentary-audition\.html"/);
+  assert.doesNotMatch(main, /href="\.\/commentary-audition\.html"/);
   assert.doesNotMatch(source, /fetch\(|generate_speech|speechSynthesis|new Audio/);
   assert.match(source, /clip\.text/); assert.doesNotMatch(source, /durationSeconds\s*\*/);
 });

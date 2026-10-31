@@ -374,7 +374,7 @@ export function createReplayPlayer({onComplete=()=>{},onInteract=()=>{},onGoal=(
       const shooter=replay.frames.at(-1).pieces.find(piece=>piece.id===replay.shooterId);
       $('replayTitle').textContent=`${TEAM[replay.team]} ${replay.ownGoal?'· Own goal':'· Goal'}`;
       const goalAction=replay.frames.at(-1).action;
-      const chance=goalAction.disguised&&Number.isFinite(goalAction.combinedProbability)?`${Math.round(goalAction.combinedProbability*100)}% combined chance · ${Math.round(goalAction.probability*100)}% at the chosen target`:`${Math.round(goalAction.probability*100)}% ${goalAction.penalty?'penalty scoring chance':'finishing chance after the keeper’s decision'}`;
+      const chance=goalAction.ownGoal?'Own goal':goalAction.disguised&&Number.isFinite(goalAction.combinedProbability)?`${Math.round(goalAction.combinedProbability*100)}% combined chance · ${Math.round(goalAction.probability*100)}% at the chosen target`:`${Math.round(goalAction.probability*100)}% ${goalAction.penalty?'penalty scoring chance':'finishing chance after the keeper’s decision'}`;
       $('replayDetails').textContent=`${TEAM[replay.shootingTeam]} ${shooter?NAMES[shooter.type].toLowerCase():'player'} · ${chance}`;
       $('replayScrub').max=String(replay.frames.length-1);playing=!!autoplay;renderFrame();schedule();return true;
     },

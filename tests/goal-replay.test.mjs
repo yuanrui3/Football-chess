@@ -637,3 +637,13 @@ test('automatic goal replay resumes the saved match and completes only once',()=
     player.stop();
   }finally{for(const [name,value] of Object.entries(previous)){if(value===undefined)delete globalThis[name];else globalThis[name]=value;}}
 });
+
+
+test('own-goal replays keep the event but omit finishing odds for either team',()=>{
+  const dom=replayDOM(),previousDocument=globalThis.document;globalThis.document=dom.document;
+  try{const player=createReplayPlayer();for(const team of ['white','black']){
+    assert.equal(player.load(recordedGoal({team,ownGoal:true}).replay,{autoplay:false}),true);
+    assert.match(dom.nodes.replayDetails.textContent,/Own goal/);assert.doesNotMatch(dom.nodes.replayDetails.textContent,/%|chance/);
+    assert.equal(player.load(recordedGoal({team}).replay,{autoplay:false}),true);assert.match(dom.nodes.replayDetails.textContent,/%.*finishing chance/);
+  }player.stop();}finally{if(previousDocument===undefined)delete globalThis.document;else globalThis.document=previousDocument;}
+});
