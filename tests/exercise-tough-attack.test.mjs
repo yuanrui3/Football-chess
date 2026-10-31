@@ -81,7 +81,7 @@ test('different support and offside-clearance choices earn the same outcome cred
 test('keeper buildup needs its actual supporting screen rather than an extra pass quota',()=>{
   const d=byId('tough-sweeper-to-bishop');
   const result=replay(d,d.exampleActions.filter((_,i)=>i!==1)).session;
-  assert.equal(result.status,'failed');assert.equal(result.reason,'weak-finish');
+  assert.notEqual(result.status,'solved');assert.equal(result.reason,null);assert.ok(result.notice);
   assert.ok(result.metrics.lastShotXG<.09&&result.metrics.lastShotXG<d.goal.minShotXG);
 });
 

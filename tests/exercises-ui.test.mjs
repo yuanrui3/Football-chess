@@ -129,7 +129,7 @@ test('the exercise page makes objectives, alternatives, study rounds and optiona
   assert.match(html,/12 Easy · 12 Medium · 12 Tough/);assert.match(html,/0 \/ 36/);
   assert.match(html,/Ending positioning and the bot’s replies do not count/);assert.match(html,/Plan lengths are a guide, not a minimum/);
   assert.match(html,/Themes, pass counts and example moves never gate credit/);
-  assert.match(html,/Tactical uses expanded study analysis/);
+  assert.match(html,/original three or four possession rounds/);assert.match(html,/id="continuationPanel" role="status" hidden/);
 });
 
 const levelCatalog=[

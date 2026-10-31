@@ -110,7 +110,8 @@ test('different knight targets and a queen single aim or disguise all satisfy th
 test('the cross creates a sound finish after carrying beyond the natural keeper’s immediate challenge',()=>{
   const d=byId('cross-to-the-middle');
   const premature=play(d,[{type:'kick',x:7,y:2},{type:'skip'}]).session;
-  assert.equal(premature.status,'failed');assert.equal(premature.reason,'possession-lost');
+  assert.equal(premature.status,'active');assert.equal(premature.reason,null);
+  assert.equal(premature.game.attack,'black');assert.match(premature.notice.text,/won possession/);
   const improved=play(d).session;
   assert.equal(improved.status,'solved');assert.equal(improved.progress.boxEntry,true);
   assert.ok(improved.metrics.lastShotXG>=d.goal.minShotXG);

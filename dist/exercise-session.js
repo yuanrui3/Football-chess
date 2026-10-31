@@ -3,7 +3,7 @@
  * string or a favourable sampled goal. All session transitions are immutable.
  */
 import {applyMove,applyKick,skipMove,selectCornerTaker,legalMoves,legalKicks,disguisedShotTargets,
-  currentTeam,shotModel,offsideInfo,inOwnBox,MIDFIELD_RANK} from './engine.js?v=bc58e8823cbc';
+  currentTeam,shotModel,offsideInfo,inOwnBox,MIDFIELD_RANK,BOARD_HEIGHT,STALLING_RULE,PACE_RULE} from './engine.js?v=bc58e8823cbc';
 import {createExercisePosition} from './exercise-positions.js?v=67887493e45d';
 
 const TEAMS=['white','black'];
@@ -15,6 +15,44 @@ const heldBy=(game,team)=>game.pieces.some(piece=>piece.id===game.ball.carrierId
   &&piece.team===team&&piece.x===game.ball.x&&piece.y===game.ball.y);
 const percentage=value=>`${Math.round(value*100)}%`;
 const LIMIT_ACTIONS=96;
+const square=p=>point(p)?`${'abcdefghijklmn'[p.x]}${BOARD_HEIGHT-p.y}`:'the ball';
+const names={K:'goalkeeper',Q:'queen',R:'rook',B:'bishop',N:'knight',P:'pawn'};
+const teamLabel=team=>team==='white'?'Ivory':'Obsidian';
+const pieceLabel=p=>p?`${p.team==='white'?'Ivory':'Obsidian'} ${names[p.type]} ${p.id.split('-')[1]}`:'The player';
+
+/** Keep the original short-study budget while accepting any legal route. */
+export function exerciseRoundLimit(definition) {
+  const base=definition.roundLimit??3;
+  if(![3,4].includes(base))throw new RangeError('The core exercise budget is three or four possession rounds.');
+  return base;
+}
+
+/** Describe the actual engine event, including the offender rather than just
+ * the kicker for offside. Shared by live coaching and the last-action caption. */
+export function exerciseActionExplanation(before,after) {
+  const a=after.lastAction||{},find=id=>before.pieces.find(p=>p.id===id)||after.pieces.find(p=>p.id===id);
+  if(a.type==='offside')return `${pieceLabel(find(a.offenderId))} was offside at ${square(a.offence)}${a.offsideReason==='boxKnight'?' and involved inside the attacking box when the ball was kicked':''}. ${teamLabel(a.restart.team)} has an indirect free kick.`;
+  if(a.type==='tackle')return `${pieceLabel(find(a.pieceId))} tackled ${pieceLabel(find(a.targetId))} at ${square(find(a.targetId))} and won possession, landing on ${square(a.to)}.`;
+  if(a.type==='interception')return `${pieceLabel(find(a.receiverId))} intercepted the pass at ${square(a.to)}.`;
+  if(a.type==='save') {
+    const keeper=pieceLabel(find(a.keeperId));
+    if(a.outcome==='saved')return `${keeper} caught the shot at ${square(a.to)}.`;
+    if(a.outcome==='corner')return `${keeper} tipped the shot out for a corner.`;
+    return `${keeper} saved the shot; the ball is loose at ${square(a.to)}.`;
+  }
+  if(a.type==='shotMiss')return `The shot went wide. ${teamLabel(a.restart.team)} has a goal kick.`;
+  if(a.type==='blockedShot')return `${pieceLabel(find(a.blockerId))} blocked the shot at ${square(a.blockedAt)}${a.outcome==='corner'?'; the ball went out for a corner':a.outcome==='out'?'; the ball went out':''}.`;
+  if(a.type==='stalling') {
+    const reason=a.reason==='dribbleLimit'?`The same player exceeded the ${PACE_RULE.maxDribbleRounds}-round dribbling limit`
+      :a.reason==='repetition'?`The same ${a.cycleRounds}-round ball route repeated ${a.repetitions} times without new forward progress`
+      :`The ball did not advance ${STALLING_RULE.minProgress} net squares in ${STALLING_RULE.rounds} rounds in the team's own half`;
+    return `${reason}. ${teamLabel(a.restart.team)} has an indirect free kick at ${square(a.offence)}. This is a possession rule, separate from the exercise round limit.`;
+  }
+  if(a.type==='out')return `The ball went out for ${a.restart?.type==='corner'?'a corner':a.restart?.type==='goalKick'?'a goal kick':'a throw-in'}.`;
+  if(a.type==='goal')return `${a.team==='white'?'Ivory':'Obsidian'} scored.`;
+  if(a.type==='move'&&a.collection)return `${pieceLabel(find(a.pieceId))} collected the loose ball at ${square(a.to)}.`;
+  return '';
+}
 
 /** Minimum expected goal probability over every legal keeper response, including
  * holding. For a disguise, shotModel returns the fair two-target mixture. This
@@ -101,15 +139,14 @@ export function createExerciseSession(definition,options={}) {
   if(!definition||typeof definition.id!=='string')throw new TypeError('Choose an exercise definition.');
   const playerTeam=definition.playerTeam||'white';
   if(!TEAMS.includes(playerTeam))throw new RangeError('Choose a valid player team.');
-  const roundLimit=definition.roundLimit??3;
-  if(![3,4].includes(roundLimit))throw new RangeError('A short exercise lasts three or four possession rounds.');
+  const roundLimit=exerciseRoundLimit(definition);
   const seed=typeof options==='number'?options:options.seed??definition.seed??1984;
   const goal=objectiveOf(definition),game=createExercisePosition(definition,seed);
   const progress={throughBall:false,boxEntry:false,completedPasses:0};
   const session={definitionId:definition.id,definition:clone({...definition,goal}),playerTeam,
     game,status:'active',roundLimit,roundsUsed:0,actionCount:0,progress,
     pendingAssessment:game.phase==='keeperReact'?assessment(game,playerTeam,progress):null,
-    loosePass:null,reviewGame:null,feedbackTitle:'Find a useful plan',
+    loosePass:null,reviewGame:null,notice:null,feedbackTitle:'Find a useful plan',
     feedback:outcomeObjective(goal),reason:null,
     metrics:{bestShotXG:0,lastShotXG:null,lastOpponentShotXG:null,bestOpponentShotXG:null,testedThreatXG:null,shotCount:0,shotResult:null},events:[]};
   return session;
@@ -126,7 +163,11 @@ function act(game,action,overrides) {
   throw new RangeError('Unknown exercise action.');
 }
 function end(session,status,reason,title,message) {
-  Object.assign(session,{status,reason,feedbackTitle:title,feedback:message});
+  Object.assign(session,{status,reason,notice:null,feedbackTitle:title,feedback:message});
+}
+function continuePlay(session,title,message) {
+  session.notice={title,text:message};
+  session.feedbackTitle=title;session.feedback=message;
 }
 function rememberLoosePass(before,after,playerTeam) {
   const a=after.lastAction,actor=before.pieces.find(piece=>piece.id===a?.pieceId);
@@ -204,8 +245,8 @@ function finishShot(session,before,after) {
     else if(pending.bestReplyXG+1e-9>=goal.minShotXG)
       end(session,'solved','strong-finish','Strong chance created',
         `Your finish is worth ${percentage(pending.bestReplyXG)} against the keeper's best legal response. Your legal route meets the finishing objective, even if the sampled shot is saved or misses.`);
-    else end(session,'failed','weak-finish','Improve the chance',
-      `That finish is worth ${percentage(pending.bestReplyXG)} against the keeper's best legal response; the target is ${percentage(goal.minShotXG)}. Look for a better angle, closer receiver or clearer shooting route.`);
+    else continuePlay(session,'Keep building your attack',
+      `${exerciseActionExplanation(before,after)} That finish was worth ${percentage(pending.bestReplyXG)} against the best keeper reply; the target is ${percentage(goal.minShotXG)}. Keep playing to create a stronger chance.`);
     return true;
   }
   if(goal.type==='defend'&&pending.shootingTeam===other(session.playerTeam)
@@ -232,7 +273,10 @@ export function applyExerciseAction(session,action,overrides={}) {
   if(!session||!session.game||!session.definition)throw new TypeError('Start an exercise first.');
   if(session.status!=='active')return clone(session);
   const before=session.game,after=act(before,action,overrides),next=clone(session);
-  next.game=after;next.actionCount++;
+  next.game=after;next.actionCount++;next.reviewGame=null;
+  // Keep a setback visible across automatic bot replies, until the next human
+  // decision. It must not disappear before the student gets control again.
+  if(currentTeam(before)===next.playerTeam)next.notice=null;
   const progressBefore=clone(next.progress);
   updateProgress(next,before,after);
   if(completedExerciseRound(before,after))next.roundsUsed++;
@@ -248,7 +292,8 @@ export function applyExerciseAction(session,action,overrides={}) {
     next.feedback='The shot is committed. Its quality will be checked after the goalkeeper response.';
     return next;
   }
-  if(before.phase==='keeperReact'&&after.phase!=='keeperReact'&&finishShot(next,before,after))return next;
+  const shotAssessed=before.phase==='keeperReact'&&after.phase!=='keeperReact'&&finishShot(next,before,after);
+  if(next.status!=='active')return next;
   const goal=next.definition.goal,opponent=other(next.playerTeam);
   if(goal.type==='defend'&&before.attack===opponent&&after.attack===next.playerTeam
       &&((!after.restart&&heldBy(after,next.playerTeam)&&(
@@ -258,20 +303,30 @@ export function applyExerciseAction(session,action,overrides={}) {
       'You won possession or forced offside before the opponent could finish. The defensive objective is complete.');
     return next;
   }
-  if(goal.type==='finish'&&(after.attack!==next.playerTeam||after.restart?.team===opponent)) {
-    end(next,'failed','possession-lost','The attack broke down',
-      'The Tactical opponent stopped the attack before a qualifying finish. Retry and protect the receiver from its strongest reply.');
+  if(goal.type==='finish'&&after.score[opponent]>before.score[opponent]) {
+    end(next,'failed','goal-conceded','Goal conceded',
+      'The opponent scored before you created the target chance. Undo a decision or retry a different plan.');
     return next;
   }
+  if(goal.type==='finish'&&!shotAssessed&&before.attack===next.playerTeam
+      &&(after.attack!==next.playerTeam||after.restart?.team===opponent))
+    continuePlay(next,'Win it back and continue',
+      `${exerciseActionExplanation(before,after)||'The opponent took possession.'} The exercise is still open: win the ball back and build another attack.`);
   if(after.phase==='finished') {
     end(next,'failed','position-ended','The line has ended','The position ended before the objective was completed. Retry a different plan.');
     return next;
   }
-  if(next.roundsUsed>=next.roundLimit||next.actionCount>=LIMIT_ACTIONS) {
+  if(next.roundsUsed>=next.roundLimit) {
     end(next,'failed','round-limit','Round limit reached',
-      `The exercise allows ${next.roundLimit} completed possession rounds. Look for a more direct route to the objective.`);
+      `${exerciseActionExplanation(before,after)} ${shotAssessed?`The chance was ${percentage(next.metrics.lastShotXG)}; the target is ${percentage(goal.minShotXG)}. `:''}The ${next.roundLimit} possession rounds are complete. Undo a decision or retry to explore another route.`.trim());
     return next;
   }
+  if(next.actionCount>=LIMIT_ACTIONS) {
+    end(next,'failed','action-limit','Study action limit reached',
+      'This attempt reached the action limit. Undo a decision or retry to explore another route.');
+    return next;
+  }
+  if(next.notice)return next;
   if(next.progress.throughBall&&!progressBefore.throughBall) {
     next.feedbackTitle='Through ball completed';
     next.feedback='An onside teammate collected your pass beyond the defensive line. Now create the finishing chance.';

@@ -1,7 +1,7 @@
 import {BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, BOX_FILES, BOX_DEPTH, currentTeam, canQuickRelease, legalMoves, legalKicks, disguisedShotTargets, cornerTakers, isBox, isGoalMouth, positionActions, applyKick} from './engine.js?v=bc58e8823cbc';
 import {chooseExerciseAction} from './exercise-ai.js?v=6318b72b3ad6';
 import {EXERCISES} from './exercise-positions.js?v=67887493e45d';
-import {createExerciseSession, applyExerciseAction, bestKeeperShotChance} from './exercise-session.js?v=9f74b59a08c4';
+import {createExerciseSession, applyExerciseAction, bestKeeperShotChance, exerciseRoundLimit, exerciseActionExplanation} from './exercise-session.js?v=14b8796faa63';
 import {createEvaluation} from './evaluation.js?v=9477bc2cb051';
 
 export const EXERCISE_PROGRESS_KEY='football-chess-exercises-v1';
@@ -220,7 +220,7 @@ export function initExercisePage(){
     $('exerciseList').replaceChildren(...list.map(def=>{
       const index=EXERCISES.indexOf(def),button=document.createElement('button');button.type='button';button.className='exercise-card'+(progress.solved[def.id]?' solved':progress.previouslySolved[def.id]?' previously-solved':'');button.dataset.exerciseId=def.id;button.setAttribute('aria-pressed',String(def.id===state?.session.definitionId));
       const difficulty=exerciseDifficulty(def),level=EXERCISE_DIFFICULTY_LABELS[difficulty];
-      button.setAttribute('aria-label',`${index+1}. ${def.title}, ${level}, ${EXERCISE_THEME_LABELS[def.theme]}, ${exercisePlanText(def)}, up to ${def.roundLimit} possession rounds${progress.solved[def.id]?', solved':progress.previouslySolved[def.id]?', updated position, previous version solved':''}`);
+      button.setAttribute('aria-label',`${index+1}. ${def.title}, ${level}, ${EXERCISE_THEME_LABELS[def.theme]}, ${exercisePlanText(def)}, up to ${exerciseRoundLimit(def)} possession rounds${progress.solved[def.id]?', solved':progress.previouslySolved[def.id]?', updated position, previous version solved':''}`);
       const number=document.createElement('span');number.className='exercise-number';number.textContent=progress.solved[def.id]?'✓':String(index+1).padStart(2,'0');
       const copy=document.createElement('span'),badge=document.createElement('span'),title=document.createElement('b'),detail=document.createElement('small');
       badge.className=`exercise-level ${difficulty}`;badge.textContent=level;title.textContent=def.title;detail.textContent=`${EXERCISE_THEME_LABELS[def.theme]} · ${Number.isInteger(def.planSteps)?`${def.planSteps} steps`:'Core idea'}`;copy.append(badge,title,detail);
@@ -272,6 +272,7 @@ export function initExercisePage(){
   }
   function actionDescription(){
     const last=state.lastAction;if(!last)return '';
+    const explanation=exerciseActionExplanation(last.before,last.after);if(explanation)return explanation;
     const result=last.result||{},piece=last.before.pieces.find(p=>p.id===(result.pieceId||last.action.pieceId||last.before.ball.carrierId));
     const who=piece?`${TEAM[piece.team]} ${pieceName(piece)}`:TEAM[last.actor];
     if(result.type==='skip')return `${who} ${result.heldCatch?'held the catch to organise':last.before.phase==='keeperReact'?'held the keeper':'ended positioning'}.`;
@@ -291,11 +292,14 @@ export function initExercisePage(){
     }
     $('exerciseTitle').textContent=def.title;$('themeLabel').textContent=EXERCISE_THEME_LABELS[def.theme]||'Tactical exercise';$('exerciseObjective').textContent=exerciseOutcomeText(def);
     $('difficultyLabel').textContent=EXERCISE_DIFFICULTY_LABELS[exerciseDifficulty(def)];$('difficultyLabel').className=`exercise-level ${exerciseDifficulty(def)}`;
-    $('planLength').textContent=`${exercisePlanText(def)} · up to ${def.roundLimit} possession rounds.`;
-    $('qualityGoal').textContent='The result earns credit. A shorter or stronger legal alternative is welcome; hints describe one possible idea.';
+    $('planLength').textContent=`${exercisePlanText(def)} · up to ${session.roundLimit} possession rounds.`;
+    $('qualityGoal').textContent='Explore your own route. In attacking studies, you can recover from a turnover or a shot below the target while rounds remain. Hints show one possible idea.';
     $('roundCounter').textContent=`${Math.min(session.roundsUsed,session.roundLimit)} / ${session.roundLimit} rounds`;
     $('sideLabel').textContent=`YOU · ${TEAM[session.playerTeam].toUpperCase()} ${session.playerTeam==='white'?'↑':'↓'}`;
     $('playBtn').hidden=view.started;$('playBtn').disabled=filterBlocked;$('actionPanel').hidden=filterBlocked||!view.started||session.status!=='active';$('feedbackPanel').hidden=filterBlocked||session.status==='active';
+    $('continuationPanel').hidden=filterBlocked||session.status!=='active'||!session.notice;
+    $('continuationTitle').textContent=session.notice?.title||'';
+    $('continuationText').textContent=session.notice?`${session.notice.text} ${session.roundLimit-session.roundsUsed} possession rounds remain.`:'';
     $('undoBtn').disabled=filterBlocked||!view.canUndo;$('retryBtn').disabled=filterBlocked||!view.started&&session.roundsUsed===0;
     const coaching=exerciseCoachingItems(def,session.progress),coachingNodes=[];
     if(coaching.length){const label=document.createElement('small');label.className='exercise-coaching-label';label.textContent='Optional coaching · does not affect credit';coachingNodes.push(label);}

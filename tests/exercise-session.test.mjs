@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as E from '../dist/engine.js';
-import {createExerciseSession,applyExerciseAction,bestKeeperShotChance,bestAvailableShotChance,completedExerciseRound} from '../dist/exercise-session.js';
+import {createExerciseSession,applyExerciseAction,bestKeeperShotChance,bestAvailableShotChance,completedExerciseRound,exerciseRoundLimit,exerciseActionExplanation} from '../dist/exercise-session.js';
 
 const clone=structuredClone;
 const other=team=>team==='white'?'black':'white';
@@ -67,10 +67,10 @@ test('a strong chance succeeds after a goal or a miss; the declaration waits for
   assert.deepEqual(pending,before);assert.match(goal.feedback,/best legal response/);
 });
 
-test('a lucky poor shot fails and a poor keeper response cannot inflate the attacking grade',()=>{
+test('a lucky poor goal leaves time to improve without inflating the attacking grade',()=>{
   const pending=shoot(start({'white-Q':['Q',6,6]}));
   const goal=resolve(pending,{roll:0});assert.equal(goal.game.lastAction.type,'goal');
-  assert.equal(goal.status,'failed');assert.equal(goal.reason,'weak-finish');assert.ok(goal.metrics.lastShotXG<.1);
+  assert.equal(goal.status,'active');assert.equal(goal.reason,null);assert.match(goal.notice.text,/target is 35%/);assert.ok(goal.metrics.lastShotXG<.1);
   assert.ok(goal.metrics.shotResult.actualReplyXG>goal.metrics.shotResult.bestReplyXG);
 });
 
@@ -123,7 +123,7 @@ test('self-chasing, a non-line-breaking forward pass and a backward space pass d
 test('an offside receiver cannot gain the through-ball badge',()=>{
   let session=start({'white-Q':['B',3,7],'white-N1':['N',7,3],'black-R2':['R',8,4]},
     {goal:{type:'finish',requires:'through-ball',minShotXG:.3}});
-  session=apply(session,kick(7,3));assert.equal(session.status,'failed');
+  session=apply(session,kick(7,3));assert.equal(session.status,'active');assert.match(session.notice.text,/Ivory knight N1 was offside at h14/);
   assert.equal(session.game.lastAction.type,'offside');assert.equal(session.progress.throughBall,false);
 });
 
@@ -171,7 +171,7 @@ test('dribble, teammate move and shared bonus are subactions, not three rounds',
   assert.equal(session.game.phase,'defendMove');assert.equal(session.roundsUsed,0);assert.equal(session.status,'active');
 });
 
-test('three completed possession rounds exhaust a three-round exercise, without charging defensive skips',()=>{
+test('the original three-round limit still applies without charging defensive skips',()=>{
   let session=start({'white-Q':['Q',6,7],'white-R1':['R',6,5],'white-R2':['R',8,5],'white-B1':['B',8,7]});
   session=apply(session,kick(6,5));assert.equal(session.roundsUsed,1);
   session=toKick(session);assert.equal(session.roundsUsed,1);session=apply(session,kick(8,5));
@@ -296,12 +296,14 @@ test('a clean possession win completes defence before a finish; a failed knight 
   assert.equal(knight.status,'active');
 });
 
-test('innocuous movement never solves defence, while possession lost by the attacker ends its attempt',()=>{
+test('innocuous movement never solves defence, while a lost attack remains recoverable',()=>{
   let defence=start({'white-Q':['Q',0,10],'white-P1':['P',5,5],'black-Q':['Q',6,4]},
     {side:'defence',phase:'defendMove',attack:'black',carrier:'black-Q',goal:{type:'defend',maxOpponentShotXG:.15}});
   defence=apply(defence,move('white-Q',0,11));assert.equal(defence.status,'active');
   let attack=start({'white-Q':['Q',6,4],'black-P1':['P',5,5]}, {phase:'defendMove'});
-  attack=apply(attack,move('black-P1',6,3));assert.equal(attack.status,'failed');assert.equal(attack.reason,'possession-lost');
+  attack=apply(attack,move('black-P1',6,3));assert.equal(attack.status,'active');assert.equal(attack.reason,null);
+  assert.match(attack.notice.text,/Obsidian pawn P1 tackled Ivory queen Q at g13/);
+  assert.match(attack.notice.text,/landing on g14/);
 });
 
 test('illegal actions throw without mutation and late bot actions cannot change a terminal result',()=>{
@@ -438,4 +440,94 @@ test('a three-pass build-up still leaves its shot on the fourth allowed possessi
   session=shoot(session,kick(7,-1));assert.equal(session.status,'active');
   session=resolve(session,{roll:.9999});assert.equal(session.status,'solved');
   assert.equal(session.roundsUsed,4);
+});
+
+test('original three- and four-round budgets stay unchanged on retry',()=>{
+  for(const base of [3,4]){
+    const session=start({}, {roundLimit:base});
+    assert.equal(session.roundLimit,base);
+    assert.equal(exerciseRoundLimit(session.definition),base);
+    assert.equal(createExerciseSession(session.definition).roundLimit,base);
+    assert.equal(session.definition.roundLimit,base);
+  }
+});
+
+test('an attack can lose possession, win it back and solve through a different legal line',()=>{
+  let session=start({'white-Q':['Q',6,4],'black-P1':['P',5,5]},
+    {phase:'defendMove',goal:{type:'finish',minShotXG:.2}});
+  session=apply(session,move('black-P1',6,3));
+  const notice=clone(session.notice);
+  session=apply(session,skip);assert.deepEqual(session.notice,notice,'automatic replies retain the explanation');
+  session=apply(session,move('white-Q',6,2));
+  assert.equal(session.game.attack,'white');assert.equal(session.notice,null);assert.equal(session.roundsUsed,2);
+  session=toKick(session);session=resolve(shoot(session),{roll:.9999});
+  assert.equal(session.status,'solved');assert.equal(session.roundsUsed,3);
+});
+
+function weakShotOutcome(outcome){
+  const pending=shoot(start({'white-Q':['Q',6,6]}));
+  const model=E.shotModel(pending.game),buckets=[['goal',model.probability],['corner',model.keeperCornerProbability],
+    ['loose',model.keeperReboundProbability],['saved',model.caughtSaveProbability],['wide',model.missProbability]];
+  let lower=0;
+  for(const [name,mass]of buckets){
+    if(name===outcome){assert.ok(mass>0);return resolve(pending,{roll:lower+mass/2});}
+    lower+=mass;
+  }
+  throw Error('Missing outcome');
+}
+for(const outcome of ['corner','loose','saved','wide'])test(`a weak ${outcome} leaves the native position playable and describes the result`,()=>{
+  const session=weakShotOutcome(outcome);
+  assert.equal(session.status,'active');assert.equal(session.reason,null);assert.equal(session.roundsUsed,1);
+  assert.equal(session.game.lastAction.outcome,outcome);assert.equal(session.pendingAssessment,null);
+  assert.equal(session.metrics.shotCount,1);assert.ok(session.metrics.lastShotXG<session.definition.goal.minShotXG);
+  assert.match(session.notice.text,/target is 35%/);
+  const explanation=exerciseActionExplanation(session.reviewGame,session.game);
+  assert.match(explanation,({corner:/corner/,loose:/loose/,saved:/caught/,wide:/wide/})[outcome]);
+  if(outcome==='saved')assert.equal(session.game.phase,'keeperRelease');
+  if(outcome==='wide')assert.equal(session.game.restart.type,'goalKick');
+  if(outcome==='corner'){
+    assert.equal(session.game.phase,'cornerSelect');
+    const taker=E.cornerTakers(session.game)[0];
+    const next=apply(session,{type:'cornerTaker',pieceId:taker.id});
+    assert.equal(next.status,'active');assert.equal(next.reviewGame,null);
+  }
+  if(outcome==='loose'){
+    assert.equal(session.game.ball.carrierId,null);
+    assert.equal(apply(session,skip).status,'active');
+  }
+});
+
+test('a last-round shot resolves fully: a qualifying chance succeeds and a weaker shot reaches the limit',()=>{
+  for(const weak of [false,true]){
+    const session=start(weak?{'white-Q':['Q',6,6]}:{});session.roundsUsed=session.roundLimit-1;
+    const pending=shoot(session);assert.equal(pending.status,'active');
+    const result=resolve(pending,{roll:.9999});
+    assert.equal(result.roundsUsed,result.roundLimit);
+    assert.equal(result.status,weak?'failed':'solved');
+    assert.equal(result.reason,weak?'round-limit':'strong-finish');
+  }
+});
+
+test('an opponent goal still ends a recovered attacking study',()=>{
+  let session=start({'white-Q':['Q',0,12],'black-Q':['Q',7,15]},
+    {phase:'keeperReact',attack:'black',carrier:'black-Q',shot:{x:7,y:17}});
+  session=resolve(session,{roll:0});
+  assert.equal(session.status,'failed');assert.equal(session.reason,'goal-conceded');
+});
+
+test('a direct interception names the receiver and square, while leaving recovery available',()=>{
+  const source=start({'white-Q':['Q',6,7],'black-P1':['P',6,5]});
+  const result=apply(source,kick(6,5));
+  assert.equal(result.status,'active');assert.match(result.notice.text,/Obsidian pawn P1 intercepted the pass at g12/);
+});
+
+test('a possession-rule turnover can happen within the exercise limit and explains that distinction',()=>{
+  let session=start({'white-Q':['Q',6,12],'white-R1':['R',8,12],'white-B1':['B',8,14]},
+    {roundLimit:4});
+  session=apply(session,kick(8,12));session=apply(toKick(session),kick(8,14));
+  session=apply(toKick(session),kick(6,12));
+  assert.equal(session.game.lastAction.type,'stalling');
+  assert.equal(session.status,'active');assert.equal(session.roundsUsed,3);assert.equal(session.roundLimit,4);
+  assert.match(session.notice.text,/did not advance 4 net squares in 3 rounds/);
+  assert.match(session.notice.text,/separate from the exercise round limit/);
 });

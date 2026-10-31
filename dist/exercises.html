@@ -5,7 +5,7 @@
   <meta name="theme-color" content="#173e35">
   <meta name="description" content="36 Football Chess exercises in Easy, Medium and Tough levels: coordinate your pieces, finish against a Tactical bot or prevent a goal.">
   <title>Football Chess · Tactical exercises</title>
-  <link rel="stylesheet" href="style.css?v=7e245ae5eca4"><link rel="stylesheet" href="exercises.css?v=1c6c94cfd2dd">
+  <link rel="stylesheet" href="style.css?v=7e245ae5eca4"><link rel="stylesheet" href="exercises.css?v=77d634c7b0c1">
 </head>
 <body class="exercises-page">
 <header class="masthead">
@@ -14,7 +14,7 @@
   <a class="text-button exercise-back" href="./">← Back to match</a>
 </header>
 <main class="exercise-main">
-  <div class="page-intro"><div><p class="eyebrow">THE TRAINING GROUND</p><h1>Find the chance.</h1><p class="exercise-intro">Find your own continuation. Any legal plan meeting the outcome earns credit, including shorter or stronger alternatives. Tactical uses expanded study analysis.</p></div><div class="exercise-progress"><strong id="solvedCount">0 / 36</strong><span>EXERCISES SOLVED</span></div></div>
+  <div class="page-intro"><div><p class="eyebrow">THE TRAINING GROUND</p><h1>Find the chance.</h1><p class="exercise-intro">Find your own continuation. Any legal plan meeting the outcome earns credit, within the original three or four possession rounds. Recover the ball, chase rebounds and try another attack while rounds remain.</p></div><div class="exercise-progress"><strong id="solvedCount">0 / 36</strong><span>EXERCISES SOLVED</span></div></div>
   <div class="exercise-layout">
     <aside class="exercise-library panel" aria-label="Exercise library">
       <p class="eyebrow">CHOOSE YOUR CHALLENGE</p>
@@ -44,6 +44,7 @@
     </section>
     <aside class="exercise-coach" aria-label="Exercise objective and actions">
       <section class="panel exercise-objective"><div class="exercise-objective-meta"><span id="difficultyLabel" class="exercise-level easy">Easy</span><p class="eyebrow" id="themeLabel">FINISHING</p></div><h2 id="exerciseTitle">Choose an exercise</h2><p id="planLength" class="exercise-plan-length">Core tactical idea · up to 3 possession rounds.</p><p id="exerciseObjective"></p><p id="qualityGoal" class="exercise-quality"></p><div class="exercise-requirements" id="requirements"></div><button type="button" id="playBtn" class="primary wide">Play exercise <span>→</span></button></section>
+      <section class="panel exercise-continuation" id="continuationPanel" role="status" hidden><p class="eyebrow">PLAY CONTINUES</p><h3 id="continuationTitle"></h3><p id="continuationText"></p></section>
       <section class="panel exercise-actions" id="actionPanel" hidden><p class="eyebrow" id="phaseLabel">YOUR TURN</p><h3 id="phaseTitle">Shape the play</h3><div class="move-modes" id="positionModes" role="group" aria-label="Positioning action"><button id="offballBtn" type="button" aria-pressed="true">Off ball</button><button id="dribbleBtn" type="button" aria-pressed="false">Dribble</button><button id="bonusBtn" type="button" aria-pressed="false">Pawn / King</button></div><p id="budgetInfo" class="exercise-budget"></p><p id="selectedInfo" class="exercise-selected">Select a piece.</p><label class="exercise-choice" id="passRunChoice" hidden><input id="passRunEnabled" type="checkbox"> Pass &amp; run <small>Uses the next off-ball move</small></label><label class="exercise-choice" id="disguiseChoice" hidden><input id="disguiseEnabled" type="checkbox"> Disguise the shot <small>Two targets, each 50%</small></label><p id="actionHelp"></p><button type="button" class="primary wide" id="endBtn">End positioning <span>→</span></button></section>
       <section class="panel exercise-feedback" id="feedbackPanel" aria-live="polite" hidden><p class="eyebrow" id="feedbackLabel">POSITION REVIEW</p><h3 id="feedbackTitle"></h3><p id="feedbackText"></p><p id="shotQuality"></p><p id="reviewPlan"></p><button id="nextBtn" class="primary wide" type="button">Next exercise <span>→</span></button></section>
       <section class="exercise-hints"><button id="hintBtn" class="text-button" type="button">Show a hint <span>?</span></button><ol id="hintsList"></ol></section>
@@ -54,6 +55,6 @@
   </div>
 </main>
 <footer><span>FOOTBALL × CHESS</span><p>Find a useful continuation, then answer the Tactical bot’s reply.</p><a href="./">Return to the match ↗</a></footer>
-<script type="module" src="exercises-app.js?v=da09a06e040b"></script>
+<script type="module" src="exercises-app.js?v=6b4ac52ca2be"></script>
 </body>
 </html>

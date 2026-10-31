@@ -1,0 +1,1030 @@
+TAP version 13
+# Subtest: study search widens the beam without changing the default match profile
+ok 1 - study search widens the beam without changing the default match profile
+  ---
+  duration_ms: 227.612601
+  type: 'test'
+  ...
+# Subtest: direct and bonus-then-tackle guaranteed wins cannot be pruned, either colour
+ok 2 - direct and bonus-then-tackle guaranteed wins cannot be pruned, either colour
+  ---
+  duration_ms: 10.506767
+  type: 'test'
+  ...
+# Subtest: capture safeguards respect spent budgets, fouls and knight evasion probabilities
+ok 3 - capture safeguards respect spent budgets, fouls and knight evasion probabilities
+  ---
+  duration_ms: 20.16003
+  type: 'test'
+  ...
+# Subtest: the full normal/bonus reply finds the concrete keeper double-step omitted by the match beam
+ok 4 - the full normal/bonus reply finds the concrete keeper double-step omitted by the match beam
+  ---
+  duration_ms: 917.565568
+  type: 'test'
+  ...
+# Subtest: an interrupted local search returns a completed legal candidate and reports its limit honestly
+ok 5 - an interrupted local search returns a completed legal candidate and reports its limit honestly
+  ---
+  duration_ms: 1.271253
+  type: 'test'
+  ...
+# Subtest: keeper responses minimize every legal declaration including the blind two-target mixture
+ok 6 - keeper responses minimize every legal declaration including the blind two-target mixture
+  ---
+  duration_ms: 85.449734
+  type: 'test'
+  ...
+# Subtest: expanded search examines all immediate finishes and preserves the strongest aim when shooting
+ok 7 - expanded search examines all immediate finishes and preserves the strongest aim when shooting
+  ---
+  duration_ms: 127.906563
+  type: 'test'
+  ...
+# Subtest: study decisions and reports do not consult the future chance seed
+ok 8 - study decisions and reports do not consult the future chance seed
+  ---
+  duration_ms: 536.510665
+  type: 'test'
+  ...
+# Subtest: the worker streams expanded results and retains the request identifier
+ok 9 - the worker streams expanded results and retains the request identifier
+  ---
+  duration_ms: 12.932677
+  type: 'test'
+  ...
+# Subtest: 36 studies preserve the original Easy IDs and provide twelve studies per tier
+ok 10 - 36 studies preserve the original Easy IDs and provide twelve studies per tier
+  ---
+  duration_ms: 1.617103
+  type: 'test'
+  ...
+# Subtest: new plan lengths count student moves, passes and shots separately from ending positioning
+ok 11 - new plan lengths count student moves, passes and shots separately from ending positioning
+  ---
+  duration_ms: 0.307172
+  type: 'test'
+  ...
+# Subtest: larger study diagrams use legal pieces from the real squad inventory
+ok 12 - larger study diagrams use legal pieces from the real squad inventory
+  ---
+  duration_ms: 11.980084
+  type: 'test'
+  ...
+# Subtest: study keepers start in a natural goalmouth position and shade only toward a wide threat
+ok 13 - study keepers start in a natural goalmouth position and shade only toward a wide threat
+  ---
+  duration_ms: 1.912658
+  type: 'test'
+  ...
+# Subtest: Medium keeps twelve larger legal studies and outcome-based two or three step examples
+ok 14 - Medium keeps twelve larger legal studies and outcome-based two or three step examples
+  ---
+  duration_ms: 7.622408
+  type: 'test'
+  ...
+# Subtest: both keepers start naturally near their own goal, with near-post shading only against a wide ball
+ok 15 - both keepers start naturally near their own goal, with near-post shading only against a wide ball
+  ---
+  duration_ms: 1.819307
+  type: 'test'
+  ...
+# Subtest: medium-clear-file: natural keepers retain a valid route against actual expanded analysis
+ok 16 - medium-clear-file: natural keepers retain a valid route against actual expanded analysis
+  ---
+  duration_ms: 386.780387
+  type: 'test'
+  ...
+# Subtest: medium-cross-carry: natural keepers retain a valid route against actual expanded analysis
+ok 17 - medium-cross-carry: natural keepers retain a valid route against actual expanded analysis
+  ---
+  duration_ms: 614.541426
+  type: 'test'
+  ...
+# Subtest: medium-diagonal-carry: natural keepers retain a valid route against actual expanded analysis
+ok 18 - medium-diagonal-carry: natural keepers retain a valid route against actual expanded analysis
+  ---
+  duration_ms: 184.710796
+  type: 'test'
+  ...
+# Subtest: medium-rook-relay: natural keepers retain a valid route against actual expanded analysis
+ok 19 - medium-rook-relay: natural keepers retain a valid route against actual expanded analysis
+  ---
+  duration_ms: 192.257439
+  type: 'test'
+  ...
+# Subtest: medium-pawn-clear: natural keepers retain a valid route against actual expanded analysis
+ok 20 - medium-pawn-clear: natural keepers retain a valid route against actual expanded analysis
+  ---
+  duration_ms: 162.108771
+  type: 'test'
+  ...
+# Subtest: medium-through-collect-finish: natural keepers retain a valid route against actual expanded analysis
+ok 21 - medium-through-collect-finish: natural keepers retain a valid route against actual expanded analysis
+  ---
+  duration_ms: 202.566999
+  type: 'test'
+  ...
+# Subtest: medium-clear-and-carry: natural keepers retain a valid route against actual expanded analysis
+ok 22 - medium-clear-and-carry: natural keepers retain a valid route against actual expanded analysis
+  ---
+  duration_ms: 173.561761
+  type: 'test'
+  ...
+# Subtest: medium-queen-through-collection: natural keepers retain a valid route against actual expanded analysis
+ok 23 - medium-queen-through-collection: natural keepers retain a valid route against actual expanded analysis
+  ---
+  duration_ms: 162.791178
+  type: 'test'
+  ...
+# Subtest: medium-vacate-receiver-lane: natural keepers retain a valid route against actual expanded analysis
+ok 24 - medium-vacate-receiver-lane: natural keepers retain a valid route against actual expanded analysis
+  ---
+  duration_ms: 111.295904
+  type: 'test'
+  ...
+# Subtest: medium-def-screen-rook: natural keepers retain a valid route against actual expanded analysis
+ok 25 - medium-def-screen-rook: natural keepers retain a valid route against actual expanded analysis
+  ---
+  duration_ms: 1763.692918
+  type: 'test'
+  ...
+# Subtest: medium-def-screen-bishop: natural keepers retain a valid route against actual expanded analysis
+ok 26 - medium-def-screen-bishop: natural keepers retain a valid route against actual expanded analysis
+  ---
+  duration_ms: 1150.981524
+  type: 'test'
+  ...
+# Subtest: medium-def-sweeper-keeper: natural keepers retain a valid route against actual expanded analysis
+ok 27 - medium-def-sweeper-keeper: natural keepers retain a valid route against actual expanded analysis
+  ---
+  duration_ms: 0.690589
+  type: 'test'
+  ...
+# Subtest: initial shots cannot meet an attacking objective and defenders have no immediate one-action capture
+ok 28 - initial shots cannot meet an attacking objective and defenders have no immediate one-action capture
+  ---
+  duration_ms: 11.521244
+  type: 'test'
+  ...
+# Subtest: different bishop clearances and a different rook vacancy earn full outcome credit
+ok 29 - different bishop clearances and a different rook vacancy earn full outcome credit
+  ---
+  duration_ms: 401.049522
+  type: 'test'
+  ...
+# Subtest: the pawn can clear either side and the queen may choose another sound final lane
+ok 30 - the pawn can clear either side and the queen may choose another sound final lane
+  ---
+  duration_ms: 191.46359
+  type: 'test'
+  ...
+# Subtest: rook-screen defence can use the king bonus first, and bishop screening admits either preparation order
+ok 31 - rook-screen defence can use the king bonus first, and bishop screening admits either preparation order
+  ---
+  duration_ms: 2180.475754
+  type: 'test'
+  ...
+# Subtest: a useful naturally covered finish still earns credit when its native roll misses
+ok 32 - a useful naturally covered finish still earns credit when its native roll misses
+  ---
+  duration_ms: 132.430424
+  type: 'test'
+  ...
+# Subtest: the leading deliveries really cross a nearby defensive line and the weighted rook retreat remains legal
+ok 33 - the leading deliveries really cross a nearby defensive line and the weighted rook retreat remains legal
+  ---
+  duration_ms: 1398.49662
+  type: 'test'
+  ...
+# Subtest: revised natural positions have newer revisions while an unchanged central bishop defence keeps its prior credit
+ok 34 - revised natural positions have newer revisions while an unchanged central bishop defence keeps its prior credit
+  ---
+  duration_ms: 0.260031
+  type: 'test'
+  ...
+# Subtest: the first study set contains nine finishing studies and three defensive studies
+ok 35 - the first study set contains nine finishing studies and three defensive studies
+  ---
+  duration_ms: 2.677588
+  type: 'test'
+  ...
+# Subtest: all diagrams are legal sparse positions with both goalkeepers and intact ball metadata
+ok 36 - all diagrams are legal sparse positions with both goalkeepers and intact ball metadata
+  ---
+  duration_ms: 25.771443
+  type: 'test'
+  ...
+# Subtest: Easy keepers start centrally in their own box, with near-post shading only for a wide ball
+ok 37 - Easy keepers start centrally in their own box, with near-post shading only for a wide ball
+  ---
+  duration_ms: 0.53837
+  type: 'test'
+  ...
+# Subtest: pick-the-open-file: an illustrative route succeeds against the study opponent within the round limit
+ok 38 - pick-the-open-file: an illustrative route succeeds against the study opponent within the round limit
+  ---
+  duration_ms: 30.748841
+  type: 'test'
+  ...
+# Subtest: knights-two-posts: an illustrative route succeeds against the study opponent within the round limit
+ok 39 - knights-two-posts: an illustrative route succeeds against the study opponent within the round limit
+  ---
+  duration_ms: 11.943028
+  type: 'test'
+  ...
+# Subtest: queen-two-targets: an illustrative route succeeds against the study opponent within the round limit
+ok 40 - queen-two-targets: an illustrative route succeeds against the study opponent within the round limit
+  ---
+  duration_ms: 44.674682
+  type: 'test'
+  ...
+# Subtest: release-the-knight: an illustrative route succeeds against the study opponent within the round limit
+ok 41 - release-the-knight: an illustrative route succeeds against the study opponent within the round limit
+  ---
+  duration_ms: 113.550286
+  type: 'test'
+  ...
+# Subtest: diagonal-pocket: an illustrative route succeeds against the study opponent within the round limit
+ok 42 - diagonal-pocket: an illustrative route succeeds against the study opponent within the round limit
+  ---
+  duration_ms: 67.613695
+  type: 'test'
+  ...
+# Subtest: pass-down-the-channel: an illustrative route succeeds against the study opponent within the round limit
+ok 43 - pass-down-the-channel: an illustrative route succeeds against the study opponent within the round limit
+  ---
+  duration_ms: 66.393463
+  type: 'test'
+  ...
+# Subtest: diagonal-delivery: an illustrative route succeeds against the study opponent within the round limit
+ok 44 - diagonal-delivery: an illustrative route succeeds against the study opponent within the round limit
+  ---
+  duration_ms: 50.553547
+  type: 'test'
+  ...
+# Subtest: cross-to-the-middle: an illustrative route succeeds against the study opponent within the round limit
+ok 45 - cross-to-the-middle: an illustrative route succeeds against the study opponent within the round limit
+  ---
+  duration_ms: 193.759985
+  type: 'test'
+  ...
+# Subtest: carry-inward: an illustrative route succeeds against the study opponent within the round limit
+ok 46 - carry-inward: an illustrative route succeeds against the study opponent within the round limit
+  ---
+  duration_ms: 188.967896
+  type: 'test'
+  ...
+# Subtest: pawn-before-the-shot: an illustrative route succeeds against the study opponent within the round limit
+ok 47 - pawn-before-the-shot: an illustrative route succeeds against the study opponent within the round limit
+  ---
+  duration_ms: 7.168826
+  type: 'test'
+  ...
+# Subtest: screen-and-cover: an illustrative route succeeds against the study opponent within the round limit
+ok 48 - screen-and-cover: an illustrative route succeeds against the study opponent within the round limit
+  ---
+  duration_ms: 1538.315355
+  type: 'test'
+  ...
+# Subtest: cover-the-declared-aim: an illustrative route succeeds against the study opponent within the round limit
+ok 49 - cover-the-declared-aim: an illustrative route succeeds against the study opponent within the round limit
+  ---
+  duration_ms: 1.163451
+  type: 'test'
+  ...
+# Subtest: different knight targets and a queen single aim or disguise all satisfy the same objective
+ok 50 - different knight targets and a queen single aim or disguise all satisfy the same objective
+  ---
+  duration_ms: 36.432212
+  type: 'test'
+  ...
+# Subtest: the cross creates a sound finish after carrying beyond the natural keeper’s immediate challenge
+ok 51 - the cross creates a sound finish after carrying beyond the natural keeper’s immediate challenge
+  ---
+  duration_ms: 2976.909296
+  type: 'test'
+  ...
+# Subtest: screening and keeper bonus may be played in either order
+ok 52 - screening and keeper bonus may be played in either order
+  ---
+  duration_ms: 939.994955
+  type: 'test'
+  ...
+# Subtest: the illustrative through-ball routes cross a nearby defensive line
+ok 53 - the illustrative through-ball routes cross a nearby defensive line
+  ---
+  duration_ms: 3.734659
+  type: 'test'
+  ...
+# Subtest: Easy progression studies still require improving the position against the natural keeper
+ok 54 - Easy progression studies still require improving the position against the natural keeper
+  ---
+  duration_ms: 2.458289
+  type: 'test'
+  ...
+# Subtest: the wide-carry study starts with a poor shot and rewards a real improvement in angle
+ok 55 - the wide-carry study starts with a poor shot and rewards a real improvement in angle
+  ---
+  duration_ms: 229.226425
+  type: 'test'
+  ...
+# Subtest: good finishes still solve when the native outcome is deliberately forced to miss
+ok 56 - good finishes still solve when the native outcome is deliberately forced to miss
+  ---
+  duration_ms: 2.705009
+  type: 'test'
+  ...
+# Subtest: creation preserves definitions, accepts a stable seed and validates short objectives
+ok 57 - creation preserves definitions, accepts a stable seed and validates short objectives
+  ---
+  duration_ms: 6.708152
+  type: 'test'
+  ...
+# Subtest: worst-keeper preview considers holding and every native reaction without touching future outcomes
+ok 58 - worst-keeper preview considers holding and every native reaction without touching future outcomes
+  ---
+  duration_ms: 18.563429
+  type: 'test'
+  ...
+# Subtest: a strong chance succeeds after a goal or a miss; the declaration waits for the Tactical keeper
+ok 59 - a strong chance succeeds after a goal or a miss; the declaration waits for the Tactical keeper
+  ---
+  duration_ms: 13.53303
+  type: 'test'
+  ...
+# Subtest: a lucky poor goal leaves time to improve without inflating the attacking grade
+ok 60 - a lucky poor goal leaves time to improve without inflating the attacking grade
+  ---
+  duration_ms: 2.422404
+  type: 'test'
+  ...
+# Subtest: different sufficiently strong aims solve the same position instead of requiring one move string
+ok 61 - different sufficiently strong aims solve the same position instead of requiring one move string
+  ---
+  duration_ms: 3.274786
+  type: 'test'
+  ...
+# Subtest: disguised shots are judged by the two-target expectation, not the favourable sampled target
+ok 62 - disguised shots are judged by the two-target expectation, not the favourable sampled target
+  ---
+  duration_ms: 5.732525
+  type: 'test'
+  ...
+# Subtest: a strong direct finish solves a through-ball study without following its suggested route
+ok 63 - a strong direct finish solves a through-ball study without following its suggested route
+  ---
+  duration_ms: 2.176995
+  type: 'test'
+  ...
+# Subtest: an onside teammate collecting a genuine forward line-breaking space pass satisfies the theme
+ok 64 - an onside teammate collecting a genuine forward line-breaking space pass satisfies the theme
+  ---
+  duration_ms: 2.932662
+  type: 'test'
+  ...
+# Subtest: self-chasing, a non-line-breaking forward pass and a backward space pass do not satisfy through-ball
+ok 65 - self-chasing, a non-line-breaking forward pass and a backward space pass do not satisfy through-ball
+  ---
+  duration_ms: 4.860102
+  type: 'test'
+  ...
+# Subtest: an offside receiver cannot gain the through-ball badge
+ok 66 - an offside receiver cannot gain the through-ball badge
+  ---
+  duration_ms: 2.56569
+  type: 'test'
+  ...
+# Subtest: a completed pass into the opposing box qualifies; an own-box pass does not
+ok 67 - a completed pass into the opposing box qualifies; an own-box pass does not
+  ---
+  duration_ms: 3.634257
+  type: 'test'
+  ...
+# Subtest: teammate collection inside the opposing box counts as box delivery, unlike a self-pass
+ok 68 - teammate collection inside the opposing box counts as box delivery, unlike a self-pass
+  ---
+  duration_ms: 1.808982
+  type: 'test'
+  ...
+# Subtest: ordinary dribbling into the box meets an either-entry objective but not a pass-only objective
+ok 69 - ordinary dribbling into the box meets an either-entry objective but not a pass-only objective
+  ---
+  duration_ms: 0.976288
+  type: 'test'
+  ...
+# Subtest: a strong dribbling finish earns credit even when the coaching theme suggests a pass into the box
+ok 70 - a strong dribbling finish earns credit even when the coaching theme suggests a pass into the box
+  ---
+  duration_ms: 2.657088
+  type: 'test'
+  ...
+# Subtest: dribble, teammate move and shared bonus are subactions, not three rounds
+ok 71 - dribble, teammate move and shared bonus are subactions, not three rounds
+  ---
+  duration_ms: 1.40907
+  type: 'test'
+  ...
+# Subtest: the original three-round limit still applies without charging defensive skips
+ok 72 - the original three-round limit still applies without charging defensive skips
+  ---
+  duration_ms: 2.951891
+  type: 'test'
+  ...
+# Subtest: a teammate pass to the keeper and its compulsory release complete one round
+ok 73 - a teammate pass to the keeper and its compulsory release complete one round
+  ---
+  duration_ms: 1.211923
+  type: 'test'
+  ...
+# Subtest: collecting a previously counted loose teammate pass with the keeper does not charge another round
+ok 74 - collecting a previously counted loose teammate pass with the keeper does not charge another round
+  ---
+  duration_ms: 1.812197
+  type: 'test'
+  ...
+# Subtest: defending grades the actual keeper response and accepts sound defence even when the shot goes in
+ok 75 - defending grades the actual keeper response and accepts sound defence even when the shot goes in
+  ---
+  duration_ms: 6.708583
+  type: 'test'
+  ...
+# Subtest: the strongest available shot preview checks every legal aim and fair disguise without chance-state mutation
+ok 76 - the strongest available shot preview checks every legal aim and fair disguise without chance-state mutation
+  ---
+  duration_ms: 10.891116
+  type: 'test'
+  ...
+# Subtest: a bot choosing a weak aim cannot award defensive credit while a stronger legal finish exists
+ok 77 - a bot choosing a weak aim cannot award defensive credit while a stronger legal finish exists
+  ---
+  duration_ms: 4.877609
+  type: 'test'
+  ...
+# Subtest: a defence earns credit when every available shooting choice and the actual keeper response meet the target
+ok 78 - a defence earns credit when every available shooting choice and the actual keeper response meet the target
+  ---
+  duration_ms: 6.907381
+  type: 'test'
+  ...
+# Subtest: hypothetical optimal cover cannot excuse the student making a poor keeper reaction
+ok 79 - hypothetical optimal cover cannot excuse the student making a poor keeper reaction
+  ---
+  duration_ms: 2.988887
+  type: 'test'
+  ...
+# Subtest: defensive target-choice grading keeps disguised shots fair across the sampled target
+ok 80 - defensive target-choice grading keeps disguised shots fair across the sampled target
+  ---
+  duration_ms: 7.028143
+  type: 'test'
+  ...
+# Subtest: an initially committed keeper study does not retroactively reopen the attackers other targets
+ok 81 - an initially committed keeper study does not retroactively reopen the attackers other targets
+  ---
+  duration_ms: 1.066565
+  type: 'test'
+  ...
+# Subtest: a clean possession win completes defence before a finish; a failed knight tackle does not
+ok 82 - a clean possession win completes defence before a finish; a failed knight tackle does not
+  ---
+  duration_ms: 0.770089
+  type: 'test'
+  ...
+# Subtest: innocuous movement never solves defence, while a lost attack remains recoverable
+ok 83 - innocuous movement never solves defence, while a lost attack remains recoverable
+  ---
+  duration_ms: 1.117271
+  type: 'test'
+  ...
+# Subtest: illegal actions throw without mutation and late bot actions cannot change a terminal result
+ok 84 - illegal actions throw without mutation and late bot actions cannot change a terminal result
+  ---
+  duration_ms: 1.930334
+  type: 'test'
+  ...
+# Subtest: a qualifying finish resolves on the final allowed round before the deadline is judged
+ok 85 - a qualifying finish resolves on the final allowed round before the deadline is judged
+  ---
+  duration_ms: 2.847294
+  type: 'test'
+  ...
+# Subtest: pass-and-run uses the next off-ball action without spending a second round
+ok 86 - pass-and-run uses the next off-ball action without spending a second round
+  ---
+  duration_ms: 0.987897
+  type: 'test'
+  ...
+# Subtest: a committed strong shot is graded by its quality without inventing coaching-theme evidence
+ok 87 - a committed strong shot is graded by its quality without inventing coaching-theme evidence
+  ---
+  duration_ms: 0.89703
+  type: 'test'
+  ...
+# Subtest: a legal on-restart teammate collection retains the native direct-receipt offside exemption
+ok 88 - a legal on-restart teammate collection retains the native direct-receipt offside exemption
+  ---
+  duration_ms: 1.086245
+  type: 'test'
+  ...
+# Subtest: coaching pass annotations default to zero and retain validated metadata
+ok 89 - coaching pass annotations default to zero and retain validated metadata
+  ---
+  duration_ms: 0.737079
+  type: 'test'
+  ...
+# Subtest: two genuine teammate passes remain tracked as coaching progress before a finishing shot
+ok 90 - two genuine teammate passes remain tracked as coaching progress before a finishing shot
+  ---
+  duration_ms: 2.583097
+  type: 'test'
+  ...
+# Subtest: a strong direct finish earns credit without satisfying the suggested pass combination
+ok 91 - a strong direct finish earns credit without satisfying the suggested pass combination
+  ---
+  duration_ms: 1.204572
+  type: 'test'
+  ...
+# Subtest: self-pass collections and direct keeper receipts do not inflate combination progress
+ok 92 - self-pass collections and direct keeper receipts do not inflate combination progress
+  ---
+  duration_ms: 2.20681
+  type: 'test'
+  ...
+# Subtest: through-ball and teammate-pass coaching achievements remain available alongside outcome grading
+ok 93 - through-ball and teammate-pass coaching achievements remain available alongside outcome grading
+  ---
+  duration_ms: 3.424742
+  type: 'test'
+  ...
+# Subtest: a better through-ball finish is not rejected for omitting the suggested second pass
+ok 94 - a better through-ball finish is not rejected for omitting the suggested second pass
+  ---
+  duration_ms: 2.557778
+  type: 'test'
+  ...
+# Subtest: a sound direct-pass combination solves even without the suggested through-ball badge
+ok 95 - a sound direct-pass combination solves even without the suggested through-ball badge
+  ---
+  duration_ms: 2.973834
+  type: 'test'
+  ...
+# Subtest: shot-quality evidence stays fixed when later coaching progress changes
+ok 96 - shot-quality evidence stays fixed when later coaching progress changes
+  ---
+  duration_ms: 0.850399
+  type: 'test'
+  ...
+# Subtest: a three-pass build-up still leaves its shot on the fourth allowed possession round
+ok 97 - a three-pass build-up still leaves its shot on the fourth allowed possession round
+  ---
+  duration_ms: 2.442654
+  type: 'test'
+  ...
+# Subtest: original three- and four-round budgets stay unchanged on retry
+ok 98 - original three- and four-round budgets stay unchanged on retry
+  ---
+  duration_ms: 0.627334
+  type: 'test'
+  ...
+# Subtest: an attack can lose possession, win it back and solve through a different legal line
+ok 99 - an attack can lose possession, win it back and solve through a different legal line
+  ---
+  duration_ms: 4.677998
+  type: 'test'
+  ...
+# Subtest: a weak corner leaves the native position playable and describes the result
+ok 100 - a weak corner leaves the native position playable and describes the result
+  ---
+  duration_ms: 6.066407
+  type: 'test'
+  ...
+# Subtest: a weak loose leaves the native position playable and describes the result
+ok 101 - a weak loose leaves the native position playable and describes the result
+  ---
+  duration_ms: 2.35951
+  type: 'test'
+  ...
+# Subtest: a weak saved leaves the native position playable and describes the result
+ok 102 - a weak saved leaves the native position playable and describes the result
+  ---
+  duration_ms: 0.905432
+  type: 'test'
+  ...
+# Subtest: a weak wide leaves the native position playable and describes the result
+ok 103 - a weak wide leaves the native position playable and describes the result
+  ---
+  duration_ms: 2.35965
+  type: 'test'
+  ...
+# Subtest: a last-round shot resolves fully: a qualifying chance succeeds and a weaker shot reaches the limit
+ok 104 - a last-round shot resolves fully: a qualifying chance succeeds and a weaker shot reaches the limit
+  ---
+  duration_ms: 2.475013
+  type: 'test'
+  ...
+# Subtest: an opponent goal still ends a recovered attacking study
+ok 105 - an opponent goal still ends a recovered attacking study
+  ---
+  duration_ms: 0.940474
+  type: 'test'
+  ...
+# Subtest: a direct interception names the receiver and square, while leaving recovery available
+ok 106 - a direct interception names the receiver and square, while leaving recovery available
+  ---
+  duration_ms: 0.669347
+  type: 'test'
+  ...
+# Subtest: a possession-rule turnover can happen within the exercise limit and explains that distinction
+ok 107 - a possession-rule turnover can happen within the exercise limit and explains that distinction
+  ---
+  duration_ms: 2.221942
+  type: 'test'
+  ...
+# Subtest: six larger Tough attacks start both keepers centrally inside their goalmouths
+ok 108 - six larger Tough attacks start both keepers centrally inside their goalmouths
+  ---
+  duration_ms: 7.519683
+  type: 'test'
+  ...
+# Subtest: tough-wide-rook-relay: a real route survives the actual study defence with natural keepers
+ok 109 - tough-wide-rook-relay: a real route survives the actual study defence with natural keepers
+  ---
+  duration_ms: 451.682047
+  type: 'test'
+  ...
+# Subtest: tough-relay-to-knight: a real route survives the actual study defence with natural keepers
+ok 110 - tough-relay-to-knight: a real route survives the actual study defence with natural keepers
+  ---
+  duration_ms: 422.304012
+  type: 'test'
+  ...
+# Subtest: tough-knight-wall-pass: a real route survives the actual study defence with natural keepers
+ok 111 - tough-knight-wall-pass: a real route survives the actual study defence with natural keepers
+  ---
+  duration_ms: 725.354674
+  type: 'test'
+  ...
+# Subtest: tough-through-ball-layoff: a real route survives the actual study defence with natural keepers
+ok 112 - tough-through-ball-layoff: a real route survives the actual study defence with natural keepers
+  ---
+  duration_ms: 296.852557
+  type: 'test'
+  ...
+# Subtest: tough-clear-offside-runner: a real route survives the actual study defence with natural keepers
+ok 113 - tough-clear-offside-runner: a real route survives the actual study defence with natural keepers
+  ---
+  duration_ms: 234.89065
+  type: 'test'
+  ...
+# Subtest: tough-sweeper-to-bishop: a real route survives the actual study defence with natural keepers
+ok 114 - tough-sweeper-to-bishop: a real route survives the actual study defence with natural keepers
+  ---
+  duration_ms: 309.321422
+  type: 'test'
+  ...
+# Subtest: none of the larger natural-keeper positions starts with a qualifying direct shot or disguise
+ok 115 - none of the larger natural-keeper positions starts with a qualifying direct shot or disguise
+  ---
+  duration_ms: 4.833992
+  type: 'test'
+  ...
+# Subtest: different support and offside-clearance choices earn the same outcome credit
+ok 116 - different support and offside-clearance choices earn the same outcome credit
+  ---
+  duration_ms: 388.036283
+  type: 'test'
+  ...
+# Subtest: keeper buildup needs its actual supporting screen rather than an extra pass quota
+ok 117 - keeper buildup needs its actual supporting screen rather than an extra pass quota
+  ---
+  duration_ms: 236.551446
+  type: 'test'
+  ...
+# Subtest: all legal goalkeeper replies grade a sound route by its best-reply quality
+ok 118 - all legal goalkeeper replies grade a sound route by its best-reply quality
+  ---
+  duration_ms: 866.567908
+  type: 'test'
+  ...
+# Subtest: a good natural-keeper finish still earns credit when its final outcome is forced to miss
+ok 119 - a good natural-keeper finish still earns credit when its final outcome is forced to miss
+  ---
+  duration_ms: 202.5199
+  type: 'test'
+  ...
+# Subtest: extra Tough defences use legal crowded diagrams and genuine three/four-step plans
+ok 120 - extra Tough defences use legal crowded diagrams and genuine three/four-step plans
+  ---
+  duration_ms: 6.692073
+  type: 'test'
+  ...
+# Subtest: tough-open-the-keepers-return: expanded study replies across three seeds
+ok 121 - tough-open-the-keepers-return: expanded study replies across three seeds
+  ---
+  duration_ms: 5940.68076
+  type: 'test'
+  ...
+# Subtest: tough-clear-the-box-gateway: expanded study replies across three seeds
+ok 122 - tough-clear-the-box-gateway: expanded study replies across three seeds
+  ---
+  duration_ms: 4622.572688
+  type: 'test'
+  ...
+# Subtest: both natural keeper defences accept the bonus and screen in either order
+ok 123 - both natural keeper defences accept the bonus and screen in either order
+  ---
+  duration_ms: 2456.456113
+  type: 'test'
+  ...
+# Subtest: covering the far post needs a screen and an actual keeper reaction
+ok 124 - covering the far post needs a screen and an actual keeper reaction
+  ---
+  duration_ms: 5869.299053
+  type: 'test'
+  ...
+# Subtest: neither natural keeper study starts with an immediate or bonus-assisted tackle
+ok 125 - neither natural keeper study starts with an immediate or bonus-assisted tackle
+  ---
+  duration_ms: 5.571892
+  type: 'test'
+  ...
+# Subtest: natural keeper coverage alone or two preparations without a reaction cannot reach the Tough targets
+ok 126 - natural keeper coverage alone or two preparations without a reaction cannot reach the Tough targets
+  ---
+  duration_ms: 361.28139
+  type: 'test'
+  ...
+# Subtest: four crowded mixed Tough studies respect natural keepers, the real squad and stated plan lengths
+ok 127 - four crowded mixed Tough studies respect natural keepers, the real squad and stated plan lengths
+  ---
+  duration_ms: 2.117176
+  type: 'test'
+  ...
+# Subtest: tough-unlock-the-rook-battery: expanded study replies solve the real line over three seeds
+ok 128 - tough-unlock-the-rook-battery: expanded study replies solve the real line over three seeds
+  ---
+  duration_ms: 688.72526
+  type: 'test'
+  ...
+# Subtest: tough-find-the-protected-pocket: expanded study replies solve the real line over three seeds
+ok 129 - tough-find-the-protected-pocket: expanded study replies solve the real line over three seeds
+  ---
+  duration_ms: 298.725455
+  type: 'test'
+  ...
+# Subtest: tough-clear-the-delivery-diagonal: expanded study replies solve the real line over three seeds
+ok 130 - tough-clear-the-delivery-diagonal: expanded study replies solve the real line over three seeds
+  ---
+  duration_ms: 688.377912
+  type: 'test'
+  ...
+# Subtest: tough-pawn-screen-keeper-route: expanded study replies solve the real line over three seeds
+ok 131 - tough-pawn-screen-keeper-route: expanded study replies solve the real line over three seeds
+  ---
+  duration_ms: 4385.597094
+  type: 'test'
+  ...
+# Subtest: different legal bishop clearances earn the same outcome-based credit
+ok 132 - different legal bishop clearances earn the same outcome-based credit
+  ---
+  duration_ms: 244.187449
+  type: 'test'
+  ...
+# Subtest: the coordinated screen accepts either preparation order
+ok 133 - the coordinated screen accepts either preparation order
+  ---
+  duration_ms: 1169.720272
+  type: 'test'
+  ...
+# Subtest: a defender cannot solve the crowded keeper study by an immediate or bonus-setup tackle
+ok 134 - a defender cannot solve the crowded keeper study by an immediate or bonus-setup tackle
+  ---
+  duration_ms: 5.146693
+  type: 'test'
+  ...
+# Subtest: the illustrated straight delivery and dribble remain subject to real blocking rules
+ok 135 - the illustrated straight delivery and dribble remain subject to real blocking rules
+  ---
+  duration_ms: 91.508797
+  type: 'test'
+  ...
+# Subtest: the rook battery accepts a different supporting bishop destination
+ok 136 - the rook battery accepts a different supporting bishop destination
+  ---
+  duration_ms: 72.192725
+  type: 'test'
+  ...
+# Subtest: the new pawn screen is necessary rather than a pawn shuffled along the same shot path
+ok 137 - the new pawn screen is necessary rather than a pawn shuffled along the same shot path
+  ---
+  duration_ms: 1184.975104
+  type: 'test'
+  ...
+# Subtest: the rebuilt pressing cage has no immediate or two-action finishing defence
+ok 138 - the rebuilt pressing cage has no immediate or two-action finishing defence
+  ---
+  duration_ms: 177.95007
+  type: 'test'
+  ...
+# Subtest: opening a study does not start a bot or allow a move before Play exercise
+ok 139 - opening a study does not start a bot or allow a move before Play exercise
+  ---
+  duration_ms: 4.063213
+  type: 'test'
+  ...
+# Subtest: an early Tactical answer waits for the visible action pace and then returns control
+ok 140 - an early Tactical answer waits for the visible action pace and then returns control
+  ---
+  duration_ms: 0.866103
+  type: 'test'
+  ...
+# Subtest: load cancels a worker and its delayed commit without reviving it
+ok 141 - load cancels a worker and its delayed commit without reviving it
+  ---
+  duration_ms: 0.515386
+  type: 'test'
+  ...
+# Subtest: retry cancels a worker and its delayed commit without reviving it
+ok 142 - retry cancels a worker and its delayed commit without reviving it
+  ---
+  duration_ms: 0.369276
+  type: 'test'
+  ...
+# Subtest: undo cancels a worker and its delayed commit without reviving it
+ok 143 - undo cancels a worker and its delayed commit without reviving it
+  ---
+  duration_ms: 0.330688
+  type: 'test'
+  ...
+# Subtest: a wrong request ID cannot commit an action and human moves cannot race the bot
+ok 144 - a wrong request ID cannot commit an action and human moves cannot race the bot
+  ---
+  duration_ms: 1.929442
+  type: 'test'
+  ...
+# Subtest: worker failure uses the same expanded study fallback without switching to the match policy
+ok 145 - worker failure uses the same expanded study fallback without switching to the match policy
+  ---
+  duration_ms: 0.735687
+  type: 'test'
+  ...
+# Subtest: without a worker the same study policy is deferred and played at the chosen pace
+ok 146 - without a worker the same study policy is deferred and played at the chosen pace
+  ---
+  duration_ms: 0.346882
+  type: 'test'
+  ...
+# Subtest: watchdog recovery can use a completed Tactical iteration without running another policy
+ok 147 - watchdog recovery can use a completed Tactical iteration without running another policy
+  ---
+  duration_ms: 0.393933
+  type: 'test'
+  ...
+# Subtest: study workers receive the expanded-search watchdog and an early legal safeguard can be recovered
+ok 148 - study workers receive the expanded-search watchdog and an early legal safeguard can be recovered
+  ---
+  duration_ms: 0.663958
+  type: 'test'
+  ...
+# Subtest: an exercise result stops further bot scheduling and late worker answers
+ok 149 - an exercise result stops further bot scheduling and late worker answers
+  ---
+  duration_ms: 0.37887
+  type: 'test'
+  ...
+# Subtest: illegal actions leave session and undo history intact
+ok 150 - illegal actions leave session and undo history intact
+  ---
+  duration_ms: 0.329986
+  type: 'test'
+  ...
+# Subtest: destroy invalidates a pending result and clears presentation timers
+ok 151 - destroy invalidates a pending result and clears presentation timers
+  ---
+  duration_ms: 0.222635
+  type: 'test'
+  ...
+# Subtest: exercise progress uses a distinct key and never replaces the saved full match
+ok 152 - exercise progress uses a distinct key and never replaces the saved full match
+  ---
+  duration_ms: 0.489226
+  type: 'test'
+  ...
+# Subtest: corrupt, inaccessible or stale progress does not block training
+ok 153 - corrupt, inaccessible or stale progress does not block training
+  ---
+  duration_ms: 0.364999
+  type: 'test'
+  ...
+# Subtest: the exercise page makes objectives, alternatives, study rounds and optional analysis explicit
+ok 154 - the exercise page makes objectives, alternatives, study rounds and optional analysis explicit
+  ---
+  duration_ms: 24.181861
+  type: 'test'
+  ...
+# Subtest: difficulty and theme filters intersect while older studies default to Easy
+ok 155 - difficulty and theme filters intersect while older studies default to Easy
+  ---
+  duration_ms: 0.735977
+  type: 'test'
+  ...
+# Subtest: changing level chooses a matching study and Next stays inside both filters
+ok 156 - changing level chooses a matching study and Next stays inside both filters
+  ---
+  duration_ms: 0.201473
+  type: 'test'
+  ...
+# Subtest: an empty filter suspends the hidden study and cancels an in-flight Tactical reply
+ok 157 - an empty filter suspends the hidden study and cancels an in-flight Tactical reply
+  ---
+  duration_ms: 0.862858
+  type: 'test'
+  ...
+# Subtest: a matching filter loads a visible study but does not resume a background page
+ok 158 - a matching filter loads a visible study but does not resume a background page
+  ---
+  duration_ms: 0.211278
+  type: 'test'
+  ...
+# Subtest: expected plan length is distinct from the possession-round allowance
+ok 159 - expected plan length is distinct from the possession-round allowance
+  ---
+  duration_ms: 0.122173
+  type: 'test'
+  ...
+# Subtest: adding difficulty tiers preserves solved Easy IDs and the previous selected study
+ok 160 - adding difficulty tiers preserves solved Easy IDs and the previous selected study
+  ---
+  duration_ms: 0.308424
+  type: 'test'
+  ...
+# Subtest: rebuilding a board retains its earlier achievement while requiring a new solve for current credit
+ok 161 - rebuilding a board retains its earlier achievement while requiring a new solve for current credit
+  ---
+  duration_ms: 0.356216
+  type: 'test'
+  ...
+# Subtest: exercise replies send only the visible position, without match difficulty or variety overrides
+ok 162 - exercise replies send only the visible position, without match difficulty or variety overrides
+  ---
+  duration_ms: 0.144237
+  type: 'test'
+  ...
+# Subtest: the visible outcome accepts a stronger direct route despite advisory pass and theme metadata
+ok 163 - the visible outcome accepts a stronger direct route despite advisory pass and theme metadata
+  ---
+  duration_ms: 0.517479
+  type: 'test'
+  ...
+# Subtest: page suspension cancels work and can resume safely after a BFCache return
+ok 164 - page suspension cancels work and can resume safely after a BFCache return
+  ---
+  duration_ms: 0.228724
+  type: 'test'
+  ...
+# Subtest: bonus mode cannot trap the passer in an optional normal run
+ok 165 - bonus mode cannot trap the passer in an optional normal run
+  ---
+  duration_ms: 5.951304
+  type: 'test'
+  ...
+# Subtest: terminal exercise reviews freeze analysis without submitting a synthetic second keeper reaction
+ok 166 - terminal exercise reviews freeze analysis without submitting a synthetic second keeper reaction
+  ---
+  duration_ms: 0.253472
+  type: 'test'
+  ...
+# Subtest: a strong completed iteration paints its real exercise fill while further analysis continues
+ok 167 - a strong completed iteration paints its real exercise fill while further analysis continues
+  ---
+  duration_ms: 3.604473
+  type: 'test'
+  ...
+# Subtest: retained exercise estimates stay visible with an explicit held or updating label
+ok 168 - retained exercise estimates stay visible with an explicit held or updating label
+  ---
+  duration_ms: 0.192059
+  type: 'test'
+  ...
+# Subtest: exercise analysis never fabricates a neutral score when none is available or analysis is off
+ok 169 - exercise analysis never fabricates a neutral score when none is available or analysis is off
+  ---
+  duration_ms: 0.158098
+  type: 'test'
+  ...
+# Subtest: starting a defensive exercise selects the human keeper rather than the opposing shooter
+ok 170 - starting a defensive exercise selects the human keeper rather than the opposing shooter
+  ---
+  duration_ms: 0.160943
+  type: 'test'
+  ...
+1..170
+# tests 170
+# suites 0
+# pass 170
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 19452.484109
