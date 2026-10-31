@@ -116,8 +116,8 @@ test('icons use supplied recorded counts even with partial ratings, and malforme
 test('earlier rating methods are labelled without treating a complete match as partial', () => {
   const root = new Element('section', document);
   renderPlayerRatings(root, {legacyMethod: true, partial: false, players: [{...player('white-P1', 7.5, 5, .5), goals: 2}]});
-  assert.match(text(root), /These ratings use the earlier method/);
-  assert.match(text(root), /Start a new match for updated ability-relative ratings/);
+  assert.match(text(root), /These saved ratings use the earlier method/);
+  assert.match(text(root), /New matches use the updated ability-relative ratings/);
   assert.doesNotMatch(text(root), /Partial ratings/);
   assert.match(text(root), /Player of the match/);
   renderPlayerRatings(root, {methodVersion: 2, legacyMethod: false, players: []});

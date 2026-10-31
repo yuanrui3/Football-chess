@@ -205,12 +205,12 @@ for(const freePawn of [false,true])test(`ordinary keeper ${freePawn?'bonus':'nor
     .map(choice=>({...choice,threat:directThreat(choice.next)})).sort((a,b)=>a.threat-b.threat);
   const best=choices[0],worst=choices.at(-1);assert.ok(best.threat<directThreat(g)-.02);
   const bestLedger=record(g,best.next),bestPlayer=playerRatingsSummary(bestLedger,best.next).players.find(p=>p.pieceId===id);
-  assert.equal(bestLedger.version,4);assert.ok(bestPlayer.impact>0,'ordinary coverage remains real raw impact');
+  assert.equal(bestLedger.version,5);assert.ok(bestPlayer.impact>0,'ordinary coverage remains real raw impact');
   assert.equal(bestPlayer.rating,6,'a routine best legal coverage move is expected, not an exceptional performance');
   assert.ok(Math.abs(bestLedger.players[id].parts.defending)<1e-9);
   assert.ok(worst.threat>best.threat+.02);
   const poorLedger=record(g,worst.next);assert.ok(poorLedger.players[id].merit<0,'worse available coverage is still a meaningful error');
-  const summary=playerRatingsSummary(bestLedger,best.next);assert.equal(summary.methodVersion,4);assert.equal(summary.legacyMethod,false);
+  const summary=playerRatingsSummary(bestLedger,best.next);assert.equal(summary.methodVersion,5);assert.equal(summary.legacyMethod,false);
   if(freePawn)assert.equal(E.legalMoves(g,id).length,0,'the bonus baseline does not invent an already spent normal move');
 });
 
@@ -224,7 +224,7 @@ test('earlier rating methods retain their original score, continuation and save 
   assert.deepEqual(playerRatingsSummary(restored,n),summary);
   const next=E.skipMove(n),continued=recordPlayerRatings(restored,n,next);
   assert.equal(continued.version,1);assert.equal(playerRatingsSummary(continued,next).players.find(p=>p.pieceId==='black-K').rating,6.8);
-  assert.equal(createPlayerRatings().version,4,'only new matches start the revised rating method');
+  assert.equal(createPlayerRatings().version,5,'new matches start the current rating method');
 });
 
 test('disguised shots use the fair pre-reveal mixture for either sampled goal target',()=>{
@@ -248,9 +248,12 @@ test('a collected native through ball credits the provider’s new territory onl
   run.kick(6,5);
   assert.equal(run.game.ball.carrierId,null);assert.deepEqual(run.game.looseBallKickOrigin.from,{x:6,y:9});
   assert.equal(run.stats.playerRatings.players['white-R2'].counts.progressSquares,0,'a loose delivery has not secured territory yet');
+  assert.equal(run.stats.playerRatings.players['white-R2'].counts.forwardPasses,0);
   run.move('white-R1',6,5);
   assert.equal(run.game.lastAction.collection,true);assert.equal(run.game.ball.carrierId,'white-R1');
   assert.equal(run.stats.playerRatings.players['white-R2'].counts.progressSquares,4,'the passer receives the retained forward progress');
+  assert.equal(run.stats.playerRatings.players['white-R2'].counts.forwardPasses,1);
   assert.ok(run.stats.playerRatings.players['white-R2'].impact>0);
   assert.equal(run.stats.playerRatings.players['white-R1'].counts.progressSquares,0,'collecting is not also counted as a dribble from the passer’s square');
+  assert.equal(run.stats.playerRatings.players['white-R1'].counts.forwardDribbles,0);
 });

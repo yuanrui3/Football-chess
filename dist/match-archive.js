@@ -2,7 +2,7 @@
 // Delta frames remove unchanged pieces; gzip removes repeated field names.
 import {BOARD_WIDTH as W,BOARD_HEIGHT as H,RULES_VERSION} from './engine.js?v=eb0ab0924c73';
 import {captureReplayFrame,validReplayFrame,validRosterTransition,buildGoalReplay} from './goal-replay.js?v=df056ed3cc3c';
-import {restoreArchiveStatistics} from './archive-statistics.js?v=33ef2335d71f';
+import {restoreArchiveStatistics} from './archive-statistics.js?v=62e9cb610a40';
 
 export const MATCH_FORMAT='football-chess-match';
 export const MAX_RECORDING_STEPS=20000;

@@ -84,6 +84,7 @@ export function renderPlayerRatings(container, summary = {}, heatmaps) {
   make('h3', 'player-ratings-title', 'Player ratings');
   make('p', 'player-ratings-intro', 'Out of 10, relative to each piece’s abilities. 6.0 is the starting rating; quiet pieces stay near it.');
   make('p', 'player-ratings-heatmap-hint', 'Select an outfield player to see their heatmap and rating details.');
+  if(summary.methodVersion>=5)make('p','player-ratings-intro','Credit comes from forward dribbles, completed forward passes, useful forward runs and keeping possession under pressure. Visiting squares alone earns nothing. Keeper advances carry much less weight.');
   const legend = make('p', 'player-ratings-contribution-legend');
   const goalLegend = make('span', '', undefined, legend);
   make('span', 'player-rating-ball', '⚽', goalLegend).setAttribute('aria-hidden', 'true');
@@ -91,7 +92,7 @@ export function renderPlayerRatings(container, summary = {}, heatmaps) {
   const assistLegend = make('span', '', undefined, legend); boot(assistLegend);
   make('span', '', 'Assists', assistLegend);
   make('span', 'player-ratings-recorded-note', 'Recorded match contributions', legend);
-  if (summary.legacyMethod) make('p', 'player-ratings-legacy', 'These ratings use the earlier method. Start a new match for updated ability-relative ratings.');
+  if (summary.legacyMethod) make('p', 'player-ratings-legacy', 'These saved ratings use the earlier method. New matches use the updated ability-relative ratings.');
   if (summary.partial) make('p', 'player-ratings-partial', 'Partial ratings: only actions recorded since this update are included.');
   if (best) {
     const award = make('p', 'player-ratings-award');

@@ -161,7 +161,7 @@ test('a non-dangerous midfield turnover is not labelled an error merely because 
 });
 
 test('a box foul records a committed penalty and yellow card against the actual tackler',()=>{
-  const game=fixture([piece('white-P1',5,15),piece('black-Q',6,14)],'black-Q',{phase:'defendMove',fouls:true});
+  const game=fixture([piece('white-P1',5,15),piece('white-R1',9,15),piece('black-Q',6,14)],'black-Q',{phase:'defendMove',fouls:true});
   const move=E.legalMoves(game,'white-P1').find(m=>m.type==='tackle');assert.ok(move);
   const run=tracked(game).move('white-P1',move.x,move.y,{roll:.04});assert.equal(run.game.lastAction.type,'foul');assert.equal(run.game.lastAction.outcome,'penalty');
   assert.equal(count(run,'white-P1','fouls'),1);assert.equal(count(run,'white-P1','yellowCards'),1);assert.equal(count(run,'white-P1','penaltiesCommitted'),1);

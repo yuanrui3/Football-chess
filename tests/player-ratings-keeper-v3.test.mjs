@@ -90,6 +90,6 @@ test('method3 signed cumulative assessment is restored without regrading and rej
  assert.ok(result.player.metrics.keeperAdjustedXGPrevented<0);
  assert.deepEqual(R.restorePlayerRatings(structuredClone(result.ledger),result.game),result.ledger);
  const bad=structuredClone(result.ledger);bad.players['black-K'].counts.keeperAdjustedXGPrevented=NaN;
- const fresh=R.restorePlayerRatings(bad,result.game);assert.equal(fresh.partial,true);assert.equal(fresh.version,4);
+ const fresh=R.restorePlayerRatings(bad,result.game);assert.equal(fresh.partial,true);assert.equal(fresh.version,5);
  assert.equal(fresh.players['black-K'].merit,0);
 });

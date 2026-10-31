@@ -1,6 +1,6 @@
 /** A small, deterministic match analyst. Every claim has recorded evidence. */
 import {BOARD_WIDTH as W,BOARD_HEIGHT as H,BOX_FILES,BOX_DEPTH} from './engine.js?v=eb0ab0924c73';
-import {createMatchStats,matchStatsSummary} from './match-stats.js?v=0b9210587149';
+import {createMatchStats,matchStatsSummary} from './match-stats.js?v=55c61804a722';
 
 const TEAMS=['white','black'],NAME={white:'Ivory',black:'Obsidian'};
 const other=team=>team==='white'?'black':'white';

@@ -7,31 +7,35 @@
  * range, B's diagonals, N's jumps and P's restricted movement. They are declared
  * tuning constants, not empirically calibrated player values.
  *
- * Movement credit uses native forward capacity (P/K1, N2, long pieces8;
- * passes N2, other pieces10), retained control and new territory only. The
- * shared pawn/king bonus gets no automatic credit. Per-possession frontiers,
- * per-round category caps and a meaningful-shot floor suppress loop farming.
+ * Progress credit names retained forward dribbles and completed forward passes.
+ * Useful onside forward runs and escaping pressure earn separate small awards;
+ * visiting squares, waiting and sideways shuffling do not. Native capacity,
+ * per-possession frontiers and per-round caps suppress loop farming. Keeper
+ * carries and attacking support receive only one fifth of movement credit.
  * Method2 credits chances created while debiting missed big chances and lost
  * duels. Keeper performance uses conditional on-target xG prevented; ordinary
  * best legal positioning is its native expectation. Method3 increases useful
  * shot-stopping credit and distinguishes a worsening position from a forgone
  * optimal improvement. Method4 bounds recoverable positioning deductions and
  * gives keeper losses the same initial rating sensitivity as positive merit.
- * Method1/2/3 records keep their original calculation so a
- * finished or resumed older match is never silently regraded.
+ * Method5 adds the action breakdown while preserving the Method4 keeper rubric.
+ * Completed records are never regraded. Resuming Method4 preserves accumulated
+ * grades and starts the new counters prospectively; Methods1/2/3 stay unchanged.
  * Missing old telemetry starts a partial record; it is never reconstructed from
  * a scorer list or the last80 undo states.
  */
-import {BOARD_WIDTH, BOARD_HEIGHT, DRIBBLE_RANGE, GOAL_FILES, inOwnBox, legalKicks, legalMoves, shotModel} from './engine.js?v=eb0ab0924c73';
+import {BOARD_WIDTH, BOARD_HEIGHT, DRIBBLE_RANGE, MOVE_RANGE, GOAL_FILES, inOwnBox, legalKicks, legalMoves, shotModel} from './engine.js?v=eb0ab0924c73';
 
 const IDS=/^(white|black)-(K|Q|[RBN][12]|P[123])$/;
 const TEAMS=['white','black'],TYPES=['K','Q','R','B','N','P'];
-const METHOD_VERSION=4;
-const supportedLedger=saved=>[1,2,3,METHOD_VERSION].includes(saved?.version);
+const METHOD_VERSION=5;
+const supportedLedger=saved=>[1,2,3,4,METHOD_VERSION].includes(saved?.version);
 const CATEGORIES=['progress','creation','finishing','defending','goalkeeping','mistakes'];
 const COUNTS=['goals','shots','xG','createdXG','tackles','tackleAttempts','interceptions','screens','support','saves','fouls','yellowCards','redCards','turnovers','progressSquares'];
 const V2_COUNTS=['assists','keyPasses','bigChancesCreated','bigChancesMissed','duelsLost','lineClearances','penaltiesCommitted','penaltySaves','keeperXGFaced','goalsConceded','xGPrevented','errorsLeadingGoals','ownGoals'];
 const V3_COUNTS=['keeperAdjustedXGPrevented'];
+const V5_COUNTS=['forwardDribbles','dribbleProgress','forwardPasses','passProgress','forwardRuns','runProgress','possessionKeeps','legacyProgressSquares'];
+const KEEPER_ADVANCE_SCALE=.2;
 // This threshold describes a big chance in this game's probability model; it
 // is not a calibrated real-football provider's definition.
 const BIG_CHANCE_XG=.35;
@@ -49,9 +53,9 @@ const typeOf=id=>validId(id)?id.split('-')[1][0]:null;
 const other=team=>team==='white'?'black':'white';
 const point=p=>p&&Number.isInteger(p.x)&&Number.isInteger(p.y)&&p.x>=0&&p.x<BOARD_WIDTH&&p.y>=0&&p.y<BOARD_HEIGHT?{x:p.x,y:p.y}:null;
 const progress=(team,p)=>point(p)?team==='white'?BOARD_HEIGHT-1-p.y:p.y:0;
-const emptyCounts=version=>Object.fromEntries([...COUNTS,...(version>=2?V2_COUNTS:[]),...(version>=3?V3_COUNTS:[])].map(key=>[key,0]));
+const emptyCounts=version=>Object.fromEntries([...COUNTS,...(version>=2?V2_COUNTS:[]),...(version>=3?V3_COUNTS:[]),...(version>=5?V5_COUNTS:[])].map(key=>[key,0]));
 const emptyParts=()=>Object.fromEntries(CATEGORIES.map(key=>[key,0]));
-const frontier=()=>({team:null,depth:0,threat:0,support:{}});
+const frontier=()=>({team:null,depth:0,threat:0,support:{},runs:{},retained:{}});
 // Ordinary coverage is a secondary rating signal. Recovering the position in
 // the same attack must cancel its deduction, without generating positive merit.
 const KEEPER_POSITION_SEQUENCE_CAP=.12,KEEPER_POSITION_MATCH_CAP=.35;
@@ -80,8 +84,14 @@ function validRecord(p,id,version){
       &&Math.abs(p.counts.xGPrevented-(p.counts.keeperXGFaced-p.counts.goalsConceded))<1e-6)
     &&(version<3||V3_COUNTS.every(k=>finite(p.counts?.[k])&&Math.abs(p.counts[k])<1e7)
       &&p.counts.keeperAdjustedXGPrevented<=p.counts.xGPrevented+1e-6)
-    &&(version<4||validKeeperPosition(p.keeperPosition));
+    &&(version<4||validKeeperPosition(p.keeperPosition))
+    &&(version<5||V5_COUNTS.every(k=>Number.isInteger(p.counts?.[k])&&p.counts[k]>=0&&p.counts[k]<1e7)
+      &&p.counts.progressSquares===p.counts.legacyProgressSquares+p.counts.dribbleProgress+p.counts.passProgress);
 }
+const validRunFrontier=f=>f.runs&&typeof f.runs==='object'&&!Array.isArray(f.runs)&&Object.keys(f.runs).length<=22
+  &&Object.entries(f.runs).every(([id,n])=>validId(id)&&Number.isInteger(n)&&n>=0&&n<BOARD_HEIGHT)
+  &&f.retained&&typeof f.retained==='object'&&!Array.isArray(f.retained)&&Object.keys(f.retained).length<=22
+  &&Object.entries(f.retained).every(([id,yes])=>validId(id)&&yes===true);
 const validError=c=>c===null||c&&validId(c.pieceId)&&teamOf(c.pieceId)===c.team&&Number.isInteger(c.turn)&&c.turn>=0&&Number.isInteger(c.passes)&&c.passes>=0&&c.passes<=1;
 export function restorePlayerRatings(saved,game,{partial=true}={}){
   const valid=supportedLedger(saved)&&typeof saved.partial==='boolean'&&Number.isInteger(saved.transitions)&&saved.transitions>=0
@@ -92,7 +102,8 @@ export function restorePlayerRatings(saved,game,{partial=true}={}){
     &&saved.frontier.support&&typeof saved.frontier.support==='object'&&Object.entries(saved.frontier.support).every(([id,n])=>validId(id)&&finite(n)&&n>=0&&n<=1)
     &&(saved.roundKey===null||typeof saved.roundKey==='string')&&(saved.lastKey===null||typeof saved.lastKey==='string')
     &&saved.caps&&typeof saved.caps==='object'&&Object.entries(saved.caps).length<=132&&Object.values(saved.caps).every(n=>finite(n)&&n>=0&&n<=2)
-    &&(saved.version<2||validError(saved.errorCandidate));
+    &&(saved.version<2||validError(saved.errorCandidate))
+    &&(saved.version<5||validRunFrontier(saved.frontier));
   // Preserve a valid snapshot exactly: restore must be equivalent to undo.
   if(valid)return copy(saved);
   const fresh=createPlayerRatings({partial});roster(fresh,game);return fresh;
@@ -128,17 +139,21 @@ function bestThreat(game){
   if(!game?.ball?.carrierId||game.restart?.indirect)return 0;
   try{return Math.max(0,...legalKicks(shooting(game)).filter(k=>k.goal===game.attack&&!k.offside).map(k=>shotModel(game,k.x,k.y).probability));}catch{return 0;}
 }
-function supportThreat(game,p){
+function receivingOption(game,p){
   if(!p||game.ball?.carrierId===p.id||p.team!==game.attack||game.restart)return 0;
   try{
-    const delivery=legalKicks(shooting(game)).find(k=>k.receiverId===p.id&&!k.offside&&!k.goal);
-    if(!delivery)return 0;
+    return legalKicks(shooting(game)).find(k=>k.receiverId===p.id&&!k.offside&&!k.goal)||null;
+  }catch{return null;}
+}
+function supportThreat(game,p){
+  const delivery=receivingOption(game,p);if(!delivery)return 0;
+  try{
     const received={...game,phase:'kick',ball:{x:p.x,y:p.y,carrierId:p.id},offside:null,pendingShot:null};
     return bestThreat(received)*clamp(delivery.accuracy??1,0,1);
   }catch{return 0;}
 }
 function resetFrontier(ledger,game){
-  ledger.frontier={team:game.attack,depth:progress(game.attack,game.ball),threat:bestThreat(game),support:{}};
+  ledger.frontier={...frontier(),team:game.attack,depth:progress(game.attack,game.ball),threat:bestThreat(game)};
 }
 function defensiveContext(team,spot,threat=0){
   const depth=progress(team,spot);
@@ -158,8 +173,43 @@ function forwardCredit(ledger,p,from,to,mode){
   ledger.frontier.depth=Math.max(ledger.frontier.depth,progress(p.team,to));
   if(!gain)return;
   const capacity=mode==='pass'?(p.type==='N'?2:10):p.type==='N'?2:['P','K'].includes(p.type)?1:DRIBBLE_RANGE;
-  const used=Math.min(gain,capacity),impact=.012*used;
-  add(ledger,p,'progress',impact,.12*used/capacity);p.counts.progressSquares+=used;
+  const used=Math.min(gain,capacity),scale=ledger.version>=5&&p.type==='K'&&mode==='dribble'?KEEPER_ADVANCE_SCALE:1;
+  add(ledger,p,'progress',.012*used*scale,.12*used/capacity*scale);p.counts.progressSquares+=used;
+  if(ledger.version>=5){
+    p.counts[mode==='pass'?'forwardPasses':'forwardDribbles']++;
+    p.counts[mode==='pass'?'passProgress':'dribbleProgress']+=used;
+  }
+}
+function forwardRunCredit(ledger,p,after,action){
+  if(ledger.version<5||p.type==='K')return;
+  const delivery=receivingOption(after,after.pieces.find(piece=>piece.id===p.pieceId));
+  if(!delivery)return;
+  const gain=Math.max(0,progress(p.team,action.to)-Math.max(progress(p.team,action.from),ledger.frontier.runs[p.pieceId]||0));
+  if(!gain)return;
+  ledger.frontier.runs[p.pieceId]=progress(p.team,action.to);
+  const capacity=p.type==='N'?2:p.type==='P'?1:MOVE_RANGE,used=Math.min(gain,capacity),accuracy=clamp(delivery.accuracy??1,0,1);
+  add(ledger,p,'progress',.006*used*accuracy,.06*used/capacity*accuracy);
+  p.counts.forwardRuns++;p.counts.runProgress+=used;
+}
+function underPressure(game,id){
+  const carrier=game.pieces.find(p=>p.id===id);
+  if(!carrier||game.ball?.carrierId!==id||game.restart)return false;
+  const defence={...game,phase:'defendMove',attack:carrier.team,pendingShot:null,passRun:null,
+    positionBudget:{normalUsed:false,pawnUsed:false,dribbleUsed:false}};
+  try{return game.pieces.some(p=>p.team!==carrier.team&&legalMoves(defence,p.id).some(move=>move.type==='tackle'&&move.targetId===id));}catch{return false;}
+}
+function retentionCredit(ledger,p,impact){
+  if(!p||ledger.frontier.retained[p.pieceId])return;
+  ledger.frontier.retained[p.pieceId]=true;p.counts.possessionKeeps++;
+  add(ledger,p,'progress',impact,impact/.22);
+}
+function upgradeActionTracking(ledger){
+  if(ledger.version!==4)return;
+  ledger.version=5;ledger.frontier.runs={};ledger.frontier.retained={};
+  for(const p of Object.values(ledger.players)){
+    for(const key of V5_COUNTS)p.counts[key]=0;
+    p.counts.legacyProgressSquares=p.counts.progressSquares;
+  }
 }
 function transitionKey(before,after,action){
   return JSON.stringify([before.turn,before.phase,after.turn,after.phase,action.type,action.pieceId,action.from,action.to,action.outcome,action.card]);
@@ -179,6 +229,7 @@ export function recordPlayerRatings(saved,before,after,{assistId=null,passProvid
   let action=after.lastAction||{};
   if(action.type==='stalling'&&before.phase==='keeperReact'&&['goal','save','shotMiss','blockedShot'].includes(action.triggeringAction?.type))action=action.triggeringAction;
   const key=transitionKey(before,after,action);if(key===ledger.lastKey)return saved;
+  upgradeActionTracking(ledger);
   roster(ledger,before);roster(ledger,after);
   if(ledger.version>=4&&(action.type==='shotAttempt'||after.attack!==before.attack||after.restart||['kickoff','finished'].includes(after.phase)))
     for(const player of Object.values(ledger.players))player.keeperPosition.key=null;
@@ -349,8 +400,18 @@ export function recordPlayerRatings(saved,before,after,{assistId=null,passProvid
       if(provider&&provider.team===actor.team&&provider!==actor)forwardCredit(ledger,provider,before.looseBallKickOrigin?.from||before.ball,action.to,'pass');
     }
   }
+  if(ledger.version>=5&&!resolving&&!before.restart&&!after.restart&&before.attack===after.attack&&before.ball?.carrierId&&after.ball?.carrierId){
+    const carrier=get(before.ball.carrierId);
+    if(action.type==='tackleMiss'&&before.ball.carrierId===after.ball.carrierId)
+      retentionCredit(ledger,carrier,.02*clamp(action.probability??.5,0,1));
+    else if(actor===carrier&&((action.type==='move'&&after.ball.carrierId===actor.pieceId)
+      ||action.type==='kick'&&action.outcome==='complete'&&teamOf(after.ball.carrierId)===actor.team&&after.ball.carrierId!==actor.pieceId)
+      &&underPressure(before,actor.pieceId)&&!underPressure(after,after.ball.carrierId))
+      retentionCredit(ledger,actor,.015);
+  }
   if(!resolving&&actor&&action.type==='move'&&before.ball?.carrierId&&before.ball.carrierId===after.ball?.carrierId&&actor.pieceId!==before.ball.carrierId&&!before.restart){
     const oldThreat=bestThreat(before),newThreat=bestThreat(after),same=actor.team===before.attack;
+    const attackingScale=ledger.version>=5&&actor.type==='K'?KEEPER_ADVANCE_SCALE:1;
     const delta=same?Math.max(0,newThreat-Math.max(oldThreat,ledger.frontier.threat)):oldThreat-newThreat;
     // Outfield screens use symmetric credit: reopening a lane cancels closing
     // it. A keeper's ordinary legal coverage is already its expected role,
@@ -371,16 +432,17 @@ export function recordPlayerRatings(saved,before,after,{assistId=null,passProvid
       if(ledger.version>=4)recordKeeperPosition(ledger,actor,before,oldThreat,newThreat);
       else add(ledger,actor,'defending',.3*(oldThreat-newThreat),.3*(ledger.version===2?relative:Math.min(0,relative))/ALLOWANCE.K.defending);
       if(delta>.02)actor.counts.screens++;
-    }else if(Math.abs(delta)>.02){award(ledger,actor,same?'creation':'defending',.3*delta);if(!same&&delta>0)actor.counts.screens++;}
+    }else if(Math.abs(delta)>.02){award(ledger,actor,same?'creation':'defending',.3*delta*(same?attackingScale:1));if(!same&&delta>0)actor.counts.screens++;}
     if(same){
+      forwardRunCredit(ledger,actor,after,action);
       const oldSupport=supportThreat(before,oldActor),newSupport=supportThreat(after,after.pieces.find(p=>p.id===actor.pieceId));
       const support=Math.max(0,newSupport-Math.max(oldSupport,ledger.frontier.support[actor.pieceId]||0));
-      if(support>.04){actor.counts.support++;award(ledger,actor,'creation',.2*support);}
+      if(support>.04){actor.counts.support++;award(ledger,actor,'creation',.2*support*attackingScale);}
       ledger.frontier.support[actor.pieceId]=Math.max(ledger.frontier.support[actor.pieceId]||0,newSupport);
       ledger.frontier.threat=Math.max(ledger.frontier.threat,newThreat);
     }
   }
-  if(after.attack!==before.attack)resetFrontier(ledger,after);
+  if(after.attack!==before.attack||ledger.version>=5&&after.restart&&!before.restart)resetFrontier(ledger,after);
   return ledger;
 }
 
@@ -419,7 +481,14 @@ export function playerRatingsSummary(saved,game){
       if(c.errorsLeadingGoals)notes.push(`${c.errorsLeadingGoals} clear error${c.errorsLeadingGoals===1?'':'s'} leading to a goal`);
       if(c.ownGoals)notes.push(`${c.ownGoals} own goal${c.ownGoals===1?'':'s'}`);
     }
-    if(c.progressSquares)notes.push(`Advanced into ${Math.round(c.progressSquares)} new square${c.progressSquares===1?'':'s'}`);
+    if(ledger.version>=5){
+      if(c.forwardDribbles)notes.push(`${c.forwardDribbles} forward dribble${c.forwardDribbles===1?'':'s'} with possession kept · ${c.dribbleProgress} square${c.dribbleProgress===1?'':'s'} gained`);
+      if(c.forwardPasses)notes.push(`${c.forwardPasses} successful forward pass${c.forwardPasses===1?'':'es'} · ${c.passProgress} square${c.passProgress===1?'':'s'} gained`);
+      if(c.forwardRuns)notes.push(`${c.forwardRuns} forward run${c.forwardRuns===1?'':'s'} providing an onside passing option · ${c.runProgress} square${c.runProgress===1?'':'s'} gained`);
+      if(c.possessionKeeps)notes.push(`Kept possession under pressure · ${c.possessionKeeps} credited time${c.possessionKeeps===1?'':'s'}`);
+      if(c.legacyProgressSquares)notes.push(`Earlier retained forward ball progress: ${c.legacyProgressSquares} square${c.legacyProgressSquares===1?'':'s'}`);
+      if(p.type==='K'&&c.forwardDribbles)notes.push('Keeper advances receive limited movement credit; distribution and saves are assessed separately.');
+    }else if(c.progressSquares)notes.push(`Retained forward ball progress: ${Math.round(c.progressSquares)} square${c.progressSquares===1?'':'s'} from passes and dribbles`);
     if(c.turnovers)notes.push(`${c.turnovers} possession loss${c.turnovers===1?'':'es'}`);
     if(c.redCards)notes.push('Sent off');else if(c.yellowCards)notes.push('Yellow card');
     if(!notes.length)notes.push(p.actions<2?'Limited involvement':'Routine play');
