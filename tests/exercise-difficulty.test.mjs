@@ -21,7 +21,7 @@ test('36 studies preserve the original Easy IDs and provide twelve studies per t
 
 test('new plan lengths count student moves, passes and shots separately from ending positioning',()=>{
   for(const d of EXERCISES.filter(d=>d.difficulty!=='easy')){
-    const range=d.difficulty==='medium'?[2,3]:[3,4];
+    const range=d.difficulty==='medium'?[2,3]:d.id==='tough-knight-wall-pass'?[5]:[3,4];
     assert.ok(range.includes(d.planSteps),`${d.id}: expected ${range.join('–')} steps`);
     assert.equal(d.exampleActions.filter(a=>a.type!=='skip').length,d.planSteps,`${d.id}: truthful step label`);
     assert.ok([3,4].includes(d.roundLimit));

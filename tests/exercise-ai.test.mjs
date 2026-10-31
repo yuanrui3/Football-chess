@@ -3,6 +3,8 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import vm from 'node:vm';
 import * as E from '../dist/engine.js';
+import {EXERCISES,createExercisePosition} from '../dist/exercise-positions.js';
+const originalStudies=JSON.parse(await readFile(new URL('../docs/exercise-defence-depth-2026-10-31/original-definitions.json',import.meta.url),'utf8'));
 import {EXERCISE_SEARCH_PROFILE,analyzeExerciseAction,chooseExerciseAction,exerciseKeeperChance,
   exerciseFinishes,findExerciseCapture,analyzeExerciseDefense} from '../dist/exercise-ai.js';
 
@@ -69,7 +71,7 @@ test('capture safeguards respect spent budgets, fouls and knight evasion probabi
     {carrierId:'white-N1',budget:{normalUsed:false,pawnUsed:true,dribbleUsed:false}});
   assert.equal(findExerciseCapture(knight).plan,null);
   const report=analyzeExerciseAction(knight);
-  assert.equal(report.reason,'exhaustive-local-defence');
+  assert.equal(report.reason,'forward-defence');
   const move=E.legalMoves(knight,report.action.pieceId).find(m=>m.x===report.action.x&&m.y===report.action.y);
   assert.equal(move.type,'tackle');assert.equal(move.tackleProbability,.5);
   const miss=apply(knight,report.action,.999999);
@@ -84,7 +86,7 @@ test('the full normal/bonus reply finds the concrete keeper double-step omitted 
   for(let i=0;E.currentTeam(ordinary)==='black'&&ordinary.attack==='white'&&i<4;i++)
     ordinary=apply(ordinary,E.chooseAIAction(ordinary,{difficulty:'tactical',modelWeights:null}));
   const ordinaryThreat=E.studyPositionMetrics(ordinary,'black').bestShotXG;
-  const report=analyzeExerciseAction(initial);
+  const report=analyzeExerciseDefense(initial);
   assert.equal(report.reason,'exhaustive-local-defence');assert.equal(report.stats.localComplete,true);
   assert.ok(report.stats.localStates>100&&report.stats.localStates<=12000);
   assert.ok(report.expectedOpponentShotXG<=.429788);
@@ -92,6 +94,32 @@ test('the full normal/bonus reply finds the concrete keeper double-step omitted 
   assert.deepEqual(report.line.map(s=>[s.action.pieceId,s.action.x,s.action.y,s.action.freePawn]),
     [['black-K',5,0,false],['black-K',6,0,true]]);
   assert.deepEqual(initial,before);
+});
+
+for(const number of [26,27])test(`exercise ${number}: defensive search follows the passing combination instead of winning a static tie by skipping`,()=>{
+  const d=originalStudies[number-1],first=d.exampleActions[0];
+  const state=E.skipMove(apply(createExercisePosition(d),first)),before=structuredClone(state);
+  const local=analyzeExerciseDefense(state);
+  assert.equal(local.expectedOpponentShotXG,0);assert.equal(local.action.type,'skip','the old short horizon misses this combination');
+  const iterations=[],report=analyzeExerciseAction(state,{onIteration:r=>iterations.push(r)});
+  assert.equal(report.reason,'forward-defence');assert.notEqual(report.action.type,'skip');
+  assert.ok(report.stats.completedDepth>=5,'complete iterations extend beyond the defending phase');
+  assert.ok(report.line.some(s=>s.team==='white'&&s.action.type==='kick'),'the continuation examines the next delivery');
+  assert.equal(report.expectedOpponentShotXG,local.expectedOpponentShotXG);
+  assert.ok(iterations.length>1,'workers receive both a safe fallback and completed forward iterations');
+  for(const r of iterations)assert.doesNotThrow(()=>apply(state,r.action));
+  assert.deepEqual(state,before);
+});
+
+test('forward choices preserve exact immediate cover on both successive defending actions',()=>{
+  let state=gap();
+  for(let n=0;n<3&&state.phase==='defendMove';n++){
+    const local=analyzeExerciseDefense(state),report=analyzeExerciseAction(state);
+    assert.ok(report.expectedOpponentShotXG<=local.expectedOpponentShotXG+1e-10);
+    state=apply(state,report.action);
+  }
+  assert.equal(state.phase,'kick');
+  assert.ok(E.studyPositionMetrics(state,'black').bestShotXG<=.429788);
 });
 
 test('an interrupted local search returns a completed legal candidate and reports its limit honestly',()=>{

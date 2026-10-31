@@ -1,11 +1,11 @@
 import {BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, BOX_FILES, BOX_DEPTH, currentTeam, canQuickRelease, legalMoves, legalKicks, disguisedShotTargets, cornerTakers, isBox, isGoalMouth, positionActions, applyKick} from './engine.js?v=eb0ab0924c73';
-import {chooseExerciseAction} from './exercise-ai.js?v=15df911d973e';
-import {EXERCISES} from './exercise-positions.js?v=e8724457fbeb';
-import {createExerciseSession, applyExerciseAction, bestKeeperShotChance, exerciseRoundLimit, exerciseActionExplanation} from './exercise-session.js?v=50b7882e60b6';
+import {chooseExerciseAction} from './exercise-ai.js?v=a8ecd5614d1f';
+import {EXERCISES} from './exercise-positions.js?v=e0b9feffbd62';
+import {createExerciseSession, applyExerciseAction, bestKeeperShotChance, exerciseRoundLimit, exerciseActionExplanation} from './exercise-session.js?v=876c8b619b1e';
 import {createEvaluation} from './evaluation.js?v=79dd005f7cd8';
 
-import {EXERCISE_SOLUTIONS} from './exercise-solutions.js?v=4e0c08554125';
-import {exerciseSolutionFrames,createExerciseSolutionPlayer} from './exercise-solution-player.js?v=412f73fb658b';
+import {EXERCISE_SOLUTIONS} from './exercise-solutions.js?v=8e1d50596c6a';
+import {exerciseSolutionFrames,createExerciseSolutionPlayer} from './exercise-solution-player.js?v=6f01324b4313';
 
 export const EXERCISE_PROGRESS_KEY='football-chess-exercises-v1';
 export const EXERCISE_THEME_LABELS=Object.freeze({'one-on-one':'One on one','through-ball':'Through balls','box-entry':'Into the box',defence:'Defend the finish'});
@@ -119,8 +119,8 @@ export function recordExerciseSolved(progress,id,catalog=EXERCISES){
  * both late worker answers and already scheduled presentation timers.
  */
 export function createExerciseController({definition,makeSession=createExerciseSession,applyAction=applyExerciseAction,
-  workerFactory=typeof Worker==='function'?()=>new Worker(new URL('./exercise-ai-worker.js?v=fffbcfb2af21',import.meta.url),{type:'module',name:'football-chess-exercise-study'}):null,
-  chooseTactical=chooseExerciseAction,now=()=>Date.now(),delayMs=1000,watchdogMs=20000,
+  workerFactory=typeof Worker==='function'?()=>new Worker(new URL('./exercise-ai-worker.js?v=479204ea1cee',import.meta.url),{type:'module',name:'football-chess-exercise-study'}):null,
+  chooseTactical=chooseExerciseAction,now=()=>Date.now(),delayMs=1000,watchdogMs=60000,
   setTimer=(fn,ms)=>setTimeout(fn,ms),clearTimer=id=>clearTimeout(id),onChange=()=>{},onError=()=>{}}={}){
   let session=null,started=false,thinking=false,suspended=false,destroyed=false,generation=0,pending=null,lastAction=null;
   const history=[];
@@ -278,7 +278,7 @@ export function initExercisePage(){
     const explanation=exerciseActionExplanation(last.before,last.after);if(explanation)return explanation;
     const result=last.result||{},piece=last.before.pieces.find(p=>p.id===(result.pieceId||last.action.pieceId||last.before.ball.carrierId));
     const who=piece?`${TEAM[piece.team]} ${pieceName(piece)}`:TEAM[last.actor];
-    if(result.type==='skip')return `${who} ${result.heldCatch?'held the catch to organise':last.before.phase==='keeperReact'?'held the keeper':'ended positioning'}.`;
+    if(result.type==='skip')return `${TEAM[last.actor]} ${result.heldCatch?'held the catch to organise':last.before.phase==='keeperReact'?'held the keeper':'ended positioning'}.`;
     if(result.type==='tackle'||result.type==='tackleMiss')return `${who} challenged${result.outcome==='won'?' and won possession':' but the knight kept the ball'}.`;
     if(last.action.type==='kick')return `${who} ${last.after.pendingShot?'shot at goal':`passed to ${xy(last.action.x,last.action.y)}`}.`;
     return result.to?`${who} moved to ${xy(result.to.x,result.to.y)}${result.freePawn?' with the shared bonus':''}.`:`${who} completed its action.`;

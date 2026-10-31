@@ -1,0 +1,2521 @@
+{
+  "aiVersion": 2,
+  "seed": 1984,
+  "requested": 2,
+  "completed": 2,
+  "solved": 0,
+  "records": [
+    {
+      "number": 26,
+      "id": "tough-relay-to-knight",
+      "title": "Cross, jump, and chip",
+      "revision": 3,
+      "status": "active",
+      "error": null,
+      "nextHuman": 7,
+      "xg": 0.0951010264475311,
+      "rounds": 3,
+      "limit": 4,
+      "target": {
+        "type": "finish",
+        "minShotXG": 0.2
+      },
+      "feedback": "The shot went wide. Obsidian has a goal kick. That finish was worth 10% against the best keeper reply; the target is 20%. Keep playing to create a stronger chance.",
+      "replyChanged": true,
+      "seconds": 17.3,
+      "trace": [
+        {
+          "actor": "white",
+          "phase": "kick",
+          "action": {
+            "type": "kick",
+            "x": 1,
+            "y": 3
+          },
+          "result": {
+            "team": "white",
+            "pieceId": "white-R1",
+            "from": {
+              "x": 1,
+              "y": 6
+            },
+            "intendedTo": {
+              "x": 1,
+              "y": 3
+            },
+            "distance": 3,
+            "accuracy": 1,
+            "probability": 1,
+            "roll": 0.004971988266333938,
+            "type": "kick",
+            "to": {
+              "x": 1,
+              "y": 3
+            },
+            "path": [
+              {
+                "x": 1,
+                "y": 6
+              },
+              {
+                "x": 1,
+                "y": 5
+              },
+              {
+                "x": 1,
+                "y": 4
+              },
+              {
+                "x": 1,
+                "y": 3
+              }
+            ],
+            "outcome": "complete",
+            "receiverId": "white-R2"
+          },
+          "rounds": 1,
+          "applyMs": 3.0619470000000035
+        },
+        {
+          "actor": "white",
+          "phase": "attackMove",
+          "action": {
+            "type": "skip"
+          },
+          "result": {
+            "type": "skip",
+            "team": "white",
+            "phase": "attackMove"
+          },
+          "rounds": 1,
+          "applyMs": 0.2997209999999768
+        },
+        {
+          "actor": "black",
+          "phase": "defendMove",
+          "action": {
+            "type": "move",
+            "pieceId": "black-K",
+            "x": 6,
+            "y": 1,
+            "freePawn": true
+          },
+          "result": {
+            "type": "move",
+            "team": "black",
+            "pieceId": "black-K",
+            "from": {
+              "x": 6,
+              "y": 0
+            },
+            "to": {
+              "x": 6,
+              "y": 1
+            },
+            "path": [
+              {
+                "x": 6,
+                "y": 0
+              },
+              {
+                "x": 6,
+                "y": 1
+              }
+            ],
+            "freePawn": true
+          },
+          "rounds": 1,
+          "analysis": {
+            "reason": "forward-defence",
+            "stats": {
+              "nodes": 24000,
+              "completedDepth": 7,
+              "cacheHits": 2897,
+              "extensions": 60,
+              "cutoffs": 5600,
+              "aborted": true,
+              "localStates": 783,
+              "localComplete": true,
+              "guardStates": 17,
+              "continuationGuardStates": 54
+            },
+            "line": [
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "black-K",
+                  "x": 6,
+                  "y": 1,
+                  "freePawn": true
+                },
+                "team": "black",
+                "phase": "defendMove"
+              },
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "black-R1",
+                  "x": 9,
+                  "y": 0,
+                  "freePawn": false
+                },
+                "team": "black",
+                "phase": "defendMove"
+              },
+              {
+                "action": {
+                  "type": "kick",
+                  "x": 5,
+                  "y": 3
+                },
+                "team": "white",
+                "phase": "kick"
+              },
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "white-B1",
+                  "x": 5,
+                  "y": 3,
+                  "freePawn": false
+                },
+                "team": "white",
+                "phase": "attackMove"
+              },
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "white-B1",
+                  "x": 3,
+                  "y": 1,
+                  "freePawn": false
+                },
+                "team": "white",
+                "phase": "attackMove"
+              },
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "white-K",
+                  "x": 7,
+                  "y": 16,
+                  "freePawn": true
+                },
+                "team": "white",
+                "phase": "attackMove"
+              },
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "black-K",
+                  "x": 5,
+                  "y": 0,
+                  "freePawn": true
+                },
+                "team": "black",
+                "phase": "defendMove"
+              }
+            ],
+            "expectedOpponentShotXG": 0,
+            "ms": 7850.294799
+          },
+          "applyMs": 0.2681929999998829
+        },
+        {
+          "actor": "black",
+          "phase": "defendMove",
+          "action": {
+            "type": "move",
+            "pieceId": "black-R1",
+            "x": 9,
+            "y": 0,
+            "freePawn": false
+          },
+          "result": {
+            "type": "move",
+            "team": "black",
+            "pieceId": "black-R1",
+            "from": {
+              "x": 12,
+              "y": 0
+            },
+            "to": {
+              "x": 9,
+              "y": 0
+            },
+            "path": [
+              {
+                "x": 12,
+                "y": 0
+              },
+              {
+                "x": 9,
+                "y": 0
+              }
+            ],
+            "freePawn": false
+          },
+          "rounds": 1,
+          "analysis": {
+            "reason": "forward-defence",
+            "stats": {
+              "nodes": 24000,
+              "completedDepth": 7,
+              "cacheHits": 8357,
+              "extensions": 275,
+              "cutoffs": 2918,
+              "aborted": true,
+              "localStates": 53,
+              "localComplete": true,
+              "guardStates": 0,
+              "continuationGuardStates": 2
+            },
+            "line": [
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "black-R1",
+                  "x": 9,
+                  "y": 0,
+                  "freePawn": false
+                },
+                "team": "black",
+                "phase": "defendMove"
+              },
+              {
+                "action": {
+                  "type": "kick",
+                  "x": 5,
+                  "y": 3
+                },
+                "team": "white",
+                "phase": "kick"
+              },
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "white-B1",
+                  "x": 5,
+                  "y": 3,
+                  "freePawn": false
+                },
+                "team": "white",
+                "phase": "attackMove"
+              },
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "white-B1",
+                  "x": 3,
+                  "y": 1,
+                  "freePawn": false
+                },
+                "team": "white",
+                "phase": "attackMove"
+              },
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "white-K",
+                  "x": 7,
+                  "y": 16,
+                  "freePawn": true
+                },
+                "team": "white",
+                "phase": "attackMove"
+              },
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "black-K",
+                  "x": 5,
+                  "y": 0,
+                  "freePawn": true
+                },
+                "team": "black",
+                "phase": "defendMove"
+              },
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "black-B1",
+                  "x": 9,
+                  "y": 4,
+                  "freePawn": false
+                },
+                "team": "black",
+                "phase": "defendMove"
+              }
+            ],
+            "expectedOpponentShotXG": 0,
+            "ms": 3127.2751430000008
+          },
+          "applyMs": 0.18201399999998102
+        },
+        {
+          "actor": "white",
+          "phase": "kick",
+          "action": {
+            "type": "kick",
+            "x": 5,
+            "y": 3
+          },
+          "result": {
+            "team": "white",
+            "pieceId": "white-R2",
+            "from": {
+              "x": 1,
+              "y": 3
+            },
+            "intendedTo": {
+              "x": 5,
+              "y": 3
+            },
+            "distance": 4,
+            "accuracy": 1,
+            "probability": 1,
+            "roll": 0.23483699234202504,
+            "type": "kick",
+            "to": {
+              "x": 5,
+              "y": 3
+            },
+            "path": [
+              {
+                "x": 1,
+                "y": 3
+              },
+              {
+                "x": 2,
+                "y": 3
+              },
+              {
+                "x": 3,
+                "y": 3
+              },
+              {
+                "x": 4,
+                "y": 3
+              },
+              {
+                "x": 5,
+                "y": 3
+              }
+            ],
+            "outcome": "complete"
+          },
+          "rounds": 2,
+          "applyMs": 0.3862310000004072
+        },
+        {
+          "actor": "white",
+          "phase": "attackMove",
+          "action": {
+            "type": "move",
+            "pieceId": "white-B1",
+            "x": 5,
+            "y": 3
+          },
+          "result": {
+            "type": "move",
+            "team": "white",
+            "pieceId": "white-B1",
+            "from": {
+              "x": 9,
+              "y": 7
+            },
+            "to": {
+              "x": 5,
+              "y": 3
+            },
+            "path": [
+              {
+                "x": 9,
+                "y": 7
+              },
+              {
+                "x": 5,
+                "y": 3
+              }
+            ],
+            "freePawn": false,
+            "collection": true
+          },
+          "rounds": 2,
+          "applyMs": 0.17333099999996193
+        },
+        {
+          "actor": "white",
+          "phase": "attackMove",
+          "action": {
+            "type": "move",
+            "pieceId": "white-B1",
+            "x": 3,
+            "y": 1
+          },
+          "result": {
+            "type": "move",
+            "team": "white",
+            "pieceId": "white-B1",
+            "from": {
+              "x": 5,
+              "y": 3
+            },
+            "to": {
+              "x": 3,
+              "y": 1
+            },
+            "path": [
+              {
+                "x": 5,
+                "y": 3
+              },
+              {
+                "x": 3,
+                "y": 1
+              }
+            ],
+            "freePawn": false
+          },
+          "rounds": 2,
+          "applyMs": 0.11545299999852432
+        },
+        {
+          "actor": "white",
+          "phase": "attackMove",
+          "action": {
+            "type": "skip"
+          },
+          "result": {
+            "type": "skip",
+            "team": "white",
+            "phase": "attackMove"
+          },
+          "rounds": 2,
+          "applyMs": 0.09581400000024587
+        },
+        {
+          "actor": "black",
+          "phase": "defendMove",
+          "action": {
+            "type": "move",
+            "pieceId": "black-P1",
+            "x": 5,
+            "y": 6,
+            "freePawn": true
+          },
+          "result": {
+            "type": "move",
+            "team": "black",
+            "pieceId": "black-P1",
+            "from": {
+              "x": 4,
+              "y": 6
+            },
+            "to": {
+              "x": 5,
+              "y": 6
+            },
+            "path": [
+              {
+                "x": 4,
+                "y": 6
+              },
+              {
+                "x": 5,
+                "y": 6
+              }
+            ],
+            "freePawn": true
+          },
+          "rounds": 2,
+          "analysis": {
+            "reason": "forward-defence",
+            "stats": {
+              "nodes": 24000,
+              "completedDepth": 4,
+              "cacheHits": 4884,
+              "extensions": 98,
+              "cutoffs": 357,
+              "aborted": true,
+              "localStates": 877,
+              "localComplete": true,
+              "guardStates": 20,
+              "continuationGuardStates": 50
+            },
+            "line": [
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "black-P1",
+                  "x": 5,
+                  "y": 6,
+                  "freePawn": true
+                },
+                "team": "black",
+                "phase": "defendMove"
+              },
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "black-K",
+                  "x": 5,
+                  "y": 1,
+                  "freePawn": false
+                },
+                "team": "black",
+                "phase": "defendMove"
+              },
+              {
+                "action": {
+                  "type": "kick",
+                  "x": 5,
+                  "y": 3
+                },
+                "team": "white",
+                "phase": "kick"
+              },
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "white-R2",
+                  "x": 5,
+                  "y": 3,
+                  "freePawn": false
+                },
+                "team": "white",
+                "phase": "attackMove"
+              }
+            ],
+            "expectedOpponentShotXG": 0.0951010264475311,
+            "ms": 1912.3507869999994
+          },
+          "applyMs": 0.2200009999996837
+        },
+        {
+          "actor": "black",
+          "phase": "defendMove",
+          "action": {
+            "type": "move",
+            "pieceId": "black-K",
+            "x": 5,
+            "y": 1,
+            "freePawn": false
+          },
+          "result": {
+            "type": "move",
+            "team": "black",
+            "pieceId": "black-K",
+            "from": {
+              "x": 6,
+              "y": 1
+            },
+            "to": {
+              "x": 5,
+              "y": 1
+            },
+            "path": [
+              {
+                "x": 6,
+                "y": 1
+              },
+              {
+                "x": 5,
+                "y": 1
+              }
+            ],
+            "freePawn": false
+          },
+          "rounds": 2,
+          "analysis": {
+            "reason": "forward-defence",
+            "stats": {
+              "nodes": 24000,
+              "completedDepth": 4,
+              "cacheHits": 2177,
+              "extensions": 25,
+              "cutoffs": 244,
+              "aborted": true,
+              "localStates": 49,
+              "localComplete": true,
+              "guardStates": 0,
+              "continuationGuardStates": 2
+            },
+            "line": [
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "black-K",
+                  "x": 5,
+                  "y": 1,
+                  "freePawn": false
+                },
+                "team": "black",
+                "phase": "defendMove"
+              },
+              {
+                "action": {
+                  "type": "kick",
+                  "x": 5,
+                  "y": 3
+                },
+                "team": "white",
+                "phase": "kick"
+              },
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "white-R2",
+                  "x": 5,
+                  "y": 3,
+                  "freePawn": false
+                },
+                "team": "white",
+                "phase": "attackMove"
+              },
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "white-K",
+                  "x": 7,
+                  "y": 16,
+                  "freePawn": true
+                },
+                "team": "white",
+                "phase": "attackMove"
+              }
+            ],
+            "expectedOpponentShotXG": 0.0951010264475311,
+            "ms": 1480.5103209999997
+          },
+          "applyMs": 0.2244169999994483
+        },
+        {
+          "actor": "white",
+          "phase": "kick",
+          "action": {
+            "type": "kick",
+            "x": 5,
+            "y": -1
+          },
+          "result": {
+            "type": "shotAttempt",
+            "team": "white",
+            "pieceId": "white-B1",
+            "from": {
+              "x": 3,
+              "y": 1
+            },
+            "to": {
+              "x": 5,
+              "y": -1
+            },
+            "path": [
+              {
+                "x": 3,
+                "y": 1
+              },
+              {
+                "x": 4,
+                "y": 0
+              },
+              {
+                "x": 5,
+                "y": -1
+              }
+            ],
+            "goalTarget": {
+              "x": 5,
+              "y": -1
+            },
+            "probability": 0.21156937842437443,
+            "shotModel": {
+              "probability": 0.21156937842437443,
+              "goalProbability": 0.21156937842437443,
+              "baseGoalProbability": 0.21156937842437443,
+              "scoringMultiplier": 1,
+              "saveProbability": 0.004592659602471257,
+              "missProbability": 0.7838379619731544,
+              "baseOnTargetProbability": 0.21616203802684567,
+              "cornerProbability": 0.002933011467136196,
+              "keeperCornerProbability": 0.002933011467136196,
+              "keeperReboundProbability": 0.0007332528667840492,
+              "caughtSaveProbability": 0.0009263952685510113,
+              "blockerIds": [],
+              "blockerPositions": [],
+              "blockProbability": 0,
+              "blockOutProbability": 0,
+              "blockCornerProbability": 0,
+              "blockPossessionProbability": 0,
+              "arrivalSpeed": 5.2791202748678625,
+              "keeperStretch": 1,
+              "rushParryBonus": 0.03380266308121324,
+              "parryGivenSave": 0.7982878443565622,
+              "onTargetProbability": 0.2161620380268457,
+              "saveGivenOnTarget": 0.0212463744531354,
+              "distance": 2.5,
+              "shotAngleDegrees": 53.13010235415598,
+              "goalDepth": 1.5,
+              "goalOpeningDegrees": 29.744881296942225,
+              "centralGoalOpeningDegrees": 106.26020470831196,
+              "goalOpeningRatio": 0.2799249387726382,
+              "postAngleFactor": 0.23329224946939606,
+              "wideAngleFactor": 1,
+              "centralLaneFactor": 1,
+              "finishingAccuracyMultiplier": 1.15,
+              "shooterType": "B",
+              "distancePenaltyRate": 0.06,
+              "keeperPathDistance": 1.1999999999999997,
+              "keeperDistance": 2,
+              "timeToKeeper": 0.26666666666666666,
+              "reach": 0.5516666666666667,
+              "rushCoverage": 0.015023405813872553,
+              "keeperInBox": true,
+              "emptyNet": false,
+              "emptyNetPassDistance": 0,
+              "closestPoint": {
+                "x": 4.28,
+                "y": 0.040000000000000036
+              },
+              "keeperPosition": {
+                "x": 5,
+                "y": 1
+              },
+              "origin": {
+                "x": 3,
+                "y": 1
+              },
+              "target": {
+                "x": 5,
+                "y": -0.5
+              },
+              "modelVersion": 19,
+              "penalty": false,
+              "directFreeKick": false
+            },
+            "outcome": "pending"
+          },
+          "rounds": 2,
+          "applyMs": 0.4735019999989163
+        },
+        {
+          "actor": "black",
+          "phase": "keeperReact",
+          "action": {
+            "type": "move",
+            "pieceId": "black-K",
+            "x": 4,
+            "y": 0,
+            "freePawn": false
+          },
+          "result": {
+            "pieceId": "white-B1",
+            "shooterId": "white-B1",
+            "shootingTeam": "white",
+            "from": {
+              "x": 3,
+              "y": 1
+            },
+            "goalTarget": {
+              "x": 5,
+              "y": -1
+            },
+            "probability": 0.0951010264475311,
+            "accuracy": 0.0951010264475311,
+            "roll": 0.28074608207680285,
+            "shotModel": {
+              "probability": 0.0951010264475311,
+              "goalProbability": 0.0951010264475311,
+              "baseGoalProbability": 0.0951010264475311,
+              "scoringMultiplier": 1,
+              "saveProbability": 0.12106101157931456,
+              "missProbability": 0.7838379619731544,
+              "baseOnTargetProbability": 0.21616203802684567,
+              "cornerProbability": 0.060816184243698945,
+              "keeperCornerProbability": 0.060816184243698945,
+              "keeperReboundProbability": 0.015204046060924736,
+              "caughtSaveProbability": 0.04504078127469088,
+              "blockerIds": [],
+              "blockerPositions": [],
+              "blockProbability": 0,
+              "blockOutProbability": 0,
+              "blockCornerProbability": 0,
+              "blockPossessionProbability": 0,
+              "arrivalSpeed": 5.364265545002144,
+              "keeperStretch": 0.39344262295081994,
+              "rushParryBonus": 0,
+              "parryGivenSave": 0.6279497363593243,
+              "onTargetProbability": 0.21616203802684567,
+              "saveGivenOnTarget": 0.56004751197007,
+              "distance": 2.5,
+              "shotAngleDegrees": 53.13010235415598,
+              "goalDepth": 1.5,
+              "goalOpeningDegrees": 29.744881296942225,
+              "centralGoalOpeningDegrees": 106.26020470831196,
+              "goalOpeningRatio": 0.2799249387726382,
+              "postAngleFactor": 0.23329224946939606,
+              "wideAngleFactor": 1,
+              "centralLaneFactor": 1,
+              "finishingAccuracyMultiplier": 1.15,
+              "shooterType": "B",
+              "distancePenaltyRate": 0.06,
+              "keeperPathDistance": 0.20000000000000012,
+              "keeperDistance": 1.4142135623730951,
+              "timeToKeeper": 0.2333333333333333,
+              "reach": 0.5083333333333333,
+              "rushCoverage": 0,
+              "keeperInBox": true,
+              "emptyNet": false,
+              "emptyNetPassDistance": 0,
+              "closestPoint": {
+                "x": 4.12,
+                "y": 0.16000000000000003
+              },
+              "keeperPosition": {
+                "x": 4,
+                "y": 0
+              },
+              "origin": {
+                "x": 3,
+                "y": 1
+              },
+              "target": {
+                "x": 5,
+                "y": -0.5
+              },
+              "modelVersion": 19,
+              "penalty": false,
+              "directFreeKick": false
+            },
+            "shotPath": [
+              {
+                "x": 3,
+                "y": 1
+              },
+              {
+                "x": 4,
+                "y": 0
+              },
+              {
+                "x": 5,
+                "y": -1
+              }
+            ],
+            "keeperMove": {
+              "pieceId": "black-K",
+              "from": {
+                "x": 5,
+                "y": 1
+              },
+              "to": {
+                "x": 4,
+                "y": 0
+              }
+            },
+            "type": "shotMiss",
+            "team": "black",
+            "keeperId": "black-K",
+            "to": {
+              "x": 5,
+              "y": 0,
+              "carrierId": "black-K"
+            },
+            "landing": {
+              "x": 5,
+              "y": -1
+            },
+            "exit": {
+              "line": "top",
+              "x": 4.5,
+              "y": -0.5
+            },
+            "path": [
+              {
+                "x": 3,
+                "y": 1
+              },
+              {
+                "x": 4,
+                "y": 0
+              },
+              {
+                "x": 5,
+                "y": -1
+              }
+            ],
+            "outcome": "wide",
+            "restart": {
+              "type": "goalKick",
+              "team": "black",
+              "takerId": "black-K",
+              "spot": {
+                "x": 5,
+                "y": 0
+              },
+              "indirect": false,
+              "exit": {
+                "line": "top",
+                "x": 4.5,
+                "y": -0.5
+              }
+            }
+          },
+          "rounds": 3,
+          "analysis": {
+            "reason": "exact-keeper-response",
+            "stats": {
+              "nodes": 0,
+              "completedDepth": 0,
+              "cacheHits": 0,
+              "extensions": 0,
+              "cutoffs": 0,
+              "aborted": false,
+              "guardStates": 0,
+              "examinedFinishes": 0
+            },
+            "line": [
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "black-K",
+                  "x": 4,
+                  "y": 0,
+                  "freePawn": false
+                },
+                "team": "black",
+                "phase": "keeperReact"
+              }
+            ],
+            "ms": 4.644228000001021
+          },
+          "applyMs": 0.7249200000005658
+        },
+        {
+          "actor": "black",
+          "phase": "attackMove",
+          "action": {
+            "type": "move",
+            "pieceId": "black-N1",
+            "x": 11,
+            "y": 6,
+            "freePawn": false
+          },
+          "result": {
+            "type": "move",
+            "team": "black",
+            "pieceId": "black-N1",
+            "from": {
+              "x": 10,
+              "y": 4
+            },
+            "to": {
+              "x": 11,
+              "y": 6
+            },
+            "path": [
+              {
+                "x": 10,
+                "y": 4
+              },
+              {
+                "x": 11,
+                "y": 6
+              }
+            ],
+            "freePawn": false
+          },
+          "rounds": 3,
+          "analysis": {
+            "reason": "expanded-tactical-search",
+            "stats": {
+              "nodes": 12000,
+              "completedDepth": 5,
+              "cacheHits": 605,
+              "extensions": 0,
+              "cutoffs": 1531,
+              "aborted": true,
+              "guardStates": 0,
+              "examinedFinishes": 0
+            },
+            "line": [
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "black-N1",
+                  "x": 11,
+                  "y": 6,
+                  "freePawn": false
+                },
+                "team": "black",
+                "phase": "attackMove"
+              },
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "black-P2",
+                  "x": 9,
+                  "y": 5,
+                  "freePawn": true
+                },
+                "team": "black",
+                "phase": "attackMove"
+              },
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "white-R2",
+                  "x": 5,
+                  "y": 3,
+                  "freePawn": false
+                },
+                "team": "white",
+                "phase": "defendMove"
+              },
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "white-P1",
+                  "x": 5,
+                  "y": 7,
+                  "freePawn": true
+                },
+                "team": "white",
+                "phase": "defendMove"
+              },
+              {
+                "action": {
+                  "type": "kick",
+                  "x": 11,
+                  "y": 6
+                },
+                "team": "black",
+                "phase": "kick"
+              }
+            ],
+            "ms": 1597.4172200000012
+          },
+          "applyMs": 0.304467999998451
+        },
+        {
+          "actor": "black",
+          "phase": "attackMove",
+          "action": {
+            "type": "move",
+            "pieceId": "black-P1",
+            "x": 4,
+            "y": 6,
+            "freePawn": true
+          },
+          "result": {
+            "type": "move",
+            "team": "black",
+            "pieceId": "black-P1",
+            "from": {
+              "x": 5,
+              "y": 6
+            },
+            "to": {
+              "x": 4,
+              "y": 6
+            },
+            "path": [
+              {
+                "x": 5,
+                "y": 6
+              },
+              {
+                "x": 4,
+                "y": 6
+              }
+            ],
+            "freePawn": true
+          },
+          "rounds": 3,
+          "analysis": {
+            "reason": "expanded-tactical-search",
+            "stats": {
+              "nodes": 12000,
+              "completedDepth": 6,
+              "cacheHits": 2097,
+              "extensions": 0,
+              "cutoffs": 824,
+              "aborted": true,
+              "guardStates": 0,
+              "examinedFinishes": 0
+            },
+            "line": [
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "black-P1",
+                  "x": 4,
+                  "y": 6,
+                  "freePawn": true
+                },
+                "team": "black",
+                "phase": "attackMove"
+              },
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "white-R2",
+                  "x": 5,
+                  "y": 3,
+                  "freePawn": false
+                },
+                "team": "white",
+                "phase": "defendMove"
+              },
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "white-P1",
+                  "x": 5,
+                  "y": 7,
+                  "freePawn": true
+                },
+                "team": "white",
+                "phase": "defendMove"
+              },
+              {
+                "action": {
+                  "type": "kick",
+                  "x": 9,
+                  "y": 0
+                },
+                "team": "black",
+                "phase": "kick"
+              },
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "black-R1",
+                  "x": 9,
+                  "y": 6,
+                  "freePawn": false
+                },
+                "team": "black",
+                "phase": "attackMove"
+              },
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "black-P2",
+                  "x": 9,
+                  "y": 5,
+                  "freePawn": true
+                },
+                "team": "black",
+                "phase": "attackMove"
+              }
+            ],
+            "ms": 1290.386043999999
+          },
+          "applyMs": 0.19447300000319956
+        }
+      ],
+      "finalGame": {
+        "pieces": [
+          {
+            "id": "white-K",
+            "team": "white",
+            "type": "K",
+            "x": 6,
+            "y": 16
+          },
+          {
+            "id": "white-B1",
+            "team": "white",
+            "type": "B",
+            "x": 3,
+            "y": 1
+          },
+          {
+            "id": "white-N2",
+            "team": "white",
+            "type": "N",
+            "x": 2,
+            "y": 9
+          },
+          {
+            "id": "white-P1",
+            "team": "white",
+            "type": "P",
+            "x": 5,
+            "y": 8
+          },
+          {
+            "id": "black-K",
+            "team": "black",
+            "type": "K",
+            "x": 5,
+            "y": 0
+          },
+          {
+            "id": "black-R1",
+            "team": "black",
+            "type": "R",
+            "x": 9,
+            "y": 0
+          },
+          {
+            "id": "black-B1",
+            "team": "black",
+            "type": "B",
+            "x": 13,
+            "y": 8
+          },
+          {
+            "id": "black-N1",
+            "team": "black",
+            "type": "N",
+            "x": 11,
+            "y": 6
+          },
+          {
+            "id": "black-P1",
+            "team": "black",
+            "type": "P",
+            "x": 4,
+            "y": 6
+          },
+          {
+            "id": "black-P2",
+            "team": "black",
+            "type": "P",
+            "x": 8,
+            "y": 5
+          },
+          {
+            "id": "black-P3",
+            "team": "black",
+            "type": "P",
+            "x": 6,
+            "y": 6
+          },
+          {
+            "id": "white-R1",
+            "team": "white",
+            "type": "R",
+            "x": 1,
+            "y": 6
+          },
+          {
+            "id": "white-R2",
+            "team": "white",
+            "type": "R",
+            "x": 1,
+            "y": 3
+          },
+          {
+            "id": "white-N1",
+            "team": "white",
+            "type": "N",
+            "x": 8,
+            "y": 3
+          }
+        ],
+        "formations": {
+          "white": "neutral",
+          "black": "neutral"
+        },
+        "ball": {
+          "x": 5,
+          "y": 0,
+          "carrierId": "black-K"
+        },
+        "attack": "black",
+        "phase": "defendMove",
+        "positionBudget": {
+          "normalUsed": false,
+          "pawnUsed": false,
+          "dribbleUsed": false
+        },
+        "pendingShot": null,
+        "releaseReason": null,
+        "score": {
+          "white": 0,
+          "black": 0
+        },
+        "turn": 4,
+        "randomState": 1205795241,
+        "log": [
+          "Exercise: Cross, jump, and chip. Unused players are omitted from this study.",
+          "White passes to the rook at b14 (100% accuracy).",
+          "White ends its positioning turn.",
+          "Black goalkeeper moves to g16 (free king move).",
+          "Black rook moves to j17.",
+          "White kicks to f14 (100% accuracy). The ball is loose.",
+          "White bishop moves to f14 and collects the ball.",
+          "White bishop dribbles to d16.",
+          "White ends its positioning turn.",
+          "Black pawn moves to f11 (free pawn move).",
+          "Black goalkeeper moves to f16.",
+          "White bishop shoots toward f! Black may move its goalkeeper or hold before the shot resolves.",
+          "Black goalkeeper reacts to e17.",
+          "White shoots wide (78% miss chance). Black has a goal kick. Both teams may reposition before the goalkeeper passes the ball into the pitch.",
+          "Black knight moves to l11.",
+          "Black pawn moves to e11 (free pawn move)."
+        ],
+        "lastAction": {
+          "type": "move",
+          "team": "black",
+          "pieceId": "black-P1",
+          "from": {
+            "x": 5,
+            "y": 6
+          },
+          "to": {
+            "x": 4,
+            "y": 6
+          },
+          "path": [
+            {
+              "x": 5,
+              "y": 6
+            },
+            {
+              "x": 4,
+              "y": 6
+            }
+          ],
+          "freePawn": true
+        },
+        "mode": "local",
+        "minutes": 10,
+        "rulesVersion": 22,
+        "boardDimensions": {
+          "width": 14,
+          "height": 17
+        },
+        "restart": {
+          "type": "goalKick",
+          "team": "black",
+          "takerId": "black-K",
+          "spot": {
+            "x": 5,
+            "y": 0
+          },
+          "indirect": false,
+          "exit": {
+            "line": "top",
+            "x": 4.5,
+            "y": -0.5
+          }
+        },
+        "offside": null,
+        "looseBallKickOrigin": null,
+        "passRun": null,
+        "foulsEnabled": false,
+        "discipline": {},
+        "sentOff": [],
+        "winner": null,
+        "finishReason": null,
+        "ballProgress": {
+          "team": "black",
+          "anchorY": 0,
+          "rounds": 0,
+          "pendingRelease": false,
+          "excludeRelease": false
+        },
+        "paceControl": null
+      }
+    },
+    {
+      "number": 27,
+      "id": "tough-knight-wall-pass",
+      "title": "Link through the knight, then escape",
+      "revision": 2,
+      "status": "illegal",
+      "error": "That is not a legal kick.",
+      "nextHuman": 5,
+      "xg": null,
+      "rounds": 3,
+      "limit": 4,
+      "target": {
+        "type": "finish",
+        "minShotXG": 0.15
+      },
+      "feedback": "Obsidian pawn P1 tackled Ivory queen Q at f14 and won possession, landing on f13. The exercise is still open: win the ball back and build another attack.",
+      "replyChanged": true,
+      "seconds": 45.1,
+      "trace": [
+        {
+          "actor": "white",
+          "phase": "kick",
+          "action": {
+            "type": "kick",
+            "x": 3,
+            "y": 2
+          },
+          "result": {
+            "team": "white",
+            "pieceId": "white-B1",
+            "from": {
+              "x": 0,
+              "y": 5
+            },
+            "intendedTo": {
+              "x": 3,
+              "y": 2
+            },
+            "distance": 3,
+            "accuracy": 1,
+            "probability": 1,
+            "roll": 0.004971988266333938,
+            "type": "kick",
+            "to": {
+              "x": 3,
+              "y": 2
+            },
+            "path": [
+              {
+                "x": 0,
+                "y": 5
+              },
+              {
+                "x": 1,
+                "y": 4
+              },
+              {
+                "x": 2,
+                "y": 3
+              },
+              {
+                "x": 3,
+                "y": 2
+              }
+            ],
+            "outcome": "complete",
+            "receiverId": "white-N1"
+          },
+          "rounds": 1,
+          "applyMs": 2.337206000000009
+        },
+        {
+          "actor": "white",
+          "phase": "attackMove",
+          "action": {
+            "type": "skip"
+          },
+          "result": {
+            "type": "skip",
+            "team": "white",
+            "phase": "attackMove"
+          },
+          "rounds": 1,
+          "applyMs": 0.35285100000001535
+        },
+        {
+          "actor": "black",
+          "phase": "defendMove",
+          "action": {
+            "type": "move",
+            "pieceId": "black-R1",
+            "x": 9,
+            "y": 0,
+            "freePawn": false
+          },
+          "result": {
+            "type": "move",
+            "team": "black",
+            "pieceId": "black-R1",
+            "from": {
+              "x": 12,
+              "y": 0
+            },
+            "to": {
+              "x": 9,
+              "y": 0
+            },
+            "path": [
+              {
+                "x": 12,
+                "y": 0
+              },
+              {
+                "x": 9,
+                "y": 0
+              }
+            ],
+            "freePawn": false
+          },
+          "rounds": 1,
+          "analysis": {
+            "reason": "forward-defence",
+            "stats": {
+              "nodes": 24000,
+              "completedDepth": 6,
+              "cacheHits": 2526,
+              "extensions": 0,
+              "cutoffs": 7884,
+              "aborted": true,
+              "localStates": 687,
+              "localComplete": true,
+              "guardStates": 12,
+              "continuationGuardStates": 15
+            },
+            "line": [
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "black-R1",
+                  "x": 9,
+                  "y": 0,
+                  "freePawn": false
+                },
+                "team": "black",
+                "phase": "defendMove"
+              },
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "black-P1",
+                  "x": 4,
+                  "y": 4,
+                  "freePawn": true
+                },
+                "team": "black",
+                "phase": "defendMove"
+              },
+              {
+                "action": {
+                  "type": "kick",
+                  "x": 5,
+                  "y": 1
+                },
+                "team": "white",
+                "phase": "kick"
+              },
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "white-Q",
+                  "x": 3,
+                  "y": 1,
+                  "freePawn": false
+                },
+                "team": "white",
+                "phase": "attackMove"
+              },
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "white-N2",
+                  "x": 5,
+                  "y": 1,
+                  "freePawn": false
+                },
+                "team": "white",
+                "phase": "attackMove"
+              },
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "white-K",
+                  "x": 7,
+                  "y": 16,
+                  "freePawn": true
+                },
+                "team": "white",
+                "phase": "attackMove"
+              }
+            ],
+            "expectedOpponentShotXG": 0,
+            "ms": 18356.264569
+          },
+          "applyMs": 0.308854999999312
+        },
+        {
+          "actor": "black",
+          "phase": "defendMove",
+          "action": {
+            "type": "move",
+            "pieceId": "black-P2",
+            "x": 7,
+            "y": 5,
+            "freePawn": true
+          },
+          "result": {
+            "type": "move",
+            "team": "black",
+            "pieceId": "black-P2",
+            "from": {
+              "x": 8,
+              "y": 5
+            },
+            "to": {
+              "x": 7,
+              "y": 5
+            },
+            "path": [
+              {
+                "x": 8,
+                "y": 5
+              },
+              {
+                "x": 7,
+                "y": 5
+              }
+            ],
+            "freePawn": true
+          },
+          "rounds": 1,
+          "analysis": {
+            "reason": "forward-defence",
+            "stats": {
+              "nodes": 24000,
+              "completedDepth": 7,
+              "cacheHits": 4622,
+              "extensions": 198,
+              "cutoffs": 4491,
+              "aborted": true,
+              "localStates": 14,
+              "localComplete": true,
+              "guardStates": 12,
+              "continuationGuardStates": 2
+            },
+            "line": [
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "black-P2",
+                  "x": 7,
+                  "y": 5,
+                  "freePawn": true
+                },
+                "team": "black",
+                "phase": "defendMove"
+              },
+              {
+                "action": {
+                  "type": "kick",
+                  "x": 5,
+                  "y": 1
+                },
+                "team": "white",
+                "phase": "kick"
+              },
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "white-Q",
+                  "x": 2,
+                  "y": 1,
+                  "freePawn": false
+                },
+                "team": "white",
+                "phase": "attackMove"
+              },
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "white-N2",
+                  "x": 5,
+                  "y": 1,
+                  "freePawn": false
+                },
+                "team": "white",
+                "phase": "attackMove"
+              },
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "white-K",
+                  "x": 7,
+                  "y": 16,
+                  "freePawn": true
+                },
+                "team": "white",
+                "phase": "attackMove"
+              },
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "black-B1",
+                  "x": 6,
+                  "y": 1,
+                  "freePawn": false
+                },
+                "team": "black",
+                "phase": "defendMove"
+              },
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "black-P1",
+                  "x": 4,
+                  "y": 4,
+                  "freePawn": true
+                },
+                "team": "black",
+                "phase": "defendMove"
+              }
+            ],
+            "expectedOpponentShotXG": 0,
+            "ms": 10786.360426
+          },
+          "applyMs": 0.29595599999811384
+        },
+        {
+          "actor": "white",
+          "phase": "kick",
+          "action": {
+            "type": "kick",
+            "x": 5,
+            "y": 1
+          },
+          "result": {
+            "team": "white",
+            "pieceId": "white-N1",
+            "from": {
+              "x": 3,
+              "y": 2
+            },
+            "intendedTo": {
+              "x": 5,
+              "y": 1
+            },
+            "distance": 2,
+            "accuracy": 1,
+            "probability": 1,
+            "roll": 0.23483699234202504,
+            "type": "kick",
+            "to": {
+              "x": 5,
+              "y": 1
+            },
+            "path": [
+              {
+                "x": 3,
+                "y": 2
+              },
+              {
+                "x": 5,
+                "y": 1
+              }
+            ],
+            "outcome": "complete",
+            "receiverId": "white-Q"
+          },
+          "rounds": 2,
+          "applyMs": 0.1542120000012801
+        },
+        {
+          "actor": "white",
+          "phase": "attackMove",
+          "action": {
+            "type": "move",
+            "pieceId": "white-Q",
+            "x": 5,
+            "y": 3
+          },
+          "result": {
+            "type": "move",
+            "team": "white",
+            "pieceId": "white-Q",
+            "from": {
+              "x": 5,
+              "y": 1
+            },
+            "to": {
+              "x": 5,
+              "y": 3
+            },
+            "path": [
+              {
+                "x": 5,
+                "y": 1
+              },
+              {
+                "x": 5,
+                "y": 3
+              }
+            ],
+            "freePawn": false
+          },
+          "rounds": 2,
+          "applyMs": 0.13881899999978486
+        },
+        {
+          "actor": "white",
+          "phase": "attackMove",
+          "action": {
+            "type": "skip"
+          },
+          "result": {
+            "type": "skip",
+            "team": "white",
+            "phase": "attackMove"
+          },
+          "rounds": 2,
+          "applyMs": 0.09565400000064983
+        },
+        {
+          "actor": "black",
+          "phase": "defendMove",
+          "action": {
+            "type": "move",
+            "pieceId": "black-P1",
+            "x": 4,
+            "y": 4,
+            "freePawn": true
+          },
+          "result": {
+            "type": "move",
+            "team": "black",
+            "pieceId": "black-P1",
+            "from": {
+              "x": 4,
+              "y": 5
+            },
+            "to": {
+              "x": 4,
+              "y": 4
+            },
+            "path": [
+              {
+                "x": 4,
+                "y": 5
+              },
+              {
+                "x": 4,
+                "y": 4
+              }
+            ],
+            "freePawn": true
+          },
+          "rounds": 2,
+          "analysis": {
+            "reason": "guaranteed-possession-win",
+            "stats": {
+              "nodes": 0,
+              "completedDepth": 0,
+              "guardStates": 10
+            },
+            "line": [
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "black-P1",
+                  "x": 4,
+                  "y": 4,
+                  "freePawn": true
+                },
+                "team": "black",
+                "phase": "defendMove"
+              },
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "black-P1",
+                  "x": 5,
+                  "y": 4,
+                  "freePawn": false
+                },
+                "team": "black",
+                "phase": "defendMove"
+              }
+            ],
+            "ms": 0.6990619999996852
+          },
+          "applyMs": 0.12548900000183494
+        },
+        {
+          "actor": "black",
+          "phase": "defendMove",
+          "action": {
+            "type": "move",
+            "pieceId": "black-P1",
+            "x": 5,
+            "y": 4,
+            "freePawn": false
+          },
+          "result": {
+            "type": "tackle",
+            "team": "black",
+            "pieceId": "black-P1",
+            "from": {
+              "x": 4,
+              "y": 4
+            },
+            "to": {
+              "x": 5,
+              "y": 4
+            },
+            "path": [
+              {
+                "x": 4,
+                "y": 4
+              },
+              {
+                "x": 5,
+                "y": 3
+              },
+              {
+                "x": 5,
+                "y": 4
+              }
+            ],
+            "freePawn": false,
+            "targetId": "white-Q",
+            "probability": 1,
+            "tackleSuccess": true,
+            "outcome": "won"
+          },
+          "rounds": 3,
+          "analysis": {
+            "reason": "guaranteed-possession-win",
+            "stats": {
+              "nodes": 0,
+              "completedDepth": 0,
+              "guardStates": 1
+            },
+            "line": [
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "black-P1",
+                  "x": 5,
+                  "y": 4,
+                  "freePawn": false
+                },
+                "team": "black",
+                "phase": "defendMove"
+              }
+            ],
+            "ms": 0.15160800000012387
+          },
+          "applyMs": 0.3758960000013758
+        },
+        {
+          "actor": "black",
+          "phase": "attackMove",
+          "action": {
+            "type": "move",
+            "pieceId": "black-P1",
+            "x": 5,
+            "y": 5,
+            "freePawn": false
+          },
+          "result": {
+            "type": "move",
+            "team": "black",
+            "pieceId": "black-P1",
+            "from": {
+              "x": 5,
+              "y": 4
+            },
+            "to": {
+              "x": 5,
+              "y": 5
+            },
+            "path": [
+              {
+                "x": 5,
+                "y": 4
+              },
+              {
+                "x": 5,
+                "y": 5
+              }
+            ],
+            "freePawn": false
+          },
+          "rounds": 3,
+          "analysis": {
+            "reason": "expanded-tactical-search",
+            "stats": {
+              "nodes": 12000,
+              "completedDepth": 5,
+              "cacheHits": 1728,
+              "extensions": 0,
+              "cutoffs": 1456,
+              "aborted": true,
+              "guardStates": 0,
+              "examinedFinishes": 0
+            },
+            "line": [
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "black-P1",
+                  "x": 5,
+                  "y": 5,
+                  "freePawn": false
+                },
+                "team": "black",
+                "phase": "attackMove"
+              },
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "black-P2",
+                  "x": 6,
+                  "y": 5,
+                  "freePawn": true
+                },
+                "team": "black",
+                "phase": "attackMove"
+              },
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "black-R1",
+                  "x": 9,
+                  "y": 1,
+                  "freePawn": false
+                },
+                "team": "black",
+                "phase": "attackMove"
+              },
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "white-Q",
+                  "x": 5,
+                  "y": 4,
+                  "freePawn": false
+                },
+                "team": "white",
+                "phase": "defendMove"
+              },
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "white-B1",
+                  "x": 1,
+                  "y": 4,
+                  "freePawn": false
+                },
+                "team": "white",
+                "phase": "attackMove"
+              }
+            ],
+            "ms": 4508.696233000002
+          },
+          "applyMs": 0.2204619999974966
+        },
+        {
+          "actor": "black",
+          "phase": "attackMove",
+          "action": {
+            "type": "move",
+            "pieceId": "black-P2",
+            "x": 6,
+            "y": 5,
+            "freePawn": true
+          },
+          "result": {
+            "type": "move",
+            "team": "black",
+            "pieceId": "black-P2",
+            "from": {
+              "x": 7,
+              "y": 5
+            },
+            "to": {
+              "x": 6,
+              "y": 5
+            },
+            "path": [
+              {
+                "x": 7,
+                "y": 5
+              },
+              {
+                "x": 6,
+                "y": 5
+              }
+            ],
+            "freePawn": true
+          },
+          "rounds": 3,
+          "analysis": {
+            "reason": "expanded-tactical-search",
+            "stats": {
+              "nodes": 12000,
+              "completedDepth": 4,
+              "cacheHits": 1121,
+              "extensions": 0,
+              "cutoffs": 636,
+              "aborted": true,
+              "guardStates": 0,
+              "examinedFinishes": 0
+            },
+            "line": [
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "black-P2",
+                  "x": 6,
+                  "y": 5,
+                  "freePawn": true
+                },
+                "team": "black",
+                "phase": "attackMove"
+              },
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "black-R1",
+                  "x": 9,
+                  "y": 1,
+                  "freePawn": false
+                },
+                "team": "black",
+                "phase": "attackMove"
+              },
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "white-Q",
+                  "x": 5,
+                  "y": 4,
+                  "freePawn": false
+                },
+                "team": "white",
+                "phase": "defendMove"
+              },
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "white-B1",
+                  "x": 1,
+                  "y": 4,
+                  "freePawn": false
+                },
+                "team": "white",
+                "phase": "attackMove"
+              }
+            ],
+            "ms": 4063.674613999996
+          },
+          "applyMs": 0.19131800000468502
+        },
+        {
+          "actor": "black",
+          "phase": "attackMove",
+          "action": {
+            "type": "move",
+            "pieceId": "black-R1",
+            "x": 9,
+            "y": 8,
+            "freePawn": false
+          },
+          "result": {
+            "type": "move",
+            "team": "black",
+            "pieceId": "black-R1",
+            "from": {
+              "x": 9,
+              "y": 0
+            },
+            "to": {
+              "x": 9,
+              "y": 8
+            },
+            "path": [
+              {
+                "x": 9,
+                "y": 0
+              },
+              {
+                "x": 9,
+                "y": 8
+              }
+            ],
+            "freePawn": false
+          },
+          "rounds": 3,
+          "analysis": {
+            "reason": "expanded-tactical-search",
+            "stats": {
+              "nodes": 12000,
+              "completedDepth": 6,
+              "cacheHits": 1426,
+              "extensions": 0,
+              "cutoffs": 3468,
+              "aborted": true,
+              "guardStates": 0,
+              "examinedFinishes": 0
+            },
+            "line": [
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "black-R1",
+                  "x": 9,
+                  "y": 8,
+                  "freePawn": false
+                },
+                "team": "black",
+                "phase": "attackMove"
+              },
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "white-Q",
+                  "x": 6,
+                  "y": 4,
+                  "freePawn": false
+                },
+                "team": "white",
+                "phase": "defendMove"
+              },
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "white-Q",
+                  "x": 3,
+                  "y": 1,
+                  "freePawn": false
+                },
+                "team": "white",
+                "phase": "attackMove"
+              },
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "white-N2",
+                  "x": 5,
+                  "y": 1,
+                  "freePawn": false
+                },
+                "team": "white",
+                "phase": "attackMove"
+              },
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "white-K",
+                  "x": 7,
+                  "y": 16,
+                  "freePawn": true
+                },
+                "team": "white",
+                "phase": "attackMove"
+              },
+              {
+                "action": {
+                  "type": "move",
+                  "pieceId": "black-K",
+                  "x": 5,
+                  "y": 0,
+                  "freePawn": true
+                },
+                "team": "black",
+                "phase": "defendMove"
+              }
+            ],
+            "ms": 7413.015442999997
+          },
+          "applyMs": 0.1744620000026771
+        }
+      ],
+      "finalGame": {
+        "pieces": [
+          {
+            "id": "white-K",
+            "team": "white",
+            "type": "K",
+            "x": 6,
+            "y": 16
+          },
+          {
+            "id": "white-B1",
+            "team": "white",
+            "type": "B",
+            "x": 0,
+            "y": 5
+          },
+          {
+            "id": "white-N1",
+            "team": "white",
+            "type": "N",
+            "x": 3,
+            "y": 2
+          },
+          {
+            "id": "white-Q",
+            "team": "white",
+            "type": "Q",
+            "x": 5,
+            "y": 3
+          },
+          {
+            "id": "white-N2",
+            "team": "white",
+            "type": "N",
+            "x": 7,
+            "y": 2
+          },
+          {
+            "id": "white-P1",
+            "team": "white",
+            "type": "P",
+            "x": 5,
+            "y": 8
+          },
+          {
+            "id": "white-P2",
+            "team": "white",
+            "type": "P",
+            "x": 11,
+            "y": 1
+          },
+          {
+            "id": "white-R1",
+            "team": "white",
+            "type": "R",
+            "x": 0,
+            "y": 8
+          },
+          {
+            "id": "black-K",
+            "team": "black",
+            "type": "K",
+            "x": 6,
+            "y": 0
+          },
+          {
+            "id": "black-R1",
+            "team": "black",
+            "type": "R",
+            "x": 9,
+            "y": 8
+          },
+          {
+            "id": "black-R2",
+            "team": "black",
+            "type": "R",
+            "x": 13,
+            "y": 1
+          },
+          {
+            "id": "black-B1",
+            "team": "black",
+            "type": "B",
+            "x": 13,
+            "y": 8
+          },
+          {
+            "id": "black-N1",
+            "team": "black",
+            "type": "N",
+            "x": 10,
+            "y": 4
+          },
+          {
+            "id": "black-P1",
+            "team": "black",
+            "type": "P",
+            "x": 5,
+            "y": 5
+          },
+          {
+            "id": "black-P2",
+            "team": "black",
+            "type": "P",
+            "x": 6,
+            "y": 5
+          }
+        ],
+        "formations": {
+          "white": "neutral",
+          "black": "neutral"
+        },
+        "ball": {
+          "x": 5,
+          "y": 5,
+          "carrierId": "black-P1"
+        },
+        "attack": "black",
+        "phase": "defendMove",
+        "positionBudget": {
+          "normalUsed": false,
+          "pawnUsed": false,
+          "dribbleUsed": false
+        },
+        "pendingShot": null,
+        "releaseReason": null,
+        "score": {
+          "white": 0,
+          "black": 0
+        },
+        "turn": 4,
+        "randomState": 1008617202,
+        "log": [
+          "Exercise: Link through the knight, then escape. Unused players are omitted from this study.",
+          "White passes to the knight at d15 (100% accuracy).",
+          "White ends its positioning turn.",
+          "Black rook moves to j17.",
+          "Black pawn moves to h12 (free pawn move).",
+          "White passes to the queen at f16 (100% accuracy).",
+          "White queen dribbles to f14.",
+          "White ends its positioning turn.",
+          "Black pawn moves to e13 (free pawn move).",
+          "Black pawn wins the tackle (100% chance) and takes possession at f13.",
+          "Black pawn dribbles to f12.",
+          "Black pawn moves to g12 (free pawn move).",
+          "Black rook moves to j9."
+        ],
+        "lastAction": {
+          "type": "move",
+          "team": "black",
+          "pieceId": "black-R1",
+          "from": {
+            "x": 9,
+            "y": 0
+          },
+          "to": {
+            "x": 9,
+            "y": 8
+          },
+          "path": [
+            {
+              "x": 9,
+              "y": 0
+            },
+            {
+              "x": 9,
+              "y": 8
+            }
+          ],
+          "freePawn": false
+        },
+        "mode": "local",
+        "minutes": 10,
+        "rulesVersion": 22,
+        "boardDimensions": {
+          "width": 14,
+          "height": 17
+        },
+        "restart": null,
+        "offside": null,
+        "looseBallKickOrigin": null,
+        "passRun": null,
+        "foulsEnabled": false,
+        "discipline": {},
+        "sentOff": [],
+        "winner": null,
+        "finishReason": null,
+        "ballProgress": {
+          "team": "black",
+          "anchorY": 4,
+          "rounds": 0,
+          "pendingRelease": false,
+          "excludeRelease": false
+        },
+        "paceControl": {
+          "team": "black",
+          "carrierId": "black-P1",
+          "dribbleRounds": 0,
+          "dribbledThisRound": true,
+          "history": [],
+          "furthestAdvance": 4
+        }
+      }
+    }
+  ]
+}

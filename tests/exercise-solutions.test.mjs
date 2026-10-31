@@ -4,6 +4,7 @@ import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {EXERCISES} from '../dist/exercise-positions.js';
 import {EXERCISE_SOLUTIONS} from '../dist/exercise-solutions.js';
+import {EXERCISE_AI_VERSION} from '../dist/exercise-ai.js';
 import {exerciseSolutionFrames,createExerciseSolutionPlayer} from '../dist/exercise-solution-player.js';
 import {createExerciseSession,applyExerciseAction} from '../dist/exercise-session.js';
 import {syncExerciseEvaluation} from '../dist/exercises-app.js';
@@ -12,6 +13,9 @@ test('every current exercise has a recorded example for this engine',()=>{
   assert.deepEqual(Object.keys(EXERCISE_SOLUTIONS.examples),EXERCISES.map(d=>d.id));
   const hash=createHash('sha256').update(readFileSync(new URL('../dist/engine.js',import.meta.url))).digest('hex');
   assert.equal(EXERCISE_SOLUTIONS.engineHash,hash,'Regenerate example replies after an engine change');
+  const aiHash=createHash('sha256').update(readFileSync(new URL('../dist/exercise-ai.js',import.meta.url))).digest('hex');
+  assert.equal(EXERCISE_SOLUTIONS.aiVersion,EXERCISE_AI_VERSION);
+  assert.equal(EXERCISE_SOLUTIONS.aiHash,aiHash,'Regenerate example replies after an exercise opponent change');
 });
 for(const definition of EXERCISES)test(`${definition.id}: every recorded action is legal and the example meets the actual objective`,()=>{
   const original=structuredClone(EXERCISE_SOLUTIONS),frames=exerciseSolutionFrames(definition,EXERCISE_SOLUTIONS);
@@ -36,7 +40,7 @@ test('demonstrating exercise 30 uses a separate session and preserves an in-prog
 });
 test('outdated, incomplete and illegal examples are rejected before presentation',()=>{
   const definition=EXERCISES[29],id=definition.id;
-  for(const change of [data=>data.rulesVersion--,data=>data.examples[id].revision--,data=>data.examples[id].actions.pop(),data=>data.examples[id].actions[0]={type:'move',pieceId:'missing',x:0,y:0}]){
+  for(const change of [data=>data.rulesVersion--,data=>data.aiVersion--,data=>data.examples[id].revision--,data=>data.examples[id].actions.pop(),data=>data.examples[id].actions[0]={type:'move',pieceId:'missing',x:0,y:0}]){
     const data=structuredClone(EXERCISE_SOLUTIONS);change(data);assert.throws(()=>exerciseSolutionFrames(definition,data));
   }
 });

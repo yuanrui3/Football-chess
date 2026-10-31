@@ -4,7 +4,7 @@
  */
 import {createGame,applyKick} from './engine.js?v=eb0ab0924c73';
 import {MEDIUM_EXERCISES} from './exercise-medium.js?v=058ae5d6ae6e';
-import {TOUGH_ATTACK_EXERCISES} from './exercise-tough-attack.js?v=29b11d9a3e19';
+import {TOUGH_ATTACK_EXERCISES} from './exercise-tough-attack.js?v=acabefd0abe4';
 import {TOUGH_MIXED_EXERCISES} from './exercise-tough-mixed.js?v=c7478b669f7b';
 import {TOUGH_DEFENCE_EXTRA} from './exercise-tough-defence-extra.js?v=b5c068a8f4ca';
 

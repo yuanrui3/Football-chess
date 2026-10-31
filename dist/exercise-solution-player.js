@@ -1,10 +1,11 @@
 import {currentTeam,RULES_VERSION} from './engine.js?v=eb0ab0924c73';
-import {createExerciseSession,applyExerciseAction} from './exercise-session.js?v=50b7882e60b6';
+import {createExerciseSession,applyExerciseAction} from './exercise-session.js?v=876c8b619b1e';
+import {EXERCISE_AI_VERSION} from './exercise-ai.js?v=a8ecd5614d1f';
 
 // Reconstruct a separate, verified demonstration. Never borrow the live attempt.
 export function exerciseSolutionFrames(definition,library){
   const record=library?.examples?.[definition?.id];
-  if(library?.format!==1||library.rulesVersion!==RULES_VERSION||record?.revision!==(definition.revision||1)
+  if(library?.format!==1||library.rulesVersion!==RULES_VERSION||library.aiVersion!==EXERCISE_AI_VERSION||record?.revision!==(definition.revision||1)
     ||!Array.isArray(record.actions)||!record.actions.length||record.actions.length>96)
     throw Error('This example solution needs updating. You can still play the exercise.');
   let session=createExerciseSession(definition,{seed:record.seed});

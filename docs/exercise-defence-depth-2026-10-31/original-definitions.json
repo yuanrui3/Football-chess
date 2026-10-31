@@ -1,0 +1,4491 @@
+[
+  {
+    "id": "pick-the-open-file",
+    "title": "Take the central finish",
+    "revision": 2,
+    "theme": "one-on-one",
+    "side": "attack",
+    "playerTeam": "white",
+    "roundLimit": 3,
+    "objective": "Create and take any legal finish worth at least 25% against the best keeper reply.",
+    "coachNote": "The keeper starts centrally on g17. A close central shot is a useful chance even against proper goalkeeping; it is not an empty-net finish. The ordinary shot, rather than a favourable sampled goal, meets this outcome.",
+    "hints": [
+      "The keeper is in a normal central position.",
+      "The queen already has a close legal shot; another pass is not compulsory.",
+      "From g15, the direct G-goal shot is worth about 26% against the best keeper reaction."
+    ],
+    "goal": {
+      "type": "finish",
+      "minShotXG": 0.25,
+      "requires": null,
+      "boxEntryMode": "pass"
+    },
+    "position": {
+      "pieces": [
+        {
+          "id": "white-K",
+          "team": "white",
+          "type": "K",
+          "x": 6,
+          "y": 16
+        },
+        {
+          "id": "black-K",
+          "team": "black",
+          "type": "K",
+          "x": 6,
+          "y": 0
+        },
+        {
+          "id": "black-R1",
+          "team": "black",
+          "type": "R",
+          "x": 13,
+          "y": 1
+        },
+        {
+          "id": "black-B1",
+          "team": "black",
+          "type": "B",
+          "x": 13,
+          "y": 8
+        },
+        {
+          "id": "white-Q",
+          "team": "white",
+          "type": "Q",
+          "x": 6,
+          "y": 2
+        }
+      ],
+      "carrierId": "white-Q",
+      "phase": "kick",
+      "attack": "white"
+    },
+    "exampleActions": [
+      {
+        "type": "kick",
+        "x": 6,
+        "y": -1
+      }
+    ],
+    "difficulty": "easy"
+  },
+  {
+    "id": "knights-two-posts",
+    "title": "The knight has two posts",
+    "revision": 2,
+    "theme": "one-on-one",
+    "side": "attack",
+    "playerTeam": "white",
+    "roundLimit": 3,
+    "objective": "Create and take any legal finish worth at least 45% after the best keeper reply.",
+    "coachNote": "A central keeper still has to react to the knight’s L-shaped target. Both reachable posts offer a useful finish here, and a legal disguise is another option. No particular target is required.",
+    "hints": [
+      "The knight does not shoot straight ahead.",
+      "Look one file across and two ranks toward the net.",
+      "From g16, F and H are legal L-shaped targets. Compare both against the central keeper or try the two-target disguise."
+    ],
+    "goal": {
+      "type": "finish",
+      "minShotXG": 0.45,
+      "requires": null,
+      "boxEntryMode": "pass"
+    },
+    "position": {
+      "pieces": [
+        {
+          "id": "white-K",
+          "team": "white",
+          "type": "K",
+          "x": 6,
+          "y": 16
+        },
+        {
+          "id": "black-K",
+          "team": "black",
+          "type": "K",
+          "x": 6,
+          "y": 0
+        },
+        {
+          "id": "black-R1",
+          "team": "black",
+          "type": "R",
+          "x": 13,
+          "y": 1
+        },
+        {
+          "id": "black-B1",
+          "team": "black",
+          "type": "B",
+          "x": 13,
+          "y": 8
+        },
+        {
+          "id": "white-N1",
+          "team": "white",
+          "type": "N",
+          "x": 6,
+          "y": 1
+        }
+      ],
+      "carrierId": "white-N1",
+      "phase": "kick",
+      "attack": "white"
+    },
+    "exampleActions": [
+      {
+        "type": "kick",
+        "x": 5,
+        "y": -1
+      }
+    ],
+    "difficulty": "easy"
+  },
+  {
+    "id": "queen-two-targets",
+    "title": "Keep the goalkeeper guessing",
+    "theme": "one-on-one",
+    "side": "attack",
+    "playerTeam": "white",
+    "roundLimit": 3,
+    "objective": "Create a finish worth at least 35%; more than one target or shooting choice can succeed.",
+    "coachNote": "The queen reaches two goal targets against a central keeper. Disguise makes the keeper respond before the actual target is chosen. Either sufficiently strong direct aim also counts.",
+    "hints": [
+      "The queen has a straight target and a diagonal target.",
+      "The keeper can react to a single declared aim, but a disguised shot shows two possibilities.",
+      "From g16, G and I are legal targets. The disguised pair is a strong way to use both."
+    ],
+    "goal": {
+      "type": "finish",
+      "minShotXG": 0.35,
+      "requires": null,
+      "boxEntryMode": "pass"
+    },
+    "position": {
+      "pieces": [
+        {
+          "id": "white-K",
+          "team": "white",
+          "type": "K",
+          "x": 6,
+          "y": 16
+        },
+        {
+          "id": "black-K",
+          "team": "black",
+          "type": "K",
+          "x": 7,
+          "y": 0
+        },
+        {
+          "id": "black-R1",
+          "team": "black",
+          "type": "R",
+          "x": 13,
+          "y": 1
+        },
+        {
+          "id": "black-B1",
+          "team": "black",
+          "type": "B",
+          "x": 13,
+          "y": 8
+        },
+        {
+          "id": "white-Q",
+          "team": "white",
+          "type": "Q",
+          "x": 6,
+          "y": 1
+        }
+      ],
+      "carrierId": "white-Q",
+      "phase": "kick",
+      "attack": "white"
+    },
+    "exampleActions": [
+      {
+        "type": "kick",
+        "x": 6,
+        "y": -1,
+        "disguise": true
+      }
+    ],
+    "difficulty": "easy"
+  },
+  {
+    "id": "release-the-knight",
+    "title": "Release the knight beyond the line",
+    "revision": 2,
+    "theme": "through-ball",
+    "side": "attack",
+    "playerTeam": "white",
+    "roundLimit": 4,
+    "objective": "Create and take any legal finish worth at least 20% against the best keeper reply.",
+    "coachNote": "The keeper begins centrally. A forward delivery into h15 lets the onside knight collect and continue toward j16, far enough from the keeper to avoid an immediate challenge. The resulting 23% chance is useful against a properly positioned defence; the through ball is one possible route.",
+    "hints": [
+      "The keeper can challenge a receiver that stops too close to it.",
+      "A ball to h15 lets the knight make a separate onward dribble toward the far side.",
+      "One plan is Bd11–h15, Nf14–h15 to collect, then Nj16 and an I-goal shot."
+    ],
+    "goal": {
+      "type": "finish",
+      "minShotXG": 0.2,
+      "requires": "through-ball",
+      "boxEntryMode": "pass"
+    },
+    "position": {
+      "pieces": [
+        {
+          "id": "white-K",
+          "team": "white",
+          "type": "K",
+          "x": 6,
+          "y": 16
+        },
+        {
+          "id": "black-K",
+          "team": "black",
+          "type": "K",
+          "x": 6,
+          "y": 0
+        },
+        {
+          "id": "black-R1",
+          "team": "black",
+          "type": "R",
+          "x": 4,
+          "y": 3
+        },
+        {
+          "id": "black-B1",
+          "team": "black",
+          "type": "B",
+          "x": 13,
+          "y": 8
+        },
+        {
+          "id": "white-B1",
+          "team": "white",
+          "type": "B",
+          "x": 3,
+          "y": 6
+        },
+        {
+          "id": "white-N1",
+          "team": "white",
+          "type": "N",
+          "x": 5,
+          "y": 3
+        }
+      ],
+      "carrierId": "white-B1",
+      "phase": "kick",
+      "attack": "white"
+    },
+    "exampleActions": [
+      {
+        "type": "kick",
+        "x": 7,
+        "y": 2
+      },
+      {
+        "type": "move",
+        "pieceId": "white-N1",
+        "x": 7,
+        "y": 2
+      },
+      {
+        "type": "move",
+        "pieceId": "white-N1",
+        "x": 9,
+        "y": 1
+      },
+      {
+        "type": "skip"
+      },
+      {
+        "type": "kick",
+        "x": 8,
+        "y": -1
+      }
+    ],
+    "difficulty": "easy"
+  },
+  {
+    "id": "diagonal-pocket",
+    "title": "Find the diagonal pocket",
+    "revision": 2,
+    "theme": "through-ball",
+    "side": "attack",
+    "playerTeam": "white",
+    "roundLimit": 4,
+    "objective": "Create and take any legal finish worth at least 20% against the best keeper reply.",
+    "coachNote": "The pass can go to empty space ahead of an onside knight. After collecting, continuing to j16 creates separation from the central goalkeeper; stopping on the nearer side gives it a challenge. Any legal plan reaching the chance target earns credit.",
+    "hints": [
+      "The knight is level with the second-last defender at release.",
+      "The empty h15 square lies on the queen’s diagonal and one knight jump away.",
+      "One route is Qf13–h15, Nf14–h15 to collect, then Nj16 and the I-goal finish."
+    ],
+    "goal": {
+      "type": "finish",
+      "minShotXG": 0.2,
+      "requires": "through-ball",
+      "boxEntryMode": "pass"
+    },
+    "position": {
+      "pieces": [
+        {
+          "id": "white-K",
+          "team": "white",
+          "type": "K",
+          "x": 6,
+          "y": 16
+        },
+        {
+          "id": "black-K",
+          "team": "black",
+          "type": "K",
+          "x": 6,
+          "y": 0
+        },
+        {
+          "id": "black-R1",
+          "team": "black",
+          "type": "R",
+          "x": 4,
+          "y": 3
+        },
+        {
+          "id": "black-B1",
+          "team": "black",
+          "type": "B",
+          "x": 13,
+          "y": 8
+        },
+        {
+          "id": "white-Q",
+          "team": "white",
+          "type": "Q",
+          "x": 5,
+          "y": 4
+        },
+        {
+          "id": "white-N1",
+          "team": "white",
+          "type": "N",
+          "x": 5,
+          "y": 3
+        }
+      ],
+      "carrierId": "white-Q",
+      "phase": "kick",
+      "attack": "white"
+    },
+    "exampleActions": [
+      {
+        "type": "kick",
+        "x": 7,
+        "y": 2
+      },
+      {
+        "type": "move",
+        "pieceId": "white-N1",
+        "x": 7,
+        "y": 2
+      },
+      {
+        "type": "move",
+        "pieceId": "white-N1",
+        "x": 9,
+        "y": 1
+      },
+      {
+        "type": "skip"
+      },
+      {
+        "type": "kick",
+        "x": 8,
+        "y": -1
+      }
+    ],
+    "difficulty": "easy"
+  },
+  {
+    "id": "pass-down-the-channel",
+    "title": "Pass down the channel",
+    "revision": 2,
+    "theme": "through-ball",
+    "side": "attack",
+    "playerTeam": "white",
+    "roundLimit": 4,
+    "objective": "Create and take any legal finish worth at least 20% against the best keeper reply.",
+    "coachNote": "A through ball can follow a rook’s file. The knight collects beyond the defensive line and changes direction toward j16. The keeper starts centrally and gets its full reply, so separation from its tackling reach matters.",
+    "hints": [
+      "The rook can send a forward ball down the h-file.",
+      "An onside knight can reach h15, then use its separate dribble.",
+      "One plan is Rh11–h15, Nf14–h15 to collect, then Nj16 and an I-goal shot."
+    ],
+    "goal": {
+      "type": "finish",
+      "minShotXG": 0.2,
+      "requires": "through-ball",
+      "boxEntryMode": "pass"
+    },
+    "position": {
+      "pieces": [
+        {
+          "id": "white-K",
+          "team": "white",
+          "type": "K",
+          "x": 6,
+          "y": 16
+        },
+        {
+          "id": "black-K",
+          "team": "black",
+          "type": "K",
+          "x": 6,
+          "y": 0
+        },
+        {
+          "id": "black-R1",
+          "team": "black",
+          "type": "R",
+          "x": 6,
+          "y": 3
+        },
+        {
+          "id": "black-B1",
+          "team": "black",
+          "type": "B",
+          "x": 13,
+          "y": 8
+        },
+        {
+          "id": "white-R1",
+          "team": "white",
+          "type": "R",
+          "x": 7,
+          "y": 6
+        },
+        {
+          "id": "white-N1",
+          "team": "white",
+          "type": "N",
+          "x": 5,
+          "y": 3
+        }
+      ],
+      "carrierId": "white-R1",
+      "phase": "kick",
+      "attack": "white"
+    },
+    "exampleActions": [
+      {
+        "type": "kick",
+        "x": 7,
+        "y": 2
+      },
+      {
+        "type": "move",
+        "pieceId": "white-N1",
+        "x": 7,
+        "y": 2
+      },
+      {
+        "type": "move",
+        "pieceId": "white-N1",
+        "x": 9,
+        "y": 1
+      },
+      {
+        "type": "skip"
+      },
+      {
+        "type": "kick",
+        "x": 8,
+        "y": -1
+      }
+    ],
+    "difficulty": "easy"
+  },
+  {
+    "id": "diagonal-delivery",
+    "title": "Deliver to the far-side receiver",
+    "revision": 2,
+    "theme": "box-entry",
+    "side": "attack",
+    "playerTeam": "white",
+    "roundLimit": 3,
+    "objective": "Create and take any legal finish worth at least 20% against the best keeper reply.",
+    "coachNote": "The bishop’s diagonal reaches an onside knight at j16, beyond an immediate challenge from the central keeper. The defending rook is wide on a16 rather than on the receiver’s file. A teammate delivery is a useful idea, not a grading requirement.",
+    "hints": [
+      "The keeper is central, so a receiver on the far side has more time.",
+      "Follow the bishop’s long diagonal toward j16.",
+      "One route is Bd10–Nj16, then the knight’s I-goal finish after the defensive reply."
+    ],
+    "goal": {
+      "type": "finish",
+      "minShotXG": 0.2,
+      "requires": "box-entry",
+      "boxEntryMode": "pass"
+    },
+    "position": {
+      "pieces": [
+        {
+          "id": "white-K",
+          "team": "white",
+          "type": "K",
+          "x": 6,
+          "y": 16
+        },
+        {
+          "id": "black-K",
+          "team": "black",
+          "type": "K",
+          "x": 6,
+          "y": 0
+        },
+        {
+          "id": "black-R1",
+          "team": "black",
+          "type": "R",
+          "x": 0,
+          "y": 1
+        },
+        {
+          "id": "black-B1",
+          "team": "black",
+          "type": "B",
+          "x": 13,
+          "y": 8
+        },
+        {
+          "id": "white-B1",
+          "team": "white",
+          "type": "B",
+          "x": 3,
+          "y": 7
+        },
+        {
+          "id": "white-N1",
+          "team": "white",
+          "type": "N",
+          "x": 9,
+          "y": 1
+        }
+      ],
+      "carrierId": "white-B1",
+      "phase": "kick",
+      "attack": "white"
+    },
+    "exampleActions": [
+      {
+        "type": "kick",
+        "x": 9,
+        "y": 1
+      },
+      {
+        "type": "skip"
+      },
+      {
+        "type": "kick",
+        "x": 8,
+        "y": -1
+      }
+    ],
+    "difficulty": "easy"
+  },
+  {
+    "id": "cross-to-the-middle",
+    "title": "Cross to the middle",
+    "revision": 2,
+    "theme": "box-entry",
+    "side": "attack",
+    "playerTeam": "white",
+    "roundLimit": 3,
+    "objective": "Create and take any legal finish worth at least 25% after the keeper’s best reply.",
+    "coachNote": "The keeper shades the near post against a genuinely wide ball. The queen is level with the passer and can receive onside, then carry toward i16 to improve the final chance. The target still accounts for the keeper’s full reaction.",
+    "hints": [
+      "A wide ball naturally draws the keeper toward the near post.",
+      "The queen is level with the ball, so it can receive without offside.",
+      "One plan is Rb15–Qh15, Qh15–i16, then the I-goal shot. Other sufficiently strong finishes also count."
+    ],
+    "goal": {
+      "type": "finish",
+      "minShotXG": 0.25,
+      "requires": "box-entry",
+      "boxEntryMode": "pass"
+    },
+    "position": {
+      "pieces": [
+        {
+          "id": "white-K",
+          "team": "white",
+          "type": "K",
+          "x": 6,
+          "y": 16
+        },
+        {
+          "id": "black-K",
+          "team": "black",
+          "type": "K",
+          "x": 5,
+          "y": 0
+        },
+        {
+          "id": "black-R1",
+          "team": "black",
+          "type": "R",
+          "x": 12,
+          "y": 3
+        },
+        {
+          "id": "black-B1",
+          "team": "black",
+          "type": "B",
+          "x": 13,
+          "y": 8
+        },
+        {
+          "id": "white-R1",
+          "team": "white",
+          "type": "R",
+          "x": 1,
+          "y": 2
+        },
+        {
+          "id": "white-Q",
+          "team": "white",
+          "type": "Q",
+          "x": 7,
+          "y": 2
+        }
+      ],
+      "carrierId": "white-R1",
+      "phase": "kick",
+      "attack": "white"
+    },
+    "exampleActions": [
+      {
+        "type": "kick",
+        "x": 7,
+        "y": 2
+      },
+      {
+        "type": "move",
+        "pieceId": "white-Q",
+        "x": 8,
+        "y": 1
+      },
+      {
+        "type": "skip"
+      },
+      {
+        "type": "kick",
+        "x": 8,
+        "y": -1
+      }
+    ],
+    "difficulty": "easy"
+  },
+  {
+    "id": "carry-inward",
+    "title": "Carry inward, then finish",
+    "revision": 3,
+    "theme": "box-entry",
+    "side": "attack",
+    "playerTeam": "white",
+    "roundLimit": 3,
+    "objective": "Create and take any legal finish worth at least 24% against the best keeper reply.",
+    "coachNote": "The central keeper is protected by a rook near h16. That defender also restricts a direct king challenge as the queen comes inward. The wide initial shot is poor; carrying to i15 creates a real choice of goal targets against the keeper and covering pieces. Any legal finish meeting the target counts.",
+    "hints": [
+      "The queen’s initial wide shot has a tight angle.",
+      "The defender beside the keeper affects its access squares as well as the ball’s route.",
+      "A carry from k13 to i15 opens an I-file finish. Compare the direct aim with the legal two-target disguise before shooting."
+    ],
+    "goal": {
+      "type": "finish",
+      "minShotXG": 0.24,
+      "requires": "box-entry",
+      "boxEntryMode": "either"
+    },
+    "position": {
+      "pieces": [
+        {
+          "id": "white-K",
+          "team": "white",
+          "type": "K",
+          "x": 6,
+          "y": 16
+        },
+        {
+          "id": "black-K",
+          "team": "black",
+          "type": "K",
+          "x": 6,
+          "y": 0
+        },
+        {
+          "id": "black-R1",
+          "team": "black",
+          "type": "R",
+          "x": 12,
+          "y": 3
+        },
+        {
+          "id": "black-B1",
+          "team": "black",
+          "type": "B",
+          "x": 13,
+          "y": 8
+        },
+        {
+          "id": "black-R2",
+          "team": "black",
+          "type": "R",
+          "x": 7,
+          "y": 1
+        },
+        {
+          "id": "white-Q",
+          "team": "white",
+          "type": "Q",
+          "x": 10,
+          "y": 4
+        }
+      ],
+      "carrierId": "white-Q",
+      "phase": "attackMove",
+      "attack": "white"
+    },
+    "exampleActions": [
+      {
+        "type": "move",
+        "pieceId": "white-Q",
+        "x": 8,
+        "y": 2
+      },
+      {
+        "type": "skip"
+      },
+      {
+        "type": "kick",
+        "x": 8,
+        "y": -1
+      }
+    ],
+    "difficulty": "easy"
+  },
+  {
+    "id": "pawn-before-the-shot",
+    "title": "Win it before the shot",
+    "revision": 2,
+    "theme": "defence",
+    "side": "defence",
+    "playerTeam": "white",
+    "roundLimit": 3,
+    "objective": "Win possession or hold the opponent’s next finishing attempt to 15% or less.",
+    "coachNote": "The keeper starts centrally. The pawn’s bonus reposition and ordinary tackle are distinct actions; one useful plan uses the free step to set up the diagonal challenge. The queen remains on the board after losing possession.",
+    "hints": [
+      "The pawn does not currently have a diagonal challenge.",
+      "It can use one cardinal bonus step without spending the ordinary action.",
+      "One plan is Pf7–f6 as the shared bonus, then tackle Qg5 and choose a legal landing such as g4."
+    ],
+    "goal": {
+      "type": "defend",
+      "maxOpponentShotXG": 0.15
+    },
+    "position": {
+      "pieces": [
+        {
+          "id": "white-K",
+          "team": "white",
+          "type": "K",
+          "x": 7,
+          "y": 16
+        },
+        {
+          "id": "black-K",
+          "team": "black",
+          "type": "K",
+          "x": 7,
+          "y": 0
+        },
+        {
+          "id": "black-Q",
+          "team": "black",
+          "type": "Q",
+          "x": 6,
+          "y": 12
+        },
+        {
+          "id": "white-P1",
+          "team": "white",
+          "type": "P",
+          "x": 5,
+          "y": 10
+        },
+        {
+          "id": "white-R1",
+          "team": "white",
+          "type": "R",
+          "x": 12,
+          "y": 14
+        },
+        {
+          "id": "black-R1",
+          "team": "black",
+          "type": "R",
+          "x": 13,
+          "y": 7
+        }
+      ],
+      "carrierId": "black-Q",
+      "phase": "defendMove",
+      "attack": "black"
+    },
+    "exampleActions": [
+      {
+        "type": "move",
+        "pieceId": "white-P1",
+        "x": 5,
+        "y": 11,
+        "freePawn": true
+      },
+      {
+        "type": "move",
+        "pieceId": "white-P1",
+        "x": 6,
+        "y": 13
+      }
+    ],
+    "difficulty": "easy"
+  },
+  {
+    "id": "screen-and-cover",
+    "title": "Screen the shot and cover the goal",
+    "revision": 2,
+    "theme": "defence",
+    "side": "defence",
+    "playerTeam": "white",
+    "roundLimit": 3,
+    "objective": "Win possession or hold the strongest available finish to 15% or less.",
+    "coachNote": "A rook on the shooting line supplies a probabilistic body block. The centrally placed king can use its shared bonus to cover the g-file, then hold its position when the shot is declared. Either preparation order works, and other effective legal defences earn credit.",
+    "hints": [
+      "The queen is ready to shoot down the g-file.",
+      "A rook screen and a small keeper shift work together.",
+      "One plan is Rm4–g4, Kh1–g1 as the shared bonus, then hold the keeper when the shot is declared."
+    ],
+    "goal": {
+      "type": "defend",
+      "maxOpponentShotXG": 0.15
+    },
+    "position": {
+      "pieces": [
+        {
+          "id": "white-K",
+          "team": "white",
+          "type": "K",
+          "x": 7,
+          "y": 16
+        },
+        {
+          "id": "black-K",
+          "team": "black",
+          "type": "K",
+          "x": 7,
+          "y": 0
+        },
+        {
+          "id": "black-Q",
+          "team": "black",
+          "type": "Q",
+          "x": 6,
+          "y": 12
+        },
+        {
+          "id": "white-R1",
+          "team": "white",
+          "type": "R",
+          "x": 12,
+          "y": 13
+        },
+        {
+          "id": "white-P1",
+          "team": "white",
+          "type": "P",
+          "x": 1,
+          "y": 12
+        },
+        {
+          "id": "black-R1",
+          "team": "black",
+          "type": "R",
+          "x": 13,
+          "y": 7
+        }
+      ],
+      "carrierId": "black-Q",
+      "phase": "defendMove",
+      "attack": "black"
+    },
+    "exampleActions": [
+      {
+        "type": "move",
+        "pieceId": "white-R1",
+        "x": 6,
+        "y": 13
+      },
+      {
+        "type": "move",
+        "pieceId": "white-K",
+        "x": 6,
+        "y": 16,
+        "freePawn": true
+      },
+      {
+        "type": "skip"
+      }
+    ],
+    "difficulty": "easy"
+  },
+  {
+    "id": "cover-the-declared-aim",
+    "title": "Cover the declared aim",
+    "revision": 2,
+    "theme": "defence",
+    "side": "defence",
+    "playerTeam": "white",
+    "roundLimit": 3,
+    "objective": "React to the committed shot and reduce its scoring chance to 20% or less.",
+    "coachNote": "The keeper starts on g1, near the centre of the goal. The shot is already committed to h, so a one-square shift onto that file improves the save position. The chance is graded rather than the random save result.",
+    "hints": [
+      "The red destination is already committed.",
+      "Only your goalkeeper reacts now.",
+      "From g1, moving to h1 covers the declared h-file shot. A sound reaction counts even if the sampled shot happens to score."
+    ],
+    "goal": {
+      "type": "defend",
+      "maxOpponentShotXG": 0.2
+    },
+    "position": {
+      "pieces": [
+        {
+          "id": "white-K",
+          "team": "white",
+          "type": "K",
+          "x": 6,
+          "y": 16
+        },
+        {
+          "id": "white-R1",
+          "team": "white",
+          "type": "R",
+          "x": 0,
+          "y": 13
+        },
+        {
+          "id": "white-P1",
+          "team": "white",
+          "type": "P",
+          "x": 12,
+          "y": 13
+        },
+        {
+          "id": "black-K",
+          "team": "black",
+          "type": "K",
+          "x": 7,
+          "y": 0
+        },
+        {
+          "id": "black-R1",
+          "team": "black",
+          "type": "R",
+          "x": 7,
+          "y": 12
+        }
+      ],
+      "carrierId": "black-R1",
+      "phase": "keeperReact",
+      "attack": "black",
+      "shot": {
+        "x": 7,
+        "y": 17
+      }
+    },
+    "exampleActions": [
+      {
+        "type": "move",
+        "pieceId": "white-K",
+        "x": 7,
+        "y": 16
+      }
+    ],
+    "difficulty": "easy"
+  },
+  {
+    "id": "medium-clear-file",
+    "title": "Clear the rook’s approach",
+    "theme": "one-on-one",
+    "side": "attack",
+    "playerTeam": "white",
+    "roundLimit": 4,
+    "position": {
+      "pieces": [
+        {
+          "id": "white-K",
+          "team": "white",
+          "type": "K",
+          "x": 6,
+          "y": 16
+        },
+        {
+          "id": "black-K",
+          "team": "black",
+          "type": "K",
+          "x": 7,
+          "y": 0
+        },
+        {
+          "id": "white-P1",
+          "team": "white",
+          "type": "P",
+          "x": 5,
+          "y": 7
+        },
+        {
+          "id": "white-P2",
+          "team": "white",
+          "type": "P",
+          "x": 8,
+          "y": 7
+        },
+        {
+          "id": "white-B2",
+          "team": "white",
+          "type": "B",
+          "x": 0,
+          "y": 8
+        },
+        {
+          "id": "black-P1",
+          "team": "black",
+          "type": "P",
+          "x": 12,
+          "y": 1
+        },
+        {
+          "id": "black-P2",
+          "team": "black",
+          "type": "P",
+          "x": 11,
+          "y": 5
+        },
+        {
+          "id": "black-N1",
+          "team": "black",
+          "type": "N",
+          "x": 11,
+          "y": 4
+        },
+        {
+          "id": "black-B1",
+          "team": "black",
+          "type": "B",
+          "x": 12,
+          "y": 9
+        },
+        {
+          "id": "black-R1",
+          "team": "black",
+          "type": "R",
+          "x": 13,
+          "y": 10
+        },
+        {
+          "id": "white-R1",
+          "team": "white",
+          "type": "R",
+          "x": 8,
+          "y": 6
+        },
+        {
+          "id": "white-B1",
+          "team": "white",
+          "type": "B",
+          "x": 8,
+          "y": 5
+        }
+      ],
+      "carrierId": "white-R1",
+      "phase": "attackMove",
+      "attack": "white"
+    },
+    "exampleActions": [
+      {
+        "type": "move",
+        "pieceId": "white-B1",
+        "x": 9,
+        "y": 4
+      },
+      {
+        "type": "move",
+        "pieceId": "white-R1",
+        "x": 8,
+        "y": 3
+      },
+      {
+        "type": "skip"
+      },
+      {
+        "type": "kick",
+        "x": 8,
+        "y": -1
+      }
+    ],
+    "goal": {
+      "type": "finish",
+      "minShotXG": 0.17
+    },
+    "difficulty": "medium",
+    "planSteps": 3,
+    "objective": "Create a finish worth at least 17%. Any legal plan meeting the target earns credit.",
+    "coachNote": "The goalkeeper starts centrally on h17. Clearing the friendly bishop opens a shorter carrying route for the rook; an i14 finish is worth about 18% against the best reply. The 17% target rewards the improved distance, not an abandoned goal. The estimate includes the keeper’s best close-range rush.",
+    "hints": [
+      "The keeper is properly set. Improve the rook’s position before shooting.",
+      "The friendly bishop occupies the rook’s forward file. Use the ordinary move to clear it, keeping the dribble available.",
+      "One plan is Bi12–j13, Ri11–i14, then the I-goal shot after ending positioning."
+    ],
+    "revision": 3
+  },
+  {
+    "id": "medium-cross-carry",
+    "title": "Switch wide, drive inside",
+    "theme": "box-entry",
+    "side": "attack",
+    "playerTeam": "white",
+    "roundLimit": 4,
+    "position": {
+      "pieces": [
+        {
+          "id": "white-K",
+          "team": "white",
+          "type": "K",
+          "x": 6,
+          "y": 16
+        },
+        {
+          "id": "black-K",
+          "team": "black",
+          "type": "K",
+          "x": 5,
+          "y": 0
+        },
+        {
+          "id": "white-P1",
+          "team": "white",
+          "type": "P",
+          "x": 5,
+          "y": 7
+        },
+        {
+          "id": "white-P2",
+          "team": "white",
+          "type": "P",
+          "x": 8,
+          "y": 7
+        },
+        {
+          "id": "white-B2",
+          "team": "white",
+          "type": "B",
+          "x": 0,
+          "y": 8
+        },
+        {
+          "id": "black-P1",
+          "team": "black",
+          "type": "P",
+          "x": 12,
+          "y": 1
+        },
+        {
+          "id": "black-P2",
+          "team": "black",
+          "type": "P",
+          "x": 11,
+          "y": 5
+        },
+        {
+          "id": "black-N1",
+          "team": "black",
+          "type": "N",
+          "x": 11,
+          "y": 4
+        },
+        {
+          "id": "black-B1",
+          "team": "black",
+          "type": "B",
+          "x": 12,
+          "y": 9
+        },
+        {
+          "id": "black-R1",
+          "team": "black",
+          "type": "R",
+          "x": 13,
+          "y": 10
+        },
+        {
+          "id": "white-R1",
+          "team": "white",
+          "type": "R",
+          "x": 1,
+          "y": 4
+        },
+        {
+          "id": "white-Q",
+          "team": "white",
+          "type": "Q",
+          "x": 10,
+          "y": 4
+        }
+      ],
+      "carrierId": "white-R1",
+      "phase": "kick",
+      "attack": "white"
+    },
+    "exampleActions": [
+      {
+        "type": "kick",
+        "x": 10,
+        "y": 4
+      },
+      {
+        "type": "move",
+        "pieceId": "white-Q",
+        "x": 8,
+        "y": 2
+      },
+      {
+        "type": "skip"
+      },
+      {
+        "type": "kick",
+        "x": 8,
+        "y": -1
+      }
+    ],
+    "goal": {
+      "type": "finish",
+      "minShotXG": 0.25
+    },
+    "difficulty": "medium",
+    "planSteps": 3,
+    "objective": "Create a finish worth at least 25%. Any legal plan meeting the target earns credit.",
+    "coachNote": "The keeper shades the near post on f17 while the ball is on the b-file. A long switch changes the angle of attack; the queen can then carry into an i15 pocket and create about 26%. The 25% target can also be reached by another sufficiently strong legal continuation.",
+    "hints": [
+      "Width is useful when the ball changes the point of attack.",
+      "Switch to the queen on k13, then look for an inward diagonal carry that stays away from the keeper’s immediate challenge.",
+      "One plan is Rb13–Qk13, Qk13–i15, then the I-goal finish."
+    ],
+    "revision": 2
+  },
+  {
+    "id": "medium-diagonal-carry",
+    "title": "Launch diagonally, finish at the edge",
+    "theme": "one-on-one",
+    "side": "attack",
+    "playerTeam": "white",
+    "roundLimit": 4,
+    "position": {
+      "pieces": [
+        {
+          "id": "white-K",
+          "team": "white",
+          "type": "K",
+          "x": 6,
+          "y": 16
+        },
+        {
+          "id": "black-K",
+          "team": "black",
+          "type": "K",
+          "x": 6,
+          "y": 0
+        },
+        {
+          "id": "white-P1",
+          "team": "white",
+          "type": "P",
+          "x": 5,
+          "y": 7
+        },
+        {
+          "id": "white-P2",
+          "team": "white",
+          "type": "P",
+          "x": 8,
+          "y": 7
+        },
+        {
+          "id": "white-B2",
+          "team": "white",
+          "type": "B",
+          "x": 0,
+          "y": 8
+        },
+        {
+          "id": "black-P1",
+          "team": "black",
+          "type": "P",
+          "x": 12,
+          "y": 1
+        },
+        {
+          "id": "black-P2",
+          "team": "black",
+          "type": "P",
+          "x": 11,
+          "y": 5
+        },
+        {
+          "id": "black-N1",
+          "team": "black",
+          "type": "N",
+          "x": 11,
+          "y": 4
+        },
+        {
+          "id": "black-B1",
+          "team": "black",
+          "type": "B",
+          "x": 12,
+          "y": 9
+        },
+        {
+          "id": "black-R1",
+          "team": "black",
+          "type": "R",
+          "x": 13,
+          "y": 10
+        },
+        {
+          "id": "white-B1",
+          "team": "white",
+          "type": "B",
+          "x": 3,
+          "y": 14
+        },
+        {
+          "id": "white-Q",
+          "team": "white",
+          "type": "Q",
+          "x": 11,
+          "y": 6
+        }
+      ],
+      "carrierId": "white-B1",
+      "phase": "kick",
+      "attack": "white"
+    },
+    "exampleActions": [
+      {
+        "type": "kick",
+        "x": 11,
+        "y": 6
+      },
+      {
+        "type": "move",
+        "pieceId": "white-Q",
+        "x": 8,
+        "y": 3
+      },
+      {
+        "type": "skip"
+      },
+      {
+        "type": "kick",
+        "x": 8,
+        "y": -1
+      }
+    ],
+    "goal": {
+      "type": "finish",
+      "minShotXG": 0.17
+    },
+    "difficulty": "medium",
+    "planSteps": 3,
+    "objective": "Create a finish worth at least 17%. Any legal plan meeting the target earns credit.",
+    "coachNote": "The keeper remains central on g17. The bishop’s accurate diagonal launch reaches the wide queen; a carry to i14 produces about 17% while staying beyond an immediate king tackle. The 17% target reflects a covered but worthwhile box-edge finish. The estimate includes the keeper’s best close-range rush.",
+    "hints": [
+      "The bishop has no direct finish. Find the queen on its long diagonal.",
+      "After receiving, the queen can change the angle before the defender’s positioning reply.",
+      "One plan is Bd3–Ql11, Ql11–i14, then the I-goal shot."
+    ],
+    "revision": 3
+  },
+  {
+    "id": "medium-rook-relay",
+    "title": "Hand the file to the forward rook",
+    "theme": "one-on-one",
+    "side": "attack",
+    "playerTeam": "white",
+    "roundLimit": 4,
+    "position": {
+      "pieces": [
+        {
+          "id": "white-K",
+          "team": "white",
+          "type": "K",
+          "x": 6,
+          "y": 16
+        },
+        {
+          "id": "black-K",
+          "team": "black",
+          "type": "K",
+          "x": 7,
+          "y": 0
+        },
+        {
+          "id": "white-P1",
+          "team": "white",
+          "type": "P",
+          "x": 5,
+          "y": 7
+        },
+        {
+          "id": "white-P2",
+          "team": "white",
+          "type": "P",
+          "x": 8,
+          "y": 7
+        },
+        {
+          "id": "white-B2",
+          "team": "white",
+          "type": "B",
+          "x": 0,
+          "y": 8
+        },
+        {
+          "id": "black-P1",
+          "team": "black",
+          "type": "P",
+          "x": 12,
+          "y": 1
+        },
+        {
+          "id": "black-P2",
+          "team": "black",
+          "type": "P",
+          "x": 11,
+          "y": 5
+        },
+        {
+          "id": "black-N1",
+          "team": "black",
+          "type": "N",
+          "x": 11,
+          "y": 4
+        },
+        {
+          "id": "black-B1",
+          "team": "black",
+          "type": "B",
+          "x": 2,
+          "y": 9
+        },
+        {
+          "id": "black-R1",
+          "team": "black",
+          "type": "R",
+          "x": 13,
+          "y": 10
+        },
+        {
+          "id": "white-R1",
+          "team": "white",
+          "type": "R",
+          "x": 8,
+          "y": 6
+        },
+        {
+          "id": "white-R2",
+          "team": "white",
+          "type": "R",
+          "x": 8,
+          "y": 4
+        },
+        {
+          "id": "white-Q",
+          "team": "white",
+          "type": "Q",
+          "x": 4,
+          "y": 5
+        }
+      ],
+      "carrierId": "white-R1",
+      "phase": "kick",
+      "attack": "white"
+    },
+    "exampleActions": [
+      {
+        "type": "kick",
+        "x": 8,
+        "y": 4
+      },
+      {
+        "type": "move",
+        "pieceId": "white-R2",
+        "x": 8,
+        "y": 3
+      },
+      {
+        "type": "skip"
+      },
+      {
+        "type": "kick",
+        "x": 8,
+        "y": -1
+      }
+    ],
+    "goal": {
+      "type": "finish",
+      "minShotXG": 0.17
+    },
+    "difficulty": "medium",
+    "planSteps": 3,
+    "objective": "Create a finish worth at least 17%. Any legal plan meeting the target earns credit.",
+    "coachNote": "Both keepers start centrally. The forward rook receives on i13 and advances to the edge of the box on i14, producing about 18% against a set keeper. The rear rook’s initial shot is weaker than the 17% objective; another sound handover or finish can also earn credit. The estimate includes the keeper’s best close-range rush.",
+    "hints": [
+      "The forward rook is a closer shooting platform on the same file.",
+      "A teammate receipt leaves its separate dribble available. The queen is behind the ball and does not invite an offside trap.",
+      "One route is Ri11–Ri13, Ri13–i14, then the I-goal shot after positioning."
+    ],
+    "revision": 4
+  },
+  {
+    "id": "medium-pawn-clear",
+    "title": "Clear the pawn, keep a safe distance",
+    "theme": "one-on-one",
+    "side": "attack",
+    "playerTeam": "white",
+    "roundLimit": 4,
+    "position": {
+      "pieces": [
+        {
+          "id": "white-K",
+          "team": "white",
+          "type": "K",
+          "x": 6,
+          "y": 16
+        },
+        {
+          "id": "black-K",
+          "team": "black",
+          "type": "K",
+          "x": 7,
+          "y": 0
+        },
+        {
+          "id": "white-P1",
+          "team": "white",
+          "type": "P",
+          "x": 5,
+          "y": 7
+        },
+        {
+          "id": "white-B2",
+          "team": "white",
+          "type": "B",
+          "x": 0,
+          "y": 8
+        },
+        {
+          "id": "black-P1",
+          "team": "black",
+          "type": "P",
+          "x": 12,
+          "y": 1
+        },
+        {
+          "id": "black-P2",
+          "team": "black",
+          "type": "P",
+          "x": 11,
+          "y": 5
+        },
+        {
+          "id": "black-N1",
+          "team": "black",
+          "type": "N",
+          "x": 11,
+          "y": 4
+        },
+        {
+          "id": "black-B1",
+          "team": "black",
+          "type": "B",
+          "x": 12,
+          "y": 9
+        },
+        {
+          "id": "black-R1",
+          "team": "black",
+          "type": "R",
+          "x": 13,
+          "y": 10
+        },
+        {
+          "id": "white-P2",
+          "team": "white",
+          "type": "P",
+          "x": 7,
+          "y": 3
+        },
+        {
+          "id": "white-Q",
+          "team": "white",
+          "type": "Q",
+          "x": 7,
+          "y": 4
+        }
+      ],
+      "carrierId": "white-Q",
+      "phase": "attackMove",
+      "attack": "white"
+    },
+    "exampleActions": [
+      {
+        "type": "move",
+        "pieceId": "white-P2",
+        "x": 8,
+        "y": 3,
+        "freePawn": true
+      },
+      {
+        "type": "move",
+        "pieceId": "white-Q",
+        "x": 7,
+        "y": 3
+      },
+      {
+        "type": "skip"
+      },
+      {
+        "type": "kick",
+        "x": 7,
+        "y": -1
+      }
+    ],
+    "goal": {
+      "type": "finish",
+      "minShotXG": 0.17
+    },
+    "difficulty": "medium",
+    "planSteps": 3,
+    "objective": "Create a finish worth at least 17%. Any legal plan meeting the target earns credit.",
+    "coachNote": "The goalkeeper starts centrally on h17. Moving the pawn opens h14 for the queen; stopping at the box edge avoids a guaranteed close-range king challenge and creates about 19%. The 17% target rewards space and support rather than keeper displacement. The estimate includes the keeper’s best close-range rush.",
+    "hints": [
+      "The friendly pawn occupies the useful next carrying square.",
+      "Use the shared pawn bonus before dribbling. The queen does not need to enter the deepest part of the box.",
+      "One plan is Ph14–i14 as the bonus, Qh13–h14, then the H-goal shot."
+    ],
+    "revision": 3
+  },
+  {
+    "id": "medium-through-collect-finish",
+    "title": "Lead the rook through the line",
+    "theme": "through-ball",
+    "side": "attack",
+    "playerTeam": "white",
+    "roundLimit": 4,
+    "position": {
+      "pieces": [
+        {
+          "id": "white-K",
+          "team": "white",
+          "type": "K",
+          "x": 6,
+          "y": 16
+        },
+        {
+          "id": "black-K",
+          "team": "black",
+          "type": "K",
+          "x": 6,
+          "y": 0
+        },
+        {
+          "id": "white-P1",
+          "team": "white",
+          "type": "P",
+          "x": 5,
+          "y": 7
+        },
+        {
+          "id": "white-P2",
+          "team": "white",
+          "type": "P",
+          "x": 8,
+          "y": 7
+        },
+        {
+          "id": "white-B2",
+          "team": "white",
+          "type": "B",
+          "x": 0,
+          "y": 8
+        },
+        {
+          "id": "black-P1",
+          "team": "black",
+          "type": "P",
+          "x": 12,
+          "y": 1
+        },
+        {
+          "id": "black-P2",
+          "team": "black",
+          "type": "P",
+          "x": 11,
+          "y": 5
+        },
+        {
+          "id": "black-N1",
+          "team": "black",
+          "type": "N",
+          "x": 11,
+          "y": 4
+        },
+        {
+          "id": "black-B1",
+          "team": "black",
+          "type": "B",
+          "x": 4,
+          "y": 5
+        },
+        {
+          "id": "black-R1",
+          "team": "black",
+          "type": "R",
+          "x": 13,
+          "y": 10
+        },
+        {
+          "id": "white-B1",
+          "team": "white",
+          "type": "B",
+          "x": 1,
+          "y": 7
+        },
+        {
+          "id": "white-R1",
+          "team": "white",
+          "type": "R",
+          "x": 5,
+          "y": 5
+        }
+      ],
+      "carrierId": "white-B1",
+      "phase": "kick",
+      "attack": "white"
+    },
+    "exampleActions": [
+      {
+        "type": "kick",
+        "x": 5,
+        "y": 3
+      },
+      {
+        "type": "move",
+        "pieceId": "white-R1",
+        "x": 5,
+        "y": 3
+      },
+      {
+        "type": "skip"
+      },
+      {
+        "type": "kick",
+        "x": 5,
+        "y": -1
+      }
+    ],
+    "goal": {
+      "type": "finish",
+      "minShotXG": 0.17
+    },
+    "difficulty": "medium",
+    "planSteps": 3,
+    "objective": "Create a finish worth at least 17%. Any legal plan meeting the target earns credit.",
+    "coachNote": "The central g17 keeper faces a genuine forward delivery. The rook collects in space beyond the nearby bishop’s line and shoots from f14, where the best keeper reply leaves about 18%. The 17% target accepts any legal plan of comparable quality. The estimate includes the keeper’s best close-range rush.",
+    "hints": [
+      "Send the bishop’s pass into empty space, not onto the rook’s present square.",
+      "The rook can collect up its own file while staying onside at release.",
+      "One plan is Bb10–f14, Rf12–f14 to collect, then the F-goal finish after positioning."
+    ],
+    "revision": 3
+  },
+  {
+    "id": "medium-clear-and-carry",
+    "title": "Clear the diagonal runway",
+    "theme": "one-on-one",
+    "side": "attack",
+    "playerTeam": "white",
+    "roundLimit": 4,
+    "position": {
+      "pieces": [
+        {
+          "id": "white-K",
+          "team": "white",
+          "type": "K",
+          "x": 6,
+          "y": 16
+        },
+        {
+          "id": "black-K",
+          "team": "black",
+          "type": "K",
+          "x": 7,
+          "y": 0
+        },
+        {
+          "id": "white-P1",
+          "team": "white",
+          "type": "P",
+          "x": 5,
+          "y": 7
+        },
+        {
+          "id": "white-P2",
+          "team": "white",
+          "type": "P",
+          "x": 8,
+          "y": 7
+        },
+        {
+          "id": "white-B2",
+          "team": "white",
+          "type": "B",
+          "x": 0,
+          "y": 8
+        },
+        {
+          "id": "black-P1",
+          "team": "black",
+          "type": "P",
+          "x": 12,
+          "y": 1
+        },
+        {
+          "id": "black-P2",
+          "team": "black",
+          "type": "P",
+          "x": 11,
+          "y": 5
+        },
+        {
+          "id": "black-N1",
+          "team": "black",
+          "type": "N",
+          "x": 11,
+          "y": 4
+        },
+        {
+          "id": "black-B1",
+          "team": "black",
+          "type": "B",
+          "x": 12,
+          "y": 9
+        },
+        {
+          "id": "black-R1",
+          "team": "black",
+          "type": "R",
+          "x": 13,
+          "y": 10
+        },
+        {
+          "id": "white-Q",
+          "team": "white",
+          "type": "Q",
+          "x": 10,
+          "y": 5
+        },
+        {
+          "id": "white-B1",
+          "team": "white",
+          "type": "B",
+          "x": 9,
+          "y": 4
+        }
+      ],
+      "carrierId": "white-Q",
+      "phase": "attackMove",
+      "attack": "white"
+    },
+    "exampleActions": [
+      {
+        "type": "move",
+        "pieceId": "white-B1",
+        "x": 8,
+        "y": 5
+      },
+      {
+        "type": "move",
+        "pieceId": "white-Q",
+        "x": 8,
+        "y": 3
+      },
+      {
+        "type": "skip"
+      },
+      {
+        "type": "kick",
+        "x": 8,
+        "y": -1
+      }
+    ],
+    "goal": {
+      "type": "finish",
+      "minShotXG": 0.17
+    },
+    "difficulty": "medium",
+    "planSteps": 3,
+    "objective": "Create a finish worth at least 17%. Any legal plan meeting the target earns credit.",
+    "coachNote": "The keeper starts naturally on h17. The bishop interrupts the queen’s diagonal route to i14; clearing it makes a 17% box-edge finish possible. The 17% target leaves room for other safe carrying routes and useful support moves. The estimate includes the keeper’s best close-range rush.",
+    "hints": [
+      "The queen has a useful inward carrying diagonal, interrupted by its own bishop.",
+      "Clear the bishop with the ordinary move, preserving the queen’s dribble.",
+      "One plan is Bj13–i12, Qk12–i14, then the I-goal shot."
+    ],
+    "revision": 3
+  },
+  {
+    "id": "medium-queen-through-collection",
+    "title": "Collect at the edge of the box",
+    "theme": "through-ball",
+    "side": "attack",
+    "playerTeam": "white",
+    "roundLimit": 4,
+    "position": {
+      "pieces": [
+        {
+          "id": "white-K",
+          "team": "white",
+          "type": "K",
+          "x": 6,
+          "y": 16
+        },
+        {
+          "id": "black-K",
+          "team": "black",
+          "type": "K",
+          "x": 6,
+          "y": 0
+        },
+        {
+          "id": "white-P1",
+          "team": "white",
+          "type": "P",
+          "x": 5,
+          "y": 7
+        },
+        {
+          "id": "white-P2",
+          "team": "white",
+          "type": "P",
+          "x": 8,
+          "y": 7
+        },
+        {
+          "id": "white-B2",
+          "team": "white",
+          "type": "B",
+          "x": 0,
+          "y": 8
+        },
+        {
+          "id": "black-P1",
+          "team": "black",
+          "type": "P",
+          "x": 12,
+          "y": 1
+        },
+        {
+          "id": "black-P2",
+          "team": "black",
+          "type": "P",
+          "x": 11,
+          "y": 5
+        },
+        {
+          "id": "black-N1",
+          "team": "black",
+          "type": "N",
+          "x": 11,
+          "y": 4
+        },
+        {
+          "id": "black-B1",
+          "team": "black",
+          "type": "B",
+          "x": 6,
+          "y": 7
+        },
+        {
+          "id": "black-R1",
+          "team": "black",
+          "type": "R",
+          "x": 13,
+          "y": 10
+        },
+        {
+          "id": "white-B1",
+          "team": "white",
+          "type": "B",
+          "x": 3,
+          "y": 8
+        },
+        {
+          "id": "white-Q",
+          "team": "white",
+          "type": "Q",
+          "x": 10,
+          "y": 5
+        }
+      ],
+      "carrierId": "white-B1",
+      "phase": "kick",
+      "attack": "white"
+    },
+    "exampleActions": [
+      {
+        "type": "kick",
+        "x": 8,
+        "y": 3
+      },
+      {
+        "type": "move",
+        "pieceId": "white-Q",
+        "x": 8,
+        "y": 3
+      },
+      {
+        "type": "skip"
+      },
+      {
+        "type": "kick",
+        "x": 8,
+        "y": -1
+      }
+    ],
+    "goal": {
+      "type": "finish",
+      "minShotXG": 0.17
+    },
+    "difficulty": "medium",
+    "planSteps": 3,
+    "objective": "Create a finish worth at least 17%. Any legal plan meeting the target earns credit.",
+    "coachNote": "The keeper starts centrally on g17 rather than at an artificial far post. The bishop leads an onside queen into i14; collecting and shooting there creates about 17%. The 17% objective accepts a different legal route if it makes an equally useful finish. The estimate includes the keeper’s best close-range rush.",
+    "hints": [
+      "The distributor has no direct goal line. Look for a diagonal leading pass.",
+      "The queen can collect the ball at the box edge without dribbling into an immediate keeper challenge.",
+      "One route is Bd9–i14, Qk12–i14 to collect, then the I-goal finish."
+    ],
+    "revision": 4
+  },
+  {
+    "id": "medium-vacate-receiver-lane",
+    "title": "Vacate the finishing pocket",
+    "theme": "one-on-one",
+    "side": "attack",
+    "playerTeam": "white",
+    "roundLimit": 4,
+    "position": {
+      "pieces": [
+        {
+          "id": "white-K",
+          "team": "white",
+          "type": "K",
+          "x": 6,
+          "y": 16
+        },
+        {
+          "id": "black-K",
+          "team": "black",
+          "type": "K",
+          "x": 7,
+          "y": 0
+        },
+        {
+          "id": "white-P1",
+          "team": "white",
+          "type": "P",
+          "x": 5,
+          "y": 7
+        },
+        {
+          "id": "white-P2",
+          "team": "white",
+          "type": "P",
+          "x": 8,
+          "y": 7
+        },
+        {
+          "id": "white-B2",
+          "team": "white",
+          "type": "B",
+          "x": 0,
+          "y": 8
+        },
+        {
+          "id": "black-P1",
+          "team": "black",
+          "type": "P",
+          "x": 12,
+          "y": 1
+        },
+        {
+          "id": "black-P2",
+          "team": "black",
+          "type": "P",
+          "x": 11,
+          "y": 5
+        },
+        {
+          "id": "black-N1",
+          "team": "black",
+          "type": "N",
+          "x": 11,
+          "y": 4
+        },
+        {
+          "id": "black-B1",
+          "team": "black",
+          "type": "B",
+          "x": 12,
+          "y": 9
+        },
+        {
+          "id": "black-R1",
+          "team": "black",
+          "type": "R",
+          "x": 13,
+          "y": 10
+        },
+        {
+          "id": "white-Q",
+          "team": "white",
+          "type": "Q",
+          "x": 10,
+          "y": 5
+        },
+        {
+          "id": "white-R1",
+          "team": "white",
+          "type": "R",
+          "x": 8,
+          "y": 3
+        }
+      ],
+      "carrierId": "white-Q",
+      "phase": "attackMove",
+      "attack": "white"
+    },
+    "exampleActions": [
+      {
+        "type": "move",
+        "pieceId": "white-R1",
+        "x": 10,
+        "y": 3
+      },
+      {
+        "type": "move",
+        "pieceId": "white-Q",
+        "x": 8,
+        "y": 3
+      },
+      {
+        "type": "skip"
+      },
+      {
+        "type": "kick",
+        "x": 8,
+        "y": -1
+      }
+    ],
+    "goal": {
+      "type": "finish",
+      "minShotXG": 0.17
+    },
+    "difficulty": "medium",
+    "planSteps": 3,
+    "objective": "Create a finish worth at least 17%. Any legal plan meeting the target earns credit.",
+    "coachNote": "The goalkeeper is set on h17. A teammate currently occupies i14, so vacating that pocket lets the queen carry in and create about 17%. The 17% outcome does not require the example rook destination or a particular pass count. The estimate includes the keeper’s best close-range rush.",
+    "hints": [
+      "The best receiving pocket is occupied by a friendly rook.",
+      "Move that rook away with the ordinary action, then use the queen’s separate dribble.",
+      "One plan is Ri14–k14, Qk12–i14, then the I-goal shot."
+    ],
+    "revision": 3
+  },
+  {
+    "id": "medium-def-screen-rook",
+    "title": "Screen and react from the centre",
+    "theme": "defence",
+    "side": "defence",
+    "playerTeam": "white",
+    "roundLimit": 4,
+    "position": {
+      "pieces": [
+        {
+          "id": "black-K",
+          "team": "black",
+          "type": "K",
+          "x": 7,
+          "y": 0
+        },
+        {
+          "id": "black-N1",
+          "team": "black",
+          "type": "N",
+          "x": 3,
+          "y": 12
+        },
+        {
+          "id": "black-B1",
+          "team": "black",
+          "type": "B",
+          "x": 9,
+          "y": 11
+        },
+        {
+          "id": "black-R1",
+          "team": "black",
+          "type": "R",
+          "x": 12,
+          "y": 10
+        },
+        {
+          "id": "white-B1",
+          "team": "white",
+          "type": "B",
+          "x": 2,
+          "y": 10
+        },
+        {
+          "id": "white-P1",
+          "team": "white",
+          "type": "P",
+          "x": 1,
+          "y": 12
+        },
+        {
+          "id": "white-P2",
+          "team": "white",
+          "type": "P",
+          "x": 12,
+          "y": 14
+        },
+        {
+          "id": "white-N1",
+          "team": "white",
+          "type": "N",
+          "x": 4,
+          "y": 10
+        },
+        {
+          "id": "white-K",
+          "team": "white",
+          "type": "K",
+          "x": 6,
+          "y": 16
+        },
+        {
+          "id": "black-Q",
+          "team": "black",
+          "type": "Q",
+          "x": 7,
+          "y": 12
+        },
+        {
+          "id": "white-R1",
+          "team": "white",
+          "type": "R",
+          "x": 1,
+          "y": 14
+        }
+      ],
+      "carrierId": "black-Q",
+      "phase": "defendMove",
+      "attack": "black"
+    },
+    "exampleActions": [
+      {
+        "type": "move",
+        "pieceId": "white-R1",
+        "x": 7,
+        "y": 14
+      },
+      {
+        "type": "skip"
+      },
+      {
+        "type": "move",
+        "pieceId": "white-K",
+        "x": 7,
+        "y": 16
+      }
+    ],
+    "goal": {
+      "type": "defend",
+      "maxOpponentShotXG": 0.12
+    },
+    "difficulty": "medium",
+    "planSteps": 2,
+    "objective": "Win possession or hold the strongest immediate finish to 12% or less. Any legal defence can earn credit.",
+    "coachNote": "The keeper starts naturally on g1. The rook’s weighted retreat puts a body on the h-file; the keeper can then react one square to h1 when the aim is declared. These two coordinated decisions reduce the threat to about 10.5%, below the 12% target.",
+    "hints": [
+      "The queen’s h-file shot needs both a screen and a keeper response.",
+      "The rook can retreat across the third rank using its full weighted movement allowance.",
+      "One plan is Rb3–h3, end defending positioning, then Kg1–h1 against the declared H shot."
+    ],
+    "revision": 2
+  },
+  {
+    "id": "medium-def-screen-bishop",
+    "title": "Close the diagonal gate",
+    "theme": "defence",
+    "side": "defence",
+    "playerTeam": "white",
+    "roundLimit": 4,
+    "position": {
+      "pieces": [
+        {
+          "id": "black-K",
+          "team": "black",
+          "type": "K",
+          "x": 7,
+          "y": 0
+        },
+        {
+          "id": "black-N1",
+          "team": "black",
+          "type": "N",
+          "x": 3,
+          "y": 12
+        },
+        {
+          "id": "black-B1",
+          "team": "black",
+          "type": "B",
+          "x": 9,
+          "y": 11
+        },
+        {
+          "id": "black-R1",
+          "team": "black",
+          "type": "R",
+          "x": 12,
+          "y": 10
+        },
+        {
+          "id": "white-P1",
+          "team": "white",
+          "type": "P",
+          "x": 1,
+          "y": 12
+        },
+        {
+          "id": "white-P2",
+          "team": "white",
+          "type": "P",
+          "x": 12,
+          "y": 14
+        },
+        {
+          "id": "white-N1",
+          "team": "white",
+          "type": "N",
+          "x": 3,
+          "y": 10
+        },
+        {
+          "id": "white-K",
+          "team": "white",
+          "type": "K",
+          "x": 6,
+          "y": 16
+        },
+        {
+          "id": "black-Q",
+          "team": "black",
+          "type": "Q",
+          "x": 8,
+          "y": 12
+        },
+        {
+          "id": "white-B1",
+          "team": "white",
+          "type": "B",
+          "x": 12,
+          "y": 11
+        }
+      ],
+      "carrierId": "black-Q",
+      "phase": "defendMove",
+      "attack": "black"
+    },
+    "exampleActions": [
+      {
+        "type": "move",
+        "pieceId": "white-B1",
+        "x": 8,
+        "y": 15
+      },
+      {
+        "type": "move",
+        "pieceId": "white-K",
+        "x": 7,
+        "y": 16,
+        "freePawn": true
+      },
+      {
+        "type": "move",
+        "pieceId": "white-K",
+        "x": 8,
+        "y": 16
+      }
+    ],
+    "goal": {
+      "type": "defend",
+      "maxOpponentShotXG": 0.1
+    },
+    "difficulty": "medium",
+    "planSteps": 3,
+    "objective": "Win possession or hold the strongest immediate finish to 10% or less. Any legal defence can earn credit.",
+    "coachNote": "The keeper begins centrally on g1. A bishop screen on i2 combines with a shared king step to h1 and a later reaction to i1, leaving about 8.7%. The 10% target can also be met by another legal defensive plan.",
+    "hints": [
+      "The dangerous aim is the i-file, two files from the keeper.",
+      "The bishop can reach the shooting line diagonally while the king uses the shared bonus.",
+      "One plan is Bm6–i2, Kg1–h1 as the bonus, then Kh1–i1 against the shot."
+    ]
+  },
+  {
+    "id": "medium-def-sweeper-keeper",
+    "title": "Step out and challenge",
+    "theme": "defence",
+    "side": "defence",
+    "playerTeam": "white",
+    "roundLimit": 4,
+    "position": {
+      "pieces": [
+        {
+          "id": "black-K",
+          "team": "black",
+          "type": "K",
+          "x": 7,
+          "y": 0
+        },
+        {
+          "id": "black-N1",
+          "team": "black",
+          "type": "N",
+          "x": 3,
+          "y": 12
+        },
+        {
+          "id": "black-B1",
+          "team": "black",
+          "type": "B",
+          "x": 9,
+          "y": 11
+        },
+        {
+          "id": "black-R1",
+          "team": "black",
+          "type": "R",
+          "x": 12,
+          "y": 10
+        },
+        {
+          "id": "white-B1",
+          "team": "white",
+          "type": "B",
+          "x": 2,
+          "y": 10
+        },
+        {
+          "id": "white-P1",
+          "team": "white",
+          "type": "P",
+          "x": 1,
+          "y": 12
+        },
+        {
+          "id": "white-P2",
+          "team": "white",
+          "type": "P",
+          "x": 12,
+          "y": 14
+        },
+        {
+          "id": "white-N1",
+          "team": "white",
+          "type": "N",
+          "x": 4,
+          "y": 10
+        },
+        {
+          "id": "white-K",
+          "team": "white",
+          "type": "K",
+          "x": 7,
+          "y": 15
+        },
+        {
+          "id": "black-Q",
+          "team": "black",
+          "type": "Q",
+          "x": 6,
+          "y": 13
+        },
+        {
+          "id": "white-R1",
+          "team": "white",
+          "type": "R",
+          "x": 12,
+          "y": 13
+        }
+      ],
+      "carrierId": "black-Q",
+      "phase": "defendMove",
+      "attack": "black"
+    },
+    "exampleActions": [
+      {
+        "type": "move",
+        "pieceId": "white-K",
+        "x": 7,
+        "y": 14,
+        "freePawn": true
+      },
+      {
+        "type": "move",
+        "pieceId": "white-K",
+        "x": 6,
+        "y": 14
+      }
+    ],
+    "goal": {
+      "type": "defend",
+      "maxOpponentShotXG": 0.15
+    },
+    "difficulty": "medium",
+    "planSteps": 2,
+    "objective": "Win possession or hold the strongest immediate finish to 15% or less. Any legal defence can earn credit.",
+    "coachNote": "The keeper starts one square off its line on h2, a normal proactive position against a nearby attack. A shared step to h3 brings the queen within a clean ordinary challenge. Winning possession completes the defensive outcome; effective shot suppression also counts.",
+    "hints": [
+      "The keeper is set inside its box and has no immediate tackle yet.",
+      "Use the shared king step to close the distance before spending the ordinary challenge.",
+      "One plan is Kh2–h3 as the bonus, then challenge Qg4 with a legal landing on g3."
+    ],
+    "revision": 2
+  },
+  {
+    "id": "tough-wide-rook-relay",
+    "title": "Open the rook’s finishing file",
+    "difficulty": "tough",
+    "planSteps": 4,
+    "revision": 2,
+    "theme": "box-entry",
+    "side": "attack",
+    "playerTeam": "white",
+    "roundLimit": 4,
+    "objective": "Create and take a finish worth at least 15% against the best keeper response. Any legal route can succeed.",
+    "coachNote": "The keeper starts centrally on g17. One plan moves the queen to i14 to deny the bishop access, then carries the receiving rook to the g-file. This creates a 19% finish through the defensive reply; the target rewards the clear file rather than an unguarded goal.",
+    "hints": [
+      "After the first pass, compare a rook carry with another pass.",
+      "The queen can support without receiving: its off-ball move can deny a defensive bishop square.",
+      "One candidate is Rb11–Rb14, Qh14–i14 off ball, Rb14–g14, then the G-goal shot. Other legal finishes above the target count."
+    ],
+    "goal": {
+      "type": "finish",
+      "minShotXG": 0.15
+    },
+    "position": {
+      "pieces": [
+        {
+          "id": "white-K",
+          "team": "white",
+          "type": "K",
+          "x": 6,
+          "y": 16
+        },
+        {
+          "id": "white-B1",
+          "team": "white",
+          "type": "B",
+          "x": 9,
+          "y": 7
+        },
+        {
+          "id": "white-N2",
+          "team": "white",
+          "type": "N",
+          "x": 2,
+          "y": 9
+        },
+        {
+          "id": "white-P1",
+          "team": "white",
+          "type": "P",
+          "x": 5,
+          "y": 8
+        },
+        {
+          "id": "black-K",
+          "team": "black",
+          "type": "K",
+          "x": 6,
+          "y": 0
+        },
+        {
+          "id": "black-R1",
+          "team": "black",
+          "type": "R",
+          "x": 12,
+          "y": 0
+        },
+        {
+          "id": "black-B1",
+          "team": "black",
+          "type": "B",
+          "x": 13,
+          "y": 8
+        },
+        {
+          "id": "black-N1",
+          "team": "black",
+          "type": "N",
+          "x": 10,
+          "y": 4
+        },
+        {
+          "id": "black-P1",
+          "team": "black",
+          "type": "P",
+          "x": 4,
+          "y": 5
+        },
+        {
+          "id": "black-P2",
+          "team": "black",
+          "type": "P",
+          "x": 8,
+          "y": 5
+        },
+        {
+          "id": "black-P3",
+          "team": "black",
+          "type": "P",
+          "x": 6,
+          "y": 6
+        },
+        {
+          "id": "white-R1",
+          "team": "white",
+          "type": "R",
+          "x": 1,
+          "y": 6
+        },
+        {
+          "id": "white-R2",
+          "team": "white",
+          "type": "R",
+          "x": 1,
+          "y": 3
+        },
+        {
+          "id": "white-Q",
+          "team": "white",
+          "type": "Q",
+          "x": 7,
+          "y": 3
+        }
+      ],
+      "carrierId": "white-R1",
+      "phase": "kick",
+      "attack": "white"
+    },
+    "exampleActions": [
+      {
+        "type": "kick",
+        "x": 1,
+        "y": 3
+      },
+      {
+        "type": "move",
+        "pieceId": "white-Q",
+        "x": 8,
+        "y": 3
+      },
+      {
+        "type": "move",
+        "pieceId": "white-R2",
+        "x": 6,
+        "y": 3
+      },
+      {
+        "type": "skip"
+      },
+      {
+        "type": "kick",
+        "x": 6,
+        "y": -1
+      }
+    ]
+  },
+  {
+    "id": "tough-relay-to-knight",
+    "title": "Cross, jump, and chip",
+    "difficulty": "tough",
+    "planSteps": 4,
+    "revision": 3,
+    "theme": "box-entry",
+    "side": "attack",
+    "playerTeam": "white",
+    "roundLimit": 4,
+    "objective": "Create and take a finish worth at least 20% against the best keeper response. Any legal route can succeed.",
+    "coachNote": "The keeper starts centrally on g17 and can use its ordinary move and shared bonus to cover the receiving knight. The relay supplies width before i14–j16 creates an L-shaped I-goal shot. Against that natural cover the checked chance is about 23%, rather than the old stranded-keeper chance.",
+    "hints": [
+      "Compare the receiving knight’s route with the keeper’s central coverage.",
+      "A knight on i14 has no immediate goal target; a change of rank and file can create one.",
+      "One candidate is Rb11–Rb14, then Ni14, Nj16 and the I-goal shot. Other legal finishes above the target count."
+    ],
+    "goal": {
+      "type": "finish",
+      "minShotXG": 0.2
+    },
+    "position": {
+      "pieces": [
+        {
+          "id": "white-K",
+          "team": "white",
+          "type": "K",
+          "x": 6,
+          "y": 16
+        },
+        {
+          "id": "white-B1",
+          "team": "white",
+          "type": "B",
+          "x": 9,
+          "y": 7
+        },
+        {
+          "id": "white-N2",
+          "team": "white",
+          "type": "N",
+          "x": 2,
+          "y": 9
+        },
+        {
+          "id": "white-P1",
+          "team": "white",
+          "type": "P",
+          "x": 5,
+          "y": 8
+        },
+        {
+          "id": "black-K",
+          "team": "black",
+          "type": "K",
+          "x": 6,
+          "y": 0
+        },
+        {
+          "id": "black-R1",
+          "team": "black",
+          "type": "R",
+          "x": 12,
+          "y": 0
+        },
+        {
+          "id": "black-B1",
+          "team": "black",
+          "type": "B",
+          "x": 13,
+          "y": 8
+        },
+        {
+          "id": "black-N1",
+          "team": "black",
+          "type": "N",
+          "x": 10,
+          "y": 4
+        },
+        {
+          "id": "black-P1",
+          "team": "black",
+          "type": "P",
+          "x": 4,
+          "y": 6
+        },
+        {
+          "id": "black-P2",
+          "team": "black",
+          "type": "P",
+          "x": 8,
+          "y": 5
+        },
+        {
+          "id": "black-P3",
+          "team": "black",
+          "type": "P",
+          "x": 6,
+          "y": 6
+        },
+        {
+          "id": "white-R1",
+          "team": "white",
+          "type": "R",
+          "x": 1,
+          "y": 6
+        },
+        {
+          "id": "white-R2",
+          "team": "white",
+          "type": "R",
+          "x": 1,
+          "y": 3
+        },
+        {
+          "id": "white-N1",
+          "team": "white",
+          "type": "N",
+          "x": 8,
+          "y": 3
+        }
+      ],
+      "carrierId": "white-R1",
+      "phase": "kick",
+      "attack": "white"
+    },
+    "exampleActions": [
+      {
+        "type": "kick",
+        "x": 1,
+        "y": 3
+      },
+      {
+        "type": "skip"
+      },
+      {
+        "type": "kick",
+        "x": 8,
+        "y": 3
+      },
+      {
+        "type": "move",
+        "pieceId": "white-N1",
+        "x": 9,
+        "y": 1
+      },
+      {
+        "type": "skip"
+      },
+      {
+        "type": "kick",
+        "x": 8,
+        "y": -1
+      }
+    ]
+  },
+  {
+    "id": "tough-knight-wall-pass",
+    "title": "Link through the knight, then escape",
+    "difficulty": "tough",
+    "planSteps": 4,
+    "revision": 2,
+    "theme": "box-entry",
+    "side": "attack",
+    "playerTeam": "white",
+    "roundLimit": 4,
+    "objective": "Create and take a finish worth at least 15% against the best keeper response. Any legal route can succeed.",
+    "coachNote": "The keeper starts centrally on g17, so an immediate close knight carry invites a challenge. One plan uses the knight as a wall player, then carries the receiving queen across to j16 before shooting diagonally. The pawn on l16 blocks the opposing rook’s horizontal challenge. The resulting covered finish is about 17%.",
+    "hints": [
+      "The knight can link to the queen without trying to finish beside the central keeper.",
+      "After receiving on f16, the queen can use its own dribble to escape across the box. Check the rook pressure from n16.",
+      "One candidate is Ba12–Nd15, Nd15–Qf16, Qf16–j16, then the H-goal shot. End positioning between kicks; other qualifying plans count."
+    ],
+    "goal": {
+      "type": "finish",
+      "minShotXG": 0.15
+    },
+    "position": {
+      "pieces": [
+        {
+          "id": "white-K",
+          "team": "white",
+          "type": "K",
+          "x": 6,
+          "y": 16
+        },
+        {
+          "id": "white-B1",
+          "team": "white",
+          "type": "B",
+          "x": 0,
+          "y": 5
+        },
+        {
+          "id": "white-N1",
+          "team": "white",
+          "type": "N",
+          "x": 3,
+          "y": 2
+        },
+        {
+          "id": "white-Q",
+          "team": "white",
+          "type": "Q",
+          "x": 5,
+          "y": 1
+        },
+        {
+          "id": "white-N2",
+          "team": "white",
+          "type": "N",
+          "x": 7,
+          "y": 2
+        },
+        {
+          "id": "white-P1",
+          "team": "white",
+          "type": "P",
+          "x": 5,
+          "y": 8
+        },
+        {
+          "id": "white-P2",
+          "team": "white",
+          "type": "P",
+          "x": 11,
+          "y": 1
+        },
+        {
+          "id": "white-R1",
+          "team": "white",
+          "type": "R",
+          "x": 0,
+          "y": 8
+        },
+        {
+          "id": "black-K",
+          "team": "black",
+          "type": "K",
+          "x": 6,
+          "y": 0
+        },
+        {
+          "id": "black-R1",
+          "team": "black",
+          "type": "R",
+          "x": 12,
+          "y": 0
+        },
+        {
+          "id": "black-R2",
+          "team": "black",
+          "type": "R",
+          "x": 13,
+          "y": 1
+        },
+        {
+          "id": "black-B1",
+          "team": "black",
+          "type": "B",
+          "x": 13,
+          "y": 8
+        },
+        {
+          "id": "black-N1",
+          "team": "black",
+          "type": "N",
+          "x": 10,
+          "y": 4
+        },
+        {
+          "id": "black-P1",
+          "team": "black",
+          "type": "P",
+          "x": 4,
+          "y": 5
+        },
+        {
+          "id": "black-P2",
+          "team": "black",
+          "type": "P",
+          "x": 8,
+          "y": 5
+        }
+      ],
+      "carrierId": "white-B1",
+      "phase": "kick",
+      "attack": "white"
+    },
+    "exampleActions": [
+      {
+        "type": "kick",
+        "x": 3,
+        "y": 2
+      },
+      {
+        "type": "skip"
+      },
+      {
+        "type": "kick",
+        "x": 5,
+        "y": 1
+      },
+      {
+        "type": "move",
+        "pieceId": "white-Q",
+        "x": 9,
+        "y": 1
+      },
+      {
+        "type": "skip"
+      },
+      {
+        "type": "kick",
+        "x": 7,
+        "y": -1
+      }
+    ]
+  },
+  {
+    "id": "tough-through-ball-layoff",
+    "title": "Through the line, then lay off",
+    "difficulty": "tough",
+    "planSteps": 4,
+    "revision": 3,
+    "theme": "through-ball",
+    "side": "attack",
+    "playerTeam": "white",
+    "roundLimit": 4,
+    "objective": "Create and take a finish worth at least 13% against the best keeper response. Any legal route can succeed.",
+    "coachNote": "The keeper starts centrally on g17. One plan sends a diagonal pass into space, collects with an onside knight and lays back to the rook. The queen and bishop restrict diagonal blocking routes, so the rook can use its long-shot strength from h12. The checked chance is about 14% against the keeper’s cover.",
+    "hints": [
+      "The first pass can reach space ahead of the knight rather than a stationary receiver.",
+      "After collecting g14, the knight has a backward L-shaped link to the rook on h12.",
+      "One candidate is Ba8–g14, Ne13–g14 to collect, Ng14–Rh12, then the H-goal shot. Other sufficiently strong legal finishes also count."
+    ],
+    "goal": {
+      "type": "finish",
+      "minShotXG": 0.13
+    },
+    "position": {
+      "pieces": [
+        {
+          "id": "white-K",
+          "team": "white",
+          "type": "K",
+          "x": 6,
+          "y": 16
+        },
+        {
+          "id": "white-B1",
+          "team": "white",
+          "type": "B",
+          "x": 0,
+          "y": 9
+        },
+        {
+          "id": "white-B2",
+          "team": "white",
+          "type": "B",
+          "x": 9,
+          "y": 3
+        },
+        {
+          "id": "white-Q",
+          "team": "white",
+          "type": "Q",
+          "x": 9,
+          "y": 5
+        },
+        {
+          "id": "white-N1",
+          "team": "white",
+          "type": "N",
+          "x": 4,
+          "y": 4
+        },
+        {
+          "id": "white-R1",
+          "team": "white",
+          "type": "R",
+          "x": 7,
+          "y": 5
+        },
+        {
+          "id": "white-P1",
+          "team": "white",
+          "type": "P",
+          "x": 5,
+          "y": 9
+        },
+        {
+          "id": "white-P2",
+          "team": "white",
+          "type": "P",
+          "x": 9,
+          "y": 7
+        },
+        {
+          "id": "black-K",
+          "team": "black",
+          "type": "K",
+          "x": 6,
+          "y": 0
+        },
+        {
+          "id": "black-R1",
+          "team": "black",
+          "type": "R",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "id": "black-R2",
+          "team": "black",
+          "type": "R",
+          "x": 13,
+          "y": 0
+        },
+        {
+          "id": "black-B1",
+          "team": "black",
+          "type": "B",
+          "x": 12,
+          "y": 8
+        },
+        {
+          "id": "black-N1",
+          "team": "black",
+          "type": "N",
+          "x": 13,
+          "y": 10
+        },
+        {
+          "id": "black-P1",
+          "team": "black",
+          "type": "P",
+          "x": 1,
+          "y": 7
+        },
+        {
+          "id": "black-P2",
+          "team": "black",
+          "type": "P",
+          "x": 11,
+          "y": 9
+        }
+      ],
+      "carrierId": "white-B1",
+      "phase": "kick",
+      "attack": "white"
+    },
+    "exampleActions": [
+      {
+        "type": "kick",
+        "x": 6,
+        "y": 3
+      },
+      {
+        "type": "move",
+        "pieceId": "white-N1",
+        "x": 6,
+        "y": 3
+      },
+      {
+        "type": "skip"
+      },
+      {
+        "type": "kick",
+        "x": 7,
+        "y": 5
+      },
+      {
+        "type": "skip"
+      },
+      {
+        "type": "kick",
+        "x": 7,
+        "y": -1
+      }
+    ]
+  },
+  {
+    "id": "tough-clear-offside-runner",
+    "title": "Clear the offside runner first",
+    "difficulty": "tough",
+    "planSteps": 3,
+    "revision": 2,
+    "theme": "box-entry",
+    "side": "attack",
+    "playerTeam": "white",
+    "roundLimit": 4,
+    "objective": "Create and take a legal finish worth at least 10% against the best keeper response. Normal offside rules still apply.",
+    "coachNote": "The advanced knight is involved while offside, but the remedy does not require the old cross and queen carry. Clearing it lets the rook use its independent dribble allowance to find the g-file and shoot. The stronger, shorter legal plan earns the same credit.",
+    "hints": [
+      "Inspect the advanced knight before choosing a finishing route.",
+      "The ordinary off-ball move and the rook’s dribble are separate actions; a teammate pass is not compulsory.",
+      "One candidate is Nf16–d15, Rb14–g14 with the ball, then the G-goal shot. End positioning before shooting."
+    ],
+    "goal": {
+      "type": "finish",
+      "minShotXG": 0.1
+    },
+    "position": {
+      "pieces": [
+        {
+          "id": "white-K",
+          "team": "white",
+          "type": "K",
+          "x": 6,
+          "y": 16
+        },
+        {
+          "id": "white-B1",
+          "team": "white",
+          "type": "B",
+          "x": 9,
+          "y": 7
+        },
+        {
+          "id": "white-N2",
+          "team": "white",
+          "type": "N",
+          "x": 2,
+          "y": 9
+        },
+        {
+          "id": "white-P1",
+          "team": "white",
+          "type": "P",
+          "x": 5,
+          "y": 8
+        },
+        {
+          "id": "black-K",
+          "team": "black",
+          "type": "K",
+          "x": 6,
+          "y": 0
+        },
+        {
+          "id": "black-R1",
+          "team": "black",
+          "type": "R",
+          "x": 12,
+          "y": 3
+        },
+        {
+          "id": "black-B1",
+          "team": "black",
+          "type": "B",
+          "x": 13,
+          "y": 8
+        },
+        {
+          "id": "black-N1",
+          "team": "black",
+          "type": "N",
+          "x": 10,
+          "y": 4
+        },
+        {
+          "id": "black-P1",
+          "team": "black",
+          "type": "P",
+          "x": 4,
+          "y": 5
+        },
+        {
+          "id": "black-P2",
+          "team": "black",
+          "type": "P",
+          "x": 8,
+          "y": 5
+        },
+        {
+          "id": "black-P3",
+          "team": "black",
+          "type": "P",
+          "x": 6,
+          "y": 6
+        },
+        {
+          "id": "white-R1",
+          "team": "white",
+          "type": "R",
+          "x": 1,
+          "y": 3
+        },
+        {
+          "id": "white-N1",
+          "team": "white",
+          "type": "N",
+          "x": 5,
+          "y": 1
+        },
+        {
+          "id": "white-Q",
+          "team": "white",
+          "type": "Q",
+          "x": 7,
+          "y": 3
+        }
+      ],
+      "carrierId": "white-R1",
+      "phase": "attackMove",
+      "attack": "white"
+    },
+    "exampleActions": [
+      {
+        "type": "move",
+        "pieceId": "white-N1",
+        "x": 3,
+        "y": 2
+      },
+      {
+        "type": "move",
+        "pieceId": "white-R1",
+        "x": 6,
+        "y": 3
+      },
+      {
+        "type": "skip"
+      },
+      {
+        "type": "kick",
+        "x": 6,
+        "y": -1
+      }
+    ]
+  },
+  {
+    "id": "tough-sweeper-to-bishop",
+    "title": "Build from the goalkeeper",
+    "difficulty": "tough",
+    "planSteps": 4,
+    "revision": 3,
+    "theme": "one-on-one",
+    "side": "attack",
+    "playerTeam": "white",
+    "roundLimit": 4,
+    "objective": "Create and take a finish worth at least 13% against the best keeper response. Any legal buildup can succeed.",
+    "coachNote": "Both keepers begin centrally on their goal lines. One buildup uses the two rooks as a relay, while a queen support move denies the bishop a diagonal blocking square. The final long shot is worth about 14% against a properly placed keeper; without that support move the route produces under 8%.",
+    "hints": [
+      "The keeper can start the attack with a legal long pass from g1.",
+      "Before forwarding from the first rook, inspect the bishop’s diagonal route toward the shooting file.",
+      "One candidate is Kg1–Rg8, Qj11–j12 off ball, Rg8–Rg12, then the G-goal shot. A different support square or qualifying plan also counts."
+    ],
+    "goal": {
+      "type": "finish",
+      "minShotXG": 0.13
+    },
+    "position": {
+      "pieces": [
+        {
+          "id": "white-K",
+          "team": "white",
+          "type": "K",
+          "x": 6,
+          "y": 16
+        },
+        {
+          "id": "white-R1",
+          "team": "white",
+          "type": "R",
+          "x": 6,
+          "y": 9
+        },
+        {
+          "id": "white-R2",
+          "team": "white",
+          "type": "R",
+          "x": 6,
+          "y": 5
+        },
+        {
+          "id": "white-Q",
+          "team": "white",
+          "type": "Q",
+          "x": 9,
+          "y": 6
+        },
+        {
+          "id": "white-B1",
+          "team": "white",
+          "type": "B",
+          "x": 3,
+          "y": 7
+        },
+        {
+          "id": "white-N1",
+          "team": "white",
+          "type": "N",
+          "x": 2,
+          "y": 5
+        },
+        {
+          "id": "white-P1",
+          "team": "white",
+          "type": "P",
+          "x": 5,
+          "y": 9
+        },
+        {
+          "id": "black-K",
+          "team": "black",
+          "type": "K",
+          "x": 6,
+          "y": 0
+        },
+        {
+          "id": "black-R1",
+          "team": "black",
+          "type": "R",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "id": "black-R2",
+          "team": "black",
+          "type": "R",
+          "x": 13,
+          "y": 0
+        },
+        {
+          "id": "black-B1",
+          "team": "black",
+          "type": "B",
+          "x": 12,
+          "y": 8
+        },
+        {
+          "id": "black-N1",
+          "team": "black",
+          "type": "N",
+          "x": 13,
+          "y": 10
+        },
+        {
+          "id": "black-P1",
+          "team": "black",
+          "type": "P",
+          "x": 1,
+          "y": 7
+        },
+        {
+          "id": "black-P2",
+          "team": "black",
+          "type": "P",
+          "x": 11,
+          "y": 9
+        }
+      ],
+      "carrierId": "white-K",
+      "phase": "kick",
+      "attack": "white"
+    },
+    "exampleActions": [
+      {
+        "type": "kick",
+        "x": 6,
+        "y": 9
+      },
+      {
+        "type": "move",
+        "pieceId": "white-Q",
+        "x": 9,
+        "y": 5
+      },
+      {
+        "type": "skip"
+      },
+      {
+        "type": "kick",
+        "x": 6,
+        "y": 5
+      },
+      {
+        "type": "skip"
+      },
+      {
+        "type": "kick",
+        "x": 6,
+        "y": -1
+      }
+    ]
+  },
+  {
+    "id": "tough-unlock-the-rook-battery",
+    "title": "Unlock the rook battery",
+    "difficulty": "tough",
+    "planSteps": 4,
+    "revision": 3,
+    "theme": "box-entry",
+    "side": "attack",
+    "playerTeam": "white",
+    "roundLimit": 4,
+    "objective": "Create and take a finish worth at least 17% against the best goalkeeper reaction. Any legal plan can earn credit.",
+    "coachNote": "The keeper begins centrally on g17. One useful plan transfers to the second rook, clears its file and carries only to the edge of the box. That keeps the ball beyond a bonus-assisted king challenge while improving the rook’s shooting distance. The resulting chance is about 18% against proper cover, rather than an almost open goal.",
+    "hints": [
+      "The wide rook has no direct finish. Its teammate can use the f-file, once the friendly bishop leaves it.",
+      "Clearance and dribbling have separate allowances. Carrying all the way beside this central keeper would expose the ball.",
+      "One plan is Rc13–Rf13, Bf14–g15, Rf13–f14, then the F-goal shot after positioning ends."
+    ],
+    "goal": {
+      "type": "finish",
+      "minShotXG": 0.17
+    },
+    "position": {
+      "pieces": [
+        {
+          "id": "white-K",
+          "team": "white",
+          "type": "K",
+          "x": 6,
+          "y": 16
+        },
+        {
+          "id": "black-K",
+          "team": "black",
+          "type": "K",
+          "x": 6,
+          "y": 0
+        },
+        {
+          "id": "black-R1",
+          "team": "black",
+          "type": "R",
+          "x": 13,
+          "y": 0
+        },
+        {
+          "id": "black-R2",
+          "team": "black",
+          "type": "R",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "id": "black-B1",
+          "team": "black",
+          "type": "B",
+          "x": 11,
+          "y": 1
+        },
+        {
+          "id": "black-N1",
+          "team": "black",
+          "type": "N",
+          "x": 1,
+          "y": 8
+        },
+        {
+          "id": "black-P1",
+          "team": "black",
+          "type": "P",
+          "x": 11,
+          "y": 10
+        },
+        {
+          "id": "white-P1",
+          "team": "white",
+          "type": "P",
+          "x": 5,
+          "y": 7
+        },
+        {
+          "id": "white-P2",
+          "team": "white",
+          "type": "P",
+          "x": 9,
+          "y": 8
+        },
+        {
+          "id": "white-B2",
+          "team": "white",
+          "type": "B",
+          "x": 10,
+          "y": 9
+        },
+        {
+          "id": "white-N2",
+          "team": "white",
+          "type": "N",
+          "x": 2,
+          "y": 10
+        },
+        {
+          "id": "white-R1",
+          "team": "white",
+          "type": "R",
+          "x": 2,
+          "y": 4
+        },
+        {
+          "id": "white-R2",
+          "team": "white",
+          "type": "R",
+          "x": 5,
+          "y": 4
+        },
+        {
+          "id": "white-B1",
+          "team": "white",
+          "type": "B",
+          "x": 5,
+          "y": 3
+        },
+        {
+          "id": "white-N1",
+          "team": "white",
+          "type": "N",
+          "x": 6,
+          "y": 1
+        }
+      ],
+      "carrierId": "white-R1",
+      "phase": "kick",
+      "attack": "white"
+    },
+    "exampleActions": [
+      {
+        "type": "kick",
+        "x": 5,
+        "y": 4
+      },
+      {
+        "type": "move",
+        "pieceId": "white-B1",
+        "x": 6,
+        "y": 2
+      },
+      {
+        "type": "move",
+        "pieceId": "white-R2",
+        "x": 5,
+        "y": 3
+      },
+      {
+        "type": "skip"
+      },
+      {
+        "type": "kick",
+        "x": 5,
+        "y": -1
+      }
+    ]
+  },
+  {
+    "id": "tough-find-the-protected-pocket",
+    "title": "Find the protected pocket",
+    "difficulty": "tough",
+    "planSteps": 4,
+    "revision": 2,
+    "theme": "through-ball",
+    "side": "attack",
+    "playerTeam": "white",
+    "roundLimit": 4,
+    "objective": "Create and take a finish worth at least 20% against the best goalkeeper reaction. Any legal plan can earn credit.",
+    "coachNote": "The keeper starts centrally on g17. A forward ball to h15 lets the knight collect and then change direction toward j16, away from the king’s immediate challenge. The supporting pawn covers a potential opposing pawn route and the rook restricts the keeper’s forward approach. The final I-file lob is about 23% against the best reaction.",
+    "hints": [
+      "The queen’s initial long shot is weak. A knight can collect into space and still use its separate dribble.",
+      "Compare the landing squares with both the king’s bonus step and its normal challenge. The right-hand pocket gives more separation.",
+      "One plan is Qh10–h15, Nf14–h15 to collect, Nh15–j16, then the I-goal finish after positioning ends."
+    ],
+    "goal": {
+      "type": "finish",
+      "minShotXG": 0.2
+    },
+    "position": {
+      "pieces": [
+        {
+          "id": "white-K",
+          "team": "white",
+          "type": "K",
+          "x": 6,
+          "y": 16
+        },
+        {
+          "id": "black-K",
+          "team": "black",
+          "type": "K",
+          "x": 6,
+          "y": 0
+        },
+        {
+          "id": "black-R1",
+          "team": "black",
+          "type": "R",
+          "x": 13,
+          "y": 0
+        },
+        {
+          "id": "black-R2",
+          "team": "black",
+          "type": "R",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "id": "black-B1",
+          "team": "black",
+          "type": "B",
+          "x": 11,
+          "y": 1
+        },
+        {
+          "id": "black-N1",
+          "team": "black",
+          "type": "N",
+          "x": 1,
+          "y": 8
+        },
+        {
+          "id": "black-P1",
+          "team": "black",
+          "type": "P",
+          "x": 6,
+          "y": 3
+        },
+        {
+          "id": "white-P1",
+          "team": "white",
+          "type": "P",
+          "x": 5,
+          "y": 7
+        },
+        {
+          "id": "white-P2",
+          "team": "white",
+          "type": "P",
+          "x": 9,
+          "y": 8
+        },
+        {
+          "id": "white-B2",
+          "team": "white",
+          "type": "B",
+          "x": 10,
+          "y": 9
+        },
+        {
+          "id": "white-N2",
+          "team": "white",
+          "type": "N",
+          "x": 2,
+          "y": 10
+        },
+        {
+          "id": "white-Q",
+          "team": "white",
+          "type": "Q",
+          "x": 7,
+          "y": 7
+        },
+        {
+          "id": "white-N1",
+          "team": "white",
+          "type": "N",
+          "x": 5,
+          "y": 3
+        },
+        {
+          "id": "white-R1",
+          "team": "white",
+          "type": "R",
+          "x": 6,
+          "y": 1
+        },
+        {
+          "id": "white-P3",
+          "team": "white",
+          "type": "P",
+          "x": 6,
+          "y": 2
+        },
+        {
+          "id": "white-B1",
+          "team": "white",
+          "type": "B",
+          "x": 2,
+          "y": 5
+        }
+      ],
+      "carrierId": "white-Q",
+      "phase": "kick",
+      "attack": "white"
+    },
+    "exampleActions": [
+      {
+        "type": "kick",
+        "x": 7,
+        "y": 2
+      },
+      {
+        "type": "move",
+        "pieceId": "white-N1",
+        "x": 7,
+        "y": 2
+      },
+      {
+        "type": "move",
+        "pieceId": "white-N1",
+        "x": 9,
+        "y": 1
+      },
+      {
+        "type": "skip"
+      },
+      {
+        "type": "kick",
+        "x": 8,
+        "y": -1
+      }
+    ]
+  },
+  {
+    "id": "tough-clear-the-delivery-diagonal",
+    "title": "Switch around the central screen",
+    "difficulty": "tough",
+    "planSteps": 3,
+    "revision": 3,
+    "theme": "box-entry",
+    "side": "attack",
+    "playerTeam": "white",
+    "roundLimit": 4,
+    "objective": "Create and take a finish worth at least 20% against the best goalkeeper reaction. Any legal plan can earn credit.",
+    "coachNote": "The goalkeeper begins centrally on g17. Two defenders screen the queen’s direct i-file attempt, while a friendly bishop interrupts the diagonal to the far-side knight. Clearing that diagonal changes the point of attack rather than relying on a keeper stranded outside its goal. The illustrated delivery creates about a 23% F-file lob.",
+    "hints": [
+      "The direct i-file shot has two defensive bodies in front of it. The opposite-side knight offers another angle.",
+      "Clear the friendly bishop off the queen–knight diagonal while keeping the receiver onside.",
+      "One route is Bg14–h15, Qi12–Ne16, then the knight’s F-goal finish. End positioning as required and answer the actual defensive replies."
+    ],
+    "goal": {
+      "type": "finish",
+      "minShotXG": 0.2
+    },
+    "position": {
+      "pieces": [
+        {
+          "id": "white-K",
+          "team": "white",
+          "type": "K",
+          "x": 6,
+          "y": 16
+        },
+        {
+          "id": "black-K",
+          "team": "black",
+          "type": "K",
+          "x": 6,
+          "y": 0
+        },
+        {
+          "id": "black-R1",
+          "team": "black",
+          "type": "R",
+          "x": 13,
+          "y": 0
+        },
+        {
+          "id": "black-R2",
+          "team": "black",
+          "type": "R",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "id": "black-B1",
+          "team": "black",
+          "type": "B",
+          "x": 11,
+          "y": 1
+        },
+        {
+          "id": "black-N1",
+          "team": "black",
+          "type": "N",
+          "x": 8,
+          "y": 2
+        },
+        {
+          "id": "black-P1",
+          "team": "black",
+          "type": "P",
+          "x": 8,
+          "y": 3
+        },
+        {
+          "id": "white-P1",
+          "team": "white",
+          "type": "P",
+          "x": 5,
+          "y": 7
+        },
+        {
+          "id": "white-P2",
+          "team": "white",
+          "type": "P",
+          "x": 9,
+          "y": 8
+        },
+        {
+          "id": "white-B2",
+          "team": "white",
+          "type": "B",
+          "x": 10,
+          "y": 9
+        },
+        {
+          "id": "white-N2",
+          "team": "white",
+          "type": "N",
+          "x": 2,
+          "y": 10
+        },
+        {
+          "id": "white-Q",
+          "team": "white",
+          "type": "Q",
+          "x": 8,
+          "y": 5
+        },
+        {
+          "id": "white-N1",
+          "team": "white",
+          "type": "N",
+          "x": 4,
+          "y": 1
+        },
+        {
+          "id": "white-B1",
+          "team": "white",
+          "type": "B",
+          "x": 6,
+          "y": 3
+        }
+      ],
+      "carrierId": "white-Q",
+      "phase": "attackMove",
+      "attack": "white"
+    },
+    "exampleActions": [
+      {
+        "type": "move",
+        "pieceId": "white-B1",
+        "x": 7,
+        "y": 2
+      },
+      {
+        "type": "skip"
+      },
+      {
+        "type": "kick",
+        "x": 4,
+        "y": 1
+      },
+      {
+        "type": "skip"
+      },
+      {
+        "type": "kick",
+        "x": 5,
+        "y": -1
+      }
+    ]
+  },
+  {
+    "id": "tough-pawn-screen-keeper-route",
+    "title": "Two screens and the keeper",
+    "difficulty": "tough",
+    "planSteps": 3,
+    "revision": 3,
+    "theme": "defence",
+    "side": "defence",
+    "playerTeam": "white",
+    "roundLimit": 3,
+    "objective": "Hold the opponent’s finishing chance to 7% or less, or win possession. Any legal defensive plan can earn credit.",
+    "coachNote": "The keeper begins centrally on g1. The knights and bishop contain the carrier’s escape routes; adding a rook screen and a separate pawn screen lets the keeper cover the declared aim behind two bodies. This reduces the initial immediate threat from about 19% to about 6%. One screen or keeper cover alone is not enough for this target.",
+    "hints": [
+      "The goalkeeper is already in a normal position, but one cover layer still leaves too much danger.",
+      "Use the ordinary action for one body screen and the shared pawn bonus for another, leaving the separate keeper reaction available.",
+      "One plan is Rg4–h4, Pg2–h2 as the bonus, then Kg1–h1 when the shot is declared. Reversing the two screens also works."
+    ],
+    "goal": {
+      "type": "defend",
+      "maxOpponentShotXG": 0.07
+    },
+    "position": {
+      "pieces": [
+        {
+          "id": "black-K",
+          "team": "black",
+          "type": "K",
+          "x": 7,
+          "y": 0
+        },
+        {
+          "id": "black-R1",
+          "team": "black",
+          "type": "R",
+          "x": 13,
+          "y": 7
+        },
+        {
+          "id": "black-Q",
+          "team": "black",
+          "type": "Q",
+          "x": 0,
+          "y": 5
+        },
+        {
+          "id": "black-B1",
+          "team": "black",
+          "type": "B",
+          "x": 2,
+          "y": 4
+        },
+        {
+          "id": "black-N1",
+          "team": "black",
+          "type": "N",
+          "x": 11,
+          "y": 6
+        },
+        {
+          "id": "black-P1",
+          "team": "black",
+          "type": "P",
+          "x": 4,
+          "y": 8
+        },
+        {
+          "id": "white-Q",
+          "team": "white",
+          "type": "Q",
+          "x": 10,
+          "y": 8
+        },
+        {
+          "id": "white-R1",
+          "team": "white",
+          "type": "R",
+          "x": 6,
+          "y": 13
+        },
+        {
+          "id": "white-B1",
+          "team": "white",
+          "type": "B",
+          "x": 7,
+          "y": 11
+        },
+        {
+          "id": "white-N1",
+          "team": "white",
+          "type": "N",
+          "x": 6,
+          "y": 12
+        },
+        {
+          "id": "white-N2",
+          "team": "white",
+          "type": "N",
+          "x": 8,
+          "y": 12
+        },
+        {
+          "id": "white-P2",
+          "team": "white",
+          "type": "P",
+          "x": 9,
+          "y": 9
+        },
+        {
+          "id": "white-K",
+          "team": "white",
+          "type": "K",
+          "x": 6,
+          "y": 16
+        },
+        {
+          "id": "black-R2",
+          "team": "black",
+          "type": "R",
+          "x": 7,
+          "y": 12
+        },
+        {
+          "id": "white-P1",
+          "team": "white",
+          "type": "P",
+          "x": 6,
+          "y": 15
+        }
+      ],
+      "carrierId": "black-R2",
+      "phase": "defendMove",
+      "attack": "black"
+    },
+    "exampleActions": [
+      {
+        "type": "move",
+        "pieceId": "white-R1",
+        "x": 7,
+        "y": 13
+      },
+      {
+        "type": "move",
+        "pieceId": "white-P1",
+        "x": 7,
+        "y": 15,
+        "freePawn": true
+      },
+      {
+        "type": "move",
+        "pieceId": "white-K",
+        "x": 7,
+        "y": 16
+      }
+    ]
+  },
+  {
+    "id": "tough-open-the-keepers-return",
+    "title": "Cover the far post",
+    "difficulty": "tough",
+    "planSteps": 3,
+    "revision": 2,
+    "theme": "defence",
+    "side": "defence",
+    "playerTeam": "white",
+    "roundLimit": 3,
+    "objective": "Win possession or hold the strongest available finishing chance to 10% or less. Any legal defensive plan can earn credit.",
+    "coachNote": "The goalkeeper begins centrally on g1. A rook can screen the i-file while the shared king bonus brings the keeper one file toward the far post; its later shot reaction supplies the final coverage. The knights and bishop contain the carrier, so the attacker has to confront the screen rather than receive a free central escape. This is one possible plan, not a required sequence.",
+    "hints": [
+      "The i-file is dangerous even though the keeper begins in a normal central position.",
+      "Coordinate a rook body block with the shared king bonus; the shot reaction is a separate action.",
+      "One plan is Rm4–i4, Kg1–h1 with the shared bonus, then Kh1–i1 against the declared I-file shot."
+    ],
+    "goal": {
+      "type": "defend",
+      "maxOpponentShotXG": 0.1
+    },
+    "position": {
+      "pieces": [
+        {
+          "id": "black-K",
+          "team": "black",
+          "type": "K",
+          "x": 7,
+          "y": 0
+        },
+        {
+          "id": "black-Q",
+          "team": "black",
+          "type": "Q",
+          "x": 0,
+          "y": 5
+        },
+        {
+          "id": "black-B1",
+          "team": "black",
+          "type": "B",
+          "x": 2,
+          "y": 4
+        },
+        {
+          "id": "black-N1",
+          "team": "black",
+          "type": "N",
+          "x": 11,
+          "y": 6
+        },
+        {
+          "id": "black-P1",
+          "team": "black",
+          "type": "P",
+          "x": 4,
+          "y": 8
+        },
+        {
+          "id": "black-R1",
+          "team": "black",
+          "type": "R",
+          "x": 13,
+          "y": 7
+        },
+        {
+          "id": "black-R2",
+          "team": "black",
+          "type": "R",
+          "x": 8,
+          "y": 12
+        },
+        {
+          "id": "white-Q",
+          "team": "white",
+          "type": "Q",
+          "x": 10,
+          "y": 8
+        },
+        {
+          "id": "white-R1",
+          "team": "white",
+          "type": "R",
+          "x": 12,
+          "y": 13
+        },
+        {
+          "id": "white-B1",
+          "team": "white",
+          "type": "B",
+          "x": 8,
+          "y": 11
+        },
+        {
+          "id": "white-N1",
+          "team": "white",
+          "type": "N",
+          "x": 7,
+          "y": 12
+        },
+        {
+          "id": "white-N2",
+          "team": "white",
+          "type": "N",
+          "x": 9,
+          "y": 12
+        },
+        {
+          "id": "white-P2",
+          "team": "white",
+          "type": "P",
+          "x": 10,
+          "y": 9
+        },
+        {
+          "id": "white-K",
+          "team": "white",
+          "type": "K",
+          "x": 6,
+          "y": 16
+        },
+        {
+          "id": "white-P1",
+          "team": "white",
+          "type": "P",
+          "x": 6,
+          "y": 15
+        }
+      ],
+      "carrierId": "black-R2",
+      "phase": "defendMove",
+      "attack": "black"
+    },
+    "exampleActions": [
+      {
+        "type": "move",
+        "pieceId": "white-R1",
+        "x": 8,
+        "y": 13
+      },
+      {
+        "type": "move",
+        "pieceId": "white-K",
+        "x": 7,
+        "y": 16,
+        "freePawn": true
+      },
+      {
+        "type": "move",
+        "pieceId": "white-K",
+        "x": 8,
+        "y": 16
+      }
+    ]
+  },
+  {
+    "id": "tough-clear-the-box-gateway",
+    "title": "Bring the bishop across",
+    "difficulty": "tough",
+    "planSteps": 3,
+    "revision": 2,
+    "theme": "defence",
+    "side": "defence",
+    "playerTeam": "white",
+    "roundLimit": 3,
+    "objective": "Win possession or hold the strongest available finishing chance to 10% or less. Any legal defensive plan can earn credit.",
+    "coachNote": "The keeper starts centrally on h1. The bishop can travel diagonally from d2 to provide a screen on f4, while the shared king bonus and the separate reaction cover the left-hand goal file. The surrounding defenders contain the rook and make the forward shot a real test of the prepared defence. Other legal plans meeting the same outcome also earn credit.",
+    "hints": [
+      "A straight attacking file can be screened by a bishop arriving diagonally.",
+      "Use the ordinary action for the bishop and the shared bonus for the king.",
+      "One plan is Bd2–f4, Kh1–g1 with the shared bonus, then Kg1–f1 against the declared F-file shot."
+    ],
+    "goal": {
+      "type": "defend",
+      "maxOpponentShotXG": 0.1
+    },
+    "position": {
+      "pieces": [
+        {
+          "id": "black-K",
+          "team": "black",
+          "type": "K",
+          "x": 6,
+          "y": 0
+        },
+        {
+          "id": "black-Q",
+          "team": "black",
+          "type": "Q",
+          "x": 13,
+          "y": 5
+        },
+        {
+          "id": "black-B1",
+          "team": "black",
+          "type": "B",
+          "x": 11,
+          "y": 4
+        },
+        {
+          "id": "black-N1",
+          "team": "black",
+          "type": "N",
+          "x": 2,
+          "y": 6
+        },
+        {
+          "id": "black-P1",
+          "team": "black",
+          "type": "P",
+          "x": 9,
+          "y": 8
+        },
+        {
+          "id": "black-R1",
+          "team": "black",
+          "type": "R",
+          "x": 0,
+          "y": 7
+        },
+        {
+          "id": "black-R2",
+          "team": "black",
+          "type": "R",
+          "x": 5,
+          "y": 12
+        },
+        {
+          "id": "white-Q",
+          "team": "white",
+          "type": "Q",
+          "x": 3,
+          "y": 8
+        },
+        {
+          "id": "white-B1",
+          "team": "white",
+          "type": "B",
+          "x": 3,
+          "y": 15
+        },
+        {
+          "id": "white-B2",
+          "team": "white",
+          "type": "B",
+          "x": 5,
+          "y": 11
+        },
+        {
+          "id": "white-N1",
+          "team": "white",
+          "type": "N",
+          "x": 6,
+          "y": 12
+        },
+        {
+          "id": "white-N2",
+          "team": "white",
+          "type": "N",
+          "x": 4,
+          "y": 12
+        },
+        {
+          "id": "white-P2",
+          "team": "white",
+          "type": "P",
+          "x": 3,
+          "y": 9
+        },
+        {
+          "id": "white-K",
+          "team": "white",
+          "type": "K",
+          "x": 7,
+          "y": 16
+        },
+        {
+          "id": "white-P1",
+          "team": "white",
+          "type": "P",
+          "x": 7,
+          "y": 15
+        }
+      ],
+      "carrierId": "black-R2",
+      "phase": "defendMove",
+      "attack": "black"
+    },
+    "exampleActions": [
+      {
+        "type": "move",
+        "pieceId": "white-B1",
+        "x": 5,
+        "y": 13
+      },
+      {
+        "type": "move",
+        "pieceId": "white-K",
+        "x": 6,
+        "y": 16,
+        "freePawn": true
+      },
+      {
+        "type": "move",
+        "pieceId": "white-K",
+        "x": 5,
+        "y": 16
+      }
+    ]
+  }
+]

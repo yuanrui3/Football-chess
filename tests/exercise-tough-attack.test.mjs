@@ -29,7 +29,7 @@ function replay(definition,actions=definition.exampleActions,{seed=1984,forceFin
 test('six larger Tough attacks start both keepers centrally inside their goalmouths',()=>{
   assert.equal(TOUGH_ATTACK_EXERCISES.length,6);assert.equal(new Set(TOUGH_ATTACK_EXERCISES.map(d=>d.id)).size,6);
   for(const d of TOUGH_ATTACK_EXERCISES){
-    assert.equal(d.difficulty,'tough');assert.equal(d.side,'attack');assert.ok([3,4].includes(d.planSteps));
+    assert.equal(d.difficulty,'tough');assert.equal(d.side,'attack');assert.ok((d.id==='tough-knight-wall-pass'?[5]:[3,4]).includes(d.planSteps));
     assert.equal(d.exampleActions.filter(a=>a.type!=='skip').length,d.planSteps);
     assert.equal(d.goal.requires,undefined);assert.equal(d.goal.minCompletedPasses,undefined);
     assert.ok(d.goal.minShotXG>=.1,'targets must remain meaningful scoring chances');
@@ -68,11 +68,19 @@ test('none of the larger natural-keeper positions starts with a qualifying direc
   }
 });
 
-test('different support and offside-clearance choices earn the same outcome credit',()=>{
+test('deeper defence refutes the old k11 support square by preparing a rook screen',()=>{
   const buildup=byId('tough-sweeper-to-bishop'),alternative=structuredClone(buildup.exampleActions);
   alternative[1]={type:'move',pieceId:'white-Q',x:10,y:6};
   const first=replay(buildup,alternative).session;
-  assert.equal(first.status,'solved');assert.ok(first.metrics.lastShotXG>=buildup.goal.minShotXG);
+  assert.equal(first.status,'active');assert.ok(first.metrics.lastShotXG<buildup.goal.minShotXG);
+  assert.ok(first.game.lastAction.shotModel.blockerIds.includes('black-R1'));
+});
+
+test('different positioning orders and offside-clearance choices earn the same outcome credit',()=>{
+  const link=byId('tough-knight-wall-pass'),alternative=structuredClone(link.exampleActions);
+  [alternative[3],alternative[4]]=[alternative[4],alternative[3]];
+  const first=replay(link,alternative).session;
+  assert.equal(first.status,'solved');assert.ok(first.metrics.lastShotXG>=link.goal.minShotXG);
   const offside=byId('tough-clear-offside-runner'),second=structuredClone(offside.exampleActions);
   second[0]={type:'move',pieceId:'white-N1',x:3,y:0};
   assert.equal(replay(offside,second).session.status,'solved');

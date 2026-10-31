@@ -82,9 +82,9 @@ test('watchdog recovery can use a completed Tactical iteration without running a
 
 test('study workers receive the expanded-search watchdog and an early legal safeguard can be recovered',()=>{
   const h=harness({useStudyWatchdog:true});h.controller.start();h.controller.play({type:'human'});
-  assert.ok([...h.timers.values()].some(timer=>timer.at===20000));
+  assert.ok([...h.timers.values()].some(timer=>timer.at===60000));
   h.workers[0].respond({progress:{stats:{completedDepth:0},action:{type:'bot'}}});
-  h.advance(19999);assert.equal(h.transitions.length,1);
+  h.advance(59999);assert.equal(h.transitions.length,1);
   h.advance(1);assert.equal(h.transitions.length,2);assert.equal(h.fallbacks.length,0);h.controller.destroy();
 });
 

@@ -7,6 +7,8 @@ import {analyzeTacticalAction,currentTeam,legalMoves,legalKicks,
 
 export const EXERCISE_SEARCH_PROFILE=Object.freeze({maxDepth:12,nodeLimit:12000,extensions:false,
   searchWidths:Object.freeze({root:24,position:8,kick:6,bonus:4})});
+export const EXERCISE_DEFENCE_PROFILE=Object.freeze({...EXERCISE_SEARCH_PROFILE,maxDepth:14,nodeLimit:24000});
+export const EXERCISE_AI_VERSION=2;
 const clone=value=>structuredClone(value);
 const actionFor=(piece,move,freePawn=false)=>({type:'move',pieceId:piece.id,x:move.x,y:move.y,freePawn});
 const hasBall=(state,team)=>state.pieces.some(p=>p.team===team&&p.id===state.ball.carrierId);
@@ -71,7 +73,7 @@ export function findExerciseCapture(state){
  * attacker's best legal finish after its keeper reply; native outlet-aware
  * positional value breaks ties between equally safe immediate defences.
  */
-export function analyzeExerciseDefense(state,{stateLimit=12000}={}){
+export function analyzeExerciseDefense(state,{stateLimit=12000,firstAction=null}={}){
   if(state.phase!=='defendMove'||state.foulsEnabled)return null;
   const defender=currentTeam(state),attacker=state.attack,memo=new Map();
   const cap=Math.max(1,Math.min(12000,Math.floor(stateLimit)||1)),ABORT=Symbol('local study budget');
@@ -112,7 +114,9 @@ export function analyzeExerciseDefense(state,{stateLimit=12000}={}){
     // This guard only protects malformed imported positions, not normal lines.
     if(depth>=3){const result=leaf(skipMove(s));memo.set(id,result);return result;}
     let best=null;
-    for(const entry of actions(s)){
+    const choices=actions(s).filter(entry=>depth!==0||!firstAction||sameAction(entry.action,firstAction));
+    if(!choices.length)throw Error('The requested defensive action is not legal.');
+    for(const entry of choices){
       const result=candidate(s,entry,depth);
       if(better(result,best))best=result;
       if(depth===0)bestRoot=best;
@@ -129,8 +133,42 @@ export function analyzeExerciseDefense(state,{stateLimit=12000}={}){
     stats:{nodes:states,completedDepth:complete?2:0,localStates:states,localComplete:complete}};
 }
 
+const sameAction=(a,b)=>a?.type===b?.type&&a?.pieceId===b?.pieceId&&a?.x===b?.x&&a?.y===b?.y
+  &&!!a?.freePawn===!!b?.freePawn;
+
+/** Search beyond the opponent's next pass, but never trade away an exact
+ * immediate defence for a speculative continuation. Recheck the first action
+ * over every remaining normal/bonus reply, including both tackle outcomes.
+ * The next decision repeats this guard, so a different continuation cannot
+ * silently give back the immediate protection established here.
+ */
+function analyzeForwardDefense(source,local,{onIteration,nodeLimit,maxDepth}){
+  const checks=new Map();
+  const checked=action=>{
+    const key=JSON.stringify(action);
+    if(!checks.has(key))checks.set(key,sameAction(action,local.action)?local:
+      analyzeExerciseDefense(source,{stateLimit:12000,firstAction:action}));
+    return checks.get(key);
+  };
+  const safeReport=report=>{
+    const guard=checked(report.action),safe=guard.stats.localComplete
+      &&guard.expectedOpponentShotXG<=local.expectedOpponentShotXG+1e-10;
+    return safe?{...report,reason:'forward-defence',expectedOpponentShotXG:guard.expectedOpponentShotXG,
+      stats:{...report.stats,localStates:local.stats.localStates,localComplete:local.stats.localComplete,
+        guardStates:local.stats.guardStates,continuationGuardStates:guard.stats.localStates}}:
+      {...local,stats:{...local.stats,forwardNodes:report.stats.nodes,forwardDepth:report.stats.completedDepth},
+        forwardRejected:true};
+  };
+  onIteration?.(clone(local));
+  const report=analyzeTacticalAction(source,{...EXERCISE_DEFENCE_PROFILE,nodeLimit,maxDepth,
+    modelWeights:null,modelScale:80,selectionSeed:null,
+    onIteration:progress=>onIteration?.(clone(safeReport(progress)))});
+  return safeReport(report);
+}
+
 export function analyzeExerciseAction(state,{onIteration,
-  nodeLimit=EXERCISE_SEARCH_PROFILE.nodeLimit,maxDepth=EXERCISE_SEARCH_PROFILE.maxDepth}={}){
+  nodeLimit=state?.phase==='defendMove'?EXERCISE_DEFENCE_PROFILE.nodeLimit:EXERCISE_SEARCH_PROFILE.nodeLimit,
+  maxDepth=state?.phase==='defendMove'?EXERCISE_DEFENCE_PROFILE.maxDepth:EXERCISE_SEARCH_PROFILE.maxDepth}={}){
   if(!state||state.phase==='finished')return {action:{type:'skip'},value:0,
     stats:{nodes:0,completedDepth:0,guardStates:0},line:[],reason:'finished'};
   // Own a private snapshot and erase future chance state before any guard or
@@ -145,7 +183,7 @@ export function analyzeExerciseAction(state,{onIteration,
   const defense=analyzeExerciseDefense(source,{stateLimit:nodeLimit});
   if(defense){
     defense.stats.guardStates=capture.checked;
-    onIteration?.(clone(defense));return defense;
+    return analyzeForwardDefense(source,defense,{onIteration,nodeLimit,maxDepth});
   }
   const finishes=exerciseFinishes(source),bestFinish=finishes[0];
   const normalize=report=>{
