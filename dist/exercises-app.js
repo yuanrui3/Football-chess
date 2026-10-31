@@ -4,6 +4,9 @@ import {EXERCISES} from './exercise-positions.js?v=e8724457fbeb';
 import {createExerciseSession, applyExerciseAction, bestKeeperShotChance, exerciseRoundLimit, exerciseActionExplanation} from './exercise-session.js?v=50b7882e60b6';
 import {createEvaluation} from './evaluation.js?v=79dd005f7cd8';
 
+import {EXERCISE_SOLUTIONS} from './exercise-solutions.js?v=4e0c08554125';
+import {exerciseSolutionFrames,createExerciseSolutionPlayer} from './exercise-solution-player.js?v=412f73fb658b';
+
 export const EXERCISE_PROGRESS_KEY='football-chess-exercises-v1';
 export const EXERCISE_THEME_LABELS=Object.freeze({'one-on-one':'One on one','through-ball':'Through balls','box-entry':'Into the box',defence:'Defend the finish'});
 export const EXERCISE_DIFFICULTY_LABELS=Object.freeze({easy:'Easy',medium:'Medium',tough:'Tough'});
@@ -64,7 +67,7 @@ export function exerciseStartingPiece(game,playerTeam){
 /** A terminal review is an illustration, not another playable engine position. */
 export function syncExerciseEvaluation(evaluation,view){
   if(!evaluation||!view?.session)return;
-  if(view.session.status!=='active'){evaluation.suspend();return;}
+  if(view.solution||view.session.status!=='active'){evaluation.suspend();return;}
   if(view.thinking||view.suspended){evaluation.suspend();evaluation.update(view.session.game);}
   else{evaluation.update(view.session.game);evaluation.resume();}
 }
@@ -183,7 +186,7 @@ export function initExercisePage(){
   const $=id=>document.getElementById(id);
   let storage=null;try{storage=window.localStorage;}catch{}
   let progress=readExerciseProgress(storage),selectedId=null,moveMode='offball',hintsUsed=0,passRun=false,disguise=false;
-  let state=null,controller=null,evaluation=null,lastBoard=null,focusedSquare=null,filterBlocked=false;
+  let state=null,controller=null,evaluation=null,lastBoard=null,focusedSquare=null,filterBlocked=false,solutionPlayer=null,solutionAttemptUI=null;
   const squares=[];
   for(let y=0;y<H;y++)for(let x=0;x<W;x++){
     const button=document.createElement('button');button.type='button';button.dataset.x=x;button.dataset.y=y;button.setAttribute('role','gridcell');button.tabIndex=-1;
@@ -196,7 +199,7 @@ export function initExercisePage(){
     button.innerHTML=`<span class="goal-file">${FILES[x].toUpperCase()}</span><span class="goal-odds">—</span>`;$(id).append(button);
   }
   const isKick=game=>['kick','kickoff','keeperRelease'].includes(game.phase);
-  const playable=()=>!filterBlocked&&state?.started&&!state.suspended&&!state.thinking&&state.session.status==='active'&&currentTeam(state.session.game)===state.session.playerTeam;
+  const playable=()=>!state?.solution&&!filterBlocked&&state?.started&&!state.suspended&&!state.thinking&&state.session.status==='active'&&currentTeam(state.session.game)===state.session.playerTeam;
   function targets(){
     if(!playable())return [];
     const game=state.session.game;
@@ -295,17 +298,17 @@ export function initExercisePage(){
     $('planLength').textContent=`${exercisePlanText(def)} · up to ${session.roundLimit} possession rounds.`;
     $('qualityGoal').textContent='Explore your own route. In attacking studies, you can recover from a turnover or a shot below the target while rounds remain. Hints show one possible idea.';
     $('roundCounter').textContent=`${Math.min(session.roundsUsed,session.roundLimit)} / ${session.roundLimit} rounds`;
-    $('sideLabel').textContent=`YOU · ${TEAM[session.playerTeam].toUpperCase()} ${session.playerTeam==='white'?'↑':'↓'}`;
-    $('playBtn').hidden=view.started;$('playBtn').disabled=filterBlocked;$('actionPanel').hidden=filterBlocked||!view.started||session.status!=='active';$('feedbackPanel').hidden=filterBlocked||session.status==='active';
-    $('continuationPanel').hidden=filterBlocked||session.status!=='active'||!session.notice;
+    $('sideLabel').textContent=`${view.solution?'EXAMPLE':'YOU'} · ${TEAM[session.playerTeam].toUpperCase()} ${session.playerTeam==='white'?'↑':'↓'}`;
+    $('playBtn').hidden=view.started;$('playBtn').disabled=filterBlocked;$('actionPanel').hidden=!!view.solution||filterBlocked||!view.started||session.status!=='active';$('feedbackPanel').hidden=filterBlocked||session.status==='active';
+    $('continuationPanel').hidden=!!view.solution||filterBlocked||session.status!=='active'||!session.notice;
     $('continuationTitle').textContent=session.notice?.title||'';
     $('continuationText').textContent=session.notice?`${session.notice.text} ${session.roundLimit-session.roundsUsed} possession rounds remain.`:'';
-    $('undoBtn').disabled=filterBlocked||!view.canUndo;$('retryBtn').disabled=filterBlocked||!view.started&&session.roundsUsed===0;
+    $('undoBtn').disabled=!!view.solution||filterBlocked||!view.canUndo;$('retryBtn').disabled=!!view.solution||filterBlocked||!view.started&&session.roundsUsed===0;
     const coaching=exerciseCoachingItems(def,session.progress),coachingNodes=[];
     if(coaching.length){const label=document.createElement('small');label.className='exercise-coaching-label';label.textContent='Optional coaching · does not affect credit';coachingNodes.push(label);}
     $('requirements').replaceChildren(...coachingNodes,...coaching.map(r=>{const item=document.createElement('span');item.className=r.done?'done':'';item.textContent=`${r.done?'✓':'○'} ${r.text}`;return item;}));
     const [phase,title,help]=phaseCopy(game);$('phaseLabel').textContent=phase;$('phaseTitle').textContent=title;$('actionHelp').textContent=help;
-    $('boardStatus').textContent=filterBlocked?'No exercises match both filters. The current study is paused; change the level or theme to continue.':!view.started?'Study the position, then Play exercise.':session.status!=='active'?session.feedback:view.thinking?`${TEAM[currentTeam(session.game)]} · Tactical is checking an expanded set of replies…`:help;
+    $('boardStatus').textContent=view.solution?`Example solution · ${view.lastAction?actionDescription():'Start position. Watch both sides or step through each action.'}`:filterBlocked?'No exercises match both filters. The current study is paused; change the level or theme to continue.':!view.started?'Study the position, then Play exercise.':session.status!=='active'?session.feedback:view.thinking?`${TEAM[currentTeam(session.game)]} · Tactical is checking an expanded set of replies…`:help;
     const positional=['attackMove','defendMove'].includes(game.phase),budget=game.positionBudget||{};
     $('positionModes').hidden=!positional||!!game.restart;
     const availability=positional?positionActions(game):null;
@@ -317,36 +320,70 @@ export function initExercisePage(){
     $('endBtn').disabled=!playable()||!(positional||canQuickRelease(game)||game.phase==='keeperReact'||game.phase==='passRun'||isKick(game)&&!game.ball.carrierId);
     $('endBtn').textContent=canQuickRelease(game)?'Hold & organise →':game.phase==='keeperReact'?'Hold keeper / resolve →':game.phase==='passRun'?'Skip run →':isKick(game)&&!game.ball.carrierId?'Continue loose-ball play →':'End positioning →';
     if(session.status!=='active'){
-      $('feedbackPanel').dataset.result=session.status;$('feedbackLabel').textContent=session.status==='solved'?'EXERCISE SOLVED':'TRY A DIFFERENT PLAN';$('feedbackTitle').textContent=session.feedbackTitle||(session.status==='solved'?'Good continuation.':'Try another continuation.');$('feedbackText').textContent=session.feedback;$('reviewPlan').textContent=def.coachNote?`One possible idea, not a required solution: ${def.coachNote}`:'';
+      $('feedbackPanel').dataset.result=session.status;$('feedbackLabel').textContent=view.solution?'SOLUTION DEMONSTRATED':session.status==='solved'?'EXERCISE SOLVED':'TRY A DIFFERENT PLAN';$('feedbackTitle').textContent=session.feedbackTitle||(session.status==='solved'?'Good continuation.':'Try another continuation.');$('feedbackText').textContent=session.feedback;$('reviewPlan').textContent=def.coachNote?`One possible idea, not a required solution: ${def.coachNote}`:'';
       const result=session.metrics?.shotResult;$('shotQuality').textContent=result?def.goal.type==='defend'&&Number.isFinite(result.testedThreatXG)
         ?`Defensive threat checked: ${percent(result.testedThreatXG)} · strongest available shot: ${percent(result.bestOpponentShotXG)} · chosen shot after your reaction: ${percent(result.actualReplyXG)}.`
         :`Chance against the best keeper reply: ${percent(result.bestReplyXG)}${Number.isFinite(result.actualReplyXG)?` · after the actual reply: ${percent(result.actualReplyXG)}`:''}.`:'';
-      if(session.status==='solved'&&!progress.solved[def.id]){progress=recordExerciseSolved(progress,def.id);save();}
+      if(!view.solution&&session.status==='solved'&&!progress.solved[def.id]){progress=recordExerciseSolved(progress,def.id);save();}
     }
-    $('hintBtn').disabled=filterBlocked||hintsUsed>=(def.hints?.length||0);$('hintBtn').firstChild.textContent=hintsUsed?`Next hint (${hintsUsed}/${def.hints.length}) `:'Show a hint ';
+    $('hintBtn').disabled=!!view.solution||filterBlocked||hintsUsed>=(def.hints?.length||0);$('hintBtn').firstChild.textContent=hintsUsed?`Next hint (${hintsUsed}/${def.hints.length}) `:'Show a hint ';
     $('hintsList').replaceChildren(...(def.hints||[]).slice(0,hintsUsed).map(text=>{const li=document.createElement('li');li.textContent=text;return li;}));
-    $('lastActionPanel').hidden=!view.lastAction;$('lastActionText').textContent=actionDescription();renderLibrary();renderBoard(game);
+    $('lastActionPanel').hidden=!view.lastAction;$('lastActionText').textContent=actionDescription();renderLibrary();renderBoard(game);renderSolutionControls();
     if(evaluation){syncExerciseEvaluation(evaluation,view);renderEvaluation(evaluation.getState());}
   }
+  function renderSolutionControls(){
+    const playback=solutionPlayer?.getState(),active=!!playback?.active;
+    $('solutionBtn').hidden=active;$('solutionBtn').disabled=filterBlocked||!EXERCISE_SOLUTIONS.examples[state.session.definitionId];
+    $('solutionControls').hidden=!active;$('analysisEnabled').disabled=active;
+    $('solutionNote').textContent=active?'One possible solution with recorded Tactical replies. Your attempt is held; watching does not mark it solved.':'Watch one possible solution on this pitch, including the opponent’s replies.';
+    if(!active)return;
+    $('solutionPlayPause').textContent=playback.playing?'Ⅱ Pause':playback.index===playback.total?'▶ Play again':'▶ Resume';
+    $('solutionPrevious').disabled=playback.index===0;$('solutionNext').disabled=playback.index===playback.total;
+    $('solutionStep').textContent=playback.index?`Action ${playback.index} of ${playback.total} · ${playback.frame.lastAction.actor===state.session.playerTeam?'your side':'opponent reply'}`:`Start position · ${playback.total} actions`;
+  }
+  function leaveSolution({resume=true}={}){
+    const ui=solutionAttemptUI;solutionAttemptUI=null;solutionPlayer?.stop();
+    if(ui)({selectedId,moveMode,passRun,disguise,focusedSquare}=ui);lastBoard=null;
+    if(resume&&!filterBlocked&&!document.hidden)controller.resume();
+    render(controller.getState());
+  }
+  function startSolution(){
+    if(filterBlocked||solutionPlayer.getState().active)return;
+    const attempt=controller.getState();controller.suspend();
+    try{
+      const frames=exerciseSolutionFrames(attempt.session.definition,EXERCISE_SOLUTIONS);
+      solutionAttemptUI={selectedId,moveMode,passRun,disguise,focusedSquare};$('errorMessage').textContent='';
+      solutionPlayer.load(frames);
+    }catch(error){$('errorMessage').textContent=error.message;controller.resume();}
+  }
   function loadDefinition(def){
+    if(solutionPlayer?.getState().active)leaveSolution({resume:false});
     evaluation?.setEnabled(false);evaluation?.reset();$('analysisEnabled').checked=false;$('evaluationRail').hidden=true;$('evaluationInfo').hidden=true;
     selectedId=null;moveMode='offball';hintsUsed=0;passRun=false;disguise=false;lastBoard=null;$('errorMessage').textContent='';
     controller.load(def);progress={...progress,lastId:def.id};save();
   }
-  controller=createExerciseController({onChange:render,onError:text=>{$('errorMessage').textContent=text;}});
+  controller=createExerciseController({onChange:view=>{if(!solutionPlayer?.getState().active)render(view);},onError:text=>{$('errorMessage').textContent=text;}});
   function renderEvaluation(value){
     const display=exerciseEvaluationDisplay(value,{complete:state?.session.status!=='active'});
-    $('evaluationRail').hidden=!value.enabled;$('evaluationInfo').hidden=!value.enabled;
+    $('evaluationRail').hidden=!!state?.solution||!value.enabled;$('evaluationInfo').hidden=!!state?.solution||!value.enabled;
     $('evaluationFill').style.height=`${display.share*100}%`;
     $('evaluationScore').textContent=display.scoreText;
     $('evaluationInfo').textContent=display.info;
   }
   evaluation=createEvaluation({onUpdate:renderEvaluation});
+  solutionPlayer=createExerciseSolutionPlayer({onChange:playback=>{if(playback.active)render(playback.frame);}});
+  $('solutionBtn').addEventListener('click',startSolution);
+  $('solutionPlayPause').addEventListener('click',()=>solutionPlayer.getState().playing?solutionPlayer.pause():solutionPlayer.play());
+  $('solutionPrevious').addEventListener('click',()=>solutionPlayer.previous());
+  $('solutionNext').addEventListener('click',()=>solutionPlayer.next());
+  $('solutionRestart').addEventListener('click',()=>solutionPlayer.restart());
+  $('solutionReturn').addEventListener('click',()=>leaveSolution());
   $('exerciseList').addEventListener('click',event=>{const id=event.target.closest('[data-exercise-id]')?.dataset.exerciseId;const def=EXERCISES.find(def=>def.id===id);if(def)loadDefinition(def);});
   const filterChanged=()=>{
     filterBlocked=!selectFilteredExercise(EXERCISES,filters(),state?.session.definitionId);
-    syncExerciseFilters(controller,EXERCISES,filters(),loadDefinition,{allowResume:!document.hidden});
-    render(controller.getState());
+    syncExerciseFilters(controller,EXERCISES,filters(),loadDefinition,{allowResume:!document.hidden&&!solutionPlayer.getState().active});
+    if(filterBlocked&&solutionPlayer.getState().active)leaveSolution({resume:false});
+    render(solutionPlayer.getState().active?solutionPlayer.getState().frame:controller.getState());
   };
   $('themeFilter').addEventListener('change',filterChanged);$('difficultyFilter').addEventListener('change',filterChanged);
   $('playBtn').addEventListener('click',()=>{selectedId=exerciseStartingPiece(state.session.game,state.session.playerTeam);moveMode=state.session.game.phase==='attackMove'?'dribble':'offball';$('errorMessage').textContent='';controller.start();});
@@ -377,10 +414,10 @@ export function initExercisePage(){
     event.preventDefault();const x=Math.max(0,Math.min(W-1,Number(button.dataset.x)+direction[0])),y=Math.max(0,Math.min(H-1,Number(button.dataset.y)+direction[1]));focusedSquare={x,y};for(const square of squares)square.tabIndex=Number(square.dataset.x)===x&&Number(square.dataset.y)===y?0:-1;squares[y*W+x].focus();
   });
   for(const id of['goalTop','goalBottom'])$(id).addEventListener('click',event=>{const button=event.target.closest('[data-x]');if(!button||!playable()||button.disabled)return;$('errorMessage').textContent='';controller.play({type:'kick',x:Number(button.dataset.x),y:Number(button.dataset.y),disguise});});
-  window.addEventListener('pagehide',()=>{controller.suspend();evaluation.suspend();});
-  window.addEventListener('pageshow',()=>{if(!filterBlocked)controller.resume();syncExerciseEvaluation(evaluation,state);renderEvaluation(evaluation.getState());});
-  document.addEventListener('visibilitychange',()=>{if(document.hidden){controller.suspend();evaluation.suspend();}else{if(!filterBlocked)controller.resume();syncExerciseEvaluation(evaluation,state);renderEvaluation(evaluation.getState());}});
+  window.addEventListener('pagehide',()=>{if(solutionPlayer.getState().active)solutionPlayer.pause();controller.suspend();evaluation.suspend();});
+  window.addEventListener('pageshow',()=>{if(!filterBlocked&&!solutionPlayer.getState().active)controller.resume();syncExerciseEvaluation(evaluation,state);renderEvaluation(evaluation.getState());});
+  document.addEventListener('visibilitychange',()=>{if(document.hidden){if(solutionPlayer.getState().active)solutionPlayer.pause();controller.suspend();evaluation.suspend();}else{if(!filterBlocked&&!solutionPlayer.getState().active)controller.resume();syncExerciseEvaluation(evaluation,state);renderEvaluation(evaluation.getState());}});
   loadDefinition(selectFilteredExercise(EXERCISES,filters(),progress.lastId)||EXERCISES[0]);
-  return {controller,evaluation};
+  return {controller,evaluation,solutionPlayer};
 }
 if(typeof document!=='undefined'&&document.getElementById('exerciseBoard'))initExercisePage();

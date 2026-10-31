@@ -74,9 +74,11 @@ const positionsVersion=await versionImports('exercise-positions.js',{'engine.js'
 const sessionVersion=await versionImports('exercise-session.js',{'engine.js':engineVersion,'exercise-positions.js':positionsVersion});
 const exerciseAiVersion=await versionImports('exercise-ai.js',{'engine.js':engineVersion});
 const exerciseAiWorkerVersion=await versionImports('exercise-ai-worker.js',{'exercise-ai.js':exerciseAiVersion,'engine.js':engineVersion});
+const solutionsVersion=hash(await readFile(asset('exercise-solutions.js'),'utf8'));
+const solutionPlayerVersion=await versionImports('exercise-solution-player.js',{'engine.js':engineVersion,'exercise-session.js':sessionVersion});
 const exercisesVersion=await versionImports('exercises-app.js',{'engine.js':engineVersion,'exercise-positions.js':positionsVersion,
   'exercise-session.js':sessionVersion,'evaluation.js':evaluationVersion,'exercise-ai.js':exerciseAiVersion,
-  'exercise-ai-worker.js':exerciseAiWorkerVersion});
+  'exercise-ai-worker.js':exerciseAiWorkerVersion,'exercise-solutions.js':solutionsVersion,'exercise-solution-player.js':solutionPlayerVersion});
 const exercisesCssVersion=hash(await readFile(asset('exercises.css'),'utf8'));
 let app=await readFile(asset('app.js'),'utf8');
 app=app.replace(/from ['"]\.\/engine\.js(?:\?v=[^'"]+)?['"]/,`from './engine.js?v=${engineVersion}'`);
