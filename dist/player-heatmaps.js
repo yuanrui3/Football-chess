@@ -1,5 +1,5 @@
 /** Time on actual occupied squares, separate from lineup and rating positions. */
-import {BOARD_WIDTH, BOARD_HEIGHT, BOX_FILES, BOX_DEPTH} from './engine.js?v=466456fd862d';
+import {BOARD_WIDTH, BOARD_HEIGHT, BOX_FILES, BOX_DEPTH} from './engine.js?v=663af4ea26d5';
 
 const outfieldId = id => typeof id === 'string' && /^(white|black)-(Q|[RBN][12]|P[123])$/.test(id);
 const positive = value => Number.isFinite(value) && value > 0;

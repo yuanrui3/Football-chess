@@ -1,12 +1,12 @@
-import {createGame, canQuickRelease, legalMoves, legalKicks, disguisedShotTargets, applyMove, applyKick, skipMove, chooseAIAction, currentTeam, cornerTakers, selectCornerTaker, BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, BOX_FILES, BOX_DEPTH, CENTRAL_GOAL_FILES, MIDFIELD_RANK, inOwnBox, canOccupySquare, isBox, isGoalMouth, shotChance, shotModel, offsideInfo, offsideFlaggedIds, LONG_TACKLE_RANGE, DRIBBLE_RANGE, FOUL_RULE, STALLING_RULE, PACE_RULE, ACTION_SECONDS, actionTimeout, progressInfo, paceInfo, positionActions, normalizeGame, FORMATION_PRESETS, setStartingFormation} from './engine.js?v=466456fd862d';
+import {createGame, canQuickRelease, legalMoves, legalKicks, disguisedShotTargets, applyMove, applyKick, skipMove, chooseAIAction, currentTeam, cornerTakers, selectCornerTaker, BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, BOX_FILES, BOX_DEPTH, CENTRAL_GOAL_FILES, MIDFIELD_RANK, inOwnBox, canOccupySquare, isBox, isGoalMouth, shotChance, shotModel, offsideInfo, offsideFlaggedIds, LONG_TACKLE_RANGE, DRIBBLE_RANGE, FOUL_RULE, STALLING_RULE, PACE_RULE, ACTION_SECONDS, actionTimeout, progressInfo, paceInfo, positionActions, normalizeGame, FORMATION_PRESETS, setStartingFormation} from './engine.js?v=663af4ea26d5';
 import {createMatchClock, restoreMatchClock, tickMatchClock, settleMatchClock, rewindMatchClock} from './match-clock.js?v=edcd4f433b39';
-import {buildGoalReplay, restoreGoalReplay, createReplayPlayer} from './goal-replay.js?v=ab3eaf51053b';
-import {createMatchStats, restoreMatchStats, recordMatchTransition, addPossessionTime, matchStatsSummary, shortPieceId} from './match-stats.js?v=ee6bbb0a0874';
-import {playerRatingsSummary} from './player-ratings.js?v=7b51d3e35c39';
-import {renderPlayerRatings} from './player-ratings-view.js?v=de108c305f34';
-import {createCommentary} from './commentary.js?v=a87d44b80350';
+import {buildGoalReplay, restoreGoalReplay, createReplayPlayer} from './goal-replay.js?v=1a702a55a146';
+import {createMatchStats, restoreMatchStats, recordMatchTransition, addPossessionTime, matchStatsSummary, shortPieceId} from './match-stats.js?v=2e8679705685';
+import {playerRatingsSummary} from './player-ratings.js?v=0a03b76a1b50';
+import {renderPlayerRatings} from './player-ratings-view.js?v=4354b54eea7f';
+import {createCommentary} from './commentary.js?v=72317a57f90f';
 import {createParadeeSpeech} from './paradee-speech.js?v=e9d0fc794cfb';
-import {createEvaluation,formatEvaluation} from './evaluation.js?v=e9a328263d3c';
+import {createEvaluation,formatEvaluation} from './evaluation.js?v=095163d2ff6c';
 
 const $ = id => document.getElementById(id);
 const normalShotLegend = document.querySelector('.shot-legend').textContent;
@@ -206,11 +206,13 @@ function yellowCards(piece,discipline=game.discipline){return Math.max(0,Number(
 function cardBadge(piece,discipline=game.discipline){return yellowCards(piece,discipline)>0?'<span class="yellow-card-badge" aria-hidden="true"></span>':'';}
 function tackleOdds(target){
   const win=target.tackleProbability??1,foul=target.foulProbability??(game.foulsEnabled?FOUL_RULE.foul:0),evaded=Math.max(0,1-win-foul);
-  return `${percent(win)} win${evaded>0?` · ${percent(evaded)} evaded`:''}${foul>0?` · ${percent(foul)} foul (${percent(FOUL_RULE.yellow)} yellow, ${percent(FOUL_RULE.red)} red of all attempts)`:''}`;
+  const cards=target.automaticRedReason?`automatic red: ${target.automaticRedReason==='keeperOutsideBox'?'keeper outside box':'no covering defender'}`
+    :`${percent(FOUL_RULE.yellow)} ${target.secondYellowRisk?'second yellow → red':'yellow'}, ${percent(FOUL_RULE.red)} straight red of all attempts`;
+  return `${percent(win)} win${evaded>0?` · ${percent(evaded)} evaded`:''}${foul>0?` · ${percent(foul)} foul (${cards})`:''}`;
 }
 function foulDescription(action){
   const offender=game.pieces.find(piece=>piece.id===action.offenderId)||game.sentOff?.find(piece=>piece.id===action.offenderId),name=offender?`${TEAM[offender.team]} ${pieceLabel(offender)}`:`${TEAM[action.team]} ${shortPieceId(action.offenderId||action.pieceId)}`;
-  const card=action.secondYellow?' · Second yellow: sent off':action.card==='red'?' · Red card: sent off':action.card==='yellow'?' · Yellow card':'';
+  const card=action.automaticRedReason?` · Automatic red: ${action.automaticRedReason==='keeperOutsideBox'?'keeper foul outside box':'no covering defender'}`:action.secondYellow?' · Second yellow: sent off':action.card==='red'?' · Red card: sent off':action.card==='yellow'?' · Yellow card':'';
   const award=action.outcome==='forfeit'?' · Match forfeited':game.restart?` · ${RESTART_NAMES[game.restart.type]||'Restart'} for ${TEAM[game.restart.team]}`:'';
   const replacement=game.pieces.find(piece=>piece.id===action.keeperReplacement?.pieceId);
   return `Foul by ${name}${card}${award}${replacement?` · ${shortPieceId(replacement.id)} takes over in goal`:''}.`;
@@ -791,7 +793,7 @@ function scheduleAI(){
   },aiPace);
   if(difficulty==='tactical'&&typeof window.Worker==='function'){
     try{
-      aiWorker=new window.Worker(new URL('./ai-worker.js?v=b4b3d2cf3279',import.meta.url),{type:'module',name:'football-chess-tactical'});
+      aiWorker=new window.Worker(new URL('./ai-worker.js?v=0140b2ec3d50',import.meta.url),{type:'module',name:'football-chess-tactical'});
       aiWorker.onmessage=event=>{
         if(!stillCurrent()||event.data?.requestId!==requestId)return;
         const progress=event.data.progress;

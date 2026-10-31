@@ -10,7 +10,7 @@ const internal=await import(`data:text/javascript;base64,${Buffer.from(source+'\
 const clone=structuredClone,other=t=>t==='white'?'black':'white';
 function fixture({knight=false,enabled=true,inside=false}={}){
  const s=E.createGame({seed:4107,foulsEnabled:enabled}),carrier=knight?'white-N1':'white-Q',row=inside?2:4;
- const positions={'white-K':[7,15],'black-K':[7,0],[carrier]:[6,row],'black-R1':[6,row+2]},used=new Set(Object.values(positions).map(p=>p.join(',')));
+ const positions={'white-K':[7,15],'black-K':[7,0],'black-B2':[1,1],[carrier]:[6,row],'black-R1':[6,row+2]},used=new Set(Object.values(positions).map(p=>p.join(',')));
  const parking=Array.from({length:E.BOARD_HEIGHT},(_,y)=>[[0,y],[E.BOARD_WIDTH-1,y]]).flat();
  for(const p of s.pieces){const q=positions[p.id]||parking.find(q=>!used.has(q.join(',')));Object.assign(p,{x:q[0],y:q[1]});used.add(q.join(','));}
  s.phase='defendMove';s.attack='white';s.ball={x:6,y:row,carrierId:carrier};s.ballProgress={team:'white',anchorY:row,rounds:0,pendingRelease:false,excludeRelease:false};

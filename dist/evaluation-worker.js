@@ -1,5 +1,5 @@
 /** Read-only current-round analysis. Past goals never enter this estimate. */
-import {analyzeTacticalAction,currentTeam} from './engine.js?v=466456fd862d';
+import {analyzeTacticalAction,currentTeam} from './engine.js?v=663af4ea26d5';
 
 export const EVALUATION_GOAL_UNIT = 2000;
 // A single round's useful values are about 0–1 goal units. The former 1.5

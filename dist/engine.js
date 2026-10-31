@@ -9,7 +9,7 @@ export const CENTRAL_GOAL_FILES = Object.freeze([6, 7]);
 export const MIDFIELD_RANK = Math.floor(BOARD_HEIGHT / 2);
 export const BOARD_CENTER_X = (BOARD_WIDTH - 1) / 2;
 export const FILE_LABELS = 'abcdefghijklmn';
-export const RULES_VERSION = 20;
+export const RULES_VERSION = 21;
 export const ALLOW_OUTFIELD_BOXES = true;
 export const LONG_TACKLE_RANGE = 5;
 export const MOVE_RANGE = 10;
@@ -542,6 +542,20 @@ function keeperReactionMoves(state, piece) {
     .filter(move => allowedSquare(piece, move.x, move.y) && !pieceAt(state, move.x, move.y));
 }
 
+// Judge the foul at contact, using the positions before the tackle. Cover is
+// an outfielder on any file strictly between the carrier's and keeper's rows;
+// neither the challenger nor the keeper can supply that cover.
+function automaticFoulRedReason(state, defender, carrier) {
+  if (!defender || !carrier || defender.team === carrier.team) return null;
+  if (defender.type === 'K') return inOwnBox(defender.team, carrier.x, carrier.y) ? null : 'keeperOutsideBox';
+  const keeper = state.pieces.find(piece => piece.team === defender.team && piece.type === 'K');
+  if (!keeper) return null;
+  const near = Math.min(carrier.y, keeper.y), far = Math.max(carrier.y, keeper.y);
+  const cover = state.pieces.some(piece => piece.team === defender.team && piece.type !== 'K'
+    && piece.id !== defender.id && piece.y > near && piece.y < far);
+  return cover ? null : 'lastDefender';
+}
+
 export function legalMoves(state, pieceId, {freePawn = false} = {}) {
   const piece = state.pieces.find(p => p.id === pieceId);
   if (state.phase === 'keeperReact') return freePawn ? [] : keeperReactionMoves(state, piece);
@@ -572,12 +586,15 @@ export function legalMoves(state, pieceId, {freePawn = false} = {}) {
   if (!running && !freePawn && !state.restart) {
     const carrier = state.pieces.find(p => p.id === state.ball.carrierId);
     if (canTackle(state, piece, carrier)) {
+      const automaticRedReason = state.foulsEnabled ? automaticFoulRedReason(state, piece, carrier) : null;
       for (const [dx, dy] of DIRECTIONS) {
         const x = carrier.x + dx, y = carrier.y + dy, occupant = pieceAt(state, x, y);
         if (distance(piece, {x, y}) <= 10 && allowedSquare(piece, x, y) && (!occupant || occupant.id === piece.id)) {
           const cleanTackleProbability = carrier.type === 'N' ? 0.5 : 1;
           moves.set(`${x},${y}`, {x, y, type: 'tackle', targetId: carrier.id, tackleProbability: cleanTackleProbability * (state.foulsEnabled ? FOUL_RULE.clean : 1),
-            ...(state.foulsEnabled ? {cleanTackleProbability, foulProbability: FOUL_RULE.foul} : {})});
+            ...(state.foulsEnabled ? {cleanTackleProbability, foulProbability: FOUL_RULE.foul,
+              ...(automaticRedReason ? {automaticRedReason} : {}),
+              secondYellowRisk: (state.discipline?.[piece.id]?.yellowCards || 0) >= 1} : {})});
         }
       }
     }
@@ -1402,14 +1419,16 @@ function resolveShot(next, {roll, targetRoll, keeperMove, landing} = {}) {
 function tackleFoul(next, source, piece, carrier, from, intendedTo, outcomeRoll) {
   next.discipline = disciplineFor(next);
   const ledger = next.discipline[piece.id] ||= {yellowCards: 0, redCard: false}, contactSpot = {x: carrier.x, y: carrier.y};
-  let card = outcomeRoll < FOUL_RULE.red ? 'red' : outcomeRoll < FOUL_RULE.red + FOUL_RULE.yellow ? 'yellow' : null;
+  const automaticRedReason = automaticFoulRedReason(source, source.pieces.find(candidate => candidate.id === piece.id), carrier);
+  let card = automaticRedReason || outcomeRoll < FOUL_RULE.red ? 'red' : outcomeRoll < FOUL_RULE.red + FOUL_RULE.yellow ? 'yellow' : null;
   if (card === 'yellow') ledger.yellowCards++;
   const secondYellow = card === 'yellow' && ledger.yellowCards >= 2;
   if (secondYellow) card = 'red';
   let keeperReplacement;
   if (card === 'red') {
     ledger.redCard = true;
-    next.sentOff = [...(next.sentOff || []), {...piece, reason: secondYellow ? 'secondYellow' : 'red', yellowCards: ledger.yellowCards}];
+    next.sentOff = [...(next.sentOff || []), {...piece, reason: secondYellow ? 'secondYellow' : 'red', yellowCards: ledger.yellowCards,
+      ...(automaticRedReason ? {automaticRedReason} : {})}];
     next.pieces = next.pieces.filter(candidate => candidate.id !== piece.id);
   }
   const forfeited = card === 'red' && forfeitIfShort(next);
@@ -1419,9 +1438,13 @@ function tackleFoul(next, source, piece, carrier, from, intendedTo, outcomeRoll)
   next.offside = null; next.looseBallKickOrigin = null; next.turn++;
   next.lastAction = {type: 'foul', team: piece.team, pieceId: piece.id, offenderId: piece.id, targetId: carrier.id,
     from, intendedTo, contactSpot, to: {...next.ball}, path: [from, contactSpot, intendedTo], card, secondYellow,
+    ...(automaticRedReason ? {automaticRedReason} : {}),
     probability: FOUL_RULE.foul, roll: outcomeRoll, ...(card === 'red' ? {sentOffId: piece.id} : {}), ...(keeperReplacement ? {keeperReplacement} : {}),
     restart: restart ? copy(restart) : null, outcome: forfeited ? 'forfeit' : type};
-  addLog(next, `${title(piece.team)} ${NAMES[piece.type]} fouls the ${NAMES[carrier.type]} at ${square(contactSpot.x, contactSpot.y)}.${card ? ` ${secondYellow ? 'Second yellow: sent off.' : card === 'red' ? 'Red card: sent off.' : 'Yellow card.'}` : ''}${forfeited ? ` ${title(next.winner)} wins by forfeit; fewer than ${FOUL_RULE.minimumPlayers} opponents remain.` : ` ${title(carrier.team)} has a ${type === 'penalty' ? 'penalty (80% scoring chance)' : 'direct free kick'}. Both teams may reposition.`}`);
+  const dismissal = automaticRedReason === 'keeperOutsideBox' ? 'Automatic red: goalkeeper foul outside the box.'
+    : automaticRedReason === 'lastDefender' ? 'Automatic red: no other defender between the attacker and goalkeeper.'
+    : secondYellow ? 'Second yellow: sent off.' : 'Red card: sent off.';
+  addLog(next, `${title(piece.team)} ${NAMES[piece.type]} fouls the ${NAMES[carrier.type]} at ${square(contactSpot.x, contactSpot.y)}.${card ? ` ${card === 'red' ? dismissal : 'Yellow card.'}` : ''}${forfeited ? ` ${title(next.winner)} wins by forfeit; fewer than ${FOUL_RULE.minimumPlayers} opponents remain.` : ` ${title(carrier.team)} has a ${type === 'penalty' ? 'penalty (80% scoring chance)' : 'direct free kick'}. Both teams may reposition.`}`);
   return next;
 }
 
@@ -2800,9 +2823,10 @@ function tacticalSuccessors(state, action) {
     const move = legalMoves(state, action.pieceId, {freePawn: !!action.freePawn}).find(candidate => candidate.x === action.x && candidate.y === action.y);
     if (move.type === 'tackle' && state.foulsEnabled) {
       const clean = move.cleanTackleProbability ?? 1;
-      return [[FOUL_RULE.red, FOUL_RULE.red / 2],
+      const foulBranches = move.automaticRedReason ? [[FOUL_RULE.foul, FOUL_RULE.foul / 2]] : [[FOUL_RULE.red, FOUL_RULE.red / 2],
         [FOUL_RULE.yellow, FOUL_RULE.red + FOUL_RULE.yellow / 2],
-        [FOUL_RULE.plain, FOUL_RULE.red + FOUL_RULE.yellow + FOUL_RULE.plain / 2],
+        [FOUL_RULE.plain, FOUL_RULE.red + FOUL_RULE.yellow + FOUL_RULE.plain / 2]];
+      return [...foulBranches,
         [FOUL_RULE.clean * clean, FOUL_RULE.foul + FOUL_RULE.clean * clean / 2],
         [FOUL_RULE.clean * (1 - clean), FOUL_RULE.foul + FOUL_RULE.clean * clean + FOUL_RULE.clean * (1 - clean) / 2]]
         .filter(([chance]) => chance > 0).map(([chance, roll]) => ({probability: chance, state: apply(roll)}));

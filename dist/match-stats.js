@@ -1,7 +1,7 @@
 /** Match records are independent of engine decisions and replay playback. */
-import {BOARD_WIDTH, BOARD_HEIGHT, GOAL_FILES, BOX_FILES, BOX_DEPTH} from './engine.js?v=466456fd862d';
-import {createPlayerRatings,restorePlayerRatings,recordPlayerRatings} from './player-ratings.js?v=7b51d3e35c39';
-import {createPlayerHeatmaps,restorePlayerHeatmaps,addPlayerHeatmapTime} from './player-heatmaps.js?v=65f92585f952';
+import {BOARD_WIDTH, BOARD_HEIGHT, GOAL_FILES, BOX_FILES, BOX_DEPTH} from './engine.js?v=663af4ea26d5';
+import {createPlayerRatings,restorePlayerRatings,recordPlayerRatings} from './player-ratings.js?v=0a03b76a1b50';
+import {createPlayerHeatmaps,restorePlayerHeatmaps,addPlayerHeatmapTime} from './player-heatmaps.js?v=70119ee99cd2';
 const TEAMS = ['white', 'black'];
 const SHOT_RESULTS = ['goal', 'save', 'shotMiss', 'blockedShot'];
 const IDS = /^(white|black)-(K|Q|[RBN][12]|P[123])$/;

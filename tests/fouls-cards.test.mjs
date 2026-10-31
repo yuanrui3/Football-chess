@@ -11,7 +11,8 @@ function fixture(team='white',{inside=false,carrierType='Q',challengerType='R',e
   const suffix={K:'K',Q:'Q',R:'R1',B:'B1',N:'N1',P:'P1'};
   const carrier=`white-${suffix[carrierType]}`,challenger=`black-${suffix[challengerType]}`;
   const cy=inside?2:3,origin=challengerType==='K'?[6,cy-1]:[6,cy+2];
-  const placements={'white-K':[6,15],'black-K':[6,0],[carrier]:[6,cy],[challenger]:origin};
+  // Generic card-partition tests need cover; automatic reds have separate fixtures.
+  const placements={'white-K':[6,15],'black-K':[6,0],'black-B2':[1,1],[carrier]:[6,cy],[challenger]:origin};
   const used=new Set(Object.values(placements).map(p=>p.join()));
   const parking=Array.from({length:E.BOARD_HEIGHT},(_,y)=>[[0,y],[E.BOARD_WIDTH-1,y]]).flat();
   for(const p of s.pieces){const q=placements[p.id]||parking.find(q=>!used.has(q.join()));used.add(q.join());Object.assign(p,rotate(q,team));if(team==='black'){p.id=id(p.id,team);p.team=other(p.team);}}

@@ -574,7 +574,7 @@ test('schema-two saves from before foul tracking restore zero disciplinary count
 function foulFixture({team='white',offenderSuffix='Q',penalty=false}={}){
   const enemy=other(team),transform=point=>team==='white'?point:mirror(point),carrier=`${team}-R1`,offenderId=`${enemy}-${offenderSuffix}`;
   const victim=penalty?[6,1]:[6,6],offender=penalty?[7,2]:[6,3];
-  const state=fixture({team,phase:'defendMove',carrier,positions:{[carrier]:transform(victim),[offenderId]:transform(offender)}});
+  const state=fixture({team,phase:'defendMove',carrier,positions:{[carrier]:transform(victim),[offenderId]:transform(offender),[`${enemy}-B2`]:transform([2,2])}});
   state.foulsEnabled=true;state.discipline={};state.sentOff=[];
   const move=legalMoves(state,offenderId).find(move=>move.type==='tackle'&&move.targetId===carrier);assert.ok(move,'a real defender can attempt the tackle');
   return {state,offenderId,fouledId:carrier,move,team,enemy,transform};

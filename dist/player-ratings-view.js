@@ -1,5 +1,5 @@
 /** End-of-match ratings review. This is a lineup diagram, not final locations. */
-import {renderPlayerHeatmap} from './player-heatmaps.js?v=65f92585f952';
+import {renderPlayerHeatmap} from './player-heatmaps.js?v=70119ee99cd2';
 const TEAMS = ['white', 'black'];
 const TEAM_NAMES = {white: 'Ivory FC', black: 'Obsidian FC'};
 const NAMES = {K: 'Goalkeeper', Q: 'Queen', R: 'Rook', B: 'Bishop', N: 'Knight', P: 'Pawn'};

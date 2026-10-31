@@ -22,7 +22,7 @@
  * Missing old telemetry starts a partial record; it is never reconstructed from
  * a scorer list or the last80 undo states.
  */
-import {BOARD_WIDTH, BOARD_HEIGHT, DRIBBLE_RANGE, GOAL_FILES, inOwnBox, legalKicks, legalMoves, shotModel} from './engine.js?v=466456fd862d';
+import {BOARD_WIDTH, BOARD_HEIGHT, DRIBBLE_RANGE, GOAL_FILES, inOwnBox, legalKicks, legalMoves, shotModel} from './engine.js?v=663af4ea26d5';
 
 const IDS=/^(white|black)-(K|Q|[RBN][12]|P[123])$/;
 const TEAMS=['white','black'],TYPES=['K','Q','R','B','N','P'];

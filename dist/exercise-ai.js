@@ -3,7 +3,7 @@
  * globally optimal play. Match opponents keep their ordinary search profile.
  */
 import {analyzeTacticalAction,currentTeam,legalMoves,legalKicks,
-  applyMove,applyKick,skipMove,shotModel,disguisedShotTargets,studyPositionMetrics} from './engine.js?v=466456fd862d';
+  applyMove,applyKick,skipMove,shotModel,disguisedShotTargets,studyPositionMetrics} from './engine.js?v=663af4ea26d5';
 
 export const EXERCISE_SEARCH_PROFILE=Object.freeze({maxDepth:12,nodeLimit:12000,extensions:false,
   searchWidths:Object.freeze({root:24,position:8,kick:6,bonus:4})});
