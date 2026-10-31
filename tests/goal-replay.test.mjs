@@ -3,6 +3,8 @@ import assert from 'node:assert/strict';
 import {createGame,applyKick,applyMove,skipMove,legalKicks,legalMoves,canOccupySquare,BOARD_WIDTH as W,BOARD_HEIGHT as H,GOAL_FILES,BOX_FILES,BOX_DEPTH,selectCornerTaker} from '../dist/engine.js';
 import {buildGoalReplay,restoreGoalReplay,createReplayPlayer} from '../dist/goal-replay.js';
 
+import {createMatchRecording,appendMatchRecording,matchReplay} from '../dist/match-archive.js';
+
 const clone=value=>structuredClone(value);
 function fixture({team='white',ownGoal=false,knight=false,keeperFrom=null,extraPositions={}}={}){
   const state=createGame({mode:'local',kickoff:team,seed:39});
@@ -445,7 +447,7 @@ function replayDOM(){
     addEventListener(type,handler){if(!this.listeners.has(type))this.listeners.set(type,[]);this.listeners.get(type).push(handler);}
     fire(type){for(const handler of this.listeners.get(type)||[])handler({target:this});}
   }
-  const ids=['replayPitch','replayBoard','replayOverlay','replayBall','replayPlayBtn','replayPrevBtn','replayNextBtn','replayRestartBtn','replayScrub','replayStep','replayCaption','replayScore','replayMoment','replayTitle','replayDetails'];
+  const ids=['replaySpeed','replayGoals','replayKind','replayPitch','replayBoard','replayOverlay','replayBall','replayPlayBtn','replayPrevBtn','replayNextBtn','replayRestartBtn','replayScrub','replayStep','replayCaption','replayScore','replayMoment','replayTitle','replayDetails'];
   const nodes=Object.fromEntries(ids.map(id=>[id,new Element()]));
   return {nodes,document:{getElementById:id=>nodes[id],createElement:tag=>new Element(tag),createElementNS:(_namespace,tag)=>new Element(tag)}};
 }
@@ -584,4 +586,21 @@ for(const team of ['white','black'])for(const kind of ['native','disguised','own
     assert.equal(dom.nodes.replayOverlay.querySelectorAll('.replay-action-line')[0].getAttribute('points'),after.lastAction.path.map(point=>`${point.x*100+50},${point.y*100+150}`).join(' '));
     player.stop();
   }finally{for(const [name,value] of Object.entries(previous)){if(value===undefined)delete globalThis[name];else globalThis[name]=value;}}
+});
+
+
+test('whole-match player shows goals before the last frame, goal jumps and full time',()=>{
+  const {state,before,after}=recordedGoal(),recording=createMatchRecording(state);
+  appendMatchRecording(recording,state,before);appendMatchRecording(recording,before,after);recording.finished=true;
+  const dom=replayDOM(),old=globalThis.document;globalThis.document=dom.document;
+  try{
+    const player=createReplayPlayer();assert.ok(player.load(recording,{autoplay:false,normalize:matchReplay}));
+    assert.equal(dom.nodes.replayKind.textContent,'MATCH REPLAY');assert.equal(dom.nodes.replayScrub.max,'3');
+    dom.nodes.replayGoals.value='2';dom.nodes.replayGoals.fire('change');
+    assert.equal(dom.nodes.replayMoment.textContent,'GOAL');assert.equal(dom.nodes.replayScore.textContent,'1 : 0');
+    dom.nodes.replayNextBtn.fire('click');assert.equal(dom.nodes.replayMoment.textContent,'FULL TIME');
+    assert.equal(dom.nodes.replayNextBtn.disabled,true);assert.equal(dom.nodes.replayBall.getAttribute('aria-label'),'Ball at h9');
+    dom.nodes.replaySpeed.value='4';dom.nodes.replaySpeed.fire('change');
+    player.stop();
+  }finally{globalThis.document=old;}
 });

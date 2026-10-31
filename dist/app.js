@@ -1,6 +1,7 @@
 import {createGame, canQuickRelease, legalMoves, legalKicks, disguisedShotTargets, applyMove, applyKick, skipMove, chooseAIAction, currentTeam, cornerTakers, selectCornerTaker, BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, BOX_FILES, BOX_DEPTH, CENTRAL_GOAL_FILES, MIDFIELD_RANK, inOwnBox, canOccupySquare, isBox, isGoalMouth, shotChance, shotModel, offsideInfo, offsideFlaggedIds, LONG_TACKLE_RANGE, DRIBBLE_RANGE, FOUL_RULE, STALLING_RULE, PACE_RULE, ACTION_SECONDS, actionTimeout, progressInfo, paceInfo, positionActions, normalizeGame, FORMATION_PRESETS, setStartingFormation} from './engine.js?v=bc58e8823cbc';
 import {createMatchClock, restoreMatchClock, tickMatchClock, settleMatchClock, rewindMatchClock} from './match-clock.js?v=edcd4f433b39';
-import {buildGoalReplay, restoreGoalReplay, createReplayPlayer} from './goal-replay.js?v=6b80c3b99662';
+import {buildGoalReplay, restoreGoalReplay, createReplayPlayer} from './goal-replay.js?v=03fa5949276e';
+import {createMatchRecording,appendMatchRecording,restoreMatchRecording,rewindMatchRecording,recordingMatchesGame,recordingFromLegacy,matchReplay,encodeMatchFile,readMatchFile} from './match-archive.js?v=e69cc9cde9af';
 import {createMatchStats, restoreMatchStats, recordMatchTransition, addPossessionTime, matchStatsSummary, shortPieceId} from './match-stats.js?v=3310fe94a6e9';
 import {playerRatingsSummary} from './player-ratings.js?v=f0bf44c20e32';
 import {renderPlayerRatings} from './player-ratings-view.js?v=0509d617ebe2';
@@ -47,6 +48,7 @@ let storageOK=true,aiPace=3000,aiDifficulty='casual',whiteDifficulty='casual',la
 let aiWorker=null,aiWatchdog=null,aiGeneration=0;
 let lastGoalReplay=null,replayAutoContinue=false,replayPendingResult=false;
 let matchStats=createMatchStats();
+let matchRecording=null,matchFileBusy=false,matchDownloadUrl=null;
 let shotFlight=null,shotFlightGeneration=0;
 let voiceEnabled=false,voiceActivated=false,voiceLastCaption='',voiceLastContext='',voiceCaptionDemo=false,voiceLifecycle=null,voicePreferredId='',voicePlayback='adam',voiceOptionsKey='',commentary=null,voiceTestRequest=0;
 let evaluationEnabled=false;
@@ -68,6 +70,8 @@ try {
     aiPace=AI_PACES.includes(saved.aiPace)?saved.aiPace:3000;lastComputerAction=saved.lastComputerAction||null;
     aiDifficulty=saved.aiDifficulty==='tactical'?'tactical':'casual';
     whiteDifficulty=saved.whiteDifficulty==='tactical'?'tactical':'casual';
+    matchRecording=restoreMatchRecording(saved.recording);
+    if(matchRecording&&!matchRecording.capped&&!recordingMatchesGame(matchRecording,game))matchRecording=null;
     const replay=restoreGoalReplay(saved.lastGoalReplay);
     if(replay&&replay.score.white<=game.score.white&&replay.score.black<=game.score.black)lastGoalReplay=replay;
   } else {
@@ -85,6 +89,13 @@ try {
     }
   }
 } catch {storageOK=false;}
+if(!matchRecording)restoreAvailableRecording();
+function restoreAvailableRecording(){
+  try{matchRecording=stage==='setup'?createMatchRecording(game):recordingFromLegacy({version:4,geometry:SAVE_GEOMETRY,game,history,stage});}
+  catch{matchRecording=createMatchRecording(game,{partial:stage!=='setup',finished:stage==='finished'});}
+  // Legacy undo entries predate recording offsets; the next action gets one.
+  for(const entry of history)delete entry.recordingLength;
+}
 
 const squares=[];
 for(let y=0;y<H;y++)for(let x=0;x<W;x++) {
@@ -192,7 +203,16 @@ function saveVoicePreference(){try{localStorage.setItem(VOICE_STORE,JSON.stringi
 function clockSnapshot(){return {remaining,actionRemaining,fullTimePending,finalChance:finalChance?{...finalChance}:null};}
 function restoreClock(clock){({remaining,actionRemaining,fullTimePending,finalChance}=clock);}
 function resetClock(){restoreClock(createMatchClock({remaining:duration*60,actionSeconds:ACTION_SECONDS}));lastTick=Date.now();}
-function save(){flushClockElapsed();try{localStorage.setItem(STORE,JSON.stringify({version:4,geometry:SAVE_GEOMETRY,foulsEnabled,passRunSelected,disguiseSelected,game,stage,paused,remaining,duration,actionRemaining,fullTimePending,finalChance,flipped,aiPace,aiDifficulty,whiteDifficulty,lastComputerAction,lastGoalReplay,matchStats,history:history.slice(-80)}));}catch{storageOK=false;$('saveNote').textContent='Match saving is unavailable in this browser.';}}
+function save(){
+  flushClockElapsed();if(stage==='setup')matchRecording=createMatchRecording(game);matchRecording.finished=stage==='finished';
+  const saved={version:4,geometry:SAVE_GEOMETRY,foulsEnabled,passRunSelected,disguiseSelected,game,stage,paused,remaining,duration,actionRemaining,fullTimePending,finalChance,flipped,aiPace,aiDifficulty,whiteDifficulty,lastComputerAction,lastGoalReplay,matchStats,recording:matchRecording};
+  // Preserve the complete recording before old, duplicate Undo snapshots when
+  // localStorage is nearly full. The in-memory Undo stack remains available.
+  for(const count of [80,20,0]){
+    try{localStorage.setItem(STORE,JSON.stringify({...saved,history:count?history.slice(-count):[]}));storageOK=true;$('saveNote').textContent='Your match saves on this device.';return;}catch{}
+  }
+  storageOK=false;$('saveNote').textContent='Device saving is unavailable. Download your recording from Save / load match.';
+}
 function toast(text){clearTimeout(toastTimer);$('toast').textContent=text;$('toast').classList.add('visible');toastTimer=setTimeout(()=>$('toast').classList.remove('visible'),3800);}
 function isComputer(team=currentTeam(game)){return game.mode==='watch'||game.mode==='solo'&&team==='black';}
 function computerDifficulty(team=currentTeam(game)){return game.mode==='watch'&&team==='white'?whiteDifficulty:aiDifficulty;}
@@ -549,7 +569,7 @@ function render(){
   if(reacting&&game.pendingShot)$('shotSummary').textContent=penaltyPending()?`Penalty aimed at ${FILES[game.pendingShot.x].toUpperCase()}. Fixed 80% conversion; the keeper holds position.`:game.pendingShot.disguised?`Disguised shot: ${goalChoiceNames(game.pendingShot.targetOptions)}, each 50%. Neither target is committed before the keeper decision.`:`Shot aimed at column ${FILES[game.pendingShot.x].toUpperCase()}. ${keeperCanReact()?`${TEAM[acting]} may move its king one square before resolution.`:'The defending king is outside its own box and has no goalkeeper reaction.'}`;
   $('skipBtn').hidden=watching||(kicking&&!quickRelease)||choosingCorner||stage==='finished';$('skipBtn').disabled=blocked()||choosingCorner;$('skipBtn').textContent=quickRelease?'Hold & organise →':running?'Skip run →':reacting?(penaltyPending()?'Resolve penalty · 80%':keeperCanReact()?'Hold keeper · resolve shot':'Resolve shot · king outside box'):'End positioning · skip unused →';
   $('statsBtn').hidden=stage!=='finished'&&!paused;$('pauseBtn').disabled=stage!=='playing';$('pauseBtn').textContent=paused?'▶ Resume':'Ⅱ Pause';$('finishBtn').disabled=stage!=='playing'||duration>0;$('finishBtn').title=duration>0?'Timed matches end after the clock and final chance settle.':'Finish this untimed match.';$('undoBtn').disabled=!history.length||stage!=='playing'||anyDialog();
-  $('replayBtn').disabled=!lastGoalReplay||anyDialog();
+  $('replayBtn').disabled=!lastGoalReplay||anyDialog();$('matchFilesBtn').disabled=!!shotFlight;
   document.body.classList.toggle('thinking',stage==='playing'&&isComputer()&&!paused);document.body.classList.toggle('paused',paused&&stage==='playing');
   const carrier=game.pieces.find(p=>p.id===game.ball.carrierId);
   $('possessionTeam').textContent=choosingCorner?TEAM[acting]:reacting?'Shot in flight':carrier?TEAM[carrier.team]:'Loose ball';
@@ -558,7 +578,7 @@ function render(){
   $('selectionInfo').innerHTML=choosingCorner&&stage==='playing'?'<span class="selection-icon">⚑</span><div><b>Choose the corner taker</b><small>Select a teammate in the attacking half.</small></div>':selected?`<span class="selection-icon">${SYMBOLS[selected.type]}</span><div><b>${pieceLabel(selected)} · ${coord(selected.x,selected.y)}</b><small>${stage==='setup'?'Choose a starting square.':running?'Optional run · uses next off-ball move':reacting?(penaltyPending()?'Penalty · keeper holds':'Keeper reaction'):kicking?'Pass / shoot · player stays':selected.id===game.restart?.takerId?'Restart taker · stays put':`${selected.id===game.ball.carrierId?'Dribble':'Move without ball'} · ${legalMoves(game,selected.id,{freePawn:positioning&&freePawnMode}).length} destinations`}</small></div>`:watching&&stage==='playing'?`<span class="selection-icon">♞</span><div><b>Watching ${TEAM[acting]}</b><small>Both teams are controlled by the computer.</small></div>`:'<span class="selection-icon">♞</span><div><b>Select a footballer</b><small>Move off the ball, or select the carrier to dribble.</small></div>';
   renderActionContext(selected);
   $('journal').replaceChildren(...game.log.slice(-12).reverse().map(line=>{const li=document.createElement('li');li.textContent=line.replaceAll('White','Ivory').replaceAll('Black','Obsidian');return li;}));$('feedCount').textContent=String(game.log.length).padStart(2,'0');
-  if(!storageOK)$('saveNote').textContent='Match saving is unavailable in this browser.';
+  if(!storageOK)$('saveNote').textContent='Device saving is unavailable. Download your recording from Save / load match.';
   renderBoard();resetKickDetails();paintShotFlight();updateClock();scheduleAI();
 }
 function updateClock(){
@@ -599,9 +619,10 @@ function commit(next,{timedOut=false,clockAdvanced=false}={}){
   if(stage!=='playing'||paused||anyDialog()||shotFlight)return;
   cancelAI();
   const before=game,priorComputerAction=lastComputerAction,actor=currentTeam(game),settled=settleMatchClock(clockSnapshot(),before,next,{timedOut,timed:duration>0,actionSeconds:ACTION_SECONDS});
-  history.push({game:structuredClone(game),actor,clock:clockSnapshot(),passRunSelected,disguiseSelected,matchStats:structuredClone(matchStats)});if(history.length>80)history.shift();const oldScore=game.score.white+game.score.black;
+  history.push({recordingLength:matchRecording.steps.length,game:structuredClone(game),actor,clock:clockSnapshot(),passRunSelected,disguiseSelected,matchStats:structuredClone(matchStats)});if(history.length>80)history.shift();const oldScore=game.score.white+game.score.black;
   matchStats=recordMatchTransition(matchStats,before,next,{matchSeconds:duration>0?Math.max(0,duration*60-settled.clock.remaining):null});
   game=next;passRunSelected=false;restoreClock(settled.clock);selectedId=null;freePawnMode=false;dribbleMode=false;lastTick=Date.now();
+  appendMatchRecording(matchRecording,before,game);
   const scored=game.score.white+game.score.black>oldScore;
   if(scored)lastGoalReplay=buildGoalReplay(history,before,game);
   lastComputerAction=isComputer(actor)?{actor,action:game.lastAction,summary:game.log.at(-1).replaceAll('White','Ivory').replaceAll('Black','Obsidian')}:null;
@@ -691,7 +712,7 @@ function paintShotFlight(){
   $('kickDetails').textContent='The shot outcome is recorded. Play and clocks resume after the ball arrives.';
   $('possessionTeam').textContent='Shot in flight';$('possessionDetail').textContent=`${TEAM[flight.shootingTeam]} · ${shortPieceId(flight.shooterId)}`;
   $('shotPanel').hidden=true;$('restartPanel').hidden=true;$('progressPanel').hidden=true;
-  $('normalMoveBtn').disabled=true;$('dribbleBtn').disabled=true;$('pawnMoveBtn').disabled=true;$('skipBtn').disabled=true;$('finishBtn').disabled=true;$('replayBtn').disabled=true;$('statsBtn').hidden=true;
+  $('normalMoveBtn').disabled=true;$('dribbleBtn').disabled=true;$('pawnMoveBtn').disabled=true;$('skipBtn').disabled=true;$('finishBtn').disabled=true;$('replayBtn').disabled=true;$('matchFilesBtn').disabled=true;$('statsBtn').hidden=true;
   $('pauseBtn').disabled=false;$('pauseBtn').textContent=paused?'▶ Resume':'Ⅱ Pause';
   for(const id of ['goalTop','goalBottom'])for(const goal of $(id).children){
     const aimed=Number(goal.dataset.goalX)===flight.goalTarget.x&&Number(goal.dataset.goalY)===flight.goalTarget.y;
@@ -759,6 +780,57 @@ function openGoalReplay({automatic=false}={}){
   $('replayDialog').showModal();replayPlayer.load(lastGoalReplay,{autoplay:true});
   lastTick=Date.now();render();save();
 }
+function openMatchFiles(){
+  if(shotFlight||matchFileBusy)return;
+  if(stage==='playing')advanceClockNow();
+  cancelAI();commentary.suspend();replayAutoContinue=false;
+  save();
+  const recording=matchRecording;
+  $('matchFileSummary').textContent=`Ivory ${game.score.white}–${game.score.black} Obsidian · ${recording.steps.length} recorded steps. ${recording.capped?'Recording limit reached; only the recorded portion can be saved.':recording.partial?'Partial recording: earlier play is unavailable.':'Recording from kickoff.'}`;
+  $('matchFileStatus').textContent='';
+  $('matchDownloadLink').hidden=true;
+  $('saveMatchBtn').disabled=stage==='setup';$('saveMatchJsonBtn').disabled=stage==='setup';$('watchMatchBtn').disabled=stage==='setup';
+  $('matchFilesDialog').showModal();lastTick=Date.now();render();
+}
+function showMatchRecording(recording){
+  replayAutoContinue=false;commentary.suspend();cancelAI();
+  $('replayDialog').showModal();
+  if(!replayPlayer.load(recording,{autoplay:false,normalize:matchReplay})){
+    $('replayDialog').close();throw new Error('This recording cannot be replayed.');
+  }
+  lastTick=Date.now();render();
+}
+async function downloadMatch(compressed){
+  if(matchFileBusy)return;
+  matchFileBusy=true;$('matchFileStatus').textContent='Preparing your recording…';
+  try{
+    const {blob,extension}=await encodeMatchFile(matchRecording,{compressed});
+    if(matchDownloadUrl)URL.revokeObjectURL(matchDownloadUrl);
+    matchDownloadUrl=URL.createObjectURL(blob);const link=$('matchDownloadLink');
+    link.href=matchDownloadUrl;link.download=`football-chess-${game.score.white}-${game.score.black}-${new Date().toISOString().slice(0,10)}.${extension}`;
+    link.textContent=`Save ${link.download}`;link.hidden=false;link.click();
+    $('matchFileStatus').textContent=`Recording ready · ${(blob.size/1024).toFixed(1)} KB. Open this file here to replay it.`;
+  }catch(error){$('matchFileStatus').textContent=error.message||'The recording could not be saved.';}
+  finally{matchFileBusy=false;}
+}
+$('matchFilesBtn').addEventListener('click',openMatchFiles);
+$('resultMatchFilesBtn').addEventListener('click',openMatchFiles);
+$('saveMatchBtn').addEventListener('click',()=>downloadMatch(true));
+$('saveMatchJsonBtn').addEventListener('click',()=>downloadMatch(false));
+$('watchMatchBtn').addEventListener('click',()=>{try{showMatchRecording(matchRecording);}catch(error){$('matchFileStatus').textContent=error.message;}});
+$('loadMatchFile').addEventListener('change',async()=>{
+  const input=$('loadMatchFile'),file=input.files?.[0];if(!file||matchFileBusy)return;
+  matchFileBusy=true;$('matchFileStatus').textContent='Reading the recording…';input.disabled=true;
+  try{
+    const recording=await readMatchFile(file);
+    // Reading a file may outlive the dialog. Reopen the panel before playback
+    // so the live match stays suspended until the viewer closes both panels.
+    if(!$('matchFilesDialog').open){advanceClockNow();$('matchFilesDialog').showModal();}
+    $('matchFileStatus').textContent=recording.partial?'Loaded a partial recording. Earlier play is unavailable.':'Recording loaded. Your current match is unchanged.';
+    showMatchRecording(recording);
+  }catch(error){$('matchFileStatus').textContent=error.message||'The recording could not be opened.';}
+  finally{input.value='';input.disabled=false;matchFileBusy=false;}
+});
 function animateComputerMove(action){
   if(!['move','tackle','tackleMiss'].includes(action?.type)||window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)return;
   const destination=squares[action.to.y*W+action.to.x],piece=destination?.querySelector('.piece');if(!piece?.animate)return;
@@ -916,7 +988,7 @@ $('duration').addEventListener('change',()=>{if(stage!=='setup')return;duration=
 $('normalMoveBtn').addEventListener('click',()=>{if(blocked()||!positionActions(game).normalAvailable)return;setMoveMode('normal');selectedId=null;render();});
 $('dribbleBtn').addEventListener('click',()=>{if(blocked()||!positionActions(game).dribbleAvailable)return;setMoveMode('dribble');selectedId=game.ball.carrierId;render();});
 $('pawnMoveBtn').addEventListener('click',()=>{if(blocked()||!positionActions(game).pawnAvailable)return;setMoveMode('pawn');selectedId=null;render();});
-$('startBtn').addEventListener('click',()=>{if(stage!=='setup')return;resetVoiceover();activateVoiceover();resetClock();stage='playing';paused=false;selectedId=null;render();save();if(voiceEnabled&&voiceActivated)commentary.confirmEnabled();});
+$('startBtn').addEventListener('click',()=>{if(stage!=='setup')return;resetVoiceover();activateVoiceover();resetClock();matchRecording=createMatchRecording(game);stage='playing';paused=false;selectedId=null;render();save();if(voiceEnabled&&voiceActivated)commentary.confirmEnabled();});
 $('skipBtn').addEventListener('click',()=>{if(!blocked())commit(skipMove(game));});
 $('pauseBtn').addEventListener('click',()=>{
   if(stage!=='playing'&&!shotFlight||advanceClockNow())return;
@@ -924,7 +996,7 @@ $('pauseBtn').addEventListener('click',()=>{
   paused=true;lastTick=Date.now();render();showPauseStats();save();
 });
 $('pauseStatsResumeBtn').addEventListener('click',resumePausedMatch);
-$('undoBtn').addEventListener('click',()=>{if(!history.length||stage!=='playing'||anyDialog()||advanceClockNow())return;evaluation.reset();resetVoiceover();cancelShotFlight();cancelAI();let entry=history.pop();if(game.mode==='solo')while(entry.actor!=='white'&&history.length)entry=history.pop();game=upgradeSavedGame(entry.game);passRunSelected=!!entry.passRunSelected&&['kick','kickoff','keeperRelease'].includes(game.phase);disguiseSelected=entry.disguiseSelected!==false;foulsEnabled=game.foulsEnabled===true;matchStats=restoreMatchStats(entry.matchStats,game,{partial:true});if(lastGoalReplay&&(game.score.white<lastGoalReplay.score.white||game.score.black<lastGoalReplay.score.black))lastGoalReplay=null;if(game.mode==='watch')paused=true;restoreClock(rewindMatchClock(clockSnapshot(),entry.clock,{actionSeconds:ACTION_SECONDS}));selectedId=null;lastComputerAction=null;freePawnMode=false;dribbleMode=false;lastTick=Date.now();render();save();toast(game.mode==='watch'?'Last computer action undone. Press Resume to continue.':'Last move undone.');});
+$('undoBtn').addEventListener('click',()=>{if(!history.length||stage!=='playing'||anyDialog()||advanceClockNow())return;evaluation.reset();resetVoiceover();cancelShotFlight();cancelAI();let entry=history.pop();if(game.mode==='solo')while(entry.actor!=='white'&&history.length)entry=history.pop();game=upgradeSavedGame(entry.game);if(!rewindMatchRecording(matchRecording,entry.recordingLength))restoreAvailableRecording();passRunSelected=!!entry.passRunSelected&&['kick','kickoff','keeperRelease'].includes(game.phase);disguiseSelected=entry.disguiseSelected!==false;foulsEnabled=game.foulsEnabled===true;matchStats=restoreMatchStats(entry.matchStats,game,{partial:true});if(lastGoalReplay&&(game.score.white<lastGoalReplay.score.white||game.score.black<lastGoalReplay.score.black))lastGoalReplay=null;if(game.mode==='watch')paused=true;restoreClock(rewindMatchClock(clockSnapshot(),entry.clock,{actionSeconds:ACTION_SECONDS}));selectedId=null;lastComputerAction=null;freePawnMode=false;dribbleMode=false;lastTick=Date.now();render();save();toast(game.mode==='watch'?'Last computer action undone. Press Resume to continue.':'Last move undone.');});
 $('flipBtn').addEventListener('click',()=>{flipped=!flipped;render();save();});
 $('replayBtn').addEventListener('click',()=>openGoalReplay());
 function finishMatch({replayGoal=false}={}){if(stage!=='playing'||shotFlight)return;flushClockElapsed();cancelAI();stage='finished';paused=false;game.phase='finished';selectedId=null;if(replayGoal&&lastGoalReplay){replayPendingResult=true;openGoalReplay({automatic:true});}else{render();save();showResult();}}

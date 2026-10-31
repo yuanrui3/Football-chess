@@ -115,3 +115,17 @@
 .evaluation-controls{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:6px 12px;margin:0 0 11px;padding:0 0 9px;border-bottom:1px solid var(--line)}.evaluation-controls button{font-size:10px;font-weight:600;padding:7px 11px;border:1px solid #bac8b1;border-radius:3px;background:#e9eedf;color:var(--green)}.evaluation-controls button[aria-pressed="true"]{background:var(--green);color:var(--lime)}.evaluation-controls output{text-align:right;font-size:12px;font-weight:700;font-variant-numeric:tabular-nums}.evaluation-controls p{grid-column:1/-1;font-size:9px;line-height:1.5;color:var(--muted);margin:0;min-height:14px}.pitch-area.analysis-visible{padding-left:25px}.board-surround{position:relative}.evaluation-rail{position:absolute;left:-38px;top:0;bottom:0;width:13px;background:var(--navy);border:1px solid #687368;border-radius:3px;overflow:hidden;box-shadow:0 1px 2px #10211722}.evaluation-rail[hidden]{display:none}.evaluation-ivory{position:absolute;left:0;right:0;bottom:0;height:50%;background:var(--white);transition:height .35s ease}.evaluation-midpoint{position:absolute;left:0;right:0;top:50%;border-top:1px solid #dbad60;opacity:.85}.evaluation-team{position:absolute;left:0;right:0;text-align:center;font-size:7px;font-weight:700;line-height:12px}.evaluation-obsidian{top:2px;color:#fff}.evaluation-white{bottom:2px;color:#182f2b}@media(max-width:600px){.pitch-area.analysis-visible{padding-left:25px}.evaluation-controls{margin-bottom:9px}.evaluation-controls p{font-size:9px}.evaluation-rail{left:-29px;width:11px}}@media(prefers-reduced-motion:reduce){.evaluation-ivory{transition:none}}
 
 .masthead-actions{display:flex;align-items:center;gap:22px;margin-left:auto}.masthead-actions .exercises-link{text-decoration:none;white-space:nowrap}.masthead-actions .exercises-link:hover{text-decoration:underline}@media(max-width:600px){.masthead-actions{gap:12px;flex-wrap:wrap;justify-content:flex-end}.masthead-actions .text-button{font-size:10px}}
+
+/* Portable match recordings */
+#matchFilesDialog{max-width:560px}
+.match-file-actions{display:flex;flex-wrap:wrap;gap:10px;margin:20px 0 14px}
+.match-file-help{font-size:13px;line-height:1.6;color:#586858}
+.match-file-upload{display:flex;flex-direction:column;gap:10px;border:1px dashed #7d9077;background:#f1f3e9;padding:20px;border-radius:6px;margin-top:22px}
+.match-file-upload span{font-size:13px;color:#586858}
+.match-file-upload input{max-width:100%;font:inherit;font-size:13px}
+.match-file-status{min-height:2.8em;font-size:13px;line-height:1.5;color:#254e33;overflow-wrap:anywhere}
+.replay-options{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin:12px 0;font-size:12px}
+.replay-options select{font:inherit;padding:7px;border:1px solid #c4cdbb;border-radius:4px;background:#f6f4e9;color:#263f2e}
+#resultMatchFilesBtn{margin:14px 0 10px}
+
+.match-download-link{display:block;margin-top:14px;color:#254e33;font-size:13px;overflow-wrap:anywhere}.match-download-link[hidden]{display:none}

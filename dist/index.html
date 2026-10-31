@@ -6,7 +6,7 @@
   <meta name="description" content="Football tactics meet chess. Play an eleven-a-side tactical match on a 14 by 17 pitch, with goalkeeper reactions, shot odds, and chess-inspired football.">
   <title>Football Chess · The beautiful game, one move at a time</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23214f3b'/%3E%3Ctext x='32' y='48' font-size='47' text-anchor='middle' fill='%23dbef84'%3E♞%3C/text%3E%3C/svg%3E">
-  <link rel="stylesheet" href="style.css?v=7e245ae5eca4">
+  <link rel="stylesheet" href="style.css?v=9b4aaa7d73f4">
   <link rel="stylesheet" href="player-ratings.css?v=0f5442ed5df9">
 </head>
 <body>
@@ -78,7 +78,7 @@
       <section class="quick-rule"><span class="quote-mark">“</span><p>No captures.<br>Just clever football.</p><small>Tackle the ball carrier, pass between your pieces, and find a route to the net.</small><button class="text-button compact" id="detailsBtn">Explore the rules ↗</button></section>
     </aside>
   </div>
-  <div class="match-toolbar"><div><button class="utility-button" id="undoBtn" disabled>↶ Undo</button><button class="utility-button" id="pauseBtn" disabled>Ⅱ Pause</button><button class="utility-button" id="finishBtn" disabled>Finish match</button><button class="utility-button" id="replayBtn" disabled>↻ Last goal</button><button class="utility-button" id="statsBtn" hidden>Match stats</button></div><button class="utility-button" id="newBtn">↻ New match</button><span class="saved-note" id="saveNote">Your match saves on this device.</span></div>
+  <div class="match-toolbar"><div><button class="utility-button" id="undoBtn" disabled>↶ Undo</button><button class="utility-button" id="pauseBtn" disabled>Ⅱ Pause</button><button class="utility-button" id="finishBtn" disabled>Finish match</button><button class="utility-button" id="replayBtn" disabled>↻ Last goal</button><button class="utility-button" id="statsBtn" hidden>Match stats</button></div><button class="utility-button" id="matchFilesBtn">Save / load match</button><button class="utility-button" id="newBtn">↻ New match</button><span class="saved-note" id="saveNote">Your match saves on this device.</span></div>
 </main>
 <footer><span>FOOTBALL × CHESS</span><p>Custom variation inspired by the game by Serrano Saunders · <a href="https://pdfhost.io/v/bWV1pmicf_Football_Chess_Handbook.pdf" target="_blank" rel="noopener">Original handbook ↗</a></p><span>PLAY WITH YOUR HEAD.</span></footer>
 <div id="toast" class="toast" role="status"></div>
@@ -171,16 +171,29 @@
   <a class="source-link" href="https://pdfhost.io/v/bWV1pmicf_Football_Chess_Handbook.pdf" target="_blank" rel="noopener">Inspired by the original handbook ↗</a>
   <a class="source-link" href="vendor/kitten/NOTICE.html" target="_blank" rel="noopener">Local speech credits and source ↗</a>
 </dialog>
+<dialog id="matchFilesDialog" aria-labelledby="matchFilesTitle">
+  <div class="dialog-heading"><p class="eyebrow">YOUR MATCH COLLECTION</p><button class="icon-button" data-close="matchFilesDialog" aria-label="Close match files">×</button></div>
+  <h2 id="matchFilesTitle">Save it. Play it back.</h2>
+  <p id="matchFileSummary"></p>
+  <div class="match-file-actions"><button class="primary" id="saveMatchBtn">Download compact match ↓</button><button class="utility-button" id="saveMatchJsonBtn">Download JSON</button><button class="utility-button" id="watchMatchBtn">Replay this match</button></div>
+  <p class="match-file-help">Compact .fcmatch files use compressed JSON. Both formats preserve the recorded moves, shots, goals and cards.</p>
+  <label class="match-file-upload" for="loadMatchFile"><b>Open a saved match</b><span>Choose a .fcmatch or .json file to watch it here.</span><input type="file" id="loadMatchFile" accept=".fcmatch,.json,.gz,.txt,application/json,application/gzip"></label>
+  <a id="matchDownloadLink" class="match-download-link" hidden download></a>
+  <p id="matchFileStatus" class="match-file-status" role="status" aria-live="polite"></p>
+  <p class="match-file-help">Your current match stays paused while these panels are open. Loading a recording does not replace it. Older device saves show only their available history.</p>
+  <button class="utility-button" data-close="matchFilesDialog">Back to match</button>
+</dialog>
 <dialog id="replayDialog" aria-labelledby="replayTitle" aria-describedby="replayCaption">
-  <div class="dialog-heading"><p class="eyebrow">GOAL REPLAY</p><button class="icon-button" data-close="replayDialog" aria-label="Close goal replay">×</button></div>
+  <div class="dialog-heading"><p class="eyebrow" id="replayKind">GOAL REPLAY</p><button class="icon-button" data-close="replayDialog" aria-label="Close replay">×</button></div>
   <div class="replay-heading"><h2 id="replayTitle">The goal</h2><b id="replayScore" class="replay-score">0 : 0</b></div>
   <p class="replay-details" id="replayDetails"></p>
   <div class="replay-controls"><button type="button" class="utility-button" id="replayPrevBtn" aria-label="Previous replay step">←</button><button type="button" class="primary" id="replayPlayBtn" aria-pressed="false">▶ Play</button><button type="button" class="utility-button" id="replayNextBtn" aria-label="Next replay step">→</button><button type="button" class="utility-button" id="replayRestartBtn">↶ Restart</button><span id="replayStep">0 / 0</span></div>
+  <div class="replay-options"><label for="replaySpeed">Playback speed</label><select id="replaySpeed"><option value="1">1×</option><option value="2">2×</option><option value="4">4×</option><option value="8">8×</option></select><select id="replayGoals" aria-label="Jump to a recorded goal" hidden></select></div>
   <label class="replay-timeline" for="replayScrub"><span>Replay timeline</span><input type="range" id="replayScrub" min="0" max="1" value="0" step="1"></label>
   <p class="replay-caption" id="replayCaption" aria-live="polite"></p>
-  <div class="replay-field" aria-label="Recorded goal and build-up">
+  <div class="replay-field" aria-label="Recorded match playback">
     <div class="replay-goal replay-goal-top" aria-hidden="true"></div>
-    <div class="replay-pitch" id="replayPitch"><div class="replay-board" id="replayBoard" role="grid" aria-label="Goal replay pitch, Ivory attacks upward"></div><span class="replay-ball" id="replayBall" role="img">⚽</span></div>
+    <div class="replay-pitch" id="replayPitch"><div class="replay-board" id="replayBoard" role="grid" aria-label="Replay pitch, Ivory attacks upward"></div><span class="replay-ball" id="replayBall" role="img">⚽</span></div>
     <div class="replay-goal replay-goal-bottom" aria-hidden="true"></div>
     <svg class="replay-overlay" id="replayOverlay" viewBox="0 0 1400 1900" aria-hidden="true"><rect x="3" y="103" width="1394" height="1694"/><path d="M0 950H1400M400 100V400H1000V100M400 1800V1500H1000V1800"/><circle cx="700" cy="950" r="110"/></svg>
     <span class="replay-moment" id="replayMoment">BUILD-UP</span>
@@ -215,9 +228,10 @@
     </div>
     <div class="stats-goal-log"><h3>Goals</h3><ol id="statsGoalLog"></ol></div>
   </section>
+  <button class="utility-button wide" id="resultMatchFilesBtn">Save / replay this match</button>
   <button class="primary wide" id="rematchBtn">Play another match <span>↗</span></button>
 </dialog>
 <dialog id="confirmDialog"><div class="dialog-heading"><p class="eyebrow">START FRESH</p><button class="icon-button" data-close="confirmDialog" aria-label="Cancel">×</button></div><h2>A new game?</h2><p>Your current match will be replaced.</p><div class="dialog-actions"><button class="utility-button" data-close="confirmDialog">Keep playing</button><button class="primary" id="confirmNewBtn">New match ↗</button></div></dialog>
-<script type="module" src="app.js?v=b0dcc29e744b"></script>
+<script type="module" src="app.js?v=d84a32259245"></script>
 </body>
 </html>

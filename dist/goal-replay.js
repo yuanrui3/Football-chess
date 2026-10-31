@@ -42,8 +42,8 @@ function validIdentity(piece){
     ?native!=='K'&&piece.type==='K'&&piece.originalType===native
     :piece.type===native&&piece.originalType===undefined&&(piece.replacementKeeper===undefined||piece.replacementKeeper===false);
 }
-function validPieces(pieces,sentOff=[]){
-  if(!Array.isArray(pieces)||pieces.length<14||pieces.length>22||!Array.isArray(sentOff)||sentOff.length>8)return false;
+function validPieces(pieces,sentOff=[],allowForfeit=false){
+  if(!Array.isArray(pieces)||pieces.length<(allowForfeit?13:14)||pieces.length>22||!Array.isArray(sentOff)||sentOff.length>(allowForfeit?9:8))return false;
   const ids=new Set(),occupied=new Set(),counts={white:0,black:0},keepers={white:0,black:0},departed=new Set();
   for(const piece of sentOff){
     if(!validIdentity(piece)||departed.has(piece.id)||!['red','secondYellow'].includes(piece.reason)||!integer(piece.yellowCards,0,2)||piece.reason==='secondYellow'&&piece.yellowCards!==2)return false;
@@ -60,7 +60,7 @@ function validPieces(pieces,sentOff=[]){
     ids.add(piece.id);occupied.add(square);
     counts[piece.team]++;if(piece.type==='K')keepers[piece.team]++;
   }
-  if(ids.size+departed.size!==IDS.size||TEAMS.some(team=>counts[team]<7||counts[team]>11||keepers[team]>1))return false;
+  if(ids.size+departed.size!==IDS.size||TEAMS.some(team=>counts[team]<(allowForfeit?6:7)||counts[team]>11||keepers[team]>1))return false;
   return [...pieces,...sentOff].every(piece=>!piece.replacementKeeper||departed.has(`${piece.team}-K`));
 }
 
@@ -170,8 +170,8 @@ function recordFrame(state){
   return {pieces:state.pieces.map(piece=>recordPiece(piece,state.discipline)),sentOff:recordSentOff(state.sentOff),ball:{x:state.ball.x,y:state.ball.y,carrierId:state.ball.carrierId??null},score:{...state.score},action:recordAction(state.lastAction),caption:frameCaption(state)};
 }
 
-function validFrame(frame,isGoal){
-  if(!frame||!validPieces(frame.pieces,frame.sentOff)||!score(frame.score)||!validAction(frame.action)||typeof frame.caption!=='string'||frame.caption.length>280)return false;
+function validFrame(frame,isGoal,allowForfeit=false){
+  if(!frame||!validPieces(frame.pieces,frame.sentOff,allowForfeit)||!score(frame.score)||!validAction(frame.action)||typeof frame.caption!=='string'||frame.caption.length>280)return false;
   if(frame.action?.outcome==='loose'&&(frame.ball?.carrierId!==null||!samePoint(frame.ball,frame.action.reboundLanding)||frame.pieces.some(piece=>samePoint(piece,frame.ball))||frame.pieces.find(piece=>piece.id===frame.action.keeperId)?.type!=='K'))return false;
   if(frame.action?.keeperMove&&frame.pieces.find(piece=>piece.id===frame.action.keeperMove.pieceId)?.type!=='K')return false;
   if(frame.action?.disguised&&!['Q','N'].includes(frame.pieces.find(piece=>piece.id===(frame.action.shooterId||frame.action.pieceId))?.type))return false;
@@ -270,11 +270,14 @@ export function buildGoalReplay(history,before,after){
   }catch{return null;}
 }
 
+// Shared, bounded frame schema for full-match recordings.
+export {recordFrame as captureReplayFrame,validFrame as validReplayFrame,validRosterTransition};
+
 /** A separate board and timer: playback never touches the live game or clock. */
 export function createReplayPlayer({onComplete=()=>{},onInteract=()=>{}}={}){
   const $=id=>document.getElementById(id),pitch=$('replayPitch'),board=$('replayBoard'),overlay=$('replayOverlay'),ball=$('replayBall');
   const tokens=new Map(),animations=new Set();
-  let replay=null,index=0,timer=null,playing=false,completed=false;
+  let replay=null,index=0,timer=null,playing=false,completed=false,speed=1;
   const svg=(name,attributes)=>{const node=document.createElementNS('http://www.w3.org/2000/svg',name);for(const [key,value]of Object.entries(attributes))node.setAttribute(key,String(value));return node;};
   overlay.replaceChildren(
     svg('rect',{x:3,y:103,width:W*100-6,height:H*100-6}),
@@ -288,7 +291,7 @@ export function createReplayPlayer({onComplete=()=>{},onInteract=()=>{}}={}){
   function clearAnimations(){for(const animation of animations)animation.cancel?.();animations.clear();}
   function animate(element,frames){
     if(!playing||!element.animate||window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)return;
-    const animation=element.animate(frames,{duration:720,easing:'ease-in-out'});animations.add(animation);animation.finished.then(()=>animations.delete(animation)).catch(()=>animations.delete(animation));
+    const animation=element.animate(frames,{duration:720/speed,easing:'ease-in-out'});animations.add(animation);animation.finished.then(()=>animations.delete(animation)).catch(()=>animations.delete(animation));
   }
   function controls(){
     $('replayPlayBtn').textContent=playing?'Ⅱ Pause':'▶ Play';$('replayPlayBtn').setAttribute('aria-pressed',String(playing));
@@ -297,9 +300,9 @@ export function createReplayPlayer({onComplete=()=>{},onInteract=()=>{}}={}){
   }
   function renderFrame(previous=null){
     if(!replay)return;
-    clearAnimations();const frame=replay.frames[index],goal=index===replay.frames.length-1;
+    clearAnimations();const frame=replay.frames[index],goal=frame.action?.type==='goal'&&(frame.ball.y===-1||frame.ball.y===H);
     $('replayCaption').textContent=frame.caption;$('replayScore').textContent=`${frame.score.white} : ${frame.score.black}`;
-    $('replayStep').setAttribute('aria-label',goal?'Goal scored':`Build-up step ${index+1}`);
+    $('replayStep').setAttribute('aria-label',goal?'Goal scored':`Recorded step ${index+1}`);
     const size=pitch.getBoundingClientRect().width/W;
     const activeIds=new Set(frame.pieces.map(piece=>piece.id));
     for(const [id,token]of tokens){token.hidden=!activeIds.has(id);token.style.display=token.hidden?'none':'';token.setAttribute('aria-hidden',String(token.hidden));}
@@ -329,7 +332,7 @@ export function createReplayPlayer({onComplete=()=>{},onInteract=()=>{}}={}){
       for(const target of action.targetOptions)line(target.path?.length>1?target.path:[action.from,target],'replay-action-line');
     }else if(action?.path?.length>1)line(action.path,'replay-action-line');
     if(action?.keeperMove)line([action.keeperMove.from,action.keeperMove.to],'replay-keeper-line');
-    $('replayMoment').textContent=goal?'GOAL':action?.type==='foul'?action.card==='red'?'RED CARD':action.card==='yellow'?'YELLOW CARD':'FOUL':action?.penalty?'PENALTY':action?.type==='shotAttempt'?'SHOT DECLARED':action?.lofted?'LOFTED PASS':'BUILD-UP';
+    $('replayMoment').textContent=goal?'GOAL':replay.kind==='match'&&index===replay.frames.length-1&&replay.finished?'FULL TIME':action?.type==='foul'?action.card==='red'?'RED CARD':action.card==='yellow'?'YELLOW CARD':'FOUL':action?.penalty?'PENALTY':action?.type==='shotAttempt'?'SHOT DECLARED':action?.lofted?'LOFTED PASS':'BUILD-UP';
     controls();
   }
   function schedule(){
@@ -338,7 +341,7 @@ export function createReplayPlayer({onComplete=()=>{},onInteract=()=>{}}={}){
       timer=null;if(!playing)return;
       if(index===replay.frames.length-1){playing=false;controls();if(!completed){completed=true;onComplete();}return;}
       const previous=replay.frames[index];index++;renderFrame(previous);schedule();
-    },index===replay.frames.length-1?1600:1050);
+    },(index===replay.frames.length-1?1600:1050)/speed);
   }
   function manual(action){onInteract();clearTimer();clearAnimations();action();controls();}
   $('replayPlayBtn').addEventListener('click',()=>manual(()=>{playing=!playing;if(playing){if(index===replay.frames.length-1){index=0;completed=false;renderFrame();}schedule();}}));
@@ -346,9 +349,25 @@ export function createReplayPlayer({onComplete=()=>{},onInteract=()=>{}}={}){
   $('replayPrevBtn').addEventListener('click',()=>manual(()=>{playing=false;index=Math.max(0,index-1);renderFrame();}));
   $('replayNextBtn').addEventListener('click',()=>manual(()=>{playing=false;index=Math.min(replay.frames.length-1,index+1);renderFrame();}));
   $('replayScrub').addEventListener('input',()=>manual(()=>{playing=false;index=Math.max(0,Math.min(replay.frames.length-1,Math.trunc(Number($('replayScrub').value))||0));renderFrame();}));
+  $('replaySpeed')?.addEventListener('change',()=>manual(()=>{speed=[1,2,4,8].includes(Number($('replaySpeed').value))?Number($('replaySpeed').value):1;schedule();}));
+  $('replayGoals')?.addEventListener('change',()=>manual(()=>{playing=false;index=Math.max(0,Math.min(replay.frames.length-1,Number($('replayGoals').value)||0));renderFrame();}));
   return {
-    load(value,{autoplay=true}={}){
-      clearTimer();clearAnimations();replay=restoreGoalReplay(value);playing=false;index=0;completed=false;if(!replay)return false;
+    load(value,{autoplay=true,normalize=restoreGoalReplay}={}){
+      clearTimer();clearAnimations();replay=normalize(value);playing=false;index=0;completed=false;speed=1;if(!replay)return false;
+      if($('replaySpeed'))$('replaySpeed').value='1';
+      if($('replayKind'))$('replayKind').textContent=replay.kind==='match'?'MATCH REPLAY':'GOAL REPLAY';
+      if($('replayGoals')){
+        $('replayGoals').replaceChildren();
+        const add=(label,i)=>{const option=document.createElement('option');option.value=String(i);option.textContent=label;$('replayGoals').append(option);};
+        add('Jump to start',0);
+        replay.frames.forEach((frame,i)=>{if(frame.action?.type==='goal'&&(frame.ball.y===-1||frame.ball.y===H))add(`Goal · ${frame.score.white}–${frame.score.black}`,i);});
+        $('replayGoals').value='0';$('replayGoals').hidden=replay.kind!=='match';
+      }
+      if(replay.kind==='match'){
+        $('replayTitle').textContent=`Ivory ${replay.score.white}–${replay.score.black} Obsidian`;
+        $('replayDetails').textContent=`${replay.partial?'Partial recording · Earlier play is unavailable.':'Recorded from kickoff.'} ${replay.capped?'Recording limit reached.':replay.finished?'Match ended.':'Match in progress when saved.'} Playback uses the recorded outcomes.`;
+        $('replayScrub').max=String(replay.frames.length-1);playing=!!autoplay;renderFrame();schedule();return true;
+      }
       const shooter=replay.frames.at(-1).pieces.find(piece=>piece.id===replay.shooterId);
       $('replayTitle').textContent=`${TEAM[replay.team]} ${replay.ownGoal?'· Own goal':'· Goal'}`;
       const goalAction=replay.frames.at(-1).action;

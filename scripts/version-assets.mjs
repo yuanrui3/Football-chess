@@ -22,6 +22,7 @@ async function versionEngineImport(name){
   return hash(source);
 }
 const replayVersion=await versionEngineImport('goal-replay.js');
+const archiveVersion=await versionImports('match-archive.js',{'engine.js':engineVersion,'goal-replay.js':replayVersion});
 const playerRatingsVersion=await versionEngineImport('player-ratings.js');
 const heatmapsVersion=await versionEngineImport('player-heatmaps.js');
 const ratingsViewVersion=await versionImports('player-ratings-view.js',{'player-heatmaps.js':heatmapsVersion});
@@ -80,6 +81,7 @@ app=app.replace(/from ['"]\.\/engine\.js(?:\?v=[^'"]+)?['"]/,`from './engine.js?
 app=app.replace(/['"]\.\/ai-worker\.js(?:\?v=[^'"]+)?['"]/,`'./ai-worker.js?v=${workerVersion}'`);
 app=app.replace(/from ['"]\.\/match-clock\.js(?:\?v=[^'"]+)?['"]/,`from './match-clock.js?v=${clockVersion}'`);
 app=app.replace(/from ['"]\.\/goal-replay\.js(?:\?v=[^'"]+)?['"]/,`from './goal-replay.js?v=${replayVersion}'`);
+app=app.replace(/from ['"]\.\/match-archive\.js(?:\?v=[^'"]+)?['"]/,`from './match-archive.js?v=${archiveVersion}'`);
 app=app.replace(/from ['"]\.\/match-stats\.js(?:\?v=[^'"]+)?['"]/,`from './match-stats.js?v=${statsVersion}'`);
 app=app.replace(/from ['"]\.\/player-ratings\.js(?:\?v=[^'"]+)?['"]/,`from './player-ratings.js?v=${playerRatingsVersion}'`);
 app=app.replace(/from ['"]\.\/player-ratings-view\.js(?:\?v=[^'"]+)?['"]/,`from './player-ratings-view.js?v=${ratingsViewVersion}'`);
