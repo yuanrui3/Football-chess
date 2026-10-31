@@ -52,7 +52,7 @@ for (const team of ['white', 'black']) {
   });
 
   test(`${team}: scoring caps at 100% without negative or leftover failure probability`, () => {
-    const normal = fixture({team, origin: [6, 1], keeper: [10, 5]}), target = point([6, -1], team);
+    const normal = fixture({team, origin: [6, 1], keeper: [9, 2]}), target = point([6, -1], team);
     const base = E.shotModel(normal, target.x, target.y); assert.ok(base.goalProbability > .5);
     const boosted = E.shotModel(withRestart(normal), target.x, target.y); doubled(base, boosted);
     assert.equal(boosted.goalProbability, 1); assert.ok(failures.every(key => boosted[key] === 0));

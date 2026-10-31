@@ -2,7 +2,7 @@
  * Example actions document one native route against the deterministic Tactical
  * bot; session grading evaluates the objective, never this move list.
  */
-import {createGame,applyKick} from './engine.js?v=bc58e8823cbc';
+import {createGame,applyKick} from './engine.js?v=eb0ab0924c73';
 import {MEDIUM_EXERCISES} from './exercise-medium.js?v=058ae5d6ae6e';
 import {TOUGH_ATTACK_EXERCISES} from './exercise-tough-attack.js?v=29b11d9a3e19';
 import {TOUGH_MIXED_EXERCISES} from './exercise-tough-mixed.js?v=c7478b669f7b';

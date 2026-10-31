@@ -70,10 +70,10 @@ for(const team of ['white','black']){
       const scored=E.skipMove(pending,{roll:.799999}),saved=E.skipMove(pending,{roll:.8});assert.equal(scored.lastAction.type,'goal');assert.equal(scored.score[team],1);assert.equal(saved.lastAction.type,'save');assert.equal(saved.ball.carrierId,keeper.id);assert.deepEqual(pending,before);
     }
   });
-  test(`${team}: a penalty still has 80% scoring odds with the king outside its own box and cannot grant an outside save`,()=>{
+  test(`${team}: a penalty at an unguarded goal uses pass accuracy and cannot grant an outside save`,()=>{
     const f=fixture(team,{inside:true}),keeper=f.s.pieces.find(p=>p.type==='K'&&p.team===other(team));Object.assign(keeper,rotate([3,3],team));
-    const ready=playRestart(challenge(f,.08)),shot=E.legalKicks(ready)[0],pending=E.applyKick(ready,shot.x,shot.y),m=E.shotModel(pending);assert.equal(m.goalProbability,.8);assert.equal(m.saveProbability,0);close(m.missProbability,.2);
-    const miss=E.skipMove(pending,{roll:.81});assert.equal(miss.lastAction.type,'shotMiss');assert.equal(miss.restart.type,'goalKick');assert.equal(miss.restart.team,other(team));
+    const ready=playRestart(challenge(f,.08)),shot=E.legalKicks(ready)[0],pending=E.applyKick(ready,shot.x,shot.y),m=E.shotModel(pending);assert.equal(m.emptyNet,true);assert.equal(m.goalProbability,E.passAccuracy(m.emptyNetPassDistance));assert.equal(m.goalProbability,1);assert.equal(m.saveProbability,0);close(m.missProbability,0);
+    const goal=E.skipMove(pending,{roll:.999999});assert.equal(goal.lastAction.type,'goal');assert.equal(goal.score[team],1);
   });
   test(`${team}: red cards survive a penalty goal and the new kickoff formation`,()=>{
     const f=fixture(team,{inside:true}),awarded=challenge(f,.01);assert.equal(awarded.pieces.length,21);const ready=playRestart(awarded),shot=E.legalKicks(ready)[0],goal=E.skipMove(E.applyKick(ready,shot.x,shot.y),{roll:0});

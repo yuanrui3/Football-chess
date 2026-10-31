@@ -1,8 +1,8 @@
-import {BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, BOX_FILES, BOX_DEPTH, currentTeam, canQuickRelease, legalMoves, legalKicks, disguisedShotTargets, cornerTakers, isBox, isGoalMouth, positionActions, applyKick} from './engine.js?v=bc58e8823cbc';
-import {chooseExerciseAction} from './exercise-ai.js?v=6318b72b3ad6';
-import {EXERCISES} from './exercise-positions.js?v=67887493e45d';
-import {createExerciseSession, applyExerciseAction, bestKeeperShotChance, exerciseRoundLimit, exerciseActionExplanation} from './exercise-session.js?v=14b8796faa63';
-import {createEvaluation} from './evaluation.js?v=9477bc2cb051';
+import {BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, BOX_FILES, BOX_DEPTH, currentTeam, canQuickRelease, legalMoves, legalKicks, disguisedShotTargets, cornerTakers, isBox, isGoalMouth, positionActions, applyKick} from './engine.js?v=eb0ab0924c73';
+import {chooseExerciseAction} from './exercise-ai.js?v=15df911d973e';
+import {EXERCISES} from './exercise-positions.js?v=e8724457fbeb';
+import {createExerciseSession, applyExerciseAction, bestKeeperShotChance, exerciseRoundLimit, exerciseActionExplanation} from './exercise-session.js?v=50b7882e60b6';
+import {createEvaluation} from './evaluation.js?v=79dd005f7cd8';
 
 export const EXERCISE_PROGRESS_KEY='football-chess-exercises-v1';
 export const EXERCISE_THEME_LABELS=Object.freeze({'one-on-one':'One on one','through-ball':'Through balls','box-entry':'Into the box',defence:'Defend the finish'});
@@ -116,7 +116,7 @@ export function recordExerciseSolved(progress,id,catalog=EXERCISES){
  * both late worker answers and already scheduled presentation timers.
  */
 export function createExerciseController({definition,makeSession=createExerciseSession,applyAction=applyExerciseAction,
-  workerFactory=typeof Worker==='function'?()=>new Worker(new URL('./exercise-ai-worker.js?v=934fb3d22b80',import.meta.url),{type:'module',name:'football-chess-exercise-study'}):null,
+  workerFactory=typeof Worker==='function'?()=>new Worker(new URL('./exercise-ai-worker.js?v=fffbcfb2af21',import.meta.url),{type:'module',name:'football-chess-exercise-study'}):null,
   chooseTactical=chooseExerciseAction,now=()=>Date.now(),delayMs=1000,watchdogMs=20000,
   setTimer=(fn,ms)=>setTimeout(fn,ms),clearTimer=id=>clearTimeout(id),onChange=()=>{},onError=()=>{}}={}){
   let session=null,started=false,thinking=false,suspended=false,destroyed=false,generation=0,pending=null,lastAction=null;

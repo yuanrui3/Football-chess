@@ -1,4 +1,4 @@
-import {restoreMatchStats} from './match-stats.js?v=3310fe94a6e9';
+import {restoreMatchStats} from './match-stats.js?v=0b9210587149';
 const TEAMS=['white','black'];
 const count=n=>Number.isSafeInteger(n)&&n>=0&&n<=1000000;
 

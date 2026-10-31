@@ -27,7 +27,7 @@ function fixture(team='white',keeper=[6,3],phase='kick'){
 const goal=(team,x=5)=>team==='white'?{x,y:-1}:{x:W-1-x,y:H};
 
 test('shot model is current and outside-keeper save parameters are zero',()=>{
-  assert.equal(E.SHOT_MODEL.version,18);
+  assert.equal(E.SHOT_MODEL.version,19);
   for(const key of ['outsideRadius','outsideDiveSpeed','outsideReactionDelay','outsideMaxSave'])assert.equal(E.SHOT_MODEL[key],0);
 });
 
@@ -36,7 +36,7 @@ for(const team of ['white','black']){
   test(`${team}: own-box boundaries alone enable probabilistic saves`,()=>{
     for(const keeper of E.BOX_FILES.flatMap(x=>Array.from({length:E.BOX_DEPTH},(_,y)=>[x,y]))){
       const state=fixture(team,keeper),target=goal(team),model=E.shotModel(state,target.x,target.y);
-      assert.equal(model.modelVersion,18);
+      assert.equal(model.modelVersion,19);
       assert.equal(model.keeperInBox,true);assert.ok(model.reach>0);assert.ok(model.saveProbability>0);
     }
     for(const keeper of [[3,0],[10,0],[3,1],[10,1],[3,2],[10,2],[5,E.BOX_DEPTH],[5,H-E.BOX_DEPTH]]){
@@ -82,7 +82,11 @@ for(const team of ['white','black']){
     const keeper=declared.pieces.find(p=>p.id===keeperId),[x,y]=transform(team,[6,E.BOX_DEPTH-1]);
     assert.throws(()=>E.applyMove(declared,keeperId,x,y),/not a legal move/);
     const scored=E.skipMove(declared,{roll:0});assert.equal(scored.lastAction.type,'goal');assert.equal(scored.lastAction.shotModel.saveProbability,0);
-    const wide=E.skipMove(declared,{roll:0.999999});assert.equal(wide.lastAction.type,'shotMiss');assert.notEqual(wide.lastAction.outcome,'saved');
+    assert.equal(E.skipMove(declared,{roll:0.999999}).lastAction.type,'goal','a clear short shot now matches a certain short pass');
+    const distant=fixture(team,[6,E.BOX_DEPTH]),shooter=distant.pieces.find(p=>p.id===`${team}-R1`);
+    Object.assign(shooter,{x:transform(team,[5,11])[0],y:transform(team,[5,11])[1]});
+    distant.ball={x:shooter.x,y:shooter.y,carrierId:shooter.id};
+    const wide=E.skipMove(E.applyKick(distant,target.x,target.y),{roll:0.999999});assert.equal(wide.lastAction.type,'shotMiss');assert.notEqual(wide.lastAction.outcome,'saved');
     assert.equal(keeper.x,transform(team,[6,E.BOX_DEPTH])[0]);
   });
 

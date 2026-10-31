@@ -21,7 +21,7 @@ export const PACE_RULE = Object.freeze({maxDribbleRounds: 4, repetitionOccurrenc
 // Tunable board-game parameters, not fitted football statistics. Distance is in
 // board squares and time is in abstract units set by ballSpeed.
 export const SHOT_MODEL = Object.freeze({
-  version: 18, ballSpeed: 6, blockPerDefender: 0.45, blockCornerShare: 0.85, knightGoalMultiplier: 1, directFreeKickGoalMultiplier: 2, finishingAccuracyMultiplier: 1.15,
+  version: 19, ballSpeed: 6, blockPerDefender: 0.45, blockCornerShare: 0.85, knightGoalMultiplier: 1, directFreeKickGoalMultiplier: 2, finishingAccuracyMultiplier: 1.15,
   parryInPlayShare: 0.20, reboundBoxMargin: 2,
   targetBase: 0.98, distanceDecay: 0.018, distancePenaltyStart: 3, longShotDecay: 0.06, rookLongShotDecay: 0.03, minOnTarget: 0.01, maxOnTarget: 0.98,
   angleFloor: 0.65, angleWeight: 0.35, postAngleFloor: 0.10, postAngleWeight: 0.90, postAngleExponent: 1.5,
@@ -1017,7 +1017,7 @@ function singleShotModel(state, x = state?.pendingShot?.x, y = state?.pendingSho
     probability: 0, goalProbability: 0, baseGoalProbability: 0, scoringMultiplier: 1, saveProbability: 0, missProbability: 1, penalty, directFreeKick,
     onTargetProbability: 0, baseOnTargetProbability: 0, saveGivenOnTarget: 0, cornerProbability: 0, keeperCornerProbability: 0, keeperReboundProbability: 0, caughtSaveProbability: 0, blockerIds: [], blockerPositions: [], blockProbability: 0, blockOutProbability: 0, blockCornerProbability: 0, blockPossessionProbability: 0, arrivalSpeed: 0, keeperStretch: 0, rushParryBonus: 0, parryGivenSave: 0, distance: 0, shotAngleDegrees: 0,
     goalDepth: 0, goalOpeningDegrees: 0, centralGoalOpeningDegrees: 0, goalOpeningRatio: 0, postAngleFactor: 0, wideAngleFactor: 1, centralLaneFactor: 1, finishingAccuracyMultiplier: SHOT_MODEL.finishingAccuracyMultiplier, shooterType, distancePenaltyRate: 0,
-    keeperPathDistance: 0, keeperDistance: 0, timeToKeeper: 0, reach: 0, rushCoverage: 0, keeperInBox: false,
+    keeperPathDistance: 0, keeperDistance: 0, timeToKeeper: 0, reach: 0, rushCoverage: 0, keeperInBox: false, emptyNet: false, emptyNetPassDistance: 0,
     closestPoint: {...origin}, keeperPosition: null, origin, target, modelVersion: SHOT_MODEL.version
   };
   if (!scoringTeam || !validOrigin) return invalid;
@@ -1025,6 +1025,11 @@ function singleShotModel(state, x = state?.pendingShot?.x, y = state?.pendingSho
   const defendingKeeper = pieces.find(p => p.team === defendingTeam && p.type === 'K');
   const candidate = keeperPosition || defendingKeeper;
   const keeper = candidate && inside(candidate.x, candidate.y) ? {x: candidate.x, y: candidate.y} : null;
+  const keeperInBox = !!keeper && inOwnBox(defendingTeam, keeper.x, keeper.y);
+  const emptyNet = !keeperInBox;
+  // Match an ordinary pass to the chosen goal square, using its grid distance.
+  // The half-square goal plane below remains the geometry for saves and blocks.
+  const emptyNetPassDistance = emptyNet ? distance(origin, {x, y}) : 0;
   const dx = target.x - origin.x, dy = target.y - origin.y;
   const length = Math.hypot(dx, dy);
   if (!Number.isFinite(length) || length <= 0) return invalid;
@@ -1050,13 +1055,13 @@ function singleShotModel(state, x = state?.pendingShot?.x, y = state?.pendingSho
   // Rooks lose less accuracy beyond three squares; their close-shot curve is
   // shared with every other piece. There is no flat scoring multiplier.
   const excessDistance = Math.max(0, length - SHOT_MODEL.distancePenaltyStart);
-  const onTarget = clamp(SHOT_MODEL.targetBase * SHOT_MODEL.finishingAccuracyMultiplier * Math.exp(-SHOT_MODEL.distanceDecay * length - distancePenaltyRate * excessDistance ** 2) * (SHOT_MODEL.angleFloor + SHOT_MODEL.angleWeight * angleCos) * postAngleFactor * wideAngleFactor * centralLaneFactor, SHOT_MODEL.minOnTarget, SHOT_MODEL.maxOnTarget);
+  const onTarget = emptyNet ? passAccuracy(emptyNetPassDistance)
+    : clamp(SHOT_MODEL.targetBase * SHOT_MODEL.finishingAccuracyMultiplier * Math.exp(-SHOT_MODEL.distanceDecay * length - distancePenaltyRate * excessDistance ** 2) * (SHOT_MODEL.angleFloor + SHOT_MODEL.angleWeight * angleCos) * postAngleFactor * wideAngleFactor * centralLaneFactor, SHOT_MODEL.minOnTarget, SHOT_MODEL.maxOnTarget);
   const rawProjection = keeper ? (keeper.x - origin.x) * ux + (keeper.y - origin.y) * uy : 0;
   const projection = clamp(rawProjection, 0, length);
   const closestPoint = {x: origin.x + projection * ux, y: origin.y + projection * uy};
   const clearance = keeper ? Math.hypot(keeper.x - closestPoint.x, keeper.y - closestPoint.y) : 0;
   const timeToKeeper = projection / SHOT_MODEL.ballSpeed;
-  const keeperInBox = !!keeper && inOwnBox(defendingTeam, keeper.x, keeper.y);
   // Outside its own box, the king is an ordinary potential shot blocker; it
   // has no goalkeeper reach, reaction or parry.
   const radius = keeperInBox ? SHOT_MODEL.boxRadius : 0;
@@ -1087,9 +1092,9 @@ function singleShotModel(state, x = state?.pendingShot?.x, y = state?.pendingSho
   const rawBlockProbability = 1 - (1 - SHOT_MODEL.blockPerDefender) ** blockers.length;
   const unblocked = 1 - rawBlockProbability;
   const baseGoalProbability = unblocked * onTarget * (1 - saveGivenOnTarget);
-  // Double the final scoring chance, including distance, angle, cover and the
-  // keeper's reaction; scale every non-goal outcome together to retain mass.
-  const scoringMultiplier = (shooterType === 'N' ? SHOT_MODEL.knightGoalMultiplier : 1)
+  // With a keeper in the box, double direct-free-kick scoring and scale every
+  // non-goal outcome together. Unguarded goals retain ordinary pass accuracy.
+  const scoringMultiplier = emptyNet ? 1 : (shooterType === 'N' ? SHOT_MODEL.knightGoalMultiplier : 1)
     * (directFreeKick ? SHOT_MODEL.directFreeKickGoalMultiplier : 1);
   const goalProbability = Math.min(1, baseGoalProbability * scoringMultiplier);
   const failureScale = baseGoalProbability < 1 ? (1 - goalProbability) / (1 - baseGoalProbability) : 0;
@@ -1123,10 +1128,10 @@ function singleShotModel(state, x = state?.pendingShot?.x, y = state?.pendingSho
     arrivalSpeed, keeperStretch, rushParryBonus, parryGivenSave, onTargetProbability: goalProbability + saveProbability, saveGivenOnTarget: goalProbability + saveProbability > 0 ? saveProbability / (goalProbability + saveProbability) : 0,
     distance: length, shotAngleDegrees: Math.acos(angleCos) * 180 / Math.PI,
     goalDepth, goalOpeningDegrees: openingDegrees, centralGoalOpeningDegrees: centralGoalOpening * 180 / Math.PI, goalOpeningRatio, postAngleFactor, wideAngleFactor, centralLaneFactor, finishingAccuracyMultiplier: SHOT_MODEL.finishingAccuracyMultiplier, shooterType, distancePenaltyRate,
-    keeperPathDistance: clearance, keeperDistance, timeToKeeper, reach, rushCoverage, keeperInBox,
+    keeperPathDistance: clearance, keeperDistance, timeToKeeper, reach, rushCoverage, keeperInBox, emptyNet, emptyNetPassDistance,
     closestPoint, keeperPosition: keeper, origin, target, modelVersion: SHOT_MODEL.version, penalty, directFreeKick
   };
-  if (!penalty) return result;
+  if (!penalty || emptyNet) return result;
   const penaltySave = keeperInBox ? FOUL_RULE.penaltyFailure : 0;
   return {...result, probability: FOUL_RULE.penaltyGoal, goalProbability: FOUL_RULE.penaltyGoal, baseGoalProbability: FOUL_RULE.penaltyGoal, scoringMultiplier: 1,
     saveProbability: penaltySave, caughtSaveProbability: penaltySave, missProbability: keeperInBox ? 0 : FOUL_RULE.penaltyFailure,
@@ -1449,7 +1454,7 @@ function tackleFoul(next, source, piece, carrier, from, intendedTo, outcomeRoll)
   const dismissal = automaticRedReason === 'keeperOutsideBox' ? 'Automatic red: goalkeeper foul outside the box.'
     : automaticRedReason === 'lastDefender' ? 'Automatic red: no other defender between the attacker and goalkeeper.'
     : secondYellow ? 'Second yellow: sent off.' : 'Red card: sent off.';
-  addLog(next, `${title(piece.team)} ${NAMES[piece.type]} fouls the ${NAMES[carrier.type]} at ${square(contactSpot.x, contactSpot.y)}.${card ? ` ${card === 'red' ? dismissal : 'Yellow card.'}` : ''}${forfeited ? ` ${title(next.winner)} wins by forfeit; fewer than ${FOUL_RULE.minimumPlayers} opponents remain.` : ` ${title(carrier.team)} has a ${type === 'penalty' ? 'penalty (80% scoring chance)' : 'direct free kick'}. Both teams may reposition.`}`);
+  addLog(next, `${title(piece.team)} ${NAMES[piece.type]} fouls the ${NAMES[carrier.type]} at ${square(contactSpot.x, contactSpot.y)}.${card ? ` ${card === 'red' ? dismissal : 'Yellow card.'}` : ''}${forfeited ? ` ${title(next.winner)} wins by forfeit; fewer than ${FOUL_RULE.minimumPlayers} opponents remain.` : ` ${title(carrier.team)} has a ${type === 'penalty' ? 'penalty' : 'direct free kick'}. Both teams may reposition.`}`);
   return next;
 }
 
@@ -2005,7 +2010,7 @@ const AI_SEARCH = Object.freeze({depth: 8, roots: 9, nodes: 1400, extensions: 3}
 function tacticalShots(state, team, react = false) {
   const carrier = state.pieces.find(piece => piece.id === state.ball.carrierId);
   if (!carrier || carrier.team !== team || ['throwIn', 'goalKick'].includes(state.restart?.type) || state.restart?.indirect || currentBoxKnights(state, carrier).length) return 0;
-  if (state.restart?.type === 'penalty') return FOUL_RULE.penaltyGoal;
+  if (state.restart?.type === 'penalty') return Math.max(...GOAL_FILES.map(x => shotChance(state, x, team === 'white' ? -1 : BOARD_HEIGHT)));
   const shots = goalShotTargets(state, carrier), pair = eligibleDisguisedPair(state, shots);
   let best = shots.reduce((value, shot) => Math.max(value, react ? reactedShotChance(state, shot) : shotChance(state, shot.x, shot.y)), 0);
   if (pair.length === 2) {

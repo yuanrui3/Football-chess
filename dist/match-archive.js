@@ -1,8 +1,8 @@
 // Portable recordings contain observed positions and outcomes, never AI seeds.
 // Delta frames remove unchanged pieces; gzip removes repeated field names.
-import {BOARD_WIDTH as W,BOARD_HEIGHT as H,RULES_VERSION} from './engine.js?v=bc58e8823cbc';
-import {captureReplayFrame,validReplayFrame,validRosterTransition,buildGoalReplay} from './goal-replay.js?v=756c713355c1';
-import {restoreArchiveStatistics} from './archive-statistics.js?v=c1008bd99b24';
+import {BOARD_WIDTH as W,BOARD_HEIGHT as H,RULES_VERSION} from './engine.js?v=eb0ab0924c73';
+import {captureReplayFrame,validReplayFrame,validRosterTransition,buildGoalReplay} from './goal-replay.js?v=df056ed3cc3c';
+import {restoreArchiveStatistics} from './archive-statistics.js?v=33ef2335d71f';
 
 export const MATCH_FORMAT='football-chess-match';
 export const MAX_RECORDING_STEPS=20000;
