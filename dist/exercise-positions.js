@@ -7,6 +7,7 @@ import {MEDIUM_EXERCISES} from './exercise-medium.js?v=058ae5d6ae6e';
 import {TOUGH_ATTACK_EXERCISES} from './exercise-tough-attack.js?v=acabefd0abe4';
 import {TOUGH_MIXED_EXERCISES} from './exercise-tough-mixed.js?v=c7478b669f7b';
 import {TOUGH_DEFENCE_EXTRA} from './exercise-tough-defence-extra.js?v=b5c068a8f4ca';
+import {MIDFIELD_EXERCISES} from './exercise-midfield.js?v=5d92a3477597';
 
 const piece=(id,x,y)=>({id,team:id.split('-')[0],type:id.split('-')[1][0],x,y});
 const base=({keeper=[6,0],defender=[12,3]}={})=>[
@@ -136,6 +137,7 @@ const deepFreeze=value=>{
 export const EXERCISES=deepFreeze([
   ...definitions.map(definition=>({...definition,difficulty:'easy'})),
   ...MEDIUM_EXERCISES,...TOUGH_ATTACK_EXERCISES,...TOUGH_MIXED_EXERCISES,...TOUGH_DEFENCE_EXTRA,
+  ...MIDFIELD_EXERCISES,
 ]);
 
 export function createExercisePosition(definitionOrId,seed=1984) {

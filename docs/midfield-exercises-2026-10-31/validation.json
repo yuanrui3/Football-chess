@@ -1,0 +1,1185 @@
+{
+  "seed": 1984,
+  "aiVersion": 2,
+  "solved": 42,
+  "records": [
+    {
+      "number": 1,
+      "id": "pick-the-open-file",
+      "title": "Take the central finish",
+      "status": "solved",
+      "goal": {
+        "type": "finish",
+        "minShotXG": 0.25,
+        "requires": null,
+        "boxEntryMode": "pass"
+      },
+      "roundsUsed": 1,
+      "roundLimit": 3,
+      "securedReplies": null
+    },
+    {
+      "number": 2,
+      "id": "knights-two-posts",
+      "title": "The knight has two posts",
+      "status": "solved",
+      "goal": {
+        "type": "finish",
+        "minShotXG": 0.45,
+        "requires": null,
+        "boxEntryMode": "pass"
+      },
+      "roundsUsed": 1,
+      "roundLimit": 3,
+      "securedReplies": null
+    },
+    {
+      "number": 3,
+      "id": "queen-two-targets",
+      "title": "Keep the goalkeeper guessing",
+      "status": "solved",
+      "goal": {
+        "type": "finish",
+        "minShotXG": 0.35,
+        "requires": null,
+        "boxEntryMode": "pass"
+      },
+      "roundsUsed": 1,
+      "roundLimit": 3,
+      "securedReplies": null
+    },
+    {
+      "number": 4,
+      "id": "release-the-knight",
+      "title": "Release the knight beyond the line",
+      "status": "solved",
+      "goal": {
+        "type": "finish",
+        "minShotXG": 0.2,
+        "requires": "through-ball",
+        "boxEntryMode": "pass"
+      },
+      "roundsUsed": 2,
+      "roundLimit": 4,
+      "securedReplies": null
+    },
+    {
+      "number": 5,
+      "id": "diagonal-pocket",
+      "title": "Find the diagonal pocket",
+      "status": "solved",
+      "goal": {
+        "type": "finish",
+        "minShotXG": 0.2,
+        "requires": "through-ball",
+        "boxEntryMode": "pass"
+      },
+      "roundsUsed": 2,
+      "roundLimit": 4,
+      "securedReplies": null
+    },
+    {
+      "number": 6,
+      "id": "pass-down-the-channel",
+      "title": "Pass down the channel",
+      "status": "solved",
+      "goal": {
+        "type": "finish",
+        "minShotXG": 0.2,
+        "requires": "through-ball",
+        "boxEntryMode": "pass"
+      },
+      "roundsUsed": 2,
+      "roundLimit": 4,
+      "securedReplies": null
+    },
+    {
+      "number": 7,
+      "id": "diagonal-delivery",
+      "title": "Deliver to the far-side receiver",
+      "status": "solved",
+      "goal": {
+        "type": "finish",
+        "minShotXG": 0.2,
+        "requires": "box-entry",
+        "boxEntryMode": "pass"
+      },
+      "roundsUsed": 2,
+      "roundLimit": 3,
+      "securedReplies": null
+    },
+    {
+      "number": 8,
+      "id": "cross-to-the-middle",
+      "title": "Cross to the middle",
+      "status": "solved",
+      "goal": {
+        "type": "finish",
+        "minShotXG": 0.25,
+        "requires": "box-entry",
+        "boxEntryMode": "pass"
+      },
+      "roundsUsed": 2,
+      "roundLimit": 3,
+      "securedReplies": null
+    },
+    {
+      "number": 9,
+      "id": "carry-inward",
+      "title": "Carry inward, then finish",
+      "status": "solved",
+      "goal": {
+        "type": "finish",
+        "minShotXG": 0.24,
+        "requires": "box-entry",
+        "boxEntryMode": "either"
+      },
+      "roundsUsed": 1,
+      "roundLimit": 3,
+      "securedReplies": null
+    },
+    {
+      "number": 10,
+      "id": "pawn-before-the-shot",
+      "title": "Win it before the shot",
+      "status": "solved",
+      "goal": {
+        "type": "defend",
+        "maxOpponentShotXG": 0.15
+      },
+      "roundsUsed": 1,
+      "roundLimit": 3,
+      "securedReplies": null
+    },
+    {
+      "number": 11,
+      "id": "screen-and-cover",
+      "title": "Screen the shot and cover the goal",
+      "status": "solved",
+      "goal": {
+        "type": "defend",
+        "maxOpponentShotXG": 0.15
+      },
+      "roundsUsed": 1,
+      "roundLimit": 3,
+      "securedReplies": null
+    },
+    {
+      "number": 12,
+      "id": "cover-the-declared-aim",
+      "title": "Cover the declared aim",
+      "status": "solved",
+      "goal": {
+        "type": "defend",
+        "maxOpponentShotXG": 0.2
+      },
+      "roundsUsed": 1,
+      "roundLimit": 3,
+      "securedReplies": null
+    },
+    {
+      "number": 13,
+      "id": "medium-clear-file",
+      "title": "Clear the rook’s approach",
+      "status": "solved",
+      "goal": {
+        "type": "finish",
+        "minShotXG": 0.17
+      },
+      "roundsUsed": 1,
+      "roundLimit": 4,
+      "securedReplies": null
+    },
+    {
+      "number": 14,
+      "id": "medium-cross-carry",
+      "title": "Switch wide, drive inside",
+      "status": "solved",
+      "goal": {
+        "type": "finish",
+        "minShotXG": 0.25
+      },
+      "roundsUsed": 2,
+      "roundLimit": 4,
+      "securedReplies": null
+    },
+    {
+      "number": 15,
+      "id": "medium-diagonal-carry",
+      "title": "Launch diagonally, finish at the edge",
+      "status": "solved",
+      "goal": {
+        "type": "finish",
+        "minShotXG": 0.17
+      },
+      "roundsUsed": 2,
+      "roundLimit": 4,
+      "securedReplies": null
+    },
+    {
+      "number": 16,
+      "id": "medium-rook-relay",
+      "title": "Hand the file to the forward rook",
+      "status": "solved",
+      "goal": {
+        "type": "finish",
+        "minShotXG": 0.17
+      },
+      "roundsUsed": 2,
+      "roundLimit": 4,
+      "securedReplies": null
+    },
+    {
+      "number": 17,
+      "id": "medium-pawn-clear",
+      "title": "Clear the pawn, keep a safe distance",
+      "status": "solved",
+      "goal": {
+        "type": "finish",
+        "minShotXG": 0.17
+      },
+      "roundsUsed": 1,
+      "roundLimit": 4,
+      "securedReplies": null
+    },
+    {
+      "number": 18,
+      "id": "medium-through-collect-finish",
+      "title": "Lead the rook through the line",
+      "status": "solved",
+      "goal": {
+        "type": "finish",
+        "minShotXG": 0.17
+      },
+      "roundsUsed": 2,
+      "roundLimit": 4,
+      "securedReplies": null
+    },
+    {
+      "number": 19,
+      "id": "medium-clear-and-carry",
+      "title": "Clear the diagonal runway",
+      "status": "solved",
+      "goal": {
+        "type": "finish",
+        "minShotXG": 0.17
+      },
+      "roundsUsed": 1,
+      "roundLimit": 4,
+      "securedReplies": null
+    },
+    {
+      "number": 20,
+      "id": "medium-queen-through-collection",
+      "title": "Collect at the edge of the box",
+      "status": "solved",
+      "goal": {
+        "type": "finish",
+        "minShotXG": 0.17
+      },
+      "roundsUsed": 2,
+      "roundLimit": 4,
+      "securedReplies": null
+    },
+    {
+      "number": 21,
+      "id": "medium-vacate-receiver-lane",
+      "title": "Vacate the finishing pocket",
+      "status": "solved",
+      "goal": {
+        "type": "finish",
+        "minShotXG": 0.17
+      },
+      "roundsUsed": 1,
+      "roundLimit": 4,
+      "securedReplies": null
+    },
+    {
+      "number": 22,
+      "id": "medium-def-screen-rook",
+      "title": "Screen and react from the centre",
+      "status": "solved",
+      "goal": {
+        "type": "defend",
+        "maxOpponentShotXG": 0.12
+      },
+      "roundsUsed": 1,
+      "roundLimit": 4,
+      "securedReplies": null
+    },
+    {
+      "number": 23,
+      "id": "medium-def-screen-bishop",
+      "title": "Close the diagonal gate",
+      "status": "solved",
+      "goal": {
+        "type": "defend",
+        "maxOpponentShotXG": 0.1
+      },
+      "roundsUsed": 1,
+      "roundLimit": 4,
+      "securedReplies": null
+    },
+    {
+      "number": 24,
+      "id": "medium-def-sweeper-keeper",
+      "title": "Step out and challenge",
+      "status": "solved",
+      "goal": {
+        "type": "defend",
+        "maxOpponentShotXG": 0.15
+      },
+      "roundsUsed": 1,
+      "roundLimit": 4,
+      "securedReplies": null
+    },
+    {
+      "number": 25,
+      "id": "tough-wide-rook-relay",
+      "title": "Open the rook’s finishing file",
+      "status": "solved",
+      "goal": {
+        "type": "finish",
+        "minShotXG": 0.15
+      },
+      "roundsUsed": 2,
+      "roundLimit": 4,
+      "securedReplies": null
+    },
+    {
+      "number": 26,
+      "id": "tough-relay-to-knight",
+      "title": "Cross, jump, and chip",
+      "status": "solved",
+      "goal": {
+        "type": "finish",
+        "minShotXG": 0.2
+      },
+      "roundsUsed": 2,
+      "roundLimit": 4,
+      "securedReplies": null
+    },
+    {
+      "number": 27,
+      "id": "tough-knight-wall-pass",
+      "title": "Link, retreat, and screen the press",
+      "status": "solved",
+      "goal": {
+        "type": "finish",
+        "minShotXG": 0.15
+      },
+      "roundsUsed": 3,
+      "roundLimit": 4,
+      "securedReplies": null
+    },
+    {
+      "number": 28,
+      "id": "tough-through-ball-layoff",
+      "title": "Through the line, then lay off",
+      "status": "solved",
+      "goal": {
+        "type": "finish",
+        "minShotXG": 0.13
+      },
+      "roundsUsed": 3,
+      "roundLimit": 4,
+      "securedReplies": null
+    },
+    {
+      "number": 29,
+      "id": "tough-clear-offside-runner",
+      "title": "Clear the offside runner first",
+      "status": "solved",
+      "goal": {
+        "type": "finish",
+        "minShotXG": 0.1
+      },
+      "roundsUsed": 1,
+      "roundLimit": 4,
+      "securedReplies": null
+    },
+    {
+      "number": 30,
+      "id": "tough-sweeper-to-bishop",
+      "title": "Build from the goalkeeper",
+      "status": "solved",
+      "goal": {
+        "type": "finish",
+        "minShotXG": 0.13
+      },
+      "roundsUsed": 3,
+      "roundLimit": 4,
+      "securedReplies": null
+    },
+    {
+      "number": 31,
+      "id": "tough-unlock-the-rook-battery",
+      "title": "Unlock the rook battery",
+      "status": "solved",
+      "goal": {
+        "type": "finish",
+        "minShotXG": 0.17
+      },
+      "roundsUsed": 2,
+      "roundLimit": 4,
+      "securedReplies": null
+    },
+    {
+      "number": 32,
+      "id": "tough-find-the-protected-pocket",
+      "title": "Find the protected pocket",
+      "status": "solved",
+      "goal": {
+        "type": "finish",
+        "minShotXG": 0.2
+      },
+      "roundsUsed": 2,
+      "roundLimit": 4,
+      "securedReplies": null
+    },
+    {
+      "number": 33,
+      "id": "tough-clear-the-delivery-diagonal",
+      "title": "Switch around the central screen",
+      "status": "solved",
+      "goal": {
+        "type": "finish",
+        "minShotXG": 0.2
+      },
+      "roundsUsed": 2,
+      "roundLimit": 4,
+      "securedReplies": null
+    },
+    {
+      "number": 34,
+      "id": "tough-pawn-screen-keeper-route",
+      "title": "Two screens and the keeper",
+      "status": "solved",
+      "goal": {
+        "type": "defend",
+        "maxOpponentShotXG": 0.07
+      },
+      "roundsUsed": 1,
+      "roundLimit": 3,
+      "securedReplies": null
+    },
+    {
+      "number": 35,
+      "id": "tough-open-the-keepers-return",
+      "title": "Cover the far post",
+      "status": "solved",
+      "goal": {
+        "type": "defend",
+        "maxOpponentShotXG": 0.1
+      },
+      "roundsUsed": 1,
+      "roundLimit": 3,
+      "securedReplies": null
+    },
+    {
+      "number": 36,
+      "id": "tough-clear-the-box-gateway",
+      "title": "Bring the bishop across",
+      "status": "solved",
+      "goal": {
+        "type": "defend",
+        "maxOpponentShotXG": 0.1
+      },
+      "roundsUsed": 1,
+      "roundLimit": 3,
+      "securedReplies": null
+    },
+    {
+      "number": 37,
+      "id": "midfield-switch-open-side",
+      "title": "Find the open flank",
+      "status": "solved",
+      "goal": {
+        "type": "possession",
+        "kind": "switch",
+        "zone": {
+          "x0": 9,
+          "x1": 13,
+          "y0": 6,
+          "y1": 10
+        },
+        "secureReplies": 1
+      },
+      "roundsUsed": 1,
+      "roundLimit": 3,
+      "securedReplies": 1,
+      "trace": [
+        {
+          "actor": "white",
+          "action": {
+            "type": "kick",
+            "x": 9,
+            "y": 8
+          },
+          "result": "kick",
+          "securedReplies": 0,
+          "status": "active"
+        },
+        {
+          "actor": "white",
+          "action": {
+            "type": "skip"
+          },
+          "result": "skip",
+          "securedReplies": 0,
+          "status": "active"
+        },
+        {
+          "actor": "black",
+          "action": {
+            "type": "move",
+            "pieceId": "black-Q",
+            "x": 5,
+            "y": 8,
+            "freePawn": false
+          },
+          "result": "move",
+          "securedReplies": 0,
+          "status": "active"
+        },
+        {
+          "actor": "black",
+          "action": {
+            "type": "move",
+            "pieceId": "black-P1",
+            "x": 3,
+            "y": 7,
+            "freePawn": true
+          },
+          "result": "move",
+          "securedReplies": 1,
+          "status": "solved"
+        }
+      ]
+    },
+    {
+      "number": 38,
+      "id": "midfield-switch-clear-lane",
+      "title": "Clear the switching lane",
+      "status": "solved",
+      "goal": {
+        "type": "possession",
+        "kind": "switch",
+        "zone": {
+          "x0": 10,
+          "x1": 13,
+          "y0": 6,
+          "y1": 10
+        },
+        "secureReplies": 1
+      },
+      "roundsUsed": 1,
+      "roundLimit": 3,
+      "securedReplies": 1,
+      "trace": [
+        {
+          "actor": "white",
+          "action": {
+            "type": "move",
+            "pieceId": "white-P1",
+            "x": 4,
+            "y": 9
+          },
+          "result": "move",
+          "securedReplies": 0,
+          "status": "active"
+        },
+        {
+          "actor": "white",
+          "action": {
+            "type": "skip"
+          },
+          "result": "skip",
+          "securedReplies": 0,
+          "status": "active"
+        },
+        {
+          "actor": "black",
+          "action": {
+            "type": "move",
+            "pieceId": "black-R1",
+            "x": 5,
+            "y": 2,
+            "freePawn": false
+          },
+          "result": "move",
+          "securedReplies": 0,
+          "status": "active"
+        },
+        {
+          "actor": "black",
+          "action": {
+            "type": "move",
+            "pieceId": "black-K",
+            "x": 7,
+            "y": 1,
+            "freePawn": true
+          },
+          "result": "move",
+          "securedReplies": 0,
+          "status": "active"
+        },
+        {
+          "actor": "white",
+          "action": {
+            "type": "kick",
+            "x": 10,
+            "y": 8
+          },
+          "result": "kick",
+          "securedReplies": 0,
+          "status": "active"
+        },
+        {
+          "actor": "white",
+          "action": {
+            "type": "skip"
+          },
+          "result": "skip",
+          "securedReplies": 0,
+          "status": "active"
+        },
+        {
+          "actor": "black",
+          "action": {
+            "type": "move",
+            "pieceId": "black-R1",
+            "x": 5,
+            "y": 8,
+            "freePawn": false
+          },
+          "result": "move",
+          "securedReplies": 0,
+          "status": "active"
+        },
+        {
+          "actor": "black",
+          "action": {
+            "type": "move",
+            "pieceId": "black-K",
+            "x": 6,
+            "y": 2,
+            "freePawn": true
+          },
+          "result": "move",
+          "securedReplies": 1,
+          "status": "solved"
+        }
+      ]
+    },
+    {
+      "number": 39,
+      "id": "midfield-switch-through-pivot",
+      "title": "Switch through a moving pivot",
+      "status": "solved",
+      "goal": {
+        "type": "possession",
+        "kind": "switch",
+        "zone": {
+          "x0": 10,
+          "x1": 13,
+          "y0": 4,
+          "y1": 9
+        },
+        "secureReplies": 1
+      },
+      "roundsUsed": 2,
+      "roundLimit": 4,
+      "securedReplies": 1,
+      "trace": [
+        {
+          "actor": "white",
+          "action": {
+            "type": "kick",
+            "x": 5,
+            "y": 7
+          },
+          "result": "kick",
+          "securedReplies": 0,
+          "status": "active"
+        },
+        {
+          "actor": "white",
+          "action": {
+            "type": "move",
+            "pieceId": "white-Q",
+            "x": 6,
+            "y": 8
+          },
+          "result": "move",
+          "securedReplies": 0,
+          "status": "active"
+        },
+        {
+          "actor": "white",
+          "action": {
+            "type": "skip"
+          },
+          "result": "skip",
+          "securedReplies": 0,
+          "status": "active"
+        },
+        {
+          "actor": "black",
+          "action": {
+            "type": "move",
+            "pieceId": "black-K",
+            "x": 7,
+            "y": 0,
+            "freePawn": true
+          },
+          "result": "move",
+          "securedReplies": 0,
+          "status": "active"
+        },
+        {
+          "actor": "black",
+          "action": {
+            "type": "move",
+            "pieceId": "black-Q",
+            "x": 6,
+            "y": 3,
+            "freePawn": false
+          },
+          "result": "move",
+          "securedReplies": 0,
+          "status": "active"
+        },
+        {
+          "actor": "white",
+          "action": {
+            "type": "kick",
+            "x": 10,
+            "y": 4
+          },
+          "result": "kick",
+          "securedReplies": 0,
+          "status": "active"
+        },
+        {
+          "actor": "white",
+          "action": {
+            "type": "skip"
+          },
+          "result": "skip",
+          "securedReplies": 0,
+          "status": "active"
+        },
+        {
+          "actor": "black",
+          "action": {
+            "type": "move",
+            "pieceId": "black-Q",
+            "x": 7,
+            "y": 4,
+            "freePawn": false
+          },
+          "result": "move",
+          "securedReplies": 0,
+          "status": "active"
+        },
+        {
+          "actor": "black",
+          "action": {
+            "type": "move",
+            "pieceId": "black-P1",
+            "x": 5,
+            "y": 5,
+            "freePawn": true
+          },
+          "result": "move",
+          "securedReplies": 1,
+          "status": "solved"
+        }
+      ]
+    },
+    {
+      "number": 40,
+      "id": "midfield-protect-leave-file",
+      "title": "Step off the pressure line",
+      "status": "solved",
+      "goal": {
+        "type": "possession",
+        "kind": "protect",
+        "zone": {
+          "x0": 4,
+          "x1": 10,
+          "y0": 6,
+          "y1": 10
+        },
+        "secureReplies": 2
+      },
+      "roundsUsed": 1,
+      "roundLimit": 3,
+      "securedReplies": 2,
+      "trace": [
+        {
+          "actor": "white",
+          "action": {
+            "type": "move",
+            "pieceId": "white-Q",
+            "x": 7,
+            "y": 9
+          },
+          "result": "move",
+          "securedReplies": 0,
+          "status": "active"
+        },
+        {
+          "actor": "white",
+          "action": {
+            "type": "skip"
+          },
+          "result": "skip",
+          "securedReplies": 0,
+          "status": "active"
+        },
+        {
+          "actor": "black",
+          "action": {
+            "type": "move",
+            "pieceId": "black-P1",
+            "x": 6,
+            "y": 7,
+            "freePawn": false
+          },
+          "result": "move",
+          "securedReplies": 0,
+          "status": "active"
+        },
+        {
+          "actor": "black",
+          "action": {
+            "type": "move",
+            "pieceId": "black-P1",
+            "x": 7,
+            "y": 7,
+            "freePawn": true
+          },
+          "result": "move",
+          "securedReplies": 1,
+          "status": "active"
+        },
+        {
+          "actor": "white",
+          "action": {
+            "type": "kick",
+            "x": 10,
+            "y": 9
+          },
+          "result": "kick",
+          "securedReplies": 1,
+          "status": "active"
+        },
+        {
+          "actor": "white",
+          "action": {
+            "type": "skip"
+          },
+          "result": "skip",
+          "securedReplies": 1,
+          "status": "active"
+        },
+        {
+          "actor": "black",
+          "action": {
+            "type": "move",
+            "pieceId": "black-R1",
+            "x": 7,
+            "y": 4,
+            "freePawn": false
+          },
+          "result": "move",
+          "securedReplies": 1,
+          "status": "active"
+        },
+        {
+          "actor": "black",
+          "action": {
+            "type": "move",
+            "pieceId": "black-P1",
+            "x": 7,
+            "y": 8,
+            "freePawn": true
+          },
+          "result": "move",
+          "securedReplies": 2,
+          "status": "solved"
+        }
+      ]
+    },
+    {
+      "number": 41,
+      "id": "midfield-protect-support-screen",
+      "title": "Protect the receiver with support",
+      "status": "solved",
+      "goal": {
+        "type": "possession",
+        "kind": "protect",
+        "zone": {
+          "x0": 4,
+          "x1": 10,
+          "y0": 6,
+          "y1": 10
+        },
+        "secureReplies": 2
+      },
+      "roundsUsed": 1,
+      "roundLimit": 3,
+      "securedReplies": 2,
+      "trace": [
+        {
+          "actor": "white",
+          "action": {
+            "type": "move",
+            "pieceId": "white-Q",
+            "x": 7,
+            "y": 9
+          },
+          "result": "move",
+          "securedReplies": 0,
+          "status": "active"
+        },
+        {
+          "actor": "white",
+          "action": {
+            "type": "move",
+            "pieceId": "white-P1",
+            "x": 6,
+            "y": 8,
+            "freePawn": true
+          },
+          "result": "move",
+          "securedReplies": 0,
+          "status": "active"
+        },
+        {
+          "actor": "white",
+          "action": {
+            "type": "skip"
+          },
+          "result": "skip",
+          "securedReplies": 0,
+          "status": "active"
+        },
+        {
+          "actor": "black",
+          "action": {
+            "type": "move",
+            "pieceId": "black-P1",
+            "x": 7,
+            "y": 7,
+            "freePawn": true
+          },
+          "result": "move",
+          "securedReplies": 0,
+          "status": "active"
+        },
+        {
+          "actor": "black",
+          "action": {
+            "type": "move",
+            "pieceId": "black-Q",
+            "x": 7,
+            "y": 6,
+            "freePawn": false
+          },
+          "result": "move",
+          "securedReplies": 1,
+          "status": "active"
+        },
+        {
+          "actor": "white",
+          "action": {
+            "type": "kick",
+            "x": 9,
+            "y": 9
+          },
+          "result": "kick",
+          "securedReplies": 1,
+          "status": "active"
+        },
+        {
+          "actor": "white",
+          "action": {
+            "type": "skip"
+          },
+          "result": "skip",
+          "securedReplies": 1,
+          "status": "active"
+        },
+        {
+          "actor": "black",
+          "action": {
+            "type": "move",
+            "pieceId": "black-P1",
+            "x": 8,
+            "y": 7,
+            "freePawn": true
+          },
+          "result": "move",
+          "securedReplies": 1,
+          "status": "active"
+        },
+        {
+          "actor": "black",
+          "action": {
+            "type": "move",
+            "pieceId": "black-Q",
+            "x": 7,
+            "y": 7,
+            "freePawn": false
+          },
+          "result": "move",
+          "securedReplies": 2,
+          "status": "solved"
+        }
+      ]
+    },
+    {
+      "number": 42,
+      "id": "midfield-protect-crowded-centre",
+      "title": "Keep control in the crowd",
+      "status": "solved",
+      "goal": {
+        "type": "possession",
+        "kind": "protect",
+        "zone": {
+          "x0": 4,
+          "x1": 10,
+          "y0": 6,
+          "y1": 10
+        },
+        "secureReplies": 2
+      },
+      "roundsUsed": 1,
+      "roundLimit": 4,
+      "securedReplies": 2,
+      "trace": [
+        {
+          "actor": "white",
+          "action": {
+            "type": "move",
+            "pieceId": "white-Q",
+            "x": 7,
+            "y": 9
+          },
+          "result": "move",
+          "securedReplies": 0,
+          "status": "active"
+        },
+        {
+          "actor": "white",
+          "action": {
+            "type": "move",
+            "pieceId": "white-P1",
+            "x": 6,
+            "y": 8,
+            "freePawn": true
+          },
+          "result": "move",
+          "securedReplies": 0,
+          "status": "active"
+        },
+        {
+          "actor": "white",
+          "action": {
+            "type": "skip"
+          },
+          "result": "skip",
+          "securedReplies": 0,
+          "status": "active"
+        },
+        {
+          "actor": "black",
+          "action": {
+            "type": "move",
+            "pieceId": "black-Q",
+            "x": 7,
+            "y": 6,
+            "freePawn": false
+          },
+          "result": "move",
+          "securedReplies": 0,
+          "status": "active"
+        },
+        {
+          "actor": "black",
+          "action": {
+            "type": "move",
+            "pieceId": "black-P1",
+            "x": 7,
+            "y": 7,
+            "freePawn": true
+          },
+          "result": "move",
+          "securedReplies": 1,
+          "status": "active"
+        },
+        {
+          "actor": "white",
+          "action": {
+            "type": "kick",
+            "x": 9,
+            "y": 9
+          },
+          "result": "kick",
+          "securedReplies": 1,
+          "status": "active"
+        },
+        {
+          "actor": "white",
+          "action": {
+            "type": "move",
+            "pieceId": "white-R1",
+            "x": 9,
+            "y": 10
+          },
+          "result": "move",
+          "securedReplies": 1,
+          "status": "active"
+        },
+        {
+          "actor": "white",
+          "action": {
+            "type": "skip"
+          },
+          "result": "skip",
+          "securedReplies": 1,
+          "status": "active"
+        },
+        {
+          "actor": "black",
+          "action": {
+            "type": "move",
+            "pieceId": "black-P1",
+            "x": 7,
+            "y": 8,
+            "freePawn": false
+          },
+          "result": "move",
+          "securedReplies": 1,
+          "status": "active"
+        },
+        {
+          "actor": "black",
+          "action": {
+            "type": "move",
+            "pieceId": "black-P1",
+            "x": 8,
+            "y": 8,
+            "freePawn": true
+          },
+          "result": "move",
+          "securedReplies": 2,
+          "status": "solved"
+        }
+      ]
+    }
+  ]
+}

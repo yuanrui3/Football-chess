@@ -7,15 +7,16 @@ const originalIds=['pick-the-open-file','knights-two-posts','queen-two-targets',
   'release-the-knight','diagonal-pocket','pass-down-the-channel','diagonal-delivery',
   'cross-to-the-middle','carry-inward','pawn-before-the-shot','screen-and-cover','cover-the-declared-aim'];
 
-test('36 studies preserve the original Easy IDs and provide twelve studies per tier',()=>{
-  assert.equal(EXERCISES.length,36);
-  assert.equal(new Set(EXERCISES.map(d=>d.id)).size,36);
-  assert.deepEqual(EXERCISES.filter(d=>d.difficulty==='easy').map(d=>d.id),originalIds);
+test('42 studies retain the first 36 IDs and add two midfield studies per tier',()=>{
+  assert.equal(EXERCISES.length,42);
+  assert.equal(new Set(EXERCISES.map(d=>d.id)).size,42);
+  assert.deepEqual(EXERCISES.slice(0,12).map(d=>d.id),originalIds);
   for(const difficulty of ['easy','medium','tough']){
     const list=EXERCISES.filter(d=>d.difficulty===difficulty);
-    assert.equal(list.length,12,difficulty);
+    assert.equal(list.length,14,difficulty);
     assert.equal(list.filter(d=>d.side==='attack').length,9,difficulty);
     assert.equal(list.filter(d=>d.side==='defence').length,3,difficulty);
+    assert.equal(list.filter(d=>d.side==='midfield').length,2,difficulty);
   }
 });
 

@@ -4,7 +4,8 @@
  */
 import {applyMove,applyKick,skipMove,selectCornerTaker,legalMoves,legalKicks,disguisedShotTargets,
   currentTeam,shotModel,offsideInfo,inOwnBox,MIDFIELD_RANK,BOARD_HEIGHT,STALLING_RULE,PACE_RULE} from './engine.js?v=eb0ab0924c73';
-import {createExercisePosition} from './exercise-positions.js?v=e0b9feffbd62';
+import {createExercisePosition} from './exercise-positions.js?v=da6cf3681b5d';
+import {normalizeMidfieldGoal,midfieldGoalText,updateMidfieldProgress} from './exercise-midfield-goals.js?v=fec79958bb0c';
 
 const TEAMS=['white','black'];
 const other=team=>team==='white'?'black':'white';
@@ -105,6 +106,7 @@ export function completedExerciseRound(before,after) {
 
 function objectiveOf(definition) {
   const source=definition.goal||{},type=source.type||(definition.side==='defence'?'defend':'finish');
+  if(type==='possession')return normalizeMidfieldGoal(source);
   if(!['finish','defend'].includes(type))throw new RangeError('Choose a finishing or defending exercise.');
   const requires=source.requires||(source.requireThroughBall?'through-ball':source.requireBoxEntry?'box-entry':null);
   if(![null,'through-ball','box-entry'].includes(requires))throw new RangeError('Unknown exercise objective.');
@@ -122,6 +124,7 @@ function objectiveOf(definition) {
   return {...source,type,requires,minShotXG,maxOpponentShotXG,boxEntryMode,minCompletedPasses,grading:'outcome'};
 }
 function outcomeObjective(goal) {
+  if(goal.type==='possession')return midfieldGoalText(goal);
   return goal.type==='finish'
     ?`Create and take a shot worth at least ${percentage(goal.minShotXG)} against the keeper's best legal response. Any legal route can succeed.`
     :`Win possession or hold the opponent's next finishing chance to ${percentage(goal.maxOpponentShotXG)} or less.`;
@@ -142,7 +145,7 @@ export function createExerciseSession(definition,options={}) {
   const roundLimit=exerciseRoundLimit(definition);
   const seed=typeof options==='number'?options:options.seed??definition.seed??1984;
   const goal=objectiveOf(definition),game=createExercisePosition(definition,seed);
-  const progress={throughBall:false,boxEntry:false,completedPasses:0};
+  const progress={throughBall:false,boxEntry:false,completedPasses:0,...(goal.type==='possession'?{securedReplies:0,midfieldReplyExposed:false}:{})};
   const session={definitionId:definition.id,definition:clone({...definition,goal}),playerTeam,
     game,status:'active',roundLimit,roundsUsed:0,actionCount:0,progress,
     pendingAssessment:game.phase==='keeperReact'?assessment(game,playerTeam,progress):null,
@@ -224,6 +227,7 @@ function reviewShot(before,after) {
   return review;
 }
 function finishShot(session,before,after) {
+  if(session.definition.goal.type==='possession'){session.pendingAssessment=null;return false;}
   const pending=session.pendingAssessment||assessment(before,session.playerTeam,session.progress);
   if(!pending)return false;
   const a=after.lastAction?.type==='stalling'&&after.lastAction.triggeringAction?.shotModel
@@ -279,6 +283,7 @@ export function applyExerciseAction(session,action,overrides={}) {
   if(currentTeam(before)===next.playerTeam)next.notice=null;
   const progressBefore=clone(next.progress);
   updateProgress(next,before,after);
+  const midfieldSolved=updateMidfieldProgress(next,before,after);
   if(completedExerciseRound(before,after))next.roundsUsed++;
   const actor=currentTeam(before),a=after.lastAction||{};
   next.events.push({number:next.actionCount,team:actor,phase:before.phase,action:clone(action),
@@ -289,12 +294,17 @@ export function applyExerciseAction(session,action,overrides={}) {
     next.pendingAssessment=assessment(after,next.playerTeam,next.progress,
       opponentShot?bestAvailableShotChance(before):null);
     next.feedbackTitle='Keeper responds';
-    next.feedback='The shot is committed. Its quality will be checked after the goalkeeper response.';
+    next.feedback=next.definition.goal.type==='possession'?'The shot is committed, but this study is completed by securing midfield possession.':'The shot is committed. Its quality will be checked after the goalkeeper response.';
     return next;
   }
   const shotAssessed=before.phase==='keeperReact'&&after.phase!=='keeperReact'&&finishShot(next,before,after);
   if(next.status!=='active')return next;
   const goal=next.definition.goal,opponent=other(next.playerTeam);
+  if(midfieldSolved){
+    end(next,'solved','midfield-controlled',goal.kind==='switch'?'Switch secured':'Possession protected',
+      `Your outfield player controls the ball in the target area after ${next.progress.securedReplies} complete defensive ${next.progress.securedReplies===1?'reply':'replies'}. Your legal route meets the midfield objective; no finish is required.`);
+    return next;
+  }
   if(goal.type==='defend'&&before.attack===opponent&&after.attack===next.playerTeam
       &&((!after.restart&&heldBy(after,next.playerTeam)&&(
         a.type==='tackle'&&a.outcome==='won'||a.type==='interception'||a.type==='move'&&a.collection))
@@ -303,15 +313,15 @@ export function applyExerciseAction(session,action,overrides={}) {
       'You won possession or forced offside before the opponent could finish. The defensive objective is complete.');
     return next;
   }
-  if(goal.type==='finish'&&after.score[opponent]>before.score[opponent]) {
+  if(goal.type!=='defend'&&after.score[opponent]>before.score[opponent]) {
     end(next,'failed','goal-conceded','Goal conceded',
-      'The opponent scored before you created the target chance. Undo a decision or retry a different plan.');
+      'The opponent scored before you completed the objective. Undo a decision or retry a different plan.');
     return next;
   }
-  if(goal.type==='finish'&&!shotAssessed&&before.attack===next.playerTeam
+  if(goal.type!=='defend'&&!shotAssessed&&before.attack===next.playerTeam
       &&(after.attack!==next.playerTeam||after.restart?.team===opponent))
     continuePlay(next,'Win it back and continue',
-      `${exerciseActionExplanation(before,after)||'The opponent took possession.'} The exercise is still open: win the ball back and build another attack.`);
+      `${exerciseActionExplanation(before,after)||'The opponent took possession.'} The exercise is still open: win the ball back and ${goal.type==='possession'?'start a new possession streak':'build another attack'}.`);
   if(after.phase==='finished') {
     end(next,'failed','position-ended','The line has ended','The position ended before the objective was completed. Retry a different plan.');
     return next;
@@ -327,6 +337,13 @@ export function applyExerciseAction(session,action,overrides={}) {
     return next;
   }
   if(next.notice)return next;
+  if(goal.type==='possession'){
+    next.feedbackTitle='Midfield control';
+    next.feedback=`${next.progress.securedReplies} / ${goal.secureReplies} clean defensive replies secured. ${outcomeObjective(goal)}`;
+    if(a.type==='tackleMiss')continuePlay(next,'Keep the ball out of tackling reach',
+      'The knight evaded a 50% tackle. You still have the ball, but that defensive reply cannot count as clean protection. Find a safer route.');
+    return next;
+  }
   if(next.progress.throughBall&&!progressBefore.throughBall) {
     next.feedbackTitle='Through ball completed';
     next.feedback='An onside teammate collected your pass beyond the defensive line. Now create the finishing chance.';

@@ -6,7 +6,7 @@ import {createExerciseSession,applyExerciseAction,bestKeeperShotChance} from '..
 import {chooseExerciseAction} from '../dist/exercise-ai.js';
 
 const byId=id=>EXERCISES.find(item=>item.id===id);
-const EASY_EXERCISES=EXERCISES.filter(item=>item.difficulty==='easy');
+const EASY_EXERCISES=EXERCISES.filter(item=>item.difficulty==='easy'&&item.side!=='midfield');
 function play(definition,actions=definition.exampleActions,{seed=1984,forceFinalRoll}={}) {
   let session=createExerciseSession(definition,{seed}),botActions=0;
   const transition=(action,bot=false)=>{

@@ -12,8 +12,8 @@ import {analyzeExerciseAction,EXERCISE_AI_VERSION} from '../dist/exercise-ai.js'
 if(isMainThread){
   const args=process.argv.slice(2),arg=name=>args[args.indexOf(name)+1];
   const out=path.resolve(args.includes('--output')?arg('--output'):'docs/exercise-defence-depth-2026-10-31/audit.json');
-  const wanted=args.includes('--only')?arg('--only').split(',').map(Number):EXERCISES.map((_,i)=>i+1);
   const definitions=args.includes('--definitions')?JSON.parse(await readFile(arg('--definitions'),'utf8')):EXERCISES;
+  const wanted=args.includes('--only')?arg('--only').split(',').map(Number):definitions.map((_,i)=>i+1);
   const records=[];let cursor=0;await mkdir(path.dirname(out),{recursive:true});
   const save=()=>writeFile(out,JSON.stringify({aiVersion:EXERCISE_AI_VERSION,seed:1984,
     requested:wanted.length,completed:records.length,solved:records.filter(r=>r.status==='solved').length,

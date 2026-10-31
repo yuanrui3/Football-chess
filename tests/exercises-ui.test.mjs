@@ -126,7 +126,7 @@ test('the exercise page makes objectives, alternatives, study rounds and optiona
   assert.match(html,/Several plans can work/);assert.match(html,/against the best keeper reply/);assert.match(html,/not by a lucky goal or an unlucky save/);
   for(const id of['themeFilter','difficultyFilter','tierCounts','filteredCount','difficultyLabel','planLength','exerciseBoard','playBtn','hintBtn','retryBtn','nextBtn','undoBtn','analysisEnabled'])assert.ok(html.includes(`id="${id}"`));
   assert.match(html,/Current-round estimate/);assert.match(html,/optional help/);assert.doesNotMatch(html,/id="analysisEnabled"[^>]*checked/);
-  assert.match(html,/12 Easy · 12 Medium · 12 Tough/);assert.match(html,/0 \/ 36/);
+  assert.match(html,/14 Easy · 14 Medium · 14 Tough/);assert.match(html,/0 \/ 42/);
   assert.match(html,/Ending positioning and the bot’s replies do not count/);assert.match(html,/Plan lengths are a guide, not a minimum/);
   assert.match(html,/Themes, pass counts and example moves never gate credit/);
   assert.match(html,/original three or four possession rounds/);assert.match(html,/id="continuationPanel" role="status" hidden/);

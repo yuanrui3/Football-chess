@@ -1,5 +1,5 @@
 import {currentTeam,RULES_VERSION} from './engine.js?v=eb0ab0924c73';
-import {createExerciseSession,applyExerciseAction} from './exercise-session.js?v=876c8b619b1e';
+import {createExerciseSession,applyExerciseAction} from './exercise-session.js?v=bca19f5f915e';
 import {EXERCISE_AI_VERSION} from './exercise-ai.js?v=a8ecd5614d1f';
 
 // Reconstruct a separate, verified demonstration. Never borrow the live attempt.

@@ -1,14 +1,16 @@
 import {BOARD_WIDTH as W, BOARD_HEIGHT as H, GOAL_FILES, BOX_FILES, BOX_DEPTH, currentTeam, canQuickRelease, legalMoves, legalKicks, disguisedShotTargets, cornerTakers, isBox, isGoalMouth, positionActions, applyKick} from './engine.js?v=eb0ab0924c73';
 import {chooseExerciseAction} from './exercise-ai.js?v=a8ecd5614d1f';
-import {EXERCISES} from './exercise-positions.js?v=e0b9feffbd62';
-import {createExerciseSession, applyExerciseAction, bestKeeperShotChance, exerciseRoundLimit, exerciseActionExplanation} from './exercise-session.js?v=876c8b619b1e';
+import {EXERCISES} from './exercise-positions.js?v=da6cf3681b5d';
+import {createExerciseSession, applyExerciseAction, bestKeeperShotChance, exerciseRoundLimit, exerciseActionExplanation} from './exercise-session.js?v=bca19f5f915e';
 import {createEvaluation} from './evaluation.js?v=79dd005f7cd8';
 
-import {EXERCISE_SOLUTIONS} from './exercise-solutions.js?v=8e1d50596c6a';
-import {exerciseSolutionFrames,createExerciseSolutionPlayer} from './exercise-solution-player.js?v=6f01324b4313';
+import {EXERCISE_SOLUTIONS} from './exercise-solutions.js?v=4d67d054217d';
+import {exerciseSolutionFrames,createExerciseSolutionPlayer} from './exercise-solution-player.js?v=61bd1e049260';
+
+import {midfieldGoalText,inExerciseZone} from './exercise-midfield-goals.js?v=fec79958bb0c';
 
 export const EXERCISE_PROGRESS_KEY='football-chess-exercises-v1';
-export const EXERCISE_THEME_LABELS=Object.freeze({'one-on-one':'One on one','through-ball':'Through balls','box-entry':'Into the box',defence:'Defend the finish'});
+export const EXERCISE_THEME_LABELS=Object.freeze({'one-on-one':'One on one','through-ball':'Through balls','box-entry':'Into the box',defence:'Defend the finish','switch-play':'Switch play','protect-ball':'Protect possession'});
 export const EXERCISE_DIFFICULTY_LABELS=Object.freeze({easy:'Easy',medium:'Medium',tough:'Tough'});
 export const exerciseDifficulty=definition=>definition.difficulty||'easy';
 export const exerciseRevision=definition=>Number.isInteger(definition?.revision)&&definition.revision>0?definition.revision:1;
@@ -32,7 +34,7 @@ export function syncExerciseFilters(controller,catalog,filters,loadDefinition,{a
   return selected;
 }
 export function exercisePlanText(definition){
-  return Number.isInteger(definition.planSteps)?`Illustrative plan: ${definition.planSteps} steps`:'Core tactical idea';
+  return Number.isInteger(definition.planSteps)?`Illustrative plan: ${definition.planSteps} ${definition.planSteps===1?'step':'steps'}`:'Core tactical idea';
 }
 const TEAM={white:'Ivory FC',black:'Obsidian FC'};
 const TYPES={K:'Goalkeeper',Q:'Queen',R:'Rook',B:'Bishop',N:'Knight',P:'Pawn'};
@@ -43,6 +45,7 @@ const pieceName=p=>`${TYPES[p.type]} ${p.id.split('-')[1]}`;
 const percent=value=>`${Math.round((Number(value)||0)*100)}%`;
 export function exerciseOutcomeText(definition){
   const goal=definition.goal||{};
+  if(goal.type==='possession')return midfieldGoalText(goal);
   return goal.type==='defend'||definition.side==='defence'
     ?`Win possession before the finish, or hold the opponent’s finishing chance to ${percent(goal.maxOpponentShotXG)} or less. Any legal defensive plan can succeed.`
     :`Create and take any legal shot worth at least ${percent(goal.minShotXG)} against the best keeper reply. Any route to that chance can succeed.`;
@@ -226,7 +229,7 @@ export function initExercisePage(){
       button.setAttribute('aria-label',`${index+1}. ${def.title}, ${level}, ${EXERCISE_THEME_LABELS[def.theme]}, ${exercisePlanText(def)}, up to ${exerciseRoundLimit(def)} possession rounds${progress.solved[def.id]?', solved':progress.previouslySolved[def.id]?', updated position, previous version solved':''}`);
       const number=document.createElement('span');number.className='exercise-number';number.textContent=progress.solved[def.id]?'✓':String(index+1).padStart(2,'0');
       const copy=document.createElement('span'),badge=document.createElement('span'),title=document.createElement('b'),detail=document.createElement('small');
-      badge.className=`exercise-level ${difficulty}`;badge.textContent=level;title.textContent=def.title;detail.textContent=`${EXERCISE_THEME_LABELS[def.theme]} · ${Number.isInteger(def.planSteps)?`${def.planSteps} steps`:'Core idea'}`;copy.append(badge,title,detail);
+      badge.className=`exercise-level ${difficulty}`;badge.textContent=level;title.textContent=def.title;detail.textContent=`${EXERCISE_THEME_LABELS[def.theme]} · ${Number.isInteger(def.planSteps)?`${def.planSteps} ${def.planSteps===1?'step':'steps'}`:'Core idea'}`;copy.append(badge,title,detail);
       if(progress.previouslySolved[def.id]){const revision=document.createElement('small');revision.className='exercise-revision-note';revision.textContent='Updated position · previous version solved';copy.append(revision);}
       button.append(number,copy);return button;
     }));
@@ -241,7 +244,7 @@ export function initExercisePage(){
     if(game.phase==='cornerSelect')return ['CORNER','Choose the taker.','Select one of your highlighted players in the attacking half.'];
     if(isKick(game))return ['PASS / SHOOT','Send the ball.','Click a highlighted teammate or empty square to pass, or a lit goal target to shoot.'];
     if(game.phase==='defendMove')return ['DEFENSIVE POSITIONING','Stop the finishing chance.','Move a defender, choose a tackle landing beside the carrier, or use the shared pawn / king bonus first.'];
-    return ['ATTACKING POSITIONING','Create the next chance.','You may dribble once, move one teammate and use one shared pawn / king bonus, in any order. Then end positioning.'];
+    return ['ATTACKING POSITIONING',state.session.definition.goal.type==='possession'?'Keep control and find space.':'Create the next chance.','You may dribble once, move one teammate and use one shared pawn / king bonus, in any order. Then end positioning.'];
   }
   function trace(game){
     const shot=state.session.status!=='active'&&state.session.metrics?.shotResult;
@@ -253,13 +256,15 @@ export function initExercisePage(){
   }
   function renderBoard(game){
     const legal=targets(),selected=game.pieces.find(p=>p.id===selectedId),carrier=game.ball.carrierId;
-    const last=state.lastAction?.result;
+    const last=state.lastAction?.result,zone=state.session.definition.goal.zone;
+    $('targetArea').style.display=zone?'':'none';
+    if(zone)for(const [key,value]of Object.entries({x:zone.x0*100+4,y:zone.y0*100+4,width:(zone.x1-zone.x0+1)*100-8,height:(zone.y1-zone.y0+1)*100-8}))$('targetAreaRect').setAttribute(key,value);
     for(const button of squares){
       const x=Number(button.dataset.x),y=Number(button.dataset.y),piece=game.pieces.find(p=>p.x===x&&p.y===y),target=legal.find(t=>t.x===x&&t.y===y);
       button.className=['square',(x+y)%2?'checker':'',isBox(x,y)?'box':'',isGoalMouth(x,y)?'keeper-only':'',piece?.id===selectedId?'selected':'',target?'legal':'',target?.type==='tackle'?'tackle':'',last?.from?.x===x&&last?.from?.y===y?'computer-from':'',last?.to?.x===x&&last?.to?.y===y?'computer-to':''].filter(Boolean).join(' ');
       button.disabled=!playable();button.setAttribute('aria-selected',String(piece?.id===selectedId));
       const label=`${xy(x,y)}, ${piece?`${TEAM[piece.team]} ${pieceName(piece)}${piece.id===carrier?', ball':''}`:'empty'}${target?`, ${target.type==='tackle'?'tackle landing':isKick(game)?target.receiverId?'pass target':'pass into space':moveMode==='bonus'?'bonus move':piece?.id===carrier?'dribble target':'move target'}`:''}`;
-      button.setAttribute('aria-label',label);button.title=label;
+      button.setAttribute('aria-label',label+(inExerciseZone({x,y},zone)?', midfield target area':''));button.title=label;
       button.innerHTML=piece?`<span class="piece ${piece.team}"><span>${SYMBOLS[piece.type]}</span>${piece.id===carrier?`<span class="ball">${ballSVG}</span>`:''}</span><span class="piece-id ${piece.team}" aria-hidden="true">${piece.id.split('-')[1]}</span>`:!carrier&&game.ball.x===x&&game.ball.y===y?`<span class="ball loose">${ballSVG}</span>`:'';
       button.tabIndex=focusedSquare?focusedSquare.x===x&&focusedSquare.y===y?0:-1:selected?selected.x===x&&selected.y===y?0:-1:x===game.ball.x&&y===game.ball.y?0:-1;
     }
@@ -296,7 +301,9 @@ export function initExercisePage(){
     $('exerciseTitle').textContent=def.title;$('themeLabel').textContent=EXERCISE_THEME_LABELS[def.theme]||'Tactical exercise';$('exerciseObjective').textContent=exerciseOutcomeText(def);
     $('difficultyLabel').textContent=EXERCISE_DIFFICULTY_LABELS[exerciseDifficulty(def)];$('difficultyLabel').className=`exercise-level ${exerciseDifficulty(def)}`;
     $('planLength').textContent=`${exercisePlanText(def)} · up to ${session.roundLimit} possession rounds.`;
-    $('qualityGoal').textContent='Explore your own route. In attacking studies, you can recover from a turnover or a shot below the target while rounds remain. Hints show one possible idea.';
+    $('qualityGoal').textContent=def.goal.type==='possession'?'Pass, carry or coordinate support. A full defensive reply must finish before control counts. A turnover, restart or leaving the marked area resets the streak; a lucky knight evasion does not count.':'Explore your own route. In attacking studies, you can recover from a turnover or a shot below the target while rounds remain. Hints show one possible idea.';
+    $('midfieldProgress').hidden=def.goal.type!=='possession';
+    $('midfieldProgress').textContent=def.goal.type==='possession'?`Marked area · ${session.progress.securedReplies} / ${def.goal.secureReplies} clean defensive replies secured`:'';
     $('roundCounter').textContent=`${Math.min(session.roundsUsed,session.roundLimit)} / ${session.roundLimit} rounds`;
     $('sideLabel').textContent=`${view.solution?'EXAMPLE':'YOU'} · ${TEAM[session.playerTeam].toUpperCase()} ${session.playerTeam==='white'?'↑':'↓'}`;
     $('playBtn').hidden=view.started;$('playBtn').disabled=filterBlocked;$('actionPanel').hidden=!!view.solution||filterBlocked||!view.started||session.status!=='active';$('feedbackPanel').hidden=filterBlocked||session.status==='active';
