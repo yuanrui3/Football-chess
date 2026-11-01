@@ -3,3 +3,14 @@ simulation-results/
 
 # Incomplete audio normalization output
 dist/audio/adam/*.tmp.mp3
+
+# Local dependencies and mobile build output
+node_modules/
+.mobile-build/
+.DS_Store
+
+# Local iOS simulator build output
+/build/
+
+# Machine-local Android Studio state
+/android/.idea/

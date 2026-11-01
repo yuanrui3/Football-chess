@@ -9,6 +9,28 @@
     "train:selfplay": "node scripts/train-selfplay.mjs",
     "evaluate:selfplay": "node scripts/evaluate-selfplay.mjs",
     "train:counterplay": "node scripts/train-counterplay.mjs",
-    "check:model": "node scripts/check-trained-model.mjs"
+    "check:model": "node scripts/check-trained-model.mjs",
+    "cap": "cap",
+    "mobile:sync": "cap sync",
+    "mobile:sync:android": "cap sync android",
+    "mobile:sync:ios": "cap sync ios",
+    "android:open": "node scripts/android.mjs open",
+    "android:run": "node scripts/android.mjs run",
+    "ios:open": "cap open ios",
+    "ios:run": "cap run ios",
+    "test:mobile": "node --test tests/engine.test.mjs tests/exercise-midfield.test.mjs tests/adam-library-assets.test.mjs",
+    "android:build": "node scripts/android.mjs build"
+  },
+  "dependencies": {
+    "@capacitor/android": "8.6.0",
+    "@capacitor/core": "8.6.0",
+    "@capacitor/ios": "8.6.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "8.6.0"
+  },
+  "packageManager": "pnpm@11.25.0",
+  "engines": {
+    "node": ">=22"
   }
 }

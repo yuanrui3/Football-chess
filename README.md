@@ -1,5 +1,7 @@
 # Football Chess — eleven a side
 
+Android and iOS development: see [MOBILE.md](MOBILE.md).
+
 A playable custom variation inspired by Football Chess by Serrano Saunders. Original handbook: https://pdfhost.io/v/bWV1pmicf_Football_Chess_Handbook.pdf
 
 ## Play

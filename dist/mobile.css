@@ -1,0 +1,23 @@
+/* Shared native-app and small-screen touch refinements. */
+body {
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  padding-left: env(safe-area-inset-left, 0px);
+}
+.toast { bottom: calc(24px + env(safe-area-inset-bottom, 0px)); }
+.pitch, .goal-wrap {
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+}
+@media (pointer: coarse), (max-width: 850px) {
+  .text-button, .utility-button, .primary,
+  .move-modes button, .solution-transport button, .solution-secondary button,
+  .select-wrap select, #voicePanel button, #coachPanel button {
+    min-height: 44px;
+  }
+  .goal-wrap, .exercise-board-wrap .goal-wrap { height: 44px; }
+  .goal-cell, .exercise-board-wrap .goal-cell { min-height: 44px; }
+  .exercise-evaluation { top: 44px; bottom: 44px; }
+}
