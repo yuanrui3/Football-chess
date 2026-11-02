@@ -1,14 +1,29 @@
 # Football Chess — eleven a side
 
-Android and iOS development: see [MOBILE.md](MOBILE.md).
+This checkout uses the complete **Sites web beta 76** as its starting point, plus shared Android/iOS packaging and mobile presentation changes on the `mobile/capacitor` branch. The imported Sites source commit is `6a2105cf22b21c7d4d9fa7263c82ac230fbccf42`; the earlier GitHub `main` branch is not the source of this beta. Web beta 76 and the native app's initial version 1.0 are separate version numbers.
 
-A playable custom variation inspired by Football Chess by Serrano Saunders. Original handbook: https://pdfhost.io/v/bWV1pmicf_Football_Chess_Handbook.pdf
+Current engine: **rules version 22** and **shooting model 19**.
+
+For native development, start with [MOBILE.md](MOBILE.md). For free testing on a personal iPhone using a Mac, see [IOS-IPHONE-TESTING.md](IOS-IPHONE-TESTING.md). Current validation and device limits are recorded in [MOBILE-STATUS.md](MOBILE-STATUS.md).
+
+A playable custom variation inspired by Football Chess by Serrano Saunders. Original [Football Chess handbook](https://pdfhost.io/v/bWV1pmicf_Football_Chess_Handbook.pdf).
+
+## Current beta features
+
+- **Play, watch and coach:** human vs computer, two players on one device, computer vs computer, and optional Tactical/Casual assistance for human-controlled teams. Take over at the next decision or ask the bot to play one action and pause.
+- **42 practice exercises:** 14 Easy, 14 Medium and 14 Tough studies, including six midfield switching/possession studies, deeper defensive replies, hints, playable solutions, Retry and Undo.
+- **Adam commentary:** bundled British whole-sentence recordings cover tactical observations and match reactions. Match playback needs no speech generation or model download.
+- **Updated goalkeeper play:** close-range rushing trades better smothering coverage for worse handling; clean catches offer quick distribution or holding to organise; current ratings better reflect cumulative shot stopping.
+- **Match review:** optional current-round analysis, full-time player ratings, outfield heatmaps, goal replays, and portable full-match recordings with post-match analysis.
+- **One game for web, Android and iOS:** `dist/` is the shared source bundled by Capacitor 8.6.0. Both native cloud build jobs have passed; real-device testing remains a separate check.
 
 ## Play
-https://football-chess-pitch.mellowguppy9.chatgpt.site
+
+[Play the current web beta](https://football-chess-pitch.frogfromyangzhou.chatgpt.site)
+
 Choose a computer opponent, two players on one device, or **Watch · computer vs computer**. The pitch is **14×17**, with four-file goals **f–i** and **6×3 boxes in files e–j**. Each side has K, Q, R1/R2, B1/B2, N1/N2 and P1/P2/P3. Ivory attacks the upper goal; Obsidian attacks the lower goal. Both teams use the same rules and a formation rotated 180°.
 
-Before kickoff, rearrange your own half and move a teammate onto the kickoff carrier to change the taker. The default Ivory formation is K g2; Q g5; rooks b4/m4; bishops c5/l5; knights d8/j7; pawns f4/h4/j4. The pawns screen immediately in front of the box. Wide rooks initially pass inward to the nearest screening pawn. Clearing that rank opens an eleven-square passing switch, subject to long-pass accuracy. The advanced knight can receive from the queen. The kickoff queen alone moves to g9 (Ivory) or h9 (Obsidian). Goal resets restore this shape.
+Before kickoff, each team can independently choose Aggressive, Neutral or Defensive starting positions, then rearrange its own half and move a teammate onto the kickoff carrier to change the taker. Neutral is the default. Its Ivory formation is K g2; Q g5; rooks b4/m4; bishops c5/l5; knights d8/j7; pawns f4/h4/j4. The pawns screen immediately in front of the box. Wide rooks initially pass inward to the nearest screening pawn. Clearing that rank opens an eleven-square passing switch, subject to long-pass accuracy. The advanced knight can receive from the queen. The kickoff queen alone moves to g9 (Ivory) or h9 (Obsidian). Goals restore surviving players to their team's selected preset, rather than restoring manual pre-match edits. Formation names change starting coordinates only; they do not alter piece abilities, shot odds or AI difficulty. See [the formation reference](docs/formation-presets-study.md).
 
 Watch mode controls both teams, including keeper reactions and restarts. Choose Casual or Tactical independently and an action pace. Pause to inspect; Undo rewinds one computer action and pauses. Reloading restores a saved Watch match paused. Mode, difficulties and pace persist for rematches. Timed games follow the match clock; untimed games offer Finish match.
 
@@ -17,6 +32,34 @@ After the keeper resolves a shot, the ball animates along its actual path before
 Full time opens a report containing shots, shots on target, corners, active-time possession, stable scorer IDs, assists and a chronological goal list. Match stats reopens it. The goal map shows actual scoring origins, with Ivory at the upper end and Obsidian at the lower end. Its custom zones are: box (e–j, nearest three ranks), central approach (e–j, next three ranks), wide close (other files, nearest six ranks), and further out. These game zones are not a scale copy of soccer's penalty area.
 
 An assist is the final accurate completed teammate pass, including a pass into space later collected by the scorer. Dribbling and off-ball moves preserve it. Turnovers, restarts, inaccurate passes, self-passes and earlier shots clear it. Own goals credit the opponent without a personal goal or assist; own-goal-target attempts are excluded from shots. A blocked shot counts once, is not on target, and clears the assist chain. Corner awards count once. Possession excludes pauses, dialogs, replays, kickoff and protected restart preparation. Pass accuracy is not reported as a match statistic.
+
+## Coach mode and optional analysis
+
+In **You vs computer**, Coach mode can control the human side. In **Two players**, each side has independent coaching settings. Choose Tactical or Casual, select **Let bot play** for continuous assistance, **Take over** to cancel the next pending decision, or **Bot plays one action** to receive one action followed by a pause for review. A committed shot finishes its presentation before control changes. Normal rules and clocks still apply, and restored coaching matches reopen paused. See [Coach mode details](docs/coach-mode-2026-10-31/README.md).
+
+The optional analysis bar estimates the **current round from Ivory's perspective**, even when the board is rotated. It considers the remaining positioning, defensive reply and kick, completing a compulsory keeper release when necessary. Earlier goals and raw piece totals are excluded. Its heuristic units are neither expected goals nor a calibrated win probability. Analysis runs in the background without consuming match randomness and holds its estimate while a shot result is hidden by the animation.
+
+## Practice exercises
+
+Open **Practice exercises** for 42 positions: **14 Easy, 14 Medium and 14 Tough**, filtered by difficulty and theme. Themes cover one-on-ones, through balls, box entry, defending the finish, switching play and protecting possession. Hints, playable example solutions, Retry and Undo decision support experimentation. Progress is saved separately from the match; a rebuilt study retains older completion as history while allowing the new board to be solved.
+
+Any legal continuation meeting the outcome earns credit. Example moves, pass counts and themes do not gate success. Each study keeps its original three- or four-possession-round limit. Attacking studies allow recovery after losing possession or taking a weak shot while rounds remain. Finishing is judged by the chance created after the best legal keeper reply, so a lucky weak goal does not pass and an unlucky save does not invalidate a strong finish.
+
+The six midfield studies, **37–42**, teach switching play and protecting the ball in crowded areas. A switch needs outfield control in the marked area after **one full clean defensive reply**; protection needs **two consecutive clean replies**. A turnover, restart or leaving the area resets the streak; a lucky knight evasion does not count. No shot is needed.
+
+Study opponents use expanded Tactical search, exact immediate keeper checks and broader defensive replies. The defensive search profile is deeper than normal match play, but remains bounded rather than proving perfect play. Defensive studies evaluate possession recovery or the strongest available immediate finish, including the keeper reaction actually played. Exercises 26 and 27 were revised for the stronger defender; exercise 27's five example actions include a separate screen within the existing round budget. See [exercise studies](docs/exercise-studies.md), [midfield studies](docs/midfield-exercises-2026-10-31/README.md), and [defensive-search update](docs/exercise-defence-depth-2026-10-31/README.md).
+
+## Ratings, heatmaps and match recordings
+
+**Match stats** can be inspected while the live match is paused. Full-time review adds player ratings, outfield heatmaps and the complete recorded analysis.
+
+The full-time report places both teams on interactive ratings lineups. Select a player for its contribution breakdown; ball and boot badges show actual goals and assists. Ratings start at **6.0 out of 10** and assess useful play relative to the piece's abilities. Forward carries, completed forward passes, legal supporting runs, retention under pressure, chance creation, tackles and errors contribute. Repeated routes and idle movement earn no automatic credit. These are transparent game heuristics, rather than calibrated real-football grades.
+
+Goalkeeper grades use cumulative assessed on-target xG prevented, with more credit for positive shot stopping and tempered deductions for difficult goals. Difficulty created by a poor keeper response is removed from that credit. Ordinary coverage deductions are bounded and recoverable within the same decision sequence; routine repositioning does not add positive merit. Keeper attacking movement earns only a fraction of comparable outfield movement credit, while useful distribution retains passing credit. Start a new match for the latest method; valid older ledgers preserve their recorded history. See [the ratings methods and audits](docs/player-ratings.md).
+
+After full time, selecting an **outfield** player also opens its heatmap. It records active time on actual occupied squares, rather than inferring paths between them. The view rotates both teams to attack upward, shows each player's busiest areas and excludes goalkeeper-only time. Older saves show missing or partial occupancy history explicitly. See [heatmap details](docs/player-heatmaps.md).
+
+**Match files** exports a compact `.fcmatch` recording or JSON and opens recordings without replacing the paused live game. Recordings retain observed actions and outcomes, goals, cards and available statistics. Replay supports a timeline, stepping, **1×/2×/4×/8×** playback, goal jumps and goal clips. New exports preserve their recorded statistics, ratings and timed heatmaps; older files reconstruct only supported event totals and label unavailable measurements. Post-match analysis is local and deterministic, grounded in recorded evidence. See [post-match analysis](docs/postmatch-analysis/README.md) and [recording format code](dist/match-archive.js).
 
 ## Action allowances
 
@@ -43,36 +86,38 @@ Movement steps, tackling and pass length use Chebyshev distance, max(abs(dx), ab
 
 Queen, rook and bishop tackles reach up to five squares along their normal capture directions. Kings challenge one adjacent square, knights one L jump, and pawns one of four diagonals, including backward. Choose a legal landing beside the carrier; the overall start-to-landing cap is ten squares. The challenger moves there on either outcome. With Fouls mode off, tackles against knights succeed 50%; other legal tackles succeed 100%. Failed tackles still spend the regular action. The bonus cannot tackle.
 
-## Shooting: model 15
+## Shooting: model 19
 
-This is an **xG-style custom game heuristic**, not a model fitted to real match data. It combines distance, visible goal angle, keeper position and defenders on the physical shot path. Previews show the mutually exclusive outcomes before rolling. Planning does not consume seeded match randomness.
+This is an **xG-style custom game heuristic**, not a model fitted to real match data. The current coefficients and exact outcome calculation are in [`SHOT_MODEL` and the shot model in `dist/engine.js`](dist/engine.js). Geometry, keeper movement, rushing, handling, empty nets and set pieces must be considered together; the dated experiment sections later in this README retain their historical measurements.
 
-An ordinary shot commits one reachable goal cell; an eligible Queen or Knight may instead declare the two-target disguised shot described below. A King in its own box gets a one-square reaction or hold. Outside its box it has no saving reach, catches, parries or special reaction; Resolve shot is the only reaction-phase action. Its occupied square is then an ordinary potential blocker. Re-entering its own box in ordinary positioning restores keeper abilities.
+An ordinary shot commits one reachable goal cell; an eligible Queen or Knight may instead declare the two-target disguised shot below. A King inside its own box gets one legal reaction step or may hold. Outside its own box it has no saving reach, catches, parries or special reaction; its occupied square can still be an ordinary body blocker. Returning to its box restores keeper abilities.
 
-For shooter S and target T on y=-0.5 or 16.5, L is Euclidean length and u the unit direction. The physical post edges are x=4.5 and 8.5. Project the keeper onto the finite segment: q=clamp(dot(K−S,u),0,L). Clearance c is the keeper's distance to that closest point; available flight time is q/6. A keeper behind the shooter cannot make a reach-based save.
+For a guarded goal:
 
-- Relative opening ratio r is the visible angle between the posts divided by the opening for a central shooter at the same goal depth, clamped to [0,1]. Tight-angle factor is **0.10 + 0.90 × r^1.5**, a stronger penalty than the preceding release.
-- For visible opening a in degrees, t=clamp((a−45)/45,0,1). Wide-opening factor is 1+0.25×t²×(3−2t), reaching +25% raw accuracy at 90°.
-- Shooting from **g or h** multiplies raw accuracy by 1.15. The target file alone grants no reward.
-- Raw on-target chance is clamp(0.98×finishingAccuracyMultiplier×exp(−0.018L−k×max(0,L−3)²)×(0.65+0.35×abs(u.y))×tightAngleFactor×wideOpeningFactor×centralFileFactor,0.01,0.98). k=0.03 for rooks, 0.06 otherwise. The shared finishingAccuracyMultiplier is 1.15 for every piece, before the 98% cap.
-- In-box keeper reach is 0.40+1.30×max(0,q/6−0.15). Readiness is 0.90×(1−exp(−(0.35+q/6)/0.45)), reduced from the preceding model's 0.94 maximum. Conditional save chance is readiness×exp(−(c/reach)²). This is a potential ceiling, not a flat 90% save rate. For a central 3.5-square shot with the keeper aligned on the goal line and no blockers, goal probability rises from 19.8% to 23.1%.
-- Each opponent square whose **interior** the physical shot segment crosses contributes an independent **45% block risk**: B=1−0.55^n. A zero-length touch at a square corner does not count. The own-box keeper uses saving mechanics instead of this body test. Friendly bodies still forbid ordinary shots. Knight lobs bypass intervening bodies.
-- Ordinary goal chance is (1−B)×rawOnTarget×(1−conditionalSave). Keeper saves and wide shots are also multiplied by 1−B.
-- Knights use the same distance, angle and keeper scoring model with **no scoring multiplier**. Their kicking range remains one L-shaped jump and intervening bodies are bypassed.
-- A block yields **85% out for a corner, 15% possession for the first defender**. Last-touch rules still apply: a shooting-side deflection out at its own goal gives its opponent a goal kick.
-- Keeper saves split into catches and parries. Arrival pace proxy is 6×exp(−0.08q); stretch is clamp(c/reach,0,1). Parry chance given a save is clamp(0.05+0.60×(arrivalPace/6)²+0.25×stretch,0.05,0.90). Close, fast arrivals and stretched stops spill more often. All shots share the same launch power.
+- Shot distance is Euclidean distance to the physical goal plane half a square beyond the end row. The visible opening between the posts, the shooter's approach and central file, and the piece's distance penalty determine raw accuracy. Rooks lose less accuracy on long shots; knights retain their single L-shaped kicking range and bypass intervening bodies, without a scoring multiplier.
+- Keeper saving combines lateral diving reach with preparedness and close-range smothering. A keeper advancing inside its own box can improve coverage when aligned between a nearby shooter and goal. The ordinary conditional save probability is capped at 90%; this is a ceiling, not a flat save rate. The rush benefit fades to zero at six squares and drops away from the shot line; advancing at a poor angle can still be worse. The blue overlay shows reactive diving reach, rather than the entire smothering calculation or a guaranteed save.
+- Each opposing body whose square interior is crossed contributes an independent 45% block risk. Corner-only contact does not count. The own-box keeper uses saving mechanics; friendly bodies prohibit ordinary shots. A body block sends the ball out 85% of the time, with the remaining mass awarding the first defender possession, subject to the normal last-touch restart rules.
+- Saved-shot mass splits into catches and parries. Fast arrivals, stretching and close-range rushing make a secure catch less likely. This handling adjustment redistributes keeper saves without changing the declared shot's goal probability. Eligible opponent-shot parries split between a live rebound and a corner as described below.
 
-The outcome draw partitions goal, keeper parry out, live keeper rebound, keeper catch, wide, defender deflection out, and defender possession. Keeper save probability excludes body blocks. Total corner probability combines only keeper parries that go out and actual block corners; catches equal keeper saves minus both parry outcomes. Long wide-shot scatter and live rebound landings use additional seeded draws. Pending shots retain shooter identity and original position while the keeper moves.
+When the defending King is absent or outside its own box, **unguarded-goal attempts use ordinary pass accuracy**: 100% through ten Chebyshev squares, then ten percentage points less per additional square, down to 25%. Outfield defenders and an outside King still block normally. The ordinary finishing curve and direct-free-kick scoring multiplier do not apply to these unguarded shots. See [empty-net regression cases](tests/empty-net-scoring.test.mjs).
+
+Previews partition mutually exclusive outcomes before the roll: goal, catch, parry out, live keeper rebound, wide, defender deflection out and defender possession. Planning does not consume match randomness. Resolution, previews and both AI policies share the model; saved pending shots retain their actual shooter and origin. Own-goal targets remain legal for humans and show an explicit own-goal warning rather than normal scoring advice.
 
 Queens and Knights can optionally declare a **disguised shot** when their native kicking pattern reaches exactly two legal opponent-goal endpoints. Both endpoints are public, but neither is selected before the keeper reacts. Resolution draws the target with equal 50/50 odds, then samples that target's usual shot outcomes. Keeper previews and both AI policies use the mean of the two target models, including the same keeper reply for both; Tactical search enumerates target and outcome branches. This gives uncertainty a practical finishing benefit without changing the underlying shot coefficients, range, friendly-body restrictions or penalties. A normal single-target shot remains available. The resolved action, statistics and replay use the actual selected endpoint; one declaration counts as one attempt.
 
 For a shot parried or blocked out, the aimed goal file selects the corner: f/g gives x=0, h/i gives x=13 on the unrotated pitch. A disguised shot uses the endpoint sampled after the keeper's reaction. Ordinary pass exits and long wide-shot scatter retain the first-boundary-crossing rule.
 
+The rush and handling changes are documented in [keeper rushing](docs/keeper-rush.md), with [rush](tests/keeper-rush.test.mjs) and [handling](tests/keeper-rush-holding.test.mjs) regression tests. Sample rates in those notes describe fixed test positions, not universal keeper save or catch rates.
+
 ### Live goalkeeper parries
 
-For saves of an opponent’s shot, **20% of parries remain in play**; 80% go out for a corner. This divides the existing parry probability and leaves goal, catch, wide and defender-block odds unchanged. `keeperReboundProbability` is `saveProbability × parryGivenSave × 0.20`; it is zero for penalties, teammate backward shots and kings outside their own box. Those backward-shot catches retain the compulsory keeper release.
+For eligible saves of an opponent’s shot, **20% of parries remain in play**; 80% go out for a corner. This divides the existing parry probability and leaves goal, catch, wide and defender-block odds unchanged. `keeperReboundProbability` is `saveProbability × parryGivenSave × 0.20`; it is zero for penalties, teammate backward shots and kings outside their own box. Teammate backward-shot catches retain the compulsory keeper release.
 
 A spill lands uniformly on one empty pitch square in the defending six-by-three box or within a two-square margin, excluding all four goal-mouth squares and occupied squares. No automatic possession is awarded. The attacking side begins the normal loose-ball positioning sequence, and only eligible players may collect. The shot’s offside snapshot survives the save. The ball animates through the keeper to its landing, statistics count a save/on-target attempt without a corner, commentary calls the live rebound, and goal replays retain it. Tactical chance search and offline learning enumerate the same public landing distribution.
+
+### Clean catches and distribution
+
+After catching an opponent's shot during live match time, the keeper can **distribute immediately before either side repositions**, or choose **Hold & organise** to keep the normal positioning round and movement allowances. The quick pass uses ordinary kicking, accuracy, interception and offside rules; it does not gain a goal kick's loft or offside exemption. An action timeout chooses holding. A catch after full time does not create another attack. Teammate back-passes still require immediate release and cannot be held. See [catch distribution](docs/keeper-catch-distribution.md).
 
 ## Offside
 
@@ -102,7 +147,9 @@ The setup toggle is enabled for fresh browser matches. It is locked after kickof
 
 Every enabled tackle uses one seeded draw: normally 2% straight red, 5% yellow, 3% uncarded foul, 90% clean. The card events are part of the 10% foul probability. Under rules version 21, every foul is a straight red when an outfield tackler has no other outfield teammate on a row strictly between the carrier and goalkeeper (across all files, excluding the tackler), or when a goalkeeper fouls outside its own box. Both checks use the pre-tackle position and the original carrier/contact square, never the selected landing square. These situations still have a 10% foul chance, with all fouls resulting in red. Legal tackle previews and Tactical chance branches use the same decision. Clean ordinary tackles win; clean Knight challenges split evenly between winning and evasion (45% / 45% / 10% overall). A second yellow dismisses the player; an automatic straight red does not add a yellow.
 
-Fouls outside the offender’s own box award a **direct freeKick** restart to the possessing side, with the normal nearest-taker and protected resettling sequence. Passes can loft over one player; direct shots are allowed. Under rules version 22 / shot model 18, an opponent-goal shot directly from a free kick receives twice the ordinary goal probability, capped at 100%. The bonus remains through keeper reactions, disguised target selection, save/reload and AI analysis. All non-goal outcome masses scale proportionally. Passing first ends the bonus; penalties, corners, indirect restarts, open play and own-goal attempts receive no bonus. Fouls in the offender’s own box award a **penalty**. Both sides resettle, then any taker can aim at all four goal targets. The normal shot pipeline animates and records it, but the result is fixed at 80% goal / 20% failure, with no body blocks, offside, piece bonus or keeper reaction move. Failure is a catch only for a keeper inside its own box; otherwise it is wide for a goal kick.
+Fouls outside the offender’s own box award a **direct free kick** to the possessing side, with nearest-taker selection and protected resettling. Passes can loft over one player and direct shots are allowed. With the defending King inside its own box, a shot directly from the free kick receives twice the ordinary goal probability, capped at 100%; all non-goal outcome masses scale together. The bonus survives the keeper reaction, disguised target choice, saving/reloading and AI analysis, and ends when the taker passes. Other restarts and open-play shots receive no bonus. Unguarded goals instead use the pass-accuracy rule above, without that multiplier.
+
+Fouls in the offender’s own box award a **penalty**. Both sides resettle and any taker can aim at all four goal targets. With a keeper in its box, the result is fixed at **80% goal / 20% catch**, without body blocks, offside, piece bonuses or a keeper reaction move. At an unguarded goal, the empty-net pass-accuracy rule applies and no outside-box save is possible. The normal shot animation and records still apply; see [penalty and card tests](tests/fouls-cards.test.mjs).
 
 Sent-off pieces leave the active roster and remain dismissed across goals, Undo snapshots and reload. Card history stays tied to stable player IDs. If the King is sent off, the nearest remaining pawn (or nearest other teammate) becomes the replacement King in a vacant own-box square, preserving its original ID and originalType. Subsequent goal kicks and immediate back-pass release use that keeper. Falling below seven players ends the match by forfeit without adding fictitious scored goals. The report shows foul and card totals plus dismissed IDs; the journal records individual foul and card events.
 
@@ -114,11 +161,13 @@ Casual ranks legal moves using safe progress, collectable passing lanes, tackle 
 
 Tactical searches actual phase transitions with iterative deepening, full rule-state transpositions, alpha-beta decision pruning and expected values for uncertain outcomes. Its candidate set retains purposeful off-ball runs into the box, and it evaluates onside receiving finishes using the real passing lane, accuracy, keeper reaction and tackle exposure. It values dismissed players and card warnings, and treats an awarded corner as protected possession. The production handcrafted utility and tackle-risk penalties are retained. Tactical uses ordinary passes instead of adding a redundant optional pass-and-run choice; the following off-ball allowance still permits the same legal run. It extends pending shots, forced releases, loose collections and imminent challenges. Default budget remains 1,400 expanded nodes, up to eight iterative depths and three horizon actions; root shortlists retain nine candidates. Only the last completed iteration selects the action. Both policies follow identical rules and do not inspect future randomness. Selective search is not a solved strategy or Elo guarantee.
 
-The 17 October tuning candidates were not promoted. One trial scored more total goals against Casual but won fewer scenarios and did not improve early scoring; the deployed playing policy remains the tested production baseline. Full results and the possession audit are in the [handcrafted Tactical study](docs/tactical-baseline-2026-10-17/README.md).
+The archived 17 October tuning candidates were not promoted. One trial scored more total goals against Casual but won fewer scenarios and did not improve early scoring; the current playing policy retains the tested handcrafted baseline. Full results and the possession audit are in the [handcrafted Tactical study](docs/tactical-baseline-2026-10-17/README.md).
 
 Playable Tactical uses handcrafted evaluation with learned weights disabled. The self-play toggle has been removed, and an old saved opt-in cannot reactivate it. Offline code, checkpoints and the [extended self-play results](docs/selfplay-hour-2026-10-16/RESULTS.md) remain archived for reproducibility; no further training is part of this update.
 
 Tactical runs in a module worker to keep controls responsive. Calculation starts during the configured action pause; an early answer waits until that pause ends, while a late answer plays when ready. It sends completed search iterations without moving early. On a worker error or four-second timeout, the controller uses the deepest completed answer for the current decision; a timeout falls back to Casual only when no iteration has finished. Stale, cancelled or paused results are discarded, and unsupported workers use the bounded main-thread policy after the pause. Opponent pace is a separate setting (three seconds by default), with visible action paths and team-labelled recaps. Reduced-motion preferences are respected.
+
+Casual and Tactical also receive a modest, bounded match-management preference adjustment: trailing sides favour progress and pressure slightly more, while leading sides favour cover and retention, with gradual clock-based urgency. This changes preferences rather than move legality, shot probabilities or search budgets. Exercises omit this live-match context. See [match management](docs/match-management.md).
 
 Timed matches allow 30 seconds per action for either side, including computer thinking and pace. Selection, settings and rotation do not refresh it. Pause/dialogs freeze clocks. A missed deadline awards an indirect free kick; during keeper reaction it instead holds and resolves the shot. At 00:00 the current decision, pending shot or forced keeper release finishes. A timeout or foul award preserves one final attacking chance through its restart and one live round, ending on shot, possession loss or completed round. Further overtime timeouts use automatic legal actions. Undo and saves retain these states. Untimed matches have no action deadline.
 
@@ -128,19 +177,59 @@ The expanded pitch starts a fresh match under browser save key **football-chess-
 
 Pending shots derive the shooting side from the actual shooter and the scoring side from the target goal, including incomplete older saves. Missing or contradictory redundant team metadata must not turn a legitimate P3 goal into an own goal. Saved goal records reconcile the own-goal flag with their stable scorer ID and credited team, preserving genuine own goals and restoring ordinary scorer entries when those identities agree. Both bot policies exclude deliberate shots into their own goal; human own-goal targets remain legal.
 
-There are no runtime or build dependencies. Run `npm test` with Node.js. `dist/engine.js` owns transitions and AI; `app.js` controls the UI; `match-clock.js`, `goal-replay.js` and `match-stats.js` are pure supporting modules. Tests cover actual seeded outcomes, mirrored geometry, action budgets, offside, restarts, saving, replays, stats and both policies. Before publishing run `node scripts/version-assets.mjs` to synchronize content versions in HTML, engine consumers and the worker. Browser QA requires the supported browser skill; DOM interaction tests do not substitute for a visual browser check.
+The browser game is buildless static JavaScript, HTML, CSS and bundled assets. Native Android and iOS packaging adds the pinned Capacitor dependencies in `package.json` and `pnpm-lock.yaml`; there is no separate web compilation step. Optional Google Fonts styling has local fallback fonts. Bundled Adam match speech is local.
 
-Run `npm run simulate -- --seeds=16 --actions=480 --out=simulation-results` for paired kickoff selfplay. Add `--difficulty=tactical`, or use `--rounds=40 --actions=1000` to study round-capped matches. Policy and shared-rule modules may be supplied using `--white`, `--black`, `--rules`. The harness records shots, post-reaction goal odds, body blocks, corners, possession chains, progress fouls and piece roles. Fixed-action runs are not timed full matches.
+### Developer setup
 
-## Tactical scoring and possession pace: 16 October 2026
+Use **Node.js 22 or newer** and **pnpm 11.25.0**:
 
-The current update allows ordinary dribbling into either box with double movement cost, reduces the goalkeeper's potential save ceiling from 94% to 90%, and adds four-round same-player carrying and three-occurrence possession-route limits. In two matched Tactical self-play cases at 480 actions, attempts increased from 13 to 18, total post-reaction xG from 2.568 to 4.568, and goals from two to four. Scores were 0–1 / 0–1 before and 2–0 / 1–1 after. All final attempts resolved, and no fouls or penalties inflated those goals. This small fixed-action sample is promising, but does not establish a typical timed-game scoreline or long-term piece balance. Protocols, full records, intermediate rule screens and exact-replay audits are retained in [the pace study](docs/tactical-pace-2026-10-16/).
+```sh
+pnpm install --frozen-lockfile
+pnpm run test:mobile
+```
 
-## Weighted-movement shooting trial
+`test:mobile` checks the engine, midfield exercises and bundled Adam assets. It is a focused check, not the entire AI/training suite; run `pnpm test` for the full existing suite when needed. Serve `dist/` from an HTTP server to run the browser game.
+
+On this Windows PC, `mobile.cmd` locates the Codex-managed runtime. Equivalent commands work with a system pnpm installation:
+
+```powershell
+.\mobile.cmd run mobile:sync:android
+.\mobile.cmd run android:open
+.\mobile.cmd run android:build
+```
+
+Android Studio opens the generated `android/` project. For Mac preparation and personal-iPhone signing steps, use [the iPhone guide](IOS-IPHONE-TESTING.md) and `bash scripts/prepare-ios-mac.sh`; the Swift Package Manager project is `ios/App/App.xcodeproj`. The user selects their Apple Account and development team in Xcode. See [MOBILE.md](MOBILE.md) for platform prerequisites and local runtime details.
+
+Edit **`dist/`**, then sync the native platform before building. Generated copies under `android/app/src/main/assets/public/` and `ios/App/App/public/` are not the source to edit. Browser saves from the hosted site do not automatically transfer into an installed app. Native packaging does not deploy the hosted web beta.
+
+The [first GitHub Actions mobile run](https://github.com/yuanrui3/Football-chess/actions/runs/41364459458) built both the Android debug APK and the unsigned iOS Simulator app successfully. That run passed 82 focused checks on the iOS job. The Simulator artifact cannot be installed on an iPhone; personal-device signing and gameplay validation are separate. See [MOBILE-STATUS.md](MOBILE-STATUS.md) for dated verification and outstanding device checks.
+
+### Source and validation map
+
+- [`dist/engine.js`](dist/engine.js): rule transitions, shot outcomes and match AI.
+- [`dist/app.js`](dist/app.js): match interface, coaching, playback and worker coordination.
+- [`dist/match-clock.js`](dist/match-clock.js), [`dist/goal-replay.js`](dist/goal-replay.js), [`dist/match-stats.js`](dist/match-stats.js): clocks, goal clips and observed statistics.
+- [`dist/exercise-session.js`](dist/exercise-session.js), [`dist/exercise-ai.js`](dist/exercise-ai.js): outcome-based study sessions and expanded study opponents.
+- [`dist/player-ratings.js`](dist/player-ratings.js), [`dist/player-heatmaps.js`](dist/player-heatmaps.js): contribution ledgers and timed occupancy.
+- [`dist/match-archive.js`](dist/match-archive.js), [`dist/match-analysis.js`](dist/match-analysis.js): portable recordings and evidence-based review.
+
+Before a hosted web publication, run `node scripts/version-assets.mjs` to synchronize content versions in HTML, module consumers and workers. Visual checks should cover the actual browser and native controls; engine tests alone do not establish touch layout, native audio or device lifecycle behavior.
+
+Run `node scripts/simulate.mjs --seeds=16 --actions=480 --out=simulation-results` for paired kickoff selfplay. Add `--difficulty=tactical`, or use `--rounds=40 --actions=1000` to study round-capped matches. Policy and shared-rule modules may be supplied using `--white`, `--black`, `--rules`. The harness records shots, post-reaction goal odds, body blocks, corners, possession chains, progress fouls and piece roles. Fixed-action runs are not timed full matches.
+
+## Historical experiments
+
+The studies below retain their original rules, policies, samples and dates for reproducibility. Their measurements do not describe the current beta under every later change.
+
+### Tactical scoring and possession pace: 16 October 2026
+
+The 16 October update allowed ordinary dribbling into either box with double movement cost, reduced the goalkeeper's potential save ceiling from 94% to 90%, and added four-round same-player carrying and three-occurrence possession-route limits. In two matched Tactical self-play cases at 480 actions, attempts increased from 13 to 18, total post-reaction xG from 2.568 to 4.568, and goals from two to four. Scores were 0–1 / 0–1 before and 2–0 / 1–1 after. All final attempts resolved, and no fouls or penalties inflated those goals. This small fixed-action sample is promising, but does not establish a typical timed-game scoreline or long-term piece balance. Protocols, full records, intermediate rule screens and exact-replay audits are retained in [the pace study](docs/tactical-pace-2026-10-16/).
+
+### Weighted-movement shooting trial
 
 The paired Fouls-OFF study in [weighted accuracy trial data](docs/weighted-accuracy-trial-2026-10-16/) used two independent seeds, both kickoffs and 480 actions per run. All variants used double-cost box movement. Four Tactical runs at the old accuracy / threat weight 650 produced five opponent-goal attempts and one goal; +15% accuracy alone produced three attempts and three goals. The selected +15% accuracy / threat weight 450 produced ten attempts and one goal. Meaningful attempts worth at least 15% rose from three to six versus accuracy alone, while average attempted quality fell. This is a willingness/quality tradeoff, not evidence of stronger play. Casual’s paired four-run screen went from 18 to 23 attempts, with six goals in each. All 9,600 actions replayed exactly. These measurements predate Fouls mode and are separate from its final smoke check.
 
-## Tactical crossplay: 16 October 2026
+### Tactical crossplay: 16 October 2026
 
 The [crossplay study](docs/tactical-crossplay-2026-10-16/) compared the previous Tactical policy with the selected updated policy against unchanged Casual, using identical corner-selection rules, Fouls mode, two fixed seeds, both Tactical colours and both kickoff choices. Each variant played eight games capped at 720 atomic actions with the same 1,400-node search allowance. Rows below report Tactical's results against Casual.
 
@@ -151,7 +240,7 @@ The [crossplay study](docs/tactical-crossplay-2026-10-16/) compared the previous
 
 On the separate validation seed, the updated policy won all four games, scoring 9–0; the previous policy won two and drew two, scoring 4–2. The updated bot accepts more moderate finishes: its added shot volume raises total attacking xG while reducing average xG per attempt. Actual shooting probabilities and piece abilities are identical for both difficulties. The two-seed, fixed-action sample supports the selected improvement; broader win rates remain uncertain. The study retains the rejected intermediate policy, stopped experimental runs, exact-replay audit, and frozen rules/policy sources.
 
-## Historical box-access trial: 16 October 2026
+### Historical box-access trial: 16 October 2026
 
 This study predates weighted box movement and model 13. The 14×17 / 6×3 / probabilistic-block study used eight Casual seeds (84100–84107), both kickoffs, and 480 actions per run. All four variants shared the new geometry, formation, bonus action and shot model; only box access and the Knight multiplier varied.
 
@@ -174,12 +263,10 @@ Earlier 12×15 scorer, assist, Tactical and goal-origin studies are retained sep
 
 ## Optional match commentary
 
-At Relaxed · 3 seconds, turn Match commentary On. **Live analysis · Hugo + Tom** is the default: Hugo, a male voice from KittenTTS Nano 0.8, speaks the engine’s dynamically filled, factual analysis, while Tom’s expressive recorded British calls retain shots, saves, blocks and goals. The model and speech runtime load after a user gesture, about 38 MB before HTTP compression; processing then runs locally in a CPU worker. No speech API, account or generation credits are needed during matches. The roughly 24 MB model file is only part of download and runtime memory use. See [local speech details](docs/paradee-local-speech.md).
+At **Relaxed · 3 seconds**, turn **Match commentary** On. **Adam** provides British commentary through the bundled whole-sentence library: tactical observations and analysis as well as shots, goals, held saves, parries, blocks and misses. No speech model downloads or speech generation requests are made during match playback. Voice provenance and the recording plan are in [Adam commentary](docs/adam-commentary.md).
 
-Brief match updates aim for every 10–15 seconds. Tom covers model loading or slow/failed synthesis where a matching saved call exists; if his saved audio also fails, captions remain available. New live-rebound calls use Hugo synthesis, with captions when the local voice is unavailable, rather than an unrelated catch or corner recording. Device speech can provide a fallback in recorded-only mode. Higher-priority events cancel delayed analysis. Captions match the spoken line; the score display and match log retain precise scorer and assist details. **British match commentator** remains available for the 55 saved calls, alongside **Device voice**.
+Tactical calls use observed geometry and recent play: switches, counterattacks, legal support, midfield congestion, pressure and defensive shape. Sustained shape claims need repeated completed rounds and are rechecked before the recording starts; setup labels alone do not establish a tactic. Player comments use observed contributions without inventing ratings or pass accuracy. Team shot totals and rounded possession updates retain exact context in the captions.
 
-Turn commentary On and wait for the local voice readiness indicator before using Test voice to audition Hugo. Match sample is available before kickoff or while paused. Off stops audio immediately. Switching pace turns commentary Off; returning to three seconds leaves it Off until enabled again. Pauses, dialogs, hidden tabs, manual replays and pagehide stop stale calls, and outcomes remain silent until visible impact.
+A three-second action pace is **not** a sentence cutoff. Every started recording finishes before the next automatic call. Important reactions wait in one priority slot; stale routine calls are dropped, and an obsolete shot announcement can be replaced by its result. Automatic goal replay and full time preserve the current sentence. Explicit mute, pause, manual replay, dialogs and resets stop playback immediately. Captions remain available when audio cannot play.
 
-Recorded audio provenance: [commentary-audio.md](docs/commentary-audio.md). Local model/runtime provenance: [kitten-vendor-provenance.json](docs/kitten-vendor-provenance.json). The deployed [local speech credits and pronunciation source](dist/vendor/kitten/NOTICE.html) include all component licenses.
-
-[Handcrafted Tactical AI study](docs/tactical-baseline-2026-10-17/README.md) — reproducible benchmarks, development audits and validation evidence.
+**Test Adam** gives a short voice check; **Match sample** is available before kickoff or while paused. Switching to Standard or Quick turns commentary off. Returning to Relaxed leaves it off until the player enables it again. Retained speech experiments and their licensed assets remain documented in the repository. The current match interface uses Adam's recorded library.

@@ -32,3 +32,12 @@ For commands and platform instructions, see MOBILE.md.
 - iOS artifact: https://github.com/yuanrui3/Football-chess/actions/runs/41364459458/artifacts/13106377038 (GitHub retention through November 8, 2026).
 - The Simulator artifact is not an installable iPhone/TestFlight build. Gameplay on Android/iOS devices remains unverified.
 - User plans to test with an Android phone tomorrow. The pending Windows restart can wait; it is only needed to complete emulator acceleration setup.
+
+## Free iPhone testing handoff — 2026-11-01
+
+- User reports that the Safari version has already worked well on the iPhone.
+- User selected free native testing on a Mac accessible by USB to the iPhone, using an Xcode Personal Team.
+- Current project uses automatic signing with no hardcoded Apple team and no restricted capabilities identified.
+- Added IOS-IPHONE-TESTING.md and scripts/prepare-ios-mac.sh. The helper prepares the locked dependencies and shared iOS assets, then opens the SPM Xcode project. Apple account login, team selection and phone confirmations remain interactive on the Mac/iPhone.
+- Helper shell syntax passed Git Bash validation on Windows. The helper and native app have not yet been run on the user's Mac or iPhone.
+- Free device provisioning lasts seven days; repeat the Xcode build/install to renew it.

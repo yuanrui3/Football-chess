@@ -29,6 +29,8 @@ The source of truth is dist/, not the generated copies under android/app/src/mai
 
 ## iOS
 
+For your USB-connected Mac and iPhone, follow [free native iPhone testing](IOS-IPHONE-TESTING.md). The helper `bash scripts/prepare-ios-mac.sh` prepares the dependencies and opens Xcode; select your Personal Team in Xcode for device signing.
+
 The ios/ native project is generated here using Swift Package Manager. Build and simulator execution require macOS with Xcode 26 or newer. On a Mac:
 
 ~~~sh
