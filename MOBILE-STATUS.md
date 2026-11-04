@@ -1,4 +1,4 @@
-# Mobile setup status — 2026-11-01
+# Mobile setup status — 2026-11-03
 
 - Imported complete Football Chess Sites version 76, source commit 6a2105cf22b21c7d4d9fa7263c82ac230fbccf42.
 - Development branch: mobile/capacitor. GitHub origin: yuanrui3/Football-chess. Cloud build results are available in the repository Actions tab.
@@ -41,3 +41,35 @@ For commands and platform instructions, see MOBILE.md.
 - Added IOS-IPHONE-TESTING.md and scripts/prepare-ios-mac.sh. The helper prepares the locked dependencies and shared iOS assets, then opens the SPM Xcode project. Apple account login, team selection and phone confirmations remain interactive on the Mac/iPhone.
 - Helper shell syntax passed Git Bash validation on Windows. The helper and native app have not yet been run on the user's Mac or iPhone.
 - Free device provisioning lasts seven days; repeat the Xcode build/install to renew it.
+
+## Mac preparation — 2026-11-02
+
+- Checked out `mobile/capacitor` at `6d7dcbc` on the user's Mac.
+- Installed a project-local Node.js 24.22.2 runtime, verified against the official Node distribution SHA-256 checksum, and installed the frozen dependencies with pnpm 11.25.0.
+- Focused mobile checks on the Mac: **82 passed, 0 failed**.
+- `cap sync ios`: **PASS**. Generated iOS assets match the checked-in project; no native source changes were needed.
+- Installed and opened Xcode 27.2 (27B52); the iOS 27.2 SDK is available and first-launch checks passed.
+- Native Debug build for generic iOS/arm64: **PASS** with `CODE_SIGNING_ALLOWED=NO`. This verifies compilation for a physical iPhone target; signing, installation and gameplay on the phone remain unverified. Local output is `.mobile-build/ios-device-build/Build/Products/Debug-iphoneos/App.app`, with the build log at `.mobile-build/ios-device-build.log`.
+- A local, ignored launcher at `.mobile-build/prepare-ios.command` selects the project-local Node runtime and the full Xcode developer directory, then runs the existing preparation helper. Open it from Finder or run `bash .mobile-build/prepare-ios.command` from this checkout. The system-wide developer-tool selection remains Command Line Tools.
+- The user selected a Personal Team and paired an iPhone 17 running iOS 26.6.2. Developer Mode was enabled and compatible developer disk-image services are usable.
+- Xcode created the development provisioning profile. The user completed signing-key authorization; the signed iPhone build **PASSED** and the entire app passed `codesign --verify --deep --strict`. The original login keychain was not reset.
+- Installation and launch on the paired iPhone 17: **PASS** after the user trusted their developer profile. The app process remained running after launch.
+- On-device basic gameplay: **PASS, user-confirmed**. The game displayed correctly, an untimed local match started, and one pass completed.
+- The user supplied a landscape screenshot showing the square grid and pieces overflowing the smaller pitch frame/SVG into the right panel and below the board. Checking only the parent grid/SVG bounds had missed the overflowing grid tracks. Exercise, commentary and background-resume checks were subsequently confirmed on 2026-11-03; see the completed device checks below.
+- The installed free development profile expires **2026-11-09 at 7:08 PM America/Indiana/Indianapolis**. Rebuild and reinstall with the Personal Team to renew it.
+- The user unplugged the iPhone after the initial session and reconnected it on 2026-11-03 for installation and verification of the corrected build below.
+
+
+## Landscape grid correction — 2026-11-02
+
+- Updated `dist/style.css`: give all 14 columns and 17 rows zero minimum grid tracks, allow cells to shrink, and remove the cell-level aspect ratio. The parent pitch already defines the 14:17 ratio; cell contents must not set the board dimensions.
+- Updated the stylesheet content version in the match, exercises and commentary-audition pages so cached CSS cannot keep the previous rules.
+- Browser regression: a local-only fixture with 62 px landscape side margins and deliberately oversized 32 px piece glyphs reproduces the original failure mechanism. Before: a 476 × 578 px cell grid overflows a 259 × 314.5 px pitch. After: the cell grid is exactly 259 × 314.5 px. This is a sizing stress case, not a claim to reproduce every iOS rotation timing condition.
+- Checked all 238 individual square positions and dimensions in a paused watch match at 874 × 402, 402 × 874, back to 874 × 402, and 1366 × 900. Also checked the exercise board at landscape → portrait → landscape. All square geometry errors were below 0.01 CSS px; pitch and SVG bounds matched. The corrected paused board was visually inspected, with no grid overflow and no browser console errors.
+- `cap sync ios`: **PASS**. After the user approved the macOS signing-key dialog, the updated signed native build **SUCCEEDED** and `codesign --verify --deep --strict` **PASSED**. All four corrected web assets match the built app bundle. Build log: `.mobile-build/ios-layout-fix-build.log`.
+- Installed and launched the corrected build on the physical iPhone 17 on **2026-11-03**: **PASS**. Local deployment records: `.mobile-build/iphone-layout-fix-install.json` and `.mobile-build/iphone-layout-fix-launch.json`.
+- Physical iPhone landscape regression: **PASS, user-confirmed 2026-11-03**. After landscape → portrait → landscape rotation, squares and pieces stay within the pitch frame immediately; the larger overlapping box no longer appears.
+- Remaining device checks completed on **2026-11-03**, all **PASS, user-confirmed**: exercise Play solution, commentary audio via Test Adam after a tap, and leaving/reopening the app.
+- Planned physical iPhone smoke checks are complete: basic local match and pass, immediate landscape alignment through rotation, exercise solution playback, commentary audio, and app background/resume. These results cover the checks performed, not exhaustive validation of every game mode or audio-interruption scenario.
+
+- The user paused further testing on **2026-11-03** after the planned checks passed. Optional next checks: force-close saved-match recovery, full match/goal-replay flow, offline operation, match export/import, and audio interruptions.

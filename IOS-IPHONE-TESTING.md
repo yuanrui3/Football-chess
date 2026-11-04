@@ -45,6 +45,10 @@ The cloud Simulator workflow uses signing-disabled build arguments. Those argume
 3. In Xcode, select the **App** scheme and your physical iPhone as the run destination.
 4. Press **Command-R**. Xcode should sign, install, and launch Football Chess.
 
+If the installed app shows an **Untrusted Developer** message, on the iPhone open **Settings > General > VPN & Device Management**, choose your Apple Account under **Developer App**, and complete the Trust/verification prompts. Keep the phone connected to the internet for verification, then retry launching the app. This approval is separate from trusting the Mac over USB and enabling Developer Mode.
+
+On the Mac, code signing may also ask for access to the **Apple Development** key in the login keychain. Enter the keychain password only in the macOS dialog (normally your Mac login password). Choosing Allow can produce another prompt for each component; Always Allow remembers access for the requesting signing tool. Do not reset the keychain just to resolve a signing prompt.
+
 If the phone is unavailable in the destination menu, read Xcode's displayed reason. An iOS version newer than that Xcode supports requires a compatible newer Xcode/macOS combination. Resolve any signing error in Signing & Capabilities before retrying.
 
 ## First phone test
@@ -57,7 +61,7 @@ If the phone is unavailable in the destination menu, read Xcode's displayed reas
 - Background and reopen the app, then relaunch it to verify saved-match restoration and safe pause behavior.
 - Try a bundled-audio match with the network unavailable. The game/audio files are bundled; Google Fonts currently has a local fallback.
 
-Record the iPhone model, iOS version, Xcode version, and any observed problem. Native device testing has not yet been performed.
+Record the iPhone model, iOS version, Xcode version, and any observed problem. Current device results are recorded in MOBILE-STATUS.md.
 
 ## Official references
 
