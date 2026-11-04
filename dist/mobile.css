@@ -21,3 +21,121 @@ body {
   .goal-cell, .exercise-board-wrap .goal-cell { min-height: 44px; }
   .exercise-evaluation { top: 44px; bottom: 44px; }
 }
+
+/* The pitch owns the center column. Everything else scrolls in the side rails. */
+html:has(> body.landscape-layout) { overflow: hidden; }
+body.landscape-layout {
+  --landscape-stage: calc(100dvh - 8px
+    - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+  --landscape-goal: clamp(28px, 8dvh, 44px);
+  --landscape-gutter: 38px;
+  /* The two goal rows, 4px border on each edge, and 10px file labels. */
+  --landscape-pitch: clamp(0px, calc(
+    (var(--landscape-stage) - 2 * var(--landscape-goal) - 18px) * 14 / 17
+  ), 480px);
+}
+
+.landscape-layout > main { padding: 4px 8px; }
+.landscape-layout > main > .page-intro { display: none; }
+.landscape-layout :is(.game-layout, .exercise-layout) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr)
+    calc(var(--landscape-pitch) + var(--landscape-gutter) + 14px)
+    minmax(0, 1fr);
+  gap: 8px;
+  align-items: start;
+  margin: 0;
+}
+.landscape-layout :is(.left-panel, .exercise-library) { grid-area: 1 / 1; }
+.landscape-layout :is(.game-layout > .pitch-area, .exercise-board-column) { grid-area: 1 / 2; }
+.landscape-layout :is(.right-panel, .exercise-coach) { grid-area: 1 / 3; }
+
+.landscape-layout :is(.left-panel, .right-panel, .exercise-library, .exercise-coach) {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  height: var(--landscape-stage);
+  overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+}
+.landscape-layout .exercise-coach > * + * { margin-top: 12px; }
+.landscape-layout .exercise-library .exercise-list {
+  display: flex;
+  flex-direction: column;
+  max-height: none;
+  margin-top: 12px;
+}
+.landscape-layout .exercise-library .exercise-card { flex: none; }
+.landscape-layout .exercise-progress { text-align: left; margin: 8px 0; }
+.landscape-layout .exercise-board-heading { margin: 0 0 8px; padding: 0; }
+.landscape-layout :is(.exercise-board-tools, .exercise-board-status, .exercise-evaluation-info) {
+  margin-left: 0;
+}
+.landscape-layout .exercise-board-column { width: 100%; max-width: none; }
+.landscape-layout .exercise-board-wrap { padding: 0 6px 0 var(--landscape-gutter); }
+
+.landscape-layout .masthead {
+  padding: 0 0 4px;
+  margin: 0 0 8px;
+  gap: 4px 8px;
+  flex-wrap: wrap;
+}
+.landscape-layout .masthead .brand-mark { width: 32px; height: 32px; }
+.landscape-layout .masthead .masthead-tag { display: none; }
+.landscape-layout .masthead-actions { gap: 0 8px; justify-content: flex-start; margin-left: 0; }
+.landscape-layout .masthead .exercise-back { margin-left: 0; }
+.landscape-layout footer { display: block; margin-top: 12px; padding: 8px 0; }
+
+.landscape-layout .scoreboard {
+  height: auto;
+  min-height: 44px;
+  margin: 0 0 8px;
+  padding: 4px;
+  gap: 4px;
+}
+.landscape-layout .scoreboard .team-name { flex: 1; min-width: 0; font-size: 9px; gap: 0; }
+.landscape-layout .scoreboard .team-dot,
+.landscape-layout .scoreboard .team-name small,
+.landscape-layout .scoreboard #matchState { display: none; }
+.landscape-layout .score-core { min-width: 0; }
+.landscape-layout .scoreboard .score { font-size: 22px; letter-spacing: 0; }
+.landscape-layout .score-divider { padding: 0 4px; }
+.landscape-layout .scoreboard .clock { font-size: 9px; margin-top: 2px; }
+.landscape-layout .match-toolbar {
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  margin: 0 0 8px;
+  padding: 0;
+}
+.landscape-layout .match-toolbar > div { width: 100%; }
+.landscape-layout .match-toolbar .saved-note { flex-basis: 100%; margin: 0; }
+
+.landscape-layout :is(.game-layout > .pitch-area, .exercise-board-wrap .pitch-area) {
+  width: 100%;
+  max-width: none;
+}
+.landscape-layout .game-layout > .pitch-area { padding: 0 6px 0 var(--landscape-gutter); }
+.landscape-layout :is(.game-layout, .exercise-board-wrap) .board-surround { border-width: 4px; }
+.landscape-layout :is(.game-layout, .exercise-board-wrap) .rank-labels { right: calc(100% + 4px); }
+.landscape-layout :is(.game-layout, .exercise-board-wrap) .file-labels {
+  position: static;
+  margin: 0 4px;
+  font-size: 7px;
+  line-height: 10px;
+}
+.landscape-layout :is(.game-layout, .exercise-board-wrap) .goal-wrap {
+  height: var(--landscape-goal);
+  width: calc((100% - 8px) / 3.5);
+}
+.landscape-layout :is(.game-layout, .exercise-board-wrap) .goal-cell { min-height: 0; }
+.landscape-layout :is(.game-layout, .exercise-board-wrap) .pitch .piece { font-size: clamp(8px, 5cqw, 26px); }
+.landscape-layout .pitch .square .piece-id {
+  font-size: 8px;
+  /* Scale the badge itself so WebView minimum font sizes cannot enlarge it. */
+  scale: 0.55;
+  min-width: 0;
+  padding: 0 0.5px;
+  line-height: 1.1;
+}
+.landscape-layout .exercise-evaluation { top: var(--landscape-goal); bottom: var(--landscape-goal); }
