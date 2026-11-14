@@ -1,0 +1,124 @@
+{
+  "arm": "positive",
+  "protocolId": "7f1eff1c3ed56895bc7db30ef141914c8adaf130b9ed4709bb4b95364241f139",
+  "games": 40,
+  "analyzedGames": 40,
+  "completeClusters": 10,
+  "incompleteSeeds": [],
+  "missingSeeds": [],
+  "identicalPolicyMirrors": null,
+  "candidate": {
+    "xG": 27.242223613866322,
+    "ownGoalXG": 0,
+    "goals": 29,
+    "shots": 180,
+    "ownGoalShots": 0,
+    "resolvedShots": 180,
+    "tackles": 57,
+    "tackleWins": 38,
+    "tacklesConceded": 1,
+    "stallingAwards": 25,
+    "offsideAwards": 4,
+    "fouls": 7,
+    "nodes": 7035048,
+    "completedDepthTotal": 20690,
+    "decisions": 5060,
+    "searchDecisions": 5046,
+    "thinkMs": 16167883.186614996,
+    "searchThinkMs": 16167518.270564998,
+    "maxNodes": 1400,
+    "meanMsPerDecision": 3195.233831346837,
+    "meanSearchMsPerDecision": 3204.0266093073715,
+    "meanNodes": 1394.1831153388823,
+    "meanCompletedDepth": 4.100277447483155
+  },
+  "baseline": {
+    "xG": 1.310754837055179,
+    "ownGoalXG": 0,
+    "goals": 1,
+    "shots": 14,
+    "ownGoalShots": 0,
+    "resolvedShots": 14,
+    "tackles": 4,
+    "tackleWins": 1,
+    "tacklesConceded": 38,
+    "stallingAwards": 0,
+    "offsideAwards": 5,
+    "fouls": 1,
+    "nodes": 0,
+    "completedDepthTotal": 0,
+    "decisions": 4541,
+    "searchDecisions": 0,
+    "thinkMs": 338984.19544599793,
+    "searchThinkMs": 0,
+    "maxNodes": 0,
+    "meanMsPerDecision": 74.64967968421007,
+    "meanSearchMsPerDecision": null,
+    "meanNodes": null,
+    "meanCompletedDepth": null
+  },
+  "candidateWDL": {
+    "win": 23,
+    "draw": 17,
+    "loss": 0
+  },
+  "clusters": [
+    {
+      "seed": 161143674,
+      "xGDiff": 0.588673271136914
+    },
+    {
+      "seed": 433439520,
+      "xGDiff": 0.5106017176813611
+    },
+    {
+      "seed": 1375790558,
+      "xGDiff": 0.767817644756527
+    },
+    {
+      "seed": 1557038883,
+      "xGDiff": 0.6561298095101966
+    },
+    {
+      "seed": 2412570437,
+      "xGDiff": 0.7784138315195449
+    },
+    {
+      "seed": 3520196491,
+      "xGDiff": 0.43256935399127994
+    },
+    {
+      "seed": 3699826156,
+      "xGDiff": 0.656387201315916
+    },
+    {
+      "seed": 3738750092,
+      "xGDiff": 0.6239408129860706
+    },
+    {
+      "seed": 3747762147,
+      "xGDiff": 0.8466197459114008
+    },
+    {
+      "seed": 4101359820,
+      "xGDiff": 0.621713805393575
+    }
+  ],
+  "xGDiff": {
+    "mean": 0.6482867194202785,
+    "seedClusterSD": 0.12517879491570985,
+    "perGameSD": 0.3540548861286178,
+    "percentile95": [
+      0.5736052910915632,
+      0.7199660487689151
+    ],
+    "bootstrapSamples": 20000,
+    "exactSignFlip": {
+      "status": "computed",
+      "pValue": 0.001953125,
+      "nonzeroClusters": 10,
+      "numerator": "2",
+      "denominator": "1024"
+    }
+  }
+}

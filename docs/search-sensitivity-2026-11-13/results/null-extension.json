@@ -1,0 +1,484 @@
+{
+  "arm": "null",
+  "protocolId": "39098f32b7eb80a80ee1e46a4dbd468b32dd3165662ba45b9e2bbc855f6b951b",
+  "games": 400,
+  "analyzedGames": 400,
+  "completeClusters": 100,
+  "incompleteSeeds": [],
+  "missingSeeds": [],
+  "identicalPolicyMirrors": 200,
+  "candidate": {
+    "xG": 129.52807732421158,
+    "ownGoalXG": 0,
+    "goals": 118,
+    "shots": 880,
+    "ownGoalShots": 0,
+    "resolvedShots": 880,
+    "tackles": 189,
+    "tackleWins": 136,
+    "tacklesConceded": 136,
+    "stallingAwards": 17,
+    "offsideAwards": 72,
+    "fouls": 16,
+    "nodes": 65810042,
+    "completedDepthTotal": 192996,
+    "decisions": 48001,
+    "searchDecisions": 47121,
+    "thinkMs": 100024091.837384,
+    "searchThinkMs": 100009457.24831511,
+    "maxNodes": 1400,
+    "meanMsPerDecision": 2083.791834282286,
+    "meanSearchMsPerDecision": 2122.396749820995,
+    "meanNodes": 1396.6181108210776,
+    "meanCompletedDepth": 4.09575348570701
+  },
+  "baseline": {
+    "xG": 129.5280773242116,
+    "ownGoalXG": 0,
+    "goals": 118,
+    "shots": 880,
+    "ownGoalShots": 0,
+    "resolvedShots": 880,
+    "tackles": 189,
+    "tackleWins": 136,
+    "tacklesConceded": 136,
+    "stallingAwards": 17,
+    "offsideAwards": 72,
+    "fouls": 16,
+    "nodes": 65810042,
+    "completedDepthTotal": 192996,
+    "decisions": 48001,
+    "searchDecisions": 47121,
+    "thinkMs": 100378002.20484394,
+    "searchThinkMs": 100362606.8413849,
+    "maxNodes": 1400,
+    "meanMsPerDecision": 2091.164813333971,
+    "meanSearchMsPerDecision": 2129.8912765303135,
+    "meanNodes": 1396.6181108210776,
+    "meanCompletedDepth": 4.09575348570701
+  },
+  "candidateWDL": {
+    "win": 97,
+    "draw": 206,
+    "loss": 97
+  },
+  "clusters": [
+    {
+      "seed": 29564277,
+      "xGDiff": 0
+    },
+    {
+      "seed": 38591508,
+      "xGDiff": 0
+    },
+    {
+      "seed": 114598532,
+      "xGDiff": 0
+    },
+    {
+      "seed": 122611928,
+      "xGDiff": 0
+    },
+    {
+      "seed": 205670324,
+      "xGDiff": 0
+    },
+    {
+      "seed": 296994999,
+      "xGDiff": 0
+    },
+    {
+      "seed": 309410916,
+      "xGDiff": 0
+    },
+    {
+      "seed": 457108176,
+      "xGDiff": 0
+    },
+    {
+      "seed": 541046924,
+      "xGDiff": 0
+    },
+    {
+      "seed": 581821727,
+      "xGDiff": 0
+    },
+    {
+      "seed": 616811490,
+      "xGDiff": 0
+    },
+    {
+      "seed": 780252478,
+      "xGDiff": 0
+    },
+    {
+      "seed": 794430776,
+      "xGDiff": 0
+    },
+    {
+      "seed": 812457944,
+      "xGDiff": 0
+    },
+    {
+      "seed": 825619036,
+      "xGDiff": 0
+    },
+    {
+      "seed": 853726226,
+      "xGDiff": 0
+    },
+    {
+      "seed": 892591677,
+      "xGDiff": 0
+    },
+    {
+      "seed": 901580134,
+      "xGDiff": 0
+    },
+    {
+      "seed": 909683064,
+      "xGDiff": 0
+    },
+    {
+      "seed": 918071935,
+      "xGDiff": 0
+    },
+    {
+      "seed": 927550411,
+      "xGDiff": 0
+    },
+    {
+      "seed": 1024471733,
+      "xGDiff": 0
+    },
+    {
+      "seed": 1091182861,
+      "xGDiff": 0
+    },
+    {
+      "seed": 1102089531,
+      "xGDiff": 0
+    },
+    {
+      "seed": 1167597540,
+      "xGDiff": 0
+    },
+    {
+      "seed": 1184272921,
+      "xGDiff": 0
+    },
+    {
+      "seed": 1185675678,
+      "xGDiff": 0
+    },
+    {
+      "seed": 1209536946,
+      "xGDiff": 0
+    },
+    {
+      "seed": 1252586994,
+      "xGDiff": 0
+    },
+    {
+      "seed": 1312018274,
+      "xGDiff": 0
+    },
+    {
+      "seed": 1335317868,
+      "xGDiff": 0
+    },
+    {
+      "seed": 1337243203,
+      "xGDiff": 0
+    },
+    {
+      "seed": 1393865963,
+      "xGDiff": 0
+    },
+    {
+      "seed": 1433711058,
+      "xGDiff": 0
+    },
+    {
+      "seed": 1464454282,
+      "xGDiff": 0
+    },
+    {
+      "seed": 1471151129,
+      "xGDiff": 0
+    },
+    {
+      "seed": 1475894011,
+      "xGDiff": 0
+    },
+    {
+      "seed": 1494537332,
+      "xGDiff": 0
+    },
+    {
+      "seed": 1504381095,
+      "xGDiff": 0
+    },
+    {
+      "seed": 1510427962,
+      "xGDiff": 0
+    },
+    {
+      "seed": 1564414716,
+      "xGDiff": 0
+    },
+    {
+      "seed": 1720042656,
+      "xGDiff": 0
+    },
+    {
+      "seed": 1775697499,
+      "xGDiff": 0
+    },
+    {
+      "seed": 1856014790,
+      "xGDiff": 0
+    },
+    {
+      "seed": 1871288919,
+      "xGDiff": 0
+    },
+    {
+      "seed": 1887332272,
+      "xGDiff": 0
+    },
+    {
+      "seed": 1900983265,
+      "xGDiff": 0
+    },
+    {
+      "seed": 1904210931,
+      "xGDiff": 0
+    },
+    {
+      "seed": 2037342776,
+      "xGDiff": 0
+    },
+    {
+      "seed": 2046241957,
+      "xGDiff": 0
+    },
+    {
+      "seed": 2058058300,
+      "xGDiff": 0
+    },
+    {
+      "seed": 2070469127,
+      "xGDiff": 0
+    },
+    {
+      "seed": 2302491424,
+      "xGDiff": 0
+    },
+    {
+      "seed": 2386448792,
+      "xGDiff": 0
+    },
+    {
+      "seed": 2410291363,
+      "xGDiff": 0
+    },
+    {
+      "seed": 2418897437,
+      "xGDiff": 0
+    },
+    {
+      "seed": 2449907480,
+      "xGDiff": 0
+    },
+    {
+      "seed": 2467484119,
+      "xGDiff": 0
+    },
+    {
+      "seed": 2491765391,
+      "xGDiff": 0
+    },
+    {
+      "seed": 2509008938,
+      "xGDiff": 0
+    },
+    {
+      "seed": 2528886575,
+      "xGDiff": 0
+    },
+    {
+      "seed": 2556331040,
+      "xGDiff": 0
+    },
+    {
+      "seed": 2588387232,
+      "xGDiff": 0
+    },
+    {
+      "seed": 2792482354,
+      "xGDiff": 0
+    },
+    {
+      "seed": 2802566450,
+      "xGDiff": 0
+    },
+    {
+      "seed": 2841830881,
+      "xGDiff": 0
+    },
+    {
+      "seed": 2848130876,
+      "xGDiff": 0
+    },
+    {
+      "seed": 2857260472,
+      "xGDiff": 0
+    },
+    {
+      "seed": 2857434194,
+      "xGDiff": 0
+    },
+    {
+      "seed": 2899325124,
+      "xGDiff": 0
+    },
+    {
+      "seed": 2962417718,
+      "xGDiff": 0
+    },
+    {
+      "seed": 2990492112,
+      "xGDiff": 0
+    },
+    {
+      "seed": 3051834699,
+      "xGDiff": 0
+    },
+    {
+      "seed": 3101448979,
+      "xGDiff": 0
+    },
+    {
+      "seed": 3120783766,
+      "xGDiff": 0
+    },
+    {
+      "seed": 3143158869,
+      "xGDiff": 0
+    },
+    {
+      "seed": 3219331494,
+      "xGDiff": 0
+    },
+    {
+      "seed": 3321944475,
+      "xGDiff": 0
+    },
+    {
+      "seed": 3322716195,
+      "xGDiff": 0
+    },
+    {
+      "seed": 3426154866,
+      "xGDiff": 0
+    },
+    {
+      "seed": 3458404452,
+      "xGDiff": 0
+    },
+    {
+      "seed": 3577569909,
+      "xGDiff": 0
+    },
+    {
+      "seed": 3582570865,
+      "xGDiff": 0
+    },
+    {
+      "seed": 3593626136,
+      "xGDiff": 0
+    },
+    {
+      "seed": 3651042077,
+      "xGDiff": 0
+    },
+    {
+      "seed": 3680872602,
+      "xGDiff": 0
+    },
+    {
+      "seed": 3710678315,
+      "xGDiff": 0
+    },
+    {
+      "seed": 3755823973,
+      "xGDiff": 0
+    },
+    {
+      "seed": 3948075129,
+      "xGDiff": 0
+    },
+    {
+      "seed": 3970522316,
+      "xGDiff": 0
+    },
+    {
+      "seed": 4008772503,
+      "xGDiff": 0
+    },
+    {
+      "seed": 4075362960,
+      "xGDiff": 0
+    },
+    {
+      "seed": 4088293491,
+      "xGDiff": 0
+    },
+    {
+      "seed": 4104035929,
+      "xGDiff": 0
+    },
+    {
+      "seed": 4129602066,
+      "xGDiff": 0
+    },
+    {
+      "seed": 4140965588,
+      "xGDiff": 0
+    },
+    {
+      "seed": 4181495360,
+      "xGDiff": 0
+    },
+    {
+      "seed": 4183200244,
+      "xGDiff": 0
+    },
+    {
+      "seed": 4236971456,
+      "xGDiff": 0
+    },
+    {
+      "seed": 4246823896,
+      "xGDiff": 0
+    }
+  ],
+  "xGDiff": {
+    "mean": 0,
+    "seedClusterSD": 0,
+    "perGameSD": 0.45169825435766703,
+    "percentile95": [
+      0,
+      0
+    ],
+    "bootstrapSamples": 20000,
+    "exactSignFlip": {
+      "status": "computed",
+      "pValue": 1,
+      "nonzeroClusters": 0,
+      "numerator": "1",
+      "denominator": "1"
+    }
+  }
+}

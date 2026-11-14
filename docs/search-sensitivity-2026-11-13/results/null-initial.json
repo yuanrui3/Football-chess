@@ -1,0 +1,184 @@
+{
+  "arm": "null",
+  "protocolId": "39098f32b7eb80a80ee1e46a4dbd468b32dd3165662ba45b9e2bbc855f6b951b",
+  "games": 100,
+  "analyzedGames": 100,
+  "completeClusters": 25,
+  "incompleteSeeds": [],
+  "missingSeeds": [],
+  "identicalPolicyMirrors": 50,
+  "candidate": {
+    "xG": 33.04765608903442,
+    "ownGoalXG": 0,
+    "goals": 25,
+    "shots": 217,
+    "ownGoalShots": 0,
+    "resolvedShots": 217,
+    "tackles": 45,
+    "tackleWins": 31,
+    "tacklesConceded": 31,
+    "stallingAwards": 0,
+    "offsideAwards": 14,
+    "fouls": 5,
+    "nodes": 16468222,
+    "completedDepthTotal": 47975,
+    "decisions": 12001,
+    "searchDecisions": 11784,
+    "thinkMs": 36338692.68795698,
+    "searchThinkMs": 36333134.95266098,
+    "maxNodes": 1400,
+    "meanMsPerDecision": 3027.97205965811,
+    "meanSearchMsPerDecision": 3083.2599246996756,
+    "meanNodes": 1397.5069585879157,
+    "meanCompletedDepth": 4.071198234894773
+  },
+  "baseline": {
+    "xG": 33.04765608903442,
+    "ownGoalXG": 0,
+    "goals": 25,
+    "shots": 217,
+    "ownGoalShots": 0,
+    "resolvedShots": 217,
+    "tackles": 45,
+    "tackleWins": 31,
+    "tacklesConceded": 31,
+    "stallingAwards": 0,
+    "offsideAwards": 14,
+    "fouls": 5,
+    "nodes": 16468222,
+    "completedDepthTotal": 47975,
+    "decisions": 12001,
+    "searchDecisions": 11784,
+    "thinkMs": 36526942.297905,
+    "searchThinkMs": 36520649.84749999,
+    "maxNodes": 1400,
+    "meanMsPerDecision": 3043.6582199737522,
+    "meanSearchMsPerDecision": 3099.1725939833664,
+    "meanNodes": 1397.5069585879157,
+    "meanCompletedDepth": 4.071198234894773
+  },
+  "candidateWDL": {
+    "win": 24,
+    "draw": 52,
+    "loss": 24
+  },
+  "clusters": [
+    {
+      "seed": 1102089531,
+      "xGDiff": 0
+    },
+    {
+      "seed": 1185675678,
+      "xGDiff": 0
+    },
+    {
+      "seed": 1335317868,
+      "xGDiff": 0
+    },
+    {
+      "seed": 1393865963,
+      "xGDiff": 0
+    },
+    {
+      "seed": 1494537332,
+      "xGDiff": 0
+    },
+    {
+      "seed": 1720042656,
+      "xGDiff": 0
+    },
+    {
+      "seed": 1775697499,
+      "xGDiff": 0
+    },
+    {
+      "seed": 1856014790,
+      "xGDiff": 0
+    },
+    {
+      "seed": 1871288919,
+      "xGDiff": 0
+    },
+    {
+      "seed": 2070469127,
+      "xGDiff": 0
+    },
+    {
+      "seed": 2302491424,
+      "xGDiff": 0
+    },
+    {
+      "seed": 2449907480,
+      "xGDiff": 0
+    },
+    {
+      "seed": 2467484119,
+      "xGDiff": 0
+    },
+    {
+      "seed": 2528886575,
+      "xGDiff": 0
+    },
+    {
+      "seed": 2588387232,
+      "xGDiff": 0
+    },
+    {
+      "seed": 2990492112,
+      "xGDiff": 0
+    },
+    {
+      "seed": 3051834699,
+      "xGDiff": 0
+    },
+    {
+      "seed": 3120783766,
+      "xGDiff": 0
+    },
+    {
+      "seed": 3458404452,
+      "xGDiff": 0
+    },
+    {
+      "seed": 3577569909,
+      "xGDiff": 0
+    },
+    {
+      "seed": 3651042077,
+      "xGDiff": 0
+    },
+    {
+      "seed": 3755823973,
+      "xGDiff": 0
+    },
+    {
+      "seed": 3948075129,
+      "xGDiff": 0
+    },
+    {
+      "seed": 4104035929,
+      "xGDiff": 0
+    },
+    {
+      "seed": 4140965588,
+      "xGDiff": 0
+    }
+  ],
+  "xGDiff": {
+    "mean": 0,
+    "seedClusterSD": 0,
+    "perGameSD": 0.483475204295106,
+    "percentile95": [
+      0,
+      0
+    ],
+    "bootstrapSamples": 20000,
+    "exactSignFlip": {
+      "status": "computed",
+      "pValue": 1,
+      "nonzeroClusters": 0,
+      "numerator": "1",
+      "denominator": "1"
+    }
+  }
+}
