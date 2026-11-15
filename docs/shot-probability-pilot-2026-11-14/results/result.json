@@ -1,0 +1,450 @@
+{
+  "node": "v24.22.1",
+  "platform": "win32",
+  "cpu": "11th Gen Intel(R) Core(TM) i9-11900K @ 3.50GHz",
+  "lock": {
+    "commit": "45fc3f4a43f2775c1eaf6e27737ef4aba76a7403",
+    "engineHash": "eb0ab0924c735871ac2186c6e1f0a1ddb450cdd49533413a795a0650c9a89901",
+    "sources": {
+      "run.mjs": "e0d00541ec6c7f6937655cb5fbf9759e17937709cacc90db36f349e65ec60c8e",
+      "positions.mjs": "97829bf2bccc2c77ab276093ab6958a0e37d82d57f6dfddc34f23f6c76a9fc08",
+      "planner.mjs": "d626e9ee672c744b096b8b0c3cc3d58fea2ffc112201a216bb278da6dfc9e433"
+    },
+    "targets": {
+      "shortHorizon": 4,
+      "depthDelta": 0.025,
+      "choiceSpread": 0.01,
+      "minEffect": 0.005,
+      "minFamilies": 6,
+      "minNaturalFamilies": 3,
+      "repetitions": 8,
+      "bootstrapSamples": 20000
+    },
+    "tree": {
+      "horizon": 6,
+      "width": 2,
+      "preShotSamples": 2
+    },
+    "budgetMs": 2,
+    "developmentPositionHash": "948af534a9132a44436c56a6006947d6ade20533d7d16030c3add0b7be7700ec",
+    "developmentFamilies": [
+      "game-1489517209",
+      "game-1333320747",
+      "game-1307553591",
+      "game-1122213915",
+      "game-1370723088",
+      "game-1082661390",
+      "game-1306195853",
+      "game-1564409531",
+      "game-1595368740",
+      "game-1494544141",
+      "game-1434409403",
+      "game-1437761038",
+      "game-1533300224",
+      "game-1307570123",
+      "game-1213657316",
+      "game-1514098987",
+      "game-1332958050",
+      "exercise-knights-two-posts",
+      "exercise-easy-knight-channel",
+      "exercise-medium-rook-clearance",
+      "exercise-tough-wall-pass"
+    ]
+  },
+  "gates": {
+    "timingValid": true,
+    "enoughDeepFamilies": true,
+    "enoughNaturalFamilies": true,
+    "practicalEffect": false,
+    "intervalAboveZero": false,
+    "naturalPointEstimatePositive": false,
+    "reactionControl": true
+  },
+  "decision": "stop",
+  "primary": {
+    "budgetMs": 2,
+    "reactionChecks": 170,
+    "reaction": {
+      "positions": 11,
+      "families": 11,
+      "callsPerMethod": 88,
+      "meanPreparationMs": 0.03436363636402265,
+      "pairedRegretReduction": 0.0005579081314693111,
+      "interval": [
+        0,
+        0.0013862604590294122
+      ],
+      "known": {
+        "meanRegret": 0,
+        "optimalRate": 1,
+        "meanTotalMs": 0.10849318181846518,
+        "meanTimedMs": 0.07412954545444253,
+        "overrunRate": 0,
+        "meanOutcomeSamples": 0,
+        "completedSweepRate": 1
+      },
+      "sampled": {
+        "meanRegret": 0.0005579081314693111,
+        "optimalRate": 0.9318181818181818,
+        "meanTotalMs": 2.040169318181556,
+        "meanTimedMs": 2.005805681817533,
+        "overrunRate": 0,
+        "meanOutcomeSamples": 12347.954545454546,
+        "completedSweepRate": 1
+      }
+    },
+    "kick": {
+      "positions": 11,
+      "families": 11,
+      "callsPerMethod": 88,
+      "meanPreparationMs": 269.6294636363633,
+      "pairedRegretReduction": 0.002869316970867225,
+      "interval": [
+        0,
+        0.008383781543105404
+      ],
+      "known": {
+        "meanRegret": 0.0033636204125627096,
+        "optimalRate": 0.9886363636363636,
+        "meanTotalMs": 270.372971590909,
+        "meanTimedMs": 0.7435079545456657,
+        "overrunRate": 0,
+        "meanOutcomeSamples": 0,
+        "completedSweepRate": 0.9431818181818182
+      },
+      "sampled": {
+        "meanRegret": 0.0062329373834299345,
+        "optimalRate": 0.9659090909090909,
+        "meanTotalMs": 271.63965795454516,
+        "meanTimedMs": 2.0101943181818402,
+        "overrunRate": 0,
+        "meanOutcomeSamples": 5700.625,
+        "completedSweepRate": 0.9772727272727273
+      }
+    },
+    "build": {
+      "positions": 11,
+      "families": 10,
+      "callsPerMethod": 88,
+      "meanPreparationMs": 538.909863636364,
+      "pairedRegretReduction": 0,
+      "interval": [
+        0,
+        0
+      ],
+      "known": {
+        "meanRegret": 0,
+        "optimalRate": 1,
+        "meanTotalMs": 540.1049784090909,
+        "meanTimedMs": 1.1951147727269762,
+        "overrunRate": 0,
+        "meanOutcomeSamples": 0,
+        "completedSweepRate": 0.6590909090909091
+      },
+      "sampled": {
+        "meanRegret": 0,
+        "optimalRate": 1,
+        "meanTotalMs": 540.7463988636363,
+        "meanTimedMs": 1.8365352272723448,
+        "overrunRate": 0,
+        "meanOutcomeSamples": 3915.465909090909,
+        "completedSweepRate": 0.6590909090909091
+      }
+    },
+    "deep": {
+      "positions": 9,
+      "families": 9,
+      "callsPerMethod": 72,
+      "meanPreparationMs": 569.153988888889,
+      "pairedRegretReduction": 0,
+      "interval": [
+        0,
+        0
+      ],
+      "known": {
+        "meanRegret": 0,
+        "optimalRate": 1,
+        "meanTotalMs": 570.4278180555553,
+        "meanTimedMs": 1.2738291666663726,
+        "overrunRate": 0,
+        "meanOutcomeSamples": 0,
+        "completedSweepRate": 0.7083333333333334
+      },
+      "sampled": {
+        "meanRegret": 0,
+        "optimalRate": 1,
+        "meanTotalMs": 571.1645361111109,
+        "meanTimedMs": 2.0105472222218546,
+        "overrunRate": 0,
+        "meanOutcomeSamples": 4433.486111111111,
+        "completedSweepRate": 0.7222222222222222
+      }
+    },
+    "naturalDeep": {
+      "positions": 6,
+      "families": 6,
+      "callsPerMethod": 48,
+      "meanPreparationMs": 644.731516666668,
+      "pairedRegretReduction": 0,
+      "interval": [
+        0,
+        0
+      ],
+      "known": {
+        "meanRegret": 0,
+        "optimalRate": 1,
+        "meanTotalMs": 646.0134312500012,
+        "meanTimedMs": 1.2819145833332186,
+        "overrunRate": 0,
+        "meanOutcomeSamples": 0,
+        "completedSweepRate": 0.7291666666666666
+      },
+      "sampled": {
+        "meanRegret": 0,
+        "optimalRate": 1,
+        "meanTotalMs": 646.7437291666678,
+        "meanTimedMs": 2.012212499999805,
+        "overrunRate": 0,
+        "meanOutcomeSamples": 4166.666666666667,
+        "completedSweepRate": 0.75
+      }
+    },
+    "all": {
+      "positions": 33,
+      "families": 31,
+      "callsPerMethod": 264,
+      "meanPreparationMs": 269.5245636363638,
+      "pairedRegretReduction": 0.0007269257597434486,
+      "interval": [
+        0.00005867819287693982,
+        0.001844587715043038
+      ],
+      "known": {
+        "meanRegret": 0.0011212068041875699,
+        "optimalRate": 0.9962121212121212,
+        "meanTotalMs": 270.19548106060626,
+        "meanTimedMs": 0.6709174242423614,
+        "overrunRate": 0,
+        "meanOutcomeSamples": 0,
+        "completedSweepRate": 0.8674242424242424
+      },
+      "sampled": {
+        "meanRegret": 0.002263615171633082,
+        "optimalRate": 0.9659090909090909,
+        "meanTotalMs": 271.475408712121,
+        "meanTimedMs": 1.9508450757572395,
+        "overrunRate": 0,
+        "meanOutcomeSamples": 7321.348484848485,
+        "completedSweepRate": 0.8787878787878788
+      }
+    }
+  },
+  "sensitivity": {
+    "budgetMs": 8,
+    "reactionChecks": 170,
+    "reaction": {
+      "positions": 11,
+      "families": 11,
+      "callsPerMethod": 88,
+      "meanPreparationMs": 0.03436363636402265,
+      "pairedRegretReduction": 0,
+      "interval": [
+        0,
+        0
+      ],
+      "known": {
+        "meanRegret": 0,
+        "optimalRate": 1,
+        "meanTotalMs": 0.11464431818239973,
+        "meanTimedMs": 0.08028068181837708,
+        "overrunRate": 0,
+        "meanOutcomeSamples": 0,
+        "completedSweepRate": 1
+      },
+      "sampled": {
+        "meanRegret": 0,
+        "optimalRate": 1,
+        "meanTotalMs": 8.058830681819101,
+        "meanTimedMs": 8.024467045455077,
+        "overrunRate": 0,
+        "meanOutcomeSamples": 62261.09090909091,
+        "completedSweepRate": 1
+      }
+    },
+    "kick": {
+      "positions": 11,
+      "families": 11,
+      "callsPerMethod": 88,
+      "meanPreparationMs": 269.6294636363633,
+      "pairedRegretReduction": 0.00011208468474813563,
+      "interval": [
+        0,
+        0.0003362540542444069
+      ],
+      "known": {
+        "meanRegret": 0,
+        "optimalRate": 1,
+        "meanTotalMs": 270.36482840909065,
+        "meanTimedMs": 0.7353647727273214,
+        "overrunRate": 0,
+        "meanOutcomeSamples": 0,
+        "completedSweepRate": 1
+      },
+      "sampled": {
+        "meanRegret": 0.00011208468474813563,
+        "optimalRate": 0.9886363636363636,
+        "meanTotalMs": 277.6395749999992,
+        "meanTimedMs": 8.010111363635836,
+        "overrunRate": 0,
+        "meanOutcomeSamples": 38970.568181818184,
+        "completedSweepRate": 1
+      }
+    },
+    "build": {
+      "positions": 11,
+      "families": 10,
+      "callsPerMethod": 88,
+      "meanPreparationMs": 538.909863636364,
+      "pairedRegretReduction": 0,
+      "interval": [
+        0,
+        0
+      ],
+      "known": {
+        "meanRegret": 0,
+        "optimalRate": 1,
+        "meanTotalMs": 540.6627329545458,
+        "meanTimedMs": 1.7528693181819273,
+        "overrunRate": 0,
+        "meanOutcomeSamples": 0,
+        "completedSweepRate": 0.875
+      },
+      "sampled": {
+        "meanRegret": 0,
+        "optimalRate": 1,
+        "meanTotalMs": 546.1927590909089,
+        "meanTimedMs": 7.282895454544897,
+        "overrunRate": 0,
+        "meanOutcomeSamples": 41535.079545454544,
+        "completedSweepRate": 0.8522727272727273
+      }
+    },
+    "deep": {
+      "positions": 9,
+      "families": 9,
+      "callsPerMethod": 72,
+      "meanPreparationMs": 569.153988888889,
+      "pairedRegretReduction": 0,
+      "interval": [
+        0,
+        0
+      ],
+      "known": {
+        "meanRegret": 0,
+        "optimalRate": 1,
+        "meanTotalMs": 571.1631875000003,
+        "meanTimedMs": 2.009198611111262,
+        "overrunRate": 0,
+        "meanOutcomeSamples": 0,
+        "completedSweepRate": 0.9583333333333334
+      },
+      "sampled": {
+        "meanRegret": 0,
+        "optimalRate": 1,
+        "meanTotalMs": 577.1656736111108,
+        "meanTimedMs": 8.011684722221819,
+        "overrunRate": 0,
+        "meanOutcomeSamples": 44568.333333333336,
+        "completedSweepRate": 0.9305555555555556
+      }
+    },
+    "naturalDeep": {
+      "positions": 6,
+      "families": 6,
+      "callsPerMethod": 48,
+      "meanPreparationMs": 644.731516666668,
+      "pairedRegretReduction": 0,
+      "interval": [
+        0,
+        0
+      ],
+      "known": {
+        "meanRegret": 0,
+        "optimalRate": 1,
+        "meanTotalMs": 646.2837395833349,
+        "meanTimedMs": 1.5522229166669301,
+        "overrunRate": 0,
+        "meanOutcomeSamples": 0,
+        "completedSweepRate": 1
+      },
+      "sampled": {
+        "meanRegret": 0,
+        "optimalRate": 1,
+        "meanTotalMs": 652.7402416666672,
+        "meanTimedMs": 8.008724999999231,
+        "overrunRate": 0,
+        "meanOutcomeSamples": 45465.041666666664,
+        "completedSweepRate": 1
+      }
+    },
+    "all": {
+      "positions": 33,
+      "families": 31,
+      "callsPerMethod": 264,
+      "meanPreparationMs": 269.5245636363638,
+      "pairedRegretReduction": 0.00003977198491062877,
+      "interval": [
+        0,
+        0.00011931595473188631
+      ],
+      "known": {
+        "meanRegret": 0,
+        "optimalRate": 1,
+        "meanTotalMs": 270.38073522727285,
+        "meanTimedMs": 0.8561715909092086,
+        "overrunRate": 0,
+        "meanOutcomeSamples": 0,
+        "completedSweepRate": 0.9583333333333334
+      },
+      "sampled": {
+        "meanRegret": 0.000037361561582711876,
+        "optimalRate": 0.9962121212121212,
+        "meanTotalMs": 277.2970549242423,
+        "meanTimedMs": 7.772491287878603,
+        "overrunRate": 0,
+        "meanOutcomeSamples": 47588.91287878788,
+        "completedSweepRate": 0.9507575757575758
+      }
+    }
+  },
+  "continuation": {
+    "positions": 11,
+    "families": 11,
+    "callsPerMethod": 88,
+    "meanPreparationMs": 0.017409090909164992,
+    "pairedRegretReduction": 0,
+    "interval": [
+      0,
+      0
+    ],
+    "known": {
+      "meanRegret": 0.18415744467663997,
+      "optimalRate": 0,
+      "meanTotalMs": 3.858993181818071,
+      "meanTimedMs": 3.841584090908906,
+      "overrunRate": 0.6363636363636364,
+      "meanOutcomeSamples": 0,
+      "completedSweepRate": 0
+    },
+    "sampled": {
+      "meanRegret": 0.18415744467663997,
+      "optimalRate": 0,
+      "meanTotalMs": 3.8327306818180826,
+      "meanTimedMs": 3.8153215909089173,
+      "overrunRate": 0.6704545454545454,
+      "meanOutcomeSamples": 1.4659090909090908,
+      "completedSweepRate": 0
+    },
+    "changedBestReaction": 2
+  }
+}

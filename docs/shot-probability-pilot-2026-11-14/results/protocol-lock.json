@@ -1,0 +1,49 @@
+{
+  "commit": "45fc3f4a43f2775c1eaf6e27737ef4aba76a7403",
+  "engineHash": "eb0ab0924c735871ac2186c6e1f0a1ddb450cdd49533413a795a0650c9a89901",
+  "sources": {
+    "run.mjs": "e0d00541ec6c7f6937655cb5fbf9759e17937709cacc90db36f349e65ec60c8e",
+    "positions.mjs": "97829bf2bccc2c77ab276093ab6958a0e37d82d57f6dfddc34f23f6c76a9fc08",
+    "planner.mjs": "d626e9ee672c744b096b8b0c3cc3d58fea2ffc112201a216bb278da6dfc9e433"
+  },
+  "targets": {
+    "shortHorizon": 4,
+    "depthDelta": 0.025,
+    "choiceSpread": 0.01,
+    "minEffect": 0.005,
+    "minFamilies": 6,
+    "minNaturalFamilies": 3,
+    "repetitions": 8,
+    "bootstrapSamples": 20000
+  },
+  "tree": {
+    "horizon": 6,
+    "width": 2,
+    "preShotSamples": 2
+  },
+  "budgetMs": 2,
+  "developmentPositionHash": "948af534a9132a44436c56a6006947d6ade20533d7d16030c3add0b7be7700ec",
+  "developmentFamilies": [
+    "game-1489517209",
+    "game-1333320747",
+    "game-1307553591",
+    "game-1122213915",
+    "game-1370723088",
+    "game-1082661390",
+    "game-1306195853",
+    "game-1564409531",
+    "game-1595368740",
+    "game-1494544141",
+    "game-1434409403",
+    "game-1437761038",
+    "game-1533300224",
+    "game-1307570123",
+    "game-1213657316",
+    "game-1514098987",
+    "game-1332958050",
+    "exercise-knights-two-posts",
+    "exercise-easy-knight-channel",
+    "exercise-medium-rook-clearance",
+    "exercise-tough-wall-pass"
+  ]
+}

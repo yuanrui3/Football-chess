@@ -1,0 +1,115 @@
+{
+  "tree": {
+    "horizon": 6,
+    "width": 2,
+    "preShotSamples": 2
+  },
+  "budgetMs": 2,
+  "qualifying": true,
+  "sweeps": [
+    {
+      "id": "game-1489517209-reaction-55",
+      "elapsedMs": 0.03573333333285215
+    },
+    {
+      "id": "game-1333320747-kick-80",
+      "elapsedMs": 1.1654666666678775
+    },
+    {
+      "id": "game-1122213915-reaction-136",
+      "elapsedMs": 0.043766666669398546
+    },
+    {
+      "id": "game-1370723088-kick-147",
+      "elapsedMs": 0.8865666666679317
+    },
+    {
+      "id": "game-1306195853-reaction-95",
+      "elapsedMs": 0.03843333333497867
+    },
+    {
+      "id": "game-1564409531-kick-87",
+      "elapsedMs": 1.9255666666649631
+    },
+    {
+      "id": "game-1595368740-build-90",
+      "elapsedMs": 5.756633333330683
+    },
+    {
+      "id": "game-1494544141-kick-85",
+      "elapsedMs": 0.09593333333759801
+    },
+    {
+      "id": "game-1434409403-reaction-135",
+      "elapsedMs": 0.03179999999701977
+    },
+    {
+      "id": "game-1437761038-kick-215",
+      "elapsedMs": 0.9273666666655723
+    },
+    {
+      "id": "game-1533300224-build-200",
+      "elapsedMs": 2.166799999999057
+    },
+    {
+      "id": "game-1307570123-kick-119",
+      "elapsedMs": 0.7302333333306402
+    },
+    {
+      "id": "game-1514098987-reaction-85",
+      "elapsedMs": 0.03389999999975165
+    },
+    {
+      "id": "game-1332958050-reaction-81",
+      "elapsedMs": 0.03146666666483119
+    },
+    {
+      "id": "exercise-knights-two-posts-kick",
+      "elapsedMs": 0.12816666666428014
+    },
+    {
+      "id": "exercise-knights-two-posts-reaction",
+      "elapsedMs": 0.07519999999931315
+    },
+    {
+      "id": "exercise-release-the-knight-build",
+      "elapsedMs": 0.5761000000008304
+    },
+    {
+      "id": "exercise-medium-clear-file-build",
+      "elapsedMs": 2.1973666666647964
+    }
+  ],
+  "reactionChecks": 98,
+  "counts": {
+    "reaction": 7,
+    "kick": 7,
+    "build": 8
+  },
+  "verifiedDepth": [
+    {
+      "id": "game-1595368740-build-90",
+      "family": "game-1595368740",
+      "depthGain": 0.18640029370454161,
+      "spread": 0.18640029370454161
+    },
+    {
+      "id": "game-1533300224-build-200",
+      "family": "game-1533300224",
+      "depthGain": 0.08596985409256572,
+      "spread": 0.08596985409256572
+    },
+    {
+      "id": "exercise-release-the-knight-build",
+      "family": "exercise-easy-knight-channel",
+      "depthGain": 0.24620651520797499,
+      "spread": 0.24620651520797499
+    },
+    {
+      "id": "exercise-medium-clear-file-build",
+      "family": "exercise-medium-rook-clearance",
+      "depthGain": 0.10206335070925067,
+      "spread": 0.10206335070925067
+    }
+  ]
+}
