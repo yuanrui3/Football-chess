@@ -1,0 +1,2039 @@
+{
+  "schemaVersion": 1,
+  "reviewedEngineCommit": "45fc3f4a43f2775c1eaf6e27737ef4aba76a7403",
+  "studies": {
+    "equal-nodes": {
+      "ledger": "equal-nodes.jsonl",
+      "ledgerSha256": "f88d29d683f295f8e1fda31a4f14a57173133ce785ab5fccb208602b468344a7",
+      "games": 72,
+      "protocol": {
+        "actionLimit": 120,
+        "foulsEnabled": true,
+        "nodeLimit": 1400,
+        "maxDepth": 8,
+        "timeLimitMs": null,
+        "matchWorkers": 9,
+        "nodeVersion": "v24.22.1"
+      },
+      "schedule": [
+        {
+          "repeat": 1,
+          "trainingSeed": 3491360068,
+          "matchSeeds": [
+            4047549127,
+            4046133696
+          ]
+        },
+        {
+          "repeat": 2,
+          "trainingSeed": 3504112574,
+          "matchSeeds": [
+            4054752215,
+            4055191402
+          ]
+        },
+        {
+          "repeat": 3,
+          "trainingSeed": 3492498577,
+          "matchSeeds": [
+            4052959355,
+            4056598669
+          ]
+        }
+      ],
+      "jobs": [
+        {
+          "key": "scratch-1",
+          "arm": "scratch",
+          "repeat": 1,
+          "protocolId": "b02ffeeeecbfcef71687fa1adbc35f14773433c6567511764f73e9bb0a7eefcb",
+          "matchSeeds": [
+            4047549127,
+            4046133696
+          ],
+          "candidateEngineSha256": "4c1ddc44e31d1d54e81ecc224a2073b2baa84669ef31b98edd1e794a837813b3",
+          "baselineEngineSha256": "eb0ab0924c735871ac2186c6e1f0a1ddb450cdd49533413a795a0650c9a89901",
+          "rulesEngineSha256": "eb0ab0924c735871ac2186c6e1f0a1ddb450cdd49533413a795a0650c9a89901",
+          "sourceLedgerSha256": "5076c4860768ba89d8ecd0d81cfd07619cd8982e67444826691f3ca0f2bb5f52"
+        },
+        {
+          "key": "imitation-1",
+          "arm": "imitation",
+          "repeat": 1,
+          "protocolId": "06b7916fcd19b89dc51618a055f6f0f06b3ffc30720ab44dffa752ec704454b9",
+          "matchSeeds": [
+            4047549127,
+            4046133696
+          ],
+          "candidateEngineSha256": "48c4fd9839d8c831a993f9c19a2a70ab32af9589259817c7f9051c1801572368",
+          "baselineEngineSha256": "eb0ab0924c735871ac2186c6e1f0a1ddb450cdd49533413a795a0650c9a89901",
+          "rulesEngineSha256": "eb0ab0924c735871ac2186c6e1f0a1ddb450cdd49533413a795a0650c9a89901",
+          "sourceLedgerSha256": "ff70a187ecfe60060d2b039127168acf26ea025b6289dabdde4727b9591f1c87"
+        },
+        {
+          "key": "hybrid-1",
+          "arm": "hybrid",
+          "repeat": 1,
+          "protocolId": "4a746ff3e432c4bb3f1657dea28878b68d21033b37fb03b4c06a3277cf6790f4",
+          "matchSeeds": [
+            4047549127,
+            4046133696
+          ],
+          "candidateEngineSha256": "e1787d7b4b7de350eac975aababf7098de401438c2e4af8a9e585aa861cd0724",
+          "baselineEngineSha256": "eb0ab0924c735871ac2186c6e1f0a1ddb450cdd49533413a795a0650c9a89901",
+          "rulesEngineSha256": "eb0ab0924c735871ac2186c6e1f0a1ddb450cdd49533413a795a0650c9a89901",
+          "sourceLedgerSha256": "ce6814de2a570793091f3d030d23e72b54eaf885e437333fdf45fffe3292c522"
+        },
+        {
+          "key": "scratch-2",
+          "arm": "scratch",
+          "repeat": 2,
+          "protocolId": "f541d23256bfb394819427cf319e40f79ca66b9095738067079b54b3e41ce7c7",
+          "matchSeeds": [
+            4054752215,
+            4055191402
+          ],
+          "candidateEngineSha256": "4c1ddc44e31d1d54e81ecc224a2073b2baa84669ef31b98edd1e794a837813b3",
+          "baselineEngineSha256": "eb0ab0924c735871ac2186c6e1f0a1ddb450cdd49533413a795a0650c9a89901",
+          "rulesEngineSha256": "eb0ab0924c735871ac2186c6e1f0a1ddb450cdd49533413a795a0650c9a89901",
+          "sourceLedgerSha256": "c1832f6d5d9dec537e6717aee5ea1946acd88a04a886e00ffc3b55979d52c22c"
+        },
+        {
+          "key": "imitation-2",
+          "arm": "imitation",
+          "repeat": 2,
+          "protocolId": "b4c40ea0bf96ede12f63835974d992e22bbfef18aa288271864b94bbc9923e72",
+          "matchSeeds": [
+            4054752215,
+            4055191402
+          ],
+          "candidateEngineSha256": "5a86ac917c2808b3fc6ef21f22e07b4cd36930ec7c4fe7bc3700ca0c9ffc58ab",
+          "baselineEngineSha256": "eb0ab0924c735871ac2186c6e1f0a1ddb450cdd49533413a795a0650c9a89901",
+          "rulesEngineSha256": "eb0ab0924c735871ac2186c6e1f0a1ddb450cdd49533413a795a0650c9a89901",
+          "sourceLedgerSha256": "3f26b9f398bd0dfb20820e7b6bc538e25b90298bcf9a5001aa423ceaaa5528b3"
+        },
+        {
+          "key": "hybrid-2",
+          "arm": "hybrid",
+          "repeat": 2,
+          "protocolId": "9a927d490d0bb764bc624bd53e0a1a2b19f277b27c7eac338ebcb27e0d90d24b",
+          "matchSeeds": [
+            4054752215,
+            4055191402
+          ],
+          "candidateEngineSha256": "4c9620e229b4af95c0fdfd1c73e4a72d7581618130be1fbfb9fded1a4eb6895a",
+          "baselineEngineSha256": "eb0ab0924c735871ac2186c6e1f0a1ddb450cdd49533413a795a0650c9a89901",
+          "rulesEngineSha256": "eb0ab0924c735871ac2186c6e1f0a1ddb450cdd49533413a795a0650c9a89901",
+          "sourceLedgerSha256": "ae4df2314e1a51fcf28494092c4f1916513d6e6faa1347088d3b6690a5cf13c1"
+        },
+        {
+          "key": "scratch-3",
+          "arm": "scratch",
+          "repeat": 3,
+          "protocolId": "075461a39daedd4c498b2691c3895061f8c3a4f0ac92c2231539c8e5449a40e7",
+          "matchSeeds": [
+            4052959355,
+            4056598669
+          ],
+          "candidateEngineSha256": "4c1ddc44e31d1d54e81ecc224a2073b2baa84669ef31b98edd1e794a837813b3",
+          "baselineEngineSha256": "eb0ab0924c735871ac2186c6e1f0a1ddb450cdd49533413a795a0650c9a89901",
+          "rulesEngineSha256": "eb0ab0924c735871ac2186c6e1f0a1ddb450cdd49533413a795a0650c9a89901",
+          "sourceLedgerSha256": "970309c6b5f866d2df22d3ae43f9a100991c2543c5c2aad77d33fdedad1fece0"
+        },
+        {
+          "key": "imitation-3",
+          "arm": "imitation",
+          "repeat": 3,
+          "protocolId": "51b5b0b8eefc2ac87baaf1c4795f462732030520966b81be9be0247ed07b8f04",
+          "matchSeeds": [
+            4052959355,
+            4056598669
+          ],
+          "candidateEngineSha256": "1b408172657a1b08134bff63c5c6eb4a6b89b05e4f8ce0ab71e5651cd43e1ede",
+          "baselineEngineSha256": "eb0ab0924c735871ac2186c6e1f0a1ddb450cdd49533413a795a0650c9a89901",
+          "rulesEngineSha256": "eb0ab0924c735871ac2186c6e1f0a1ddb450cdd49533413a795a0650c9a89901",
+          "sourceLedgerSha256": "77df387d2976f16cb9964524f41ed76ba6b4f2c0d050105a611e6372b15f3e1a"
+        },
+        {
+          "key": "hybrid-3",
+          "arm": "hybrid",
+          "repeat": 3,
+          "protocolId": "8be698e420c677a7c00c7af56101cb913b2fcab124666226eaab93be272197c1",
+          "matchSeeds": [
+            4052959355,
+            4056598669
+          ],
+          "candidateEngineSha256": "32c040873548d849ab6b39788db4e80ad58f4a977e54c34796741a306fab33ca",
+          "baselineEngineSha256": "eb0ab0924c735871ac2186c6e1f0a1ddb450cdd49533413a795a0650c9a89901",
+          "rulesEngineSha256": "eb0ab0924c735871ac2186c6e1f0a1ddb450cdd49533413a795a0650c9a89901",
+          "sourceLedgerSha256": "0914b5499b3dcda6a703d3390514ff1c305dcb81d5513eaf397fc9d480690540"
+        }
+      ],
+      "gamesByArm": {
+        "scratch": {
+          "pooled": {
+            "games": 24,
+            "wdl": {
+              "win": 0,
+              "draw": 13,
+              "loss": 11
+            },
+            "candidate": {
+              "goals": 0,
+              "xG": 0.004448563911509534,
+              "shots": 8,
+              "tacklesConceded": 3,
+              "searchDecisions": 1309,
+              "searchThinkMs": 1007346.7178999984,
+              "nodes": 1765352,
+              "completedDepthTotal": 6261,
+              "maxNodes": 1400
+            },
+            "baseline": {
+              "goals": 11,
+              "xG": 8.887182365925327,
+              "shots": 59,
+              "tacklesConceded": 3,
+              "searchDecisions": 1508,
+              "searchThinkMs": 1228909.5922000003,
+              "nodes": 2082367,
+              "completedDepthTotal": 6621,
+              "maxNodes": 1400
+            }
+          },
+          "perRun": [
+            {
+              "games": 8,
+              "wdl": {
+                "win": 0,
+                "draw": 3,
+                "loss": 5
+              },
+              "candidate": {
+                "goals": 0,
+                "xG": 0.0016682114668160751,
+                "shots": 3,
+                "tacklesConceded": 1,
+                "searchDecisions": 441,
+                "searchThinkMs": 286039.9568,
+                "nodes": 594603,
+                "completedDepthTotal": 2126,
+                "maxNodes": 1400
+              },
+              "baseline": {
+                "goals": 5,
+                "xG": 2.7793264526022,
+                "shots": 20,
+                "tacklesConceded": 1,
+                "searchDecisions": 497,
+                "searchThinkMs": 403914.6281000002,
+                "nodes": 686046,
+                "completedDepthTotal": 2139,
+                "maxNodes": 1400
+              }
+            },
+            {
+              "games": 8,
+              "wdl": {
+                "win": 0,
+                "draw": 6,
+                "loss": 2
+              },
+              "candidate": {
+                "goals": 0,
+                "xG": 0.0011121409778773834,
+                "shots": 2,
+                "tacklesConceded": 1,
+                "searchDecisions": 422,
+                "searchThinkMs": 356367.09059999895,
+                "nodes": 570885,
+                "completedDepthTotal": 1986,
+                "maxNodes": 1400
+              },
+              "baseline": {
+                "goals": 2,
+                "xG": 3.5303450836028367,
+                "shots": 20,
+                "tacklesConceded": 1,
+                "searchDecisions": 517,
+                "searchThinkMs": 422091.75909999973,
+                "nodes": 717102,
+                "completedDepthTotal": 2283,
+                "maxNodes": 1400
+              }
+            },
+            {
+              "games": 8,
+              "wdl": {
+                "win": 0,
+                "draw": 4,
+                "loss": 4
+              },
+              "candidate": {
+                "goals": 0,
+                "xG": 0.0016682114668160751,
+                "shots": 3,
+                "tacklesConceded": 1,
+                "searchDecisions": 446,
+                "searchThinkMs": 364939.67049999937,
+                "nodes": 599864,
+                "completedDepthTotal": 2149,
+                "maxNodes": 1400
+              },
+              "baseline": {
+                "goals": 4,
+                "xG": 2.577510829720292,
+                "shots": 19,
+                "tacklesConceded": 1,
+                "searchDecisions": 494,
+                "searchThinkMs": 402903.20500000037,
+                "nodes": 679219,
+                "completedDepthTotal": 2199,
+                "maxNodes": 1400
+              }
+            }
+          ]
+        },
+        "imitation": {
+          "pooled": {
+            "games": 24,
+            "wdl": {
+              "win": 5,
+              "draw": 19,
+              "loss": 0
+            },
+            "candidate": {
+              "goals": 8,
+              "xG": 4.461994839914423,
+              "shots": 30,
+              "tacklesConceded": 0,
+              "searchDecisions": 1462,
+              "searchThinkMs": 1337336.0677999996,
+              "nodes": 2042823,
+              "completedDepthTotal": 5688,
+              "maxNodes": 1400
+            },
+            "baseline": {
+              "goals": 1,
+              "xG": 2.399825615701989,
+              "shots": 23,
+              "tacklesConceded": 6,
+              "searchDecisions": 1365,
+              "searchThinkMs": 965381.379700001,
+              "nodes": 1903538,
+              "completedDepthTotal": 5713,
+              "maxNodes": 1400
+            }
+          },
+          "perRun": [
+            {
+              "games": 8,
+              "wdl": {
+                "win": 0,
+                "draw": 8,
+                "loss": 0
+              },
+              "candidate": {
+                "goals": 1,
+                "xG": 0.9422826494842793,
+                "shots": 6,
+                "tacklesConceded": 0,
+                "searchDecisions": 522,
+                "searchThinkMs": 485871.492499999,
+                "nodes": 729479,
+                "completedDepthTotal": 2108,
+                "maxNodes": 1400
+              },
+              "baseline": {
+                "goals": 1,
+                "xG": 0.3140664854585564,
+                "shots": 4,
+                "tacklesConceded": 1,
+                "searchDecisions": 428,
+                "searchThinkMs": 300445.4941000004,
+                "nodes": 597386,
+                "completedDepthTotal": 1854,
+                "maxNodes": 1400
+              }
+            },
+            {
+              "games": 8,
+              "wdl": {
+                "win": 2,
+                "draw": 6,
+                "loss": 0
+              },
+              "candidate": {
+                "goals": 2,
+                "xG": 1.975484038322584,
+                "shots": 12,
+                "tacklesConceded": 0,
+                "searchDecisions": 456,
+                "searchThinkMs": 410806.8583999998,
+                "nodes": 637348,
+                "completedDepthTotal": 1744,
+                "maxNodes": 1400
+              },
+              "baseline": {
+                "goals": 0,
+                "xG": 1.5820475113858514,
+                "shots": 14,
+                "tacklesConceded": 0,
+                "searchDecisions": 478,
+                "searchThinkMs": 362355.4071000003,
+                "nodes": 663552,
+                "completedDepthTotal": 1978,
+                "maxNodes": 1400
+              }
+            },
+            {
+              "games": 8,
+              "wdl": {
+                "win": 3,
+                "draw": 5,
+                "loss": 0
+              },
+              "candidate": {
+                "goals": 5,
+                "xG": 1.5442281521075598,
+                "shots": 12,
+                "tacklesConceded": 0,
+                "searchDecisions": 484,
+                "searchThinkMs": 440657.71690000064,
+                "nodes": 675996,
+                "completedDepthTotal": 1836,
+                "maxNodes": 1400
+              },
+              "baseline": {
+                "goals": 0,
+                "xG": 0.5037116188575812,
+                "shots": 5,
+                "tacklesConceded": 5,
+                "searchDecisions": 459,
+                "searchThinkMs": 302580.4785000004,
+                "nodes": 642600,
+                "completedDepthTotal": 1881,
+                "maxNodes": 1400
+              }
+            }
+          ]
+        },
+        "hybrid": {
+          "pooled": {
+            "games": 24,
+            "wdl": {
+              "win": 3,
+              "draw": 19,
+              "loss": 2
+            },
+            "candidate": {
+              "goals": 3,
+              "xG": 3.2418047016191744,
+              "shots": 24,
+              "tacklesConceded": 0,
+              "searchDecisions": 1458,
+              "searchThinkMs": 1370021.9702000003,
+              "nodes": 2038975,
+              "completedDepthTotal": 5617,
+              "maxNodes": 1400
+            },
+            "baseline": {
+              "goals": 2,
+              "xG": 4.185046084155284,
+              "shots": 25,
+              "tacklesConceded": 5,
+              "searchDecisions": 1373,
+              "searchThinkMs": 1106783.4842999992,
+              "nodes": 1919684,
+              "completedDepthTotal": 5783,
+              "maxNodes": 1400
+            }
+          },
+          "perRun": [
+            {
+              "games": 8,
+              "wdl": {
+                "win": 2,
+                "draw": 4,
+                "loss": 2
+              },
+              "candidate": {
+                "goals": 2,
+                "xG": 1.212147284945296,
+                "shots": 9,
+                "tacklesConceded": 0,
+                "searchDecisions": 464,
+                "searchThinkMs": 436142.14400000114,
+                "nodes": 649600,
+                "completedDepthTotal": 1767,
+                "maxNodes": 1400
+              },
+              "baseline": {
+                "goals": 2,
+                "xG": 1.5869450975739343,
+                "shots": 13,
+                "tacklesConceded": 1,
+                "searchDecisions": 474,
+                "searchThinkMs": 369295.66309999913,
+                "nodes": 662818,
+                "completedDepthTotal": 1990,
+                "maxNodes": 1400
+              }
+            },
+            {
+              "games": 8,
+              "wdl": {
+                "win": 0,
+                "draw": 8,
+                "loss": 0
+              },
+              "candidate": {
+                "goals": 0,
+                "xG": 0.8916544046525846,
+                "shots": 8,
+                "tacklesConceded": 0,
+                "searchDecisions": 511,
+                "searchThinkMs": 500723.7987999982,
+                "nodes": 713944,
+                "completedDepthTotal": 1946,
+                "maxNodes": 1400
+              },
+              "baseline": {
+                "goals": 0,
+                "xG": 2.212860382001213,
+                "shots": 9,
+                "tacklesConceded": 0,
+                "searchDecisions": 432,
+                "searchThinkMs": 349376.8213999994,
+                "nodes": 604034,
+                "completedDepthTotal": 1805,
+                "maxNodes": 1400
+              }
+            },
+            {
+              "games": 8,
+              "wdl": {
+                "win": 1,
+                "draw": 7,
+                "loss": 0
+              },
+              "candidate": {
+                "goals": 1,
+                "xG": 1.1380030120212938,
+                "shots": 7,
+                "tacklesConceded": 0,
+                "searchDecisions": 483,
+                "searchThinkMs": 433156.02740000107,
+                "nodes": 675431,
+                "completedDepthTotal": 1904,
+                "maxNodes": 1400
+              },
+              "baseline": {
+                "goals": 0,
+                "xG": 0.3852406045801371,
+                "shots": 3,
+                "tacklesConceded": 4,
+                "searchDecisions": 467,
+                "searchThinkMs": 388110.99980000086,
+                "nodes": 652832,
+                "completedDepthTotal": 1988,
+                "maxNodes": 1400
+              }
+            }
+          ]
+        }
+      },
+      "comparisons": {
+        "scratch-vs-frozen": {
+          "goalDifference": {
+            "mean": -0.4583333333333333,
+            "percentile95": [
+              -0.8333333333333334,
+              -0.16666666666666666
+            ],
+            "trainingRunMeans": [
+              -0.625,
+              -0.25,
+              -0.5
+            ]
+          },
+          "wdlScoreAboveParity": {
+            "mean": -0.22916666666666666,
+            "percentile95": [
+              -0.4166666666666667,
+              -0.08333333333333333
+            ],
+            "trainingRunMeans": [
+              -0.3125,
+              -0.125,
+              -0.25
+            ]
+          },
+          "xG": {
+            "mean": -0.37011390841724245,
+            "percentile95": [
+              -0.4411541178281199,
+              -0.31934824878684726
+            ],
+            "trainingRunMeans": [
+              -0.3472072801419229,
+              -0.4411541178281199,
+              -0.3219803272816846
+            ]
+          }
+        },
+        "imitation-vs-frozen": {
+          "goalDifference": {
+            "mean": 0.2916666666666667,
+            "percentile95": [
+              0,
+              0.8333333333333334
+            ],
+            "trainingRunMeans": [
+              0,
+              0.25,
+              0.625
+            ]
+          },
+          "wdlScoreAboveParity": {
+            "mean": 0.10416666666666667,
+            "percentile95": [
+              0,
+              0.25
+            ],
+            "trainingRunMeans": [
+              0,
+              0.125,
+              0.1875
+            ]
+          },
+          "xG": {
+            "mean": 0.0859237176755181,
+            "percentile95": [
+              0.04666638203865551,
+              0.13138932115844482
+            ],
+            "trainingRunMeans": [
+              0.07852702050321536,
+              0.04917956586709156,
+              0.13006456665624735
+            ]
+          }
+        },
+        "hybrid-vs-frozen": {
+          "goalDifference": {
+            "mean": 0.041666666666666664,
+            "percentile95": [
+              -0.08333333333333333,
+              0.16666666666666666
+            ],
+            "trainingRunMeans": [
+              0,
+              0,
+              0.125
+            ]
+          },
+          "wdlScoreAboveParity": {
+            "mean": 0.020833333333333332,
+            "percentile95": [
+              -0.041666666666666664,
+              0.08333333333333333
+            ],
+            "trainingRunMeans": [
+              0,
+              0,
+              0.0625
+            ]
+          },
+          "xG": {
+            "mean": -0.03930172427233793,
+            "percentile95": [
+              -0.16515074716857858,
+              0.08560327728350947
+            ],
+            "trainingRunMeans": [
+              -0.0468497265785798,
+              -0.16515074716857858,
+              0.09409530093014458
+            ]
+          }
+        },
+        "hybrid-vs-imitation": {
+          "goalDifference": {
+            "mean": -0.25,
+            "percentile95": [
+              -0.6666666666666666,
+              0.08333333333333333
+            ],
+            "trainingRunMeans": [
+              0,
+              -0.25,
+              -0.5
+            ]
+          },
+          "wdlScoreAboveParity": {
+            "mean": -0.08333333333333333,
+            "percentile95": [
+              -0.20833333333333334,
+              0.041666666666666664
+            ],
+            "trainingRunMeans": [
+              0,
+              -0.125,
+              -0.125
+            ]
+          },
+          "xG": {
+            "mean": -0.12522544194785604,
+            "percentile95": [
+              -0.2358405213741701,
+              -0.030943208767312796
+            ],
+            "trainingRunMeans": [
+              -0.12537674708179516,
+              -0.21433031303567013,
+              -0.03596926572610276
+            ]
+          }
+        }
+      }
+    },
+    "200ms": {
+      "ledger": "200ms.jsonl",
+      "ledgerSha256": "4c45bd1aa3162d16424142512dda3615658b2bf81ac82efee3eb39259ac6c7f0",
+      "games": 48,
+      "protocol": {
+        "actionLimit": 120,
+        "foulsEnabled": true,
+        "nodeLimit": 50000,
+        "maxDepth": 8,
+        "timeLimitMs": 200,
+        "matchWorkers": 4,
+        "nodeVersion": "v24.22.1"
+      },
+      "schedule": [
+        {
+          "repeat": 1,
+          "trainingSeed": 3491360068,
+          "matchSeeds": [
+            4066643503,
+            4068020807
+          ]
+        },
+        {
+          "repeat": 2,
+          "trainingSeed": 3504112574,
+          "matchSeeds": [
+            4074630765,
+            4076639222
+          ]
+        },
+        {
+          "repeat": 3,
+          "trainingSeed": 3492498577,
+          "matchSeeds": [
+            4069103029,
+            4060904573
+          ]
+        }
+      ],
+      "jobs": [
+        {
+          "key": "plain-1",
+          "arm": "plain",
+          "repeat": 1,
+          "protocolId": "c0081871648aec21f64fbd1ae3d369216e846764a38f2ab7565fedd029022e6a",
+          "matchSeeds": [
+            4066643503,
+            4068020807
+          ],
+          "candidateEngineSha256": "f551baa6e616fa5918f70db76aca64a4b3822300e1d1a07c0d22fca74b77807e",
+          "baselineEngineSha256": "d60e76da31dc700a61b9b8ea77ccf2f2b5daed1f76dc53668fbbb80ac85834b2",
+          "rulesEngineSha256": "eb0ab0924c735871ac2186c6e1f0a1ddb450cdd49533413a795a0650c9a89901",
+          "sourceLedgerSha256": "34a5b3d56c65daee902e59e4ce330988880ecbd4e322bccc68052e87dde3d367"
+        },
+        {
+          "key": "protected-1",
+          "arm": "protected",
+          "repeat": 1,
+          "protocolId": "bcf5cd7a204e7c304ce0c5429707b26d7f4230b101a25bbd80b1baf703ac9b07",
+          "matchSeeds": [
+            4066643503,
+            4068020807
+          ],
+          "candidateEngineSha256": "11495b9d0da7beca8f1bcf53e180c70855321b4fbd5e4af849ffa85f4a662beb",
+          "baselineEngineSha256": "d60e76da31dc700a61b9b8ea77ccf2f2b5daed1f76dc53668fbbb80ac85834b2",
+          "rulesEngineSha256": "eb0ab0924c735871ac2186c6e1f0a1ddb450cdd49533413a795a0650c9a89901",
+          "sourceLedgerSha256": "af64f4c64c2698c0f61e2f491ea97f437b77ea246b3ea15cf98b8085968cc894"
+        },
+        {
+          "key": "plain-2",
+          "arm": "plain",
+          "repeat": 2,
+          "protocolId": "b72fb461277ab95126937288077fa466ebb09c3fc6e7d1d3bb0b650d4269001b",
+          "matchSeeds": [
+            4074630765,
+            4076639222
+          ],
+          "candidateEngineSha256": "394579b601c968c81f24bf2795478e61a83def65421434fd2628069329e08b4f",
+          "baselineEngineSha256": "d60e76da31dc700a61b9b8ea77ccf2f2b5daed1f76dc53668fbbb80ac85834b2",
+          "rulesEngineSha256": "eb0ab0924c735871ac2186c6e1f0a1ddb450cdd49533413a795a0650c9a89901",
+          "sourceLedgerSha256": "f46e093137f97d69e89f47533e31be2f401b8659b4329a749de6967c06e0beff"
+        },
+        {
+          "key": "protected-2",
+          "arm": "protected",
+          "repeat": 2,
+          "protocolId": "f0e40f1649eecddbb374da6d7f653339422eef02676a942c07360ce1318519b1",
+          "matchSeeds": [
+            4074630765,
+            4076639222
+          ],
+          "candidateEngineSha256": "eb3bf3d5c47241c3e721b12084b82d0eb73610d3a23312ea218e4ce1dfad92e8",
+          "baselineEngineSha256": "d60e76da31dc700a61b9b8ea77ccf2f2b5daed1f76dc53668fbbb80ac85834b2",
+          "rulesEngineSha256": "eb0ab0924c735871ac2186c6e1f0a1ddb450cdd49533413a795a0650c9a89901",
+          "sourceLedgerSha256": "f95acebe0185d5a439b37a5989f5f66dc4803b25cb40b5807b9d6f3c709be47e"
+        },
+        {
+          "key": "plain-3",
+          "arm": "plain",
+          "repeat": 3,
+          "protocolId": "f2b46ab25d095ebd9e284a60afa5e838fe9eb1070dfe9d5f7fcc4e589131a5d6",
+          "matchSeeds": [
+            4069103029,
+            4060904573
+          ],
+          "candidateEngineSha256": "54a54843173a3abc616b992f992f4282d03d31f461f7379f69ca119235540403",
+          "baselineEngineSha256": "d60e76da31dc700a61b9b8ea77ccf2f2b5daed1f76dc53668fbbb80ac85834b2",
+          "rulesEngineSha256": "eb0ab0924c735871ac2186c6e1f0a1ddb450cdd49533413a795a0650c9a89901",
+          "sourceLedgerSha256": "f60961f08a75018284f047107bcd15b6afd045264e500aae9afa56906ee4befa"
+        },
+        {
+          "key": "protected-3",
+          "arm": "protected",
+          "repeat": 3,
+          "protocolId": "cd9cc3f240b2868c52f547a5e4531d29955bc510be1a4ac803627bbe9a1427be",
+          "matchSeeds": [
+            4069103029,
+            4060904573
+          ],
+          "candidateEngineSha256": "cc9861d733a90156fb7829b6cf0febb92120b002946ad3a4644f1cdf01ff0208",
+          "baselineEngineSha256": "d60e76da31dc700a61b9b8ea77ccf2f2b5daed1f76dc53668fbbb80ac85834b2",
+          "rulesEngineSha256": "eb0ab0924c735871ac2186c6e1f0a1ddb450cdd49533413a795a0650c9a89901",
+          "sourceLedgerSha256": "41429c4baefc59871c86b09224e48c51035aa6cd8d5c9b93df1bef4a93e1f706"
+        }
+      ],
+      "gamesByArm": {
+        "plain": {
+          "pooled": {
+            "games": 24,
+            "wdl": {
+              "win": 3,
+              "draw": 18,
+              "loss": 3
+            },
+            "candidate": {
+              "goals": 3,
+              "xG": 2.4955524715249124,
+              "shots": 20,
+              "tacklesConceded": 3,
+              "searchDecisions": 1423,
+              "searchThinkMs": 288187.11030000023,
+              "nodes": 765919,
+              "completedDepthTotal": 3253,
+              "maxNodes": 1966
+            },
+            "baseline": {
+              "goals": 3,
+              "xG": 3.6836825380099123,
+              "shots": 24,
+              "tacklesConceded": 5,
+              "searchDecisions": 1414,
+              "searchThinkMs": 285808.0215999995,
+              "nodes": 776212,
+              "completedDepthTotal": 3628,
+              "maxNodes": 2079
+            }
+          },
+          "perRun": [
+            {
+              "games": 8,
+              "wdl": {
+                "win": 0,
+                "draw": 7,
+                "loss": 1
+              },
+              "candidate": {
+                "goals": 0,
+                "xG": 1.0605734314039164,
+                "shots": 8,
+                "tacklesConceded": 1,
+                "searchDecisions": 501,
+                "searchThinkMs": 101376.42250000019,
+                "nodes": 256927,
+                "completedDepthTotal": 1113,
+                "maxNodes": 1662
+              },
+              "baseline": {
+                "goals": 1,
+                "xG": 1.0555746243132949,
+                "shots": 7,
+                "tacklesConceded": 2,
+                "searchDecisions": 445,
+                "searchThinkMs": 89945.25329999981,
+                "nodes": 254720,
+                "completedDepthTotal": 1200,
+                "maxNodes": 1999
+              }
+            },
+            {
+              "games": 8,
+              "wdl": {
+                "win": 0,
+                "draw": 6,
+                "loss": 2
+              },
+              "candidate": {
+                "goals": 0,
+                "xG": 0.48352756183253487,
+                "shots": 4,
+                "tacklesConceded": 2,
+                "searchDecisions": 461,
+                "searchThinkMs": 93773.29199999988,
+                "nodes": 222141,
+                "completedDepthTotal": 1005,
+                "maxNodes": 1700
+              },
+              "baseline": {
+                "goals": 2,
+                "xG": 1.0405874360612914,
+                "shots": 9,
+                "tacklesConceded": 1,
+                "searchDecisions": 486,
+                "searchThinkMs": 98258.07409999994,
+                "nodes": 233865,
+                "completedDepthTotal": 1180,
+                "maxNodes": 1791
+              }
+            },
+            {
+              "games": 8,
+              "wdl": {
+                "win": 3,
+                "draw": 5,
+                "loss": 0
+              },
+              "candidate": {
+                "goals": 3,
+                "xG": 0.9514514782884618,
+                "shots": 8,
+                "tacklesConceded": 0,
+                "searchDecisions": 461,
+                "searchThinkMs": 93037.39580000013,
+                "nodes": 286851,
+                "completedDepthTotal": 1135,
+                "maxNodes": 1966
+              },
+              "baseline": {
+                "goals": 0,
+                "xG": 1.5875204776353267,
+                "shots": 8,
+                "tacklesConceded": 2,
+                "searchDecisions": 483,
+                "searchThinkMs": 97604.69419999977,
+                "nodes": 287627,
+                "completedDepthTotal": 1248,
+                "maxNodes": 2079
+              }
+            }
+          ]
+        },
+        "protected": {
+          "pooled": {
+            "games": 24,
+            "wdl": {
+              "win": 1,
+              "draw": 19,
+              "loss": 4
+            },
+            "candidate": {
+              "goals": 1,
+              "xG": 2.103333105621401,
+              "shots": 16,
+              "tacklesConceded": 6,
+              "searchDecisions": 1487,
+              "searchThinkMs": 301052.2426999998,
+              "nodes": 759548,
+              "completedDepthTotal": 3492,
+              "maxNodes": 1693
+            },
+            "baseline": {
+              "goals": 4,
+              "xG": 2.0878076058942763,
+              "shots": 18,
+              "tacklesConceded": 3,
+              "searchDecisions": 1360,
+              "searchThinkMs": 274083.4081999995,
+              "nodes": 845618,
+              "completedDepthTotal": 3901,
+              "maxNodes": 2276
+            }
+          },
+          "perRun": [
+            {
+              "games": 8,
+              "wdl": {
+                "win": 0,
+                "draw": 8,
+                "loss": 0
+              },
+              "candidate": {
+                "goals": 0,
+                "xG": 0.8103070232144924,
+                "shots": 6,
+                "tacklesConceded": 2,
+                "searchDecisions": 502,
+                "searchThinkMs": 101785.88840000019,
+                "nodes": 268844,
+                "completedDepthTotal": 1177,
+                "maxNodes": 1588
+              },
+              "baseline": {
+                "goals": 0,
+                "xG": 0.5485772009912286,
+                "shots": 5,
+                "tacklesConceded": 1,
+                "searchDecisions": 447,
+                "searchThinkMs": 90141.39449999951,
+                "nodes": 257665,
+                "completedDepthTotal": 1235,
+                "maxNodes": 1704
+              }
+            },
+            {
+              "games": 8,
+              "wdl": {
+                "win": 0,
+                "draw": 8,
+                "loss": 0
+              },
+              "candidate": {
+                "goals": 0,
+                "xG": 0.5927811795861356,
+                "shots": 4,
+                "tacklesConceded": 2,
+                "searchDecisions": 512,
+                "searchThinkMs": 103837.53329999959,
+                "nodes": 226031,
+                "completedDepthTotal": 1144,
+                "maxNodes": 1600
+              },
+              "baseline": {
+                "goals": 0,
+                "xG": 0.5428393077928969,
+                "shots": 4,
+                "tacklesConceded": 1,
+                "searchDecisions": 440,
+                "searchThinkMs": 88798.17410000003,
+                "nodes": 221648,
+                "completedDepthTotal": 1149,
+                "maxNodes": 1528
+              }
+            },
+            {
+              "games": 8,
+              "wdl": {
+                "win": 1,
+                "draw": 3,
+                "loss": 4
+              },
+              "candidate": {
+                "goals": 1,
+                "xG": 0.7002449028207733,
+                "shots": 6,
+                "tacklesConceded": 2,
+                "searchDecisions": 473,
+                "searchThinkMs": 95428.82100000013,
+                "nodes": 264673,
+                "completedDepthTotal": 1171,
+                "maxNodes": 1693
+              },
+              "baseline": {
+                "goals": 4,
+                "xG": 0.996391097110151,
+                "shots": 9,
+                "tacklesConceded": 1,
+                "searchDecisions": 473,
+                "searchThinkMs": 95143.83959999992,
+                "nodes": 366305,
+                "completedDepthTotal": 1517,
+                "maxNodes": 2276
+              }
+            }
+          ]
+        }
+      },
+      "comparisons": {
+        "plain-vs-frozen": {
+          "goalDifference": {
+            "mean": 0,
+            "percentile95": [
+              -0.3333333333333333,
+              0.3333333333333333
+            ],
+            "trainingRunMeans": [
+              -0.125,
+              -0.25,
+              0.375
+            ]
+          },
+          "wdlScoreAboveParity": {
+            "mean": 0,
+            "percentile95": [
+              -0.16666666666666666,
+              0.16666666666666666
+            ],
+            "trainingRunMeans": [
+              -0.0625,
+              -0.125,
+              0.1875
+            ]
+          },
+          "xG": {
+            "mean": -0.049505419436874996,
+            "percentile95": [
+              -0.10359013734041023,
+              0.019109826852635264
+            ],
+            "trainingRunMeans": [
+              0.000624850886327688,
+              -0.06963248427859456,
+              -0.07950862491835811
+            ]
+          }
+        },
+        "protected-vs-frozen": {
+          "goalDifference": {
+            "mean": -0.125,
+            "percentile95": [
+              -0.3333333333333333,
+              0
+            ],
+            "trainingRunMeans": [
+              0,
+              0,
+              -0.375
+            ]
+          },
+          "wdlScoreAboveParity": {
+            "mean": -0.0625,
+            "percentile95": [
+              -0.16666666666666666,
+              0
+            ],
+            "trainingRunMeans": [
+              0,
+              0,
+              -0.1875
+            ]
+          },
+          "xG": {
+            "mean": 0.0006468958219635473,
+            "percentile95": [
+              -0.03583529796734494,
+              0.0463482083432977
+            ],
+            "trainingRunMeans": [
+              0.03271622777790799,
+              0.0062427339741548404,
+              -0.03701827428617219
+            ]
+          }
+        },
+        "protected-vs-plain": {
+          "goalDifference": {
+            "mean": -0.125,
+            "percentile95": [
+              -0.6666666666666666,
+              0.3333333333333333
+            ],
+            "trainingRunMeans": [
+              0.125,
+              0.25,
+              -0.75
+            ]
+          },
+          "wdlScoreAboveParity": {
+            "mean": -0.0625,
+            "percentile95": [
+              -0.3333333333333333,
+              0.16666666666666666
+            ],
+            "trainingRunMeans": [
+              0.0625,
+              0.125,
+              -0.375
+            ]
+          },
+          "xG": {
+            "mean": 0.05015231525883853,
+            "percentile95": [
+              0.00047106334363953883,
+              0.09610682906047678
+            ],
+            "trainingRunMeans": [
+              0.032091376891580294,
+              0.0758752182527494,
+              0.04249035063218591
+            ]
+          }
+        }
+      },
+      "timing": {
+        "allowanceMs": 200,
+        "plain": {
+          "candidate": {
+            "count": 1423,
+            "meanMs": 202.5208083626144,
+            "p50Ms": 200.8472000000038,
+            "p95Ms": 207.5117400000003,
+            "timeLimitHits": 1423,
+            "zeroDepthSearchDecisions": 156,
+            "aboveAllowanceBy10Ms": 27,
+            "aboveAllowanceBy25Ms": 9
+          },
+          "baseline": {
+            "count": 1414,
+            "meanMs": 202.12731371994312,
+            "p50Ms": 200.85299999999916,
+            "p95Ms": 207.0700000000041,
+            "timeLimitHits": 1414,
+            "zeroDepthSearchDecisions": 104,
+            "aboveAllowanceBy10Ms": 28,
+            "aboveAllowanceBy25Ms": 12
+          },
+          "candidateToBaselineMeanRatio": 1.001946766300058
+        },
+        "protected": {
+          "candidate": {
+            "count": 1487,
+            "meanMs": 202.456114794889,
+            "p50Ms": 200.91599999999744,
+            "p95Ms": 207.57896999999647,
+            "timeLimitHits": 1486,
+            "zeroDepthSearchDecisions": 134,
+            "aboveAllowanceBy10Ms": 45,
+            "aboveAllowanceBy25Ms": 9
+          },
+          "baseline": {
+            "count": 1360,
+            "meanMs": 201.53191779411728,
+            "p50Ms": 200.70164999999542,
+            "p95Ms": 205.93179499999678,
+            "timeLimitHits": 1359,
+            "zeroDepthSearchDecisions": 49,
+            "aboveAllowanceBy10Ms": 14,
+            "aboveAllowanceBy25Ms": 1
+          },
+          "candidateToBaselineMeanRatio": 1.004585859207254
+        }
+      },
+      "calibration": {
+        "reference1400": {
+          "decisions": 36,
+          "meanMs": 701.2925611111111,
+          "p50Ms": 618.9052000000011,
+          "p95Ms": 1399.6491999999998,
+          "maxMs": 1485.239599999999,
+          "timedOut": 0,
+          "over25Ms": 36,
+          "zeroDepth": 0
+        },
+        "frozen": {
+          "decisions": 36,
+          "meanMs": 203.41782222222224,
+          "p50Ms": 201.3101999999999,
+          "p95Ms": 219.18239999999787,
+          "maxMs": 220.3148000000001,
+          "timedOut": 36,
+          "over25Ms": 0,
+          "zeroDepth": 5
+        },
+        "plain": {
+          "decisions": 36,
+          "meanMs": 201.98247500000016,
+          "p50Ms": 201.00970000000052,
+          "p95Ms": 209.02109999999993,
+          "maxMs": 209.45430000000124,
+          "timedOut": 36,
+          "over25Ms": 0,
+          "zeroDepth": 5
+        },
+        "protected": {
+          "decisions": 36,
+          "meanMs": 202.0201472222224,
+          "p50Ms": 201.3086000000003,
+          "p95Ms": 208.09020000000055,
+          "maxMs": 208.27870000000075,
+          "timedOut": 36,
+          "over25Ms": 0,
+          "zeroDepth": 5
+        }
+      }
+    },
+    "original-time": {
+      "ledger": "original-time.jsonl",
+      "ledgerSha256": "040b7082136e4e8d1ee325980fc32244f917628e6bbcbe04a5b478811a931a9c",
+      "games": 48,
+      "protocol": {
+        "actionLimit": 120,
+        "foulsEnabled": true,
+        "nodeLimit": 50000,
+        "maxDepth": 8,
+        "timeLimitMs": 777.4551239284034,
+        "matchWorkers": 4,
+        "nodeVersion": "v24.22.1"
+      },
+      "schedule": [
+        {
+          "repeat": 1,
+          "trainingSeed": 3491360068,
+          "matchSeeds": [
+            4089989056,
+            4087917435
+          ]
+        },
+        {
+          "repeat": 2,
+          "trainingSeed": 3504112574,
+          "matchSeeds": [
+            4083298085,
+            4079576607
+          ]
+        },
+        {
+          "repeat": 3,
+          "trainingSeed": 3492498577,
+          "matchSeeds": [
+            4084380889,
+            4080543689
+          ]
+        }
+      ],
+      "jobs": [
+        {
+          "key": "plain-1",
+          "arm": "plain",
+          "repeat": 1,
+          "protocolId": "9a57f3e0ab7580e62278d0c22d1d4591731d914055ae8d852e7799370eb57616",
+          "matchSeeds": [
+            4089989056,
+            4087917435
+          ],
+          "candidateEngineSha256": "f551baa6e616fa5918f70db76aca64a4b3822300e1d1a07c0d22fca74b77807e",
+          "baselineEngineSha256": "d60e76da31dc700a61b9b8ea77ccf2f2b5daed1f76dc53668fbbb80ac85834b2",
+          "rulesEngineSha256": "eb0ab0924c735871ac2186c6e1f0a1ddb450cdd49533413a795a0650c9a89901",
+          "sourceLedgerSha256": "5f4120c3f24469febbcf3119c02a7c9c6e75db1687334ec416757f41a3a6fc50"
+        },
+        {
+          "key": "protected-1",
+          "arm": "protected",
+          "repeat": 1,
+          "protocolId": "9d9ca7ac362b51b8691c0466187c53d5c0f4b0a893dd546666f12ebc2c102371",
+          "matchSeeds": [
+            4089989056,
+            4087917435
+          ],
+          "candidateEngineSha256": "11495b9d0da7beca8f1bcf53e180c70855321b4fbd5e4af849ffa85f4a662beb",
+          "baselineEngineSha256": "d60e76da31dc700a61b9b8ea77ccf2f2b5daed1f76dc53668fbbb80ac85834b2",
+          "rulesEngineSha256": "eb0ab0924c735871ac2186c6e1f0a1ddb450cdd49533413a795a0650c9a89901",
+          "sourceLedgerSha256": "b4a3bbc095957795418705b71aeebc5e03d9e7bd20c50ec89c542700d9e71c1b"
+        },
+        {
+          "key": "plain-2",
+          "arm": "plain",
+          "repeat": 2,
+          "protocolId": "43224825137c02bd295edcfae1f8fd31129dbaf2fd640a2f6c2bf781b1cba27c",
+          "matchSeeds": [
+            4083298085,
+            4079576607
+          ],
+          "candidateEngineSha256": "394579b601c968c81f24bf2795478e61a83def65421434fd2628069329e08b4f",
+          "baselineEngineSha256": "d60e76da31dc700a61b9b8ea77ccf2f2b5daed1f76dc53668fbbb80ac85834b2",
+          "rulesEngineSha256": "eb0ab0924c735871ac2186c6e1f0a1ddb450cdd49533413a795a0650c9a89901",
+          "sourceLedgerSha256": "b44682cc0adeb0a97ba4b39235513a1f801a23864a6ed13fbb69332c8ea35494"
+        },
+        {
+          "key": "protected-2",
+          "arm": "protected",
+          "repeat": 2,
+          "protocolId": "742cb17493074c26c55ee2def5d5d23399331a88db47bb3f1fbd3fbe53e3f82f",
+          "matchSeeds": [
+            4083298085,
+            4079576607
+          ],
+          "candidateEngineSha256": "eb3bf3d5c47241c3e721b12084b82d0eb73610d3a23312ea218e4ce1dfad92e8",
+          "baselineEngineSha256": "d60e76da31dc700a61b9b8ea77ccf2f2b5daed1f76dc53668fbbb80ac85834b2",
+          "rulesEngineSha256": "eb0ab0924c735871ac2186c6e1f0a1ddb450cdd49533413a795a0650c9a89901",
+          "sourceLedgerSha256": "7235953970c9a774a869f4aae3576453ef750dc2583054216b855a0aede5dc83"
+        },
+        {
+          "key": "plain-3",
+          "arm": "plain",
+          "repeat": 3,
+          "protocolId": "09baaba67fc59dcf02978441e25f0f227f381872175e945a20d4d92222b5d77c",
+          "matchSeeds": [
+            4084380889,
+            4080543689
+          ],
+          "candidateEngineSha256": "54a54843173a3abc616b992f992f4282d03d31f461f7379f69ca119235540403",
+          "baselineEngineSha256": "d60e76da31dc700a61b9b8ea77ccf2f2b5daed1f76dc53668fbbb80ac85834b2",
+          "rulesEngineSha256": "eb0ab0924c735871ac2186c6e1f0a1ddb450cdd49533413a795a0650c9a89901",
+          "sourceLedgerSha256": "94a1b0b53bb1a1b9757d8e5489798e88e23fa7261ac968e6248131ae83393e2a"
+        },
+        {
+          "key": "protected-3",
+          "arm": "protected",
+          "repeat": 3,
+          "protocolId": "5c0cd1772226735d1cd51186c6cde03d4d2f0d8bb6e6dec29a9d73fa45cd7603",
+          "matchSeeds": [
+            4084380889,
+            4080543689
+          ],
+          "candidateEngineSha256": "cc9861d733a90156fb7829b6cf0febb92120b002946ad3a4644f1cdf01ff0208",
+          "baselineEngineSha256": "d60e76da31dc700a61b9b8ea77ccf2f2b5daed1f76dc53668fbbb80ac85834b2",
+          "rulesEngineSha256": "eb0ab0924c735871ac2186c6e1f0a1ddb450cdd49533413a795a0650c9a89901",
+          "sourceLedgerSha256": "bb2ff48fe25715ea0278a5a4c94a547c311b4e6b81e14948de11a9292fe3f9fc"
+        }
+      ],
+      "gamesByArm": {
+        "plain": {
+          "pooled": {
+            "games": 24,
+            "wdl": {
+              "win": 1,
+              "draw": 22,
+              "loss": 1
+            },
+            "candidate": {
+              "goals": 2,
+              "xG": 3.1014452640328756,
+              "shots": 24,
+              "tacklesConceded": 2,
+              "searchDecisions": 1485,
+              "searchThinkMs": 1153745.4619999994,
+              "nodes": 2431251,
+              "completedDepthTotal": 6015,
+              "maxNodes": 4853
+            },
+            "baseline": {
+              "goals": 2,
+              "xG": 2.6283491079688543,
+              "shots": 19,
+              "tacklesConceded": 2,
+              "searchDecisions": 1352,
+              "searchThinkMs": 1046001.5948000003,
+              "nodes": 2449956,
+              "completedDepthTotal": 6092,
+              "maxNodes": 5721
+            }
+          },
+          "perRun": [
+            {
+              "games": 8,
+              "wdl": {
+                "win": 0,
+                "draw": 8,
+                "loss": 0
+              },
+              "candidate": {
+                "goals": 1,
+                "xG": 0.9739021604293152,
+                "shots": 7,
+                "tacklesConceded": 1,
+                "searchDecisions": 474,
+                "searchThinkMs": 368868.2050999999,
+                "nodes": 705502,
+                "completedDepthTotal": 1890,
+                "maxNodes": 4048
+              },
+              "baseline": {
+                "goals": 1,
+                "xG": 1.2135799899178004,
+                "shots": 8,
+                "tacklesConceded": 0,
+                "searchDecisions": 471,
+                "searchThinkMs": 364657.6744999996,
+                "nodes": 744421,
+                "completedDepthTotal": 2065,
+                "maxNodes": 5721
+              }
+            },
+            {
+              "games": 8,
+              "wdl": {
+                "win": 0,
+                "draw": 7,
+                "loss": 1
+              },
+              "candidate": {
+                "goals": 0,
+                "xG": 0.9069701427815067,
+                "shots": 8,
+                "tacklesConceded": 0,
+                "searchDecisions": 502,
+                "searchThinkMs": 390710.31200000027,
+                "nodes": 698493,
+                "completedDepthTotal": 1910,
+                "maxNodes": 4637
+              },
+              "baseline": {
+                "goals": 1,
+                "xG": 0.5784453246676563,
+                "shots": 4,
+                "tacklesConceded": 0,
+                "searchDecisions": 446,
+                "searchThinkMs": 345955.18560000014,
+                "nodes": 696377,
+                "completedDepthTotal": 1918,
+                "maxNodes": 4609
+              }
+            },
+            {
+              "games": 8,
+              "wdl": {
+                "win": 1,
+                "draw": 7,
+                "loss": 0
+              },
+              "candidate": {
+                "goals": 1,
+                "xG": 1.2205729608220537,
+                "shots": 9,
+                "tacklesConceded": 1,
+                "searchDecisions": 509,
+                "searchThinkMs": 394166.944899999,
+                "nodes": 1027256,
+                "completedDepthTotal": 2215,
+                "maxNodes": 4853
+              },
+              "baseline": {
+                "goals": 0,
+                "xG": 0.836323793383398,
+                "shots": 7,
+                "tacklesConceded": 2,
+                "searchDecisions": 435,
+                "searchThinkMs": 335388.7347000005,
+                "nodes": 1009158,
+                "completedDepthTotal": 2109,
+                "maxNodes": 5358
+              }
+            }
+          ]
+        },
+        "protected": {
+          "pooled": {
+            "games": 24,
+            "wdl": {
+              "win": 3,
+              "draw": 18,
+              "loss": 3
+            },
+            "candidate": {
+              "goals": 5,
+              "xG": 3.4737049280830794,
+              "shots": 19,
+              "tacklesConceded": 5,
+              "searchDecisions": 1462,
+              "searchThinkMs": 1128658.0866000003,
+              "nodes": 2456820,
+              "completedDepthTotal": 6101,
+              "maxNodes": 5602
+            },
+            "baseline": {
+              "goals": 5,
+              "xG": 2.5039679244260165,
+              "shots": 25,
+              "tacklesConceded": 5,
+              "searchDecisions": 1374,
+              "searchThinkMs": 1055130.2678000003,
+              "nodes": 2532130,
+              "completedDepthTotal": 6295,
+              "maxNodes": 6527
+            }
+          },
+          "perRun": [
+            {
+              "games": 8,
+              "wdl": {
+                "win": 1,
+                "draw": 7,
+                "loss": 0
+              },
+              "candidate": {
+                "goals": 1,
+                "xG": 0.6444896777786646,
+                "shots": 6,
+                "tacklesConceded": 3,
+                "searchDecisions": 493,
+                "searchThinkMs": 382907.04609999957,
+                "nodes": 743768,
+                "completedDepthTotal": 1941,
+                "maxNodes": 3847
+              },
+              "baseline": {
+                "goals": 0,
+                "xG": 0.8210039389691022,
+                "shots": 9,
+                "tacklesConceded": 2,
+                "searchDecisions": 452,
+                "searchThinkMs": 351640.97310000076,
+                "nodes": 741096,
+                "completedDepthTotal": 1933,
+                "maxNodes": 5176
+              }
+            },
+            {
+              "games": 8,
+              "wdl": {
+                "win": 0,
+                "draw": 5,
+                "loss": 3
+              },
+              "candidate": {
+                "goals": 2,
+                "xG": 0.7941145161273468,
+                "shots": 5,
+                "tacklesConceded": 1,
+                "searchDecisions": 476,
+                "searchThinkMs": 363779.82500000007,
+                "nodes": 775321,
+                "completedDepthTotal": 1993,
+                "maxNodes": 5037
+              },
+              "baseline": {
+                "goals": 5,
+                "xG": 0.9901870615634539,
+                "shots": 10,
+                "tacklesConceded": 2,
+                "searchDecisions": 469,
+                "searchThinkMs": 357271.8051,
+                "nodes": 779630,
+                "completedDepthTotal": 2140,
+                "maxNodes": 4699
+              }
+            },
+            {
+              "games": 8,
+              "wdl": {
+                "win": 2,
+                "draw": 6,
+                "loss": 0
+              },
+              "candidate": {
+                "goals": 2,
+                "xG": 2.035100734177068,
+                "shots": 8,
+                "tacklesConceded": 1,
+                "searchDecisions": 493,
+                "searchThinkMs": 381971.2155000006,
+                "nodes": 937731,
+                "completedDepthTotal": 2167,
+                "maxNodes": 5602
+              },
+              "baseline": {
+                "goals": 0,
+                "xG": 0.6927769238934604,
+                "shots": 6,
+                "tacklesConceded": 1,
+                "searchDecisions": 453,
+                "searchThinkMs": 346217.4895999995,
+                "nodes": 1011404,
+                "completedDepthTotal": 2222,
+                "maxNodes": 6527
+              }
+            }
+          ]
+        }
+      },
+      "comparisons": {
+        "plain-vs-frozen": {
+          "goalDifference": {
+            "mean": 0,
+            "percentile95": [
+              -0.125,
+              0.125
+            ],
+            "trainingRunMeans": [
+              0,
+              -0.125,
+              0.125
+            ]
+          },
+          "wdlScoreAboveParity": {
+            "mean": 0,
+            "percentile95": [
+              -0.0625,
+              0.0625
+            ],
+            "trainingRunMeans": [
+              0,
+              -0.0625,
+              0.0625
+            ]
+          },
+          "xG": {
+            "mean": 0.01971233983600088,
+            "percentile95": [
+              -0.029959728686060616,
+              0.058355194938700804
+            ],
+            "trainingRunMeans": [
+              -0.029959728686060616,
+              0.04106560226423131,
+              0.048031145929831945
+            ]
+          }
+        },
+        "protected-vs-frozen": {
+          "goalDifference": {
+            "mean": 0,
+            "percentile95": [
+              -0.3333333333333333,
+              0.25
+            ],
+            "trainingRunMeans": [
+              0.125,
+              -0.375,
+              0.25
+            ]
+          },
+          "wdlScoreAboveParity": {
+            "mean": 0,
+            "percentile95": [
+              -0.16666666666666666,
+              0.125
+            ],
+            "trainingRunMeans": [
+              0.0625,
+              -0.1875,
+              0.125
+            ]
+          },
+          "xG": {
+            "mean": 0.040405708485710956,
+            "percentile95": [
+              -0.03657276122658307,
+              0.18095393063485377
+            ],
+            "trainingRunMeans": [
+              -0.022064282648804716,
+              -0.02450906817951338,
+              0.16779047628545096
+            ]
+          }
+        },
+        "protected-vs-plain": {
+          "goalDifference": {
+            "mean": 0,
+            "percentile95": [
+              -0.25,
+              0.20833333333333334
+            ],
+            "trainingRunMeans": [
+              0.125,
+              -0.25,
+              0.125
+            ]
+          },
+          "wdlScoreAboveParity": {
+            "mean": 0,
+            "percentile95": [
+              -0.125,
+              0.10416666666666667
+            ],
+            "trainingRunMeans": [
+              0.0625,
+              -0.125,
+              0.0625
+            ]
+          },
+          "xG": {
+            "mean": 0.020693368649710078,
+            "percentile95": [
+              -0.06557467044374468,
+              0.14507944383141813
+            ],
+            "trainingRunMeans": [
+              0.007895446037255907,
+              -0.06557467044374468,
+              0.119759330355619
+            ]
+          }
+        }
+      },
+      "timing": {
+        "allowanceMs": 777.4551239284034,
+        "plain": {
+          "candidate": {
+            "count": 1485,
+            "meanMs": 776.9329710437706,
+            "p50Ms": 778.78820000001,
+            "p95Ms": 789.5269800000475,
+            "timeLimitHits": 1463,
+            "zeroDepthSearchDecisions": 5,
+            "aboveAllowanceBy10Ms": 119,
+            "aboveAllowanceBy25Ms": 18
+          },
+          "baseline": {
+            "count": 1352,
+            "meanMs": 773.6698186390533,
+            "p50Ms": 778.6181500000093,
+            "p95Ms": 789.0578349999938,
+            "timeLimitHits": 1308,
+            "zeroDepthSearchDecisions": 2,
+            "aboveAllowanceBy10Ms": 89,
+            "aboveAllowanceBy25Ms": 23
+          },
+          "candidateToBaselineMeanRatio": 1.0042177584366125
+        },
+        "protected": {
+          "candidate": {
+            "count": 1462,
+            "meanMs": 771.9959552667581,
+            "p50Ms": 778.6555499999886,
+            "p95Ms": 788.684209999966,
+            "timeLimitHits": 1417,
+            "zeroDepthSearchDecisions": 0,
+            "aboveAllowanceBy10Ms": 106,
+            "aboveAllowanceBy25Ms": 10
+          },
+          "baseline": {
+            "count": 1374,
+            "meanMs": 767.9259590975255,
+            "p50Ms": 778.5529999999999,
+            "p95Ms": 786.9418099999988,
+            "timeLimitHits": 1315,
+            "zeroDepthSearchDecisions": 0,
+            "aboveAllowanceBy10Ms": 63,
+            "aboveAllowanceBy25Ms": 11
+          },
+          "candidateToBaselineMeanRatio": 1.0052999851366082
+        }
+      },
+      "calibration": {
+        "reference1400": {
+          "decisions": 36,
+          "meanMs": 653.6368138888893,
+          "p50Ms": 615.1820999999982,
+          "p95Ms": 1224.4269000000022,
+          "maxMs": 1373.8924000000006,
+          "timedOut": 0,
+          "over25Ms": 7,
+          "zeroDepth": 0
+        },
+        "frozen": {
+          "decisions": 36,
+          "meanMs": 774.9958916666667,
+          "p50Ms": 778.7373000000007,
+          "p95Ms": 785.0718000000015,
+          "maxMs": 792.0498000000007,
+          "timedOut": 35,
+          "over25Ms": 0,
+          "zeroDepth": 0
+        },
+        "plain": {
+          "decisions": 36,
+          "meanMs": 780.9934222222223,
+          "p50Ms": 778.5247999999992,
+          "p95Ms": 802.4939000000013,
+          "maxMs": 809.5383000000002,
+          "timedOut": 36,
+          "over25Ms": 2,
+          "zeroDepth": 0
+        },
+        "protected": {
+          "decisions": 36,
+          "meanMs": 780.0420499999994,
+          "p50Ms": 778.2321999999986,
+          "p95Ms": 795.8407000000007,
+          "maxMs": 817.2459999999992,
+          "timedOut": 35,
+          "over25Ms": 1,
+          "zeroDepth": 0
+        }
+      }
+    }
+  },
+  "training": {
+    "settings": {
+      "labels": 384,
+      "diagnosticLabels": 64,
+      "teacherNodes": 350,
+      "teacherDepth": 8,
+      "episodes": 128,
+      "actions": 160,
+      "imitationEpochs": 10,
+      "imitationBatch": 16,
+      "rlBatch": 8,
+      "imitationRate": 0.03,
+      "rlRate": 0.04,
+      "gamma": 0.995,
+      "weightLimit": 8,
+      "warmup": [
+        0,
+        24,
+        48,
+        72
+      ],
+      "dataGameActions": 128,
+      "dataSelection": 0.3,
+      "dataExploration": 0.12
+    },
+    "repetitions": [
+      {
+        "repeat": 1,
+        "seed": 3491360068,
+        "sourceCheckpointSha256": "4f7b41da05725c69fbf240391db956681f4a9d075d349042900d189070a9aea2",
+        "scratch": {
+          "actions": 20480,
+          "learnedDecisions": 20474,
+          "settledShots": 4,
+          "goalEvents": 0,
+          "whiteWins": 0,
+          "draws": 128,
+          "blackWins": 0,
+          "forfeits": 0,
+          "updates": 0,
+          "elapsedMs": 27212.802299999996,
+          "finalNonzeroWeights": 0
+        },
+        "imitation": {
+          "elapsedMs": 133.1547999999966,
+          "updates": 240,
+          "teacherDecisions": 384
+        },
+        "hybrid": {
+          "actions": 20481,
+          "learnedDecisions": 20280,
+          "settledShots": 166,
+          "goalEvents": 37,
+          "whiteWins": 13,
+          "draws": 95,
+          "blackWins": 20,
+          "forfeits": 0,
+          "updates": 14,
+          "elapsedMs": 101531.0034
+        }
+      },
+      {
+        "repeat": 2,
+        "seed": 3504112574,
+        "sourceCheckpointSha256": "92eb7cd5421c5967343d78aed45b993829d3ddec78521a19ec94d52a777c9ff3",
+        "scratch": {
+          "actions": 20480,
+          "learnedDecisions": 20477,
+          "settledShots": 2,
+          "goalEvents": 0,
+          "whiteWins": 0,
+          "draws": 128,
+          "blackWins": 0,
+          "forfeits": 0,
+          "updates": 0,
+          "elapsedMs": 31596.58260000001,
+          "finalNonzeroWeights": 0
+        },
+        "imitation": {
+          "elapsedMs": 150.01150000000052,
+          "updates": 240,
+          "teacherDecisions": 384
+        },
+        "hybrid": {
+          "actions": 20481,
+          "learnedDecisions": 20276,
+          "settledShots": 172,
+          "goalEvents": 45,
+          "whiteWins": 20,
+          "draws": 85,
+          "blackWins": 23,
+          "forfeits": 0,
+          "updates": 16,
+          "elapsedMs": 130789.9417
+        }
+      },
+      {
+        "repeat": 3,
+        "seed": 3492498577,
+        "sourceCheckpointSha256": "4af2f915c8a84335466d4d90d52ce9813e0fedf0985d6289d4b82ef32ef47aa3",
+        "scratch": {
+          "actions": 20480,
+          "learnedDecisions": 20477,
+          "settledShots": 2,
+          "goalEvents": 0,
+          "whiteWins": 0,
+          "draws": 128,
+          "blackWins": 0,
+          "forfeits": 0,
+          "updates": 0,
+          "elapsedMs": 30610.6765,
+          "finalNonzeroWeights": 0
+        },
+        "imitation": {
+          "elapsedMs": 156.1820000000007,
+          "updates": 240,
+          "teacherDecisions": 384
+        },
+        "hybrid": {
+          "actions": 20483,
+          "learnedDecisions": 20286,
+          "settledShots": 171,
+          "goalEvents": 36,
+          "whiteWins": 16,
+          "draws": 95,
+          "blackWins": 17,
+          "forfeits": 0,
+          "updates": 15,
+          "elapsedMs": 136353.6251
+        }
+      }
+    ]
+  },
+  "originalTimeReference": {
+    "schemaVersion": 1,
+    "previousEngineHash": "eb0ab0924c735871ac2186c6e1f0a1ddb450cdd49533413a795a0650c9a89901",
+    "previousNodeLimit": 1400,
+    "previousMaxDepth": 8,
+    "games": 72,
+    "searchDecisions": 4246,
+    "searchThinkMs": 3301074.456200001,
+    "timeLimitMs": 777.4551239284034,
+    "originalFrozenMeanNodes": 1390.8593970796044,
+    "originalFrozenMeanDepth": 4.266839378238342,
+    "byArm": {
+      "scratch": {
+        "games": 24,
+        "searchDecisions": 1508,
+        "searchThinkMs": 1228909.5922000003,
+        "nodes": 2082367,
+        "completedDepthTotal": 6621,
+        "meanSearchMs": 814.9267852785148
+      },
+      "imitation": {
+        "games": 24,
+        "searchDecisions": 1365,
+        "searchThinkMs": 965381.3797000012,
+        "nodes": 1903538,
+        "completedDepthTotal": 5713,
+        "meanSearchMs": 707.2391060073269
+      },
+      "hybrid": {
+        "games": 24,
+        "searchDecisions": 1373,
+        "searchThinkMs": 1106783.4842999992,
+        "nodes": 1919684,
+        "completedDepthTotal": 5783,
+        "meanSearchMs": 806.1059608885646
+      }
+    }
+  }
+}

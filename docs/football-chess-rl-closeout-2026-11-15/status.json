@@ -1,0 +1,10 @@
+{
+  "project": "Football Chess reinforcement learning research",
+  "status": "closed",
+  "closedOn": "2026-11-15",
+  "scope": "Football Chess RL training and benchmark research program",
+  "reviewedEngineCommit": "45fc3f4a43f2775c1eaf6e27737ef4aba76a7403",
+  "decision": "Conclude after the pilots. The chance study missed its improvement threshold, self-play RL showed no added match value, and imitation did not beat frozen Tactical in the equal-time repeats.",
+  "report": "README.md",
+  "evidence": "evidence/README.md"
+}
