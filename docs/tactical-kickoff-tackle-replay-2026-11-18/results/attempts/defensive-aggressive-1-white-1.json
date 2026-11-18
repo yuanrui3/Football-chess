@@ -1,0 +1,2621 @@
+{
+  "id": "defensive-aggressive-1-white",
+  "attempt": 1,
+  "seed": 3068247425,
+  "kickoff": "white",
+  "formations": {
+    "white": "defensive",
+    "black": "aggressive"
+  },
+  "candidateFirst": false,
+  "baseline": {
+    "seed": 3068247425,
+    "kickoff": "white",
+    "formations": {
+      "white": "defensive",
+      "black": "aggressive"
+    },
+    "initialStateHash": "7d88ccba1f3926748d74a6607180be0d39e0e0a1db5d2f485b29be1940c7422e",
+    "finalStateHash": "1c043984e4813894a41bb1074a762e795efa13b4ccd5a28dc8f3e6ab93c35cbb",
+    "trajectoryHash": "7af976c8976753921aef25ee046ae9dcc22269a4926e2fc88e7096893914b507",
+    "opening": {
+      "actions": 64,
+      "actionLimit": 64,
+      "extraKeeperActions": 0,
+      "termination": "limit",
+      "censored": true,
+      "turnover": false,
+      "turnoverEvent": null,
+      "shots": 0,
+      "hadShot": false,
+      "xG": 0,
+      "firstShot": null,
+      "ownGoalShots": 0,
+      "ownGoalXG": 0,
+      "netXG": 0,
+      "goals": 0
+    },
+    "followup": {
+      "triggered": false,
+      "actions": 0,
+      "actionLimit": 24,
+      "extraKeeperActions": 0,
+      "termination": "not-started",
+      "shotsAgainst": 0,
+      "xGAgainst": 0,
+      "goalsAgainst": 0,
+      "ownGoalShotsAgainst": 0,
+      "ownGoalXGAgainst": 0,
+      "ownGoalsAgainst": 0
+    },
+    "timing": {
+      "openingAttack": {
+        "decisions": 42,
+        "ms": 14389.1123,
+        "msSamples": [
+          342.03319999999803,
+          342.0492000000013,
+          342.10690000000614,
+          342.4450999999972,
+          342.0370000000039,
+          342.3891000000003,
+          344.8824999999997,
+          342.07480000000214,
+          342.64949999999953,
+          342.46970000000147,
+          342.2286000000022,
+          342.04649999999674,
+          342.0474000000104,
+          342.6296999999904,
+          342.66500000000815,
+          342.44929999999295,
+          342.04730000000563,
+          344.4180000000051,
+          342.0766999999905,
+          342.53760000001057,
+          342.0469000000012,
+          344.62510000000475,
+          342.0344000000041,
+          343.45840000000317,
+          342.2801000000036,
+          342.02739999999176,
+          342.2595000000001,
+          342.1553000000131,
+          342.1354999999894,
+          344.98679999999877,
+          343.1972999999998,
+          343.14049999999406,
+          342.0393999999942,
+          342.3380999999936,
+          342.13989999999467,
+          342.6094000000012,
+          342.16049999999814,
+          344.3862000000081,
+          342.042300000001,
+          342.1128999999928,
+          342.17189999998664,
+          342.4814000000042
+        ],
+        "policyStatsTotals": {
+          "nodes": 63943,
+          "completedDepth": 159,
+          "cacheHits": 7124,
+          "extensions": 19763,
+          "cutoffs": 9605,
+          "aborted": 42,
+          "timedOut": 42
+        }
+      },
+      "openingDefense": {
+        "decisions": 22,
+        "ms": 7291.542999999976,
+        "msSamples": [
+          343.62749999999505,
+          342.2413000000015,
+          342.0601999999999,
+          346.3136000000013,
+          343.0676999999996,
+          342.1226000000024,
+          342.5780999999988,
+          342.1421999999875,
+          345.0997000000061,
+          342.02750000001106,
+          343.2789000000048,
+          343.35549999999057,
+          183.4429999999993,
+          344.2899999999936,
+          343.07760000000417,
+          342.1325999999972,
+          248.31579999999667,
+          342.25599999999395,
+          343.5188999999955,
+          342.375,
+          342.1811999999918,
+          342.0381000000052
+        ],
+        "policyStatsTotals": {
+          "nodes": 23032,
+          "completedDepth": 86,
+          "cacheHits": 1060,
+          "extensions": 8727,
+          "cutoffs": 5025,
+          "aborted": 20,
+          "timedOut": 20
+        }
+      },
+      "keeper": {
+        "decisions": 0,
+        "ms": 0,
+        "msSamples": [],
+        "policyStatsTotals": {}
+      },
+      "followupKickoffTeam": {
+        "decisions": 0,
+        "ms": 0,
+        "msSamples": [],
+        "policyStatsTotals": {}
+      },
+      "followupOpponent": {
+        "decisions": 0,
+        "ms": 0,
+        "msSamples": [],
+        "policyStatsTotals": {}
+      }
+    },
+    "score": {
+      "white": 0,
+      "black": 0
+    },
+    "trace": [
+      {
+        "ply": 0,
+        "stage": "opening",
+        "team": "white",
+        "phase": "kickoff",
+        "action": {
+          "type": "kick",
+          "x": 9,
+          "y": 11
+        },
+        "policyStats": {
+          "nodes": 1415,
+          "completedDepth": 3,
+          "cacheHits": 157,
+          "extensions": 379,
+          "cutoffs": 180,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "attackMove",
+        "nextAttack": "white",
+        "event": "kick",
+        "shot": null
+      },
+      {
+        "ply": 1,
+        "stage": "opening",
+        "team": "white",
+        "phase": "attackMove",
+        "action": {
+          "type": "move",
+          "pieceId": "white-P2",
+          "x": 8,
+          "y": 13,
+          "freePawn": true
+        },
+        "policyStats": {
+          "nodes": 1321,
+          "completedDepth": 4,
+          "cacheHits": 156,
+          "extensions": 596,
+          "cutoffs": 248,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "attackMove",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 2,
+        "stage": "opening",
+        "team": "white",
+        "phase": "attackMove",
+        "action": {
+          "type": "move",
+          "pieceId": "white-N2",
+          "x": 8,
+          "y": 9,
+          "freePawn": false
+        },
+        "policyStats": {
+          "nodes": 1352,
+          "completedDepth": 3,
+          "cacheHits": 48,
+          "extensions": 565,
+          "cutoffs": 224,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "attackMove",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 3,
+        "stage": "opening",
+        "team": "white",
+        "phase": "attackMove",
+        "action": {
+          "type": "move",
+          "pieceId": "white-K",
+          "x": 6,
+          "y": 16,
+          "freePawn": false
+        },
+        "policyStats": {
+          "nodes": 848,
+          "completedDepth": 4,
+          "cacheHits": 53,
+          "extensions": 381,
+          "cutoffs": 167,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "defendMove",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 4,
+        "stage": "opening",
+        "team": "black",
+        "phase": "defendMove",
+        "action": {
+          "type": "move",
+          "pieceId": "black-Q",
+          "x": 7,
+          "y": 10,
+          "freePawn": false
+        },
+        "policyStats": {
+          "nodes": 532,
+          "completedDepth": 3,
+          "cacheHits": 19,
+          "extensions": 268,
+          "cutoffs": 153,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "defendMove",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 5,
+        "stage": "opening",
+        "team": "black",
+        "phase": "defendMove",
+        "action": {
+          "type": "move",
+          "pieceId": "black-K",
+          "x": 6,
+          "y": 0,
+          "freePawn": true
+        },
+        "policyStats": {
+          "nodes": 447,
+          "completedDepth": 3,
+          "cacheHits": 19,
+          "extensions": 214,
+          "cutoffs": 121,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "kick",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 6,
+        "stage": "opening",
+        "team": "white",
+        "phase": "kick",
+        "action": {
+          "type": "kick",
+          "x": 6,
+          "y": 8
+        },
+        "policyStats": {
+          "nodes": 1164,
+          "completedDepth": 3,
+          "cacheHits": 32,
+          "extensions": 355,
+          "cutoffs": 173,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "attackMove",
+        "nextAttack": "white",
+        "event": "kick",
+        "shot": null
+      },
+      {
+        "ply": 7,
+        "stage": "opening",
+        "team": "white",
+        "phase": "attackMove",
+        "action": {
+          "type": "move",
+          "pieceId": "white-Q",
+          "x": 6,
+          "y": 6,
+          "freePawn": false
+        },
+        "policyStats": {
+          "nodes": 1199,
+          "completedDepth": 2,
+          "cacheHits": 42,
+          "extensions": 246,
+          "cutoffs": 141,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "attackMove",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 8,
+        "stage": "opening",
+        "team": "white",
+        "phase": "attackMove",
+        "action": {
+          "type": "move",
+          "pieceId": "white-N2",
+          "x": 7,
+          "y": 7,
+          "freePawn": false
+        },
+        "policyStats": {
+          "nodes": 2080,
+          "completedDepth": 4,
+          "cacheHits": 490,
+          "extensions": 337,
+          "cutoffs": 154,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "attackMove",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 9,
+        "stage": "opening",
+        "team": "white",
+        "phase": "attackMove",
+        "action": {
+          "type": "move",
+          "pieceId": "white-P1",
+          "x": 6,
+          "y": 13,
+          "freePawn": true
+        },
+        "policyStats": {
+          "nodes": 1622,
+          "completedDepth": 2,
+          "cacheHits": 470,
+          "extensions": 183,
+          "cutoffs": 105,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "defendMove",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 10,
+        "stage": "opening",
+        "team": "black",
+        "phase": "defendMove",
+        "action": {
+          "type": "move",
+          "pieceId": "black-P1",
+          "x": 8,
+          "y": 4,
+          "freePawn": true
+        },
+        "policyStats": {
+          "nodes": 896,
+          "completedDepth": 3,
+          "cacheHits": 35,
+          "extensions": 264,
+          "cutoffs": 130,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "defendMove",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 11,
+        "stage": "opening",
+        "team": "black",
+        "phase": "defendMove",
+        "action": {
+          "type": "move",
+          "pieceId": "black-Q",
+          "x": 7,
+          "y": 8,
+          "freePawn": false
+        },
+        "policyStats": {
+          "nodes": 1068,
+          "completedDepth": 4,
+          "cacheHits": 44,
+          "extensions": 305,
+          "cutoffs": 150,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "kick",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 12,
+        "stage": "opening",
+        "team": "white",
+        "phase": "kick",
+        "action": {
+          "type": "kick",
+          "x": 6,
+          "y": 12
+        },
+        "policyStats": {
+          "nodes": 1406,
+          "completedDepth": 2,
+          "cacheHits": 45,
+          "extensions": 427,
+          "cutoffs": 178,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "attackMove",
+        "nextAttack": "white",
+        "event": "kick",
+        "shot": null
+      },
+      {
+        "ply": 13,
+        "stage": "opening",
+        "team": "white",
+        "phase": "attackMove",
+        "action": {
+          "type": "move",
+          "pieceId": "white-Q",
+          "x": 6,
+          "y": 10,
+          "freePawn": false
+        },
+        "policyStats": {
+          "nodes": 1830,
+          "completedDepth": 4,
+          "cacheHits": 581,
+          "extensions": 528,
+          "cutoffs": 291,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "attackMove",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 14,
+        "stage": "opening",
+        "team": "white",
+        "phase": "attackMove",
+        "action": {
+          "type": "move",
+          "pieceId": "white-P1",
+          "x": 6,
+          "y": 12,
+          "freePawn": true
+        },
+        "policyStats": {
+          "nodes": 1056,
+          "completedDepth": 4,
+          "cacheHits": 63,
+          "extensions": 369,
+          "cutoffs": 186,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "attackMove",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 15,
+        "stage": "opening",
+        "team": "white",
+        "phase": "attackMove",
+        "action": {
+          "type": "move",
+          "pieceId": "white-P1",
+          "x": 6,
+          "y": 11,
+          "freePawn": false
+        },
+        "policyStats": {
+          "nodes": 1008,
+          "completedDepth": 4,
+          "cacheHits": 69,
+          "extensions": 351,
+          "cutoffs": 142,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "defendMove",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 16,
+        "stage": "opening",
+        "team": "black",
+        "phase": "defendMove",
+        "action": {
+          "type": "move",
+          "pieceId": "black-Q",
+          "x": 3,
+          "y": 8,
+          "freePawn": false
+        },
+        "policyStats": {
+          "nodes": 628,
+          "completedDepth": 3,
+          "cacheHits": 16,
+          "extensions": 327,
+          "cutoffs": 137,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "defendMove",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 17,
+        "stage": "opening",
+        "team": "black",
+        "phase": "defendMove",
+        "action": {
+          "type": "move",
+          "pieceId": "black-P2",
+          "x": 6,
+          "y": 4,
+          "freePawn": true
+        },
+        "policyStats": {
+          "nodes": 513,
+          "completedDepth": 2,
+          "cacheHits": 2,
+          "extensions": 287,
+          "cutoffs": 165,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "kick",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 18,
+        "stage": "opening",
+        "team": "white",
+        "phase": "kick",
+        "action": {
+          "type": "kick",
+          "x": 6,
+          "y": 10
+        },
+        "policyStats": {
+          "nodes": 1477,
+          "completedDepth": 3,
+          "cacheHits": 50,
+          "extensions": 523,
+          "cutoffs": 273,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "attackMove",
+        "nextAttack": "white",
+        "event": "kick",
+        "shot": null
+      },
+      {
+        "ply": 19,
+        "stage": "opening",
+        "team": "white",
+        "phase": "attackMove",
+        "action": {
+          "type": "move",
+          "pieceId": "white-Q",
+          "x": 6,
+          "y": 6,
+          "freePawn": false
+        },
+        "policyStats": {
+          "nodes": 1469,
+          "completedDepth": 2,
+          "cacheHits": 47,
+          "extensions": 336,
+          "cutoffs": 193,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "attackMove",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 20,
+        "stage": "opening",
+        "team": "white",
+        "phase": "attackMove",
+        "action": {
+          "type": "move",
+          "pieceId": "white-B2",
+          "x": 6,
+          "y": 8,
+          "freePawn": false
+        },
+        "policyStats": {
+          "nodes": 2292,
+          "completedDepth": 4,
+          "cacheHits": 562,
+          "extensions": 309,
+          "cutoffs": 125,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "attackMove",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 21,
+        "stage": "opening",
+        "team": "white",
+        "phase": "attackMove",
+        "action": {
+          "type": "move",
+          "pieceId": "white-P1",
+          "x": 6,
+          "y": 10,
+          "freePawn": true
+        },
+        "policyStats": {
+          "nodes": 2434,
+          "completedDepth": 3,
+          "cacheHits": 591,
+          "extensions": 317,
+          "cutoffs": 119,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "defendMove",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 22,
+        "stage": "opening",
+        "team": "black",
+        "phase": "defendMove",
+        "action": {
+          "type": "move",
+          "pieceId": "black-B1",
+          "x": 6,
+          "y": 3,
+          "freePawn": false
+        },
+        "policyStats": {
+          "nodes": 1105,
+          "completedDepth": 4,
+          "cacheHits": 18,
+          "extensions": 286,
+          "cutoffs": 152,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "defendMove",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 23,
+        "stage": "opening",
+        "team": "black",
+        "phase": "defendMove",
+        "action": {
+          "type": "move",
+          "pieceId": "black-P2",
+          "x": 6,
+          "y": 5,
+          "freePawn": true
+        },
+        "policyStats": {
+          "nodes": 1232,
+          "completedDepth": 4,
+          "cacheHits": 25,
+          "extensions": 343,
+          "cutoffs": 193,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "kick",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 24,
+        "stage": "opening",
+        "team": "white",
+        "phase": "kick",
+        "action": {
+          "type": "kick",
+          "x": 7,
+          "y": 7
+        },
+        "policyStats": {
+          "nodes": 1149,
+          "completedDepth": 2,
+          "cacheHits": 22,
+          "extensions": 366,
+          "cutoffs": 165,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "attackMove",
+        "nextAttack": "white",
+        "event": "kick",
+        "shot": null
+      },
+      {
+        "ply": 25,
+        "stage": "opening",
+        "team": "white",
+        "phase": "attackMove",
+        "action": {
+          "type": "move",
+          "pieceId": "white-P1",
+          "x": 6,
+          "y": 9,
+          "freePawn": true
+        },
+        "policyStats": {
+          "nodes": 1322,
+          "completedDepth": 4,
+          "cacheHits": 43,
+          "extensions": 621,
+          "cutoffs": 356,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "attackMove",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 26,
+        "stage": "opening",
+        "team": "white",
+        "phase": "attackMove",
+        "action": {
+          "type": "move",
+          "pieceId": "white-N2",
+          "x": 9,
+          "y": 8,
+          "freePawn": false
+        },
+        "policyStats": {
+          "nodes": 1106,
+          "completedDepth": 3,
+          "cacheHits": 15,
+          "extensions": 476,
+          "cutoffs": 201,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "attackMove",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 27,
+        "stage": "opening",
+        "team": "white",
+        "phase": "attackMove",
+        "action": {
+          "type": "move",
+          "pieceId": "white-Q",
+          "x": 10,
+          "y": 6,
+          "freePawn": false
+        },
+        "policyStats": {
+          "nodes": 939,
+          "completedDepth": 4,
+          "cacheHits": 22,
+          "extensions": 423,
+          "cutoffs": 154,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "defendMove",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 28,
+        "stage": "opening",
+        "team": "black",
+        "phase": "defendMove",
+        "action": {
+          "type": "move",
+          "pieceId": "black-K",
+          "x": 7,
+          "y": 0,
+          "freePawn": true
+        },
+        "policyStats": {
+          "nodes": 556,
+          "completedDepth": 3,
+          "cacheHits": 10,
+          "extensions": 270,
+          "cutoffs": 180,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "defendMove",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 29,
+        "stage": "opening",
+        "team": "black",
+        "phase": "defendMove",
+        "action": {
+          "type": "move",
+          "pieceId": "black-N1",
+          "x": 8,
+          "y": 6,
+          "freePawn": false
+        },
+        "policyStats": {
+          "nodes": 454,
+          "completedDepth": 2,
+          "cacheHits": 11,
+          "extensions": 228,
+          "cutoffs": 142,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "kick",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 30,
+        "stage": "opening",
+        "team": "white",
+        "phase": "kick",
+        "action": {
+          "type": "kick",
+          "x": 10,
+          "y": 6
+        },
+        "policyStats": {
+          "nodes": 1998,
+          "completedDepth": 3,
+          "cacheHits": 54,
+          "extensions": 437,
+          "cutoffs": 245,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "attackMove",
+        "nextAttack": "white",
+        "event": "kick",
+        "shot": null
+      },
+      {
+        "ply": 31,
+        "stage": "opening",
+        "team": "white",
+        "phase": "attackMove",
+        "action": {
+          "type": "move",
+          "pieceId": "white-Q",
+          "x": 10,
+          "y": 2,
+          "freePawn": false
+        },
+        "policyStats": {
+          "nodes": 2081,
+          "completedDepth": 2,
+          "cacheHits": 62,
+          "extensions": 318,
+          "cutoffs": 178,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "attackMove",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 32,
+        "stage": "opening",
+        "team": "white",
+        "phase": "attackMove",
+        "action": {
+          "type": "move",
+          "pieceId": "white-R1",
+          "x": 1,
+          "y": 5,
+          "freePawn": false
+        },
+        "policyStats": {
+          "nodes": 2180,
+          "completedDepth": 3,
+          "cacheHits": 661,
+          "extensions": 378,
+          "cutoffs": 94,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "attackMove",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 33,
+        "stage": "opening",
+        "team": "white",
+        "phase": "attackMove",
+        "action": {
+          "type": "move",
+          "pieceId": "white-P3",
+          "x": 10,
+          "y": 13,
+          "freePawn": true
+        },
+        "policyStats": {
+          "nodes": 2216,
+          "completedDepth": 3,
+          "cacheHits": 587,
+          "extensions": 463,
+          "cutoffs": 106,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "defendMove",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 34,
+        "stage": "opening",
+        "team": "black",
+        "phase": "defendMove",
+        "action": {
+          "type": "move",
+          "pieceId": "black-K",
+          "x": 8,
+          "y": 0,
+          "freePawn": true
+        },
+        "policyStats": {
+          "nodes": 1683,
+          "completedDepth": 2,
+          "cacheHits": 241,
+          "extensions": 359,
+          "cutoffs": 23,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "defendMove",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 35,
+        "stage": "opening",
+        "team": "black",
+        "phase": "defendMove",
+        "action": {
+          "type": "move",
+          "pieceId": "black-B1",
+          "x": 8,
+          "y": 1,
+          "freePawn": false
+        },
+        "policyStats": {
+          "nodes": 1507,
+          "completedDepth": 1,
+          "cacheHits": 126,
+          "extensions": 376,
+          "cutoffs": 16,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "kick",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 36,
+        "stage": "opening",
+        "team": "white",
+        "phase": "kick",
+        "action": {
+          "type": "kick",
+          "x": 10,
+          "y": 6
+        },
+        "policyStats": {
+          "nodes": 1018,
+          "completedDepth": 2,
+          "cacheHits": 64,
+          "extensions": 451,
+          "cutoffs": 135,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "attackMove",
+        "nextAttack": "white",
+        "event": "kick",
+        "shot": null
+      },
+      {
+        "ply": 37,
+        "stage": "opening",
+        "team": "white",
+        "phase": "attackMove",
+        "action": {
+          "type": "move",
+          "pieceId": "white-N2",
+          "x": 10,
+          "y": 6,
+          "freePawn": false
+        },
+        "policyStats": {
+          "nodes": 1412,
+          "completedDepth": 7,
+          "cacheHits": 70,
+          "extensions": 581,
+          "cutoffs": 425,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "attackMove",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 38,
+        "stage": "opening",
+        "team": "white",
+        "phase": "attackMove",
+        "action": {
+          "type": "move",
+          "pieceId": "white-P2",
+          "x": 8,
+          "y": 12,
+          "freePawn": true
+        },
+        "policyStats": {
+          "nodes": 1622,
+          "completedDepth": 4,
+          "cacheHits": 92,
+          "extensions": 709,
+          "cutoffs": 309,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "attackMove",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 39,
+        "stage": "opening",
+        "team": "white",
+        "phase": "attackMove",
+        "action": {
+          "type": "skip"
+        },
+        "policyStats": {
+          "nodes": 1540,
+          "completedDepth": 4,
+          "cacheHits": 83,
+          "extensions": 654,
+          "cutoffs": 274,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "defendMove",
+        "nextAttack": "white",
+        "event": "skip",
+        "shot": null
+      },
+      {
+        "ply": 40,
+        "stage": "opening",
+        "team": "black",
+        "phase": "defendMove",
+        "action": {
+          "type": "move",
+          "pieceId": "black-Q",
+          "x": 5,
+          "y": 8,
+          "freePawn": false
+        },
+        "policyStats": {
+          "nodes": 1316,
+          "completedDepth": 8,
+          "cacheHits": 101,
+          "extensions": 509,
+          "cutoffs": 410,
+          "aborted": false
+        },
+        "nextPhase": "defendMove",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 41,
+        "stage": "opening",
+        "team": "black",
+        "phase": "defendMove",
+        "action": {
+          "type": "move",
+          "pieceId": "black-P1",
+          "x": 8,
+          "y": 5,
+          "freePawn": true
+        },
+        "policyStats": {
+          "nodes": 1635,
+          "completedDepth": 7,
+          "cacheHits": 20,
+          "extensions": 651,
+          "cutoffs": 506,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "kick",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 42,
+        "stage": "opening",
+        "team": "white",
+        "phase": "kick",
+        "action": {
+          "type": "kick",
+          "x": 12,
+          "y": 5
+        },
+        "policyStats": {
+          "nodes": 1264,
+          "completedDepth": 4,
+          "cacheHits": 70,
+          "extensions": 487,
+          "cutoffs": 240,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "attackMove",
+        "nextAttack": "white",
+        "event": "kick",
+        "shot": null
+      },
+      {
+        "ply": 43,
+        "stage": "opening",
+        "team": "white",
+        "phase": "attackMove",
+        "action": {
+          "type": "move",
+          "pieceId": "white-R2",
+          "x": 12,
+          "y": 5,
+          "freePawn": false
+        },
+        "policyStats": {
+          "nodes": 1474,
+          "completedDepth": 6,
+          "cacheHits": 49,
+          "extensions": 620,
+          "cutoffs": 390,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "attackMove",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 44,
+        "stage": "opening",
+        "team": "white",
+        "phase": "attackMove",
+        "action": {
+          "type": "move",
+          "pieceId": "white-R2",
+          "x": 12,
+          "y": 12,
+          "freePawn": false
+        },
+        "policyStats": {
+          "nodes": 1182,
+          "completedDepth": 5,
+          "cacheHits": 33,
+          "extensions": 475,
+          "cutoffs": 248,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "attackMove",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 45,
+        "stage": "opening",
+        "team": "white",
+        "phase": "attackMove",
+        "action": {
+          "type": "move",
+          "pieceId": "white-P3",
+          "x": 9,
+          "y": 13,
+          "freePawn": true
+        },
+        "policyStats": {
+          "nodes": 822,
+          "completedDepth": 4,
+          "cacheHits": 32,
+          "extensions": 348,
+          "cutoffs": 160,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "defendMove",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 46,
+        "stage": "opening",
+        "team": "black",
+        "phase": "defendMove",
+        "action": {
+          "type": "move",
+          "pieceId": "black-R1",
+          "x": 12,
+          "y": 11,
+          "freePawn": false
+        },
+        "policyStats": {
+          "nodes": 621,
+          "completedDepth": 3,
+          "cacheHits": 37,
+          "extensions": 309,
+          "cutoffs": 221,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "defendMove",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 47,
+        "stage": "opening",
+        "team": "black",
+        "phase": "defendMove",
+        "action": {
+          "type": "move",
+          "pieceId": "black-P1",
+          "x": 9,
+          "y": 5,
+          "freePawn": true
+        },
+        "policyStats": {
+          "nodes": 537,
+          "completedDepth": 2,
+          "cacheHits": 19,
+          "extensions": 276,
+          "cutoffs": 176,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "kick",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 48,
+        "stage": "opening",
+        "team": "white",
+        "phase": "kick",
+        "action": {
+          "type": "kick",
+          "x": 12,
+          "y": 14
+        },
+        "policyStats": {
+          "nodes": 2026,
+          "completedDepth": 4,
+          "cacheHits": 443,
+          "extensions": 750,
+          "cutoffs": 446,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "attackMove",
+        "nextAttack": "white",
+        "event": "kick",
+        "shot": null
+      },
+      {
+        "ply": 49,
+        "stage": "opening",
+        "team": "white",
+        "phase": "attackMove",
+        "action": {
+          "type": "move",
+          "pieceId": "white-Q",
+          "x": 5,
+          "y": 7,
+          "freePawn": false
+        },
+        "policyStats": {
+          "nodes": 1870,
+          "completedDepth": 6,
+          "cacheHits": 118,
+          "extensions": 719,
+          "cutoffs": 376,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "attackMove",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 50,
+        "stage": "opening",
+        "team": "white",
+        "phase": "attackMove",
+        "action": {
+          "type": "move",
+          "pieceId": "white-P1",
+          "x": 6,
+          "y": 10,
+          "freePawn": true
+        },
+        "policyStats": {
+          "nodes": 1580,
+          "completedDepth": 6,
+          "cacheHits": 86,
+          "extensions": 622,
+          "cutoffs": 386,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "defendMove",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 51,
+        "stage": "opening",
+        "team": "black",
+        "phase": "defendMove",
+        "action": {
+          "type": "move",
+          "pieceId": "black-B1",
+          "x": 13,
+          "y": 6,
+          "freePawn": false
+        },
+        "policyStats": {
+          "nodes": 1373,
+          "completedDepth": 8,
+          "cacheHits": 106,
+          "extensions": 541,
+          "cutoffs": 507,
+          "aborted": false
+        },
+        "nextPhase": "defendMove",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 52,
+        "stage": "opening",
+        "team": "black",
+        "phase": "defendMove",
+        "action": {
+          "type": "move",
+          "pieceId": "black-P2",
+          "x": 5,
+          "y": 5,
+          "freePawn": true
+        },
+        "policyStats": {
+          "nodes": 1315,
+          "completedDepth": 6,
+          "cacheHits": 58,
+          "extensions": 547,
+          "cutoffs": 369,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "attackMove",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 53,
+        "stage": "opening",
+        "team": "white",
+        "phase": "attackMove",
+        "action": {
+          "type": "move",
+          "pieceId": "white-P1",
+          "x": 7,
+          "y": 10,
+          "freePawn": true
+        },
+        "policyStats": {
+          "nodes": 1393,
+          "completedDepth": 6,
+          "cacheHits": 44,
+          "extensions": 491,
+          "cutoffs": 307,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "attackMove",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 54,
+        "stage": "opening",
+        "team": "white",
+        "phase": "attackMove",
+        "action": {
+          "type": "move",
+          "pieceId": "white-B2",
+          "x": 12,
+          "y": 14,
+          "freePawn": false
+        },
+        "policyStats": {
+          "nodes": 1086,
+          "completedDepth": 5,
+          "cacheHits": 38,
+          "extensions": 397,
+          "cutoffs": 258,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "attackMove",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 55,
+        "stage": "opening",
+        "team": "white",
+        "phase": "attackMove",
+        "action": {
+          "type": "move",
+          "pieceId": "white-B2",
+          "x": 7,
+          "y": 9,
+          "freePawn": false
+        },
+        "policyStats": {
+          "nodes": 898,
+          "completedDepth": 4,
+          "cacheHits": 45,
+          "extensions": 390,
+          "cutoffs": 151,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "defendMove",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 56,
+        "stage": "opening",
+        "team": "black",
+        "phase": "defendMove",
+        "action": {
+          "type": "move",
+          "pieceId": "black-Q",
+          "x": 6,
+          "y": 8,
+          "freePawn": false
+        },
+        "policyStats": {
+          "nodes": 900,
+          "completedDepth": 4,
+          "cacheHits": 11,
+          "extensions": 388,
+          "cutoffs": 231,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "defendMove",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 57,
+        "stage": "opening",
+        "team": "black",
+        "phase": "defendMove",
+        "action": {
+          "type": "move",
+          "pieceId": "black-P3",
+          "x": 5,
+          "y": 3,
+          "freePawn": true
+        },
+        "policyStats": {
+          "nodes": 1789,
+          "completedDepth": 5,
+          "cacheHits": 31,
+          "extensions": 717,
+          "cutoffs": 364,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "kick",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 58,
+        "stage": "opening",
+        "team": "white",
+        "phase": "kick",
+        "action": {
+          "type": "kick",
+          "x": 9,
+          "y": 7
+        },
+        "policyStats": {
+          "nodes": 2025,
+          "completedDepth": 4,
+          "cacheHits": 197,
+          "extensions": 713,
+          "cutoffs": 367,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "attackMove",
+        "nextAttack": "white",
+        "event": "kick",
+        "shot": null
+      },
+      {
+        "ply": 59,
+        "stage": "opening",
+        "team": "white",
+        "phase": "attackMove",
+        "action": {
+          "type": "move",
+          "pieceId": "white-Q",
+          "x": 9,
+          "y": 7,
+          "freePawn": false
+        },
+        "policyStats": {
+          "nodes": 2039,
+          "completedDepth": 5,
+          "cacheHits": 239,
+          "extensions": 572,
+          "cutoffs": 277,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "attackMove",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 60,
+        "stage": "opening",
+        "team": "white",
+        "phase": "attackMove",
+        "action": {
+          "type": "move",
+          "pieceId": "white-P2",
+          "x": 9,
+          "y": 12,
+          "freePawn": true
+        },
+        "policyStats": {
+          "nodes": 2198,
+          "completedDepth": 4,
+          "cacheHits": 398,
+          "extensions": 548,
+          "cutoffs": 243,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "attackMove",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 61,
+        "stage": "opening",
+        "team": "white",
+        "phase": "attackMove",
+        "action": {
+          "type": "move",
+          "pieceId": "white-Q",
+          "x": 11,
+          "y": 9,
+          "freePawn": false
+        },
+        "policyStats": {
+          "nodes": 1530,
+          "completedDepth": 4,
+          "cacheHits": 101,
+          "extensions": 552,
+          "cutoffs": 215,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "defendMove",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 62,
+        "stage": "opening",
+        "team": "black",
+        "phase": "defendMove",
+        "action": {
+          "type": "move",
+          "pieceId": "black-B1",
+          "x": 11,
+          "y": 8,
+          "freePawn": false
+        },
+        "policyStats": {
+          "nodes": 1477,
+          "completedDepth": 5,
+          "cacheHits": 44,
+          "extensions": 625,
+          "cutoffs": 366,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "defendMove",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 63,
+        "stage": "opening",
+        "team": "black",
+        "phase": "defendMove",
+        "action": {
+          "type": "move",
+          "pieceId": "black-P2",
+          "x": 6,
+          "y": 5,
+          "freePawn": true
+        },
+        "policyStats": {
+          "nodes": 1448,
+          "completedDepth": 4,
+          "cacheHits": 67,
+          "extensions": 637,
+          "cutoffs": 313,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "kick",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      }
+    ]
+  },
+  "candidate": {
+    "seed": 3068247425,
+    "kickoff": "white",
+    "formations": {
+      "white": "defensive",
+      "black": "aggressive"
+    },
+    "initialStateHash": "7d88ccba1f3926748d74a6607180be0d39e0e0a1db5d2f485b29be1940c7422e",
+    "finalStateHash": "d39bcfdb7cbf2f4fd4b1be8d8b526293b5c740973956134e336a5e4af34a7991",
+    "trajectoryHash": "91c49a01878c12f1279bbfd7a474f7379d1909b00f0a821ef68cfa783c582ba6",
+    "opening": {
+      "actions": 14,
+      "actionLimit": 64,
+      "extraKeeperActions": 0,
+      "termination": "shot",
+      "censored": false,
+      "turnover": false,
+      "turnoverEvent": null,
+      "shots": 1,
+      "hadShot": true,
+      "xG": 0.05540663138478323,
+      "firstShot": {
+        "attemptPly": 12,
+        "settlementPly": 13,
+        "shootingTeam": "white",
+        "scoringTeam": "white",
+        "ownGoal": false,
+        "xG": 0.05540663138478323,
+        "sampledXG": 0.05540663138478323,
+        "outcome": "wide",
+        "scored": false,
+        "nextAttack": "black",
+        "restartType": "goalKick"
+      },
+      "ownGoalShots": 0,
+      "ownGoalXG": 0,
+      "netXG": 0.05540663138478323,
+      "goals": 0
+    },
+    "followup": {
+      "triggered": false,
+      "actions": 0,
+      "actionLimit": 24,
+      "extraKeeperActions": 0,
+      "termination": "not-started",
+      "shotsAgainst": 0,
+      "xGAgainst": 0,
+      "goalsAgainst": 0,
+      "ownGoalShotsAgainst": 0,
+      "ownGoalXGAgainst": 0,
+      "ownGoalsAgainst": 0
+    },
+    "timing": {
+      "openingAttack": {
+        "decisions": 9,
+        "ms": 3121.1617999999726,
+        "msSamples": [
+          369.8012000000017,
+          348.36209999999846,
+          331.5816999999952,
+          348.24779999999737,
+          341.86780000000726,
+          369.6936999999889,
+          344.59889999999723,
+          336.52129999999306,
+          330.4872999999934
+        ],
+        "policyStatsTotals": {
+          "nodes": 5824,
+          "completedDepth": 13,
+          "fallbackNodes": 3243,
+          "routeNodes": 2581,
+          "replans": 306,
+          "routeActions": 23,
+          "rolloutActions": 350,
+          "completedRoutes": 12,
+          "completedReplicas": 21,
+          "shotRoutes": 3,
+          "interruptedRoutes": 9,
+          "turnoverRoutes": 3,
+          "eligible": 9,
+          "elapsedMs": 3121.0413000000117,
+          "budgetMs": 3078,
+          "overrunMs": 70.62630000000354,
+          "routeCompleted": 9,
+          "nativeSelectedRoute": 5,
+          "nonNativeSelectedRoute": 4
+        }
+      },
+      "openingDefense": {
+        "decisions": 4,
+        "ms": 1368.9109000000026,
+        "msSamples": [
+          342.4505000000063,
+          342.2021999999997,
+          342.1128000000026,
+          342.14539999999397
+        ],
+        "policyStatsTotals": {
+          "nodes": 5317,
+          "completedDepth": 17,
+          "cacheHits": 133,
+          "extensions": 1797,
+          "cutoffs": 888,
+          "aborted": 4,
+          "timedOut": 4
+        }
+      },
+      "keeper": {
+        "decisions": 1,
+        "ms": 4.69440000000759,
+        "msSamples": [
+          4.69440000000759
+        ],
+        "policyStatsTotals": {
+          "nodes": 0,
+          "completedDepth": 0,
+          "cacheHits": 0,
+          "extensions": 0,
+          "cutoffs": 0,
+          "aborted": 0
+        }
+      },
+      "followupKickoffTeam": {
+        "decisions": 0,
+        "ms": 0,
+        "msSamples": [],
+        "policyStatsTotals": {}
+      },
+      "followupOpponent": {
+        "decisions": 0,
+        "ms": 0,
+        "msSamples": [],
+        "policyStatsTotals": {}
+      }
+    },
+    "score": {
+      "white": 0,
+      "black": 0
+    },
+    "trace": [
+      {
+        "ply": 0,
+        "stage": "opening",
+        "team": "white",
+        "phase": "kickoff",
+        "action": {
+          "type": "kick",
+          "x": 9,
+          "y": 11
+        },
+        "policyStats": {
+          "nodes": 489,
+          "completedDepth": 1,
+          "fallbackNodes": 230,
+          "routeNodes": 259,
+          "replans": 31,
+          "routeActions": 4,
+          "rolloutActions": 37,
+          "completedRoutes": 1,
+          "completedReplicas": 2,
+          "shotRoutes": 1,
+          "interruptedRoutes": 1,
+          "turnoverRoutes": 0,
+          "eligible": true,
+          "elapsedMs": 369.7695999999996,
+          "budgetMs": 342,
+          "overrunMs": 27.769599999999627,
+          "routeCompleted": true,
+          "nativeSelectedRoute": false,
+          "nonNativeSelectedRoute": true
+        },
+        "selectedRoute": "pass:white-N2",
+        "nextPhase": "attackMove",
+        "nextAttack": "white",
+        "event": "kick",
+        "shot": null
+      },
+      {
+        "ply": 1,
+        "stage": "opening",
+        "team": "white",
+        "phase": "attackMove",
+        "action": {
+          "type": "move",
+          "pieceId": "white-N2",
+          "x": 8,
+          "y": 9,
+          "freePawn": false
+        },
+        "policyStats": {
+          "nodes": 663,
+          "completedDepth": 2,
+          "fallbackNodes": 260,
+          "routeNodes": 403,
+          "replans": 37,
+          "routeActions": 2,
+          "rolloutActions": 41,
+          "completedRoutes": 1,
+          "completedReplicas": 2,
+          "shotRoutes": 0,
+          "interruptedRoutes": 1,
+          "turnoverRoutes": 0,
+          "eligible": true,
+          "elapsedMs": 348.35289999999804,
+          "budgetMs": 342,
+          "overrunMs": 6.352899999998044,
+          "routeCompleted": true,
+          "nativeSelectedRoute": true,
+          "nonNativeSelectedRoute": false
+        },
+        "selectedRoute": "native",
+        "nextPhase": "attackMove",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 2,
+        "stage": "opening",
+        "team": "white",
+        "phase": "attackMove",
+        "action": {
+          "type": "move",
+          "pieceId": "white-B2",
+          "x": 9,
+          "y": 11,
+          "freePawn": false
+        },
+        "policyStats": {
+          "nodes": 1075,
+          "completedDepth": 4,
+          "fallbackNodes": 537,
+          "routeNodes": 538,
+          "replans": 42,
+          "routeActions": 4,
+          "rolloutActions": 49,
+          "completedRoutes": 2,
+          "completedReplicas": 3,
+          "shotRoutes": 0,
+          "interruptedRoutes": 1,
+          "turnoverRoutes": 1,
+          "eligible": true,
+          "elapsedMs": 331.57369999999355,
+          "budgetMs": 342,
+          "overrunMs": 0,
+          "routeCompleted": true,
+          "nativeSelectedRoute": true,
+          "nonNativeSelectedRoute": false
+        },
+        "selectedRoute": "native",
+        "nextPhase": "attackMove",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 3,
+        "stage": "opening",
+        "team": "white",
+        "phase": "attackMove",
+        "action": {
+          "type": "move",
+          "pieceId": "white-K",
+          "x": 5,
+          "y": 16,
+          "freePawn": true
+        },
+        "policyStats": {
+          "nodes": 750,
+          "completedDepth": 2,
+          "fallbackNodes": 406,
+          "routeNodes": 344,
+          "replans": 35,
+          "routeActions": 7,
+          "rolloutActions": 45,
+          "completedRoutes": 2,
+          "completedReplicas": 3,
+          "shotRoutes": 1,
+          "interruptedRoutes": 1,
+          "turnoverRoutes": 1,
+          "eligible": true,
+          "elapsedMs": 348.2402000000002,
+          "budgetMs": 342,
+          "overrunMs": 6.240200000000186,
+          "routeCompleted": true,
+          "nativeSelectedRoute": false,
+          "nonNativeSelectedRoute": true
+        },
+        "selectedRoute": "pawn:white-K:5,16",
+        "nextPhase": "defendMove",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 4,
+        "stage": "opening",
+        "team": "black",
+        "phase": "defendMove",
+        "action": {
+          "type": "move",
+          "pieceId": "black-Q",
+          "x": 6,
+          "y": 7,
+          "freePawn": false
+        },
+        "policyStats": {
+          "nodes": 677,
+          "completedDepth": 4,
+          "cacheHits": 16,
+          "extensions": 346,
+          "cutoffs": 191,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "defendMove",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 5,
+        "stage": "opening",
+        "team": "black",
+        "phase": "defendMove",
+        "action": {
+          "type": "move",
+          "pieceId": "black-K",
+          "x": 6,
+          "y": 0,
+          "freePawn": true
+        },
+        "policyStats": {
+          "nodes": 1182,
+          "completedDepth": 4,
+          "cacheHits": 12,
+          "extensions": 385,
+          "cutoffs": 218,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "kick",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 6,
+        "stage": "opening",
+        "team": "white",
+        "phase": "kick",
+        "action": {
+          "type": "kick",
+          "x": 6,
+          "y": 8
+        },
+        "policyStats": {
+          "nodes": 347,
+          "completedDepth": 1,
+          "fallbackNodes": 158,
+          "routeNodes": 189,
+          "replans": 34,
+          "routeActions": 1,
+          "rolloutActions": 37,
+          "completedRoutes": 1,
+          "completedReplicas": 2,
+          "shotRoutes": 0,
+          "interruptedRoutes": 1,
+          "turnoverRoutes": 0,
+          "eligible": true,
+          "elapsedMs": 341.85689999999886,
+          "budgetMs": 342,
+          "overrunMs": 0,
+          "routeCompleted": true,
+          "nativeSelectedRoute": true,
+          "nonNativeSelectedRoute": false
+        },
+        "selectedRoute": "native",
+        "nextPhase": "attackMove",
+        "nextAttack": "white",
+        "event": "kick",
+        "shot": null
+      },
+      {
+        "ply": 7,
+        "stage": "opening",
+        "team": "white",
+        "phase": "attackMove",
+        "action": {
+          "type": "move",
+          "pieceId": "white-Q",
+          "x": 11,
+          "y": 3,
+          "freePawn": false
+        },
+        "policyStats": {
+          "nodes": 304,
+          "completedDepth": 0,
+          "fallbackNodes": 83,
+          "routeNodes": 221,
+          "replans": 34,
+          "routeActions": 0,
+          "rolloutActions": 36,
+          "completedRoutes": 1,
+          "completedReplicas": 2,
+          "shotRoutes": 0,
+          "interruptedRoutes": 1,
+          "turnoverRoutes": 0,
+          "eligible": true,
+          "elapsedMs": 369.67810000000463,
+          "budgetMs": 342,
+          "overrunMs": 27.678100000004633,
+          "routeCompleted": true,
+          "nativeSelectedRoute": true,
+          "nonNativeSelectedRoute": false
+        },
+        "selectedRoute": "native",
+        "nextPhase": "attackMove",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 8,
+        "stage": "opening",
+        "team": "white",
+        "phase": "attackMove",
+        "action": {
+          "type": "move",
+          "pieceId": "white-N2",
+          "x": 7,
+          "y": 7,
+          "freePawn": false
+        },
+        "policyStats": {
+          "nodes": 558,
+          "completedDepth": 1,
+          "fallbackNodes": 435,
+          "routeNodes": 123,
+          "replans": 27,
+          "routeActions": 1,
+          "rolloutActions": 30,
+          "completedRoutes": 1,
+          "completedReplicas": 2,
+          "shotRoutes": 0,
+          "interruptedRoutes": 1,
+          "turnoverRoutes": 0,
+          "eligible": true,
+          "elapsedMs": 344.58550000000105,
+          "budgetMs": 342,
+          "overrunMs": 2.5855000000010477,
+          "routeCompleted": true,
+          "nativeSelectedRoute": false,
+          "nonNativeSelectedRoute": true
+        },
+        "selectedRoute": "support:white-N2",
+        "nextPhase": "attackMove",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 9,
+        "stage": "opening",
+        "team": "white",
+        "phase": "attackMove",
+        "action": {
+          "type": "move",
+          "pieceId": "white-K",
+          "x": 6,
+          "y": 16,
+          "freePawn": true
+        },
+        "policyStats": {
+          "nodes": 732,
+          "completedDepth": 0,
+          "fallbackNodes": 581,
+          "routeNodes": 151,
+          "replans": 29,
+          "routeActions": 4,
+          "rolloutActions": 35,
+          "completedRoutes": 1,
+          "completedReplicas": 2,
+          "shotRoutes": 0,
+          "interruptedRoutes": 1,
+          "turnoverRoutes": 1,
+          "eligible": true,
+          "elapsedMs": 336.507500000007,
+          "budgetMs": 342,
+          "overrunMs": 0,
+          "routeCompleted": true,
+          "nativeSelectedRoute": true,
+          "nonNativeSelectedRoute": false
+        },
+        "selectedRoute": "native",
+        "nextPhase": "defendMove",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 10,
+        "stage": "opening",
+        "team": "black",
+        "phase": "defendMove",
+        "action": {
+          "type": "move",
+          "pieceId": "black-R1",
+          "x": 12,
+          "y": 3,
+          "freePawn": false
+        },
+        "policyStats": {
+          "nodes": 1689,
+          "completedDepth": 5,
+          "cacheHits": 54,
+          "extensions": 491,
+          "cutoffs": 191,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "defendMove",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 11,
+        "stage": "opening",
+        "team": "black",
+        "phase": "defendMove",
+        "action": {
+          "type": "move",
+          "pieceId": "black-K",
+          "x": 7,
+          "y": 0,
+          "freePawn": true
+        },
+        "policyStats": {
+          "nodes": 1769,
+          "completedDepth": 4,
+          "cacheHits": 51,
+          "extensions": 575,
+          "cutoffs": 288,
+          "aborted": true,
+          "timedOut": true
+        },
+        "nextPhase": "kick",
+        "nextAttack": "white",
+        "event": "move",
+        "shot": null
+      },
+      {
+        "ply": 12,
+        "stage": "opening",
+        "team": "white",
+        "phase": "kick",
+        "action": {
+          "type": "kick",
+          "x": 7,
+          "y": -1
+        },
+        "policyStats": {
+          "nodes": 906,
+          "completedDepth": 2,
+          "fallbackNodes": 553,
+          "routeNodes": 353,
+          "replans": 37,
+          "routeActions": 0,
+          "rolloutActions": 40,
+          "completedRoutes": 2,
+          "completedReplicas": 3,
+          "shotRoutes": 1,
+          "interruptedRoutes": 1,
+          "turnoverRoutes": 0,
+          "eligible": true,
+          "elapsedMs": 330.47690000000875,
+          "budgetMs": 342,
+          "overrunMs": 0,
+          "routeCompleted": true,
+          "nativeSelectedRoute": false,
+          "nonNativeSelectedRoute": true
+        },
+        "selectedRoute": "shot:7,-1",
+        "nextPhase": "keeperReact",
+        "nextAttack": "white",
+        "event": "shotAttempt",
+        "shot": null
+      },
+      {
+        "ply": 13,
+        "stage": "opening",
+        "team": "black",
+        "phase": "keeperReact",
+        "action": {
+          "type": "skip"
+        },
+        "policyStats": {
+          "nodes": 0,
+          "completedDepth": 0,
+          "cacheHits": 0,
+          "extensions": 0,
+          "cutoffs": 0,
+          "aborted": false
+        },
+        "nextPhase": "attackMove",
+        "nextAttack": "black",
+        "event": "shotMiss",
+        "shot": {
+          "attemptPly": 12,
+          "settlementPly": 13,
+          "shootingTeam": "white",
+          "scoringTeam": "white",
+          "ownGoal": false,
+          "xG": 0.05540663138478323,
+          "sampledXG": 0.05540663138478323,
+          "outcome": "wide",
+          "scored": false,
+          "nextAttack": "black",
+          "restartType": "goalKick"
+        }
+      }
+    ],
+    "plannerChoices": [
+      {
+        "ply": 0,
+        "action": {
+          "type": "kick",
+          "x": 9,
+          "y": 11
+        },
+        "fallbackAction": {
+          "type": "kick",
+          "x": 6,
+          "y": 10
+        },
+        "selectedRoute": "pass:white-N2",
+        "routeCompleted": true,
+        "routeGain": 0.035436528035352036
+      },
+      {
+        "ply": 1,
+        "action": {
+          "type": "move",
+          "pieceId": "white-N2",
+          "x": 8,
+          "y": 9,
+          "freePawn": false
+        },
+        "fallbackAction": {
+          "type": "move",
+          "pieceId": "white-N2",
+          "x": 8,
+          "y": 9,
+          "freePawn": false
+        },
+        "selectedRoute": "native",
+        "routeCompleted": true,
+        "routeGain": 0
+      },
+      {
+        "ply": 2,
+        "action": {
+          "type": "move",
+          "pieceId": "white-B2",
+          "x": 9,
+          "y": 11,
+          "freePawn": false
+        },
+        "fallbackAction": {
+          "type": "move",
+          "pieceId": "white-B2",
+          "x": 9,
+          "y": 11,
+          "freePawn": false
+        },
+        "selectedRoute": "native",
+        "routeCompleted": true,
+        "routeGain": 0
+      },
+      {
+        "ply": 3,
+        "action": {
+          "type": "move",
+          "pieceId": "white-K",
+          "x": 5,
+          "y": 16,
+          "freePawn": true
+        },
+        "fallbackAction": {
+          "type": "move",
+          "pieceId": "white-K",
+          "x": 6,
+          "y": 16,
+          "freePawn": true
+        },
+        "selectedRoute": "pawn:white-K:5,16",
+        "routeCompleted": true,
+        "routeGain": 0.07692787860845753
+      },
+      {
+        "ply": 6,
+        "action": {
+          "type": "kick",
+          "x": 6,
+          "y": 8
+        },
+        "fallbackAction": {
+          "type": "kick",
+          "x": 6,
+          "y": 8
+        },
+        "selectedRoute": "native",
+        "routeCompleted": true,
+        "routeGain": 0
+      },
+      {
+        "ply": 7,
+        "action": {
+          "type": "move",
+          "pieceId": "white-Q",
+          "x": 11,
+          "y": 3,
+          "freePawn": false
+        },
+        "fallbackAction": {
+          "type": "move",
+          "pieceId": "white-Q",
+          "x": 11,
+          "y": 3,
+          "freePawn": false
+        },
+        "selectedRoute": "native",
+        "routeCompleted": true,
+        "routeGain": 0
+      },
+      {
+        "ply": 8,
+        "action": {
+          "type": "move",
+          "pieceId": "white-N2",
+          "x": 7,
+          "y": 7,
+          "freePawn": false
+        },
+        "fallbackAction": {
+          "type": "move",
+          "pieceId": "white-B2",
+          "x": 11,
+          "y": 9,
+          "freePawn": false
+        },
+        "selectedRoute": "support:white-N2",
+        "routeCompleted": true,
+        "routeGain": 0.00022779094733347757
+      },
+      {
+        "ply": 9,
+        "action": {
+          "type": "move",
+          "pieceId": "white-K",
+          "x": 6,
+          "y": 16,
+          "freePawn": true
+        },
+        "fallbackAction": {
+          "type": "move",
+          "pieceId": "white-K",
+          "x": 6,
+          "y": 16,
+          "freePawn": true
+        },
+        "selectedRoute": "native",
+        "routeCompleted": true,
+        "routeGain": 0
+      },
+      {
+        "ply": 12,
+        "action": {
+          "type": "kick",
+          "x": 7,
+          "y": -1
+        },
+        "fallbackAction": {
+          "type": "kick",
+          "x": 7,
+          "y": 7
+        },
+        "selectedRoute": "shot:7,-1",
+        "routeCompleted": true,
+        "routeGain": 0.03531158596871731
+      }
+    ]
+  },
+  "matches": {
+    "baseline": {
+      "initialState": true,
+      "trajectory": false,
+      "finalState": false,
+      "exact": false
+    },
+    "candidate": {
+      "initialState": true,
+      "trajectory": false,
+      "finalState": false,
+      "exact": false
+    }
+  },
+  "qualifiesAdverseOutcome": false,
+  "workers": 6
+}

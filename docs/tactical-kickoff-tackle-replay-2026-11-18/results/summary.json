@@ -1,0 +1,4663 @@
+{
+  "schemaVersion": 1,
+  "lockSha256": "3ed7fe94c8de01c3e9b3152a76d394bb4d2ba4556701bf5825919299a01fe233",
+  "selection": "Archived candidate pre-shot tackle turnover with no archived baseline pre-shot turnover",
+  "settings": {
+    "openingActionLimit": 64,
+    "followupActionLimit": 24,
+    "seedsPerFormationPair": 2,
+    "maxDepth": 8,
+    "nodeLimit": 50000,
+    "timeLimitMs": 342,
+    "workerCount": 6
+  },
+  "cases": 13,
+  "attempts": 30,
+  "exactBaselineCases": 0,
+  "exactCandidateCases": 1,
+  "exactBothCases": 0,
+  "exactSameAttemptCases": 0,
+  "qualifyingCases": 13,
+  "interpretation": "A trace reconstructs the archived game only when its initial state, trajectory, and final state hashes match. A different trajectory remains diagnostic and cannot identify the archived moves.",
+  "perCase": [
+    {
+      "id": "aggressive-aggressive-1-white",
+      "seed": 1934095657,
+      "kickoff": "white",
+      "formations": {
+        "white": "aggressive",
+        "black": "aggressive"
+      },
+      "original": {
+        "baseline": {
+          "initialStateHash": "df5d2eae9725278ff935fcb61fddfa7323a5902fd150945ff35df886eea0f665",
+          "trajectoryHash": "da77d398c85a14aefc46e67766a0ad4c5da1bdc6607ac6361327b3533437d432",
+          "finalStateHash": "048c2997a55cac40f23e1e9c64958eac778fb79d0bb22f9526ee2aefc9f98fef",
+          "opening": {
+            "actions": 65,
+            "actionLimit": 64,
+            "extraKeeperActions": 1,
+            "termination": "shot",
+            "censored": false,
+            "turnover": false,
+            "turnoverEvent": null,
+            "shots": 1,
+            "hadShot": true,
+            "xG": 0.0616001657271679,
+            "firstShot": {
+              "attemptPly": 63,
+              "settlementPly": 64,
+              "shootingTeam": "white",
+              "scoringTeam": "white",
+              "ownGoal": false,
+              "xG": 0.0616001657271679,
+              "sampledXG": 0.0616001657271679,
+              "outcome": "saved",
+              "scored": false,
+              "nextAttack": "black",
+              "restartType": null
+            },
+            "ownGoalShots": 0,
+            "ownGoalXG": 0,
+            "netXG": 0.0616001657271679,
+            "goals": 0
+          },
+          "followup": {
+            "triggered": false,
+            "actions": 0,
+            "actionLimit": 24,
+            "extraKeeperActions": 0,
+            "termination": "not-started",
+            "shotsAgainst": 0,
+            "xGAgainst": 0,
+            "goalsAgainst": 0,
+            "ownGoalShotsAgainst": 0,
+            "ownGoalXGAgainst": 0,
+            "ownGoalsAgainst": 0
+          },
+          "score": {
+            "white": 0,
+            "black": 0
+          }
+        },
+        "candidate": {
+          "initialStateHash": "df5d2eae9725278ff935fcb61fddfa7323a5902fd150945ff35df886eea0f665",
+          "trajectoryHash": "5e92ff3ccff5ddd96a6fdcb35aa3f68caea61c9b1629fe4ff583cd532c8699b7",
+          "finalStateHash": "63d3c6c85a0a579263fa2ce35ec99a05bfe628c04a49e9f442b653c6cf0ccc0b",
+          "opening": {
+            "actions": 13,
+            "actionLimit": 64,
+            "extraKeeperActions": 0,
+            "termination": "turnover",
+            "censored": false,
+            "turnover": true,
+            "turnoverEvent": {
+              "ply": 12,
+              "type": "tackle",
+              "restartType": null
+            },
+            "shots": 0,
+            "hadShot": false,
+            "xG": 0,
+            "firstShot": null,
+            "ownGoalShots": 0,
+            "ownGoalXG": 0,
+            "netXG": 0,
+            "goals": 0
+          },
+          "followup": {
+            "triggered": true,
+            "actions": 24,
+            "actionLimit": 24,
+            "extraKeeperActions": 0,
+            "termination": "limit",
+            "shotsAgainst": 0,
+            "xGAgainst": 0,
+            "goalsAgainst": 0,
+            "ownGoalShotsAgainst": 0,
+            "ownGoalXGAgainst": 0,
+            "ownGoalsAgainst": 0
+          },
+          "score": {
+            "white": 0,
+            "black": 0
+          }
+        }
+      },
+      "exactBaseline": [],
+      "exactCandidate": [],
+      "exactBothSameAttempt": [],
+      "qualifyingAttempts": [
+        1
+      ],
+      "attempts": [
+        {
+          "attempt": 1,
+          "file": "attempts/aggressive-aggressive-1-white-1.json",
+          "workers": 6,
+          "matches": {
+            "baseline": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            },
+            "candidate": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            }
+          },
+          "qualifiesAdverseOutcome": true,
+          "baseline": {
+            "initialStateHash": "df5d2eae9725278ff935fcb61fddfa7323a5902fd150945ff35df886eea0f665",
+            "trajectoryHash": "d7adfd462d2b8af04538816aa7a8fa3b4120bc6213d349f77c245d295936a20e",
+            "finalStateHash": "0be2313804463f8c248424f657965de3967a9d0fdbab4a9a623ef581b043a98a",
+            "opening": {
+              "actions": 64,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "limit",
+              "censored": true,
+              "turnover": false,
+              "turnoverEvent": null,
+              "shots": 0,
+              "hadShot": false,
+              "xG": 0,
+              "firstShot": null,
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": false,
+              "actions": 0,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "not-started",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          },
+          "candidate": {
+            "initialStateHash": "df5d2eae9725278ff935fcb61fddfa7323a5902fd150945ff35df886eea0f665",
+            "trajectoryHash": "fb8aee46d1b930f439dfc0d05ba0d2f6bbb032aab9803b3f829d59d95558f6ec",
+            "finalStateHash": "22fef534714c266afe54d7c9296dbbcf812869f3f274f0a645927d551068ab36",
+            "opening": {
+              "actions": 13,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "turnover",
+              "censored": false,
+              "turnover": true,
+              "turnoverEvent": {
+                "ply": 12,
+                "type": "tackle",
+                "restartType": null
+              },
+              "shots": 0,
+              "hadShot": false,
+              "xG": 0,
+              "firstShot": null,
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": true,
+              "actions": 24,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "limit",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "aggressive-aggressive-1-black",
+      "seed": 1934095657,
+      "kickoff": "black",
+      "formations": {
+        "white": "aggressive",
+        "black": "aggressive"
+      },
+      "original": {
+        "baseline": {
+          "initialStateHash": "32436358672b5a849d6f13769ca58bfef759b37bad63c2270d9d1cf2cfe6d013",
+          "trajectoryHash": "217ba2ed085a5ba13534a87f3a9fc042991ec551d0557b95cbbafc949244fa50",
+          "finalStateHash": "6d1224fc4e26abc553fc395fcec27640175f24f919e8eb2047fe4a45cf7305c5",
+          "opening": {
+            "actions": 64,
+            "actionLimit": 64,
+            "extraKeeperActions": 0,
+            "termination": "limit",
+            "censored": true,
+            "turnover": false,
+            "turnoverEvent": null,
+            "shots": 0,
+            "hadShot": false,
+            "xG": 0,
+            "firstShot": null,
+            "ownGoalShots": 0,
+            "ownGoalXG": 0,
+            "netXG": 0,
+            "goals": 0
+          },
+          "followup": {
+            "triggered": false,
+            "actions": 0,
+            "actionLimit": 24,
+            "extraKeeperActions": 0,
+            "termination": "not-started",
+            "shotsAgainst": 0,
+            "xGAgainst": 0,
+            "goalsAgainst": 0,
+            "ownGoalShotsAgainst": 0,
+            "ownGoalXGAgainst": 0,
+            "ownGoalsAgainst": 0
+          },
+          "score": {
+            "white": 0,
+            "black": 0
+          }
+        },
+        "candidate": {
+          "initialStateHash": "32436358672b5a849d6f13769ca58bfef759b37bad63c2270d9d1cf2cfe6d013",
+          "trajectoryHash": "06b9ed87d9cc0886a100eb2dd6542856209607f927e564e6b6ba1934774b2756",
+          "finalStateHash": "b721e92022e4c899b312cd9965063dde1187d88c5099a924a48fddf776ad9bcf",
+          "opening": {
+            "actions": 34,
+            "actionLimit": 64,
+            "extraKeeperActions": 0,
+            "termination": "turnover",
+            "censored": false,
+            "turnover": true,
+            "turnoverEvent": {
+              "ply": 33,
+              "type": "tackle",
+              "restartType": null
+            },
+            "shots": 0,
+            "hadShot": false,
+            "xG": 0,
+            "firstShot": null,
+            "ownGoalShots": 0,
+            "ownGoalXG": 0,
+            "netXG": 0,
+            "goals": 0
+          },
+          "followup": {
+            "triggered": true,
+            "actions": 24,
+            "actionLimit": 24,
+            "extraKeeperActions": 0,
+            "termination": "limit",
+            "shotsAgainst": 1,
+            "xGAgainst": 0.10633163403390551,
+            "goalsAgainst": 0,
+            "ownGoalShotsAgainst": 0,
+            "ownGoalXGAgainst": 0,
+            "ownGoalsAgainst": 0
+          },
+          "score": {
+            "white": 0,
+            "black": 0
+          }
+        }
+      },
+      "exactBaseline": [],
+      "exactCandidate": [],
+      "exactBothSameAttempt": [],
+      "qualifyingAttempts": [
+        2
+      ],
+      "attempts": [
+        {
+          "attempt": 1,
+          "file": "attempts/aggressive-aggressive-1-black-1.json",
+          "workers": 6,
+          "matches": {
+            "baseline": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            },
+            "candidate": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            }
+          },
+          "qualifiesAdverseOutcome": false,
+          "baseline": {
+            "initialStateHash": "32436358672b5a849d6f13769ca58bfef759b37bad63c2270d9d1cf2cfe6d013",
+            "trajectoryHash": "c1f456cddf473b567f6e1ea7c1f9127550fcfb839b4955a17115c154a04b660e",
+            "finalStateHash": "659d7c73ed9bb7f4e4046b71f6c965f5fb3944cd525b5720d136b51022b2d5e8",
+            "opening": {
+              "actions": 57,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "shot",
+              "censored": false,
+              "turnover": false,
+              "turnoverEvent": null,
+              "shots": 1,
+              "hadShot": true,
+              "xG": 0.10277953869926872,
+              "firstShot": {
+                "attemptPly": 55,
+                "settlementPly": 56,
+                "shootingTeam": "black",
+                "scoringTeam": "black",
+                "ownGoal": false,
+                "xG": 0.10277953869926872,
+                "sampledXG": 0.10277953869926872,
+                "outcome": "wide",
+                "scored": false,
+                "nextAttack": "white",
+                "restartType": "goalKick"
+              },
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0.10277953869926872,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": false,
+              "actions": 0,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "not-started",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          },
+          "candidate": {
+            "initialStateHash": "32436358672b5a849d6f13769ca58bfef759b37bad63c2270d9d1cf2cfe6d013",
+            "trajectoryHash": "98880ddea250bd8c3fe030b128cc3fed46ff103dfc492feea91d387d4faccb7f",
+            "finalStateHash": "0eb93c5286cc908afa3ab78302808658dca2a545cec1b4a403c79114daa17e1a",
+            "opening": {
+              "actions": 64,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "limit",
+              "censored": true,
+              "turnover": false,
+              "turnoverEvent": null,
+              "shots": 0,
+              "hadShot": false,
+              "xG": 0,
+              "firstShot": null,
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": false,
+              "actions": 0,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "not-started",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          }
+        },
+        {
+          "attempt": 2,
+          "file": "attempts/aggressive-aggressive-1-black-2.json",
+          "workers": 6,
+          "matches": {
+            "baseline": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            },
+            "candidate": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            }
+          },
+          "qualifiesAdverseOutcome": true,
+          "baseline": {
+            "initialStateHash": "32436358672b5a849d6f13769ca58bfef759b37bad63c2270d9d1cf2cfe6d013",
+            "trajectoryHash": "0cb83def03027de434bae1c0fb733f32bb21a49fa042bb022522f48e16a2fb29",
+            "finalStateHash": "0ca0b12fc512eeec185708e6e5c8437f983a13c2d3146e51a08513748d82c2ba",
+            "opening": {
+              "actions": 38,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "shot",
+              "censored": false,
+              "turnover": false,
+              "turnoverEvent": null,
+              "shots": 1,
+              "hadShot": true,
+              "xG": 0.06848284110756926,
+              "firstShot": {
+                "attemptPly": 36,
+                "settlementPly": 37,
+                "shootingTeam": "black",
+                "scoringTeam": "black",
+                "ownGoal": false,
+                "xG": 0.06848284110756926,
+                "sampledXG": 0.06848284110756926,
+                "outcome": "wide",
+                "scored": false,
+                "nextAttack": "white",
+                "restartType": "goalKick"
+              },
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0.06848284110756926,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": false,
+              "actions": 0,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "not-started",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          },
+          "candidate": {
+            "initialStateHash": "32436358672b5a849d6f13769ca58bfef759b37bad63c2270d9d1cf2cfe6d013",
+            "trajectoryHash": "d8225c50ff52f10f6b0aad98a1c3ea4bc72029adea863893fbee21d0a48133ed",
+            "finalStateHash": "5521b45e05d26ed81b78573b958f4500caeb9eccde6eb8a462102a69da6450e7",
+            "opening": {
+              "actions": 13,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "turnover",
+              "censored": false,
+              "turnover": true,
+              "turnoverEvent": {
+                "ply": 12,
+                "type": "tackle",
+                "restartType": null
+              },
+              "shots": 0,
+              "hadShot": false,
+              "xG": 0,
+              "firstShot": null,
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": true,
+              "actions": 23,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "goal",
+              "shotsAgainst": 1,
+              "xGAgainst": 0.18640029370454161,
+              "goalsAgainst": 1,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 1,
+              "black": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "aggressive-aggressive-2-black",
+      "seed": 2943127479,
+      "kickoff": "black",
+      "formations": {
+        "white": "aggressive",
+        "black": "aggressive"
+      },
+      "original": {
+        "baseline": {
+          "initialStateHash": "d84f8c351a2a85282285b3686e615a91aad170290e8a3f8ecc2575fd9e88c28c",
+          "trajectoryHash": "79c706ca82c3b0123ccff974d1ba6476df3e443c800665150b78dfd20e1518e0",
+          "finalStateHash": "595797ef3002ca52e4144a6abb3385661e701e87ac26bd54c2b028cb2226ca8c",
+          "opening": {
+            "actions": 64,
+            "actionLimit": 64,
+            "extraKeeperActions": 0,
+            "termination": "limit",
+            "censored": true,
+            "turnover": false,
+            "turnoverEvent": null,
+            "shots": 0,
+            "hadShot": false,
+            "xG": 0,
+            "firstShot": null,
+            "ownGoalShots": 0,
+            "ownGoalXG": 0,
+            "netXG": 0,
+            "goals": 0
+          },
+          "followup": {
+            "triggered": false,
+            "actions": 0,
+            "actionLimit": 24,
+            "extraKeeperActions": 0,
+            "termination": "not-started",
+            "shotsAgainst": 0,
+            "xGAgainst": 0,
+            "goalsAgainst": 0,
+            "ownGoalShotsAgainst": 0,
+            "ownGoalXGAgainst": 0,
+            "ownGoalsAgainst": 0
+          },
+          "score": {
+            "white": 0,
+            "black": 0
+          }
+        },
+        "candidate": {
+          "initialStateHash": "d84f8c351a2a85282285b3686e615a91aad170290e8a3f8ecc2575fd9e88c28c",
+          "trajectoryHash": "411d3606e66f017be7b4e58fc749cd369e3c62ac12faba475be623c6fbb5a00b",
+          "finalStateHash": "06f010d600a02051c7a01727f4c773d89e98cc82add019d0219165063be24733",
+          "opening": {
+            "actions": 13,
+            "actionLimit": 64,
+            "extraKeeperActions": 0,
+            "termination": "turnover",
+            "censored": false,
+            "turnover": true,
+            "turnoverEvent": {
+              "ply": 12,
+              "type": "tackle",
+              "restartType": null
+            },
+            "shots": 0,
+            "hadShot": false,
+            "xG": 0,
+            "firstShot": null,
+            "ownGoalShots": 0,
+            "ownGoalXG": 0,
+            "netXG": 0,
+            "goals": 0
+          },
+          "followup": {
+            "triggered": true,
+            "actions": 24,
+            "actionLimit": 24,
+            "extraKeeperActions": 0,
+            "termination": "limit",
+            "shotsAgainst": 0,
+            "xGAgainst": 0,
+            "goalsAgainst": 0,
+            "ownGoalShotsAgainst": 0,
+            "ownGoalXGAgainst": 0,
+            "ownGoalsAgainst": 0
+          },
+          "score": {
+            "white": 0,
+            "black": 0
+          }
+        }
+      },
+      "exactBaseline": [],
+      "exactCandidate": [
+        1
+      ],
+      "exactBothSameAttempt": [],
+      "qualifyingAttempts": [
+        2
+      ],
+      "attempts": [
+        {
+          "attempt": 1,
+          "file": "attempts/aggressive-aggressive-2-black-1.json",
+          "workers": 6,
+          "matches": {
+            "baseline": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            },
+            "candidate": {
+              "initialState": true,
+              "trajectory": true,
+              "finalState": true,
+              "exact": true
+            }
+          },
+          "qualifiesAdverseOutcome": false,
+          "baseline": {
+            "initialStateHash": "d84f8c351a2a85282285b3686e615a91aad170290e8a3f8ecc2575fd9e88c28c",
+            "trajectoryHash": "057f751f1655c57265c037963048597e3a61b0cc4bcbf1ae79ea0dcbbdb6736e",
+            "finalStateHash": "6a81f1713c7ee31eba1fe4eb2925f01ade72cb656ee9994005cad75e6582cf5c",
+            "opening": {
+              "actions": 13,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "turnover",
+              "censored": false,
+              "turnover": true,
+              "turnoverEvent": {
+                "ply": 12,
+                "type": "tackle",
+                "restartType": null
+              },
+              "shots": 0,
+              "hadShot": false,
+              "xG": 0,
+              "firstShot": null,
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": true,
+              "actions": 24,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "limit",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          },
+          "candidate": {
+            "initialStateHash": "d84f8c351a2a85282285b3686e615a91aad170290e8a3f8ecc2575fd9e88c28c",
+            "trajectoryHash": "411d3606e66f017be7b4e58fc749cd369e3c62ac12faba475be623c6fbb5a00b",
+            "finalStateHash": "06f010d600a02051c7a01727f4c773d89e98cc82add019d0219165063be24733",
+            "opening": {
+              "actions": 13,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "turnover",
+              "censored": false,
+              "turnover": true,
+              "turnoverEvent": {
+                "ply": 12,
+                "type": "tackle",
+                "restartType": null
+              },
+              "shots": 0,
+              "hadShot": false,
+              "xG": 0,
+              "firstShot": null,
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": true,
+              "actions": 24,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "limit",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          }
+        },
+        {
+          "attempt": 2,
+          "file": "attempts/aggressive-aggressive-2-black-2.json",
+          "workers": 6,
+          "matches": {
+            "baseline": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            },
+            "candidate": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            }
+          },
+          "qualifiesAdverseOutcome": true,
+          "baseline": {
+            "initialStateHash": "d84f8c351a2a85282285b3686e615a91aad170290e8a3f8ecc2575fd9e88c28c",
+            "trajectoryHash": "6007d2e1e284e0d0faf1297ad831f576ed9c2f72e5e41a066757c8c09b6ecaf7",
+            "finalStateHash": "2f8d48f4adc3182d79169d9ff68d6d38219d6b63e4268d8391740740b4421656",
+            "opening": {
+              "actions": 64,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "limit",
+              "censored": true,
+              "turnover": false,
+              "turnoverEvent": null,
+              "shots": 0,
+              "hadShot": false,
+              "xG": 0,
+              "firstShot": null,
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": false,
+              "actions": 0,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "not-started",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          },
+          "candidate": {
+            "initialStateHash": "d84f8c351a2a85282285b3686e615a91aad170290e8a3f8ecc2575fd9e88c28c",
+            "trajectoryHash": "16b634fafb7a78a78582a006226a269bcbb6eb08adeda25432da76304b553402",
+            "finalStateHash": "bcbc385c1d6d9167df0787f69ffcaa5af6544b12c51b16e6cc3d5a4e47079e7d",
+            "opening": {
+              "actions": 13,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "turnover",
+              "censored": false,
+              "turnover": true,
+              "turnoverEvent": {
+                "ply": 12,
+                "type": "tackle",
+                "restartType": null
+              },
+              "shots": 0,
+              "hadShot": false,
+              "xG": 0,
+              "firstShot": null,
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": true,
+              "actions": 24,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "limit",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "aggressive-neutral-1-white",
+      "seed": 664616954,
+      "kickoff": "white",
+      "formations": {
+        "white": "aggressive",
+        "black": "neutral"
+      },
+      "original": {
+        "baseline": {
+          "initialStateHash": "4a516041aecdfc87f49ee719845565b317fb11b31bdc4c19075897da1fd2f0ea",
+          "trajectoryHash": "d3950f4fcfa3a702c7f211ad9ea6a9ddb17b73c533c204ec722c63f7472a28ba",
+          "finalStateHash": "c1ba5c26f8ac4851b573410c35f9dae6332685a8aca9f6344bcc00820e3b41d2",
+          "opening": {
+            "actions": 50,
+            "actionLimit": 64,
+            "extraKeeperActions": 0,
+            "termination": "shot",
+            "censored": false,
+            "turnover": false,
+            "turnoverEvent": null,
+            "shots": 1,
+            "hadShot": true,
+            "xG": 0.095101026447531,
+            "firstShot": {
+              "attemptPly": 48,
+              "settlementPly": 49,
+              "shootingTeam": "white",
+              "scoringTeam": "white",
+              "ownGoal": false,
+              "xG": 0.095101026447531,
+              "sampledXG": 0.095101026447531,
+              "outcome": "wide",
+              "scored": false,
+              "nextAttack": "black",
+              "restartType": "goalKick"
+            },
+            "ownGoalShots": 0,
+            "ownGoalXG": 0,
+            "netXG": 0.095101026447531,
+            "goals": 0
+          },
+          "followup": {
+            "triggered": false,
+            "actions": 0,
+            "actionLimit": 24,
+            "extraKeeperActions": 0,
+            "termination": "not-started",
+            "shotsAgainst": 0,
+            "xGAgainst": 0,
+            "goalsAgainst": 0,
+            "ownGoalShotsAgainst": 0,
+            "ownGoalXGAgainst": 0,
+            "ownGoalsAgainst": 0
+          },
+          "score": {
+            "white": 0,
+            "black": 0
+          }
+        },
+        "candidate": {
+          "initialStateHash": "4a516041aecdfc87f49ee719845565b317fb11b31bdc4c19075897da1fd2f0ea",
+          "trajectoryHash": "4997c35b8a811b008dfcd6a6c34fefb540b330ddca788603a3794edcd88ecdd1",
+          "finalStateHash": "e2da60a00705d556576bb2b5e2c145ac84b95a905b481e7343a4a533b5d17aa7",
+          "opening": {
+            "actions": 8,
+            "actionLimit": 64,
+            "extraKeeperActions": 0,
+            "termination": "turnover",
+            "censored": false,
+            "turnover": true,
+            "turnoverEvent": {
+              "ply": 7,
+              "type": "tackle",
+              "restartType": null
+            },
+            "shots": 0,
+            "hadShot": false,
+            "xG": 0,
+            "firstShot": null,
+            "ownGoalShots": 0,
+            "ownGoalXG": 0,
+            "netXG": 0,
+            "goals": 0
+          },
+          "followup": {
+            "triggered": true,
+            "actions": 24,
+            "actionLimit": 24,
+            "extraKeeperActions": 0,
+            "termination": "limit",
+            "shotsAgainst": 0,
+            "xGAgainst": 0,
+            "goalsAgainst": 0,
+            "ownGoalShotsAgainst": 0,
+            "ownGoalXGAgainst": 0,
+            "ownGoalsAgainst": 0
+          },
+          "score": {
+            "white": 0,
+            "black": 0
+          }
+        }
+      },
+      "exactBaseline": [],
+      "exactCandidate": [],
+      "exactBothSameAttempt": [],
+      "qualifyingAttempts": [
+        1
+      ],
+      "attempts": [
+        {
+          "attempt": 1,
+          "file": "attempts/aggressive-neutral-1-white-1.json",
+          "workers": 6,
+          "matches": {
+            "baseline": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            },
+            "candidate": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            }
+          },
+          "qualifiesAdverseOutcome": true,
+          "baseline": {
+            "initialStateHash": "4a516041aecdfc87f49ee719845565b317fb11b31bdc4c19075897da1fd2f0ea",
+            "trajectoryHash": "f1a047c36555b53765970cad7a153c3a5262e30543b410755c5fcae88a9c20a4",
+            "finalStateHash": "5b1555f1ecb631c18b42953d210ef234e0fb71ed0077362bb7158cbf100440fb",
+            "opening": {
+              "actions": 50,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "shot",
+              "censored": false,
+              "turnover": false,
+              "turnoverEvent": null,
+              "shots": 1,
+              "hadShot": true,
+              "xG": 0.095101026447531,
+              "firstShot": {
+                "attemptPly": 48,
+                "settlementPly": 49,
+                "shootingTeam": "white",
+                "scoringTeam": "white",
+                "ownGoal": false,
+                "xG": 0.095101026447531,
+                "sampledXG": 0.095101026447531,
+                "outcome": "wide",
+                "scored": false,
+                "nextAttack": "black",
+                "restartType": "goalKick"
+              },
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0.095101026447531,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": false,
+              "actions": 0,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "not-started",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          },
+          "candidate": {
+            "initialStateHash": "4a516041aecdfc87f49ee719845565b317fb11b31bdc4c19075897da1fd2f0ea",
+            "trajectoryHash": "b45c1c9299e48f767c1c177a5154e51bb9e3194aff09049b21591f5cf718eeca",
+            "finalStateHash": "2591ce2fc2f2e46faea16b142405856cd9dee217d2a3f2166712c03077341648",
+            "opening": {
+              "actions": 8,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "turnover",
+              "censored": false,
+              "turnover": true,
+              "turnoverEvent": {
+                "ply": 7,
+                "type": "tackle",
+                "restartType": null
+              },
+              "shots": 0,
+              "hadShot": false,
+              "xG": 0,
+              "firstShot": null,
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": true,
+              "actions": 24,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "limit",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "aggressive-neutral-2-white",
+      "seed": 2714730843,
+      "kickoff": "white",
+      "formations": {
+        "white": "aggressive",
+        "black": "neutral"
+      },
+      "original": {
+        "baseline": {
+          "initialStateHash": "8a07fe5483b097f84bddaa5291e4b3df6ca68da704435d549651d6965f5c3a5d",
+          "trajectoryHash": "7b02646d9e421c7d7f8a5fc0926985e939b042a6fbbc0ec29730c39ee0ce8f4d",
+          "finalStateHash": "829ea0f94f73409a8901fd3021bf75742ff02502b6ecf2e803518cbcce6b4d6b",
+          "opening": {
+            "actions": 64,
+            "actionLimit": 64,
+            "extraKeeperActions": 0,
+            "termination": "limit",
+            "censored": true,
+            "turnover": false,
+            "turnoverEvent": null,
+            "shots": 0,
+            "hadShot": false,
+            "xG": 0,
+            "firstShot": null,
+            "ownGoalShots": 0,
+            "ownGoalXG": 0,
+            "netXG": 0,
+            "goals": 0
+          },
+          "followup": {
+            "triggered": false,
+            "actions": 0,
+            "actionLimit": 24,
+            "extraKeeperActions": 0,
+            "termination": "not-started",
+            "shotsAgainst": 0,
+            "xGAgainst": 0,
+            "goalsAgainst": 0,
+            "ownGoalShotsAgainst": 0,
+            "ownGoalXGAgainst": 0,
+            "ownGoalsAgainst": 0
+          },
+          "score": {
+            "white": 0,
+            "black": 0
+          }
+        },
+        "candidate": {
+          "initialStateHash": "8a07fe5483b097f84bddaa5291e4b3df6ca68da704435d549651d6965f5c3a5d",
+          "trajectoryHash": "d6b0fe3b02bcada5e98fb36604320bef71a7df19a4eeb352f65b86ae4210b8ce",
+          "finalStateHash": "2990b412b894c84ff2c52e77ec97c04198354db3e6ad26ee0fc74fe3f60852fa",
+          "opening": {
+            "actions": 8,
+            "actionLimit": 64,
+            "extraKeeperActions": 0,
+            "termination": "turnover",
+            "censored": false,
+            "turnover": true,
+            "turnoverEvent": {
+              "ply": 7,
+              "type": "tackle",
+              "restartType": null
+            },
+            "shots": 0,
+            "hadShot": false,
+            "xG": 0,
+            "firstShot": null,
+            "ownGoalShots": 0,
+            "ownGoalXG": 0,
+            "netXG": 0,
+            "goals": 0
+          },
+          "followup": {
+            "triggered": true,
+            "actions": 24,
+            "actionLimit": 24,
+            "extraKeeperActions": 0,
+            "termination": "limit",
+            "shotsAgainst": 0,
+            "xGAgainst": 0,
+            "goalsAgainst": 0,
+            "ownGoalShotsAgainst": 0,
+            "ownGoalXGAgainst": 0,
+            "ownGoalsAgainst": 0
+          },
+          "score": {
+            "white": 0,
+            "black": 0
+          }
+        }
+      },
+      "exactBaseline": [],
+      "exactCandidate": [],
+      "exactBothSameAttempt": [],
+      "qualifyingAttempts": [
+        2
+      ],
+      "attempts": [
+        {
+          "attempt": 1,
+          "file": "attempts/aggressive-neutral-2-white-1.json",
+          "workers": 6,
+          "matches": {
+            "baseline": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            },
+            "candidate": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            }
+          },
+          "qualifiesAdverseOutcome": false,
+          "baseline": {
+            "initialStateHash": "8a07fe5483b097f84bddaa5291e4b3df6ca68da704435d549651d6965f5c3a5d",
+            "trajectoryHash": "ee9c9c0abe375f426b17f2d61f47312eced4e1428daa988130c3f1ab2a3588b4",
+            "finalStateHash": "671dc06a578144a6a88a7db3d611ba7387bfd66f0d75db952619617afd3925c7",
+            "opening": {
+              "actions": 64,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "limit",
+              "censored": true,
+              "turnover": false,
+              "turnoverEvent": null,
+              "shots": 0,
+              "hadShot": false,
+              "xG": 0,
+              "firstShot": null,
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": false,
+              "actions": 0,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "not-started",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          },
+          "candidate": {
+            "initialStateHash": "8a07fe5483b097f84bddaa5291e4b3df6ca68da704435d549651d6965f5c3a5d",
+            "trajectoryHash": "e26acbd4666ba88fdd546ff63eff1d308f89931bde4f3dac27b41bac7105d242",
+            "finalStateHash": "abecb9abd44bb7ef0dae3ba68bc9d0dd718862551b5facf63b0dc0b3a60cf512",
+            "opening": {
+              "actions": 17,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "shot",
+              "censored": false,
+              "turnover": false,
+              "turnoverEvent": null,
+              "shots": 1,
+              "hadShot": true,
+              "xG": 0.04229612053084272,
+              "firstShot": {
+                "attemptPly": 15,
+                "settlementPly": 16,
+                "shootingTeam": "white",
+                "scoringTeam": "white",
+                "ownGoal": false,
+                "xG": 0.04229612053084272,
+                "sampledXG": 0.04229612053084272,
+                "outcome": "saved",
+                "scored": false,
+                "nextAttack": "black",
+                "restartType": null
+              },
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0.04229612053084272,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": false,
+              "actions": 0,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "not-started",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          }
+        },
+        {
+          "attempt": 2,
+          "file": "attempts/aggressive-neutral-2-white-2.json",
+          "workers": 6,
+          "matches": {
+            "baseline": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            },
+            "candidate": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            }
+          },
+          "qualifiesAdverseOutcome": true,
+          "baseline": {
+            "initialStateHash": "8a07fe5483b097f84bddaa5291e4b3df6ca68da704435d549651d6965f5c3a5d",
+            "trajectoryHash": "d5f68ad1b0f1579f37f0307663a1d9be503f42e0f96450975232d75cd1d2366b",
+            "finalStateHash": "ab4c1d9ee70395325c5300fe5a571558813204a1e0a8c3c6f11b7260922561d3",
+            "opening": {
+              "actions": 64,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "limit",
+              "censored": true,
+              "turnover": false,
+              "turnoverEvent": null,
+              "shots": 0,
+              "hadShot": false,
+              "xG": 0,
+              "firstShot": null,
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": false,
+              "actions": 0,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "not-started",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          },
+          "candidate": {
+            "initialStateHash": "8a07fe5483b097f84bddaa5291e4b3df6ca68da704435d549651d6965f5c3a5d",
+            "trajectoryHash": "0aec02ad76ab8e2af762e5d1bbd36930184c98341de13f3ea11cc3dc359ab300",
+            "finalStateHash": "289b28ff979ec01bff904ff8cae94f3cb0bc69490179a278a3f11db7b6a4ec17",
+            "opening": {
+              "actions": 8,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "turnover",
+              "censored": false,
+              "turnover": true,
+              "turnoverEvent": {
+                "ply": 7,
+                "type": "tackle",
+                "restartType": null
+              },
+              "shots": 0,
+              "hadShot": false,
+              "xG": 0,
+              "firstShot": null,
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": true,
+              "actions": 24,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "limit",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "aggressive-neutral-2-black",
+      "seed": 2714730843,
+      "kickoff": "black",
+      "formations": {
+        "white": "aggressive",
+        "black": "neutral"
+      },
+      "original": {
+        "baseline": {
+          "initialStateHash": "f843f0b9dc1c6756df469aa1e5cb480dce6588d6f82c799fe83d5b6b5aa13e53",
+          "trajectoryHash": "dd5f3cd8b0a53de5687044bb927b288819ff9ccb35e62913b4bbe19a7eda6557",
+          "finalStateHash": "49a401abbc17dc9f061a12f7d82a46aee71126c2649f7f23113084e87de103c9",
+          "opening": {
+            "actions": 64,
+            "actionLimit": 64,
+            "extraKeeperActions": 0,
+            "termination": "limit",
+            "censored": true,
+            "turnover": false,
+            "turnoverEvent": null,
+            "shots": 0,
+            "hadShot": false,
+            "xG": 0,
+            "firstShot": null,
+            "ownGoalShots": 0,
+            "ownGoalXG": 0,
+            "netXG": 0,
+            "goals": 0
+          },
+          "followup": {
+            "triggered": false,
+            "actions": 0,
+            "actionLimit": 24,
+            "extraKeeperActions": 0,
+            "termination": "not-started",
+            "shotsAgainst": 0,
+            "xGAgainst": 0,
+            "goalsAgainst": 0,
+            "ownGoalShotsAgainst": 0,
+            "ownGoalXGAgainst": 0,
+            "ownGoalsAgainst": 0
+          },
+          "score": {
+            "white": 0,
+            "black": 0
+          }
+        },
+        "candidate": {
+          "initialStateHash": "f843f0b9dc1c6756df469aa1e5cb480dce6588d6f82c799fe83d5b6b5aa13e53",
+          "trajectoryHash": "9abd63db06975df7d0bcbe2edc886862809868b6bfc8d7ab64870d299ab055e1",
+          "finalStateHash": "e665d09ac17a435ebd817c909c9845899e84c3908eed1949ae7fadae05a828b6",
+          "opening": {
+            "actions": 32,
+            "actionLimit": 64,
+            "extraKeeperActions": 0,
+            "termination": "turnover",
+            "censored": false,
+            "turnover": true,
+            "turnoverEvent": {
+              "ply": 31,
+              "type": "tackle",
+              "restartType": null
+            },
+            "shots": 0,
+            "hadShot": false,
+            "xG": 0,
+            "firstShot": null,
+            "ownGoalShots": 0,
+            "ownGoalXG": 0,
+            "netXG": 0,
+            "goals": 0
+          },
+          "followup": {
+            "triggered": true,
+            "actions": 24,
+            "actionLimit": 24,
+            "extraKeeperActions": 0,
+            "termination": "limit",
+            "shotsAgainst": 0,
+            "xGAgainst": 0,
+            "goalsAgainst": 0,
+            "ownGoalShotsAgainst": 0,
+            "ownGoalXGAgainst": 0,
+            "ownGoalsAgainst": 0
+          },
+          "score": {
+            "white": 0,
+            "black": 0
+          }
+        }
+      },
+      "exactBaseline": [],
+      "exactCandidate": [],
+      "exactBothSameAttempt": [],
+      "qualifyingAttempts": [
+        2
+      ],
+      "attempts": [
+        {
+          "attempt": 1,
+          "file": "attempts/aggressive-neutral-2-black-1.json",
+          "workers": 6,
+          "matches": {
+            "baseline": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            },
+            "candidate": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            }
+          },
+          "qualifiesAdverseOutcome": false,
+          "baseline": {
+            "initialStateHash": "f843f0b9dc1c6756df469aa1e5cb480dce6588d6f82c799fe83d5b6b5aa13e53",
+            "trajectoryHash": "760ea5c91a2c17b8707c09cbaf973e86b5046a7c91844a963ebe378a35caff3d",
+            "finalStateHash": "84bbe1ece69595749fb35758c91e8e61bcb91d6310622a2fc45cc2d2aa2e230d",
+            "opening": {
+              "actions": 64,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "limit",
+              "censored": true,
+              "turnover": false,
+              "turnoverEvent": null,
+              "shots": 0,
+              "hadShot": false,
+              "xG": 0,
+              "firstShot": null,
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": false,
+              "actions": 0,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "not-started",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          },
+          "candidate": {
+            "initialStateHash": "f843f0b9dc1c6756df469aa1e5cb480dce6588d6f82c799fe83d5b6b5aa13e53",
+            "trajectoryHash": "1615bad700ed45972b9a0e05155852251c53c582a55d046602db7b17515238e3",
+            "finalStateHash": "76454eba69434e62f3692a9fe09c3d1c8637c9537f59b96329c6ea2930bf2507",
+            "opening": {
+              "actions": 18,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "shot",
+              "censored": false,
+              "turnover": false,
+              "turnoverEvent": null,
+              "shots": 1,
+              "hadShot": true,
+              "xG": 0.055406631384783286,
+              "firstShot": {
+                "attemptPly": 16,
+                "settlementPly": 17,
+                "shootingTeam": "black",
+                "scoringTeam": "black",
+                "ownGoal": false,
+                "xG": 0.055406631384783286,
+                "sampledXG": 0.055406631384783286,
+                "outcome": "saved",
+                "scored": false,
+                "nextAttack": "white",
+                "restartType": null
+              },
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0.055406631384783286,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": false,
+              "actions": 0,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "not-started",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          }
+        },
+        {
+          "attempt": 2,
+          "file": "attempts/aggressive-neutral-2-black-2.json",
+          "workers": 6,
+          "matches": {
+            "baseline": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            },
+            "candidate": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            }
+          },
+          "qualifiesAdverseOutcome": true,
+          "baseline": {
+            "initialStateHash": "f843f0b9dc1c6756df469aa1e5cb480dce6588d6f82c799fe83d5b6b5aa13e53",
+            "trajectoryHash": "079bd206bb1b113d01ba1e1728235f8ad96a0403dadf04093ef2a67781028eb0",
+            "finalStateHash": "b3076454207975b0e320630a3e6c4e08533e015c82fb1ae998a85ca5212b88f7",
+            "opening": {
+              "actions": 54,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "shot",
+              "censored": false,
+              "turnover": false,
+              "turnoverEvent": null,
+              "shots": 1,
+              "hadShot": true,
+              "xG": 0.09578151435082304,
+              "firstShot": {
+                "attemptPly": 52,
+                "settlementPly": 53,
+                "shootingTeam": "black",
+                "scoringTeam": "black",
+                "ownGoal": false,
+                "xG": 0.09578151435082304,
+                "sampledXG": 0.09578151435082304,
+                "outcome": "wide",
+                "scored": false,
+                "nextAttack": "white",
+                "restartType": "goalKick"
+              },
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0.09578151435082304,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": false,
+              "actions": 0,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "not-started",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          },
+          "candidate": {
+            "initialStateHash": "f843f0b9dc1c6756df469aa1e5cb480dce6588d6f82c799fe83d5b6b5aa13e53",
+            "trajectoryHash": "63047caba0f2f6a6cfd4633930a8d5b7ebc093d34ba37da6d6117f06d86aca12",
+            "finalStateHash": "2f8d9806565f00bf3aff2bed90e594dfcccbc3b8b7cb6c1262065d45d388ffaf",
+            "opening": {
+              "actions": 18,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "turnover",
+              "censored": false,
+              "turnover": true,
+              "turnoverEvent": {
+                "ply": 17,
+                "type": "tackle",
+                "restartType": null
+              },
+              "shots": 0,
+              "hadShot": false,
+              "xG": 0,
+              "firstShot": null,
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": true,
+              "actions": 24,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "limit",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "neutral-neutral-1-black",
+      "seed": 791577934,
+      "kickoff": "black",
+      "formations": {
+        "white": "neutral",
+        "black": "neutral"
+      },
+      "original": {
+        "baseline": {
+          "initialStateHash": "50ca449110a239f0d453e51444b1890927dc725e2a36613287fc19bc03a316e0",
+          "trajectoryHash": "8ceac60bf45b10022b4407a979e7eb1c57fcd767c732352c4ba1a3b5d17c12b4",
+          "finalStateHash": "ee7ea81b07ccf765355a05fbe0eb13b1a960dd868c88ed20f7f5f47d555c9d60",
+          "opening": {
+            "actions": 14,
+            "actionLimit": 64,
+            "extraKeeperActions": 0,
+            "termination": "shot",
+            "censored": false,
+            "turnover": false,
+            "turnoverEvent": null,
+            "shots": 1,
+            "hadShot": true,
+            "xG": 0.038978860201282946,
+            "firstShot": {
+              "attemptPly": 12,
+              "settlementPly": 13,
+              "shootingTeam": "black",
+              "scoringTeam": "black",
+              "ownGoal": false,
+              "xG": 0.038978860201282946,
+              "sampledXG": 0.038978860201282946,
+              "outcome": "corner",
+              "scored": false,
+              "nextAttack": "black",
+              "restartType": "corner"
+            },
+            "ownGoalShots": 0,
+            "ownGoalXG": 0,
+            "netXG": 0.038978860201282946,
+            "goals": 0
+          },
+          "followup": {
+            "triggered": false,
+            "actions": 0,
+            "actionLimit": 24,
+            "extraKeeperActions": 0,
+            "termination": "not-started",
+            "shotsAgainst": 0,
+            "xGAgainst": 0,
+            "goalsAgainst": 0,
+            "ownGoalShotsAgainst": 0,
+            "ownGoalXGAgainst": 0,
+            "ownGoalsAgainst": 0
+          },
+          "score": {
+            "white": 0,
+            "black": 0
+          }
+        },
+        "candidate": {
+          "initialStateHash": "50ca449110a239f0d453e51444b1890927dc725e2a36613287fc19bc03a316e0",
+          "trajectoryHash": "5dc4578bcd9f81545fb42776cf4a58738a6513769befeaece6d256dc32931aed",
+          "finalStateHash": "4b85ae94bf4caada059c4cba09fefce2e944793be8f062db5258c4ce40be82b4",
+          "opening": {
+            "actions": 9,
+            "actionLimit": 64,
+            "extraKeeperActions": 0,
+            "termination": "turnover",
+            "censored": false,
+            "turnover": true,
+            "turnoverEvent": {
+              "ply": 8,
+              "type": "tackle",
+              "restartType": null
+            },
+            "shots": 0,
+            "hadShot": false,
+            "xG": 0,
+            "firstShot": null,
+            "ownGoalShots": 0,
+            "ownGoalXG": 0,
+            "netXG": 0,
+            "goals": 0
+          },
+          "followup": {
+            "triggered": true,
+            "actions": 24,
+            "actionLimit": 24,
+            "extraKeeperActions": 0,
+            "termination": "limit",
+            "shotsAgainst": 0,
+            "xGAgainst": 0,
+            "goalsAgainst": 0,
+            "ownGoalShotsAgainst": 0,
+            "ownGoalXGAgainst": 0,
+            "ownGoalsAgainst": 0
+          },
+          "score": {
+            "white": 0,
+            "black": 0
+          }
+        }
+      },
+      "exactBaseline": [],
+      "exactCandidate": [],
+      "exactBothSameAttempt": [],
+      "qualifyingAttempts": [
+        1
+      ],
+      "attempts": [
+        {
+          "attempt": 1,
+          "file": "attempts/neutral-neutral-1-black-1.json",
+          "workers": 6,
+          "matches": {
+            "baseline": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            },
+            "candidate": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            }
+          },
+          "qualifiesAdverseOutcome": true,
+          "baseline": {
+            "initialStateHash": "50ca449110a239f0d453e51444b1890927dc725e2a36613287fc19bc03a316e0",
+            "trajectoryHash": "91e28b22238f2000ea2133680e6ed6b0fa0d77e76b8f7d71b33e3954e5164df4",
+            "finalStateHash": "0238ec2b37a5fc4d3c231b06998a50e49ef969735ff24caf88a62c4e0fc49e56",
+            "opening": {
+              "actions": 64,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "limit",
+              "censored": true,
+              "turnover": false,
+              "turnoverEvent": null,
+              "shots": 0,
+              "hadShot": false,
+              "xG": 0,
+              "firstShot": null,
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": false,
+              "actions": 0,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "not-started",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          },
+          "candidate": {
+            "initialStateHash": "50ca449110a239f0d453e51444b1890927dc725e2a36613287fc19bc03a316e0",
+            "trajectoryHash": "74dcd3a2abdb8a7625368bd8fe00b105a32f4e8050871bfac254257b19aeb931",
+            "finalStateHash": "3b8a907fe4dc3745e8beab8a3ff2f74aa6c806172a6bcb11565197e16eea9619",
+            "opening": {
+              "actions": 9,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "turnover",
+              "censored": false,
+              "turnover": true,
+              "turnoverEvent": {
+                "ply": 8,
+                "type": "tackle",
+                "restartType": null
+              },
+              "shots": 0,
+              "hadShot": false,
+              "xG": 0,
+              "firstShot": null,
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": true,
+              "actions": 24,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "limit",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "neutral-neutral-2-white",
+      "seed": 830632677,
+      "kickoff": "white",
+      "formations": {
+        "white": "neutral",
+        "black": "neutral"
+      },
+      "original": {
+        "baseline": {
+          "initialStateHash": "9ba2c7de7b549536bf9ffb815564c68b3e1dbcc8c9e5d23fe876142e8b30fc01",
+          "trajectoryHash": "7d6c3276b3c5766d71db61223bec33595ea20ac7fa45a4b3eb36ece6a4182828",
+          "finalStateHash": "1302b4abb499ceb2776297a8e00b0f3e77a1974e2a51b99b6f028a2d7fdb1732",
+          "opening": {
+            "actions": 64,
+            "actionLimit": 64,
+            "extraKeeperActions": 0,
+            "termination": "limit",
+            "censored": true,
+            "turnover": false,
+            "turnoverEvent": null,
+            "shots": 0,
+            "hadShot": false,
+            "xG": 0,
+            "firstShot": null,
+            "ownGoalShots": 0,
+            "ownGoalXG": 0,
+            "netXG": 0,
+            "goals": 0
+          },
+          "followup": {
+            "triggered": false,
+            "actions": 0,
+            "actionLimit": 24,
+            "extraKeeperActions": 0,
+            "termination": "not-started",
+            "shotsAgainst": 0,
+            "xGAgainst": 0,
+            "goalsAgainst": 0,
+            "ownGoalShotsAgainst": 0,
+            "ownGoalXGAgainst": 0,
+            "ownGoalsAgainst": 0
+          },
+          "score": {
+            "white": 0,
+            "black": 0
+          }
+        },
+        "candidate": {
+          "initialStateHash": "9ba2c7de7b549536bf9ffb815564c68b3e1dbcc8c9e5d23fe876142e8b30fc01",
+          "trajectoryHash": "4638562df4d99b6680188bee5b2a41a91c8e7eaf90ed136ee0f60a7bd0f42323",
+          "finalStateHash": "c2651b7388b2596e85b47d723ca06b3e44a824707ab5ed53bca49a3e772c3b81",
+          "opening": {
+            "actions": 8,
+            "actionLimit": 64,
+            "extraKeeperActions": 0,
+            "termination": "turnover",
+            "censored": false,
+            "turnover": true,
+            "turnoverEvent": {
+              "ply": 7,
+              "type": "tackle",
+              "restartType": null
+            },
+            "shots": 0,
+            "hadShot": false,
+            "xG": 0,
+            "firstShot": null,
+            "ownGoalShots": 0,
+            "ownGoalXG": 0,
+            "netXG": 0,
+            "goals": 0
+          },
+          "followup": {
+            "triggered": true,
+            "actions": 24,
+            "actionLimit": 24,
+            "extraKeeperActions": 0,
+            "termination": "limit",
+            "shotsAgainst": 0,
+            "xGAgainst": 0,
+            "goalsAgainst": 0,
+            "ownGoalShotsAgainst": 0,
+            "ownGoalXGAgainst": 0,
+            "ownGoalsAgainst": 0
+          },
+          "score": {
+            "white": 0,
+            "black": 0
+          }
+        }
+      },
+      "exactBaseline": [],
+      "exactCandidate": [],
+      "exactBothSameAttempt": [],
+      "qualifyingAttempts": [
+        1
+      ],
+      "attempts": [
+        {
+          "attempt": 1,
+          "file": "attempts/neutral-neutral-2-white-1.json",
+          "workers": 6,
+          "matches": {
+            "baseline": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            },
+            "candidate": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            }
+          },
+          "qualifiesAdverseOutcome": true,
+          "baseline": {
+            "initialStateHash": "9ba2c7de7b549536bf9ffb815564c68b3e1dbcc8c9e5d23fe876142e8b30fc01",
+            "trajectoryHash": "88bd145dbd026c736b3ee1b3ef7c82e7a5483f6c1d2836144e334f76ac067105",
+            "finalStateHash": "636d67ef09e28055ff947b7e6fb55a42738eac6724e549de88ee8ed1b5504117",
+            "opening": {
+              "actions": 14,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "shot",
+              "censored": false,
+              "turnover": false,
+              "turnoverEvent": null,
+              "shots": 1,
+              "hadShot": true,
+              "xG": 0.06693339630523339,
+              "firstShot": {
+                "attemptPly": 12,
+                "settlementPly": 13,
+                "shootingTeam": "white",
+                "scoringTeam": "white",
+                "ownGoal": false,
+                "xG": 0.06693339630523339,
+                "sampledXG": 0.06693339630523339,
+                "outcome": "goal",
+                "scored": true,
+                "nextAttack": "black",
+                "restartType": null
+              },
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0.06693339630523339,
+              "goals": 1
+            },
+            "followup": {
+              "triggered": false,
+              "actions": 0,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "not-started",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 1,
+              "black": 0
+            }
+          },
+          "candidate": {
+            "initialStateHash": "9ba2c7de7b549536bf9ffb815564c68b3e1dbcc8c9e5d23fe876142e8b30fc01",
+            "trajectoryHash": "915ad80d01cb9831805f83fac48fac1601985b7c6bea0ef0ac4c10976f630cb0",
+            "finalStateHash": "908c3a46f9b5b19b3b88c51f3dae5a7cb7358ce81203c28d6874600874db7e65",
+            "opening": {
+              "actions": 8,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "turnover",
+              "censored": false,
+              "turnover": true,
+              "turnoverEvent": {
+                "ply": 7,
+                "type": "tackle",
+                "restartType": null
+              },
+              "shots": 0,
+              "hadShot": false,
+              "xG": 0,
+              "firstShot": null,
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": true,
+              "actions": 24,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "limit",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "neutral-neutral-2-black",
+      "seed": 830632677,
+      "kickoff": "black",
+      "formations": {
+        "white": "neutral",
+        "black": "neutral"
+      },
+      "original": {
+        "baseline": {
+          "initialStateHash": "edc4d2b54082157b96b456a0232331d8598f2a6d56e27919902d34285fa5e8a9",
+          "trajectoryHash": "cc5b4407611393dc43d611af8bee2d0e7b0ba8325b09811adef927970f633f7e",
+          "finalStateHash": "532c84778b0ad413b15ea18e06f293740b01c75a5006d9b38038e5cd6c247662",
+          "opening": {
+            "actions": 64,
+            "actionLimit": 64,
+            "extraKeeperActions": 0,
+            "termination": "limit",
+            "censored": true,
+            "turnover": false,
+            "turnoverEvent": null,
+            "shots": 0,
+            "hadShot": false,
+            "xG": 0,
+            "firstShot": null,
+            "ownGoalShots": 0,
+            "ownGoalXG": 0,
+            "netXG": 0,
+            "goals": 0
+          },
+          "followup": {
+            "triggered": false,
+            "actions": 0,
+            "actionLimit": 24,
+            "extraKeeperActions": 0,
+            "termination": "not-started",
+            "shotsAgainst": 0,
+            "xGAgainst": 0,
+            "goalsAgainst": 0,
+            "ownGoalShotsAgainst": 0,
+            "ownGoalXGAgainst": 0,
+            "ownGoalsAgainst": 0
+          },
+          "score": {
+            "white": 0,
+            "black": 0
+          }
+        },
+        "candidate": {
+          "initialStateHash": "edc4d2b54082157b96b456a0232331d8598f2a6d56e27919902d34285fa5e8a9",
+          "trajectoryHash": "20526b9a63f1bf3a3082e70cb92d6a88397d7ba9fefcf138fa182617a5d4112b",
+          "finalStateHash": "8a398527875d812b823b500958c1b49efe7fd265fe968c8aec1994c70e6265ae",
+          "opening": {
+            "actions": 40,
+            "actionLimit": 64,
+            "extraKeeperActions": 0,
+            "termination": "turnover",
+            "censored": false,
+            "turnover": true,
+            "turnoverEvent": {
+              "ply": 39,
+              "type": "tackle",
+              "restartType": null
+            },
+            "shots": 0,
+            "hadShot": false,
+            "xG": 0,
+            "firstShot": null,
+            "ownGoalShots": 0,
+            "ownGoalXG": 0,
+            "netXG": 0,
+            "goals": 0
+          },
+          "followup": {
+            "triggered": true,
+            "actions": 24,
+            "actionLimit": 24,
+            "extraKeeperActions": 0,
+            "termination": "limit",
+            "shotsAgainst": 0,
+            "xGAgainst": 0,
+            "goalsAgainst": 0,
+            "ownGoalShotsAgainst": 0,
+            "ownGoalXGAgainst": 0,
+            "ownGoalsAgainst": 0
+          },
+          "score": {
+            "white": 0,
+            "black": 0
+          }
+        }
+      },
+      "exactBaseline": [],
+      "exactCandidate": [],
+      "exactBothSameAttempt": [],
+      "qualifyingAttempts": [
+        1
+      ],
+      "attempts": [
+        {
+          "attempt": 1,
+          "file": "attempts/neutral-neutral-2-black-1.json",
+          "workers": 6,
+          "matches": {
+            "baseline": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            },
+            "candidate": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            }
+          },
+          "qualifiesAdverseOutcome": true,
+          "baseline": {
+            "initialStateHash": "edc4d2b54082157b96b456a0232331d8598f2a6d56e27919902d34285fa5e8a9",
+            "trajectoryHash": "d0319a4eb1b84b8f374157a610ad1bc80f165e41975702da3296cd6439dd2a59",
+            "finalStateHash": "5bf486996e70b7e1fa7bbaa8be687ef9f68066492769887e73027704927f3e8c",
+            "opening": {
+              "actions": 14,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "shot",
+              "censored": false,
+              "turnover": false,
+              "turnoverEvent": null,
+              "shots": 1,
+              "hadShot": true,
+              "xG": 0.038978860201282946,
+              "firstShot": {
+                "attemptPly": 12,
+                "settlementPly": 13,
+                "shootingTeam": "black",
+                "scoringTeam": "black",
+                "ownGoal": false,
+                "xG": 0.038978860201282946,
+                "sampledXG": 0.038978860201282946,
+                "outcome": "goal",
+                "scored": true,
+                "nextAttack": "white",
+                "restartType": null
+              },
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0.038978860201282946,
+              "goals": 1
+            },
+            "followup": {
+              "triggered": false,
+              "actions": 0,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "not-started",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 1
+            }
+          },
+          "candidate": {
+            "initialStateHash": "edc4d2b54082157b96b456a0232331d8598f2a6d56e27919902d34285fa5e8a9",
+            "trajectoryHash": "592347d2783b9cb052b72a00ee148d232a0b9c1b23ba5d36ceaedf2cd440f23d",
+            "finalStateHash": "8d8f984223d71078ca1a1abbbf3abc60e3db97bd4a89c8240e7a968ecce96b99",
+            "opening": {
+              "actions": 8,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "turnover",
+              "censored": false,
+              "turnover": true,
+              "turnoverEvent": {
+                "ply": 7,
+                "type": "tackle",
+                "restartType": null
+              },
+              "shots": 0,
+              "hadShot": false,
+              "xG": 0,
+              "firstShot": null,
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": true,
+              "actions": 24,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "limit",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "neutral-defensive-2-white",
+      "seed": 3042271559,
+      "kickoff": "white",
+      "formations": {
+        "white": "neutral",
+        "black": "defensive"
+      },
+      "original": {
+        "baseline": {
+          "initialStateHash": "e2bdfbce11d08086e6821a91b8764f457ea14dba3887cde24b5e4717eee9e541",
+          "trajectoryHash": "3a4578358a2b8aaa0e1bafe87b790af9966f6710d4eb8c55cc6f81608d6e8df8",
+          "finalStateHash": "85e93ea4ef666d93e6055f0491ba9460ef944ea0bbc08ebf48fc9946c0da6c4e",
+          "opening": {
+            "actions": 37,
+            "actionLimit": 64,
+            "extraKeeperActions": 0,
+            "termination": "shot",
+            "censored": false,
+            "turnover": false,
+            "turnoverEvent": null,
+            "shots": 1,
+            "hadShot": true,
+            "xG": 0.15882290322546955,
+            "firstShot": {
+              "attemptPly": 35,
+              "settlementPly": 36,
+              "shootingTeam": "white",
+              "scoringTeam": "white",
+              "ownGoal": false,
+              "xG": 0.15882290322546955,
+              "sampledXG": 0.15882290322546955,
+              "outcome": "wide",
+              "scored": false,
+              "nextAttack": "black",
+              "restartType": "goalKick"
+            },
+            "ownGoalShots": 0,
+            "ownGoalXG": 0,
+            "netXG": 0.15882290322546955,
+            "goals": 0
+          },
+          "followup": {
+            "triggered": false,
+            "actions": 0,
+            "actionLimit": 24,
+            "extraKeeperActions": 0,
+            "termination": "not-started",
+            "shotsAgainst": 0,
+            "xGAgainst": 0,
+            "goalsAgainst": 0,
+            "ownGoalShotsAgainst": 0,
+            "ownGoalXGAgainst": 0,
+            "ownGoalsAgainst": 0
+          },
+          "score": {
+            "white": 0,
+            "black": 0
+          }
+        },
+        "candidate": {
+          "initialStateHash": "e2bdfbce11d08086e6821a91b8764f457ea14dba3887cde24b5e4717eee9e541",
+          "trajectoryHash": "e45d4d9c4f8335cbb00545ef501911252554453432450f9f427e807dac3af17e",
+          "finalStateHash": "9b41f28580d797038209f6ad48d0b0e80df0c20e4eecc677fb797ab1ac0a80a8",
+          "opening": {
+            "actions": 32,
+            "actionLimit": 64,
+            "extraKeeperActions": 0,
+            "termination": "turnover",
+            "censored": false,
+            "turnover": true,
+            "turnoverEvent": {
+              "ply": 31,
+              "type": "tackle",
+              "restartType": null
+            },
+            "shots": 0,
+            "hadShot": false,
+            "xG": 0,
+            "firstShot": null,
+            "ownGoalShots": 0,
+            "ownGoalXG": 0,
+            "netXG": 0,
+            "goals": 0
+          },
+          "followup": {
+            "triggered": true,
+            "actions": 24,
+            "actionLimit": 24,
+            "extraKeeperActions": 0,
+            "termination": "limit",
+            "shotsAgainst": 0,
+            "xGAgainst": 0,
+            "goalsAgainst": 0,
+            "ownGoalShotsAgainst": 0,
+            "ownGoalXGAgainst": 0,
+            "ownGoalsAgainst": 0
+          },
+          "score": {
+            "white": 0,
+            "black": 0
+          }
+        }
+      },
+      "exactBaseline": [],
+      "exactCandidate": [],
+      "exactBothSameAttempt": [],
+      "qualifyingAttempts": [
+        7
+      ],
+      "attempts": [
+        {
+          "attempt": 1,
+          "file": "attempts/neutral-defensive-2-white-1.json",
+          "workers": 6,
+          "matches": {
+            "baseline": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            },
+            "candidate": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            }
+          },
+          "qualifiesAdverseOutcome": false,
+          "baseline": {
+            "initialStateHash": "e2bdfbce11d08086e6821a91b8764f457ea14dba3887cde24b5e4717eee9e541",
+            "trajectoryHash": "a548a840a4577f5a06283d9a1615048950523d858de5a79a6e5bada09857b861",
+            "finalStateHash": "7a654c6992342d3874c59e7da7888d096c5f1b4660e64c936ea256615bf964eb",
+            "opening": {
+              "actions": 57,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "turnover",
+              "censored": false,
+              "turnover": true,
+              "turnoverEvent": {
+                "ply": 56,
+                "type": "offside",
+                "restartType": "offside"
+              },
+              "shots": 0,
+              "hadShot": false,
+              "xG": 0,
+              "firstShot": null,
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": true,
+              "actions": 24,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "limit",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          },
+          "candidate": {
+            "initialStateHash": "e2bdfbce11d08086e6821a91b8764f457ea14dba3887cde24b5e4717eee9e541",
+            "trajectoryHash": "2931d5179b3c5df3706215bad2c6f7313763bc52a718aca24f4f01af1b933e48",
+            "finalStateHash": "cd10ae7bec1ffb44c19942c9bcee87992892b4f1d6f072e6fe38d245b64268b0",
+            "opening": {
+              "actions": 64,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "limit",
+              "censored": true,
+              "turnover": false,
+              "turnoverEvent": null,
+              "shots": 0,
+              "hadShot": false,
+              "xG": 0,
+              "firstShot": null,
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": false,
+              "actions": 0,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "not-started",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          }
+        },
+        {
+          "attempt": 2,
+          "file": "attempts/neutral-defensive-2-white-2.json",
+          "workers": 6,
+          "matches": {
+            "baseline": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            },
+            "candidate": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            }
+          },
+          "qualifiesAdverseOutcome": false,
+          "baseline": {
+            "initialStateHash": "e2bdfbce11d08086e6821a91b8764f457ea14dba3887cde24b5e4717eee9e541",
+            "trajectoryHash": "af98e129b5b7bc9a3be473324505a0e9aaa6a413c27db5c9d407567fdaecbb49",
+            "finalStateHash": "2ae1dae3e7bbc4aeff083223cbc80555980122bd447e6d91972d76b1d5d29170",
+            "opening": {
+              "actions": 63,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "turnover",
+              "censored": false,
+              "turnover": true,
+              "turnoverEvent": {
+                "ply": 62,
+                "type": "stalling",
+                "restartType": "stalling"
+              },
+              "shots": 0,
+              "hadShot": false,
+              "xG": 0,
+              "firstShot": null,
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": true,
+              "actions": 24,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "limit",
+              "shotsAgainst": 1,
+              "xGAgainst": 0.17414820791058733,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          },
+          "candidate": {
+            "initialStateHash": "e2bdfbce11d08086e6821a91b8764f457ea14dba3887cde24b5e4717eee9e541",
+            "trajectoryHash": "d9816965669b3857d5eb710c0a7723199fa793bb7d2c152095f16d9242e0a662",
+            "finalStateHash": "ed1986240a4b711fc86092713e603a026eea5530ce875399d984da01d325a602",
+            "opening": {
+              "actions": 50,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "turnover",
+              "censored": false,
+              "turnover": true,
+              "turnoverEvent": {
+                "ply": 49,
+                "type": "move",
+                "restartType": null
+              },
+              "shots": 0,
+              "hadShot": false,
+              "xG": 0,
+              "firstShot": null,
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": true,
+              "actions": 24,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "limit",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          }
+        },
+        {
+          "attempt": 3,
+          "file": "attempts/neutral-defensive-2-white-3.json",
+          "workers": 3,
+          "matches": {
+            "baseline": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            },
+            "candidate": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            }
+          },
+          "qualifiesAdverseOutcome": false,
+          "baseline": {
+            "initialStateHash": "e2bdfbce11d08086e6821a91b8764f457ea14dba3887cde24b5e4717eee9e541",
+            "trajectoryHash": "d61252440c82f17676d38d78acdcc675ddb86115b77de583d309399536f78f22",
+            "finalStateHash": "9d8819f64d69bd3b9a2e279c4614db11dcbf29d44a940159950c07fe39356a07",
+            "opening": {
+              "actions": 64,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "limit",
+              "censored": true,
+              "turnover": false,
+              "turnoverEvent": null,
+              "shots": 0,
+              "hadShot": false,
+              "xG": 0,
+              "firstShot": null,
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": false,
+              "actions": 0,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "not-started",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          },
+          "candidate": {
+            "initialStateHash": "e2bdfbce11d08086e6821a91b8764f457ea14dba3887cde24b5e4717eee9e541",
+            "trajectoryHash": "283922ad5fbff861b46638cae21331eefedbf077405d28ca0a35e70c95938535",
+            "finalStateHash": "797739d5e2805544ac41676502f5745c134fb0c7b72306e311e7a87f93e8f3da",
+            "opening": {
+              "actions": 64,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "limit",
+              "censored": true,
+              "turnover": false,
+              "turnoverEvent": null,
+              "shots": 0,
+              "hadShot": false,
+              "xG": 0,
+              "firstShot": null,
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": false,
+              "actions": 0,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "not-started",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          }
+        },
+        {
+          "attempt": 4,
+          "file": "attempts/neutral-defensive-2-white-4.json",
+          "workers": 3,
+          "matches": {
+            "baseline": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            },
+            "candidate": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            }
+          },
+          "qualifiesAdverseOutcome": false,
+          "baseline": {
+            "initialStateHash": "e2bdfbce11d08086e6821a91b8764f457ea14dba3887cde24b5e4717eee9e541",
+            "trajectoryHash": "b1a29167eae374bfe1eb91cd2f70534930b3785362560bf6fc68f0252f6179e2",
+            "finalStateHash": "321a321ca48a0b07bd27447ac8defdbaa643fa04e9b31ebbb832fbc332165376",
+            "opening": {
+              "actions": 63,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "shot",
+              "censored": false,
+              "turnover": false,
+              "turnoverEvent": null,
+              "shots": 1,
+              "hadShot": true,
+              "xG": 0.15882290322546955,
+              "firstShot": {
+                "attemptPly": 61,
+                "settlementPly": 62,
+                "shootingTeam": "white",
+                "scoringTeam": "white",
+                "ownGoal": false,
+                "xG": 0.15882290322546955,
+                "sampledXG": 0.15882290322546955,
+                "outcome": "wide",
+                "scored": false,
+                "nextAttack": "black",
+                "restartType": "goalKick"
+              },
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0.15882290322546955,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": false,
+              "actions": 0,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "not-started",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          },
+          "candidate": {
+            "initialStateHash": "e2bdfbce11d08086e6821a91b8764f457ea14dba3887cde24b5e4717eee9e541",
+            "trajectoryHash": "c5e42e775a400ea26dccbee2fe67640024abaa88c30e0fc5c5a53e366e928b1f",
+            "finalStateHash": "3c44229ea201004cf4402d3880c3b9a656e7ac0d807e4a75e66d60a9db9ab3d1",
+            "opening": {
+              "actions": 64,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "limit",
+              "censored": true,
+              "turnover": false,
+              "turnoverEvent": null,
+              "shots": 0,
+              "hadShot": false,
+              "xG": 0,
+              "firstShot": null,
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": false,
+              "actions": 0,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "not-started",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          }
+        },
+        {
+          "attempt": 5,
+          "file": "attempts/neutral-defensive-2-white-5.json",
+          "workers": 3,
+          "matches": {
+            "baseline": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            },
+            "candidate": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            }
+          },
+          "qualifiesAdverseOutcome": false,
+          "baseline": {
+            "initialStateHash": "e2bdfbce11d08086e6821a91b8764f457ea14dba3887cde24b5e4717eee9e541",
+            "trajectoryHash": "22de385cbd52780896d436283504b9691c1335555b020eaba99eedd143f1ca1c",
+            "finalStateHash": "eef86e9d33f8c8ea8e3f927713c2f64c209eaffaba790f99408487c804438926",
+            "opening": {
+              "actions": 65,
+              "actionLimit": 64,
+              "extraKeeperActions": 1,
+              "termination": "shot",
+              "censored": false,
+              "turnover": false,
+              "turnoverEvent": null,
+              "shots": 1,
+              "hadShot": true,
+              "xG": 0.17410953554125588,
+              "firstShot": {
+                "attemptPly": 63,
+                "settlementPly": 64,
+                "shootingTeam": "white",
+                "scoringTeam": "white",
+                "ownGoal": false,
+                "xG": 0.17410953554125588,
+                "sampledXG": 0.17410953554125588,
+                "outcome": "corner",
+                "scored": false,
+                "nextAttack": "white",
+                "restartType": "corner"
+              },
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0.17410953554125588,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": false,
+              "actions": 0,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "not-started",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          },
+          "candidate": {
+            "initialStateHash": "e2bdfbce11d08086e6821a91b8764f457ea14dba3887cde24b5e4717eee9e541",
+            "trajectoryHash": "1d3aaddcc46e8332b16dee7a6816bcd07f7b331c7a8dc6b0b34f1363b45f397f",
+            "finalStateHash": "1725c37dc05e115180ad340d23ad3cb945a464d8e577f770e40e13ce8a2f8a59",
+            "opening": {
+              "actions": 64,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "limit",
+              "censored": true,
+              "turnover": false,
+              "turnoverEvent": null,
+              "shots": 0,
+              "hadShot": false,
+              "xG": 0,
+              "firstShot": null,
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": false,
+              "actions": 0,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "not-started",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          }
+        },
+        {
+          "attempt": 6,
+          "file": "attempts/neutral-defensive-2-white-6.json",
+          "workers": 1,
+          "matches": {
+            "baseline": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            },
+            "candidate": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            }
+          },
+          "qualifiesAdverseOutcome": false,
+          "baseline": {
+            "initialStateHash": "e2bdfbce11d08086e6821a91b8764f457ea14dba3887cde24b5e4717eee9e541",
+            "trajectoryHash": "e9c580977ddcd413a6c699b575bbc1c20f2a1943c8724e0880647185297778da",
+            "finalStateHash": "ef7cb43616d990aebd1638a3a623a93073512990047add527471f6b3482da1ac",
+            "opening": {
+              "actions": 64,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "limit",
+              "censored": true,
+              "turnover": false,
+              "turnoverEvent": null,
+              "shots": 0,
+              "hadShot": false,
+              "xG": 0,
+              "firstShot": null,
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": false,
+              "actions": 0,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "not-started",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          },
+          "candidate": {
+            "initialStateHash": "e2bdfbce11d08086e6821a91b8764f457ea14dba3887cde24b5e4717eee9e541",
+            "trajectoryHash": "4277a769c7209fffd3f8fad2af0b75d9e2ef231a9c5b87b256316b203abe1263",
+            "finalStateHash": "c537ab3048abbbd73711dba5d56ec727afe10702fde391ff14220e56befd4545",
+            "opening": {
+              "actions": 28,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "shot",
+              "censored": false,
+              "turnover": false,
+              "turnoverEvent": null,
+              "shots": 1,
+              "hadShot": true,
+              "xG": 0.08630128260457381,
+              "firstShot": {
+                "attemptPly": 26,
+                "settlementPly": 27,
+                "shootingTeam": "white",
+                "scoringTeam": "white",
+                "ownGoal": false,
+                "xG": 0.08630128260457381,
+                "sampledXG": 0.08630128260457381,
+                "outcome": "wide",
+                "scored": false,
+                "nextAttack": "black",
+                "restartType": "goalKick"
+              },
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0.08630128260457381,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": false,
+              "actions": 0,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "not-started",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          }
+        },
+        {
+          "attempt": 7,
+          "file": "attempts/neutral-defensive-2-white-7.json",
+          "workers": 1,
+          "matches": {
+            "baseline": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            },
+            "candidate": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            }
+          },
+          "qualifiesAdverseOutcome": true,
+          "baseline": {
+            "initialStateHash": "e2bdfbce11d08086e6821a91b8764f457ea14dba3887cde24b5e4717eee9e541",
+            "trajectoryHash": "d7554f9455923570e444d8f29babf1928346c03187d93023dbc3e3e5f14862e2",
+            "finalStateHash": "247d8b33e3f5a3a617b5580f7a30cc13d05e7caabd2ea6bf4bb0e05451e79090",
+            "opening": {
+              "actions": 64,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "limit",
+              "censored": true,
+              "turnover": false,
+              "turnoverEvent": null,
+              "shots": 0,
+              "hadShot": false,
+              "xG": 0,
+              "firstShot": null,
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": false,
+              "actions": 0,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "not-started",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          },
+          "candidate": {
+            "initialStateHash": "e2bdfbce11d08086e6821a91b8764f457ea14dba3887cde24b5e4717eee9e541",
+            "trajectoryHash": "284ee10a748c93d236938107f961202e735e808c066a8ed2df9eb79f3b45638b",
+            "finalStateHash": "9d2bf318da07a2ff1e4ccf794140165f2de848da46e89d9eb833a5aa43486e59",
+            "opening": {
+              "actions": 24,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "turnover",
+              "censored": false,
+              "turnover": true,
+              "turnoverEvent": {
+                "ply": 23,
+                "type": "tackle",
+                "restartType": null
+              },
+              "shots": 0,
+              "hadShot": false,
+              "xG": 0,
+              "firstShot": null,
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": true,
+              "actions": 24,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "limit",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "neutral-defensive-2-black",
+      "seed": 3042271559,
+      "kickoff": "black",
+      "formations": {
+        "white": "neutral",
+        "black": "defensive"
+      },
+      "original": {
+        "baseline": {
+          "initialStateHash": "e6ea39c0696d59e13ee9282541af35bf0631aa8ee40c9e321ec0f67ece7388b6",
+          "trajectoryHash": "219c2d912098fa760a815ae480a6fd8e10cb8a22fa96f4798b128892c84c0afd",
+          "finalStateHash": "abd94a839541e97ff207ebab79a6abd94779b37d5290323611024028584a1607",
+          "opening": {
+            "actions": 61,
+            "actionLimit": 64,
+            "extraKeeperActions": 0,
+            "termination": "shot",
+            "censored": false,
+            "turnover": false,
+            "turnoverEvent": null,
+            "shots": 1,
+            "hadShot": true,
+            "xG": 0.09510102644753113,
+            "firstShot": {
+              "attemptPly": 59,
+              "settlementPly": 60,
+              "shootingTeam": "black",
+              "scoringTeam": "black",
+              "ownGoal": false,
+              "xG": 0.09510102644753113,
+              "sampledXG": 0.09510102644753113,
+              "outcome": "wide",
+              "scored": false,
+              "nextAttack": "white",
+              "restartType": "goalKick"
+            },
+            "ownGoalShots": 0,
+            "ownGoalXG": 0,
+            "netXG": 0.09510102644753113,
+            "goals": 0
+          },
+          "followup": {
+            "triggered": false,
+            "actions": 0,
+            "actionLimit": 24,
+            "extraKeeperActions": 0,
+            "termination": "not-started",
+            "shotsAgainst": 0,
+            "xGAgainst": 0,
+            "goalsAgainst": 0,
+            "ownGoalShotsAgainst": 0,
+            "ownGoalXGAgainst": 0,
+            "ownGoalsAgainst": 0
+          },
+          "score": {
+            "white": 0,
+            "black": 0
+          }
+        },
+        "candidate": {
+          "initialStateHash": "e6ea39c0696d59e13ee9282541af35bf0631aa8ee40c9e321ec0f67ece7388b6",
+          "trajectoryHash": "6f409898669fc6c6d6e9a7943afe4e7600d6656d27453593d16c4276d90cd154",
+          "finalStateHash": "1795a9ae12fdbab03b5253f9e310ca2280259a81dfd61014e65bd72042141e75",
+          "opening": {
+            "actions": 8,
+            "actionLimit": 64,
+            "extraKeeperActions": 0,
+            "termination": "turnover",
+            "censored": false,
+            "turnover": true,
+            "turnoverEvent": {
+              "ply": 7,
+              "type": "tackle",
+              "restartType": null
+            },
+            "shots": 0,
+            "hadShot": false,
+            "xG": 0,
+            "firstShot": null,
+            "ownGoalShots": 0,
+            "ownGoalXG": 0,
+            "netXG": 0,
+            "goals": 0
+          },
+          "followup": {
+            "triggered": true,
+            "actions": 24,
+            "actionLimit": 24,
+            "extraKeeperActions": 0,
+            "termination": "limit",
+            "shotsAgainst": 0,
+            "xGAgainst": 0,
+            "goalsAgainst": 0,
+            "ownGoalShotsAgainst": 0,
+            "ownGoalXGAgainst": 0,
+            "ownGoalsAgainst": 0
+          },
+          "score": {
+            "white": 0,
+            "black": 0
+          }
+        }
+      },
+      "exactBaseline": [],
+      "exactCandidate": [],
+      "exactBothSameAttempt": [],
+      "qualifyingAttempts": [
+        1
+      ],
+      "attempts": [
+        {
+          "attempt": 1,
+          "file": "attempts/neutral-defensive-2-black-1.json",
+          "workers": 6,
+          "matches": {
+            "baseline": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            },
+            "candidate": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            }
+          },
+          "qualifiesAdverseOutcome": true,
+          "baseline": {
+            "initialStateHash": "e6ea39c0696d59e13ee9282541af35bf0631aa8ee40c9e321ec0f67ece7388b6",
+            "trajectoryHash": "1f8b80674fddfb7751589c858772ae783c54b57f32644052078855e6ee94416f",
+            "finalStateHash": "f3b8b55a0f91064b02bd36e56be10d689029bdcf20d890c88b72519aafbb1fd9",
+            "opening": {
+              "actions": 26,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "shot",
+              "censored": false,
+              "turnover": false,
+              "turnoverEvent": null,
+              "shots": 1,
+              "hadShot": true,
+              "xG": 0.15691142291740698,
+              "firstShot": {
+                "attemptPly": 24,
+                "settlementPly": 25,
+                "shootingTeam": "black",
+                "scoringTeam": "black",
+                "ownGoal": false,
+                "xG": 0.15691142291740698,
+                "sampledXG": 0.15691142291740698,
+                "outcome": "saved",
+                "scored": false,
+                "nextAttack": "white",
+                "restartType": null
+              },
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0.15691142291740698,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": false,
+              "actions": 0,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "not-started",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          },
+          "candidate": {
+            "initialStateHash": "e6ea39c0696d59e13ee9282541af35bf0631aa8ee40c9e321ec0f67ece7388b6",
+            "trajectoryHash": "36fd15c976c1d288a5bfcc5afd1acfa7516711d0919c120ad538e3916f5da07b",
+            "finalStateHash": "dadb373db3b6c45a1a586970f1af11c49121e5da1b64ec5819cbfd92db8bef7f",
+            "opening": {
+              "actions": 47,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "turnover",
+              "censored": false,
+              "turnover": true,
+              "turnoverEvent": {
+                "ply": 46,
+                "type": "tackle",
+                "restartType": null
+              },
+              "shots": 0,
+              "hadShot": false,
+              "xG": 0,
+              "firstShot": null,
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": true,
+              "actions": 24,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "limit",
+              "shotsAgainst": 1,
+              "xGAgainst": 0.10388809529931088,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "defensive-aggressive-1-white",
+      "seed": 3068247425,
+      "kickoff": "white",
+      "formations": {
+        "white": "defensive",
+        "black": "aggressive"
+      },
+      "original": {
+        "baseline": {
+          "initialStateHash": "7d88ccba1f3926748d74a6607180be0d39e0e0a1db5d2f485b29be1940c7422e",
+          "trajectoryHash": "ec4c304ff401221af5139f8060d233945770418334f0bafbbd2a94faf1925620",
+          "finalStateHash": "0eba27636a086b8fd87027a53f4dc6547c5c24c0c49e567fa3ab0ab928771f20",
+          "opening": {
+            "actions": 64,
+            "actionLimit": 64,
+            "extraKeeperActions": 0,
+            "termination": "limit",
+            "censored": true,
+            "turnover": false,
+            "turnoverEvent": null,
+            "shots": 0,
+            "hadShot": false,
+            "xG": 0,
+            "firstShot": null,
+            "ownGoalShots": 0,
+            "ownGoalXG": 0,
+            "netXG": 0,
+            "goals": 0
+          },
+          "followup": {
+            "triggered": false,
+            "actions": 0,
+            "actionLimit": 24,
+            "extraKeeperActions": 0,
+            "termination": "not-started",
+            "shotsAgainst": 0,
+            "xGAgainst": 0,
+            "goalsAgainst": 0,
+            "ownGoalShotsAgainst": 0,
+            "ownGoalXGAgainst": 0,
+            "ownGoalsAgainst": 0
+          },
+          "score": {
+            "white": 0,
+            "black": 0
+          }
+        },
+        "candidate": {
+          "initialStateHash": "7d88ccba1f3926748d74a6607180be0d39e0e0a1db5d2f485b29be1940c7422e",
+          "trajectoryHash": "6d35075a8de59a09cef53327e1460e3390a166bb204d72f0e77524c5bd3a24ac",
+          "finalStateHash": "54e350dbab460cc5e3c2bece64c45c4c298a795ef6317515c5765213d227192b",
+          "opening": {
+            "actions": 27,
+            "actionLimit": 64,
+            "extraKeeperActions": 0,
+            "termination": "turnover",
+            "censored": false,
+            "turnover": true,
+            "turnoverEvent": {
+              "ply": 26,
+              "type": "tackle",
+              "restartType": null
+            },
+            "shots": 0,
+            "hadShot": false,
+            "xG": 0,
+            "firstShot": null,
+            "ownGoalShots": 0,
+            "ownGoalXG": 0,
+            "netXG": 0,
+            "goals": 0
+          },
+          "followup": {
+            "triggered": true,
+            "actions": 24,
+            "actionLimit": 24,
+            "extraKeeperActions": 0,
+            "termination": "limit",
+            "shotsAgainst": 0,
+            "xGAgainst": 0,
+            "goalsAgainst": 0,
+            "ownGoalShotsAgainst": 0,
+            "ownGoalXGAgainst": 0,
+            "ownGoalsAgainst": 0
+          },
+          "score": {
+            "white": 0,
+            "black": 0
+          }
+        }
+      },
+      "exactBaseline": [],
+      "exactCandidate": [],
+      "exactBothSameAttempt": [],
+      "qualifyingAttempts": [
+        5
+      ],
+      "attempts": [
+        {
+          "attempt": 1,
+          "file": "attempts/defensive-aggressive-1-white-1.json",
+          "workers": 6,
+          "matches": {
+            "baseline": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            },
+            "candidate": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            }
+          },
+          "qualifiesAdverseOutcome": false,
+          "baseline": {
+            "initialStateHash": "7d88ccba1f3926748d74a6607180be0d39e0e0a1db5d2f485b29be1940c7422e",
+            "trajectoryHash": "7af976c8976753921aef25ee046ae9dcc22269a4926e2fc88e7096893914b507",
+            "finalStateHash": "1c043984e4813894a41bb1074a762e795efa13b4ccd5a28dc8f3e6ab93c35cbb",
+            "opening": {
+              "actions": 64,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "limit",
+              "censored": true,
+              "turnover": false,
+              "turnoverEvent": null,
+              "shots": 0,
+              "hadShot": false,
+              "xG": 0,
+              "firstShot": null,
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": false,
+              "actions": 0,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "not-started",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          },
+          "candidate": {
+            "initialStateHash": "7d88ccba1f3926748d74a6607180be0d39e0e0a1db5d2f485b29be1940c7422e",
+            "trajectoryHash": "91c49a01878c12f1279bbfd7a474f7379d1909b00f0a821ef68cfa783c582ba6",
+            "finalStateHash": "d39bcfdb7cbf2f4fd4b1be8d8b526293b5c740973956134e336a5e4af34a7991",
+            "opening": {
+              "actions": 14,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "shot",
+              "censored": false,
+              "turnover": false,
+              "turnoverEvent": null,
+              "shots": 1,
+              "hadShot": true,
+              "xG": 0.05540663138478323,
+              "firstShot": {
+                "attemptPly": 12,
+                "settlementPly": 13,
+                "shootingTeam": "white",
+                "scoringTeam": "white",
+                "ownGoal": false,
+                "xG": 0.05540663138478323,
+                "sampledXG": 0.05540663138478323,
+                "outcome": "wide",
+                "scored": false,
+                "nextAttack": "black",
+                "restartType": "goalKick"
+              },
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0.05540663138478323,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": false,
+              "actions": 0,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "not-started",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          }
+        },
+        {
+          "attempt": 2,
+          "file": "attempts/defensive-aggressive-1-white-2.json",
+          "workers": 6,
+          "matches": {
+            "baseline": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            },
+            "candidate": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            }
+          },
+          "qualifiesAdverseOutcome": false,
+          "baseline": {
+            "initialStateHash": "7d88ccba1f3926748d74a6607180be0d39e0e0a1db5d2f485b29be1940c7422e",
+            "trajectoryHash": "ee99cfe6f34d9000e186f9783a6cfc7758011b3e0be30eb41ca9f36fcc7d6ad3",
+            "finalStateHash": "c04e4dfa809b062ba5255d269c6f20dca9edf7cb99c0f8bc0690cfbabe9c9b8e",
+            "opening": {
+              "actions": 45,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "shot",
+              "censored": false,
+              "turnover": false,
+              "turnoverEvent": null,
+              "shots": 1,
+              "hadShot": true,
+              "xG": 0.095101026447531,
+              "firstShot": {
+                "attemptPly": 43,
+                "settlementPly": 44,
+                "shootingTeam": "white",
+                "scoringTeam": "white",
+                "ownGoal": false,
+                "xG": 0.095101026447531,
+                "sampledXG": 0.095101026447531,
+                "outcome": "wide",
+                "scored": false,
+                "nextAttack": "black",
+                "restartType": "goalKick"
+              },
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0.095101026447531,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": false,
+              "actions": 0,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "not-started",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          },
+          "candidate": {
+            "initialStateHash": "7d88ccba1f3926748d74a6607180be0d39e0e0a1db5d2f485b29be1940c7422e",
+            "trajectoryHash": "44f571f2449c9c1b9fce7b639fd5eed84bae161c6b3a12f94449d907d6b20633",
+            "finalStateHash": "6537d6dfa5fc9390c251aae1f6225a4458893bce6ed8655709f0e794c38598fc",
+            "opening": {
+              "actions": 14,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "shot",
+              "censored": false,
+              "turnover": false,
+              "turnoverEvent": null,
+              "shots": 1,
+              "hadShot": true,
+              "xG": 0.05540663138478323,
+              "firstShot": {
+                "attemptPly": 12,
+                "settlementPly": 13,
+                "shootingTeam": "white",
+                "scoringTeam": "white",
+                "ownGoal": false,
+                "xG": 0.05540663138478323,
+                "sampledXG": 0.05540663138478323,
+                "outcome": "wide",
+                "scored": false,
+                "nextAttack": "black",
+                "restartType": "goalKick"
+              },
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0.05540663138478323,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": false,
+              "actions": 0,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "not-started",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          }
+        },
+        {
+          "attempt": 3,
+          "file": "attempts/defensive-aggressive-1-white-3.json",
+          "workers": 3,
+          "matches": {
+            "baseline": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            },
+            "candidate": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            }
+          },
+          "qualifiesAdverseOutcome": false,
+          "baseline": {
+            "initialStateHash": "7d88ccba1f3926748d74a6607180be0d39e0e0a1db5d2f485b29be1940c7422e",
+            "trajectoryHash": "495575ca849b9b377804cce1f33c3bdcf81aa905ab645c2093631c70d4a33533",
+            "finalStateHash": "55d3a7982093628abdaa18bacc0018568ad19683df785419207c147205c7e446",
+            "opening": {
+              "actions": 64,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "limit",
+              "censored": true,
+              "turnover": false,
+              "turnoverEvent": null,
+              "shots": 0,
+              "hadShot": false,
+              "xG": 0,
+              "firstShot": null,
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": false,
+              "actions": 0,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "not-started",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          },
+          "candidate": {
+            "initialStateHash": "7d88ccba1f3926748d74a6607180be0d39e0e0a1db5d2f485b29be1940c7422e",
+            "trajectoryHash": "d83dae44dada50b1eb1f7f72a9fdaa39360b23c82771346d7810de3d4bd90280",
+            "finalStateHash": "71e7849ddfc207fc6fe2addc440c1c5356ab106714cd293b715c5da64745abd1",
+            "opening": {
+              "actions": 19,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "shot",
+              "censored": false,
+              "turnover": false,
+              "turnoverEvent": null,
+              "shots": 1,
+              "hadShot": true,
+              "xG": 0.04157762594314892,
+              "firstShot": {
+                "attemptPly": 17,
+                "settlementPly": 18,
+                "shootingTeam": "white",
+                "scoringTeam": "white",
+                "ownGoal": false,
+                "xG": 0.04157762594314892,
+                "sampledXG": 0.04157762594314892,
+                "outcome": "corner",
+                "scored": false,
+                "nextAttack": "white",
+                "restartType": "corner"
+              },
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0.04157762594314892,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": false,
+              "actions": 0,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "not-started",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          }
+        },
+        {
+          "attempt": 4,
+          "file": "attempts/defensive-aggressive-1-white-4.json",
+          "workers": 3,
+          "matches": {
+            "baseline": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            },
+            "candidate": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            }
+          },
+          "qualifiesAdverseOutcome": false,
+          "baseline": {
+            "initialStateHash": "7d88ccba1f3926748d74a6607180be0d39e0e0a1db5d2f485b29be1940c7422e",
+            "trajectoryHash": "e80d4e28e8b0891aa6c640a277def096baab7909b77619ff930ccf3d7501d603",
+            "finalStateHash": "03c43158e95ccd4a20857aa237e906449b01b83d867ca71a1432bc6473fc5833",
+            "opening": {
+              "actions": 31,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "shot",
+              "censored": false,
+              "turnover": false,
+              "turnoverEvent": null,
+              "shots": 1,
+              "hadShot": true,
+              "xG": 0.17414820791058727,
+              "firstShot": {
+                "attemptPly": 29,
+                "settlementPly": 30,
+                "shootingTeam": "white",
+                "scoringTeam": "white",
+                "ownGoal": false,
+                "xG": 0.17414820791058727,
+                "sampledXG": 0.17414820791058727,
+                "outcome": "corner",
+                "scored": false,
+                "nextAttack": "white",
+                "restartType": "corner"
+              },
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0.17414820791058727,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": false,
+              "actions": 0,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "not-started",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          },
+          "candidate": {
+            "initialStateHash": "7d88ccba1f3926748d74a6607180be0d39e0e0a1db5d2f485b29be1940c7422e",
+            "trajectoryHash": "6b5ca3b409802325e929b3a710220ac6efbcbe723b248b89461733b2d3c2e622",
+            "finalStateHash": "2db3740d90c36a0d8931962a2a681b3a62eaaf40ed6aafe82f6f7e64c22c73cf",
+            "opening": {
+              "actions": 14,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "shot",
+              "censored": false,
+              "turnover": false,
+              "turnoverEvent": null,
+              "shots": 1,
+              "hadShot": true,
+              "xG": 0.05540663138478323,
+              "firstShot": {
+                "attemptPly": 12,
+                "settlementPly": 13,
+                "shootingTeam": "white",
+                "scoringTeam": "white",
+                "ownGoal": false,
+                "xG": 0.05540663138478323,
+                "sampledXG": 0.05540663138478323,
+                "outcome": "wide",
+                "scored": false,
+                "nextAttack": "black",
+                "restartType": "goalKick"
+              },
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0.05540663138478323,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": false,
+              "actions": 0,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "not-started",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          }
+        },
+        {
+          "attempt": 5,
+          "file": "attempts/defensive-aggressive-1-white-5.json",
+          "workers": 3,
+          "matches": {
+            "baseline": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            },
+            "candidate": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            }
+          },
+          "qualifiesAdverseOutcome": true,
+          "baseline": {
+            "initialStateHash": "7d88ccba1f3926748d74a6607180be0d39e0e0a1db5d2f485b29be1940c7422e",
+            "trajectoryHash": "4bfb4f90f8ce65f63928d58f4a7ec473c7d4217a277f434bab9e97f404209085",
+            "finalStateHash": "d836e36936852a90819e9c47a6bdbd4a159a1af0d94a4b54f815c1504dfc5064",
+            "opening": {
+              "actions": 64,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "limit",
+              "censored": true,
+              "turnover": false,
+              "turnoverEvent": null,
+              "shots": 0,
+              "hadShot": false,
+              "xG": 0,
+              "firstShot": null,
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": false,
+              "actions": 0,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "not-started",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          },
+          "candidate": {
+            "initialStateHash": "7d88ccba1f3926748d74a6607180be0d39e0e0a1db5d2f485b29be1940c7422e",
+            "trajectoryHash": "c45a3a3e179f04290c1a8f937067df19fa4327e2f007e1c5a6232b20b017dfbb",
+            "finalStateHash": "f6417d8e87a47e0890b5193879bb6c7937681f19bf982f95817ba6f383da8e0f",
+            "opening": {
+              "actions": 42,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "turnover",
+              "censored": false,
+              "turnover": true,
+              "turnoverEvent": {
+                "ply": 41,
+                "type": "tackle",
+                "restartType": null
+              },
+              "shots": 0,
+              "hadShot": false,
+              "xG": 0,
+              "firstShot": null,
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": true,
+              "actions": 24,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "limit",
+              "shotsAgainst": 1,
+              "xGAgainst": 0.10252016153749789,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "defensive-neutral-1-white",
+      "seed": 3927544692,
+      "kickoff": "white",
+      "formations": {
+        "white": "defensive",
+        "black": "neutral"
+      },
+      "original": {
+        "baseline": {
+          "initialStateHash": "ee63a842313043d52a8a3e3a428e77e7034c41b3ede308b90a71c1ce2478b9da",
+          "trajectoryHash": "b3ee97dff5adb4d1c980c757b98a86f65f1cc044bb5c216625acf41a174f0fc8",
+          "finalStateHash": "35a3594cf4606de11ef0140400426aa977169d421dbca744d00f271deaf6e71b",
+          "opening": {
+            "actions": 64,
+            "actionLimit": 64,
+            "extraKeeperActions": 0,
+            "termination": "limit",
+            "censored": true,
+            "turnover": false,
+            "turnoverEvent": null,
+            "shots": 0,
+            "hadShot": false,
+            "xG": 0,
+            "firstShot": null,
+            "ownGoalShots": 0,
+            "ownGoalXG": 0,
+            "netXG": 0,
+            "goals": 0
+          },
+          "followup": {
+            "triggered": false,
+            "actions": 0,
+            "actionLimit": 24,
+            "extraKeeperActions": 0,
+            "termination": "not-started",
+            "shotsAgainst": 0,
+            "xGAgainst": 0,
+            "goalsAgainst": 0,
+            "ownGoalShotsAgainst": 0,
+            "ownGoalXGAgainst": 0,
+            "ownGoalsAgainst": 0
+          },
+          "score": {
+            "white": 0,
+            "black": 0
+          }
+        },
+        "candidate": {
+          "initialStateHash": "ee63a842313043d52a8a3e3a428e77e7034c41b3ede308b90a71c1ce2478b9da",
+          "trajectoryHash": "cd6755dad36f6659f6f62a5f384c6421e731e6abfdc1840891c398ccc4951ee7",
+          "finalStateHash": "b2b1c177bcb675dc8645acb60bfa3ca0e0e31fef68c6c894966f6ca710a1d68d",
+          "opening": {
+            "actions": 48,
+            "actionLimit": 64,
+            "extraKeeperActions": 0,
+            "termination": "turnover",
+            "censored": false,
+            "turnover": true,
+            "turnoverEvent": {
+              "ply": 47,
+              "type": "tackle",
+              "restartType": null
+            },
+            "shots": 0,
+            "hadShot": false,
+            "xG": 0,
+            "firstShot": null,
+            "ownGoalShots": 0,
+            "ownGoalXG": 0,
+            "netXG": 0,
+            "goals": 0
+          },
+          "followup": {
+            "triggered": true,
+            "actions": 24,
+            "actionLimit": 24,
+            "extraKeeperActions": 0,
+            "termination": "limit",
+            "shotsAgainst": 0,
+            "xGAgainst": 0,
+            "goalsAgainst": 0,
+            "ownGoalShotsAgainst": 0,
+            "ownGoalXGAgainst": 0,
+            "ownGoalsAgainst": 0
+          },
+          "score": {
+            "white": 0,
+            "black": 0
+          }
+        }
+      },
+      "exactBaseline": [],
+      "exactCandidate": [],
+      "exactBothSameAttempt": [],
+      "qualifyingAttempts": [
+        4
+      ],
+      "attempts": [
+        {
+          "attempt": 1,
+          "file": "attempts/defensive-neutral-1-white-1.json",
+          "workers": 6,
+          "matches": {
+            "baseline": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            },
+            "candidate": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            }
+          },
+          "qualifiesAdverseOutcome": false,
+          "baseline": {
+            "initialStateHash": "ee63a842313043d52a8a3e3a428e77e7034c41b3ede308b90a71c1ce2478b9da",
+            "trajectoryHash": "12aae1918f6122ef32038d1cda75ba0ec002f0b4794c56e3c21326a0535da39d",
+            "finalStateHash": "05480129375bc9fea21009ef151b4934dd2e966b497bd60746b0446c7aa2ca1a",
+            "opening": {
+              "actions": 64,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "limit",
+              "censored": true,
+              "turnover": false,
+              "turnoverEvent": null,
+              "shots": 0,
+              "hadShot": false,
+              "xG": 0,
+              "firstShot": null,
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": false,
+              "actions": 0,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "not-started",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          },
+          "candidate": {
+            "initialStateHash": "ee63a842313043d52a8a3e3a428e77e7034c41b3ede308b90a71c1ce2478b9da",
+            "trajectoryHash": "760490bf3487895739603f443a02c679468042b301db4a651d08dd8fe6431438",
+            "finalStateHash": "8433ea4ff8727314684da37dfaa3f7ef4614f40b64c434b5371bb9b4a41ce5ad",
+            "opening": {
+              "actions": 19,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "shot",
+              "censored": false,
+              "turnover": false,
+              "turnoverEvent": null,
+              "shots": 1,
+              "hadShot": true,
+              "xG": 0.07063498504652284,
+              "firstShot": {
+                "attemptPly": 17,
+                "settlementPly": 18,
+                "shootingTeam": "white",
+                "scoringTeam": "white",
+                "ownGoal": false,
+                "xG": 0.07063498504652284,
+                "sampledXG": 0.07063498504652284,
+                "outcome": "corner",
+                "scored": false,
+                "nextAttack": "white",
+                "restartType": "corner"
+              },
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0.07063498504652284,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": false,
+              "actions": 0,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "not-started",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          }
+        },
+        {
+          "attempt": 2,
+          "file": "attempts/defensive-neutral-1-white-2.json",
+          "workers": 6,
+          "matches": {
+            "baseline": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            },
+            "candidate": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            }
+          },
+          "qualifiesAdverseOutcome": false,
+          "baseline": {
+            "initialStateHash": "ee63a842313043d52a8a3e3a428e77e7034c41b3ede308b90a71c1ce2478b9da",
+            "trajectoryHash": "d911f58b72965b8aa1a030b8fb1f6650e28f3d0276f4ca8928d64c395ec7b155",
+            "finalStateHash": "09c793deb97c45637fc379cc76ec86922e925fe81031d11f910b8004bc76ce25",
+            "opening": {
+              "actions": 64,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "limit",
+              "censored": true,
+              "turnover": false,
+              "turnoverEvent": null,
+              "shots": 0,
+              "hadShot": false,
+              "xG": 0,
+              "firstShot": null,
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": false,
+              "actions": 0,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "not-started",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          },
+          "candidate": {
+            "initialStateHash": "ee63a842313043d52a8a3e3a428e77e7034c41b3ede308b90a71c1ce2478b9da",
+            "trajectoryHash": "d5c98e8760fe8beb95b31316518cc01f114022d4699994f95f39ec1ce818e44f",
+            "finalStateHash": "9f1b4ba0b76394dc79d5031d460e9f85156bdf2a3bb14848234384db9c96c0f3",
+            "opening": {
+              "actions": 19,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "shot",
+              "censored": false,
+              "turnover": false,
+              "turnoverEvent": null,
+              "shots": 1,
+              "hadShot": true,
+              "xG": 0.07180716994043412,
+              "firstShot": {
+                "attemptPly": 17,
+                "settlementPly": 18,
+                "shootingTeam": "white",
+                "scoringTeam": "white",
+                "ownGoal": false,
+                "xG": 0.07180716994043412,
+                "sampledXG": 0.07180716994043412,
+                "outcome": "corner",
+                "scored": false,
+                "nextAttack": "white",
+                "restartType": "corner"
+              },
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0.07180716994043412,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": false,
+              "actions": 0,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "not-started",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          }
+        },
+        {
+          "attempt": 3,
+          "file": "attempts/defensive-neutral-1-white-3.json",
+          "workers": 3,
+          "matches": {
+            "baseline": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            },
+            "candidate": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            }
+          },
+          "qualifiesAdverseOutcome": false,
+          "baseline": {
+            "initialStateHash": "ee63a842313043d52a8a3e3a428e77e7034c41b3ede308b90a71c1ce2478b9da",
+            "trajectoryHash": "677fcf387c6c3e018f2d6b6b1c4008ff1f1ea5cb0e5c3febe80815153c9a0949",
+            "finalStateHash": "a27842a8511a240644d75daf0014903095c0f748953ee709a4095125d5e3e444",
+            "opening": {
+              "actions": 64,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "limit",
+              "censored": true,
+              "turnover": false,
+              "turnoverEvent": null,
+              "shots": 0,
+              "hadShot": false,
+              "xG": 0,
+              "firstShot": null,
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": false,
+              "actions": 0,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "not-started",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          },
+          "candidate": {
+            "initialStateHash": "ee63a842313043d52a8a3e3a428e77e7034c41b3ede308b90a71c1ce2478b9da",
+            "trajectoryHash": "de96fe76b34fc6ab4e63cc524195668aa16206f8d60584d00e5eb8414d622ea3",
+            "finalStateHash": "685e665926a1e075abb972be66062a556bc8164cf0cacf69bcafa1170df5d89a",
+            "opening": {
+              "actions": 49,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "shot",
+              "censored": false,
+              "turnover": false,
+              "turnoverEvent": null,
+              "shots": 1,
+              "hadShot": true,
+              "xG": 0.17410953554125588,
+              "firstShot": {
+                "attemptPly": 47,
+                "settlementPly": 48,
+                "shootingTeam": "white",
+                "scoringTeam": "white",
+                "ownGoal": false,
+                "xG": 0.17410953554125588,
+                "sampledXG": 0.17410953554125588,
+                "outcome": "corner",
+                "scored": false,
+                "nextAttack": "white",
+                "restartType": "corner"
+              },
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0.17410953554125588,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": false,
+              "actions": 0,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "not-started",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          }
+        },
+        {
+          "attempt": 4,
+          "file": "attempts/defensive-neutral-1-white-4.json",
+          "workers": 3,
+          "matches": {
+            "baseline": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            },
+            "candidate": {
+              "initialState": true,
+              "trajectory": false,
+              "finalState": false,
+              "exact": false
+            }
+          },
+          "qualifiesAdverseOutcome": true,
+          "baseline": {
+            "initialStateHash": "ee63a842313043d52a8a3e3a428e77e7034c41b3ede308b90a71c1ce2478b9da",
+            "trajectoryHash": "d355629dc8877128058d7927fe6759dcaa9f4b5fd0b29a035ed8652cba4ccb0c",
+            "finalStateHash": "88edc368951e03a95d224d99832455c5231377eb99fdeaf208a224e2b20f4ed0",
+            "opening": {
+              "actions": 64,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "limit",
+              "censored": true,
+              "turnover": false,
+              "turnoverEvent": null,
+              "shots": 0,
+              "hadShot": false,
+              "xG": 0,
+              "firstShot": null,
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": false,
+              "actions": 0,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "not-started",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          },
+          "candidate": {
+            "initialStateHash": "ee63a842313043d52a8a3e3a428e77e7034c41b3ede308b90a71c1ce2478b9da",
+            "trajectoryHash": "262335e2d431199b78404941c9a3033bd429dc7f228c07123a2820bb6891d192",
+            "finalStateHash": "dbbe645cd0c551f0458b90674c1bb58794f5026e0024508bf1a886322bcfa028",
+            "opening": {
+              "actions": 9,
+              "actionLimit": 64,
+              "extraKeeperActions": 0,
+              "termination": "turnover",
+              "censored": false,
+              "turnover": true,
+              "turnoverEvent": {
+                "ply": 8,
+                "type": "tackle",
+                "restartType": null
+              },
+              "shots": 0,
+              "hadShot": false,
+              "xG": 0,
+              "firstShot": null,
+              "ownGoalShots": 0,
+              "ownGoalXG": 0,
+              "netXG": 0,
+              "goals": 0
+            },
+            "followup": {
+              "triggered": true,
+              "actions": 24,
+              "actionLimit": 24,
+              "extraKeeperActions": 0,
+              "termination": "limit",
+              "shotsAgainst": 0,
+              "xGAgainst": 0,
+              "goalsAgainst": 0,
+              "ownGoalShotsAgainst": 0,
+              "ownGoalXGAgainst": 0,
+              "ownGoalsAgainst": 0
+            },
+            "score": {
+              "white": 0,
+              "black": 0
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

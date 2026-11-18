@@ -1,0 +1,392 @@
+{
+  "engineHash": "0fd749202309f4394f7f1201ad8e8397601531a1f0d9bdef1efd061ff9b4bdba",
+  "timedHash": "764582897f7fc6db35ffa3cb4ec064b7141a49add159a85ab17c1876114e905e",
+  "sources": {
+    "run.mjs": "a1215e4b80e130121942cc4fb55bca37e8a9623f5e7d9e28fa929b6888d2bfa8",
+    "timed.mjs": "60eff151d20ed9a41d558c041d6239bc9f1f9c621a9289f747fff32a4f2921c1",
+    "calibrate.mjs": "cf4b966d197f824d87d91f62590fe29d76da4eac3653787a20cf821acbeeb3c9",
+    "planner.mjs": "39c5513dec9fe8382f87bc82c5fa5ca1d176f040dd50d176a2c3d4c5b81408af",
+    "simulate.mjs": "7ddafa1d82d7210175da0bf892a43bc4b49e75e7e4437ad303f355d71f4a0cf9",
+    "../../scripts/simulate.mjs": "b324185edf2c1e77b93a5d87877059f58ef2f08702940fb55059599d5a7a604d",
+    "../../scripts/evaluate-selfplay.mjs": "d60ef13a7689954fb40d693ca34fa477c7a9f5f35198a50920745ad3431df5d3",
+    "../tactical-native-short-replication-2026-11-16/results/rules.mjs": "eb0ab0924c735871ac2186c6e1f0a1ddb450cdd49533413a795a0650c9a89901"
+  },
+  "calibrationHash": "20670c60da8dcb0ef2ed38f1c1a4f41b6b7eebf9ba820f3ad402860a472d0b83",
+  "design": {
+    "openingActionLimit": 64,
+    "followupActionLimit": 24,
+    "seedsPerFormationPair": 2,
+    "maxDepth": 8,
+    "nodeLimit": 50000,
+    "timeLimitMs": 342,
+    "workerCount": 6
+  },
+  "archivedSeedCount": 1647,
+  "machine": {
+    "node": "v24.22.1",
+    "platform": "win32",
+    "processor": "11th Gen Intel(R) Core(TM) i9-11900K @ 3.50GHz"
+  },
+  "schedule": [
+    {
+      "id": "aggressive-aggressive-1-white",
+      "seed": 1934095657,
+      "kickoff": "white",
+      "formations": {
+        "white": "aggressive",
+        "black": "aggressive"
+      },
+      "candidateFirst": false
+    },
+    {
+      "id": "aggressive-aggressive-1-black",
+      "seed": 1934095657,
+      "kickoff": "black",
+      "formations": {
+        "white": "aggressive",
+        "black": "aggressive"
+      },
+      "candidateFirst": true
+    },
+    {
+      "id": "aggressive-aggressive-2-white",
+      "seed": 2943127479,
+      "kickoff": "white",
+      "formations": {
+        "white": "aggressive",
+        "black": "aggressive"
+      },
+      "candidateFirst": true
+    },
+    {
+      "id": "aggressive-aggressive-2-black",
+      "seed": 2943127479,
+      "kickoff": "black",
+      "formations": {
+        "white": "aggressive",
+        "black": "aggressive"
+      },
+      "candidateFirst": false
+    },
+    {
+      "id": "aggressive-neutral-1-white",
+      "seed": 664616954,
+      "kickoff": "white",
+      "formations": {
+        "white": "aggressive",
+        "black": "neutral"
+      },
+      "candidateFirst": false
+    },
+    {
+      "id": "aggressive-neutral-1-black",
+      "seed": 664616954,
+      "kickoff": "black",
+      "formations": {
+        "white": "aggressive",
+        "black": "neutral"
+      },
+      "candidateFirst": true
+    },
+    {
+      "id": "aggressive-neutral-2-white",
+      "seed": 2714730843,
+      "kickoff": "white",
+      "formations": {
+        "white": "aggressive",
+        "black": "neutral"
+      },
+      "candidateFirst": true
+    },
+    {
+      "id": "aggressive-neutral-2-black",
+      "seed": 2714730843,
+      "kickoff": "black",
+      "formations": {
+        "white": "aggressive",
+        "black": "neutral"
+      },
+      "candidateFirst": false
+    },
+    {
+      "id": "aggressive-defensive-1-white",
+      "seed": 604882497,
+      "kickoff": "white",
+      "formations": {
+        "white": "aggressive",
+        "black": "defensive"
+      },
+      "candidateFirst": false
+    },
+    {
+      "id": "aggressive-defensive-1-black",
+      "seed": 604882497,
+      "kickoff": "black",
+      "formations": {
+        "white": "aggressive",
+        "black": "defensive"
+      },
+      "candidateFirst": true
+    },
+    {
+      "id": "aggressive-defensive-2-white",
+      "seed": 1393479537,
+      "kickoff": "white",
+      "formations": {
+        "white": "aggressive",
+        "black": "defensive"
+      },
+      "candidateFirst": true
+    },
+    {
+      "id": "aggressive-defensive-2-black",
+      "seed": 1393479537,
+      "kickoff": "black",
+      "formations": {
+        "white": "aggressive",
+        "black": "defensive"
+      },
+      "candidateFirst": false
+    },
+    {
+      "id": "neutral-aggressive-1-white",
+      "seed": 618125317,
+      "kickoff": "white",
+      "formations": {
+        "white": "neutral",
+        "black": "aggressive"
+      },
+      "candidateFirst": false
+    },
+    {
+      "id": "neutral-aggressive-1-black",
+      "seed": 618125317,
+      "kickoff": "black",
+      "formations": {
+        "white": "neutral",
+        "black": "aggressive"
+      },
+      "candidateFirst": true
+    },
+    {
+      "id": "neutral-aggressive-2-white",
+      "seed": 2521135431,
+      "kickoff": "white",
+      "formations": {
+        "white": "neutral",
+        "black": "aggressive"
+      },
+      "candidateFirst": true
+    },
+    {
+      "id": "neutral-aggressive-2-black",
+      "seed": 2521135431,
+      "kickoff": "black",
+      "formations": {
+        "white": "neutral",
+        "black": "aggressive"
+      },
+      "candidateFirst": false
+    },
+    {
+      "id": "neutral-neutral-1-white",
+      "seed": 791577934,
+      "kickoff": "white",
+      "formations": {
+        "white": "neutral",
+        "black": "neutral"
+      },
+      "candidateFirst": false
+    },
+    {
+      "id": "neutral-neutral-1-black",
+      "seed": 791577934,
+      "kickoff": "black",
+      "formations": {
+        "white": "neutral",
+        "black": "neutral"
+      },
+      "candidateFirst": true
+    },
+    {
+      "id": "neutral-neutral-2-white",
+      "seed": 830632677,
+      "kickoff": "white",
+      "formations": {
+        "white": "neutral",
+        "black": "neutral"
+      },
+      "candidateFirst": true
+    },
+    {
+      "id": "neutral-neutral-2-black",
+      "seed": 830632677,
+      "kickoff": "black",
+      "formations": {
+        "white": "neutral",
+        "black": "neutral"
+      },
+      "candidateFirst": false
+    },
+    {
+      "id": "neutral-defensive-1-white",
+      "seed": 1651163086,
+      "kickoff": "white",
+      "formations": {
+        "white": "neutral",
+        "black": "defensive"
+      },
+      "candidateFirst": false
+    },
+    {
+      "id": "neutral-defensive-1-black",
+      "seed": 1651163086,
+      "kickoff": "black",
+      "formations": {
+        "white": "neutral",
+        "black": "defensive"
+      },
+      "candidateFirst": true
+    },
+    {
+      "id": "neutral-defensive-2-white",
+      "seed": 3042271559,
+      "kickoff": "white",
+      "formations": {
+        "white": "neutral",
+        "black": "defensive"
+      },
+      "candidateFirst": true
+    },
+    {
+      "id": "neutral-defensive-2-black",
+      "seed": 3042271559,
+      "kickoff": "black",
+      "formations": {
+        "white": "neutral",
+        "black": "defensive"
+      },
+      "candidateFirst": false
+    },
+    {
+      "id": "defensive-aggressive-1-white",
+      "seed": 3068247425,
+      "kickoff": "white",
+      "formations": {
+        "white": "defensive",
+        "black": "aggressive"
+      },
+      "candidateFirst": false
+    },
+    {
+      "id": "defensive-aggressive-1-black",
+      "seed": 3068247425,
+      "kickoff": "black",
+      "formations": {
+        "white": "defensive",
+        "black": "aggressive"
+      },
+      "candidateFirst": true
+    },
+    {
+      "id": "defensive-aggressive-2-white",
+      "seed": 1410275094,
+      "kickoff": "white",
+      "formations": {
+        "white": "defensive",
+        "black": "aggressive"
+      },
+      "candidateFirst": true
+    },
+    {
+      "id": "defensive-aggressive-2-black",
+      "seed": 1410275094,
+      "kickoff": "black",
+      "formations": {
+        "white": "defensive",
+        "black": "aggressive"
+      },
+      "candidateFirst": false
+    },
+    {
+      "id": "defensive-neutral-1-white",
+      "seed": 3927544692,
+      "kickoff": "white",
+      "formations": {
+        "white": "defensive",
+        "black": "neutral"
+      },
+      "candidateFirst": false
+    },
+    {
+      "id": "defensive-neutral-1-black",
+      "seed": 3927544692,
+      "kickoff": "black",
+      "formations": {
+        "white": "defensive",
+        "black": "neutral"
+      },
+      "candidateFirst": true
+    },
+    {
+      "id": "defensive-neutral-2-white",
+      "seed": 1277938871,
+      "kickoff": "white",
+      "formations": {
+        "white": "defensive",
+        "black": "neutral"
+      },
+      "candidateFirst": true
+    },
+    {
+      "id": "defensive-neutral-2-black",
+      "seed": 1277938871,
+      "kickoff": "black",
+      "formations": {
+        "white": "defensive",
+        "black": "neutral"
+      },
+      "candidateFirst": false
+    },
+    {
+      "id": "defensive-defensive-1-white",
+      "seed": 2785655407,
+      "kickoff": "white",
+      "formations": {
+        "white": "defensive",
+        "black": "defensive"
+      },
+      "candidateFirst": false
+    },
+    {
+      "id": "defensive-defensive-1-black",
+      "seed": 2785655407,
+      "kickoff": "black",
+      "formations": {
+        "white": "defensive",
+        "black": "defensive"
+      },
+      "candidateFirst": true
+    },
+    {
+      "id": "defensive-defensive-2-white",
+      "seed": 1810332619,
+      "kickoff": "white",
+      "formations": {
+        "white": "defensive",
+        "black": "defensive"
+      },
+      "candidateFirst": true
+    },
+    {
+      "id": "defensive-defensive-2-black",
+      "seed": 1810332619,
+      "kickoff": "black",
+      "formations": {
+        "white": "defensive",
+        "black": "defensive"
+      },
+      "candidateFirst": false
+    }
+  ]
+}

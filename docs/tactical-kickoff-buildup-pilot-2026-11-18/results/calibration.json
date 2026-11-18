@@ -1,0 +1,555 @@
+{
+  "engineHash": "0fd749202309f4394f7f1201ad8e8397601531a1f0d9bdef1efd061ff9b4bdba",
+  "timedHash": "764582897f7fc6db35ffa3cb4ec064b7141a49add159a85ab17c1876114e905e",
+  "node": "v24.22.1",
+  "referenceMeanMs": 342.1405599999999,
+  "timeLimitMs": 342,
+  "rows": [
+    {
+      "seed": 4264542848,
+      "kickoff": "white",
+      "formations": {
+        "white": "aggressive",
+        "black": "neutral"
+      },
+      "ply": 0,
+      "phase": "kickoff",
+      "action": {
+        "type": "kick",
+        "x": 4,
+        "y": 10
+      },
+      "ms": 489.5477000000001,
+      "depth": 3
+    },
+    {
+      "seed": 4264542848,
+      "kickoff": "white",
+      "formations": {
+        "white": "aggressive",
+        "black": "neutral"
+      },
+      "ply": 1,
+      "phase": "attackMove",
+      "action": {
+        "type": "move",
+        "pieceId": "white-N2",
+        "x": 8,
+        "y": 8,
+        "freePawn": false
+      },
+      "ms": 334.8089,
+      "depth": 5
+    },
+    {
+      "seed": 4264542848,
+      "kickoff": "white",
+      "formations": {
+        "white": "aggressive",
+        "black": "neutral"
+      },
+      "ply": 2,
+      "phase": "attackMove",
+      "action": {
+        "type": "move",
+        "pieceId": "white-K",
+        "x": 6,
+        "y": 16,
+        "freePawn": true
+      },
+      "ms": 195.34609999999975,
+      "depth": 2
+    },
+    {
+      "seed": 4264542848,
+      "kickoff": "white",
+      "formations": {
+        "white": "aggressive",
+        "black": "neutral"
+      },
+      "ply": 5,
+      "phase": "kick",
+      "action": {
+        "type": "kick",
+        "x": 6,
+        "y": 8
+      },
+      "ms": 328.1722,
+      "depth": 3
+    },
+    {
+      "seed": 4264542848,
+      "kickoff": "white",
+      "formations": {
+        "white": "aggressive",
+        "black": "neutral"
+      },
+      "ply": 6,
+      "phase": "attackMove",
+      "action": {
+        "type": "move",
+        "pieceId": "white-B1",
+        "x": 7,
+        "y": 7,
+        "freePawn": false
+      },
+      "ms": 302.15399999999954,
+      "depth": 5
+    },
+    {
+      "seed": 4264542849,
+      "kickoff": "black",
+      "formations": {
+        "white": "aggressive",
+        "black": "neutral"
+      },
+      "ply": 0,
+      "phase": "kickoff",
+      "action": {
+        "type": "kick",
+        "x": 11,
+        "y": 4
+      },
+      "ms": 275.02320000000054,
+      "depth": 3
+    },
+    {
+      "seed": 4264542849,
+      "kickoff": "black",
+      "formations": {
+        "white": "aggressive",
+        "black": "neutral"
+      },
+      "ply": 1,
+      "phase": "attackMove",
+      "action": {
+        "type": "move",
+        "pieceId": "black-R1",
+        "x": 12,
+        "y": 9,
+        "freePawn": false
+      },
+      "ms": 309.0007999999998,
+      "depth": 5
+    },
+    {
+      "seed": 4264542849,
+      "kickoff": "black",
+      "formations": {
+        "white": "aggressive",
+        "black": "neutral"
+      },
+      "ply": 2,
+      "phase": "attackMove",
+      "action": {
+        "type": "move",
+        "pieceId": "black-K",
+        "x": 6,
+        "y": 0,
+        "freePawn": true
+      },
+      "ms": 199.30559999999969,
+      "depth": 3
+    },
+    {
+      "seed": 4264542849,
+      "kickoff": "black",
+      "formations": {
+        "white": "aggressive",
+        "black": "neutral"
+      },
+      "ply": 5,
+      "phase": "kick",
+      "action": {
+        "type": "kick",
+        "x": 7,
+        "y": 8
+      },
+      "ms": 355.6808000000001,
+      "depth": 3
+    },
+    {
+      "seed": 4264542849,
+      "kickoff": "black",
+      "formations": {
+        "white": "aggressive",
+        "black": "neutral"
+      },
+      "ply": 6,
+      "phase": "attackMove",
+      "action": {
+        "type": "move",
+        "pieceId": "black-B1",
+        "x": 6,
+        "y": 9,
+        "freePawn": false
+      },
+      "ms": 280.0733,
+      "depth": 4
+    },
+    {
+      "seed": 4264542850,
+      "kickoff": "white",
+      "formations": {
+        "white": "neutral",
+        "black": "defensive"
+      },
+      "ply": 0,
+      "phase": "kickoff",
+      "action": {
+        "type": "kick",
+        "x": 2,
+        "y": 12
+      },
+      "ms": 322.9542999999994,
+      "depth": 3
+    },
+    {
+      "seed": 4264542850,
+      "kickoff": "white",
+      "formations": {
+        "white": "neutral",
+        "black": "defensive"
+      },
+      "ply": 1,
+      "phase": "attackMove",
+      "action": {
+        "type": "move",
+        "pieceId": "white-N2",
+        "x": 7,
+        "y": 11,
+        "freePawn": false
+      },
+      "ms": 351.79240000000027,
+      "depth": 4
+    },
+    {
+      "seed": 4264542850,
+      "kickoff": "white",
+      "formations": {
+        "white": "neutral",
+        "black": "defensive"
+      },
+      "ply": 2,
+      "phase": "attackMove",
+      "action": {
+        "type": "move",
+        "pieceId": "white-K",
+        "x": 6,
+        "y": 16,
+        "freePawn": true
+      },
+      "ms": 306.15769999999975,
+      "depth": 3
+    },
+    {
+      "seed": 4264542850,
+      "kickoff": "white",
+      "formations": {
+        "white": "neutral",
+        "black": "defensive"
+      },
+      "ply": 3,
+      "phase": "attackMove",
+      "action": {
+        "type": "move",
+        "pieceId": "white-B1",
+        "x": 4,
+        "y": 8,
+        "freePawn": false
+      },
+      "ms": 525.5782999999992,
+      "depth": 4
+    },
+    {
+      "seed": 4264542850,
+      "kickoff": "white",
+      "formations": {
+        "white": "neutral",
+        "black": "defensive"
+      },
+      "ply": 6,
+      "phase": "kick",
+      "action": {
+        "type": "kick",
+        "x": 5,
+        "y": 9
+      },
+      "ms": 314.9488999999994,
+      "depth": 3
+    },
+    {
+      "seed": 4264542851,
+      "kickoff": "black",
+      "formations": {
+        "white": "neutral",
+        "black": "defensive"
+      },
+      "ply": 0,
+      "phase": "kickoff",
+      "action": {
+        "type": "kick",
+        "x": 4,
+        "y": 5
+      },
+      "ms": 268.21659999999974,
+      "depth": 3
+    },
+    {
+      "seed": 4264542851,
+      "kickoff": "black",
+      "formations": {
+        "white": "neutral",
+        "black": "defensive"
+      },
+      "ply": 1,
+      "phase": "attackMove",
+      "action": {
+        "type": "move",
+        "pieceId": "black-N1",
+        "x": 8,
+        "y": 7,
+        "freePawn": false
+      },
+      "ms": 281.41690000000017,
+      "depth": 4
+    },
+    {
+      "seed": 4264542851,
+      "kickoff": "black",
+      "formations": {
+        "white": "neutral",
+        "black": "defensive"
+      },
+      "ply": 2,
+      "phase": "attackMove",
+      "action": {
+        "type": "move",
+        "pieceId": "black-K",
+        "x": 6,
+        "y": 0,
+        "freePawn": true
+      },
+      "ms": 320.6342000000004,
+      "depth": 4
+    },
+    {
+      "seed": 4264542851,
+      "kickoff": "black",
+      "formations": {
+        "white": "neutral",
+        "black": "defensive"
+      },
+      "ply": 3,
+      "phase": "attackMove",
+      "action": {
+        "type": "move",
+        "pieceId": "black-N1",
+        "x": 10,
+        "y": 6,
+        "freePawn": false
+      },
+      "ms": 453.8688000000002,
+      "depth": 4
+    },
+    {
+      "seed": 4264542851,
+      "kickoff": "black",
+      "formations": {
+        "white": "neutral",
+        "black": "defensive"
+      },
+      "ply": 6,
+      "phase": "kick",
+      "action": {
+        "type": "kick",
+        "x": 5,
+        "y": 8
+      },
+      "ms": 308.6327000000001,
+      "depth": 4
+    },
+    {
+      "seed": 4264542852,
+      "kickoff": "white",
+      "formations": {
+        "white": "defensive",
+        "black": "aggressive"
+      },
+      "ply": 0,
+      "phase": "kickoff",
+      "action": {
+        "type": "kick",
+        "x": 9,
+        "y": 11
+      },
+      "ms": 343.9457000000002,
+      "depth": 3
+    },
+    {
+      "seed": 4264542852,
+      "kickoff": "white",
+      "formations": {
+        "white": "defensive",
+        "black": "aggressive"
+      },
+      "ply": 1,
+      "phase": "attackMove",
+      "action": {
+        "type": "move",
+        "pieceId": "white-N1",
+        "x": 6,
+        "y": 10,
+        "freePawn": false
+      },
+      "ms": 229.65550000000076,
+      "depth": 5
+    },
+    {
+      "seed": 4264542852,
+      "kickoff": "white",
+      "formations": {
+        "white": "defensive",
+        "black": "aggressive"
+      },
+      "ply": 2,
+      "phase": "attackMove",
+      "action": {
+        "type": "move",
+        "pieceId": "white-N1",
+        "x": 8,
+        "y": 9,
+        "freePawn": false
+      },
+      "ms": 295.21780000000035,
+      "depth": 4
+    },
+    {
+      "seed": 4264542852,
+      "kickoff": "white",
+      "formations": {
+        "white": "defensive",
+        "black": "aggressive"
+      },
+      "ply": 3,
+      "phase": "attackMove",
+      "action": {
+        "type": "move",
+        "pieceId": "white-K",
+        "x": 6,
+        "y": 16,
+        "freePawn": true
+      },
+      "ms": 742.5334999999995,
+      "depth": 4
+    },
+    {
+      "seed": 4264542852,
+      "kickoff": "white",
+      "formations": {
+        "white": "defensive",
+        "black": "aggressive"
+      },
+      "ply": 6,
+      "phase": "kick",
+      "action": {
+        "type": "kick",
+        "x": 6,
+        "y": 8
+      },
+      "ms": 390.1206000000002,
+      "depth": 3
+    },
+    {
+      "seed": 4264542853,
+      "kickoff": "black",
+      "formations": {
+        "white": "defensive",
+        "black": "aggressive"
+      },
+      "ply": 0,
+      "phase": "kickoff",
+      "action": {
+        "type": "kick",
+        "x": 6,
+        "y": 7
+      },
+      "ms": 323.3660999999993,
+      "depth": 3
+    },
+    {
+      "seed": 4264542853,
+      "kickoff": "black",
+      "formations": {
+        "white": "defensive",
+        "black": "aggressive"
+      },
+      "ply": 1,
+      "phase": "attackMove",
+      "action": {
+        "type": "move",
+        "pieceId": "black-N2",
+        "x": 6,
+        "y": 7,
+        "freePawn": false
+      },
+      "ms": 279.7462999999989,
+      "depth": 5
+    },
+    {
+      "seed": 4264542853,
+      "kickoff": "black",
+      "formations": {
+        "white": "defensive",
+        "black": "aggressive"
+      },
+      "ply": 2,
+      "phase": "attackMove",
+      "action": {
+        "type": "move",
+        "pieceId": "black-N2",
+        "x": 7,
+        "y": 9,
+        "freePawn": false
+      },
+      "ms": 297.8672999999999,
+      "depth": 4
+    },
+    {
+      "seed": 4264542853,
+      "kickoff": "black",
+      "formations": {
+        "white": "defensive",
+        "black": "aggressive"
+      },
+      "ply": 3,
+      "phase": "attackMove",
+      "action": {
+        "type": "move",
+        "pieceId": "black-N2",
+        "x": 7,
+        "y": 5,
+        "freePawn": false
+      },
+      "ms": 530.3920999999991,
+      "depth": 4
+    },
+    {
+      "seed": 4264542853,
+      "kickoff": "black",
+      "formations": {
+        "white": "defensive",
+        "black": "aggressive"
+      },
+      "ply": 6,
+      "phase": "kick",
+      "action": {
+        "type": "kick",
+        "x": 7,
+        "y": 8
+      },
+      "ms": 308.058500000001,
+      "depth": 3
+    }
+  ]
+}

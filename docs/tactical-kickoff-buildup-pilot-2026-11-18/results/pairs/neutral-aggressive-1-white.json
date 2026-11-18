@@ -1,0 +1,375 @@
+{
+  "id": "neutral-aggressive-1-white",
+  "seed": 618125317,
+  "kickoff": "white",
+  "formations": {
+    "white": "neutral",
+    "black": "aggressive"
+  },
+  "baseline": {
+    "seed": 618125317,
+    "kickoff": "white",
+    "formations": {
+      "white": "neutral",
+      "black": "aggressive"
+    },
+    "initialStateHash": "6751cf3f51b0f74bd410656b165781c9c0489c1e079d0d8a42abf183b398e96e",
+    "finalStateHash": "5903f99300c703f8a44dd0964539167174aeacde52bc7ffbe83152ae90f4ee15",
+    "trajectoryHash": "fe3fbfc712cd8145513de5832ed9e691236fdd2e62fe76083c9d93eb9d3dbafb",
+    "opening": {
+      "actions": 40,
+      "actionLimit": 64,
+      "extraKeeperActions": 0,
+      "termination": "turnover",
+      "censored": false,
+      "turnover": true,
+      "turnoverEvent": {
+        "ply": 39,
+        "type": "tackle",
+        "restartType": null
+      },
+      "shots": 0,
+      "hadShot": false,
+      "xG": 0,
+      "firstShot": null,
+      "ownGoalShots": 0,
+      "ownGoalXG": 0,
+      "netXG": 0,
+      "goals": 0
+    },
+    "followup": {
+      "triggered": true,
+      "actions": 24,
+      "actionLimit": 24,
+      "extraKeeperActions": 0,
+      "termination": "limit",
+      "shotsAgainst": 0,
+      "xGAgainst": 0,
+      "goalsAgainst": 0,
+      "ownGoalShotsAgainst": 0,
+      "ownGoalXGAgainst": 0,
+      "ownGoalsAgainst": 0
+    },
+    "timing": {
+      "openingAttack": {
+        "decisions": 25,
+        "ms": 8584.146899999992,
+        "msSamples": [
+          342.0941000000021,
+          342.44520000000193,
+          344.06299999999464,
+          344.1244000000006,
+          342.08720000000903,
+          343.56690000000526,
+          343.73330000000715,
+          343.39370000000054,
+          342.7983000000095,
+          346.4231,
+          342.4482999999891,
+          342.0975999999937,
+          346.7146999999968,
+          342.10869999999704,
+          344.92759999999544,
+          345.2875000000058,
+          342.4131999999954,
+          343.21480000000156,
+          342.0599999999977,
+          342.2237999999925,
+          343.8715999999986,
+          342.7161000000051,
+          343.3381999999983,
+          343.0081999999966,
+          342.98739999999816
+        ],
+        "policyStatsTotals": {
+          "nodes": 27598,
+          "completedDepth": 114,
+          "cacheHits": 2517,
+          "extensions": 9758,
+          "cutoffs": 6212,
+          "aborted": 25,
+          "timedOut": 25
+        }
+      },
+      "openingDefense": {
+        "decisions": 15,
+        "ms": 5145.160499999984,
+        "msSamples": [
+          342.11909999999625,
+          343.19199999999546,
+          343.13099999999395,
+          343.9470000000001,
+          342.06960000000254,
+          343.1725000000006,
+          342.3177999999898,
+          342.13799999999173,
+          343.2146000000066,
+          342.3381000000081,
+          342.53609999999753,
+          342.22090000000026,
+          346.0060999999987,
+          344.7014000000054,
+          342.05629999999655
+        ],
+        "policyStatsTotals": {
+          "nodes": 16616,
+          "completedDepth": 68,
+          "cacheHits": 1713,
+          "extensions": 6885,
+          "cutoffs": 4857,
+          "aborted": 15,
+          "timedOut": 15
+        }
+      },
+      "keeper": {
+        "decisions": 0,
+        "ms": 0,
+        "msSamples": [],
+        "policyStatsTotals": {}
+      },
+      "followupKickoffTeam": {
+        "decisions": 8,
+        "ms": 2754.973200000022,
+        "msSamples": [
+          342.07050000000163,
+          342.08020000001125,
+          352.13580000000366,
+          345.9545999999973,
+          342.7945000000036,
+          342.2768999999971,
+          342.12950000001,
+          345.5311999999976
+        ],
+        "policyStatsTotals": {
+          "nodes": 7064,
+          "completedDepth": 26,
+          "cacheHits": 279,
+          "extensions": 2291,
+          "cutoffs": 1222,
+          "aborted": 8,
+          "timedOut": 8
+        }
+      },
+      "followupOpponent": {
+        "decisions": 16,
+        "ms": 5491.840100000016,
+        "msSamples": [
+          343.2470999999932,
+          344.02350000001024,
+          344.01870000000054,
+          345.51620000001276,
+          342.19130000000587,
+          342.1079999999929,
+          343.4061000000074,
+          342.13129999999364,
+          342.94790000001376,
+          342.0764000000054,
+          343.00139999999374,
+          342.63129999999364,
+          345.25800000000163,
+          343.3744000000006,
+          342.0599999999977,
+          343.8484999999928
+        ],
+        "policyStatsTotals": {
+          "nodes": 16171,
+          "completedDepth": 55,
+          "cacheHits": 2390,
+          "extensions": 5041,
+          "cutoffs": 2609,
+          "aborted": 16,
+          "timedOut": 16
+        }
+      }
+    },
+    "score": {
+      "white": 0,
+      "black": 0
+    }
+  },
+  "candidate": {
+    "seed": 618125317,
+    "kickoff": "white",
+    "formations": {
+      "white": "neutral",
+      "black": "aggressive"
+    },
+    "initialStateHash": "6751cf3f51b0f74bd410656b165781c9c0489c1e079d0d8a42abf183b398e96e",
+    "finalStateHash": "3da539e2eb70580f9473660b7ead03726e450df215bbb18cb5fb56c0888c2eb1",
+    "trajectoryHash": "f48c0fb2cd6e0a7c95fd17052c6eea0cbc5ce18b320c14a587f0be30dbba44e2",
+    "opening": {
+      "actions": 32,
+      "actionLimit": 64,
+      "extraKeeperActions": 0,
+      "termination": "turnover",
+      "censored": false,
+      "turnover": true,
+      "turnoverEvent": {
+        "ply": 31,
+        "type": "tackle",
+        "restartType": null
+      },
+      "shots": 0,
+      "hadShot": false,
+      "xG": 0,
+      "firstShot": null,
+      "ownGoalShots": 0,
+      "ownGoalXG": 0,
+      "netXG": 0,
+      "goals": 0
+    },
+    "followup": {
+      "triggered": true,
+      "actions": 24,
+      "actionLimit": 24,
+      "extraKeeperActions": 0,
+      "termination": "limit",
+      "shotsAgainst": 0,
+      "xGAgainst": 0,
+      "goalsAgainst": 0,
+      "ownGoalShotsAgainst": 0,
+      "ownGoalXGAgainst": 0,
+      "ownGoalsAgainst": 0
+    },
+    "timing": {
+      "openingAttack": {
+        "decisions": 21,
+        "ms": 7065.823999999964,
+        "msSamples": [
+          330.8323000000091,
+          330.5075999999972,
+          330.34440000000177,
+          330.1898999999976,
+          330.4916999999987,
+          335.3104999999923,
+          330.1875,
+          356.09019999999146,
+          348.6198999999906,
+          333.7929000000004,
+          332.25410000000556,
+          330.4458999999915,
+          332.1298999999999,
+          346.7988999999943,
+          330.1003999999957,
+          345.8396000000066,
+          331.48510000000533,
+          330.2997000000032,
+          330.7350999999908,
+          368.0494000000035,
+          331.3189999999886
+        ],
+        "policyStatsTotals": {
+          "nodes": 9574,
+          "completedDepth": 35,
+          "fallbackNodes": 7542,
+          "routeNodes": 2032,
+          "replans": 418,
+          "routeActions": 18,
+          "rolloutActions": 462,
+          "completedRoutes": 13,
+          "completedReplicas": 26,
+          "shotRoutes": 1,
+          "interruptedRoutes": 14,
+          "turnoverRoutes": 4,
+          "eligible": 14,
+          "elapsedMs": 7065.461200000005,
+          "budgetMs": 7182,
+          "overrunMs": 55.2612999999983,
+          "routeCompleted": 9,
+          "nativeSelectedRoute": 17,
+          "nonNativeSelectedRoute": 4
+        }
+      },
+      "openingDefense": {
+        "decisions": 11,
+        "ms": 3784.38930000001,
+        "msSamples": [
+          342.123299999992,
+          342.35659999999916,
+          342.11500000000524,
+          345.8588000000018,
+          345.11729999999807,
+          342.0313000000024,
+          342.27780000001076,
+          349.3246999999974,
+          342.505799999999,
+          344.781799999997,
+          345.896900000007
+        ],
+        "policyStatsTotals": {
+          "nodes": 9464,
+          "completedDepth": 35,
+          "cacheHits": 707,
+          "extensions": 2633,
+          "cutoffs": 1367,
+          "aborted": 11,
+          "timedOut": 11
+        }
+      },
+      "keeper": {
+        "decisions": 0,
+        "ms": 0,
+        "msSamples": [],
+        "policyStatsTotals": {}
+      },
+      "followupKickoffTeam": {
+        "decisions": 8,
+        "ms": 2745.155700000032,
+        "msSamples": [
+          347.51630000000296,
+          342.1350000000093,
+          342.2713999999978,
+          342.6828000000096,
+          343.1273000000074,
+          342.53660000000673,
+          342.6021000000037,
+          342.2841999999946
+        ],
+        "policyStatsTotals": {
+          "nodes": 6045,
+          "completedDepth": 30,
+          "cacheHits": 250,
+          "extensions": 2654,
+          "cutoffs": 1587,
+          "aborted": 8,
+          "timedOut": 8
+        }
+      },
+      "followupOpponent": {
+        "decisions": 16,
+        "ms": 5487.126900000003,
+        "msSamples": [
+          342.8938000000053,
+          342.26020000000426,
+          342.508600000001,
+          342.10329999998794,
+          342.2869000000064,
+          343.80629999999655,
+          342.07070000001113,
+          342.11010000000533,
+          342.5234000000055,
+          342.1238000000012,
+          342.31579999999667,
+          342.2801999999938,
+          344.3266000000003,
+          344.09040000000095,
+          347.25749999999243,
+          342.1692999999941
+        ],
+        "policyStatsTotals": {
+          "nodes": 12881,
+          "completedDepth": 51,
+          "cacheHits": 927,
+          "extensions": 5642,
+          "cutoffs": 2763,
+          "aborted": 16,
+          "timedOut": 16
+        }
+      }
+    },
+    "score": {
+      "white": 0,
+      "black": 0
+    }
+  }
+}
