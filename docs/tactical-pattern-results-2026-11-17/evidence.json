@@ -1,0 +1,868 @@
+{
+  "schemaVersion": 1,
+  "studyDate": "2026-11-17",
+  "engine": "Frozen prepared-shot Tactical, local Node.js CPU, native Fast at 350 nodes",
+  "replayableCorpusExtension": {
+    "positions": 20000,
+    "games": 540,
+    "generatorSha256": "adb5f35da86d36cc18cf501f114000410c7d40189083210e3e9b7d4771ef3131",
+    "provenanceSha256": "f3693802eec587e294eb87b49dc2145e6808da84d651907449e343154d6d8577",
+    "corpusLockSha256": "ae5df93f39d2b55c90ec650b50a612a95a0957662974f309d1b802ae3c573758",
+    "positionsSha256": "9ecd379ae32a52bbdccca7fa2896eaedb6052dbf2c8028292525332f4c7c9bc5",
+    "overlaps": {
+      "seeds": 0,
+      "geometry": 0
+    },
+    "actions": 64803,
+    "generationMinutesApprox": 19.6
+  },
+  "additionalLabels": {
+    "lockSha256": "20c6698ca508e150a3dbeeaf79c00db359521f2fba45b6595eeac2e27ca0f3ed",
+    "labelsSha256": "527fa1fc5dd33011be29d182980f197d94ec0c4a9cee64288f0edc50baf47b30",
+    "gzipSha256": "488bbb6d274cc8238a7ced169aba06ddb7de8633c2a5012026d30742bf8592fc",
+    "positions": 20000,
+    "splits": {
+      "train": {
+        "positions": 20000,
+        "smallTrain": 0,
+        "rootCandidates": 176432,
+        "searchedCandidates": 176225,
+        "exactCandidates": 28444,
+        "positionsWithStrictPairs": 19087,
+        "strictPairs": 166298,
+        "teacherSearchMs": 12818875.529799946,
+        "shotsUnderHold": 995,
+        "keeperReplies": 0,
+        "tackles": 413,
+        "unlaunchedGoalTargets": 2,
+        "phases": {
+          "defendMove": 6958,
+          "attackMove": 9636,
+          "kick": 3293,
+          "kickoff": 28,
+          "cornerSelect": 61,
+          "keeperRelease": 24
+        }
+      }
+    }
+  },
+  "fixedValidationPanel": {
+    "10000": {
+      "selectedEpoch": 8,
+      "validation": {
+        "positions": 1000,
+        "positionsWithPairs": 951,
+        "strictPairs": 8449,
+        "pairLoss": 0.5180797943111509,
+        "pairAccuracy": 0.7280327126249199,
+        "teacherTop1": 0.345,
+        "teacherTop3": 0.672,
+        "certifiedRegretLowerBound": 9.934761566556128
+      },
+      "modelSha256": "94f386aacbe808f3fb83690759b34a3d2be5a19a122c7ecc354a24c0469210a1"
+    },
+    "30000": {
+      "selectedEpoch": 8,
+      "validation": {
+        "positions": 1000,
+        "positionsWithPairs": 951,
+        "strictPairs": 8449,
+        "pairLoss": 0.5025749522597718,
+        "pairAccuracy": 0.7340961568970035,
+        "teacherTop1": 0.347,
+        "teacherTop3": 0.68,
+        "certifiedRegretLowerBound": 9.333671888813512
+      },
+      "modelSha256": "abfa142d00e35b3ef07b5bc1a572f0d8ea7a43448f54f932bb01e20501184431"
+    }
+  },
+  "boardDiagnostic": {
+    "sources": {
+      "boards": "25580c5ae2103a819a5eca111d2747f88f584d5b4b608a340a86bae963b12da1",
+      "fast": "0fd749202309f4394f7f1201ad8e8397601531a1f0d9bdef1efd061ff9b4bdba",
+      "guided": "eb48f53dbfd228a798d6b1bb7d05851755bb18bc70c5ecacbc356ac3ede1dda6",
+      "inspector": "d2e5236115940f751fa9b6aa6f900be8a2fc6d69101f7e588458be311ee59388"
+    },
+    "budgets": {
+      "fast": 350,
+      "guided": 335,
+      "equalNodes": 350,
+      "reference": 1400
+    },
+    "equalNodes": {
+      "boards": 128,
+      "games": 56,
+      "guidedFirstIterationAborts": 5,
+      "fastFirstIterationAborts": 5,
+      "completedDepths": {
+        "guided": 2.2109375,
+        "fast": 2.2265625
+      },
+      "guidedRelativeDepth": {
+        "0": 126,
+        "-1": 2
+      },
+      "agreesOnFinalMove": 125,
+      "disagreementsInSharedCompletedIterations": {},
+      "referenceAgreement": {
+        "guided": 70,
+        "fast": 69
+      },
+      "qualityByReferenceBounds": {
+        "unresolved-by-reference-bounds": 2,
+        "same-action": 125,
+        "guided-better": 1
+      },
+      "onDeeperReferenceBoards": {
+        "boards": 126,
+        "quality": {
+          "unresolved-by-reference-bounds": 2,
+          "same-action": 123,
+          "guided-better": 1
+        }
+      },
+      "meanCertifiedRegretLowerBounds": {
+        "comparableBoards": 127,
+        "guided": 3.5498293322236063,
+        "fast": 3.701132342660216
+      }
+    }
+  },
+  "neutralConfirmation": {
+    "games": 384,
+    "seedGroups": 96,
+    "wdl": {
+      "win": 20,
+      "draw": 354,
+      "loss": 10
+    },
+    "effects": {
+      "xGPerGame": {
+        "estimate": 0.019833665782807885,
+        "interval95": [
+          0.013648181124528126,
+          0.02582574644789852
+        ]
+      },
+      "goalsPerGame": {
+        "estimate": 0.026041666666666668,
+        "interval95": [
+          0.0026041666666666665,
+          0.052083333333333336
+        ]
+      },
+      "signedPointsPerGame": {
+        "estimate": 0.026041666666666668,
+        "interval95": [
+          0.0026041666666666665,
+          0.052083333333333336
+        ]
+      },
+      "meanTimeRatio": {
+        "estimate": 1.0454352359340626,
+        "interval95": [
+          1.0365333662020795,
+          1.0544154621713981
+        ]
+      }
+    },
+    "hashes": {
+      "ledger": "c6a3c8d95f38fca366991622672b7f0a5b0fa68f8990fca6925cd46e7440a20c",
+      "lock": "36f57b232d73fcbe700b9eff8ca64cf2e96b62173b136b6a29d82af8ba1e9ba5",
+      "analysisPlan": "8cfc6ff91f3bc597d836a3e39640315fc9efce767d8dfb11afc4800e4702c57c"
+    },
+    "candidate": {
+      "goals": 22,
+      "xG": 28.168167876309013,
+      "meanMs": 178.9438895138485,
+      "p95Ms": 324.9018000001088,
+      "meanNodes": 350
+    },
+    "baseline": {
+      "goals": 12,
+      "xG": 20.552040215710814,
+      "meanMs": 171.16688185277022,
+      "p95Ms": 300.3945999999996,
+      "meanNodes": 350
+    },
+    "kickoff": {
+      "candidateStarts": {
+        "games": 192,
+        "candidateShots": 202,
+        "baselineShots": 69,
+        "gamesWithoutShots": 0,
+        "xGPerGame": {
+          "estimate": 0.08484553394930462,
+          "interval95": [
+            0.07464588191171095,
+            0.09433355873735955
+          ]
+        },
+        "goalsPerGame": {
+          "estimate": 0.0625,
+          "interval95": [
+            0.020833333333333332,
+            0.109375
+          ]
+        },
+        "signedPointsPerGame": {
+          "estimate": 0.0625,
+          "interval95": [
+            0.020833333333333332,
+            0.109375
+          ]
+        },
+        "meanTimeRatio": {
+          "estimate": 0.9390419093937014,
+          "interval95": [
+            0.9278449163605053,
+            0.9505809792899795
+          ]
+        }
+      },
+      "baselineStarts": {
+        "games": 192,
+        "candidateShots": 40,
+        "baselineShots": 103,
+        "gamesWithoutShots": 96,
+        "xGPerGame": {
+          "estimate": -0.04517820238368888,
+          "interval95": [
+            -0.051333125972646665,
+            -0.03857857308573639
+          ]
+        },
+        "goalsPerGame": {
+          "estimate": -0.010416666666666666,
+          "interval95": [
+            -0.041666666666666664,
+            0.015625
+          ]
+        },
+        "signedPointsPerGame": {
+          "estimate": -0.010416666666666666,
+          "interval95": [
+            -0.041666666666666664,
+            0.015625
+          ]
+        },
+        "meanTimeRatio": {
+          "estimate": 1.1666017739759038,
+          "interval95": [
+            1.1556519898633666,
+            1.1775414830280746
+          ]
+        }
+      }
+    }
+  },
+  "variedConfirmation": {
+    "games": 360,
+    "seedGroups": 90,
+    "wdl": {
+      "win": 22,
+      "draw": 304,
+      "loss": 34
+    },
+    "effects": {
+      "xGPerGame": {
+        "estimate": 0.008077945964648281,
+        "interval95": [
+          -0.0036218516207614723,
+          0.018595160993236545
+        ]
+      },
+      "goalsPerGame": {
+        "estimate": -0.03611111111111111,
+        "interval95": [
+          -0.07222222222222222,
+          -0.002777777777777778
+        ]
+      },
+      "signedPointsPerGame": {
+        "estimate": -0.03333333333333333,
+        "interval95": [
+          -0.06944444444444445,
+          0
+        ]
+      },
+      "meanTimeRatio": {
+        "estimate": 1.0126067224316317,
+        "interval95": [
+          1.0049135856055438,
+          1.0203603979138722
+        ]
+      }
+    },
+    "hashes": {
+      "ledger": "74ef26839be33183297330e66791f8ae93af662f75a5ca0590f8378ccc8a1de8",
+      "lock": "c6f6b2d19e04148df079c4c73d67ddcdc83117346ff5097f386ee6f525bc71c0",
+      "analysisPlan": "8cfc6ff91f3bc597d836a3e39640315fc9efce767d8dfb11afc4800e4702c57c"
+    },
+    "candidate": {
+      "goals": 23,
+      "xG": 32.013964279205226,
+      "meanMs": 163.21497551289897,
+      "p95Ms": 277.88530000002356,
+      "meanNodes": 349.99971702117625
+    },
+    "baseline": {
+      "goals": 36,
+      "xG": 29.10590373193184,
+      "meanMs": 161.1829863433666,
+      "p95Ms": 272.30369999993127,
+      "meanNodes": 349.99112783351916
+    },
+    "kickoff": {
+      "candidateStarts": {
+        "games": 180,
+        "candidateShots": 197,
+        "baselineShots": 71,
+        "gamesWithoutShots": 30,
+        "xGPerGame": {
+          "estimate": 0.07909959698005437,
+          "interval95": [
+            0.06410557592281507,
+            0.09382073064281807
+          ]
+        },
+        "goalsPerGame": {
+          "estimate": 0.06666666666666667,
+          "interval95": [
+            0.016666666666666666,
+            0.12222222222222222
+          ]
+        },
+        "signedPointsPerGame": {
+          "estimate": 0.06111111111111111,
+          "interval95": [
+            0.011111111111111112,
+            0.1111111111111111
+          ]
+        },
+        "meanTimeRatio": {
+          "estimate": 0.9297987094770551,
+          "interval95": [
+            0.9158367249722529,
+            0.943253194475718
+          ]
+        }
+      },
+      "baselineStarts": {
+        "games": 180,
+        "candidateShots": 67,
+        "baselineShots": 137,
+        "gamesWithoutShots": 80,
+        "xGPerGame": {
+          "estimate": -0.06294370505075782,
+          "interval95": [
+            -0.08203822122039932,
+            -0.04517177566452789
+          ]
+        },
+        "goalsPerGame": {
+          "estimate": -0.1388888888888889,
+          "interval95": [
+            -0.2,
+            -0.07777777777777778
+          ]
+        },
+        "signedPointsPerGame": {
+          "estimate": -0.12777777777777777,
+          "interval95": [
+            -0.18333333333333332,
+            -0.07222222222222222
+          ]
+        },
+        "meanTimeRatio": {
+          "estimate": 1.1005607576539842,
+          "interval95": [
+            1.0863627455626153,
+            1.1140643121716236
+          ]
+        }
+      }
+    }
+  },
+  "allFormationScaling": {
+    "plan": {
+      "schemaVersion": 1,
+      "originalTrainingPositions": 10000,
+      "newTrainingPositions": 20000,
+      "validationPositions": 1000,
+      "seedGroups": 90,
+      "legsPerSeed": 4,
+      "actionLimit": 120,
+      "nodeCap": 350,
+      "depthCap": 8,
+      "workersPerArm": 4,
+      "bootstrapSamples": 20000,
+      "smallestInterestingXGGainPerGame": 0.01,
+      "signedPointLossMarginPerGame": -0.05,
+      "largestAcceptableTimeRatioVsFast": 1.05
+    },
+    "games": 720,
+    "method": "Difference of guided model margins against the same frozen Fast policy, pairing seed, starting formations, candidate color and kickoff. Percentile intervals resample whole seed groups.",
+    "effects": {
+      "xGPerGame": {
+        "estimate": 0.013634400940639628,
+        "interval95": [
+          -0.003809493072034472,
+          0.03235453871633513
+        ]
+      },
+      "goalsPerGame": {
+        "estimate": 0.011111111111111112,
+        "interval95": [
+          -0.027777777777777776,
+          0.05
+        ]
+      },
+      "signedPointsPerGame": {
+        "estimate": 0.011111111111111112,
+        "interval95": [
+          -0.027777777777777776,
+          0.05
+        ]
+      }
+    },
+    "kickoff": {
+      "guidedStarts": {
+        "xGPerGame": {
+          "estimate": 0.032532572702667954,
+          "interval95": [
+            0.0008464452672198744,
+            0.06630435831086007
+          ]
+        },
+        "goalsPerGame": {
+          "estimate": 0.022222222222222223,
+          "interval95": [
+            -0.044444444444444446,
+            0.08333333333333333
+          ]
+        },
+        "signedPointsPerGame": {
+          "estimate": 0.022222222222222223,
+          "interval95": [
+            -0.044444444444444446,
+            0.08333333333333333
+          ]
+        }
+      },
+      "fastStarts": {
+        "xGPerGame": {
+          "estimate": -0.005263770821388718,
+          "interval95": [
+            -0.016637105864345633,
+            0.006766586415327993
+          ]
+        },
+        "goalsPerGame": {
+          "estimate": 0,
+          "interval95": [
+            -0.03333333333333333,
+            0.03333333333333333
+          ]
+        },
+        "signedPointsPerGame": {
+          "estimate": 0,
+          "interval95": [
+            -0.03333333333333333,
+            0.03333333333333333
+          ]
+        }
+      }
+    },
+    "decision": {
+      "positiveScalingEffect": false,
+      "usefulScalingEstimate": true,
+      "usefulScalingEffectExcluded": false,
+      "pointLossBounded": true,
+      "comparableTimeVsFast": true
+    },
+    "hashes": {
+      "plan": "8e0a7ff74750eec38df83bb33c272006f354499a758049831a1b8cb3f92ea6ab",
+      "comparisonLock": "32ada03e37ba005d3db96a6270c05f075ee7293deb5c9af89efc853ad89552a4"
+    },
+    "arms": {
+      "10000": {
+        "games": 360,
+        "seedGroups": 90,
+        "wdl": {
+          "win": 28,
+          "draw": 307,
+          "loss": 25
+        },
+        "effects": {
+          "xGPerGame": {
+            "estimate": 0.01310241726663895,
+            "interval95": [
+              0.0018094248530127457,
+              0.024396534375887846
+            ]
+          },
+          "goalsPerGame": {
+            "estimate": 0.008333333333333333,
+            "interval95": [
+              -0.027777777777777776,
+              0.04722222222222222
+            ]
+          },
+          "signedPointsPerGame": {
+            "estimate": 0.008333333333333333,
+            "interval95": [
+              -0.027777777777777776,
+              0.04722222222222222
+            ]
+          },
+          "meanTimeRatio": {
+            "estimate": 0.9570370518196992,
+            "interval95": [
+              0.9475492014402083,
+              0.9668970372730568
+            ]
+          }
+        },
+        "hashes": {
+          "ledger": "aafa44d76930cb438a609890763b659171480183140818ff35da452a994b980e",
+          "lock": "a6eee0c1ab834fad17aad314ba06c2fcd57b451204ac2a6ec1cff177667acc2c",
+          "analysisPlan": "8cfc6ff91f3bc597d836a3e39640315fc9efce767d8dfb11afc4800e4702c57c"
+        },
+        "candidate": {
+          "goals": 30,
+          "xG": 32.00636055557615,
+          "meanMs": 132.05943313980788,
+          "p95Ms": 218.32910000000265,
+          "meanNodes": 350
+        },
+        "baseline": {
+          "goals": 27,
+          "xG": 27.289490339586123,
+          "meanMs": 137.9877956540048,
+          "p95Ms": 236.95609999999579,
+          "meanNodes": 350
+        }
+      },
+      "30000": {
+        "games": 360,
+        "seedGroups": 90,
+        "wdl": {
+          "win": 32,
+          "draw": 303,
+          "loss": 25
+        },
+        "effects": {
+          "xGPerGame": {
+            "estimate": 0.026736818207278575,
+            "interval95": [
+              0.009724945092913807,
+              0.045545427992225176
+            ]
+          },
+          "goalsPerGame": {
+            "estimate": 0.019444444444444445,
+            "interval95": [
+              -0.019444444444444445,
+              0.058333333333333334
+            ]
+          },
+          "signedPointsPerGame": {
+            "estimate": 0.019444444444444445,
+            "interval95": [
+              -0.019444444444444445,
+              0.058333333333333334
+            ]
+          },
+          "meanTimeRatio": {
+            "estimate": 1.001560322752071,
+            "interval95": [
+              0.9925249782667386,
+              1.0105655348708364
+            ]
+          }
+        },
+        "hashes": {
+          "ledger": "ac33479b7cf6ec2fb66bc09520c61cf34eae308b333743f0b483d6523b6b6d1d",
+          "lock": "0ee77299b6284032c207ece0f805c4dc682b431a2018ca912efa59082103a902",
+          "analysisPlan": "8cfc6ff91f3bc597d836a3e39640315fc9efce767d8dfb11afc4800e4702c57c"
+        },
+        "candidate": {
+          "goals": 34,
+          "xG": 35.580345421579,
+          "meanMs": 133.58503766861148,
+          "p95Ms": 220.17989999998827,
+          "meanNodes": 349.9911030326222
+        },
+        "baseline": {
+          "goals": 27,
+          "xG": 25.9550908669587,
+          "meanMs": 133.37692661541232,
+          "p95Ms": 221.49970000004396,
+          "meanNodes": 350
+        }
+      }
+    }
+  },
+  "exploratorySubgroups": {
+    "method": {
+      "samples": 20000,
+      "seed": 1443742298,
+      "method": "Paired whole seed groups resampled within each of the nine ordered formation pairs. All four legs stay together. Formation weights are held fixed."
+    },
+    "offNeutral": {
+      "estimate": -0.006797364278074447,
+      "interval95": [
+        -0.01634839942309469,
+        0.0029504752414355297
+      ]
+    },
+    "bothNeutral": {
+      "estimate": 0.17708852269035222,
+      "interval95": [
+        0.10017664389307941,
+        0.24803149491120025
+      ]
+    },
+    "bothNeutralGuidedStarts": {
+      "estimate": 0.342239232227855,
+      "interval95": [
+        0.1955652755587743,
+        0.48891318889693564
+      ]
+    },
+    "bothNeutralFastStarts": {
+      "estimate": 0.011937813152849364,
+      "interval95": [
+        0,
+        0.02387562630569873
+      ]
+    }
+  },
+  "freshTransfer": {
+    "plan": {
+      "schemaVersion": 1,
+      "originalTrainingPositions": 10000,
+      "newTrainingPositions": 20000,
+      "validationPositions": 1000,
+      "seedGroups": 120,
+      "formationPairs": 8,
+      "excludedPair": [
+        "neutral",
+        "neutral"
+      ],
+      "legsPerSeed": 4,
+      "actionLimit": 120,
+      "nodeCap": 350,
+      "depthCap": 8,
+      "workersPerArm": 4,
+      "bootstrapSamples": 20000,
+      "smallestInterestingXGGainPerGame": 0.01,
+      "signedPointLossMarginPerGame": -0.05,
+      "largestAcceptableTimeRatioVsFast": 1.05
+    },
+    "games": 960,
+    "method": "Difference of guided model margins against the same frozen Fast policy, pairing seed, starting formations, candidate color and kickoff. Percentile intervals resample whole seed groups.",
+    "effects": {
+      "xGPerGame": {
+        "estimate": -0.012885095714858867,
+        "interval95": [
+          -0.023345189604841252,
+          -0.00313903268837875
+        ]
+      },
+      "goalsPerGame": {
+        "estimate": 0.00625,
+        "interval95": [
+          -0.016666666666666666,
+          0.029166666666666667
+        ]
+      },
+      "signedPointsPerGame": {
+        "estimate": 0.00625,
+        "interval95": [
+          -0.016666666666666666,
+          0.029166666666666667
+        ]
+      }
+    },
+    "kickoff": {
+      "guidedStarts": {
+        "xGPerGame": {
+          "estimate": -0.011819705899121322,
+          "interval95": [
+            -0.02982951515064669,
+            0.005764259362497233
+          ]
+        },
+        "goalsPerGame": {
+          "estimate": 0.016666666666666666,
+          "interval95": [
+            -0.020833333333333332,
+            0.05416666666666667
+          ]
+        },
+        "signedPointsPerGame": {
+          "estimate": 0.016666666666666666,
+          "interval95": [
+            -0.020833333333333332,
+            0.05416666666666667
+          ]
+        }
+      },
+      "fastStarts": {
+        "xGPerGame": {
+          "estimate": -0.013950485530596411,
+          "interval95": [
+            -0.021855798163124916,
+            -0.006322025789521555
+          ]
+        },
+        "goalsPerGame": {
+          "estimate": -0.004166666666666667,
+          "interval95": [
+            -0.03333333333333333,
+            0.020833333333333332
+          ]
+        },
+        "signedPointsPerGame": {
+          "estimate": -0.004166666666666667,
+          "interval95": [
+            -0.03333333333333333,
+            0.020833333333333332
+          ]
+        }
+      }
+    },
+    "decision": {
+      "positiveScalingEffect": false,
+      "usefulScalingEstimate": false,
+      "usefulScalingEffectExcluded": true,
+      "pointLossBounded": true,
+      "comparableTimeVsFast": true
+    },
+    "hashes": {
+      "plan": "8dd1c06c603e3dee26c7d207af6cf990f14db3866a2aff68cb45cf3f534922c2",
+      "comparisonLock": "f879cc4266045a87a01f868e4b5d7f02cbe7c5de2475835a7c78a9f22c0465a3"
+    },
+    "arms": {
+      "10000": {
+        "games": 480,
+        "seedGroups": 120,
+        "wdl": {
+          "win": 33,
+          "draw": 414,
+          "loss": 33
+        },
+        "effects": {
+          "xGPerGame": {
+            "estimate": 0.007570902519975673,
+            "interval95": [
+              -0.002989824820803813,
+              0.018116203325351476
+            ]
+          },
+          "goalsPerGame": {
+            "estimate": 0,
+            "interval95": [
+              -0.03125,
+              0.03125
+            ]
+          },
+          "signedPointsPerGame": {
+            "estimate": 0,
+            "interval95": [
+              -0.03125,
+              0.03125
+            ]
+          },
+          "meanTimeRatio": {
+            "estimate": 0.849930958807259,
+            "interval95": [
+              0.8343109221793098,
+              0.8663117022795156
+            ]
+          }
+        },
+        "hashes": {
+          "ledger": "36eddbf1a10c0b62f17998ee46c9c6eab49edfac1d2676752788176f6d20c676",
+          "lock": "8f34654577b25aa9a99e3974f476e0ac6fff201f6ac026ffaf3cd9f462288014",
+          "analysisPlan": "8cfc6ff91f3bc597d836a3e39640315fc9efce767d8dfb11afc4800e4702c57c"
+        },
+        "candidate": {
+          "goals": 36,
+          "xG": 41.99439897341634,
+          "meanMs": 132.75112669162326,
+          "p95Ms": 220.92620000010356,
+          "meanNodes": 350
+        },
+        "baseline": {
+          "goals": 36,
+          "xG": 38.36036576382801,
+          "meanMs": 156.19048266922528,
+          "p95Ms": 276.42269999999553,
+          "meanNodes": 349.9933356594557
+        }
+      },
+      "30000": {
+        "games": 480,
+        "seedGroups": 120,
+        "wdl": {
+          "win": 35,
+          "draw": 413,
+          "loss": 32
+        },
+        "effects": {
+          "xGPerGame": {
+            "estimate": -0.005314193194883191,
+            "interval95": [
+              -0.01537573825813018,
+              0.00436946858195209
+            ]
+          },
+          "goalsPerGame": {
+            "estimate": 0.00625,
+            "interval95": [
+              -0.022916666666666665,
+              0.035416666666666666
+            ]
+          },
+          "signedPointsPerGame": {
+            "estimate": 0.00625,
+            "interval95": [
+              -0.022916666666666665,
+              0.035416666666666666
+            ]
+          },
+          "meanTimeRatio": {
+            "estimate": 1.0312568124970327,
+            "interval95": [
+              1.0254765389648512,
+              1.0370453005598324
+            ]
+          }
+        },
+        "hashes": {
+          "ledger": "c9d7f0e34dd7500725d56bc01f6c232ee1dbf427108b8ef92934433cc76da073",
+          "lock": "1b14b073894b47053e6473a9d9ae11c472b9fb169a62d73d3e2444f7c2c41509",
+          "analysisPlan": "8cfc6ff91f3bc597d836a3e39640315fc9efce767d8dfb11afc4800e4702c57c"
+        },
+        "candidate": {
+          "goals": 38,
+          "xG": 36.51521240696352,
+          "meanMs": 131.08109089767913,
+          "p95Ms": 216.48320000013337,
+          "meanNodes": 349.9888821145501
+        },
+        "baseline": {
+          "goals": 35,
+          "xG": 39.066025140507456,
+          "meanMs": 127.10809694462618,
+          "p95Ms": 208.72420000005513,
+          "meanNodes": 350
+        }
+      }
+    }
+  },
+  "compactTransferLedgerSha256": "eaddfceff523e10ff665eec61a4dedd87346e516cc56ab719c4934b8ff612556"
+}

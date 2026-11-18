@@ -1,0 +1,1109 @@
+{
+  "seed": 4250659187,
+  "formation": {
+    "white": "neutral",
+    "black": "neutral"
+  },
+  "selection": "First neutral/neutral seed in the archived scaling schedule, guided kickoff for each color",
+  "hashes": {
+    "comparisonLock": "32ada03e37ba005d3db96a6270c05f075ee7293deb5c9af89efc853ad89552a4",
+    "comparisonSummary": "ca81bdb3f4b803cef5120e977455c7b11a80f2b6d51dfa06bcbbcd4482e1e343",
+    "diagnosticRunner": "d936e575f933310295898e58e83e435e24466be5c7d896e45e26e40f42b473ac",
+    "arms": {
+      "guided-10000": {
+        "ledger": "aafa44d76930cb438a609890763b659171480183140818ff35da452a994b980e",
+        "lock": "a6eee0c1ab834fad17aad314ba06c2fcd57b451204ac2a6ec1cff177667acc2c",
+        "runner": "cdee33cc4786627ce4471a11e3c1deeafa529800800b42b3f82709a7a6c206ae"
+      },
+      "guided-30000": {
+        "ledger": "ac33479b7cf6ec2fb66bc09520c61cf34eae308b333743f0b483d6523b6b6d1d",
+        "lock": "0ee77299b6284032c207ece0f805c4dc682b431a2018ca912efa59082103a902",
+        "runner": "cdee33cc4786627ce4471a11e3c1deeafa529800800b42b3f82709a7a6c206ae"
+      }
+    }
+  },
+  "replayVerification": "Both variants matched their archived trajectory hashes, final states, scores, shots and expected goals for each color.",
+  "interpretation": "Mechanistic diagnosis on one selected seed. Later positions differ after the first choice, so the score and xG differences describe both resulting trajectories.",
+  "results": [
+    {
+      "candidateColor": "white",
+      "kickoff": "white",
+      "firstDivergence": {
+        "decision": 69,
+        "turn": 13,
+        "phase": "attackMove",
+        "team": "white",
+        "publicState": {
+          "pieces": [
+            {
+              "id": "white-K",
+              "team": "white",
+              "type": "K",
+              "x": 6,
+              "y": 16
+            },
+            {
+              "id": "white-Q",
+              "team": "white",
+              "type": "Q",
+              "x": 8,
+              "y": 3
+            },
+            {
+              "id": "white-R1",
+              "team": "white",
+              "type": "R",
+              "x": 1,
+              "y": 13
+            },
+            {
+              "id": "white-R2",
+              "team": "white",
+              "type": "R",
+              "x": 12,
+              "y": 13
+            },
+            {
+              "id": "white-B1",
+              "team": "white",
+              "type": "B",
+              "x": 4,
+              "y": 10
+            },
+            {
+              "id": "white-B2",
+              "team": "white",
+              "type": "B",
+              "x": 13,
+              "y": 0
+            },
+            {
+              "id": "white-N1",
+              "team": "white",
+              "type": "N",
+              "x": 10,
+              "y": 10
+            },
+            {
+              "id": "white-N2",
+              "team": "white",
+              "type": "N",
+              "x": 9,
+              "y": 6
+            },
+            {
+              "id": "white-P1",
+              "team": "white",
+              "type": "P",
+              "x": 6,
+              "y": 8
+            },
+            {
+              "id": "white-P2",
+              "team": "white",
+              "type": "P",
+              "x": 7,
+              "y": 9
+            },
+            {
+              "id": "white-P3",
+              "team": "white",
+              "type": "P",
+              "x": 9,
+              "y": 13
+            },
+            {
+              "id": "black-K",
+              "team": "black",
+              "type": "K",
+              "x": 8,
+              "y": 2
+            },
+            {
+              "id": "black-Q",
+              "team": "black",
+              "type": "Q",
+              "x": 5,
+              "y": 9
+            },
+            {
+              "id": "black-R1",
+              "team": "black",
+              "type": "R",
+              "x": 3,
+              "y": 8
+            },
+            {
+              "id": "black-R2",
+              "team": "black",
+              "type": "R",
+              "x": 4,
+              "y": 3
+            },
+            {
+              "id": "black-B1",
+              "team": "black",
+              "type": "B",
+              "x": 11,
+              "y": 4
+            },
+            {
+              "id": "black-B2",
+              "team": "black",
+              "type": "B",
+              "x": 9,
+              "y": 5
+            },
+            {
+              "id": "black-N1",
+              "team": "black",
+              "type": "N",
+              "x": 9,
+              "y": 9
+            },
+            {
+              "id": "black-N2",
+              "team": "black",
+              "type": "N",
+              "x": 6,
+              "y": 7
+            },
+            {
+              "id": "black-P1",
+              "team": "black",
+              "type": "P",
+              "x": 6,
+              "y": 3
+            },
+            {
+              "id": "black-P2",
+              "team": "black",
+              "type": "P",
+              "x": 8,
+              "y": 5
+            },
+            {
+              "id": "black-P3",
+              "team": "black",
+              "type": "P",
+              "x": 5,
+              "y": 4
+            }
+          ],
+          "formations": {
+            "white": "neutral",
+            "black": "neutral"
+          },
+          "ball": {
+            "x": 13,
+            "y": 0,
+            "carrierId": "white-B2"
+          },
+          "attack": "white",
+          "phase": "attackMove",
+          "positionBudget": {
+            "normalUsed": false,
+            "pawnUsed": false,
+            "dribbleUsed": false
+          },
+          "pendingShot": null,
+          "releaseReason": null,
+          "score": {
+            "white": 0,
+            "black": 0
+          },
+          "turn": 13,
+          "randomState": 0,
+          "log": [
+            "White has kick-off. Kick the ball to begin.",
+            "White kicks to f10 (100% accuracy). The ball is loose.",
+            "White queen moves to f10 and collects the ball; collecting its own pass uses the dribble allowance.",
+            "White goalkeeper moves to g1 (free king move).",
+            "Black goalkeeper moves to g17 (free king move).",
+            "Black queen moves to f11.",
+            "White kicks to f7 (100% accuracy). The ball is loose.",
+            "White knight moves to f7 and collects the ball.",
+            "White knight dribbles to h8.",
+            "White pawn moves to f5 (free pawn move).",
+            "Black queen moves to i11.",
+            "Black pawn moves to g13 (free pawn move).",
+            "White kicks to g10 (100% accuracy). The ball is loose.",
+            "White queen moves to g10 and collects the ball.",
+            "White queen dribbles to f10.",
+            "White pawn moves to f6 (free pawn move).",
+            "Black queen moves to g9.",
+            "Black pawn moves to f14 (free pawn move).",
+            "White kicks to f7 (100% accuracy). The ball is loose.",
+            "White bishop moves to e7.",
+            "White pawn moves to f7 and collects the ball (free pawn move).",
+            "White ends its positioning turn.",
+            "Black queen moves to f8.",
+            "Black pawn moves to f13 (free pawn move).",
+            "White passes to the knight at j7 (100% accuracy).",
+            "White knight dribbles to k9.",
+            "White knight moves to i10.",
+            "White pawn moves to h5 (free pawn move).",
+            "Black rook moves to m9.",
+            "Black goalkeeper moves to h17 (free king move).",
+            "White kicks to j7 (100% accuracy). The ball is loose.",
+            "White bishop moves to j7 and collects the ball.",
+            "White bishop dribbles to h9.",
+            "White pawn moves to h6 (free pawn move).",
+            "Black knight moves to g10.",
+            "Black pawn moves to g12 (free pawn move).",
+            "White passes to the knight at i10 (100% accuracy).",
+            "White knight moves to j11.",
+            "White pawn moves to h7 (free pawn move).",
+            "White knight dribbles to k11.",
+            "Black pawn moves to h12 (free pawn move).",
+            "Black bishop moves to f16.",
+            "White kicks to i10 (100% accuracy). The ball is loose.",
+            "White pawn moves to h8 (free pawn move).",
+            "White bishop moves to i10 and collects the ball.",
+            "White bishop dribbles to k8.",
+            "Black bishop moves to j12.",
+            "Black pawn moves to h14 (free pawn move).",
+            "White kicks to l9 (100% accuracy). The ball is loose.",
+            "White pawn moves to g7 (free pawn move).",
+            "White knight moves to l9 and collects the ball.",
+            "White knight dribbles to k7.",
+            "Black knight moves to j8.",
+            "Black pawn moves to i12 (free pawn move).",
+            "White kicks to i6 (100% accuracy). The ball is loose.",
+            "White bishop moves to i6 and collects the ball.",
+            "White bishop dribbles to c12.",
+            "White pawn moves to g8 (free pawn move).",
+            "Black rook moves to d9.",
+            "Black pawn moves to g14 (free pawn move).",
+            "White kicks to e10 (100% accuracy). The ball is loose.",
+            "White queen moves to e10 and collects the ball.",
+            "White queen dribbles to i14.",
+            "White pawn moves to g9 (free pawn move).",
+            "Black rook moves to e14.",
+            "Black goalkeeper moves to i16 (free king move).",
+            "White queen shoots toward i! Black may move its goalkeeper or hold before the shot resolves.",
+            "Black goalkeeper reacts to i15.",
+            "Black goalkeeper parries the shot out (90% parry chance if stopped). White has a corner and a full positioning round.",
+            "White chooses bishop B2 for the corner. Both teams may reposition before the kick."
+          ],
+          "lastAction": {
+            "type": "cornerTaker",
+            "team": "white",
+            "pieceId": "white-B2",
+            "from": {
+              "x": 2,
+              "y": 5
+            },
+            "to": {
+              "x": 13,
+              "y": 0
+            },
+            "restart": {
+              "type": "corner",
+              "team": "white",
+              "takerId": "white-B2",
+              "spot": {
+                "x": 13,
+                "y": 0
+              },
+              "indirect": false,
+              "exit": {
+                "line": "top",
+                "x": 8,
+                "y": -0.5
+              }
+            }
+          },
+          "mode": "local",
+          "minutes": 10,
+          "rulesVersion": 22,
+          "boardDimensions": {
+            "width": 14,
+            "height": 17
+          },
+          "restart": {
+            "type": "corner",
+            "team": "white",
+            "takerId": "white-B2",
+            "spot": {
+              "x": 13,
+              "y": 0
+            },
+            "indirect": false,
+            "exit": {
+              "line": "top",
+              "x": 8,
+              "y": -0.5
+            }
+          },
+          "offside": null,
+          "looseBallKickOrigin": null,
+          "passRun": null,
+          "foulsEnabled": true,
+          "discipline": {},
+          "sentOff": [],
+          "winner": null,
+          "finishReason": null,
+          "ballProgress": {
+            "team": "white",
+            "anchorY": 0,
+            "rounds": 0,
+            "pendingRelease": false,
+            "excludeRelease": false
+          },
+          "paceControl": null
+        },
+        "before": {
+          "decision": 69,
+          "turn": 13,
+          "phase": "attackMove",
+          "team": "white",
+          "action": {
+            "type": "move",
+            "pieceId": "white-Q",
+            "x": 9,
+            "y": 4,
+            "freePawn": false
+          },
+          "completedDepth": 3,
+          "nodes": 350,
+          "score": {
+            "white": 0,
+            "black": 0
+          },
+          "event": "move",
+          "shotXG": null
+        },
+        "after": {
+          "decision": 69,
+          "turn": 13,
+          "phase": "attackMove",
+          "team": "white",
+          "action": {
+            "type": "move",
+            "pieceId": "white-Q",
+            "x": 10,
+            "y": 3,
+            "freePawn": false
+          },
+          "completedDepth": 4,
+          "nodes": 350,
+          "score": {
+            "white": 0,
+            "black": 0
+          },
+          "event": "move",
+          "shotXG": null
+        }
+      },
+      "variants": {
+        "guided-10000": {
+          "archived": {
+            "score": {
+              "white": 0,
+              "black": 0
+            },
+            "actions": 120,
+            "candidateResult": "draw",
+            "sides": {
+              "candidate": {
+                "goals": 0,
+                "shots": 1,
+                "xG": 0.17410953554125588
+              },
+              "baseline": {
+                "goals": 0,
+                "shots": 0,
+                "xG": 0
+              }
+            },
+            "trajectorySha256": "490b400e25fceb8399f6a85a2bbacee65610671b262ef07592d7debbf1bdd307",
+            "finalStateSha256": "7a707d89bd297a311994c2d4dba9c622a59224c21c83999cd49fdc1d496b3448"
+          },
+          "nearbyDecisions": [
+            {
+              "decision": 67,
+              "turn": 12,
+              "phase": "keeperReact",
+              "team": "black",
+              "action": {
+                "type": "move",
+                "pieceId": "black-K",
+                "x": 8,
+                "y": 2,
+                "freePawn": false
+              },
+              "completedDepth": 0,
+              "nodes": 0,
+              "score": {
+                "white": 0,
+                "black": 0
+              },
+              "event": "save",
+              "shotXG": 0.17410953554125588
+            },
+            {
+              "decision": 68,
+              "turn": 13,
+              "phase": "cornerSelect",
+              "team": "white",
+              "action": {
+                "type": "cornerTaker",
+                "pieceId": "white-B2"
+              },
+              "completedDepth": 5,
+              "nodes": 350,
+              "score": {
+                "white": 0,
+                "black": 0
+              },
+              "event": "cornerTaker",
+              "shotXG": null
+            },
+            {
+              "decision": 69,
+              "turn": 13,
+              "phase": "attackMove",
+              "team": "white",
+              "action": {
+                "type": "move",
+                "pieceId": "white-Q",
+                "x": 9,
+                "y": 4,
+                "freePawn": false
+              },
+              "completedDepth": 3,
+              "nodes": 350,
+              "score": {
+                "white": 0,
+                "black": 0
+              },
+              "event": "move",
+              "shotXG": null
+            },
+            {
+              "decision": 70,
+              "turn": 13,
+              "phase": "attackMove",
+              "team": "white",
+              "action": {
+                "type": "move",
+                "pieceId": "white-P2",
+                "x": 8,
+                "y": 9,
+                "freePawn": true
+              },
+              "completedDepth": 3,
+              "nodes": 350,
+              "score": {
+                "white": 0,
+                "black": 0
+              },
+              "event": "move",
+              "shotXG": null
+            },
+            {
+              "decision": 71,
+              "turn": 13,
+              "phase": "defendMove",
+              "team": "black",
+              "action": {
+                "type": "move",
+                "pieceId": "black-B1",
+                "x": 12,
+                "y": 3,
+                "freePawn": false
+              },
+              "completedDepth": 3,
+              "nodes": 350,
+              "score": {
+                "white": 0,
+                "black": 0
+              },
+              "event": "move",
+              "shotXG": null
+            },
+            {
+              "decision": 72,
+              "turn": 13,
+              "phase": "defendMove",
+              "team": "black",
+              "action": {
+                "type": "move",
+                "pieceId": "black-K",
+                "x": 8,
+                "y": 1,
+                "freePawn": true
+              },
+              "completedDepth": 2,
+              "nodes": 350,
+              "score": {
+                "white": 0,
+                "black": 0
+              },
+              "event": "move",
+              "shotXG": null
+            },
+            {
+              "decision": 73,
+              "turn": 13,
+              "phase": "kick",
+              "team": "white",
+              "action": {
+                "type": "kick",
+                "x": 9,
+                "y": 4
+              },
+              "completedDepth": 3,
+              "nodes": 350,
+              "score": {
+                "white": 0,
+                "black": 0
+              },
+              "event": "kick",
+              "shotXG": null
+            }
+          ],
+          "shotResolutions": [
+            {
+              "decision": 67,
+              "turn": 12,
+              "phase": "keeperReact",
+              "team": "black",
+              "action": {
+                "type": "move",
+                "pieceId": "black-K",
+                "x": 8,
+                "y": 2,
+                "freePawn": false
+              },
+              "completedDepth": 0,
+              "nodes": 0,
+              "score": {
+                "white": 0,
+                "black": 0
+              },
+              "event": "save",
+              "shotXG": 0.17410953554125588
+            }
+          ]
+        },
+        "guided-30000": {
+          "archived": {
+            "score": {
+              "white": 1,
+              "black": 0
+            },
+            "actions": 120,
+            "candidateResult": "win",
+            "sides": {
+              "candidate": {
+                "goals": 1,
+                "shots": 2,
+                "xG": 1.1519359133351275
+              },
+              "baseline": {
+                "goals": 0,
+                "shots": 0,
+                "xG": 0
+              }
+            },
+            "trajectorySha256": "d3717bfb97d70fdcd4d85e067c72a6570a19309a8af148c93ceba05ea2eb508a",
+            "finalStateSha256": "6cff29641f78fdfc3159adbf43356b587be7690a05a463c4a8d3cf6c6e188320"
+          },
+          "nearbyDecisions": [
+            {
+              "decision": 67,
+              "turn": 12,
+              "phase": "keeperReact",
+              "team": "black",
+              "action": {
+                "type": "move",
+                "pieceId": "black-K",
+                "x": 8,
+                "y": 2,
+                "freePawn": false
+              },
+              "completedDepth": 0,
+              "nodes": 0,
+              "score": {
+                "white": 0,
+                "black": 0
+              },
+              "event": "save",
+              "shotXG": 0.17410953554125588
+            },
+            {
+              "decision": 68,
+              "turn": 13,
+              "phase": "cornerSelect",
+              "team": "white",
+              "action": {
+                "type": "cornerTaker",
+                "pieceId": "white-B2"
+              },
+              "completedDepth": 5,
+              "nodes": 350,
+              "score": {
+                "white": 0,
+                "black": 0
+              },
+              "event": "cornerTaker",
+              "shotXG": null
+            },
+            {
+              "decision": 69,
+              "turn": 13,
+              "phase": "attackMove",
+              "team": "white",
+              "action": {
+                "type": "move",
+                "pieceId": "white-Q",
+                "x": 10,
+                "y": 3,
+                "freePawn": false
+              },
+              "completedDepth": 4,
+              "nodes": 350,
+              "score": {
+                "white": 0,
+                "black": 0
+              },
+              "event": "move",
+              "shotXG": null
+            },
+            {
+              "decision": 70,
+              "turn": 13,
+              "phase": "attackMove",
+              "team": "white",
+              "action": {
+                "type": "move",
+                "pieceId": "white-P2",
+                "x": 7,
+                "y": 8,
+                "freePawn": true
+              },
+              "completedDepth": 2,
+              "nodes": 350,
+              "score": {
+                "white": 0,
+                "black": 0
+              },
+              "event": "move",
+              "shotXG": null
+            },
+            {
+              "decision": 71,
+              "turn": 13,
+              "phase": "defendMove",
+              "team": "black",
+              "action": {
+                "type": "move",
+                "pieceId": "black-K",
+                "x": 9,
+                "y": 2,
+                "freePawn": true
+              },
+              "completedDepth": 3,
+              "nodes": 350,
+              "score": {
+                "white": 0,
+                "black": 0
+              },
+              "event": "move",
+              "shotXG": null
+            },
+            {
+              "decision": 72,
+              "turn": 13,
+              "phase": "defendMove",
+              "team": "black",
+              "action": {
+                "type": "move",
+                "pieceId": "black-B2",
+                "x": 11,
+                "y": 3,
+                "freePawn": false
+              },
+              "completedDepth": 2,
+              "nodes": 350,
+              "score": {
+                "white": 0,
+                "black": 0
+              },
+              "event": "move",
+              "shotXG": null
+            },
+            {
+              "decision": 73,
+              "turn": 13,
+              "phase": "kick",
+              "team": "white",
+              "action": {
+                "type": "kick",
+                "x": 9,
+                "y": 4
+              },
+              "completedDepth": 3,
+              "nodes": 350,
+              "score": {
+                "white": 0,
+                "black": 0
+              },
+              "event": "kick",
+              "shotXG": null
+            }
+          ],
+          "shotResolutions": [
+            {
+              "decision": 67,
+              "turn": 12,
+              "phase": "keeperReact",
+              "team": "black",
+              "action": {
+                "type": "move",
+                "pieceId": "black-K",
+                "x": 8,
+                "y": 2,
+                "freePawn": false
+              },
+              "completedDepth": 0,
+              "nodes": 0,
+              "score": {
+                "white": 0,
+                "black": 0
+              },
+              "event": "save",
+              "shotXG": 0.17410953554125588
+            },
+            {
+              "decision": 80,
+              "turn": 14,
+              "phase": "keeperReact",
+              "team": "black",
+              "action": {
+                "type": "move",
+                "pieceId": "black-K",
+                "x": 7,
+                "y": 0,
+                "freePawn": false
+              },
+              "completedDepth": 0,
+              "nodes": 0,
+              "score": {
+                "white": 1,
+                "black": 0
+              },
+              "event": "goal",
+              "shotXG": 0.9778263777938716
+            }
+          ]
+        }
+      }
+    },
+    {
+      "candidateColor": "black",
+      "kickoff": "black",
+      "firstDivergence": null,
+      "variants": {
+        "guided-10000": {
+          "archived": {
+            "score": {
+              "white": 0,
+              "black": 0
+            },
+            "actions": 120,
+            "candidateResult": "draw",
+            "sides": {
+              "candidate": {
+                "goals": 0,
+                "shots": 1,
+                "xG": 0.07149800925464826
+              },
+              "baseline": {
+                "goals": 0,
+                "shots": 2,
+                "xG": 0.1577992918592221
+              }
+            },
+            "trajectorySha256": "192b1f09366fef73e9a0e2204da852bece72504a8f734cb339630a8fd99cb62d",
+            "finalStateSha256": "a9ac2a03aad023f69739fa47f8054e3b8e6b33b13bc6bcbb3f07bfb94bb4be1f"
+          },
+          "nearbyDecisions": [
+            {
+              "decision": 1,
+              "turn": 1,
+              "phase": "kickoff",
+              "team": "black",
+              "action": {
+                "type": "kick",
+                "x": 8,
+                "y": 9
+              },
+              "completedDepth": 1,
+              "nodes": 350,
+              "score": {
+                "white": 0,
+                "black": 0
+              },
+              "event": "kick",
+              "shotXG": null
+            },
+            {
+              "decision": 2,
+              "turn": 2,
+              "phase": "attackMove",
+              "team": "black",
+              "action": {
+                "type": "move",
+                "pieceId": "black-Q",
+                "x": 8,
+                "y": 9,
+                "freePawn": false
+              },
+              "completedDepth": 3,
+              "nodes": 350,
+              "score": {
+                "white": 0,
+                "black": 0
+              },
+              "event": "move",
+              "shotXG": null
+            },
+            {
+              "decision": 3,
+              "turn": 2,
+              "phase": "attackMove",
+              "team": "black",
+              "action": {
+                "type": "move",
+                "pieceId": "black-K",
+                "x": 6,
+                "y": 0,
+                "freePawn": true
+              },
+              "completedDepth": 0,
+              "nodes": 350,
+              "score": {
+                "white": 0,
+                "black": 0
+              },
+              "event": "move",
+              "shotXG": null
+            }
+          ],
+          "shotResolutions": [
+            {
+              "decision": 36,
+              "turn": 7,
+              "phase": "keeperReact",
+              "team": "white",
+              "action": {
+                "type": "move",
+                "pieceId": "white-K",
+                "x": 5,
+                "y": 14,
+                "freePawn": false
+              },
+              "completedDepth": 0,
+              "nodes": 0,
+              "score": {
+                "white": 0,
+                "black": 0
+              },
+              "event": "shotMiss",
+              "shotXG": 0.07149800925464826
+            },
+            {
+              "decision": 82,
+              "turn": 15,
+              "phase": "keeperReact",
+              "team": "black",
+              "action": {
+                "type": "move",
+                "pieceId": "black-K",
+                "x": 8,
+                "y": 2,
+                "freePawn": false
+              },
+              "completedDepth": 0,
+              "nodes": 0,
+              "score": {
+                "white": 0,
+                "black": 0
+              },
+              "event": "blockedShot",
+              "shotXG": 0.07149800925464826
+            },
+            {
+              "decision": 107,
+              "turn": 19,
+              "phase": "keeperReact",
+              "team": "black",
+              "action": {
+                "type": "skip"
+              },
+              "completedDepth": 0,
+              "nodes": 0,
+              "score": {
+                "white": 0,
+                "black": 0
+              },
+              "event": "shotMiss",
+              "shotXG": 0.08630128260457381
+            }
+          ]
+        },
+        "guided-30000": {
+          "archived": {
+            "score": {
+              "white": 0,
+              "black": 0
+            },
+            "actions": 120,
+            "candidateResult": "draw",
+            "sides": {
+              "candidate": {
+                "goals": 0,
+                "shots": 1,
+                "xG": 0.07149800925464826
+              },
+              "baseline": {
+                "goals": 0,
+                "shots": 2,
+                "xG": 0.1577992918592221
+              }
+            },
+            "trajectorySha256": "192b1f09366fef73e9a0e2204da852bece72504a8f734cb339630a8fd99cb62d",
+            "finalStateSha256": "a9ac2a03aad023f69739fa47f8054e3b8e6b33b13bc6bcbb3f07bfb94bb4be1f"
+          },
+          "nearbyDecisions": [
+            {
+              "decision": 1,
+              "turn": 1,
+              "phase": "kickoff",
+              "team": "black",
+              "action": {
+                "type": "kick",
+                "x": 8,
+                "y": 9
+              },
+              "completedDepth": 1,
+              "nodes": 350,
+              "score": {
+                "white": 0,
+                "black": 0
+              },
+              "event": "kick",
+              "shotXG": null
+            },
+            {
+              "decision": 2,
+              "turn": 2,
+              "phase": "attackMove",
+              "team": "black",
+              "action": {
+                "type": "move",
+                "pieceId": "black-Q",
+                "x": 8,
+                "y": 9,
+                "freePawn": false
+              },
+              "completedDepth": 3,
+              "nodes": 350,
+              "score": {
+                "white": 0,
+                "black": 0
+              },
+              "event": "move",
+              "shotXG": null
+            },
+            {
+              "decision": 3,
+              "turn": 2,
+              "phase": "attackMove",
+              "team": "black",
+              "action": {
+                "type": "move",
+                "pieceId": "black-K",
+                "x": 6,
+                "y": 0,
+                "freePawn": true
+              },
+              "completedDepth": 0,
+              "nodes": 350,
+              "score": {
+                "white": 0,
+                "black": 0
+              },
+              "event": "move",
+              "shotXG": null
+            }
+          ],
+          "shotResolutions": [
+            {
+              "decision": 36,
+              "turn": 7,
+              "phase": "keeperReact",
+              "team": "white",
+              "action": {
+                "type": "move",
+                "pieceId": "white-K",
+                "x": 5,
+                "y": 14,
+                "freePawn": false
+              },
+              "completedDepth": 0,
+              "nodes": 0,
+              "score": {
+                "white": 0,
+                "black": 0
+              },
+              "event": "shotMiss",
+              "shotXG": 0.07149800925464826
+            },
+            {
+              "decision": 82,
+              "turn": 15,
+              "phase": "keeperReact",
+              "team": "black",
+              "action": {
+                "type": "move",
+                "pieceId": "black-K",
+                "x": 8,
+                "y": 2,
+                "freePawn": false
+              },
+              "completedDepth": 0,
+              "nodes": 0,
+              "score": {
+                "white": 0,
+                "black": 0
+              },
+              "event": "blockedShot",
+              "shotXG": 0.07149800925464826
+            },
+            {
+              "decision": 107,
+              "turn": 19,
+              "phase": "keeperReact",
+              "team": "black",
+              "action": {
+                "type": "skip"
+              },
+              "completedDepth": 0,
+              "nodes": 0,
+              "score": {
+                "white": 0,
+                "black": 0
+              },
+              "event": "shotMiss",
+              "shotXG": 0.08630128260457381
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
