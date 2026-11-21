@@ -1,0 +1,21 @@
+{
+  "games": 36,
+  "crossedIdenticalTrajectories": 18,
+  "actionStateTransitions": 4320,
+  "candidate": {
+    "count": 2134,
+    "mean": 256.59986387066493,
+    "p95": 419.7554999999993
+  },
+  "baseline": {
+    "count": 2134,
+    "mean": 273.59465154639196,
+    "p95": 446.3228999999992
+  },
+  "relativeMeanSaving": 0.06211666631518675,
+  "seedBootstrap95Saving": [
+    0.020598364909030664,
+    0.10512472854163246
+  ],
+  "rawLogSha256": "59ffa19c9d8eb879aa24c6b84fe0aea21f061953024d57217b16c2f5a572b46e"
+}

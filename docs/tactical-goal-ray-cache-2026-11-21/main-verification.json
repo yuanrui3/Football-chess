@@ -1,0 +1,71 @@
+{
+  "baselineCommit": "5bfab91d77280f6c9d2065c979197baadcb54884",
+  "parity": {
+    "passed": true,
+    "boards": 48,
+    "completeReportComparisons": 144,
+    "candidateDefaultComparisons": 48,
+    "tacticalEntryComparisons": 6,
+    "tacticalEntryPhases": [
+      "kick",
+      "attackMove",
+      "defendMove",
+      "kickoff",
+      "keeperRelease",
+      "cornerSelect"
+    ],
+    "profiles": {
+      "node700": {
+        "modelWeights": null,
+        "nodeLimit": 700,
+        "maxDepth": 8
+      },
+      "fixedDepth2": {
+        "modelWeights": null,
+        "nodeLimit": 50000,
+        "maxDepth": 2,
+        "extensions": false
+      }
+    },
+    "sources": {
+      "baseline": "df962903a48e9853a18ce0a600d498f648ac84fee600ed1ff045cf963d8311f8",
+      "candidate": "622f12f552b3a706149a6706a6c6b0ac314483bdb03e1935cbdcd499952b800c"
+    },
+    "panelSha256": "9372c547c8afda2f03dee5f7fb81507c74c037de24e069db47a49ffebcf2fc8d",
+    "boardListSha256": "c9acb70153e2b3eab62d6eab21edc8090d3e5dc7fc2b1c627c8979c4bdef15bd",
+    "publicStateUnchanged": true
+  },
+  "timing": {
+    "baseline": {
+      "calls": 96,
+      "meanMs": 218.7669354166663,
+      "p95Ms": 423.52999999999884
+    },
+    "candidate": {
+      "calls": 96,
+      "meanMs": 189.98895104166664,
+      "p95Ms": 342.90469999999914
+    },
+    "meanSavingsPercent": 13.154631580951094,
+    "p95SavingsPercent": 19.03650272707953,
+    "measuredScope": "Full 700-node call after the public-state clone; balanced policy order after parity warmup",
+    "machine": {
+      "node": "v24.22.1",
+      "platform": "win32",
+      "processor": "11th Gen Intel(R) Core(TM) i9-11900K @ 3.50GHz"
+    }
+  },
+  "testSuite": {
+    "baseline": {
+      "tests": 803,
+      "passed": 714,
+      "failed": 89
+    },
+    "candidate": {
+      "tests": 805,
+      "passed": 716,
+      "failed": 89
+    },
+    "identicalFailingTestNames": true
+  }
+}

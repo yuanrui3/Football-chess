@@ -1041,7 +1041,7 @@ export function legalKicks(state) {
 
 // Goal-only geometry is shared by threat evaluation and saved declarations.
 // It does not generate passes, consume randomness, or introduce new kick rays.
-function goalShotTargets(state, carrier) {
+function collectGoalShotTargets(state, carrier) {
   if (!carrier) return [];
   const vectors = carrier.type === 'N' ? KNIGHT : carrier.type === 'P' || carrier.type === 'R' ? STRAIGHTS : carrier.type === 'B' ? DIAGONALS : DIRECTIONS;
   const targets = [];
@@ -1052,14 +1052,48 @@ function goalShotTargets(state, carrier) {
       const x = carrier.x + dx * step, y = carrier.y + dy * step;
       path.push({x, y});
       if (!inside(x, y)) {
-        if (goalAt(x, y) === carrier.team && !friendlyStopsShot(state, carrier, x, y)) targets.push({x, y, goal: carrier.team, path, distance: distance(carrier, {x, y})});
+        if (goalAt(x, y) === carrier.team && (!state || !friendlyStopsShot(state, carrier, x, y))) targets.push({x, y, goal: carrier.team, path, distance: distance(carrier, {x, y})});
         break;
       }
       if (carrier.type === 'N') break;
-      if (pieceAt(state, x, y)?.team === carrier.team) break;
+      if (state && pieceAt(state, x, y)?.team === carrier.team) break;
     }
   }
   return targets.sort((a, b) => a.x - b.x);
+}
+
+// Reuse only board geometry. A search still checks the current position for
+// friendly blockers, and public shot models keep returning fresh paths.
+const goalRayPlans = new Map();
+let goalRaySearchActive = false;
+
+function goalShotTargets(state, carrier) {
+  if (!goalRaySearchActive || !carrier || !inside(carrier.x, carrier.y)
+      || !TYPES.includes(carrier.type) || !TEAMS.includes(carrier.team)) {
+    return collectGoalShotTargets(state, carrier);
+  }
+  const {type, team, x, y} = carrier;
+  const key = type + '|' + team + '|' + x + '|' + y;
+  let plan = goalRayPlans.get(key);
+  if (!plan) {
+    plan = collectGoalShotTargets(null, carrier);
+    for (const target of plan) {
+      for (const square of target.path) Object.freeze(square);
+      Object.freeze(target.path);
+      Object.freeze(target);
+    }
+    Object.freeze(plan);
+    goalRayPlans.set(key, plan);
+  }
+  return plan.filter(target => {
+    if (type !== 'N') {
+      for (let step = 1; step < target.path.length - 1; step++) {
+        const square = target.path[step];
+        if (pieceAt(state, square.x, square.y)?.team === team) return false;
+      }
+    }
+    return !friendlyStopsShot(state, carrier, target.x, target.y);
+  });
 }
 
 function eligibleDisguisedPair(state, targets) {
@@ -1784,7 +1818,7 @@ export const AI_DIFFICULTIES = Object.freeze(['casual', 'tactical']);
 // Tactical searches the real phase machine, including consecutive actions by
 // one side and public chance outcomes. Work is bounded by deterministic nodes,
 // not elapsed time or the live random seed.
-const AI_SEARCH = Object.freeze({depth: 8, roots: 9, nodes: 1400, extensions: 3});
+const AI_SEARCH = Object.freeze({depth: 8, roots: 9, nodes: 700, extensions: 3});
 
 // Inspect only goal rays when ranking positions. Building every ordinary pass
 // (and its complete animation path) here would dominate the search cost.
@@ -2665,7 +2699,17 @@ function tacticalUnsettled(state) {
 // Public diagnostics make budgets, completed iterations and cache equivalence
 // reproducible in tests and simulations. The controller still receives just an
 // action through chooseAIAction; no analysis state enters a saved match.
-export function analyzeTacticalAction(state, {maxDepth = AI_SEARCH.depth, nodeLimit = AI_SEARCH.nodes, useCache = true, extensions = true, onIteration,
+export function analyzeTacticalAction(state, options = {}) {
+  const previous = goalRaySearchActive;
+  goalRaySearchActive = true;
+  try {
+    return searchTacticalAction(state, options);
+  } finally {
+    goalRaySearchActive = previous;
+  }
+}
+
+function searchTacticalAction(state, {maxDepth = AI_SEARCH.depth, nodeLimit = AI_SEARCH.nodes, useCache = true, extensions = true, onIteration,
   modelWeights = RL_VALUE_MODEL.enabled ? RL_VALUE_MODEL.weights : null, modelScale = rlDefaultScale(modelWeights)} = {}) {
   modelWeights = rlValidateWeights(modelWeights);
   modelScale = rlValidateScale(modelScale);
@@ -2788,8 +2832,17 @@ export function analyzeTacticalAction(state, {maxDepth = AI_SEARCH.depth, nodeLi
       // A worker may deliver completed iterations while the next one searches.
       // Isolate the callback's snapshot so a consumer cannot mutate search
       // actions, cached principal variations or diagnostic counters.
-      if (typeof onIteration === 'function') onIteration({action: copy(completed.action), value: completed.value,
-        stats: {...stats}, line: copy(completed.line)});
+      if (typeof onIteration === 'function') {
+        // Callers can use the public shot model or start another analysis here.
+        const previous = goalRaySearchActive;
+        goalRaySearchActive = false;
+        try {
+          onIteration({action: copy(completed.action), value: completed.value,
+            stats: {...stats}, line: copy(completed.line)});
+        } finally {
+          goalRaySearchActive = previous;
+        }
+      }
     } catch (error) {
       if (error !== SEARCH_ABORT) throw error;
       stats.aborted = true; break;
