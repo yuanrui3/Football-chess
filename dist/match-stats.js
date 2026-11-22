@@ -1,5 +1,5 @@
 /** Match records are independent of engine decisions and replay playback. */
-import {BOARD_WIDTH, BOARD_HEIGHT, GOAL_FILES, BOX_FILES, BOX_DEPTH} from './engine.js?v=622f12f552b3';
+import {BOARD_WIDTH, BOARD_HEIGHT, GOAL_FILES, BOX_FILES, BOX_DEPTH} from './engine.js?v=f8af4ed1d1ce';
 const TEAMS = ['white', 'black'];
 const SHOT_RESULTS = ['goal', 'save', 'shotMiss', 'blockedShot'];
 const IDS = /^(white|black)-(K|Q|[RBN][12]|P[123])$/;
