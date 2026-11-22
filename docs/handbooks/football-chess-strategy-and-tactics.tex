@@ -1,0 +1,559 @@
+% Build with: tectonic football-chess-strategy-and-tactics.tex
+% The vector boards and all text are contained in this source file.
+\documentclass[11pt,letterpaper]{article}
+\usepackage[T1]{fontenc}
+\usepackage{tgpagella}
+\usepackage{tgheros}
+\usepackage[letterpaper,top=.82in,bottom=.76in,left=.77in,right=.77in,headheight=23pt]{geometry}
+\usepackage{booktabs,tabularx,ragged2e,fancyhdr,xcolor,tikz,hyperref}
+\usetikzlibrary{arrows.meta,calc}
+
+\definecolor{ink}{HTML}{17302A}
+\definecolor{muted}{HTML}{40584F}
+\definecolor{teal}{HTML}{106C60}
+\definecolor{rust}{HTML}{9C4A34}
+\definecolor{gold}{HTML}{A56220}
+\definecolor{ivory}{HTML}{FFF8E8}
+\definecolor{obsidian}{HTML}{253A48}
+\definecolor{pitchlight}{HTML}{E8F2E8}
+\definecolor{pitchdark}{HTML}{CEE2D2}
+\definecolor{boxlight}{HTML}{DDEBDB}
+\definecolor{boxdark}{HTML}{BAD6C4}
+\definecolor{panel}{HTML}{EDF3EF}
+\definecolor{linegray}{HTML}{A2BBAF}
+\definecolor{quiet}{HTML}{71867F}
+
+\hypersetup{colorlinks=true,linkcolor=teal,urlcolor=teal,
+  pdftitle={Football Chess Strategy and Tactics Handbook},
+  pdfsubject={Attacking and defending patterns with illustrated board examples}}
+\color{ink}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{7pt}
+\setlength{\tabcolsep}{6pt}
+\setlength{\emergencystretch}{1.4em}
+\linespread{1.07}
+\raggedbottom
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\sffamily\footnotesize\bfseries FOOTBALL CHESS}
+\fancyhead[R]{\sffamily\footnotesize\color{muted}\nouppercase{\leftmark}}
+\fancyfoot[L]{\sffamily\footnotesize\color{muted}STRATEGY AND TACTICS}
+\fancyfoot[R]{\sffamily\footnotesize\bfseries\thepage}
+\renewcommand{\headrulewidth}{.45pt}
+\renewcommand{\footrulewidth}{.35pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{linegray}\leaders\hrule height \headrulewidth\hfill}}
+\renewcommand{\footrule}{\hbox to\headwidth{\color{linegray}\leaders\hrule height \footrulewidth\hfill}}
+\newcolumntype{Y}{>{\RaggedRight\arraybackslash}X}
+\newcolumntype{P}[1]{>{\RaggedRight\arraybackslash}p{#1}}
+
+\newcommand{\eyebrow}[1]{{\sffamily\bfseries\footnotesize\color{teal}\MakeUppercase{#1}}}
+\newcommand{\chapterpage}[4]{%
+  \clearpage\markboth{#2}{}\hypertarget{ch#1}{}\pdfbookmark[0]{#3}{bookmark#1}%
+  \vspace*{1mm}{\eyebrow{#4 \quad / \quad #1}\par}
+  \vspace{1mm}{\RaggedRight\fontsize{30}{32}\selectfont\bfseries #3\par}\vspace{3mm}}
+\newcommand{\subtopic}[1]{\par\vspace{2mm}{\sffamily\large\bfseries #1\par}\vspace{-1mm}}
+\newcommand{\tocitem}[3]{\noindent\hyperlink{ch#1}{{\sffamily\bfseries\color{teal}#1}\hspace{2.7mm}\textbf{#2}}\par
+  {\small\color{muted}#3\par}\vspace{2.5mm}}
+\newcommand{\leadbox}[2]{\par\vspace{2mm}\begingroup\setlength{\fboxsep}{10pt}%
+  \noindent\colorbox{panel}{\parbox{\dimexpr\linewidth-2\fboxsep\relax}{%
+  {\sffamily\small\bfseries\color{teal}#1}\par\vspace{.6mm}\small #2}}\endgroup\par\vspace{1mm}}
+\newcommand{\fcaption}[3]{\par\vspace{1.5mm}{\small\sffamily%
+  \textbf{\color{teal}#1 \hspace{2mm} #2}\enspace{\color{muted}#3}\par}}
+\newcommand{\paneltitle}[1]{{\sffamily\small\bfseries\color{ink}#1\par}\vspace{1mm}}
+\newcommand{\figlegend}[1]{{\sffamily\footnotesize\color{muted}#1\par}}
+
+% Files are numeric in drawing commands (a=0 ... n=13); y is the board rank.
+% Ranks 18 and 0 are schematic target bays outside the occupiable pitch.
+\newenvironment{pitch}[5]{%
+  \begin{tikzpicture}[x=#5mm,y=#5mm,line cap=round,line join=round,
+    token/.style={circle,inner sep=0pt,minimum size=3.95mm,font=\sffamily\bfseries\scriptsize},
+    board-step/.style={-{Latex[length=2.2mm,width=1.55mm]},line width=.88pt,teal},
+    board-risk/.style={-{Latex[length=2.2mm,width=1.55mm]},line width=.85pt,rust,dashed},
+    board-shot/.style={-{Latex[length=2.2mm,width=1.55mm]},line width=.95pt,gold},
+    board-alternate/.style={-{Latex[length=2.1mm,width=1.45mm]},line width=.78pt,teal,dashed}]
+  \foreach \fx in {#1,...,#2}{
+    \foreach \ry in {#3,...,#4}{
+      \pgfmathtruncatemacro{\parity}{mod(\fx+\ry,2)}
+      \pgfmathtruncatemacro{\inthebox}{and(and(\fx>=4,\fx<=9),or(\ry<=3,\ry>=15))}
+      \ifnum\inthebox=1
+        \ifnum\parity=0 \def\cellfill{boxlight}\else \def\cellfill{boxdark}\fi
+      \else
+        \ifnum\parity=0 \def\cellfill{pitchlight}\else \def\cellfill{pitchdark}\fi
+      \fi
+      \fill[\cellfill] ({\fx-.5},{\ry-.5}) rectangle ({\fx+.5},{\ry+.5});
+    }
+    \pgfmathtruncatemacro{\fileletter}{\fx+1}
+    \node[font=\sffamily\tiny,text=muted] at (\fx,{#3-.88}) {\char\numexpr96+\fileletter\relax};
+    \ifnum\fx>4
+      \ifnum\fx<9
+        \ifnum#4=17
+          \draw[linegray,fill=panel,line width=.3pt] ({\fx-.5},17.5) rectangle ({\fx+.5},18.5);
+        \fi
+        \ifnum#3=1
+          \draw[linegray,fill=panel,line width=.3pt] ({\fx-.5},.49) rectangle ({\fx+.5},-.5);
+        \fi
+      \fi
+    \fi
+  }
+  \draw[teal!56,line width=.55pt] ({#1-.5},{#3-.5}) rectangle ({#2+.5},{#4+.5});
+  \foreach \ry in {#3,...,#4}{
+    \node[font=\sffamily\tiny,text=muted,anchor=east,inner sep=1.5pt] at ({#1-.58},\ry) {\ry};
+  }
+}{\end{tikzpicture}}
+\newcommand{\ivpiece}[3]{\node[token,draw=ink,fill=ivory,text=ink,line width=.43pt] at (#1,#2) {#3};}
+\newcommand{\obpiece}[3]{\node[token,draw=obsidian,fill=obsidian,text=white,line width=.45pt] at (#1,#2) {#3};}
+\newcommand{\mutepiece}[4]{%
+  \node[token,draw=quiet!64,fill=#1,text=quiet,line width=.28pt] at (#2,#3) {#4};}
+\newcommand{\ballmark}[2]{\draw[draw=ink,fill=ivory,line width=.46pt] ({#1+.29},{#2-.27}) circle[radius=1.02mm];%
+  \fill[ink] ({#1+.29},{#2-.27}) circle[radius=.38mm];}
+\newcommand{\loosemark}[2]{\draw[draw=ink,fill=ivory,line width=.47pt] (#1,#2) circle[radius=1.12mm];%
+  \fill[ink] (#1,#2) circle[radius=.42mm];}
+\newcommand{\targetlabel}[3]{\node[draw=gold,fill=ivory,rounded corners=.7pt,inner sep=1.4pt,
+  font=\sffamily\tiny\bfseries,text=gold] at (#1,#2) {#3};}
+\newcommand{\landing}[2]{\draw[rust,line width=.87pt] ({#1-.17},{#2-.17})--({#1+.17},{#2+.17})
+  ({#1-.17},{#2+.17})--({#1+.17},{#2-.17});}
+\newcommand{\ring}[3]{\draw[#1,line width=.75pt] (#2,#3) circle[radius=1.64mm];}
+\newcommand{\vectorarrow}[5]{\draw[#1,shorten <=1.55mm,shorten >=1.5mm] (#2,#3)--(#4,#5);}
+\newcommand{\numdot}[3]{\node[fill=teal,text=white,circle,inner sep=1.1pt,
+  font=\sffamily\tiny\bfseries] at (#1,#2) {#3};}
+
+\begin{document}
+\thispagestyle{empty}
+\pdfbookmark[0]{Football Chess Strategy and Tactics}{cover}
+\vspace*{8mm}
+{\eyebrow{Illustrated playing handbook}\par}
+\vspace{4mm}
+{\fontsize{53}{54}\selectfont\bfseries Football Chess\par}
+\vspace{1.5mm}
+{\fontsize{30}{32}\selectfont Strategy and Tactics\par}
+\vspace{4mm}
+{\color{teal}\rule{\linewidth}{1.2pt}\par}
+\vspace{5mm}
+\noindent\begin{minipage}[t]{.441\linewidth}
+\vspace{0pt}\RaggedRight
+Build toward a receiver who can survive the first defensive reply and reach a useful shot. At each decision, picture the next two junctions in the attack. After the ball changes hands or reaches space, who can play it next? After the defender responds, which pass, dribble or shot still works?
+
+
+\vspace{3mm}
+This handbook draws on reconstructed matches, paired continuations and short exact searches. The examples use the board\textquoteright{}s original orientation. A goal target like \textbf{h18} lies just beyond the end line. For one shot, 0.10 expected goals (xG) means a 10\% chance after the keeper reacts. Across a sequence, net xG is the sum of your chances minus the sum you concede. Figures marked current use the web game. Other numbers come from the archived tests.
+
+
+\vspace{3mm}
+\leadbox{Find a pattern}{\hyperlink{ch00}{Attacking and defending index}\\[1mm]
+  \hyperlink{ch07}{Midfield possession}\\[1mm]\hyperlink{ch08}{Paired practice positions}}
+\end{minipage}\hfill
+\begin{minipage}[t]{.527\linewidth}
+\vspace{0pt}\centering
+
+\begin{pitch}{0}{13}{1}{17}{5.53}
+\vectorarrow{board-shot}{11}{14}{7}{18}
+\vectorarrow{board-step}{11}{14}{10}{13}
+\mutepiece{ivory!72!pitchlight}{7}{1}{K}
+\mutepiece{ivory!72!pitchlight}{4}{12}{Q}
+\mutepiece{ivory!72!pitchlight}{5}{4}{R}
+\ivpiece{12}{13}{R}
+\ivpiece{11}{14}{B}
+\mutepiece{ivory!72!pitchlight}{12}{6}{B}
+\mutepiece{ivory!72!pitchlight}{3}{4}{N}
+\mutepiece{ivory!72!pitchlight}{9}{7}{N}
+\mutepiece{ivory!72!pitchlight}{5}{7}{P}
+\mutepiece{ivory!72!pitchlight}{9}{5}{P}
+\mutepiece{ivory!72!pitchlight}{7}{6}{P}
+\obpiece{6}{17}{K}
+\mutepiece{obsidian!17!pitchdark}{10}{5}{Q}
+\mutepiece{obsidian!17!pitchdark}{5}{9}{R}
+\mutepiece{obsidian!17!pitchdark}{7}{5}{R}
+\mutepiece{obsidian!17!pitchdark}{4}{6}{B}
+\mutepiece{obsidian!17!pitchdark}{8}{7}{B}
+\mutepiece{obsidian!17!pitchdark}{12}{14}{N}
+\mutepiece{obsidian!17!pitchdark}{6}{11}{N}
+\mutepiece{obsidian!17!pitchdark}{10}{11}{P}
+\mutepiece{obsidian!17!pitchdark}{7}{8}{P}
+\mutepiece{obsidian!17!pitchdark}{5}{14}{P}
+\ballmark{11}{14}
+\targetlabel{7}{18}{h18}
+\loosemark{10}{13}
+\end{pitch}
+
+\fcaption{COVER}{A choice before the kick.}{Ivory's bishop on l14 can shoot toward h18 or put the ball into k13. The archived route is on the finishing page.}
+\end{minipage}
+\vfill
+\figlegend{Board orientation: rank 17 is at the top. Cream pieces are Ivory; dark pieces are Obsidian. A small ball badge identifies the carrier. All coordinates keep the original board orientation.}
+
+\chapterpage{00}{Pattern index}{Attacking and defending patterns}{Pattern index}
+
+\leadbox{How to read a diagram}{The ball badge shows who starts in possession. Green arrows show the route to try. Rust dashes show a threat to check. A cross gives the tackler\textquoteright{}s landing square. Gold points to a shot target. Look at when the threat becomes possible, then test the reply in the paired panel or caption.}
+
+\vspace{5mm}
+\noindent\begin{minipage}[t]{.478\linewidth}\RaggedRight
+\paneltitle{Attacking}
+\tocitem{01}{Protected pickup}{Before kicking into space, find the collector and the defender's best tackle after collection.}
+\tocitem{02}{Purposeful recycle}{Use a teammate or keeper outlet when the next release changes who can advance.}
+\tocitem{03}{Independent outlets}{Make one reply insufficient. Keep a third receiver or a first dribble that opens an escape.}
+\tocitem{07}{Midfield possession}{Keep a nearby outlet at a different depth and a receiver who can take the ball forward.}
+\tocitem{04}{Build from the finish}{Look for a final dribble that improves the angle. \hyperlink{ch04b}{Compare shooting and passing} when you can choose either.}
+\tocitem{05}{Split the keeper's coverage}{Disguise when the two targets demand different replies. Give an onside teammate a rebound route.}
+\end{minipage}\hfill
+\begin{minipage}[t]{.478\linewidth}\RaggedRight
+\paneltitle{Defending}
+\tocitem{01}{Prepare during the loose ball}{Move into tackling range before the collector takes control. Check where the tackler will land.}
+\tocitem{03}{One reply against two outlets}{Make the passes or their first touches unsafe. Also check whether either receiver can dribble away.}
+\tocitem{06}{Defend the next kick}{When the attacker can shoot this round, compare the best shot after holding and after using the keeper or an outfield piece.}
+\tocitem{06b}{Clear a teammate's tackle}{Spend the bonus to remove your own obstruction while the normal tackle remains available.}
+\tocitem{05}{Cover both targets and the spill}{Review the two target odds under the same keeper reply. Arrange a defender to contest the loose rebound.}
+\tocitem{07}{Protect the central exit}{Track the pivot and the first forward pass after a turnover. Preserve cover if you commit to pressure.}
+\end{minipage}
+\vfill
+\leadbox{Practice these decisions}{\hyperlink{ch08}{Nine paired positions} compare concrete alternatives against Tactical Fast under two shared continuation policies.}
+
+\chapterpage{01}{Protected pickup}{Secure the pickup before the kick}{Attacking and defending}
+A clear kick can still deliver the ball to a bad square. Before using space, identify the likely collector, the defender\textquoteright{}s best preparation while the ball is loose, and the first legal tackle after collection. Work backward from the tackle\textquoteright{}s approach and landing square. A teammate can collect into the same trap as the original kicker. Check which movement allowance the receiver will have before the challenge.
+
+\textbf{Worked example.} In one aggressive opening, Obsidian\textquoteright{}s queen kicked \textbf{h9 \ensuremath{\to} i8} into space. Ivory\textquoteright{}s queen stepped to \textbf{h8} while the ball was loose. Once Obsidian\textquoteright{}s queen collected at \textbf{i8}, Ivory had a \textbf{90\%} immediate tackle in that match. The intervening Obsidian keeper move left it open. Rotating the position and swapping sides gives Ivory \textbf{g9 \ensuremath{\to} f10} with Obsidian\textquoteright{}s queen on \textbf{g10}. Check the actual tackle landings before choosing either route.
+
+
+\noindent\begin{minipage}[t]{.48\linewidth}\centering\paneltitle{While the ball is loose}
+
+\begin{pitch}{5}{10}{6}{11}{7}
+\vectorarrow{board-step}{7}{9}{8}{8}
+\vectorarrow{board-alternate}{6}{7}{7}{8}
+\obpiece{7}{9}{Q}
+\ivpiece{6}{7}{Q}
+\loosemark{8}{8}
+\ring{teal}{7}{8}
+\end{pitch}
+\end{minipage}\hfill\begin{minipage}[t]{.48\linewidth}\centering\paneltitle{After Obsidian collects}
+
+\begin{pitch}{5}{10}{6}{11}{7}
+\vectorarrow{board-risk}{7}{8}{8}{8}
+\vectorarrow{board-step}{7}{8}{7}{9}
+\obpiece{8}{8}{Q}
+\ivpiece{7}{8}{Q}
+\ballmark{8}{8}
+\landing{7}{9}
+\end{pitch}
+\end{minipage}\par
+
+\fcaption{01}{The opponent can prepare during the pickup.}{Obsidian's kick from h9 leaves the ball at i8. Ivory's queen comes from g7. The rust ray points to the carrier and the cross marks the tackle landing on h9. Intervening moves are omitted.}
+This mechanism appeared in all 13 selected tackle-loss replays. It can be worth keeping a space pass if you can collect before the defender sets up, route the ball to another player, or change the square the defender has to reach. In the aggressive example, the original space kick produced more xG than its tested safer replacement under the stronger continuation. The danger depended on what followed the kick.
+
+
+\chapterpage{02}{Purposeful recycling}{Recycle with a next action in mind}{Attacking}
+Consider a direct teammate outlet when a risky pickup has no escape. Plan the return pass or switch before committing. Look for a receiver who changes the next passing direction, has a viable dribble, or can draw pressure away from the eventual shooter. Use the keeper outlet when you can also name a sound immediate release. A backward ball that opens a route can be more valuable than a forward ball that stalls the attack.
+
+
+\noindent\begin{minipage}[t]{.48\linewidth}\centering\paneltitle{Bishop outlet}
+
+\begin{pitch}{1}{7}{4}{10}{5.4}
+\vectorarrow{board-step}{6}{9}{2}{5}
+\ivpiece{6}{9}{Q}
+\ivpiece{2}{5}{B}
+\ballmark{6}{9}
+\end{pitch}
+\end{minipage}\hfill\begin{minipage}[t]{.48\linewidth}\centering\paneltitle{Keeper outlet}
+
+\begin{pitch}{5}{10}{8}{17}{4.9}
+\vectorarrow{board-step}{7}{9}{7}{16}
+\obpiece{7}{9}{Q}
+\obpiece{7}{16}{K}
+\ballmark{7}{9}
+\end{pitch}
+\end{minipage}\par
+
+\fcaption{02}{Two ways out of the kickoff pickup.}{Separate archived starts. Read each solid arrow as the first pass to a teammate.}
+
+{\small\renewcommand{\arraystretch}{1.29}
+\begin{tabularx}{\linewidth}{@{}P{.28\linewidth}Y@{}}
+\toprule
+\textbf{Archived first pass} & \textbf{What made the route useful} \\
+\midrule
+Ivory queen \textbf{g9 \ensuremath{\to} c5} to the bishop & The bishop exchanged through the queen and a rook, then received again. The route reached the bishop\textquoteright{}s \textbf{j16 \ensuremath{\to} h18} shot at \textbf{0.096 xG} in four stronger-defense replays. \\[1.2pt]
+Obsidian queen \textbf{h9 \ensuremath{\to} h16} to the keeper & The release started a different path through the outfield, ending in the bishop\textquoteright{}s \textbf{d2 \ensuremath{\to} f0} shot at \textbf{0.106 xG}. Two starts shared this geometry and the same route. \\[1.2pt]
+Ivory queen \textbf{l9 \ensuremath{\to} g4} to a pawn & The deeper-search outlet beat the forward \textbf{l9 \ensuremath{\to} k8} space kick on the same board under both continuations. The archived shot totals were \textbf{0.095 vs 0} and \textbf{0.174 vs 0.095} xG. The stronger continuation changed the route and still rewarded the recycle. \\
+\bottomrule
+\end{tabularx}\par}
+Keep testing for escape after the first pass. In 144 preset openings, an outlet-first planner recorded no turnovers in the first 14 actions across both sides. By 64 actions it had \textbf{52} turnovers against Tactical\textquoteright{}s \textbf{20}, although it had taken \textbf{64} shots against \textbf{46}. Its xG per opening was \textbf{0.0321} against \textbf{0.0373}. By 96 actions, Tactical led on shots and xG. A pass that buys time should leave a way to spend that time creating a chance.
+
+
+\chapterpage{03}{Independent outlets}{Create outlets that survive a reply}{Attacking and defending}
+When placing off-ball receivers, ask \textbf{which single legal defender move could close both outlets?} Two receivers served by the same passing lane or exposed to the same tackling approach can fall together. Try a switch, a third outlet, or a receiver with a legal first dribble away from pressure. Keep the pass choice open until the defender has moved.
+
+For each likely reply, cross out the passes it intercepts. For the remaining receivers, picture the successful pass and their next first touch. Can they hold? If holding is exposed, can they move first to a square that survives the next tackle? Does a third player offer a way out? On five archived replies that closed both preferred outlets if the receivers held, at least one of the original receivers had a legal dribble escape every time. Four replies also left a third receiver safe to hold. A ranking rule based on the hold-only check produced \textbf{\ensuremath{-}0.0017 net xG per game} versus 700-node Tactical in 144 fresh matches, with an interval spanning zero.
+
+\textbf{Worked example.} With Obsidian\textquoteright{}s rook carrying at \textbf{g10}, Ivory\textquoteright{}s queen stepped \textbf{j15 \ensuremath{\to} k15} to threaten a queen receiving on \textbf{f10} and a knight receiving on \textbf{k10}. Obsidian could still find its pawn on \textbf{g12}. The queen and knight also had escapes, \textbf{f10 \ensuremath{\to} f9} and \textbf{k10 \ensuremath{\to} l8}. Across 129 single replies in that archived position, some holding outlet survived every reply, although the safe receiver changed.
+
+
+{\centering
+\begin{pitch}{3}{12}{7}{15}{7.2}
+\vectorarrow{board-step}{9}{15}{10}{15}
+\vectorarrow{board-risk}{10}{15}{5}{10}
+\vectorarrow{board-risk}{10}{15}{10}{10}
+\vectorarrow{board-alternate}{6}{10}{5}{10}
+\vectorarrow{board-alternate}{6}{10}{10}{10}
+\vectorarrow{board-alternate}{6}{10}{6}{12}
+\vectorarrow{board-step}{5}{10}{5}{9}
+\vectorarrow{board-step}{10}{10}{11}{8}
+\ivpiece{9}{15}{Q}
+\mutepiece{ivory!72!pitchlight}{4}{7}{B}
+\mutepiece{ivory!72!pitchlight}{4}{10}{N}
+\mutepiece{ivory!72!pitchlight}{7}{7}{N}
+\obpiece{5}{10}{Q}
+\obpiece{6}{10}{R}
+\mutepiece{obsidian!17!pitchdark}{7}{9}{B}
+\obpiece{10}{10}{N}
+\mutepiece{obsidian!17!pitchdark}{3}{13}{N}
+\mutepiece{obsidian!17!pitchdark}{7}{13}{P}
+\obpiece{6}{12}{P}
+\mutepiece{obsidian!17!pitchdark}{4}{14}{P}
+\ballmark{6}{10}
+\ring{rust}{10}{15}
+\end{pitch}
+\par}
+
+\fcaption{03}{Pressure on the receiving square can leave an escape.}{The defending queen is shown before j15 to k15. Rust rays show potential tackle approaches after reception. Obsidian can choose one of three dashed green outlets, then use a solid green escape if needed.}
+Move order matters here. Keep the allowance that lets you adapt to the reply. If doing two actions in either order gives the same layout, also check who has the ball and which allowances, progress and pace history remain. A replay audit found nine such look-alike layouts with different game states.
+
+
+\chapterpage{04}{The receiving finish}{Build backward from the finish}{Attacking}
+Choose the next useful shooting square before moving your support. Preview the goal targets from that square and check whether you can get the ball there onside, with a first touch that survives a tackle. One file can turn a narrow shot into two usable targets. A bishop with an open diagonal, a rook with an open central file, and a knight with a nearby landing can give the ball different routes to goal. Keep the supporting runner out of the physical shot corridor.
+
+\textbf{Dribble to change the geometry.} When the carrier can enter the box safely, look for a dribble that changes the angle, gains a second target, or forces the keeper to cover more width. A two-game pace and box-entry trial recorded 16 opponent-box entries or crossings with the ball. One sequence ended with an Obsidian knight entering by an L-shaped move and scoring a disguised shot with a \textbf{50.7\%} settled probability. Judge the offer against the defender\textquoteright{}s tackle and keeper reply on the live board.
+
+\textbf{Use the last dribble to set up the kick.} In an archived late-positioning board, Ivory\textquoteright{}s queen on \textbf{c10} had only its dribble left. \textbf{c10 \ensuremath{\to} g14} was the unique best action for the next-kick objective, giving \textbf{10.25\%} scoring probability over the enumerated defensive and keeper replies. Skipping left no immediate scoring chance. This is an exact result for one position and one kick.
+
+
+{\centering
+\begin{pitch}{1}{9}{8}{17}{7.6}
+\vectorarrow{board-step}{2}{10}{6}{14}
+\vectorarrow{board-shot}{6}{14}{6}{18}
+\ivpiece{2}{10}{Q}
+\mutepiece{ivory!72!pitchlight}{5}{11}{R}
+\mutepiece{ivory!72!pitchlight}{7}{8}{B}
+\mutepiece{ivory!72!pitchlight}{3}{8}{N}
+\mutepiece{ivory!72!pitchlight}{4}{10}{P}
+\obpiece{6}{17}{K}
+\mutepiece{obsidian!17!pitchdark}{6}{9}{B}
+\mutepiece{obsidian!17!pitchdark}{2}{12}{B}
+\mutepiece{obsidian!17!pitchdark}{2}{9}{N}
+\mutepiece{obsidian!17!pitchdark}{6}{10}{N}
+\mutepiece{obsidian!17!pitchdark}{7}{11}{P}
+\mutepiece{obsidian!17!pitchdark}{6}{11}{P}
+\mutepiece{obsidian!17!pitchdark}{6}{12}{P}
+\ballmark{2}{10}
+\ring{teal}{6}{14}
+\targetlabel{6}{18}{g18}
+\end{pitch}
+\par}
+
+\fcaption{04}{Keep the dribble that changes the next kick.}{The queen reaches g14 with its last positioning allowance. The gold line marks a potential target. The defender still replies before the kick.}
+\chapterpage{04b}{Shoot or pass}{Shoot now or build a finish}{Attacking}
+\textbf{Compare the modest shot with the receiving finish.} In one archived board, Ivory\textquoteright{}s bishop at \textbf{l14} had a \textbf{5.54\%} shot to \textbf{h18}. It passed into \textbf{k13}. The rook collected from \textbf{m13}, dribbled to \textbf{i13} and shot at \textbf{i18} for \textbf{13.91\%} in both representative continuations. Over all 32-action replays on that board, passing led to \textbf{0.320} or \textbf{0.293} xG created. The immediate shot led to \textbf{0.072} or \textbf{0.055}. In another board, Obsidian\textquoteright{}s \textbf{3.49\%} queen shot \textbf{f7 \ensuremath{\to} f0} beat the recycle to \textbf{h7}, which produced no xG. Immediate shooting improved net xG on five of the nine selected boards under each policy. Larger losses elsewhere pulled the average below zero. Compare the receiving finish and the counterattack you allow on that particular board.
+
+
+\noindent\begin{minipage}[t]{.48\linewidth}\centering\paneltitle{1 / Shoot now or pass into space}
+
+\begin{pitch}{6}{13}{12}{17}{7.5}
+\vectorarrow{board-shot}{11}{14}{7}{18}
+\vectorarrow{board-step}{11}{14}{10}{13}
+\ivpiece{12}{13}{R}
+\ivpiece{11}{14}{B}
+\obpiece{6}{17}{K}
+\mutepiece{obsidian!17!pitchdark}{12}{14}{N}
+\ballmark{11}{14}
+\loosemark{10}{13}
+\targetlabel{7}{18}{h18}
+\end{pitch}
+\end{minipage}\hfill\begin{minipage}[t]{.48\linewidth}\centering\paneltitle{2 / The receiving finish}
+
+\begin{pitch}{6}{13}{12}{17}{7.5}
+\vectorarrow{board-alternate}{12}{13}{10}{13}
+\vectorarrow{board-step}{10}{13}{8}{13}
+\vectorarrow{board-shot}{8}{13}{8}{18}
+\ivpiece{12}{13}{R}
+\ring{teal}{10}{13}
+\ring{teal}{8}{13}
+\targetlabel{8}{18}{i18}
+\numdot{10}{12.45}{1}
+\numdot{8}{12.45}{2}
+\end{pitch}
+\end{minipage}\par
+
+\fcaption{05}{The later finish starts with a change of receiver.}{The rook collects on k13, dribbles to i13 and shoots after the defense. Right panel is a route diagram. Other pieces are omitted.}
+
+\chapterpage{05}{Disguise and rebounds}{Make the keeper cover two lines}{Attacking and defending}
+With a disguised finish available, compare it with both aimed shots after the defense responds. For each legal keeper reaction, average the two target probabilities under \textbf{that same reaction}. Then take the keeper\textquoteright{}s lowest average. For a declared single target, the keeper can choose a different best response for each target. Disguise has value when the keeper would like to cover one line for one target and a different line for the other. It can be less useful if the same position covers both or one target is much stronger.
+
+\textbf{Current web engine example.} Put Ivory\textquoteright{}s queen on \textbf{g16} and Obsidian\textquoteright{}s keeper on \textbf{g17}, with the other pieces clear of the lines. The single target on the upper \textbf{g} file falls to \textbf{37.78\%} if the king holds. The single target on \textbf{i} falls to \textbf{43.12\%} if the king moves to \textbf{h17}. For the disguised pair, the best keeper reply is to hold. The two target chances at that position are \textbf{37.78\%} and \textbf{96.98\%}, giving \textbf{67.38\%} together. The difference comes from making the keeper choose one response before seeing which line is used. If the keeper starts at \textbf{i17} instead, the declared \textbf{g} target is worth \textbf{97.78\%} after its best reply, versus \textbf{70.45\%} for disguise. Check which choice the actual geometry favors.
+
+
+\noindent\begin{minipage}[t]{.48\linewidth}\centering\paneltitle{One keeper reply covers two targets}
+
+\begin{pitch}{4}{9}{14}{17}{7.8}
+\vectorarrow{board-shot}{6}{16}{6}{18}
+\vectorarrow{board-shot}{6}{16}{8}{18}
+\ivpiece{6}{16}{Q}
+\obpiece{6}{17}{K}
+\ballmark{6}{16}
+\targetlabel{6}{18}{g18}
+\targetlabel{8}{18}{i18}
+\end{pitch}
+\end{minipage}\hfill\begin{minipage}[t]{.48\linewidth}\centering\paneltitle{One possible live rebound}
+
+\begin{pitch}{4}{9}{14}{17}{7.8}
+\vectorarrow{board-step}{6}{16}{6}{15}
+\ivpiece{6}{16}{Q}
+\obpiece{6}{17}{K}
+\loosemark{6}{15}
+\end{pitch}
+\end{minipage}\par
+
+\fcaption{06}{A disguise and a possible spill.}{At left, Hold yields the 67.38\% disguise average. At right, g15 is one possible landing after an aimed g-file shot spills. Only the queen and keeper are shown.}
+Plan the ball after a save as well. When pressing for a rebound, leave an onside player with a route into more than one likely landing square and give another player a job if the ball falls to the defense. When defending, use a body to screen the shooter\textquoteright{}s viable corridor while keeping the keeper able to react. Check both disguised targets before committing a defender to one line.
+
+\textbf{Rebound drill.} On the \textbf{g16} versus \textbf{g17} board, the aimed \textbf{g} shot against Hold has a \textbf{6.76\%} chance of spilling back into play. If it lands on \textbf{g15}, the unflagged queen can step back to collect. A teammate flagged at the kick can still give away offside by collecting first. Before the shot, identify your eligible collector and the piece that will cover a clearance.
+
+
+\chapterpage{06}{Defensive urgency}{Spend defensive moves on the most urgent threat}{Defending}
+Compare what the attacker gets if you hold with what they get if you act. Test the tackle, the move that blocks the best pass or immediate shot, and a move that covers the next ball after a save or pickup. When a player is already poised to shoot, there may be little time for a distant reposition. Exact short searches found five positions where skipping gave up at least \textbf{0.02} immediate goal probability. On one defending board, holding allowed \textbf{0.578} on the next kick and the best move reduced it to \textbf{0.139}.
+
+\textbf{Use a defensive bonus to cover the shot that is already available.} In a current-engine replay of that board, Ivory\textquoteright{}s rook carried on \textbf{i13} and Obsidian\textquoteright{}s keeper was on \textbf{g17}. Ending defense immediately allowed a best shot of \textbf{57.77\%}. Moving the keeper by bonus \textbf{g17 \ensuremath{\to} h16} and then ending defense cut it to \textbf{16.91\%}. The ordinary defensive move was still available. The next pass may be the greater threat on an earlier board.
+
+
+{\centering
+\begin{pitch}{4}{11}{12}{17}{7.2}
+\vectorarrow{board-shot}{8}{13}{8}{18}
+\vectorarrow{board-step}{6}{17}{7}{16}
+\mutepiece{ivory!72!pitchlight}{4}{12}{Q}
+\ivpiece{8}{13}{R}
+\mutepiece{ivory!72!pitchlight}{11}{14}{B}
+\obpiece{6}{17}{K}
+\mutepiece{obsidian!17!pitchdark}{5}{14}{P}
+\ballmark{8}{13}
+\ring{teal}{7}{16}
+\targetlabel{8}{18}{i18}
+\end{pitch}
+\par}
+
+\fcaption{07}{Move the keeper before the shot is declared.}{Obsidian's keeper bonus takes g17 to h16. The later keeper reaction remains available. The 16.91\% comparison ends defensive positioning after the bonus.}
+\textbf{Protect the landing square before moving the keeper.} In a replay, shifting Ivory\textquoteright{}s pawn \textbf{h4 \ensuremath{\to} g4} denied the sequence that followed \textbf{keeper h1 \ensuremath{\to} g1}. After the keeper move, Obsidian sent the ball to \textbf{e6}, collected with a bishop and produced a \textbf{0.159 xG} shot in every archived paired seed under both continuation strengths. After the pawn move, Obsidian had no shots during the window. Look at the opponent\textquoteright{}s next pass and collector before committing the keeper during ordinary positioning.
+
+
+\chapterpage{06b}{Cross-piece tackles}{Clear a teammate's tackle line}{Defending / Experimental}
+This is an experimental motif for a defense that still has both movement allowances. Look for a friendly pawn or keeper between an ordinary tackler and the carrier, or occupying a useful tackle landing. Move that piece with the bonus if it opens a legal tackle by a different teammate. Then inspect the board you leave after either a win or a miss. When attacking, include this two-move reply in your pickup check.
+
+
+{\small\renewcommand{\arraystretch}{1.29}
+\begin{tabularx}{\linewidth}{@{}P{.32\linewidth}P{.21\linewidth}Y@{}}
+\toprule
+\textbf{Archived screen} & \textbf{Bonus clear} & \textbf{Tackle made available} \\
+\midrule
+Ivory queen \textbf{h10}, pawn \textbf{i9}, Obsidian rook with ball \textbf{k7} & Pawn \textbf{i9 \ensuremath{\to} j9} & Queen tackles, landing \textbf{j8}. \textbf{90\%} clean possession in the tested state. \\[1.2pt]
+Obsidian queen \textbf{g13}, pawn \textbf{f12}, Ivory knight with ball \textbf{c9} & Pawn \textbf{f12 \ensuremath{\to} g12} & Queen tackles, landing \textbf{d10}. \textbf{45\%} clean possession in the tested state. \\
+\bottomrule
+\end{tabularx}\par}
+
+\noindent\begin{minipage}[t]{.48\linewidth}\centering\paneltitle{Ivory clears a diagonal}
+
+\begin{pitch}{6}{11}{6}{11}{6.9}
+\vectorarrow{board-risk}{7}{10}{10}{7}
+\vectorarrow{board-step}{8}{9}{9}{9}
+\ivpiece{7}{10}{Q}
+\ivpiece{8}{9}{P}
+\obpiece{10}{7}{R}
+\ballmark{10}{7}
+\landing{9}{8}
+\end{pitch}
+\end{minipage}\hfill\begin{minipage}[t]{.48\linewidth}\centering\paneltitle{Obsidian clears a diagonal}
+
+\begin{pitch}{1}{7}{8}{14}{6.3}
+\vectorarrow{board-risk}{6}{13}{2}{9}
+\vectorarrow{board-step}{5}{12}{6}{12}
+\obpiece{6}{13}{Q}
+\obpiece{5}{12}{P}
+\ivpiece{2}{9}{N}
+\ballmark{2}{9}
+\landing{3}{10}
+\end{pitch}
+\end{minipage}\par
+
+\fcaption{08}{Clear the approach and check the landing.}{Green shows the bonus. Rust points to the carrier. The queens land on the crosses at j8 and d10. The opposing pieces stay on the board.}
+The study found a small \textbf{+0.0043 net xG per game} in its 144-game confirmation. The bot selected the setup on eight of 8,589 decisions, and the six audited activations repeated two local geometries. Use it as a candidate when the pieces line up. Give a knight\textquoteright{}s escape and your cover after a failed challenge real weight.
+
+In another position checked on the current web engine, Obsidian\textquoteright{}s pawn moved \textbf{e14 \ensuremath{\to} e13} with the bonus. That opened the row from its rook on \textbf{b14} to Ivory\textquoteright{}s queen on \textbf{g14}. The rook could then tackle the queen, using \textbf{f15} as the landing square. Check the line to the carrier and the legality of the landing separately.
+
+
+\chapterpage{07}{Midfield possession}{Hold the ball through midfield}{Midfield}
+
+Retain a deeper support player and give the receiving player an exit before you pass. In a crowded center, move the ball carrier just far enough to change the opponent's approach. Then fill the square the carrier vacated if it would otherwise let the opponent prepare a tackle. Hand the ball off while the receiver has a safe first dribble.
+
+\textbf{A verified midfield sequence.}
+Ivory's queen dribbles \textbf{g9 \ensuremath{\to} h8} and its pawn fills \textbf{f9 \ensuremath{\to} g9} with the bonus. Without the pawn fill, Obsidian can play \textbf{g10 \ensuremath{\to} g9} with its pawn, then tackle the queen and land on \textbf{h9}. The support move denies that setup and keeps Ivory's ordinary move available.
+
+\noindent\begin{minipage}[t]{.48\linewidth}
+\centering\paneltitle{1 / Move and fill}
+\begin{pitch}{4}{10}{6}{12}{6.3}
+\vectorarrow{board-step}{6}{9}{7}{8}
+\vectorarrow{board-step}{5}{9}{6}{9}
+\vectorarrow{board-risk}{6}{10}{6}{9}
+\vectorarrow{board-risk}{6}{9}{7}{8}
+\ivpiece{6}{9}{Q}\ivpiece{5}{9}{P}\ivpiece{9}{8}{R}
+\obpiece{6}{10}{P}\obpiece{10}{10}{N}
+\ballmark{6}{9}\ring{teal}{7}{8}\landing{7}{9}
+\end{pitch}
+\end{minipage}\hfill
+\begin{minipage}[t]{.48\linewidth}
+\centering\paneltitle{2 / Pass and escape}
+\begin{pitch}{4}{10}{6}{12}{6.3}
+\vectorarrow{board-step}{7}{8}{9}{8}
+\vectorarrow{board-step}{9}{8}{9}{7}
+\vectorarrow{board-risk}{10}{10}{9}{8}
+\ivpiece{7}{8}{Q}\ivpiece{6}{9}{P}\ivpiece{9}{8}{R}
+\obpiece{7}{11}{Q}\obpiece{7}{10}{P}\obpiece{10}{10}{N}
+\ballmark{7}{8}\landing{8}{9}\ring{teal}{9}{7}
+\end{pitch}
+\end{minipage}\par
+\fcaption{09}{Protect the handoff in midfield.}{The rust dashes show the tackle threats if Ivory omits the pawn fill or holds with the rook. Crosses mark the corresponding tackle landings. The two crops show different phases of the same exercise.}
+
+After Obsidian\textquoteright{}s queen moves to h11 and its pawn to h10, Ivory\textquoteright{}s queen passes \textbf{h8 \ensuremath{\to} j8} and the rook dribbles \textbf{j8 \ensuremath{\to} j7}. Holding on j8 would allow Obsidian's knight on \textbf{k10} to tackle, landing on \textbf{i9}. The dribble removes the direct next-turn tackles in this position. With fouls disabled, both counterfactual tackles would win possession if allowed.
+
+\textbf{Defend the pass after the pivot.}
+When a central outlet can hold, look at its next forward passing lane before committing a second player to the ball. If you win it there, name the first safe outlet before you send runners ahead.
+
+\subtopic{Turn possession into progress}
+A sideways pass earns its keep when it changes the next route. If the same player comes back to the same square with the same options, switch receivers or carry to a new square. Leave a teammate ready to contest the first opposing pass if you lose the ball.
+
+In 16 archived aggressive matchups, outlet-first took more shots by 96 actions, often finding the \textbf{l14 \ensuremath{\to} h18} finish near \textbf{0.055 xG}. Tactical produced more total xG. Judge the shot you can create and the attack you may concede.
+
+\chapterpage{08}{Paired practice positions}{Nine practice positions}{Practice}
+Start with a move you would play and a plausible alternative. From the same board, look at the best reply, the first exposed touch and the first reliable shot in each route. Then vary the defense or switch sides.
+
+The opportunity-mining study screened 216 fresh positions. Nine alternatives gained at least \textbf{0.02 net xG} against Tactical Fast\textquoteright{}s choice under both the 350- and 1,400-node continuation policies on fresh paired chance draws. The table is a practice index. Both recorded choices in each case are legal on the current web engine. The later xG belongs to the archived continuations.
+
+
+{\small\renewcommand{\arraystretch}{1.29}
+\begin{tabularx}{\linewidth}{@{}Y P{.217\linewidth} P{.168\linewidth} P{.169\linewidth}@{}}
+\toprule
+\textbf{Situation} & \textbf{Tactical Fast choice} & \textbf{Alternative to examine} & \textbf{Net xG gain\newline 350 / 1,400} \\
+\midrule
+Defend against a knight carrying at \textbf{l8} & Ivory queen \textbf{i6 \ensuremath{\to} l9} & Bishop \textbf{l4 \ensuremath{\to} n6} & +0.099 / +0.048 \\[1.2pt]
+Defend against a queen carrying at \textbf{f10} & Ivory pawn \textbf{g7 \ensuremath{\to} f7} & Queen \textbf{i11 \ensuremath{\to} g11} & +0.109 / +0.186 \\[1.2pt]
+Build from a bishop carrying at \textbf{g12} & Obsidian knight \textbf{e11 \ensuremath{\to} d9} & Queen \textbf{l10 \ensuremath{\to} l5} & +0.195 / +0.075 \\[1.2pt]
+Support a queen carrying at \textbf{i10} & Obsidian knight \textbf{h13 \ensuremath{\to} i11} & Bishop \textbf{c14 \ensuremath{\to} i8} & +0.106 / +0.104 \\[1.2pt]
+Spend the bonus with a queen carrying at \textbf{m11} & Obsidian pawn \textbf{f14 \ensuremath{\to} f13} & Pawn \textbf{h12 \ensuremath{\to} h11} & +0.106 / +0.151 \\[1.2pt]
+Dribble on the \textbf{d} file & Ivory queen \textbf{d10 \ensuremath{\to} d15} & Queen \textbf{d10 \ensuremath{\to} d16} & +0.043 / +0.106 \\[1.2pt]
+Support a knight carrying at \textbf{m6} & Obsidian queen \textbf{m8 \ensuremath{\to} n8} & Knight \textbf{l9 \ensuremath{\to} k7} & +0.231 / +0.274 \\[1.2pt]
+Spend the bonus with a bishop carrying at \textbf{l11} & Ivory pawn \textbf{j4 \ensuremath{\to} j5} & Pawn \textbf{f4 \ensuremath{\to} f5} & +0.095 / +0.174 \\[1.2pt]
+Choose a knight kick from \textbf{l9} & Obsidian kick to \textbf{m11} & Kick to \textbf{k7} & +0.259 / +0.168 \\
+\bottomrule
+\end{tabularx}\par}
+In 100 separate disagreements between 700 and 1,400 nodes, each budget had six choices that won on the same board against both continuations. Pattern learning also transferred less well beyond neutral starts. Learn the conditions that make a candidate work.
+
+
+\subtopic{Evidence notes}
+{\footnotesize\RaggedRight
+\textbf{Kickoff and outlets.} The November 18 \href{https://github.com/yuanrui3/Football-chess/tree/c2bb5c39835b2367ad75abbcba884bc80c2a11d0/docs/tactical-kickoff-tackle-replay-2026-11-18}{kickoff replays} preserve the tackle and outlet routes. Pickup and outlet-first follow-ups compare 64- and 96-action windows.
+
+\textbf{Finishing and defense.} The November 19 Five Mathematical Approaches archive records the outlet, shot timing and skip tests. The 700-versus-1,400 disagreements supply the pawn defense and deeper outlet. The \href{https://github.com/yuanrui3/Football-chess/blob/7be2b4e508e8e878bab9827977a9b104c7b7c016/docs/tactical-goal-ray-cache-2026-11-21/README.md}{700-node study} summarizes the tackle confirmation.
+
+\textbf{Midfield and practice.} \href{https://github.com/yuanrui3/Football-chess/blob/45fc3f4a43f2775c1eaf6e27737ef4aba76a7403/dist/exercise-midfield.js#L57}{Keep control in the crowd} supplies Figure 09. Its ten actions and two tackle alternatives were checked in the web engine. The nine practice cases are from the November 18 opportunity-mining archive, beginning with \textsf{opportunity-00014:80}.\par}
+\end{document}
