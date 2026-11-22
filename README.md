@@ -1,5 +1,7 @@
 # Football Chess — eleven a side
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24448305.svg)](https://doi.org/10.5281/zenodo.24448305)
+
 A playable custom variation inspired by Football Chess by Serrano Saunders. Original handbook: https://pdfhost.io/v/bWV1pmicf_Football_Chess_Handbook.pdf
 
 ## Play
