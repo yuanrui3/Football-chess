@@ -4,12 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>When Should a Language Model Change Its Move? Paired Shot and Pass Decisions in Purdue Football Chess</title>
-  <meta name="description" content="An open benchmark for evaluating language models on 100 matched Football Chess position pairs. The release includes 200 boards, engine action values, model choices and offline scorers.">
+  <meta name="description" content="Football Chess benchmark for language model decisions: 100 original shot and pass pairs, an eight-pair passing follow-up on 16 boards, and 48 cue-reliability decisions on six layouts. Includes exact prompts, recorded choices and offline scorers.">
   <meta name="author" content="Yuanrui Chen">
   <link rel="canonical" href="https://yuanrui3.github.io/Football-chess/benchmarks/paired-positions/">
   <meta property="og:type" content="website">
   <meta property="og:title" content="When Should a Language Model Change Its Move? Paired Shot and Pass Decisions in Purdue Football Chess">
-  <meta property="og:description" content="An open benchmark for evaluating language models on 100 matched Football Chess position pairs. The release includes 200 boards, engine action values, model choices and offline scorers.">
+  <meta property="og:description" content="Football Chess benchmark for language model decisions: 100 original shot and pass pairs, an eight-pair passing follow-up on 16 boards, and 48 cue-reliability decisions on six layouts. Includes exact prompts, recorded choices and offline scorers.">
   <meta property="og:url" content="https://yuanrui3.github.io/Football-chess/benchmarks/paired-positions/">
   <script type="application/ld+json">{
   "@context": "https://schema.org",
@@ -17,24 +17,26 @@
   "@id": "https://yuanrui3.github.io/Football-chess/benchmarks/paired-positions/#dataset",
   "name": "Paired shot and pass decisions in Purdue Football Chess",
   "url": "https://yuanrui3.github.io/Football-chess/benchmarks/paired-positions/",
-  "description": "An open benchmark for evaluating language models on 100 matched Football Chess position pairs. The release includes 200 boards, engine action values, model choices and offline scorers.",
+  "description": "Football Chess benchmark for language model decisions: 100 original shot and pass pairs, an eight-pair passing follow-up on 16 boards, and 48 cue-reliability decisions on six layouts. Includes exact prompts, recorded choices and offline scorers.",
   "creator": {
     "@type": "Person",
     "name": "Yuanrui Chen"
   },
   "datePublished": "2026-11-27",
-  "version": "8e87600e949d23675a293414391c54e63cbc64aa",
+  "version": "08eb135fcd87299787a51ec9b237cc981a667793",
   "keywords": [
     "language model evaluation",
     "paired positions",
     "board games",
     "spatial reasoning",
     "action selection",
-    "Purdue Football Chess"
+    "Purdue Football Chess",
+    "cue reliability",
+    "decision making under uncertainty"
   ],
   "isAccessibleForFree": true,
   "inLanguage": "en",
-  "sameAs": "https://github.com/yuanrui3/Football-chess/tree/8e87600e949d23675a293414391c54e63cbc64aa/benchmarks/paired-positions",
+  "sameAs": "https://github.com/yuanrui3/Football-chess/tree/08eb135fcd87299787a51ec9b237cc981a667793/benchmarks/paired-positions",
   "distribution": [
     {
       "@type": "DataDownload",
@@ -53,6 +55,36 @@
       "name": "Pass positions, exact prompts, engine values and model choices",
       "encodingFormat": "application/json",
       "contentUrl": "https://raw.githubusercontent.com/yuanrui3/Football-chess/8e87600e949d23675a293414391c54e63cbc64aa/benchmarks/paired-positions/anc/pass/data.json"
+    },
+    {
+      "@type": "DataDownload",
+      "name": "Passing follow-up boards, menu orders and values",
+      "encodingFormat": "application/json",
+      "contentUrl": "https://raw.githubusercontent.com/yuanrui3/Football-chess/08eb135fcd87299787a51ec9b237cc981a667793/benchmarks/paired-positions/anc/followup/bank.json"
+    },
+    {
+      "@type": "DataDownload",
+      "name": "Passing follow-up recorded author and model choices",
+      "encodingFormat": "application/json",
+      "contentUrl": "https://raw.githubusercontent.com/yuanrui3/Football-chess/08eb135fcd87299787a51ec9b237cc981a667793/benchmarks/paired-positions/anc/followup/comparison.json"
+    },
+    {
+      "@type": "DataDownload",
+      "name": "Cue experiment layouts, prompts and answer keys",
+      "encodingFormat": "application/json",
+      "contentUrl": "https://raw.githubusercontent.com/yuanrui3/Football-chess/08eb135fcd87299787a51ec9b237cc981a667793/benchmarks/paired-positions/anc/cue/manifest.json"
+    },
+    {
+      "@type": "DataDownload",
+      "name": "Cue experiment recorded choices",
+      "encodingFormat": "application/json",
+      "contentUrl": "https://raw.githubusercontent.com/yuanrui3/Football-chess/08eb135fcd87299787a51ec9b237cc981a667793/benchmarks/paired-positions/anc/cue/choices.json"
+    },
+    {
+      "@type": "DataDownload",
+      "name": "Cue experiment scored results",
+      "encodingFormat": "application/json",
+      "contentUrl": "https://raw.githubusercontent.com/yuanrui3/Football-chess/08eb135fcd87299787a51ec9b237cc981a667793/benchmarks/paired-positions/anc/cue/results.json"
     }
   ]
 }</script>
@@ -76,13 +108,13 @@
 </head>
 <body>
   <header>
-    <nav aria-label="Project links"><a href="https://yuanrui3.github.io/Football-chess/dist/">Play Football Chess</a><a href="https://github.com/yuanrui3/Football-chess/tree/8e87600e949d23675a293414391c54e63cbc64aa/benchmarks/paired-positions">Benchmark on GitHub</a></nav>
+    <nav aria-label="Project links"><a href="https://yuanrui3.github.io/Football-chess/dist/">Play Football Chess</a><a href="https://github.com/yuanrui3/Football-chess/tree/main/benchmarks/paired-positions">Benchmark on GitHub</a></nav>
     <h1>When Should a Language Model Change Its Move? Paired Shot and Pass Decisions in Purdue Football Chess</h1>
     <p>Yuanrui Chen</p>
   </header>
   <main>
-    <p>The Purdue Football Chess paired-position benchmark tests whether a language model changes its action when a defender moves one square. Each model sees one board at a time and chooses from three actions. The rules engine evaluates every option. In half of each task’s pairs the edit changes the best action. In the other half the same action remains best.</p>
-    <h2>Two decisions, 100 pairs</h2>
+    <p>In three paired-board studies, a defender moves one square and the model chooses from three actions. The rules engine evaluates every option. The edit changes the best action in half of each study’s pairs. A fourth study holds a partially visible layout fixed and varies the reliability of a scout report.</p>
+    <h2>Original benchmark · 100 pairs</h2>
     <dl>
       <dt>Shooting · 60 pairs, 120 boards</dt>
       <dd>Choose a declared target or disguise the shot. The goalkeeper responds to minimize the chance of a goal. The release includes coordinates and rules, prompts adding legal goalkeeper replies, and prompts adding the scoring odds for each reply.</dd>
@@ -91,21 +123,37 @@
     </dl>
     <h2>What the paired scores show</h2>
     <p>Solving a pair requires picking the engine’s best action on both boards. On shots from coordinates and rules, Gemini 3.1 Flash-Lite solved 12 of 60 pairs and a geometric shot-line rule solved 52. On passes, Gemini and a rule based on tackle shapes and ranges each solved 38 of 40 pairs. The scores describe one recorded response per input on deliberately selected positions. Full-match play and the models’ training histories fall outside these measurements.</p>
+    <h2>When is the knight a good pass?</h2>
+    <dl>
+      <dt>Matched-image passing follow-up · 16 boards in eight fresh pairs</dt>
+      <dd>The author and Gemini saw the same pitch image, coordinates, rules and pass menu. The author solved seven pairs and Gemini solved two. Gemini chose the knight on 13 of 16 boards, although it was optimal on four. The author was familiar with the task. <a href="anc/followup/participant/quiz.html">Open the 16-board quiz</a>.</dd>
+      <dt>Cue reliability · 48 text decisions on six layouts</dt>
+      <dd>A scout reported whether an ordinary receiver was safe. The prompt supplied the tackle outcomes. A second receiver, either the rook or the knight, was protected and retained possession with probability 0.75. A 90%-reliable “safe” report favored the ordinary pass. The same report at 60% favored the protected pass.</dd>
+    </dl>
+    <p>Gemini made all 12 predicted reversals, six with each protected piece. It chose 24 knights and 24 rooks and maximized expected retention on all 48 decisions. Choosing the ordinary receiver only on a 90%-reliable “safe” report reproduces those choices. This leaves open how Gemini infers who can be tackled on the fully specified boards.</p>
     <h2>Download the benchmark</h2>
     <ul>
       <li><a href="https://raw.githubusercontent.com/yuanrui3/Football-chess/8e87600e949d23675a293414391c54e63cbc64aa/benchmarks/paired-positions/anc/positions.json">Shot positions, engine values and model choices (JSON)</a></li>
       <li><a href="https://raw.githubusercontent.com/yuanrui3/Football-chess/8e87600e949d23675a293414391c54e63cbc64aa/benchmarks/paired-positions/anc/prompts.json">Exact shot prompts (JSON)</a></li>
       <li><a href="https://raw.githubusercontent.com/yuanrui3/Football-chess/8e87600e949d23675a293414391c54e63cbc64aa/benchmarks/paired-positions/anc/pass/data.json">Pass positions, exact prompts, engine values and model choices (JSON)</a></li>
+      <li><a href="https://raw.githubusercontent.com/yuanrui3/Football-chess/08eb135fcd87299787a51ec9b237cc981a667793/benchmarks/paired-positions/anc/followup/bank.json">Passing follow-up boards, menu orders and values (JSON)</a></li>
+      <li><a href="https://raw.githubusercontent.com/yuanrui3/Football-chess/08eb135fcd87299787a51ec9b237cc981a667793/benchmarks/paired-positions/anc/followup/comparison.json">Passing follow-up recorded author and model choices (JSON)</a></li>
+      <li><a href="https://raw.githubusercontent.com/yuanrui3/Football-chess/08eb135fcd87299787a51ec9b237cc981a667793/benchmarks/paired-positions/anc/cue/manifest.json">Cue experiment layouts, prompts and answer keys (JSON)</a></li>
+      <li><a href="https://raw.githubusercontent.com/yuanrui3/Football-chess/08eb135fcd87299787a51ec9b237cc981a667793/benchmarks/paired-positions/anc/cue/choices.json">Cue experiment recorded choices (JSON)</a></li>
+      <li><a href="https://raw.githubusercontent.com/yuanrui3/Football-chess/08eb135fcd87299787a51ec9b237cc981a667793/benchmarks/paired-positions/anc/cue/results.json">Cue experiment scored results (JSON)</a></li>
     </ul>
-    <p>The <a href="https://github.com/yuanrui3/Football-chess/blob/8e87600e949d23675a293414391c54e63cbc64aa/benchmarks/paired-positions/anc/README.md">shot data guide</a> and <a href="https://github.com/yuanrui3/Football-chess/blob/8e87600e949d23675a293414391c54e63cbc64aa/benchmarks/paired-positions/anc/pass/README.md">pass data guide</a> document fields, conditions and endpoints. All three JSON downloads use the same fixed release.</p>
+    <p>The <a href="https://github.com/yuanrui3/Football-chess/blob/8e87600e949d23675a293414391c54e63cbc64aa/benchmarks/paired-positions/anc/README.md">shot data guide</a> and <a href="https://github.com/yuanrui3/Football-chess/blob/8e87600e949d23675a293414391c54e63cbc64aa/benchmarks/paired-positions/anc/pass/README.md">pass data guide</a> document fields, conditions and endpoints. The primary data are pinned to <a href="https://github.com/yuanrui3/Football-chess/tree/8e87600e949d23675a293414391c54e63cbc64aa/benchmarks/paired-positions">original revision 8e87600</a>. The <a href="https://github.com/yuanrui3/Football-chess/blob/08eb135fcd87299787a51ec9b237cc981a667793/benchmarks/paired-positions/anc/followup/README.md">16-board guide</a> and <a href="https://github.com/yuanrui3/Football-chess/blob/08eb135fcd87299787a51ec9b237cc981a667793/benchmarks/paired-positions/anc/cue/README.md">cue experiment guide</a> document the additional studies.</p>
     <h2>Reproduce the results</h2>
-    <p>From <code>benchmarks/paired-positions/</code> in a checkout of <a href="https://github.com/yuanrui3/Football-chess/tree/8e87600e949d23675a293414391c54e63cbc64aa/benchmarks/paired-positions">revision 8e87600</a>, run the following with Node.js 24.2 or later. The scorers use the included files and run offline.</p>
+    <p>From <code>benchmarks/paired-positions/</code> in a checkout of the <a href="https://github.com/yuanrui3/Football-chess/tree/08eb135fcd87299787a51ec9b237cc981a667793/benchmarks/paired-positions">expanded dataset</a>, run the following with Node.js 24.2 or later. The scorers use the included files and run offline.</p>
     <pre><code>node anc/score.mjs
 node anc/pass/reproduce.mjs
-node anc/native/verify.mjs</code></pre>
-    <p>Inspect the <a href="https://github.com/yuanrui3/Football-chess/blob/8e87600e949d23675a293414391c54e63cbc64aa/benchmarks/paired-positions/anc/score.mjs">shot scorer</a>, <a href="https://github.com/yuanrui3/Football-chess/blob/8e87600e949d23675a293414391c54e63cbc64aa/benchmarks/paired-positions/anc/geometry.mjs">geometry baseline</a>, <a href="https://github.com/yuanrui3/Football-chess/blob/8e87600e949d23675a293414391c54e63cbc64aa/benchmarks/paired-positions/anc/pass/reproduce.mjs">pass scorer</a> and <a href="https://github.com/yuanrui3/Football-chess/blob/8e87600e949d23675a293414391c54e63cbc64aa/benchmarks/paired-positions/anc/native/verify.mjs">engine verification script</a>.</p>
+node anc/native/verify.mjs
+node anc/followup/reproduce.mjs
+node anc/followup/value-of-information.mjs
+node anc/cue/reproduce.mjs</code></pre>
+    <p>Inspect the <a href="https://github.com/yuanrui3/Football-chess/blob/8e87600e949d23675a293414391c54e63cbc64aa/benchmarks/paired-positions/anc/score.mjs">shot scorer</a>, <a href="https://github.com/yuanrui3/Football-chess/blob/8e87600e949d23675a293414391c54e63cbc64aa/benchmarks/paired-positions/anc/geometry.mjs">geometry baseline</a>, <a href="https://github.com/yuanrui3/Football-chess/blob/8e87600e949d23675a293414391c54e63cbc64aa/benchmarks/paired-positions/anc/pass/reproduce.mjs">pass scorer</a> and <a href="https://github.com/yuanrui3/Football-chess/blob/8e87600e949d23675a293414391c54e63cbc64aa/benchmarks/paired-positions/anc/native/verify.mjs">engine verification script</a>. For the additional studies, use the <a href="https://github.com/yuanrui3/Football-chess/blob/08eb135fcd87299787a51ec9b237cc981a667793/benchmarks/paired-positions/anc/followup/reproduce.mjs">16-board scorer</a>, <a href="https://github.com/yuanrui3/Football-chess/blob/08eb135fcd87299787a51ec9b237cc981a667793/benchmarks/paired-positions/anc/followup/value-of-information.mjs">value-of-information analysis</a> and <a href="https://github.com/yuanrui3/Football-chess/blob/08eb135fcd87299787a51ec9b237cc981a667793/benchmarks/paired-positions/anc/cue/reproduce.mjs">cue experiment scorer</a>.</p>
     <h2>Cite the dataset</h2>
-    <p>Yuanrui Chen. <cite>Paired shot and pass decisions in Purdue Football Chess</cite>. Dataset, 2026. Revision <code>8e87600</code>. <a href="https://github.com/yuanrui3/Football-chess/blob/main/benchmarks/paired-positions/CITATION.cff">Machine-readable citation (CFF)</a>.</p>
+    <p>Yuanrui Chen. <cite>Paired shot and pass decisions in Purdue Football Chess</cite>. Dataset, 2026. Expanded dataset revision <code>08eb135</code>. <a href="https://github.com/yuanrui3/Football-chess/blob/main/benchmarks/paired-positions/CITATION.cff">Machine-readable citation (CFF)</a>.</p>
   </main>
   <footer><a href="https://github.com/yuanrui3/Football-chess">Football Chess game repository</a></footer>
 </body>
