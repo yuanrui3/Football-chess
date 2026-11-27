@@ -2,6 +2,8 @@
 
 This is the benchmark for *When Should a Language Model Change Its Move? Paired Shot and Pass Decisions in Purdue Football Chess* by Yuanrui Chen. Each pair differs by a one-square defensive edit. The model sees each board separately. Half of each bank requires a change of action, and half preserves the optimal action.
 
+The [dataset landing page](https://yuanrui3.github.io/Football-chess/benchmarks/paired-positions/) links the release files and study summary. Use the [dataset citation](CITATION.cff) to cite this release.
+
 | Task | Fixed bank | Inputs and recorded choices | Reproduction script |
 | --- | --- | --- | --- |
 | Choose a shot against a responding goalkeeper | 60 pairs, 120 boards | [Boards, payoffs and model choices](anc/positions.json) · [Exact prompts](anc/prompts.json) · [Data guide](anc/README.md) | [Shot scores and geometry baseline](anc/score.mjs) |

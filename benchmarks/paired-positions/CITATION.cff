@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "Use this citation for the published 60 shot pairs and 40 pass pairs in this dataset."
+type: dataset
+title: "Paired shot and pass decisions in Purdue Football Chess"
+authors:
+  - family-names: Chen
+    given-names: Yuanrui
+date-released: 2026-11-27
+commit: 8e87600e949d23675a293414391c54e63cbc64aa
+url: "https://yuanrui3.github.io/Football-chess/benchmarks/paired-positions/"
+repository-code: "https://github.com/yuanrui3/Football-chess/tree/8e87600e949d23675a293414391c54e63cbc64aa/benchmarks/paired-positions"
+keywords:
+  - language model evaluation
+  - paired positions
+  - spatial reasoning
+  - action selection
+  - Football Chess

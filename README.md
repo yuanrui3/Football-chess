@@ -4,7 +4,7 @@
 
 A playable custom variation inspired by Football Chess by Serrano Saunders. Original handbook: https://pdfhost.io/v/bWV1pmicf_Football_Chess_Handbook.pdf
 
-The [paired shot and pass benchmark](benchmarks/paired-positions/) includes 100 position pairs, model choices and offline reproduction scripts.
+The [paired shot and pass benchmark](benchmarks/paired-positions/) includes 100 position pairs, model choices and offline reproduction scripts. See the [Purdue Football Chess research dataset](https://yuanrui3.github.io/Football-chess/benchmarks/paired-positions/) for the study, data downloads and citation.
 
 ## Play
 https://yuanrui3.github.io/Football-chess/dist/
