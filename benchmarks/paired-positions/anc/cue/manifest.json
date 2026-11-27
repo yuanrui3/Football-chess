@@ -1,0 +1,2404 @@
+{
+  "version": "PFC-CUE-1",
+  "seed": 2026112709,
+  "engineHash": "8c4e1d5fe428878d4d8a0aace338b2f12d1c50d1839e076b3990f1b7d99163c6",
+  "proposals": 33,
+  "layouts": [
+    {
+      "layoutId": "board-1",
+      "attack": "white",
+      "options": [
+        "N",
+        "R",
+        "B"
+      ],
+      "variants": {
+        "R": [
+          [
+            {
+              "id": "black-B2",
+              "type": "B",
+              "team": "black",
+              "square": "i13"
+            },
+            {
+              "id": "black-K",
+              "type": "K",
+              "team": "black",
+              "square": "h17"
+            },
+            {
+              "id": "black-P2",
+              "type": "P",
+              "team": "black",
+              "square": "j9"
+            },
+            {
+              "id": "black-P3",
+              "type": "P",
+              "team": "black",
+              "square": "b15"
+            },
+            {
+              "id": "black-Q",
+              "type": "Q",
+              "team": "black",
+              "square": "l7"
+            },
+            {
+              "id": "black-R2",
+              "type": "R",
+              "team": "black",
+              "square": "j7"
+            },
+            {
+              "id": "white-B1",
+              "type": "B",
+              "team": "white",
+              "square": "h14"
+            },
+            {
+              "id": "white-K",
+              "type": "K",
+              "team": "white",
+              "square": "i1"
+            },
+            {
+              "id": "white-N1",
+              "type": "N",
+              "team": "white",
+              "square": "h11"
+            },
+            {
+              "id": "white-Q",
+              "type": "Q",
+              "team": "white",
+              "square": "e11"
+            },
+            {
+              "id": "white-R1",
+              "type": "R",
+              "team": "white",
+              "square": "j6"
+            }
+          ],
+          [
+            {
+              "id": "black-B2",
+              "type": "B",
+              "team": "black",
+              "square": "i13"
+            },
+            {
+              "id": "black-K",
+              "type": "K",
+              "team": "black",
+              "square": "h17"
+            },
+            {
+              "id": "black-P2",
+              "type": "P",
+              "team": "black",
+              "square": "k9"
+            },
+            {
+              "id": "black-P3",
+              "type": "P",
+              "team": "black",
+              "square": "b15"
+            },
+            {
+              "id": "black-Q",
+              "type": "Q",
+              "team": "black",
+              "square": "l7"
+            },
+            {
+              "id": "black-R2",
+              "type": "R",
+              "team": "black",
+              "square": "j7"
+            },
+            {
+              "id": "white-B1",
+              "type": "B",
+              "team": "white",
+              "square": "h14"
+            },
+            {
+              "id": "white-K",
+              "type": "K",
+              "team": "white",
+              "square": "i1"
+            },
+            {
+              "id": "white-N1",
+              "type": "N",
+              "team": "white",
+              "square": "h11"
+            },
+            {
+              "id": "white-Q",
+              "type": "Q",
+              "team": "white",
+              "square": "e11"
+            },
+            {
+              "id": "white-R1",
+              "type": "R",
+              "team": "white",
+              "square": "j6"
+            }
+          ]
+        ],
+        "N": [
+          [
+            {
+              "id": "black-B2",
+              "type": "B",
+              "team": "black",
+              "square": "i13"
+            },
+            {
+              "id": "black-K",
+              "type": "K",
+              "team": "black",
+              "square": "h17"
+            },
+            {
+              "id": "black-P2",
+              "type": "P",
+              "team": "black",
+              "square": "j9"
+            },
+            {
+              "id": "black-P3",
+              "type": "P",
+              "team": "black",
+              "square": "b15"
+            },
+            {
+              "id": "black-Q",
+              "type": "Q",
+              "team": "black",
+              "square": "l7"
+            },
+            {
+              "id": "black-R2",
+              "type": "R",
+              "team": "black",
+              "square": "j7"
+            },
+            {
+              "id": "white-B1",
+              "type": "B",
+              "team": "white",
+              "square": "h14"
+            },
+            {
+              "id": "white-K",
+              "type": "K",
+              "team": "white",
+              "square": "i1"
+            },
+            {
+              "id": "white-N1",
+              "type": "N",
+              "team": "white",
+              "square": "j6"
+            },
+            {
+              "id": "white-Q",
+              "type": "Q",
+              "team": "white",
+              "square": "e11"
+            },
+            {
+              "id": "white-R1",
+              "type": "R",
+              "team": "white",
+              "square": "h11"
+            }
+          ],
+          [
+            {
+              "id": "black-B2",
+              "type": "B",
+              "team": "black",
+              "square": "i13"
+            },
+            {
+              "id": "black-K",
+              "type": "K",
+              "team": "black",
+              "square": "h17"
+            },
+            {
+              "id": "black-P2",
+              "type": "P",
+              "team": "black",
+              "square": "k9"
+            },
+            {
+              "id": "black-P3",
+              "type": "P",
+              "team": "black",
+              "square": "b15"
+            },
+            {
+              "id": "black-Q",
+              "type": "Q",
+              "team": "black",
+              "square": "l7"
+            },
+            {
+              "id": "black-R2",
+              "type": "R",
+              "team": "black",
+              "square": "j7"
+            },
+            {
+              "id": "white-B1",
+              "type": "B",
+              "team": "white",
+              "square": "h14"
+            },
+            {
+              "id": "white-K",
+              "type": "K",
+              "team": "white",
+              "square": "i1"
+            },
+            {
+              "id": "white-N1",
+              "type": "N",
+              "team": "white",
+              "square": "j6"
+            },
+            {
+              "id": "white-Q",
+              "type": "Q",
+              "team": "white",
+              "square": "e11"
+            },
+            {
+              "id": "white-R1",
+              "type": "R",
+              "team": "white",
+              "square": "h11"
+            }
+          ]
+        ]
+      }
+    },
+    {
+      "layoutId": "board-2",
+      "attack": "black",
+      "options": [
+        "N",
+        "B",
+        "R"
+      ],
+      "variants": {
+        "R": [
+          [
+            {
+              "id": "black-B1",
+              "type": "B",
+              "team": "black",
+              "square": "j11"
+            },
+            {
+              "id": "black-K",
+              "type": "K",
+              "team": "black",
+              "square": "g17"
+            },
+            {
+              "id": "black-N1",
+              "type": "N",
+              "team": "black",
+              "square": "c7"
+            },
+            {
+              "id": "black-Q",
+              "type": "Q",
+              "team": "black",
+              "square": "g11"
+            },
+            {
+              "id": "black-R1",
+              "type": "R",
+              "team": "black",
+              "square": "k7"
+            },
+            {
+              "id": "white-B2",
+              "type": "B",
+              "team": "white",
+              "square": "i10"
+            },
+            {
+              "id": "white-K",
+              "type": "K",
+              "team": "white",
+              "square": "h1"
+            },
+            {
+              "id": "white-P2",
+              "type": "P",
+              "team": "white",
+              "square": "c5"
+            },
+            {
+              "id": "white-P3",
+              "type": "P",
+              "team": "white",
+              "square": "j3"
+            },
+            {
+              "id": "white-Q",
+              "type": "Q",
+              "team": "white",
+              "square": "c4"
+            },
+            {
+              "id": "white-R2",
+              "type": "R",
+              "team": "white",
+              "square": "k9"
+            }
+          ],
+          [
+            {
+              "id": "black-B1",
+              "type": "B",
+              "team": "black",
+              "square": "j11"
+            },
+            {
+              "id": "black-K",
+              "type": "K",
+              "team": "black",
+              "square": "g17"
+            },
+            {
+              "id": "black-N1",
+              "type": "N",
+              "team": "black",
+              "square": "c7"
+            },
+            {
+              "id": "black-Q",
+              "type": "Q",
+              "team": "black",
+              "square": "g11"
+            },
+            {
+              "id": "black-R1",
+              "type": "R",
+              "team": "black",
+              "square": "k7"
+            },
+            {
+              "id": "white-B2",
+              "type": "B",
+              "team": "white",
+              "square": "i10"
+            },
+            {
+              "id": "white-K",
+              "type": "K",
+              "team": "white",
+              "square": "h1"
+            },
+            {
+              "id": "white-P2",
+              "type": "P",
+              "team": "white",
+              "square": "b5"
+            },
+            {
+              "id": "white-P3",
+              "type": "P",
+              "team": "white",
+              "square": "j3"
+            },
+            {
+              "id": "white-Q",
+              "type": "Q",
+              "team": "white",
+              "square": "c4"
+            },
+            {
+              "id": "white-R2",
+              "type": "R",
+              "team": "white",
+              "square": "k9"
+            }
+          ]
+        ],
+        "N": [
+          [
+            {
+              "id": "black-B1",
+              "type": "B",
+              "team": "black",
+              "square": "j11"
+            },
+            {
+              "id": "black-K",
+              "type": "K",
+              "team": "black",
+              "square": "g17"
+            },
+            {
+              "id": "black-N1",
+              "type": "N",
+              "team": "black",
+              "square": "k7"
+            },
+            {
+              "id": "black-Q",
+              "type": "Q",
+              "team": "black",
+              "square": "g11"
+            },
+            {
+              "id": "black-R1",
+              "type": "R",
+              "team": "black",
+              "square": "c7"
+            },
+            {
+              "id": "white-B2",
+              "type": "B",
+              "team": "white",
+              "square": "i10"
+            },
+            {
+              "id": "white-K",
+              "type": "K",
+              "team": "white",
+              "square": "h1"
+            },
+            {
+              "id": "white-P2",
+              "type": "P",
+              "team": "white",
+              "square": "c5"
+            },
+            {
+              "id": "white-P3",
+              "type": "P",
+              "team": "white",
+              "square": "j3"
+            },
+            {
+              "id": "white-Q",
+              "type": "Q",
+              "team": "white",
+              "square": "c4"
+            },
+            {
+              "id": "white-R2",
+              "type": "R",
+              "team": "white",
+              "square": "k9"
+            }
+          ],
+          [
+            {
+              "id": "black-B1",
+              "type": "B",
+              "team": "black",
+              "square": "j11"
+            },
+            {
+              "id": "black-K",
+              "type": "K",
+              "team": "black",
+              "square": "g17"
+            },
+            {
+              "id": "black-N1",
+              "type": "N",
+              "team": "black",
+              "square": "k7"
+            },
+            {
+              "id": "black-Q",
+              "type": "Q",
+              "team": "black",
+              "square": "g11"
+            },
+            {
+              "id": "black-R1",
+              "type": "R",
+              "team": "black",
+              "square": "c7"
+            },
+            {
+              "id": "white-B2",
+              "type": "B",
+              "team": "white",
+              "square": "i10"
+            },
+            {
+              "id": "white-K",
+              "type": "K",
+              "team": "white",
+              "square": "h1"
+            },
+            {
+              "id": "white-P2",
+              "type": "P",
+              "team": "white",
+              "square": "b5"
+            },
+            {
+              "id": "white-P3",
+              "type": "P",
+              "team": "white",
+              "square": "j3"
+            },
+            {
+              "id": "white-Q",
+              "type": "Q",
+              "team": "white",
+              "square": "c4"
+            },
+            {
+              "id": "white-R2",
+              "type": "R",
+              "team": "white",
+              "square": "k9"
+            }
+          ]
+        ]
+      }
+    },
+    {
+      "layoutId": "board-3",
+      "attack": "white",
+      "options": [
+        "R",
+        "N",
+        "B"
+      ],
+      "variants": {
+        "R": [
+          [
+            {
+              "id": "black-B2",
+              "type": "B",
+              "team": "black",
+              "square": "m7"
+            },
+            {
+              "id": "black-K",
+              "type": "K",
+              "team": "black",
+              "square": "h17"
+            },
+            {
+              "id": "black-P2",
+              "type": "P",
+              "team": "black",
+              "square": "k5"
+            },
+            {
+              "id": "black-P3",
+              "type": "P",
+              "team": "black",
+              "square": "g16"
+            },
+            {
+              "id": "black-Q",
+              "type": "Q",
+              "team": "black",
+              "square": "l4"
+            },
+            {
+              "id": "black-R2",
+              "type": "R",
+              "team": "black",
+              "square": "e16"
+            },
+            {
+              "id": "white-B1",
+              "type": "B",
+              "team": "white",
+              "square": "l6"
+            },
+            {
+              "id": "white-K",
+              "type": "K",
+              "team": "white",
+              "square": "i1"
+            },
+            {
+              "id": "white-N1",
+              "type": "N",
+              "team": "white",
+              "square": "i7"
+            },
+            {
+              "id": "white-Q",
+              "type": "Q",
+              "team": "white",
+              "square": "i9"
+            },
+            {
+              "id": "white-R1",
+              "type": "R",
+              "team": "white",
+              "square": "e13"
+            }
+          ],
+          [
+            {
+              "id": "black-B2",
+              "type": "B",
+              "team": "black",
+              "square": "m7"
+            },
+            {
+              "id": "black-K",
+              "type": "K",
+              "team": "black",
+              "square": "h17"
+            },
+            {
+              "id": "black-P2",
+              "type": "P",
+              "team": "black",
+              "square": "j5"
+            },
+            {
+              "id": "black-P3",
+              "type": "P",
+              "team": "black",
+              "square": "g16"
+            },
+            {
+              "id": "black-Q",
+              "type": "Q",
+              "team": "black",
+              "square": "l4"
+            },
+            {
+              "id": "black-R2",
+              "type": "R",
+              "team": "black",
+              "square": "e16"
+            },
+            {
+              "id": "white-B1",
+              "type": "B",
+              "team": "white",
+              "square": "l6"
+            },
+            {
+              "id": "white-K",
+              "type": "K",
+              "team": "white",
+              "square": "i1"
+            },
+            {
+              "id": "white-N1",
+              "type": "N",
+              "team": "white",
+              "square": "i7"
+            },
+            {
+              "id": "white-Q",
+              "type": "Q",
+              "team": "white",
+              "square": "i9"
+            },
+            {
+              "id": "white-R1",
+              "type": "R",
+              "team": "white",
+              "square": "e13"
+            }
+          ]
+        ],
+        "N": [
+          [
+            {
+              "id": "black-B2",
+              "type": "B",
+              "team": "black",
+              "square": "m7"
+            },
+            {
+              "id": "black-K",
+              "type": "K",
+              "team": "black",
+              "square": "h17"
+            },
+            {
+              "id": "black-P2",
+              "type": "P",
+              "team": "black",
+              "square": "k5"
+            },
+            {
+              "id": "black-P3",
+              "type": "P",
+              "team": "black",
+              "square": "g16"
+            },
+            {
+              "id": "black-Q",
+              "type": "Q",
+              "team": "black",
+              "square": "l4"
+            },
+            {
+              "id": "black-R2",
+              "type": "R",
+              "team": "black",
+              "square": "e16"
+            },
+            {
+              "id": "white-B1",
+              "type": "B",
+              "team": "white",
+              "square": "l6"
+            },
+            {
+              "id": "white-K",
+              "type": "K",
+              "team": "white",
+              "square": "i1"
+            },
+            {
+              "id": "white-N1",
+              "type": "N",
+              "team": "white",
+              "square": "e13"
+            },
+            {
+              "id": "white-Q",
+              "type": "Q",
+              "team": "white",
+              "square": "i9"
+            },
+            {
+              "id": "white-R1",
+              "type": "R",
+              "team": "white",
+              "square": "i7"
+            }
+          ],
+          [
+            {
+              "id": "black-B2",
+              "type": "B",
+              "team": "black",
+              "square": "m7"
+            },
+            {
+              "id": "black-K",
+              "type": "K",
+              "team": "black",
+              "square": "h17"
+            },
+            {
+              "id": "black-P2",
+              "type": "P",
+              "team": "black",
+              "square": "j5"
+            },
+            {
+              "id": "black-P3",
+              "type": "P",
+              "team": "black",
+              "square": "g16"
+            },
+            {
+              "id": "black-Q",
+              "type": "Q",
+              "team": "black",
+              "square": "l4"
+            },
+            {
+              "id": "black-R2",
+              "type": "R",
+              "team": "black",
+              "square": "e16"
+            },
+            {
+              "id": "white-B1",
+              "type": "B",
+              "team": "white",
+              "square": "l6"
+            },
+            {
+              "id": "white-K",
+              "type": "K",
+              "team": "white",
+              "square": "i1"
+            },
+            {
+              "id": "white-N1",
+              "type": "N",
+              "team": "white",
+              "square": "e13"
+            },
+            {
+              "id": "white-Q",
+              "type": "Q",
+              "team": "white",
+              "square": "i9"
+            },
+            {
+              "id": "white-R1",
+              "type": "R",
+              "team": "white",
+              "square": "i7"
+            }
+          ]
+        ]
+      }
+    },
+    {
+      "layoutId": "board-4",
+      "attack": "black",
+      "options": [
+        "R",
+        "B",
+        "N"
+      ],
+      "variants": {
+        "R": [
+          [
+            {
+              "id": "black-B1",
+              "type": "B",
+              "team": "black",
+              "square": "g4"
+            },
+            {
+              "id": "black-K",
+              "type": "K",
+              "team": "black",
+              "square": "i17"
+            },
+            {
+              "id": "black-N1",
+              "type": "N",
+              "team": "black",
+              "square": "e9"
+            },
+            {
+              "id": "black-Q",
+              "type": "Q",
+              "team": "black",
+              "square": "g7"
+            },
+            {
+              "id": "black-R1",
+              "type": "R",
+              "team": "black",
+              "square": "b7"
+            },
+            {
+              "id": "white-B2",
+              "type": "B",
+              "team": "white",
+              "square": "h5"
+            },
+            {
+              "id": "white-K",
+              "type": "K",
+              "team": "white",
+              "square": "i1"
+            },
+            {
+              "id": "white-P2",
+              "type": "P",
+              "team": "white",
+              "square": "e11"
+            },
+            {
+              "id": "white-P3",
+              "type": "P",
+              "team": "white",
+              "square": "g2"
+            },
+            {
+              "id": "white-Q",
+              "type": "Q",
+              "team": "white",
+              "square": "e14"
+            },
+            {
+              "id": "white-R2",
+              "type": "R",
+              "team": "white",
+              "square": "a7"
+            }
+          ],
+          [
+            {
+              "id": "black-B1",
+              "type": "B",
+              "team": "black",
+              "square": "g4"
+            },
+            {
+              "id": "black-K",
+              "type": "K",
+              "team": "black",
+              "square": "i17"
+            },
+            {
+              "id": "black-N1",
+              "type": "N",
+              "team": "black",
+              "square": "e9"
+            },
+            {
+              "id": "black-Q",
+              "type": "Q",
+              "team": "black",
+              "square": "g7"
+            },
+            {
+              "id": "black-R1",
+              "type": "R",
+              "team": "black",
+              "square": "b7"
+            },
+            {
+              "id": "white-B2",
+              "type": "B",
+              "team": "white",
+              "square": "h5"
+            },
+            {
+              "id": "white-K",
+              "type": "K",
+              "team": "white",
+              "square": "i1"
+            },
+            {
+              "id": "white-P2",
+              "type": "P",
+              "team": "white",
+              "square": "d11"
+            },
+            {
+              "id": "white-P3",
+              "type": "P",
+              "team": "white",
+              "square": "g2"
+            },
+            {
+              "id": "white-Q",
+              "type": "Q",
+              "team": "white",
+              "square": "e14"
+            },
+            {
+              "id": "white-R2",
+              "type": "R",
+              "team": "white",
+              "square": "a7"
+            }
+          ]
+        ],
+        "N": [
+          [
+            {
+              "id": "black-B1",
+              "type": "B",
+              "team": "black",
+              "square": "g4"
+            },
+            {
+              "id": "black-K",
+              "type": "K",
+              "team": "black",
+              "square": "i17"
+            },
+            {
+              "id": "black-N1",
+              "type": "N",
+              "team": "black",
+              "square": "b7"
+            },
+            {
+              "id": "black-Q",
+              "type": "Q",
+              "team": "black",
+              "square": "g7"
+            },
+            {
+              "id": "black-R1",
+              "type": "R",
+              "team": "black",
+              "square": "e9"
+            },
+            {
+              "id": "white-B2",
+              "type": "B",
+              "team": "white",
+              "square": "h5"
+            },
+            {
+              "id": "white-K",
+              "type": "K",
+              "team": "white",
+              "square": "i1"
+            },
+            {
+              "id": "white-P2",
+              "type": "P",
+              "team": "white",
+              "square": "e11"
+            },
+            {
+              "id": "white-P3",
+              "type": "P",
+              "team": "white",
+              "square": "g2"
+            },
+            {
+              "id": "white-Q",
+              "type": "Q",
+              "team": "white",
+              "square": "e14"
+            },
+            {
+              "id": "white-R2",
+              "type": "R",
+              "team": "white",
+              "square": "a7"
+            }
+          ],
+          [
+            {
+              "id": "black-B1",
+              "type": "B",
+              "team": "black",
+              "square": "g4"
+            },
+            {
+              "id": "black-K",
+              "type": "K",
+              "team": "black",
+              "square": "i17"
+            },
+            {
+              "id": "black-N1",
+              "type": "N",
+              "team": "black",
+              "square": "b7"
+            },
+            {
+              "id": "black-Q",
+              "type": "Q",
+              "team": "black",
+              "square": "g7"
+            },
+            {
+              "id": "black-R1",
+              "type": "R",
+              "team": "black",
+              "square": "e9"
+            },
+            {
+              "id": "white-B2",
+              "type": "B",
+              "team": "white",
+              "square": "h5"
+            },
+            {
+              "id": "white-K",
+              "type": "K",
+              "team": "white",
+              "square": "i1"
+            },
+            {
+              "id": "white-P2",
+              "type": "P",
+              "team": "white",
+              "square": "d11"
+            },
+            {
+              "id": "white-P3",
+              "type": "P",
+              "team": "white",
+              "square": "g2"
+            },
+            {
+              "id": "white-Q",
+              "type": "Q",
+              "team": "white",
+              "square": "e14"
+            },
+            {
+              "id": "white-R2",
+              "type": "R",
+              "team": "white",
+              "square": "a7"
+            }
+          ]
+        ]
+      }
+    },
+    {
+      "layoutId": "board-5",
+      "attack": "white",
+      "options": [
+        "B",
+        "N",
+        "R"
+      ],
+      "variants": {
+        "R": [
+          [
+            {
+              "id": "black-B2",
+              "type": "B",
+              "team": "black",
+              "square": "i9"
+            },
+            {
+              "id": "black-K",
+              "type": "K",
+              "team": "black",
+              "square": "h17"
+            },
+            {
+              "id": "black-P2",
+              "type": "P",
+              "team": "black",
+              "square": "f4"
+            },
+            {
+              "id": "black-P3",
+              "type": "P",
+              "team": "black",
+              "square": "b16"
+            },
+            {
+              "id": "black-Q",
+              "type": "Q",
+              "team": "black",
+              "square": "c1"
+            },
+            {
+              "id": "black-R2",
+              "type": "R",
+              "team": "black",
+              "square": "b8"
+            },
+            {
+              "id": "white-B1",
+              "type": "B",
+              "team": "white",
+              "square": "j10"
+            },
+            {
+              "id": "white-K",
+              "type": "K",
+              "team": "white",
+              "square": "g1"
+            },
+            {
+              "id": "white-N1",
+              "type": "N",
+              "team": "white",
+              "square": "h6"
+            },
+            {
+              "id": "white-Q",
+              "type": "Q",
+              "team": "white",
+              "square": "j8"
+            },
+            {
+              "id": "white-R1",
+              "type": "R",
+              "team": "white",
+              "square": "e8"
+            }
+          ],
+          [
+            {
+              "id": "black-B2",
+              "type": "B",
+              "team": "black",
+              "square": "i9"
+            },
+            {
+              "id": "black-K",
+              "type": "K",
+              "team": "black",
+              "square": "h17"
+            },
+            {
+              "id": "black-P2",
+              "type": "P",
+              "team": "black",
+              "square": "f5"
+            },
+            {
+              "id": "black-P3",
+              "type": "P",
+              "team": "black",
+              "square": "b16"
+            },
+            {
+              "id": "black-Q",
+              "type": "Q",
+              "team": "black",
+              "square": "c1"
+            },
+            {
+              "id": "black-R2",
+              "type": "R",
+              "team": "black",
+              "square": "b8"
+            },
+            {
+              "id": "white-B1",
+              "type": "B",
+              "team": "white",
+              "square": "j10"
+            },
+            {
+              "id": "white-K",
+              "type": "K",
+              "team": "white",
+              "square": "g1"
+            },
+            {
+              "id": "white-N1",
+              "type": "N",
+              "team": "white",
+              "square": "h6"
+            },
+            {
+              "id": "white-Q",
+              "type": "Q",
+              "team": "white",
+              "square": "j8"
+            },
+            {
+              "id": "white-R1",
+              "type": "R",
+              "team": "white",
+              "square": "e8"
+            }
+          ]
+        ],
+        "N": [
+          [
+            {
+              "id": "black-B2",
+              "type": "B",
+              "team": "black",
+              "square": "i9"
+            },
+            {
+              "id": "black-K",
+              "type": "K",
+              "team": "black",
+              "square": "h17"
+            },
+            {
+              "id": "black-P2",
+              "type": "P",
+              "team": "black",
+              "square": "f4"
+            },
+            {
+              "id": "black-P3",
+              "type": "P",
+              "team": "black",
+              "square": "b16"
+            },
+            {
+              "id": "black-Q",
+              "type": "Q",
+              "team": "black",
+              "square": "c1"
+            },
+            {
+              "id": "black-R2",
+              "type": "R",
+              "team": "black",
+              "square": "b8"
+            },
+            {
+              "id": "white-B1",
+              "type": "B",
+              "team": "white",
+              "square": "j10"
+            },
+            {
+              "id": "white-K",
+              "type": "K",
+              "team": "white",
+              "square": "g1"
+            },
+            {
+              "id": "white-N1",
+              "type": "N",
+              "team": "white",
+              "square": "e8"
+            },
+            {
+              "id": "white-Q",
+              "type": "Q",
+              "team": "white",
+              "square": "j8"
+            },
+            {
+              "id": "white-R1",
+              "type": "R",
+              "team": "white",
+              "square": "h6"
+            }
+          ],
+          [
+            {
+              "id": "black-B2",
+              "type": "B",
+              "team": "black",
+              "square": "i9"
+            },
+            {
+              "id": "black-K",
+              "type": "K",
+              "team": "black",
+              "square": "h17"
+            },
+            {
+              "id": "black-P2",
+              "type": "P",
+              "team": "black",
+              "square": "f5"
+            },
+            {
+              "id": "black-P3",
+              "type": "P",
+              "team": "black",
+              "square": "b16"
+            },
+            {
+              "id": "black-Q",
+              "type": "Q",
+              "team": "black",
+              "square": "c1"
+            },
+            {
+              "id": "black-R2",
+              "type": "R",
+              "team": "black",
+              "square": "b8"
+            },
+            {
+              "id": "white-B1",
+              "type": "B",
+              "team": "white",
+              "square": "j10"
+            },
+            {
+              "id": "white-K",
+              "type": "K",
+              "team": "white",
+              "square": "g1"
+            },
+            {
+              "id": "white-N1",
+              "type": "N",
+              "team": "white",
+              "square": "e8"
+            },
+            {
+              "id": "white-Q",
+              "type": "Q",
+              "team": "white",
+              "square": "j8"
+            },
+            {
+              "id": "white-R1",
+              "type": "R",
+              "team": "white",
+              "square": "h6"
+            }
+          ]
+        ]
+      }
+    },
+    {
+      "layoutId": "board-6",
+      "attack": "black",
+      "options": [
+        "B",
+        "R",
+        "N"
+      ],
+      "variants": {
+        "R": [
+          [
+            {
+              "id": "black-B1",
+              "type": "B",
+              "team": "black",
+              "square": "d13"
+            },
+            {
+              "id": "black-K",
+              "type": "K",
+              "team": "black",
+              "square": "g17"
+            },
+            {
+              "id": "black-N1",
+              "type": "N",
+              "team": "black",
+              "square": "m12"
+            },
+            {
+              "id": "black-Q",
+              "type": "Q",
+              "team": "black",
+              "square": "i8"
+            },
+            {
+              "id": "black-R1",
+              "type": "R",
+              "team": "black",
+              "square": "g6"
+            },
+            {
+              "id": "white-B2",
+              "type": "B",
+              "team": "white",
+              "square": "b11"
+            },
+            {
+              "id": "white-K",
+              "type": "K",
+              "team": "white",
+              "square": "i1"
+            },
+            {
+              "id": "white-P2",
+              "type": "P",
+              "team": "white",
+              "square": "j12"
+            },
+            {
+              "id": "white-P3",
+              "type": "P",
+              "team": "white",
+              "square": "m2"
+            },
+            {
+              "id": "white-Q",
+              "type": "Q",
+              "team": "white",
+              "square": "i12"
+            },
+            {
+              "id": "white-R2",
+              "type": "R",
+              "team": "white",
+              "square": "i6"
+            }
+          ],
+          [
+            {
+              "id": "black-B1",
+              "type": "B",
+              "team": "black",
+              "square": "d13"
+            },
+            {
+              "id": "black-K",
+              "type": "K",
+              "team": "black",
+              "square": "g17"
+            },
+            {
+              "id": "black-N1",
+              "type": "N",
+              "team": "black",
+              "square": "m12"
+            },
+            {
+              "id": "black-Q",
+              "type": "Q",
+              "team": "black",
+              "square": "i8"
+            },
+            {
+              "id": "black-R1",
+              "type": "R",
+              "team": "black",
+              "square": "g6"
+            },
+            {
+              "id": "white-B2",
+              "type": "B",
+              "team": "white",
+              "square": "b11"
+            },
+            {
+              "id": "white-K",
+              "type": "K",
+              "team": "white",
+              "square": "i1"
+            },
+            {
+              "id": "white-P2",
+              "type": "P",
+              "team": "white",
+              "square": "j11"
+            },
+            {
+              "id": "white-P3",
+              "type": "P",
+              "team": "white",
+              "square": "m2"
+            },
+            {
+              "id": "white-Q",
+              "type": "Q",
+              "team": "white",
+              "square": "i12"
+            },
+            {
+              "id": "white-R2",
+              "type": "R",
+              "team": "white",
+              "square": "i6"
+            }
+          ]
+        ],
+        "N": [
+          [
+            {
+              "id": "black-B1",
+              "type": "B",
+              "team": "black",
+              "square": "d13"
+            },
+            {
+              "id": "black-K",
+              "type": "K",
+              "team": "black",
+              "square": "g17"
+            },
+            {
+              "id": "black-N1",
+              "type": "N",
+              "team": "black",
+              "square": "g6"
+            },
+            {
+              "id": "black-Q",
+              "type": "Q",
+              "team": "black",
+              "square": "i8"
+            },
+            {
+              "id": "black-R1",
+              "type": "R",
+              "team": "black",
+              "square": "m12"
+            },
+            {
+              "id": "white-B2",
+              "type": "B",
+              "team": "white",
+              "square": "b11"
+            },
+            {
+              "id": "white-K",
+              "type": "K",
+              "team": "white",
+              "square": "i1"
+            },
+            {
+              "id": "white-P2",
+              "type": "P",
+              "team": "white",
+              "square": "j12"
+            },
+            {
+              "id": "white-P3",
+              "type": "P",
+              "team": "white",
+              "square": "m2"
+            },
+            {
+              "id": "white-Q",
+              "type": "Q",
+              "team": "white",
+              "square": "i12"
+            },
+            {
+              "id": "white-R2",
+              "type": "R",
+              "team": "white",
+              "square": "i6"
+            }
+          ],
+          [
+            {
+              "id": "black-B1",
+              "type": "B",
+              "team": "black",
+              "square": "d13"
+            },
+            {
+              "id": "black-K",
+              "type": "K",
+              "team": "black",
+              "square": "g17"
+            },
+            {
+              "id": "black-N1",
+              "type": "N",
+              "team": "black",
+              "square": "g6"
+            },
+            {
+              "id": "black-Q",
+              "type": "Q",
+              "team": "black",
+              "square": "i8"
+            },
+            {
+              "id": "black-R1",
+              "type": "R",
+              "team": "black",
+              "square": "m12"
+            },
+            {
+              "id": "white-B2",
+              "type": "B",
+              "team": "white",
+              "square": "b11"
+            },
+            {
+              "id": "white-K",
+              "type": "K",
+              "team": "white",
+              "square": "i1"
+            },
+            {
+              "id": "white-P2",
+              "type": "P",
+              "team": "white",
+              "square": "j11"
+            },
+            {
+              "id": "white-P3",
+              "type": "P",
+              "team": "white",
+              "square": "m2"
+            },
+            {
+              "id": "white-Q",
+              "type": "Q",
+              "team": "white",
+              "square": "i12"
+            },
+            {
+              "id": "white-R2",
+              "type": "R",
+              "team": "white",
+              "square": "i6"
+            }
+          ]
+        ]
+      }
+    }
+  ],
+  "items": [
+    {
+      "itemId": "ee71fdb3aad9945a",
+      "layoutId": "board-1",
+      "protectedPiece": "R",
+      "signal": "safe",
+      "reliability": 0.6,
+      "options": [
+        "N",
+        "R",
+        "B"
+      ],
+      "optimal": 2,
+      "prompt": "Choose a pass in this partially observed Football Chess position. Maximize the probability that your team keeps possession after the next defensive challenge. All three passes are legal and arrive for certain. Your team then holds position. The defense takes a legal tackle whenever one is available.\n\nIn this rule variant only the rook has protection: if tackled it retains possession with probability 75%. Any other tackled receiver loses possession. Any receiver that cannot be tackled keeps possession. These rules specify all receiver abilities.\n\nPitch coordinates (files a-n, ranks 1-17). Your side is white and your queen has the ball.\nYour players: bishop h14, keeper i1, knight h11, queen e11, rook j6.\nVisible opposing players: bishop i13, keeper h17, pawn b15, queen l7, rook j7.\n\nOne opposing pawn is hidden. Before receiving the scout report, its two possible squares are equally likely. On j9 the knight is safe (no legal tackle). On k9 the knight is exposed (a legal tackle exists). Both squares leave the rook and the bishop exposed. These conditional tackle outcomes are given.\n\nThe scout reports either SAFE or EXPOSED for the knight. In each of the two possible states the report is correct 60% of the time and gives the opposite report otherwise. The scout now reports: SAFE.\n\nChoose one recipient:\n1. knight on h11\n2. rook on j6\n3. bishop on h14\nReturn just its option number."
+    },
+    {
+      "itemId": "828a70dc47e5d690",
+      "layoutId": "board-1",
+      "protectedPiece": "R",
+      "signal": "safe",
+      "reliability": 0.9,
+      "options": [
+        "N",
+        "R",
+        "B"
+      ],
+      "optimal": 1,
+      "prompt": "Choose a pass in this partially observed Football Chess position. Maximize the probability that your team keeps possession after the next defensive challenge. All three passes are legal and arrive for certain. Your team then holds position. The defense takes a legal tackle whenever one is available.\n\nIn this rule variant only the rook has protection: if tackled it retains possession with probability 75%. Any other tackled receiver loses possession. Any receiver that cannot be tackled keeps possession. These rules specify all receiver abilities.\n\nPitch coordinates (files a-n, ranks 1-17). Your side is white and your queen has the ball.\nYour players: bishop h14, keeper i1, knight h11, queen e11, rook j6.\nVisible opposing players: bishop i13, keeper h17, pawn b15, queen l7, rook j7.\n\nOne opposing pawn is hidden. Before receiving the scout report, its two possible squares are equally likely. On j9 the knight is safe (no legal tackle). On k9 the knight is exposed (a legal tackle exists). Both squares leave the rook and the bishop exposed. These conditional tackle outcomes are given.\n\nThe scout reports either SAFE or EXPOSED for the knight. In each of the two possible states the report is correct 90% of the time and gives the opposite report otherwise. The scout now reports: SAFE.\n\nChoose one recipient:\n1. knight on h11\n2. rook on j6\n3. bishop on h14\nReturn just its option number."
+    },
+    {
+      "itemId": "bcbf13cefca9329b",
+      "layoutId": "board-1",
+      "protectedPiece": "R",
+      "signal": "unsafe",
+      "reliability": 0.6,
+      "options": [
+        "N",
+        "R",
+        "B"
+      ],
+      "optimal": 2,
+      "prompt": "Choose a pass in this partially observed Football Chess position. Maximize the probability that your team keeps possession after the next defensive challenge. All three passes are legal and arrive for certain. Your team then holds position. The defense takes a legal tackle whenever one is available.\n\nIn this rule variant only the rook has protection: if tackled it retains possession with probability 75%. Any other tackled receiver loses possession. Any receiver that cannot be tackled keeps possession. These rules specify all receiver abilities.\n\nPitch coordinates (files a-n, ranks 1-17). Your side is white and your queen has the ball.\nYour players: bishop h14, keeper i1, knight h11, queen e11, rook j6.\nVisible opposing players: bishop i13, keeper h17, pawn b15, queen l7, rook j7.\n\nOne opposing pawn is hidden. Before receiving the scout report, its two possible squares are equally likely. On j9 the knight is safe (no legal tackle). On k9 the knight is exposed (a legal tackle exists). Both squares leave the rook and the bishop exposed. These conditional tackle outcomes are given.\n\nThe scout reports either SAFE or EXPOSED for the knight. In each of the two possible states the report is correct 60% of the time and gives the opposite report otherwise. The scout now reports: EXPOSED.\n\nChoose one recipient:\n1. knight on h11\n2. rook on j6\n3. bishop on h14\nReturn just its option number."
+    },
+    {
+      "itemId": "a6f524f86c7dab51",
+      "layoutId": "board-1",
+      "protectedPiece": "R",
+      "signal": "unsafe",
+      "reliability": 0.9,
+      "options": [
+        "N",
+        "R",
+        "B"
+      ],
+      "optimal": 2,
+      "prompt": "Choose a pass in this partially observed Football Chess position. Maximize the probability that your team keeps possession after the next defensive challenge. All three passes are legal and arrive for certain. Your team then holds position. The defense takes a legal tackle whenever one is available.\n\nIn this rule variant only the rook has protection: if tackled it retains possession with probability 75%. Any other tackled receiver loses possession. Any receiver that cannot be tackled keeps possession. These rules specify all receiver abilities.\n\nPitch coordinates (files a-n, ranks 1-17). Your side is white and your queen has the ball.\nYour players: bishop h14, keeper i1, knight h11, queen e11, rook j6.\nVisible opposing players: bishop i13, keeper h17, pawn b15, queen l7, rook j7.\n\nOne opposing pawn is hidden. Before receiving the scout report, its two possible squares are equally likely. On j9 the knight is safe (no legal tackle). On k9 the knight is exposed (a legal tackle exists). Both squares leave the rook and the bishop exposed. These conditional tackle outcomes are given.\n\nThe scout reports either SAFE or EXPOSED for the knight. In each of the two possible states the report is correct 90% of the time and gives the opposite report otherwise. The scout now reports: EXPOSED.\n\nChoose one recipient:\n1. knight on h11\n2. rook on j6\n3. bishop on h14\nReturn just its option number."
+    },
+    {
+      "itemId": "595ebd9335516931",
+      "layoutId": "board-1",
+      "protectedPiece": "N",
+      "signal": "safe",
+      "reliability": 0.6,
+      "options": [
+        "N",
+        "R",
+        "B"
+      ],
+      "optimal": 1,
+      "prompt": "Choose a pass in this partially observed Football Chess position. Maximize the probability that your team keeps possession after the next defensive challenge. All three passes are legal and arrive for certain. Your team then holds position. The defense takes a legal tackle whenever one is available.\n\nIn this rule variant only the knight has protection: if tackled it retains possession with probability 75%. Any other tackled receiver loses possession. Any receiver that cannot be tackled keeps possession. These rules specify all receiver abilities.\n\nPitch coordinates (files a-n, ranks 1-17). Your side is white and your queen has the ball.\nYour players: bishop h14, keeper i1, knight j6, queen e11, rook h11.\nVisible opposing players: bishop i13, keeper h17, pawn b15, queen l7, rook j7.\n\nOne opposing pawn is hidden. Before receiving the scout report, its two possible squares are equally likely. On j9 the rook is safe (no legal tackle). On k9 the rook is exposed (a legal tackle exists). Both squares leave the knight and the bishop exposed. These conditional tackle outcomes are given.\n\nThe scout reports either SAFE or EXPOSED for the rook. In each of the two possible states the report is correct 60% of the time and gives the opposite report otherwise. The scout now reports: SAFE.\n\nChoose one recipient:\n1. knight on j6\n2. rook on h11\n3. bishop on h14\nReturn just its option number."
+    },
+    {
+      "itemId": "51f15acd6bd3e283",
+      "layoutId": "board-1",
+      "protectedPiece": "N",
+      "signal": "safe",
+      "reliability": 0.9,
+      "options": [
+        "N",
+        "R",
+        "B"
+      ],
+      "optimal": 2,
+      "prompt": "Choose a pass in this partially observed Football Chess position. Maximize the probability that your team keeps possession after the next defensive challenge. All three passes are legal and arrive for certain. Your team then holds position. The defense takes a legal tackle whenever one is available.\n\nIn this rule variant only the knight has protection: if tackled it retains possession with probability 75%. Any other tackled receiver loses possession. Any receiver that cannot be tackled keeps possession. These rules specify all receiver abilities.\n\nPitch coordinates (files a-n, ranks 1-17). Your side is white and your queen has the ball.\nYour players: bishop h14, keeper i1, knight j6, queen e11, rook h11.\nVisible opposing players: bishop i13, keeper h17, pawn b15, queen l7, rook j7.\n\nOne opposing pawn is hidden. Before receiving the scout report, its two possible squares are equally likely. On j9 the rook is safe (no legal tackle). On k9 the rook is exposed (a legal tackle exists). Both squares leave the knight and the bishop exposed. These conditional tackle outcomes are given.\n\nThe scout reports either SAFE or EXPOSED for the rook. In each of the two possible states the report is correct 90% of the time and gives the opposite report otherwise. The scout now reports: SAFE.\n\nChoose one recipient:\n1. knight on j6\n2. rook on h11\n3. bishop on h14\nReturn just its option number."
+    },
+    {
+      "itemId": "9f681e76050ef19d",
+      "layoutId": "board-1",
+      "protectedPiece": "N",
+      "signal": "unsafe",
+      "reliability": 0.6,
+      "options": [
+        "N",
+        "R",
+        "B"
+      ],
+      "optimal": 1,
+      "prompt": "Choose a pass in this partially observed Football Chess position. Maximize the probability that your team keeps possession after the next defensive challenge. All three passes are legal and arrive for certain. Your team then holds position. The defense takes a legal tackle whenever one is available.\n\nIn this rule variant only the knight has protection: if tackled it retains possession with probability 75%. Any other tackled receiver loses possession. Any receiver that cannot be tackled keeps possession. These rules specify all receiver abilities.\n\nPitch coordinates (files a-n, ranks 1-17). Your side is white and your queen has the ball.\nYour players: bishop h14, keeper i1, knight j6, queen e11, rook h11.\nVisible opposing players: bishop i13, keeper h17, pawn b15, queen l7, rook j7.\n\nOne opposing pawn is hidden. Before receiving the scout report, its two possible squares are equally likely. On j9 the rook is safe (no legal tackle). On k9 the rook is exposed (a legal tackle exists). Both squares leave the knight and the bishop exposed. These conditional tackle outcomes are given.\n\nThe scout reports either SAFE or EXPOSED for the rook. In each of the two possible states the report is correct 60% of the time and gives the opposite report otherwise. The scout now reports: EXPOSED.\n\nChoose one recipient:\n1. knight on j6\n2. rook on h11\n3. bishop on h14\nReturn just its option number."
+    },
+    {
+      "itemId": "c0f2a017cdd288f3",
+      "layoutId": "board-1",
+      "protectedPiece": "N",
+      "signal": "unsafe",
+      "reliability": 0.9,
+      "options": [
+        "N",
+        "R",
+        "B"
+      ],
+      "optimal": 1,
+      "prompt": "Choose a pass in this partially observed Football Chess position. Maximize the probability that your team keeps possession after the next defensive challenge. All three passes are legal and arrive for certain. Your team then holds position. The defense takes a legal tackle whenever one is available.\n\nIn this rule variant only the knight has protection: if tackled it retains possession with probability 75%. Any other tackled receiver loses possession. Any receiver that cannot be tackled keeps possession. These rules specify all receiver abilities.\n\nPitch coordinates (files a-n, ranks 1-17). Your side is white and your queen has the ball.\nYour players: bishop h14, keeper i1, knight j6, queen e11, rook h11.\nVisible opposing players: bishop i13, keeper h17, pawn b15, queen l7, rook j7.\n\nOne opposing pawn is hidden. Before receiving the scout report, its two possible squares are equally likely. On j9 the rook is safe (no legal tackle). On k9 the rook is exposed (a legal tackle exists). Both squares leave the knight and the bishop exposed. These conditional tackle outcomes are given.\n\nThe scout reports either SAFE or EXPOSED for the rook. In each of the two possible states the report is correct 90% of the time and gives the opposite report otherwise. The scout now reports: EXPOSED.\n\nChoose one recipient:\n1. knight on j6\n2. rook on h11\n3. bishop on h14\nReturn just its option number."
+    },
+    {
+      "itemId": "65deb685445caf8c",
+      "layoutId": "board-2",
+      "protectedPiece": "R",
+      "signal": "safe",
+      "reliability": 0.6,
+      "options": [
+        "N",
+        "B",
+        "R"
+      ],
+      "optimal": 3,
+      "prompt": "Choose a pass in this partially observed Football Chess position. Maximize the probability that your team keeps possession after the next defensive challenge. All three passes are legal and arrive for certain. Your team then holds position. The defense takes a legal tackle whenever one is available.\n\nIn this rule variant only the rook has protection: if tackled it retains possession with probability 75%. Any other tackled receiver loses possession. Any receiver that cannot be tackled keeps possession. These rules specify all receiver abilities.\n\nPitch coordinates (files a-n, ranks 1-17). Your side is black and your queen has the ball.\nYour players: bishop j11, keeper g17, knight c7, queen g11, rook k7.\nVisible opposing players: bishop i10, keeper h1, pawn j3, queen c4, rook k9.\n\nOne opposing pawn is hidden. Before receiving the scout report, its two possible squares are equally likely. On c5 the knight is safe (no legal tackle). On b5 the knight is exposed (a legal tackle exists). Both squares leave the rook and the bishop exposed. These conditional tackle outcomes are given.\n\nThe scout reports either SAFE or EXPOSED for the knight. In each of the two possible states the report is correct 60% of the time and gives the opposite report otherwise. The scout now reports: SAFE.\n\nChoose one recipient:\n1. knight on c7\n2. bishop on j11\n3. rook on k7\nReturn just its option number."
+    },
+    {
+      "itemId": "c23e55cf9ec489ce",
+      "layoutId": "board-2",
+      "protectedPiece": "R",
+      "signal": "safe",
+      "reliability": 0.9,
+      "options": [
+        "N",
+        "B",
+        "R"
+      ],
+      "optimal": 1,
+      "prompt": "Choose a pass in this partially observed Football Chess position. Maximize the probability that your team keeps possession after the next defensive challenge. All three passes are legal and arrive for certain. Your team then holds position. The defense takes a legal tackle whenever one is available.\n\nIn this rule variant only the rook has protection: if tackled it retains possession with probability 75%. Any other tackled receiver loses possession. Any receiver that cannot be tackled keeps possession. These rules specify all receiver abilities.\n\nPitch coordinates (files a-n, ranks 1-17). Your side is black and your queen has the ball.\nYour players: bishop j11, keeper g17, knight c7, queen g11, rook k7.\nVisible opposing players: bishop i10, keeper h1, pawn j3, queen c4, rook k9.\n\nOne opposing pawn is hidden. Before receiving the scout report, its two possible squares are equally likely. On c5 the knight is safe (no legal tackle). On b5 the knight is exposed (a legal tackle exists). Both squares leave the rook and the bishop exposed. These conditional tackle outcomes are given.\n\nThe scout reports either SAFE or EXPOSED for the knight. In each of the two possible states the report is correct 90% of the time and gives the opposite report otherwise. The scout now reports: SAFE.\n\nChoose one recipient:\n1. knight on c7\n2. bishop on j11\n3. rook on k7\nReturn just its option number."
+    },
+    {
+      "itemId": "44ac768bf556a12c",
+      "layoutId": "board-2",
+      "protectedPiece": "R",
+      "signal": "unsafe",
+      "reliability": 0.6,
+      "options": [
+        "N",
+        "B",
+        "R"
+      ],
+      "optimal": 3,
+      "prompt": "Choose a pass in this partially observed Football Chess position. Maximize the probability that your team keeps possession after the next defensive challenge. All three passes are legal and arrive for certain. Your team then holds position. The defense takes a legal tackle whenever one is available.\n\nIn this rule variant only the rook has protection: if tackled it retains possession with probability 75%. Any other tackled receiver loses possession. Any receiver that cannot be tackled keeps possession. These rules specify all receiver abilities.\n\nPitch coordinates (files a-n, ranks 1-17). Your side is black and your queen has the ball.\nYour players: bishop j11, keeper g17, knight c7, queen g11, rook k7.\nVisible opposing players: bishop i10, keeper h1, pawn j3, queen c4, rook k9.\n\nOne opposing pawn is hidden. Before receiving the scout report, its two possible squares are equally likely. On c5 the knight is safe (no legal tackle). On b5 the knight is exposed (a legal tackle exists). Both squares leave the rook and the bishop exposed. These conditional tackle outcomes are given.\n\nThe scout reports either SAFE or EXPOSED for the knight. In each of the two possible states the report is correct 60% of the time and gives the opposite report otherwise. The scout now reports: EXPOSED.\n\nChoose one recipient:\n1. knight on c7\n2. bishop on j11\n3. rook on k7\nReturn just its option number."
+    },
+    {
+      "itemId": "de4e30aa0e77ec19",
+      "layoutId": "board-2",
+      "protectedPiece": "R",
+      "signal": "unsafe",
+      "reliability": 0.9,
+      "options": [
+        "N",
+        "B",
+        "R"
+      ],
+      "optimal": 3,
+      "prompt": "Choose a pass in this partially observed Football Chess position. Maximize the probability that your team keeps possession after the next defensive challenge. All three passes are legal and arrive for certain. Your team then holds position. The defense takes a legal tackle whenever one is available.\n\nIn this rule variant only the rook has protection: if tackled it retains possession with probability 75%. Any other tackled receiver loses possession. Any receiver that cannot be tackled keeps possession. These rules specify all receiver abilities.\n\nPitch coordinates (files a-n, ranks 1-17). Your side is black and your queen has the ball.\nYour players: bishop j11, keeper g17, knight c7, queen g11, rook k7.\nVisible opposing players: bishop i10, keeper h1, pawn j3, queen c4, rook k9.\n\nOne opposing pawn is hidden. Before receiving the scout report, its two possible squares are equally likely. On c5 the knight is safe (no legal tackle). On b5 the knight is exposed (a legal tackle exists). Both squares leave the rook and the bishop exposed. These conditional tackle outcomes are given.\n\nThe scout reports either SAFE or EXPOSED for the knight. In each of the two possible states the report is correct 90% of the time and gives the opposite report otherwise. The scout now reports: EXPOSED.\n\nChoose one recipient:\n1. knight on c7\n2. bishop on j11\n3. rook on k7\nReturn just its option number."
+    },
+    {
+      "itemId": "fe9a570a6a24a8cd",
+      "layoutId": "board-2",
+      "protectedPiece": "N",
+      "signal": "safe",
+      "reliability": 0.6,
+      "options": [
+        "N",
+        "B",
+        "R"
+      ],
+      "optimal": 1,
+      "prompt": "Choose a pass in this partially observed Football Chess position. Maximize the probability that your team keeps possession after the next defensive challenge. All three passes are legal and arrive for certain. Your team then holds position. The defense takes a legal tackle whenever one is available.\n\nIn this rule variant only the knight has protection: if tackled it retains possession with probability 75%. Any other tackled receiver loses possession. Any receiver that cannot be tackled keeps possession. These rules specify all receiver abilities.\n\nPitch coordinates (files a-n, ranks 1-17). Your side is black and your queen has the ball.\nYour players: bishop j11, keeper g17, knight k7, queen g11, rook c7.\nVisible opposing players: bishop i10, keeper h1, pawn j3, queen c4, rook k9.\n\nOne opposing pawn is hidden. Before receiving the scout report, its two possible squares are equally likely. On c5 the rook is safe (no legal tackle). On b5 the rook is exposed (a legal tackle exists). Both squares leave the knight and the bishop exposed. These conditional tackle outcomes are given.\n\nThe scout reports either SAFE or EXPOSED for the rook. In each of the two possible states the report is correct 60% of the time and gives the opposite report otherwise. The scout now reports: SAFE.\n\nChoose one recipient:\n1. knight on k7\n2. bishop on j11\n3. rook on c7\nReturn just its option number."
+    },
+    {
+      "itemId": "68d201839bef4653",
+      "layoutId": "board-2",
+      "protectedPiece": "N",
+      "signal": "safe",
+      "reliability": 0.9,
+      "options": [
+        "N",
+        "B",
+        "R"
+      ],
+      "optimal": 3,
+      "prompt": "Choose a pass in this partially observed Football Chess position. Maximize the probability that your team keeps possession after the next defensive challenge. All three passes are legal and arrive for certain. Your team then holds position. The defense takes a legal tackle whenever one is available.\n\nIn this rule variant only the knight has protection: if tackled it retains possession with probability 75%. Any other tackled receiver loses possession. Any receiver that cannot be tackled keeps possession. These rules specify all receiver abilities.\n\nPitch coordinates (files a-n, ranks 1-17). Your side is black and your queen has the ball.\nYour players: bishop j11, keeper g17, knight k7, queen g11, rook c7.\nVisible opposing players: bishop i10, keeper h1, pawn j3, queen c4, rook k9.\n\nOne opposing pawn is hidden. Before receiving the scout report, its two possible squares are equally likely. On c5 the rook is safe (no legal tackle). On b5 the rook is exposed (a legal tackle exists). Both squares leave the knight and the bishop exposed. These conditional tackle outcomes are given.\n\nThe scout reports either SAFE or EXPOSED for the rook. In each of the two possible states the report is correct 90% of the time and gives the opposite report otherwise. The scout now reports: SAFE.\n\nChoose one recipient:\n1. knight on k7\n2. bishop on j11\n3. rook on c7\nReturn just its option number."
+    },
+    {
+      "itemId": "ec7829a45cba1638",
+      "layoutId": "board-2",
+      "protectedPiece": "N",
+      "signal": "unsafe",
+      "reliability": 0.6,
+      "options": [
+        "N",
+        "B",
+        "R"
+      ],
+      "optimal": 1,
+      "prompt": "Choose a pass in this partially observed Football Chess position. Maximize the probability that your team keeps possession after the next defensive challenge. All three passes are legal and arrive for certain. Your team then holds position. The defense takes a legal tackle whenever one is available.\n\nIn this rule variant only the knight has protection: if tackled it retains possession with probability 75%. Any other tackled receiver loses possession. Any receiver that cannot be tackled keeps possession. These rules specify all receiver abilities.\n\nPitch coordinates (files a-n, ranks 1-17). Your side is black and your queen has the ball.\nYour players: bishop j11, keeper g17, knight k7, queen g11, rook c7.\nVisible opposing players: bishop i10, keeper h1, pawn j3, queen c4, rook k9.\n\nOne opposing pawn is hidden. Before receiving the scout report, its two possible squares are equally likely. On c5 the rook is safe (no legal tackle). On b5 the rook is exposed (a legal tackle exists). Both squares leave the knight and the bishop exposed. These conditional tackle outcomes are given.\n\nThe scout reports either SAFE or EXPOSED for the rook. In each of the two possible states the report is correct 60% of the time and gives the opposite report otherwise. The scout now reports: EXPOSED.\n\nChoose one recipient:\n1. knight on k7\n2. bishop on j11\n3. rook on c7\nReturn just its option number."
+    },
+    {
+      "itemId": "4e763ac215a9c146",
+      "layoutId": "board-2",
+      "protectedPiece": "N",
+      "signal": "unsafe",
+      "reliability": 0.9,
+      "options": [
+        "N",
+        "B",
+        "R"
+      ],
+      "optimal": 1,
+      "prompt": "Choose a pass in this partially observed Football Chess position. Maximize the probability that your team keeps possession after the next defensive challenge. All three passes are legal and arrive for certain. Your team then holds position. The defense takes a legal tackle whenever one is available.\n\nIn this rule variant only the knight has protection: if tackled it retains possession with probability 75%. Any other tackled receiver loses possession. Any receiver that cannot be tackled keeps possession. These rules specify all receiver abilities.\n\nPitch coordinates (files a-n, ranks 1-17). Your side is black and your queen has the ball.\nYour players: bishop j11, keeper g17, knight k7, queen g11, rook c7.\nVisible opposing players: bishop i10, keeper h1, pawn j3, queen c4, rook k9.\n\nOne opposing pawn is hidden. Before receiving the scout report, its two possible squares are equally likely. On c5 the rook is safe (no legal tackle). On b5 the rook is exposed (a legal tackle exists). Both squares leave the knight and the bishop exposed. These conditional tackle outcomes are given.\n\nThe scout reports either SAFE or EXPOSED for the rook. In each of the two possible states the report is correct 90% of the time and gives the opposite report otherwise. The scout now reports: EXPOSED.\n\nChoose one recipient:\n1. knight on k7\n2. bishop on j11\n3. rook on c7\nReturn just its option number."
+    },
+    {
+      "itemId": "1800a6a09aa4e784",
+      "layoutId": "board-3",
+      "protectedPiece": "R",
+      "signal": "safe",
+      "reliability": 0.6,
+      "options": [
+        "R",
+        "N",
+        "B"
+      ],
+      "optimal": 1,
+      "prompt": "Choose a pass in this partially observed Football Chess position. Maximize the probability that your team keeps possession after the next defensive challenge. All three passes are legal and arrive for certain. Your team then holds position. The defense takes a legal tackle whenever one is available.\n\nIn this rule variant only the rook has protection: if tackled it retains possession with probability 75%. Any other tackled receiver loses possession. Any receiver that cannot be tackled keeps possession. These rules specify all receiver abilities.\n\nPitch coordinates (files a-n, ranks 1-17). Your side is white and your queen has the ball.\nYour players: bishop l6, keeper i1, knight i7, queen i9, rook e13.\nVisible opposing players: bishop m7, keeper h17, pawn g16, queen l4, rook e16.\n\nOne opposing pawn is hidden. Before receiving the scout report, its two possible squares are equally likely. On k5 the knight is safe (no legal tackle). On j5 the knight is exposed (a legal tackle exists). Both squares leave the rook and the bishop exposed. These conditional tackle outcomes are given.\n\nThe scout reports either SAFE or EXPOSED for the knight. In each of the two possible states the report is correct 60% of the time and gives the opposite report otherwise. The scout now reports: SAFE.\n\nChoose one recipient:\n1. rook on e13\n2. knight on i7\n3. bishop on l6\nReturn just its option number."
+    },
+    {
+      "itemId": "40344bd8eb1a51b8",
+      "layoutId": "board-3",
+      "protectedPiece": "R",
+      "signal": "safe",
+      "reliability": 0.9,
+      "options": [
+        "R",
+        "N",
+        "B"
+      ],
+      "optimal": 2,
+      "prompt": "Choose a pass in this partially observed Football Chess position. Maximize the probability that your team keeps possession after the next defensive challenge. All three passes are legal and arrive for certain. Your team then holds position. The defense takes a legal tackle whenever one is available.\n\nIn this rule variant only the rook has protection: if tackled it retains possession with probability 75%. Any other tackled receiver loses possession. Any receiver that cannot be tackled keeps possession. These rules specify all receiver abilities.\n\nPitch coordinates (files a-n, ranks 1-17). Your side is white and your queen has the ball.\nYour players: bishop l6, keeper i1, knight i7, queen i9, rook e13.\nVisible opposing players: bishop m7, keeper h17, pawn g16, queen l4, rook e16.\n\nOne opposing pawn is hidden. Before receiving the scout report, its two possible squares are equally likely. On k5 the knight is safe (no legal tackle). On j5 the knight is exposed (a legal tackle exists). Both squares leave the rook and the bishop exposed. These conditional tackle outcomes are given.\n\nThe scout reports either SAFE or EXPOSED for the knight. In each of the two possible states the report is correct 90% of the time and gives the opposite report otherwise. The scout now reports: SAFE.\n\nChoose one recipient:\n1. rook on e13\n2. knight on i7\n3. bishop on l6\nReturn just its option number."
+    },
+    {
+      "itemId": "e250e1fa3c32aafb",
+      "layoutId": "board-3",
+      "protectedPiece": "R",
+      "signal": "unsafe",
+      "reliability": 0.6,
+      "options": [
+        "R",
+        "N",
+        "B"
+      ],
+      "optimal": 1,
+      "prompt": "Choose a pass in this partially observed Football Chess position. Maximize the probability that your team keeps possession after the next defensive challenge. All three passes are legal and arrive for certain. Your team then holds position. The defense takes a legal tackle whenever one is available.\n\nIn this rule variant only the rook has protection: if tackled it retains possession with probability 75%. Any other tackled receiver loses possession. Any receiver that cannot be tackled keeps possession. These rules specify all receiver abilities.\n\nPitch coordinates (files a-n, ranks 1-17). Your side is white and your queen has the ball.\nYour players: bishop l6, keeper i1, knight i7, queen i9, rook e13.\nVisible opposing players: bishop m7, keeper h17, pawn g16, queen l4, rook e16.\n\nOne opposing pawn is hidden. Before receiving the scout report, its two possible squares are equally likely. On k5 the knight is safe (no legal tackle). On j5 the knight is exposed (a legal tackle exists). Both squares leave the rook and the bishop exposed. These conditional tackle outcomes are given.\n\nThe scout reports either SAFE or EXPOSED for the knight. In each of the two possible states the report is correct 60% of the time and gives the opposite report otherwise. The scout now reports: EXPOSED.\n\nChoose one recipient:\n1. rook on e13\n2. knight on i7\n3. bishop on l6\nReturn just its option number."
+    },
+    {
+      "itemId": "ddb7d200bbbf05d1",
+      "layoutId": "board-3",
+      "protectedPiece": "R",
+      "signal": "unsafe",
+      "reliability": 0.9,
+      "options": [
+        "R",
+        "N",
+        "B"
+      ],
+      "optimal": 1,
+      "prompt": "Choose a pass in this partially observed Football Chess position. Maximize the probability that your team keeps possession after the next defensive challenge. All three passes are legal and arrive for certain. Your team then holds position. The defense takes a legal tackle whenever one is available.\n\nIn this rule variant only the rook has protection: if tackled it retains possession with probability 75%. Any other tackled receiver loses possession. Any receiver that cannot be tackled keeps possession. These rules specify all receiver abilities.\n\nPitch coordinates (files a-n, ranks 1-17). Your side is white and your queen has the ball.\nYour players: bishop l6, keeper i1, knight i7, queen i9, rook e13.\nVisible opposing players: bishop m7, keeper h17, pawn g16, queen l4, rook e16.\n\nOne opposing pawn is hidden. Before receiving the scout report, its two possible squares are equally likely. On k5 the knight is safe (no legal tackle). On j5 the knight is exposed (a legal tackle exists). Both squares leave the rook and the bishop exposed. These conditional tackle outcomes are given.\n\nThe scout reports either SAFE or EXPOSED for the knight. In each of the two possible states the report is correct 90% of the time and gives the opposite report otherwise. The scout now reports: EXPOSED.\n\nChoose one recipient:\n1. rook on e13\n2. knight on i7\n3. bishop on l6\nReturn just its option number."
+    },
+    {
+      "itemId": "9a30694904f2cd33",
+      "layoutId": "board-3",
+      "protectedPiece": "N",
+      "signal": "safe",
+      "reliability": 0.6,
+      "options": [
+        "R",
+        "N",
+        "B"
+      ],
+      "optimal": 2,
+      "prompt": "Choose a pass in this partially observed Football Chess position. Maximize the probability that your team keeps possession after the next defensive challenge. All three passes are legal and arrive for certain. Your team then holds position. The defense takes a legal tackle whenever one is available.\n\nIn this rule variant only the knight has protection: if tackled it retains possession with probability 75%. Any other tackled receiver loses possession. Any receiver that cannot be tackled keeps possession. These rules specify all receiver abilities.\n\nPitch coordinates (files a-n, ranks 1-17). Your side is white and your queen has the ball.\nYour players: bishop l6, keeper i1, knight e13, queen i9, rook i7.\nVisible opposing players: bishop m7, keeper h17, pawn g16, queen l4, rook e16.\n\nOne opposing pawn is hidden. Before receiving the scout report, its two possible squares are equally likely. On k5 the rook is safe (no legal tackle). On j5 the rook is exposed (a legal tackle exists). Both squares leave the knight and the bishop exposed. These conditional tackle outcomes are given.\n\nThe scout reports either SAFE or EXPOSED for the rook. In each of the two possible states the report is correct 60% of the time and gives the opposite report otherwise. The scout now reports: SAFE.\n\nChoose one recipient:\n1. rook on i7\n2. knight on e13\n3. bishop on l6\nReturn just its option number."
+    },
+    {
+      "itemId": "416a50f689d81a1a",
+      "layoutId": "board-3",
+      "protectedPiece": "N",
+      "signal": "safe",
+      "reliability": 0.9,
+      "options": [
+        "R",
+        "N",
+        "B"
+      ],
+      "optimal": 1,
+      "prompt": "Choose a pass in this partially observed Football Chess position. Maximize the probability that your team keeps possession after the next defensive challenge. All three passes are legal and arrive for certain. Your team then holds position. The defense takes a legal tackle whenever one is available.\n\nIn this rule variant only the knight has protection: if tackled it retains possession with probability 75%. Any other tackled receiver loses possession. Any receiver that cannot be tackled keeps possession. These rules specify all receiver abilities.\n\nPitch coordinates (files a-n, ranks 1-17). Your side is white and your queen has the ball.\nYour players: bishop l6, keeper i1, knight e13, queen i9, rook i7.\nVisible opposing players: bishop m7, keeper h17, pawn g16, queen l4, rook e16.\n\nOne opposing pawn is hidden. Before receiving the scout report, its two possible squares are equally likely. On k5 the rook is safe (no legal tackle). On j5 the rook is exposed (a legal tackle exists). Both squares leave the knight and the bishop exposed. These conditional tackle outcomes are given.\n\nThe scout reports either SAFE or EXPOSED for the rook. In each of the two possible states the report is correct 90% of the time and gives the opposite report otherwise. The scout now reports: SAFE.\n\nChoose one recipient:\n1. rook on i7\n2. knight on e13\n3. bishop on l6\nReturn just its option number."
+    },
+    {
+      "itemId": "d5d1d2eed02e13b6",
+      "layoutId": "board-3",
+      "protectedPiece": "N",
+      "signal": "unsafe",
+      "reliability": 0.6,
+      "options": [
+        "R",
+        "N",
+        "B"
+      ],
+      "optimal": 2,
+      "prompt": "Choose a pass in this partially observed Football Chess position. Maximize the probability that your team keeps possession after the next defensive challenge. All three passes are legal and arrive for certain. Your team then holds position. The defense takes a legal tackle whenever one is available.\n\nIn this rule variant only the knight has protection: if tackled it retains possession with probability 75%. Any other tackled receiver loses possession. Any receiver that cannot be tackled keeps possession. These rules specify all receiver abilities.\n\nPitch coordinates (files a-n, ranks 1-17). Your side is white and your queen has the ball.\nYour players: bishop l6, keeper i1, knight e13, queen i9, rook i7.\nVisible opposing players: bishop m7, keeper h17, pawn g16, queen l4, rook e16.\n\nOne opposing pawn is hidden. Before receiving the scout report, its two possible squares are equally likely. On k5 the rook is safe (no legal tackle). On j5 the rook is exposed (a legal tackle exists). Both squares leave the knight and the bishop exposed. These conditional tackle outcomes are given.\n\nThe scout reports either SAFE or EXPOSED for the rook. In each of the two possible states the report is correct 60% of the time and gives the opposite report otherwise. The scout now reports: EXPOSED.\n\nChoose one recipient:\n1. rook on i7\n2. knight on e13\n3. bishop on l6\nReturn just its option number."
+    },
+    {
+      "itemId": "a6c8fb9710efa84f",
+      "layoutId": "board-3",
+      "protectedPiece": "N",
+      "signal": "unsafe",
+      "reliability": 0.9,
+      "options": [
+        "R",
+        "N",
+        "B"
+      ],
+      "optimal": 2,
+      "prompt": "Choose a pass in this partially observed Football Chess position. Maximize the probability that your team keeps possession after the next defensive challenge. All three passes are legal and arrive for certain. Your team then holds position. The defense takes a legal tackle whenever one is available.\n\nIn this rule variant only the knight has protection: if tackled it retains possession with probability 75%. Any other tackled receiver loses possession. Any receiver that cannot be tackled keeps possession. These rules specify all receiver abilities.\n\nPitch coordinates (files a-n, ranks 1-17). Your side is white and your queen has the ball.\nYour players: bishop l6, keeper i1, knight e13, queen i9, rook i7.\nVisible opposing players: bishop m7, keeper h17, pawn g16, queen l4, rook e16.\n\nOne opposing pawn is hidden. Before receiving the scout report, its two possible squares are equally likely. On k5 the rook is safe (no legal tackle). On j5 the rook is exposed (a legal tackle exists). Both squares leave the knight and the bishop exposed. These conditional tackle outcomes are given.\n\nThe scout reports either SAFE or EXPOSED for the rook. In each of the two possible states the report is correct 90% of the time and gives the opposite report otherwise. The scout now reports: EXPOSED.\n\nChoose one recipient:\n1. rook on i7\n2. knight on e13\n3. bishop on l6\nReturn just its option number."
+    },
+    {
+      "itemId": "fe9f415c3e4575c2",
+      "layoutId": "board-4",
+      "protectedPiece": "R",
+      "signal": "safe",
+      "reliability": 0.6,
+      "options": [
+        "R",
+        "B",
+        "N"
+      ],
+      "optimal": 1,
+      "prompt": "Choose a pass in this partially observed Football Chess position. Maximize the probability that your team keeps possession after the next defensive challenge. All three passes are legal and arrive for certain. Your team then holds position. The defense takes a legal tackle whenever one is available.\n\nIn this rule variant only the rook has protection: if tackled it retains possession with probability 75%. Any other tackled receiver loses possession. Any receiver that cannot be tackled keeps possession. These rules specify all receiver abilities.\n\nPitch coordinates (files a-n, ranks 1-17). Your side is black and your queen has the ball.\nYour players: bishop g4, keeper i17, knight e9, queen g7, rook b7.\nVisible opposing players: bishop h5, keeper i1, pawn g2, queen e14, rook a7.\n\nOne opposing pawn is hidden. Before receiving the scout report, its two possible squares are equally likely. On e11 the knight is safe (no legal tackle). On d11 the knight is exposed (a legal tackle exists). Both squares leave the rook and the bishop exposed. These conditional tackle outcomes are given.\n\nThe scout reports either SAFE or EXPOSED for the knight. In each of the two possible states the report is correct 60% of the time and gives the opposite report otherwise. The scout now reports: SAFE.\n\nChoose one recipient:\n1. rook on b7\n2. bishop on g4\n3. knight on e9\nReturn just its option number."
+    },
+    {
+      "itemId": "f5cd80c9721ca19a",
+      "layoutId": "board-4",
+      "protectedPiece": "R",
+      "signal": "safe",
+      "reliability": 0.9,
+      "options": [
+        "R",
+        "B",
+        "N"
+      ],
+      "optimal": 3,
+      "prompt": "Choose a pass in this partially observed Football Chess position. Maximize the probability that your team keeps possession after the next defensive challenge. All three passes are legal and arrive for certain. Your team then holds position. The defense takes a legal tackle whenever one is available.\n\nIn this rule variant only the rook has protection: if tackled it retains possession with probability 75%. Any other tackled receiver loses possession. Any receiver that cannot be tackled keeps possession. These rules specify all receiver abilities.\n\nPitch coordinates (files a-n, ranks 1-17). Your side is black and your queen has the ball.\nYour players: bishop g4, keeper i17, knight e9, queen g7, rook b7.\nVisible opposing players: bishop h5, keeper i1, pawn g2, queen e14, rook a7.\n\nOne opposing pawn is hidden. Before receiving the scout report, its two possible squares are equally likely. On e11 the knight is safe (no legal tackle). On d11 the knight is exposed (a legal tackle exists). Both squares leave the rook and the bishop exposed. These conditional tackle outcomes are given.\n\nThe scout reports either SAFE or EXPOSED for the knight. In each of the two possible states the report is correct 90% of the time and gives the opposite report otherwise. The scout now reports: SAFE.\n\nChoose one recipient:\n1. rook on b7\n2. bishop on g4\n3. knight on e9\nReturn just its option number."
+    },
+    {
+      "itemId": "e2b0f9f1385ba9a3",
+      "layoutId": "board-4",
+      "protectedPiece": "R",
+      "signal": "unsafe",
+      "reliability": 0.6,
+      "options": [
+        "R",
+        "B",
+        "N"
+      ],
+      "optimal": 1,
+      "prompt": "Choose a pass in this partially observed Football Chess position. Maximize the probability that your team keeps possession after the next defensive challenge. All three passes are legal and arrive for certain. Your team then holds position. The defense takes a legal tackle whenever one is available.\n\nIn this rule variant only the rook has protection: if tackled it retains possession with probability 75%. Any other tackled receiver loses possession. Any receiver that cannot be tackled keeps possession. These rules specify all receiver abilities.\n\nPitch coordinates (files a-n, ranks 1-17). Your side is black and your queen has the ball.\nYour players: bishop g4, keeper i17, knight e9, queen g7, rook b7.\nVisible opposing players: bishop h5, keeper i1, pawn g2, queen e14, rook a7.\n\nOne opposing pawn is hidden. Before receiving the scout report, its two possible squares are equally likely. On e11 the knight is safe (no legal tackle). On d11 the knight is exposed (a legal tackle exists). Both squares leave the rook and the bishop exposed. These conditional tackle outcomes are given.\n\nThe scout reports either SAFE or EXPOSED for the knight. In each of the two possible states the report is correct 60% of the time and gives the opposite report otherwise. The scout now reports: EXPOSED.\n\nChoose one recipient:\n1. rook on b7\n2. bishop on g4\n3. knight on e9\nReturn just its option number."
+    },
+    {
+      "itemId": "2bfaa0551651fdad",
+      "layoutId": "board-4",
+      "protectedPiece": "R",
+      "signal": "unsafe",
+      "reliability": 0.9,
+      "options": [
+        "R",
+        "B",
+        "N"
+      ],
+      "optimal": 1,
+      "prompt": "Choose a pass in this partially observed Football Chess position. Maximize the probability that your team keeps possession after the next defensive challenge. All three passes are legal and arrive for certain. Your team then holds position. The defense takes a legal tackle whenever one is available.\n\nIn this rule variant only the rook has protection: if tackled it retains possession with probability 75%. Any other tackled receiver loses possession. Any receiver that cannot be tackled keeps possession. These rules specify all receiver abilities.\n\nPitch coordinates (files a-n, ranks 1-17). Your side is black and your queen has the ball.\nYour players: bishop g4, keeper i17, knight e9, queen g7, rook b7.\nVisible opposing players: bishop h5, keeper i1, pawn g2, queen e14, rook a7.\n\nOne opposing pawn is hidden. Before receiving the scout report, its two possible squares are equally likely. On e11 the knight is safe (no legal tackle). On d11 the knight is exposed (a legal tackle exists). Both squares leave the rook and the bishop exposed. These conditional tackle outcomes are given.\n\nThe scout reports either SAFE or EXPOSED for the knight. In each of the two possible states the report is correct 90% of the time and gives the opposite report otherwise. The scout now reports: EXPOSED.\n\nChoose one recipient:\n1. rook on b7\n2. bishop on g4\n3. knight on e9\nReturn just its option number."
+    },
+    {
+      "itemId": "5cbc155de391c3f7",
+      "layoutId": "board-4",
+      "protectedPiece": "N",
+      "signal": "safe",
+      "reliability": 0.6,
+      "options": [
+        "R",
+        "B",
+        "N"
+      ],
+      "optimal": 3,
+      "prompt": "Choose a pass in this partially observed Football Chess position. Maximize the probability that your team keeps possession after the next defensive challenge. All three passes are legal and arrive for certain. Your team then holds position. The defense takes a legal tackle whenever one is available.\n\nIn this rule variant only the knight has protection: if tackled it retains possession with probability 75%. Any other tackled receiver loses possession. Any receiver that cannot be tackled keeps possession. These rules specify all receiver abilities.\n\nPitch coordinates (files a-n, ranks 1-17). Your side is black and your queen has the ball.\nYour players: bishop g4, keeper i17, knight b7, queen g7, rook e9.\nVisible opposing players: bishop h5, keeper i1, pawn g2, queen e14, rook a7.\n\nOne opposing pawn is hidden. Before receiving the scout report, its two possible squares are equally likely. On e11 the rook is safe (no legal tackle). On d11 the rook is exposed (a legal tackle exists). Both squares leave the knight and the bishop exposed. These conditional tackle outcomes are given.\n\nThe scout reports either SAFE or EXPOSED for the rook. In each of the two possible states the report is correct 60% of the time and gives the opposite report otherwise. The scout now reports: SAFE.\n\nChoose one recipient:\n1. rook on e9\n2. bishop on g4\n3. knight on b7\nReturn just its option number."
+    },
+    {
+      "itemId": "3b472616a709bc62",
+      "layoutId": "board-4",
+      "protectedPiece": "N",
+      "signal": "safe",
+      "reliability": 0.9,
+      "options": [
+        "R",
+        "B",
+        "N"
+      ],
+      "optimal": 1,
+      "prompt": "Choose a pass in this partially observed Football Chess position. Maximize the probability that your team keeps possession after the next defensive challenge. All three passes are legal and arrive for certain. Your team then holds position. The defense takes a legal tackle whenever one is available.\n\nIn this rule variant only the knight has protection: if tackled it retains possession with probability 75%. Any other tackled receiver loses possession. Any receiver that cannot be tackled keeps possession. These rules specify all receiver abilities.\n\nPitch coordinates (files a-n, ranks 1-17). Your side is black and your queen has the ball.\nYour players: bishop g4, keeper i17, knight b7, queen g7, rook e9.\nVisible opposing players: bishop h5, keeper i1, pawn g2, queen e14, rook a7.\n\nOne opposing pawn is hidden. Before receiving the scout report, its two possible squares are equally likely. On e11 the rook is safe (no legal tackle). On d11 the rook is exposed (a legal tackle exists). Both squares leave the knight and the bishop exposed. These conditional tackle outcomes are given.\n\nThe scout reports either SAFE or EXPOSED for the rook. In each of the two possible states the report is correct 90% of the time and gives the opposite report otherwise. The scout now reports: SAFE.\n\nChoose one recipient:\n1. rook on e9\n2. bishop on g4\n3. knight on b7\nReturn just its option number."
+    },
+    {
+      "itemId": "5ce67d2dafd3cbde",
+      "layoutId": "board-4",
+      "protectedPiece": "N",
+      "signal": "unsafe",
+      "reliability": 0.6,
+      "options": [
+        "R",
+        "B",
+        "N"
+      ],
+      "optimal": 3,
+      "prompt": "Choose a pass in this partially observed Football Chess position. Maximize the probability that your team keeps possession after the next defensive challenge. All three passes are legal and arrive for certain. Your team then holds position. The defense takes a legal tackle whenever one is available.\n\nIn this rule variant only the knight has protection: if tackled it retains possession with probability 75%. Any other tackled receiver loses possession. Any receiver that cannot be tackled keeps possession. These rules specify all receiver abilities.\n\nPitch coordinates (files a-n, ranks 1-17). Your side is black and your queen has the ball.\nYour players: bishop g4, keeper i17, knight b7, queen g7, rook e9.\nVisible opposing players: bishop h5, keeper i1, pawn g2, queen e14, rook a7.\n\nOne opposing pawn is hidden. Before receiving the scout report, its two possible squares are equally likely. On e11 the rook is safe (no legal tackle). On d11 the rook is exposed (a legal tackle exists). Both squares leave the knight and the bishop exposed. These conditional tackle outcomes are given.\n\nThe scout reports either SAFE or EXPOSED for the rook. In each of the two possible states the report is correct 60% of the time and gives the opposite report otherwise. The scout now reports: EXPOSED.\n\nChoose one recipient:\n1. rook on e9\n2. bishop on g4\n3. knight on b7\nReturn just its option number."
+    },
+    {
+      "itemId": "74397a58404bf617",
+      "layoutId": "board-4",
+      "protectedPiece": "N",
+      "signal": "unsafe",
+      "reliability": 0.9,
+      "options": [
+        "R",
+        "B",
+        "N"
+      ],
+      "optimal": 3,
+      "prompt": "Choose a pass in this partially observed Football Chess position. Maximize the probability that your team keeps possession after the next defensive challenge. All three passes are legal and arrive for certain. Your team then holds position. The defense takes a legal tackle whenever one is available.\n\nIn this rule variant only the knight has protection: if tackled it retains possession with probability 75%. Any other tackled receiver loses possession. Any receiver that cannot be tackled keeps possession. These rules specify all receiver abilities.\n\nPitch coordinates (files a-n, ranks 1-17). Your side is black and your queen has the ball.\nYour players: bishop g4, keeper i17, knight b7, queen g7, rook e9.\nVisible opposing players: bishop h5, keeper i1, pawn g2, queen e14, rook a7.\n\nOne opposing pawn is hidden. Before receiving the scout report, its two possible squares are equally likely. On e11 the rook is safe (no legal tackle). On d11 the rook is exposed (a legal tackle exists). Both squares leave the knight and the bishop exposed. These conditional tackle outcomes are given.\n\nThe scout reports either SAFE or EXPOSED for the rook. In each of the two possible states the report is correct 90% of the time and gives the opposite report otherwise. The scout now reports: EXPOSED.\n\nChoose one recipient:\n1. rook on e9\n2. bishop on g4\n3. knight on b7\nReturn just its option number."
+    },
+    {
+      "itemId": "4ea4e32afca09ece",
+      "layoutId": "board-5",
+      "protectedPiece": "R",
+      "signal": "safe",
+      "reliability": 0.6,
+      "options": [
+        "B",
+        "N",
+        "R"
+      ],
+      "optimal": 3,
+      "prompt": "Choose a pass in this partially observed Football Chess position. Maximize the probability that your team keeps possession after the next defensive challenge. All three passes are legal and arrive for certain. Your team then holds position. The defense takes a legal tackle whenever one is available.\n\nIn this rule variant only the rook has protection: if tackled it retains possession with probability 75%. Any other tackled receiver loses possession. Any receiver that cannot be tackled keeps possession. These rules specify all receiver abilities.\n\nPitch coordinates (files a-n, ranks 1-17). Your side is white and your queen has the ball.\nYour players: bishop j10, keeper g1, knight h6, queen j8, rook e8.\nVisible opposing players: bishop i9, keeper h17, pawn b16, queen c1, rook b8.\n\nOne opposing pawn is hidden. Before receiving the scout report, its two possible squares are equally likely. On f4 the knight is safe (no legal tackle). On f5 the knight is exposed (a legal tackle exists). Both squares leave the rook and the bishop exposed. These conditional tackle outcomes are given.\n\nThe scout reports either SAFE or EXPOSED for the knight. In each of the two possible states the report is correct 60% of the time and gives the opposite report otherwise. The scout now reports: SAFE.\n\nChoose one recipient:\n1. bishop on j10\n2. knight on h6\n3. rook on e8\nReturn just its option number."
+    },
+    {
+      "itemId": "527659c637d17c9f",
+      "layoutId": "board-5",
+      "protectedPiece": "R",
+      "signal": "safe",
+      "reliability": 0.9,
+      "options": [
+        "B",
+        "N",
+        "R"
+      ],
+      "optimal": 2,
+      "prompt": "Choose a pass in this partially observed Football Chess position. Maximize the probability that your team keeps possession after the next defensive challenge. All three passes are legal and arrive for certain. Your team then holds position. The defense takes a legal tackle whenever one is available.\n\nIn this rule variant only the rook has protection: if tackled it retains possession with probability 75%. Any other tackled receiver loses possession. Any receiver that cannot be tackled keeps possession. These rules specify all receiver abilities.\n\nPitch coordinates (files a-n, ranks 1-17). Your side is white and your queen has the ball.\nYour players: bishop j10, keeper g1, knight h6, queen j8, rook e8.\nVisible opposing players: bishop i9, keeper h17, pawn b16, queen c1, rook b8.\n\nOne opposing pawn is hidden. Before receiving the scout report, its two possible squares are equally likely. On f4 the knight is safe (no legal tackle). On f5 the knight is exposed (a legal tackle exists). Both squares leave the rook and the bishop exposed. These conditional tackle outcomes are given.\n\nThe scout reports either SAFE or EXPOSED for the knight. In each of the two possible states the report is correct 90% of the time and gives the opposite report otherwise. The scout now reports: SAFE.\n\nChoose one recipient:\n1. bishop on j10\n2. knight on h6\n3. rook on e8\nReturn just its option number."
+    },
+    {
+      "itemId": "b4a94b663aba9ef1",
+      "layoutId": "board-5",
+      "protectedPiece": "R",
+      "signal": "unsafe",
+      "reliability": 0.6,
+      "options": [
+        "B",
+        "N",
+        "R"
+      ],
+      "optimal": 3,
+      "prompt": "Choose a pass in this partially observed Football Chess position. Maximize the probability that your team keeps possession after the next defensive challenge. All three passes are legal and arrive for certain. Your team then holds position. The defense takes a legal tackle whenever one is available.\n\nIn this rule variant only the rook has protection: if tackled it retains possession with probability 75%. Any other tackled receiver loses possession. Any receiver that cannot be tackled keeps possession. These rules specify all receiver abilities.\n\nPitch coordinates (files a-n, ranks 1-17). Your side is white and your queen has the ball.\nYour players: bishop j10, keeper g1, knight h6, queen j8, rook e8.\nVisible opposing players: bishop i9, keeper h17, pawn b16, queen c1, rook b8.\n\nOne opposing pawn is hidden. Before receiving the scout report, its two possible squares are equally likely. On f4 the knight is safe (no legal tackle). On f5 the knight is exposed (a legal tackle exists). Both squares leave the rook and the bishop exposed. These conditional tackle outcomes are given.\n\nThe scout reports either SAFE or EXPOSED for the knight. In each of the two possible states the report is correct 60% of the time and gives the opposite report otherwise. The scout now reports: EXPOSED.\n\nChoose one recipient:\n1. bishop on j10\n2. knight on h6\n3. rook on e8\nReturn just its option number."
+    },
+    {
+      "itemId": "dd7e7c53414e1fd8",
+      "layoutId": "board-5",
+      "protectedPiece": "R",
+      "signal": "unsafe",
+      "reliability": 0.9,
+      "options": [
+        "B",
+        "N",
+        "R"
+      ],
+      "optimal": 3,
+      "prompt": "Choose a pass in this partially observed Football Chess position. Maximize the probability that your team keeps possession after the next defensive challenge. All three passes are legal and arrive for certain. Your team then holds position. The defense takes a legal tackle whenever one is available.\n\nIn this rule variant only the rook has protection: if tackled it retains possession with probability 75%. Any other tackled receiver loses possession. Any receiver that cannot be tackled keeps possession. These rules specify all receiver abilities.\n\nPitch coordinates (files a-n, ranks 1-17). Your side is white and your queen has the ball.\nYour players: bishop j10, keeper g1, knight h6, queen j8, rook e8.\nVisible opposing players: bishop i9, keeper h17, pawn b16, queen c1, rook b8.\n\nOne opposing pawn is hidden. Before receiving the scout report, its two possible squares are equally likely. On f4 the knight is safe (no legal tackle). On f5 the knight is exposed (a legal tackle exists). Both squares leave the rook and the bishop exposed. These conditional tackle outcomes are given.\n\nThe scout reports either SAFE or EXPOSED for the knight. In each of the two possible states the report is correct 90% of the time and gives the opposite report otherwise. The scout now reports: EXPOSED.\n\nChoose one recipient:\n1. bishop on j10\n2. knight on h6\n3. rook on e8\nReturn just its option number."
+    },
+    {
+      "itemId": "114d31433ab88236",
+      "layoutId": "board-5",
+      "protectedPiece": "N",
+      "signal": "safe",
+      "reliability": 0.6,
+      "options": [
+        "B",
+        "N",
+        "R"
+      ],
+      "optimal": 2,
+      "prompt": "Choose a pass in this partially observed Football Chess position. Maximize the probability that your team keeps possession after the next defensive challenge. All three passes are legal and arrive for certain. Your team then holds position. The defense takes a legal tackle whenever one is available.\n\nIn this rule variant only the knight has protection: if tackled it retains possession with probability 75%. Any other tackled receiver loses possession. Any receiver that cannot be tackled keeps possession. These rules specify all receiver abilities.\n\nPitch coordinates (files a-n, ranks 1-17). Your side is white and your queen has the ball.\nYour players: bishop j10, keeper g1, knight e8, queen j8, rook h6.\nVisible opposing players: bishop i9, keeper h17, pawn b16, queen c1, rook b8.\n\nOne opposing pawn is hidden. Before receiving the scout report, its two possible squares are equally likely. On f4 the rook is safe (no legal tackle). On f5 the rook is exposed (a legal tackle exists). Both squares leave the knight and the bishop exposed. These conditional tackle outcomes are given.\n\nThe scout reports either SAFE or EXPOSED for the rook. In each of the two possible states the report is correct 60% of the time and gives the opposite report otherwise. The scout now reports: SAFE.\n\nChoose one recipient:\n1. bishop on j10\n2. knight on e8\n3. rook on h6\nReturn just its option number."
+    },
+    {
+      "itemId": "60cc2828584035fa",
+      "layoutId": "board-5",
+      "protectedPiece": "N",
+      "signal": "safe",
+      "reliability": 0.9,
+      "options": [
+        "B",
+        "N",
+        "R"
+      ],
+      "optimal": 3,
+      "prompt": "Choose a pass in this partially observed Football Chess position. Maximize the probability that your team keeps possession after the next defensive challenge. All three passes are legal and arrive for certain. Your team then holds position. The defense takes a legal tackle whenever one is available.\n\nIn this rule variant only the knight has protection: if tackled it retains possession with probability 75%. Any other tackled receiver loses possession. Any receiver that cannot be tackled keeps possession. These rules specify all receiver abilities.\n\nPitch coordinates (files a-n, ranks 1-17). Your side is white and your queen has the ball.\nYour players: bishop j10, keeper g1, knight e8, queen j8, rook h6.\nVisible opposing players: bishop i9, keeper h17, pawn b16, queen c1, rook b8.\n\nOne opposing pawn is hidden. Before receiving the scout report, its two possible squares are equally likely. On f4 the rook is safe (no legal tackle). On f5 the rook is exposed (a legal tackle exists). Both squares leave the knight and the bishop exposed. These conditional tackle outcomes are given.\n\nThe scout reports either SAFE or EXPOSED for the rook. In each of the two possible states the report is correct 90% of the time and gives the opposite report otherwise. The scout now reports: SAFE.\n\nChoose one recipient:\n1. bishop on j10\n2. knight on e8\n3. rook on h6\nReturn just its option number."
+    },
+    {
+      "itemId": "72df092ca5abf84a",
+      "layoutId": "board-5",
+      "protectedPiece": "N",
+      "signal": "unsafe",
+      "reliability": 0.6,
+      "options": [
+        "B",
+        "N",
+        "R"
+      ],
+      "optimal": 2,
+      "prompt": "Choose a pass in this partially observed Football Chess position. Maximize the probability that your team keeps possession after the next defensive challenge. All three passes are legal and arrive for certain. Your team then holds position. The defense takes a legal tackle whenever one is available.\n\nIn this rule variant only the knight has protection: if tackled it retains possession with probability 75%. Any other tackled receiver loses possession. Any receiver that cannot be tackled keeps possession. These rules specify all receiver abilities.\n\nPitch coordinates (files a-n, ranks 1-17). Your side is white and your queen has the ball.\nYour players: bishop j10, keeper g1, knight e8, queen j8, rook h6.\nVisible opposing players: bishop i9, keeper h17, pawn b16, queen c1, rook b8.\n\nOne opposing pawn is hidden. Before receiving the scout report, its two possible squares are equally likely. On f4 the rook is safe (no legal tackle). On f5 the rook is exposed (a legal tackle exists). Both squares leave the knight and the bishop exposed. These conditional tackle outcomes are given.\n\nThe scout reports either SAFE or EXPOSED for the rook. In each of the two possible states the report is correct 60% of the time and gives the opposite report otherwise. The scout now reports: EXPOSED.\n\nChoose one recipient:\n1. bishop on j10\n2. knight on e8\n3. rook on h6\nReturn just its option number."
+    },
+    {
+      "itemId": "8156ab1bafdad3bf",
+      "layoutId": "board-5",
+      "protectedPiece": "N",
+      "signal": "unsafe",
+      "reliability": 0.9,
+      "options": [
+        "B",
+        "N",
+        "R"
+      ],
+      "optimal": 2,
+      "prompt": "Choose a pass in this partially observed Football Chess position. Maximize the probability that your team keeps possession after the next defensive challenge. All three passes are legal and arrive for certain. Your team then holds position. The defense takes a legal tackle whenever one is available.\n\nIn this rule variant only the knight has protection: if tackled it retains possession with probability 75%. Any other tackled receiver loses possession. Any receiver that cannot be tackled keeps possession. These rules specify all receiver abilities.\n\nPitch coordinates (files a-n, ranks 1-17). Your side is white and your queen has the ball.\nYour players: bishop j10, keeper g1, knight e8, queen j8, rook h6.\nVisible opposing players: bishop i9, keeper h17, pawn b16, queen c1, rook b8.\n\nOne opposing pawn is hidden. Before receiving the scout report, its two possible squares are equally likely. On f4 the rook is safe (no legal tackle). On f5 the rook is exposed (a legal tackle exists). Both squares leave the knight and the bishop exposed. These conditional tackle outcomes are given.\n\nThe scout reports either SAFE or EXPOSED for the rook. In each of the two possible states the report is correct 90% of the time and gives the opposite report otherwise. The scout now reports: EXPOSED.\n\nChoose one recipient:\n1. bishop on j10\n2. knight on e8\n3. rook on h6\nReturn just its option number."
+    },
+    {
+      "itemId": "6237e6f28420335d",
+      "layoutId": "board-6",
+      "protectedPiece": "R",
+      "signal": "safe",
+      "reliability": 0.6,
+      "options": [
+        "B",
+        "R",
+        "N"
+      ],
+      "optimal": 2,
+      "prompt": "Choose a pass in this partially observed Football Chess position. Maximize the probability that your team keeps possession after the next defensive challenge. All three passes are legal and arrive for certain. Your team then holds position. The defense takes a legal tackle whenever one is available.\n\nIn this rule variant only the rook has protection: if tackled it retains possession with probability 75%. Any other tackled receiver loses possession. Any receiver that cannot be tackled keeps possession. These rules specify all receiver abilities.\n\nPitch coordinates (files a-n, ranks 1-17). Your side is black and your queen has the ball.\nYour players: bishop d13, keeper g17, knight m12, queen i8, rook g6.\nVisible opposing players: bishop b11, keeper i1, pawn m2, queen i12, rook i6.\n\nOne opposing pawn is hidden. Before receiving the scout report, its two possible squares are equally likely. On j12 the knight is safe (no legal tackle). On j11 the knight is exposed (a legal tackle exists). Both squares leave the rook and the bishop exposed. These conditional tackle outcomes are given.\n\nThe scout reports either SAFE or EXPOSED for the knight. In each of the two possible states the report is correct 60% of the time and gives the opposite report otherwise. The scout now reports: SAFE.\n\nChoose one recipient:\n1. bishop on d13\n2. rook on g6\n3. knight on m12\nReturn just its option number."
+    },
+    {
+      "itemId": "d1279022d30e7647",
+      "layoutId": "board-6",
+      "protectedPiece": "R",
+      "signal": "safe",
+      "reliability": 0.9,
+      "options": [
+        "B",
+        "R",
+        "N"
+      ],
+      "optimal": 3,
+      "prompt": "Choose a pass in this partially observed Football Chess position. Maximize the probability that your team keeps possession after the next defensive challenge. All three passes are legal and arrive for certain. Your team then holds position. The defense takes a legal tackle whenever one is available.\n\nIn this rule variant only the rook has protection: if tackled it retains possession with probability 75%. Any other tackled receiver loses possession. Any receiver that cannot be tackled keeps possession. These rules specify all receiver abilities.\n\nPitch coordinates (files a-n, ranks 1-17). Your side is black and your queen has the ball.\nYour players: bishop d13, keeper g17, knight m12, queen i8, rook g6.\nVisible opposing players: bishop b11, keeper i1, pawn m2, queen i12, rook i6.\n\nOne opposing pawn is hidden. Before receiving the scout report, its two possible squares are equally likely. On j12 the knight is safe (no legal tackle). On j11 the knight is exposed (a legal tackle exists). Both squares leave the rook and the bishop exposed. These conditional tackle outcomes are given.\n\nThe scout reports either SAFE or EXPOSED for the knight. In each of the two possible states the report is correct 90% of the time and gives the opposite report otherwise. The scout now reports: SAFE.\n\nChoose one recipient:\n1. bishop on d13\n2. rook on g6\n3. knight on m12\nReturn just its option number."
+    },
+    {
+      "itemId": "07f15ab246b2af15",
+      "layoutId": "board-6",
+      "protectedPiece": "R",
+      "signal": "unsafe",
+      "reliability": 0.6,
+      "options": [
+        "B",
+        "R",
+        "N"
+      ],
+      "optimal": 2,
+      "prompt": "Choose a pass in this partially observed Football Chess position. Maximize the probability that your team keeps possession after the next defensive challenge. All three passes are legal and arrive for certain. Your team then holds position. The defense takes a legal tackle whenever one is available.\n\nIn this rule variant only the rook has protection: if tackled it retains possession with probability 75%. Any other tackled receiver loses possession. Any receiver that cannot be tackled keeps possession. These rules specify all receiver abilities.\n\nPitch coordinates (files a-n, ranks 1-17). Your side is black and your queen has the ball.\nYour players: bishop d13, keeper g17, knight m12, queen i8, rook g6.\nVisible opposing players: bishop b11, keeper i1, pawn m2, queen i12, rook i6.\n\nOne opposing pawn is hidden. Before receiving the scout report, its two possible squares are equally likely. On j12 the knight is safe (no legal tackle). On j11 the knight is exposed (a legal tackle exists). Both squares leave the rook and the bishop exposed. These conditional tackle outcomes are given.\n\nThe scout reports either SAFE or EXPOSED for the knight. In each of the two possible states the report is correct 60% of the time and gives the opposite report otherwise. The scout now reports: EXPOSED.\n\nChoose one recipient:\n1. bishop on d13\n2. rook on g6\n3. knight on m12\nReturn just its option number."
+    },
+    {
+      "itemId": "444d44f2752dd062",
+      "layoutId": "board-6",
+      "protectedPiece": "R",
+      "signal": "unsafe",
+      "reliability": 0.9,
+      "options": [
+        "B",
+        "R",
+        "N"
+      ],
+      "optimal": 2,
+      "prompt": "Choose a pass in this partially observed Football Chess position. Maximize the probability that your team keeps possession after the next defensive challenge. All three passes are legal and arrive for certain. Your team then holds position. The defense takes a legal tackle whenever one is available.\n\nIn this rule variant only the rook has protection: if tackled it retains possession with probability 75%. Any other tackled receiver loses possession. Any receiver that cannot be tackled keeps possession. These rules specify all receiver abilities.\n\nPitch coordinates (files a-n, ranks 1-17). Your side is black and your queen has the ball.\nYour players: bishop d13, keeper g17, knight m12, queen i8, rook g6.\nVisible opposing players: bishop b11, keeper i1, pawn m2, queen i12, rook i6.\n\nOne opposing pawn is hidden. Before receiving the scout report, its two possible squares are equally likely. On j12 the knight is safe (no legal tackle). On j11 the knight is exposed (a legal tackle exists). Both squares leave the rook and the bishop exposed. These conditional tackle outcomes are given.\n\nThe scout reports either SAFE or EXPOSED for the knight. In each of the two possible states the report is correct 90% of the time and gives the opposite report otherwise. The scout now reports: EXPOSED.\n\nChoose one recipient:\n1. bishop on d13\n2. rook on g6\n3. knight on m12\nReturn just its option number."
+    },
+    {
+      "itemId": "55264c2a5f1ec532",
+      "layoutId": "board-6",
+      "protectedPiece": "N",
+      "signal": "safe",
+      "reliability": 0.6,
+      "options": [
+        "B",
+        "R",
+        "N"
+      ],
+      "optimal": 3,
+      "prompt": "Choose a pass in this partially observed Football Chess position. Maximize the probability that your team keeps possession after the next defensive challenge. All three passes are legal and arrive for certain. Your team then holds position. The defense takes a legal tackle whenever one is available.\n\nIn this rule variant only the knight has protection: if tackled it retains possession with probability 75%. Any other tackled receiver loses possession. Any receiver that cannot be tackled keeps possession. These rules specify all receiver abilities.\n\nPitch coordinates (files a-n, ranks 1-17). Your side is black and your queen has the ball.\nYour players: bishop d13, keeper g17, knight g6, queen i8, rook m12.\nVisible opposing players: bishop b11, keeper i1, pawn m2, queen i12, rook i6.\n\nOne opposing pawn is hidden. Before receiving the scout report, its two possible squares are equally likely. On j12 the rook is safe (no legal tackle). On j11 the rook is exposed (a legal tackle exists). Both squares leave the knight and the bishop exposed. These conditional tackle outcomes are given.\n\nThe scout reports either SAFE or EXPOSED for the rook. In each of the two possible states the report is correct 60% of the time and gives the opposite report otherwise. The scout now reports: SAFE.\n\nChoose one recipient:\n1. bishop on d13\n2. rook on m12\n3. knight on g6\nReturn just its option number."
+    },
+    {
+      "itemId": "0c588a9785d9429a",
+      "layoutId": "board-6",
+      "protectedPiece": "N",
+      "signal": "safe",
+      "reliability": 0.9,
+      "options": [
+        "B",
+        "R",
+        "N"
+      ],
+      "optimal": 2,
+      "prompt": "Choose a pass in this partially observed Football Chess position. Maximize the probability that your team keeps possession after the next defensive challenge. All three passes are legal and arrive for certain. Your team then holds position. The defense takes a legal tackle whenever one is available.\n\nIn this rule variant only the knight has protection: if tackled it retains possession with probability 75%. Any other tackled receiver loses possession. Any receiver that cannot be tackled keeps possession. These rules specify all receiver abilities.\n\nPitch coordinates (files a-n, ranks 1-17). Your side is black and your queen has the ball.\nYour players: bishop d13, keeper g17, knight g6, queen i8, rook m12.\nVisible opposing players: bishop b11, keeper i1, pawn m2, queen i12, rook i6.\n\nOne opposing pawn is hidden. Before receiving the scout report, its two possible squares are equally likely. On j12 the rook is safe (no legal tackle). On j11 the rook is exposed (a legal tackle exists). Both squares leave the knight and the bishop exposed. These conditional tackle outcomes are given.\n\nThe scout reports either SAFE or EXPOSED for the rook. In each of the two possible states the report is correct 90% of the time and gives the opposite report otherwise. The scout now reports: SAFE.\n\nChoose one recipient:\n1. bishop on d13\n2. rook on m12\n3. knight on g6\nReturn just its option number."
+    },
+    {
+      "itemId": "3c4c9d6849e02d38",
+      "layoutId": "board-6",
+      "protectedPiece": "N",
+      "signal": "unsafe",
+      "reliability": 0.6,
+      "options": [
+        "B",
+        "R",
+        "N"
+      ],
+      "optimal": 3,
+      "prompt": "Choose a pass in this partially observed Football Chess position. Maximize the probability that your team keeps possession after the next defensive challenge. All three passes are legal and arrive for certain. Your team then holds position. The defense takes a legal tackle whenever one is available.\n\nIn this rule variant only the knight has protection: if tackled it retains possession with probability 75%. Any other tackled receiver loses possession. Any receiver that cannot be tackled keeps possession. These rules specify all receiver abilities.\n\nPitch coordinates (files a-n, ranks 1-17). Your side is black and your queen has the ball.\nYour players: bishop d13, keeper g17, knight g6, queen i8, rook m12.\nVisible opposing players: bishop b11, keeper i1, pawn m2, queen i12, rook i6.\n\nOne opposing pawn is hidden. Before receiving the scout report, its two possible squares are equally likely. On j12 the rook is safe (no legal tackle). On j11 the rook is exposed (a legal tackle exists). Both squares leave the knight and the bishop exposed. These conditional tackle outcomes are given.\n\nThe scout reports either SAFE or EXPOSED for the rook. In each of the two possible states the report is correct 60% of the time and gives the opposite report otherwise. The scout now reports: EXPOSED.\n\nChoose one recipient:\n1. bishop on d13\n2. rook on m12\n3. knight on g6\nReturn just its option number."
+    },
+    {
+      "itemId": "b3e01ef3e563704a",
+      "layoutId": "board-6",
+      "protectedPiece": "N",
+      "signal": "unsafe",
+      "reliability": 0.9,
+      "options": [
+        "B",
+        "R",
+        "N"
+      ],
+      "optimal": 3,
+      "prompt": "Choose a pass in this partially observed Football Chess position. Maximize the probability that your team keeps possession after the next defensive challenge. All three passes are legal and arrive for certain. Your team then holds position. The defense takes a legal tackle whenever one is available.\n\nIn this rule variant only the knight has protection: if tackled it retains possession with probability 75%. Any other tackled receiver loses possession. Any receiver that cannot be tackled keeps possession. These rules specify all receiver abilities.\n\nPitch coordinates (files a-n, ranks 1-17). Your side is black and your queen has the ball.\nYour players: bishop d13, keeper g17, knight g6, queen i8, rook m12.\nVisible opposing players: bishop b11, keeper i1, pawn m2, queen i12, rook i6.\n\nOne opposing pawn is hidden. Before receiving the scout report, its two possible squares are equally likely. On j12 the rook is safe (no legal tackle). On j11 the rook is exposed (a legal tackle exists). Both squares leave the knight and the bishop exposed. These conditional tackle outcomes are given.\n\nThe scout reports either SAFE or EXPOSED for the rook. In each of the two possible states the report is correct 90% of the time and gives the opposite report otherwise. The scout now reports: EXPOSED.\n\nChoose one recipient:\n1. bishop on d13\n2. rook on m12\n3. knight on g6\nReturn just its option number."
+    }
+  ]
+}

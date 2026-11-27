@@ -1,0 +1,364 @@
+{
+  "primaryFavorableCue": {
+    "assigned": 12,
+    "bothValid": 12,
+    "correctReversals": 12,
+    "patterns": {
+      "correctReversal": 12,
+      "oppositeReversal": 0,
+      "bothProtected": 0,
+      "bothOrdinary": 0,
+      "includesBishop": 0,
+      "invalid": 0
+    },
+    "byProtectedPiece": {
+      "N": {
+        "assigned": 6,
+        "bothValid": 6,
+        "correctReversals": 6,
+        "patterns": {
+          "correctReversal": 6,
+          "oppositeReversal": 0,
+          "bothProtected": 0,
+          "bothOrdinary": 0,
+          "includesBishop": 0,
+          "invalid": 0
+        }
+      },
+      "R": {
+        "assigned": 6,
+        "bothValid": 6,
+        "correctReversals": 6,
+        "patterns": {
+          "correctReversal": 6,
+          "oppositeReversal": 0,
+          "bothProtected": 0,
+          "bothOrdinary": 0,
+          "includesBishop": 0,
+          "invalid": 0
+        }
+      }
+    },
+    "layoutsCorrectUnderBothRoleAssignments": 6,
+    "layoutsAssigned": 6
+  },
+  "unfavorableCueControls": {
+    "assigned": 12,
+    "bothValid": 12,
+    "bothCorrect": 12
+  },
+  "overall": {
+    "assigned": 48,
+    "valid": 48,
+    "correct": 48,
+    "pieceChoices": {
+      "N": 24,
+      "R": 24,
+      "B": 0
+    },
+    "roleChoices": {
+      "protected": 36,
+      "ordinary": 12,
+      "bishop": 0
+    },
+    "meanRetentionOnValid": 0.7875,
+    "meanOptimalRetentionOnValid": 0.7875,
+    "meanShortfallFromCueOraclePpOnValid": 0
+  },
+  "byCell": [
+    {
+      "signal": "safe",
+      "reliability": 0.9,
+      "protectedPiece": "N",
+      "assigned": 6,
+      "valid": 6,
+      "correct": 6,
+      "pieceChoices": {
+        "N": 0,
+        "R": 6,
+        "B": 0
+      },
+      "roleChoices": {
+        "protected": 0,
+        "ordinary": 6,
+        "bishop": 0
+      },
+      "meanRetentionOnValid": 0.9,
+      "meanOptimalRetentionOnValid": 0.9,
+      "meanShortfallFromCueOraclePpOnValid": 0
+    },
+    {
+      "signal": "safe",
+      "reliability": 0.9,
+      "protectedPiece": "R",
+      "assigned": 6,
+      "valid": 6,
+      "correct": 6,
+      "pieceChoices": {
+        "N": 6,
+        "R": 0,
+        "B": 0
+      },
+      "roleChoices": {
+        "protected": 0,
+        "ordinary": 6,
+        "bishop": 0
+      },
+      "meanRetentionOnValid": 0.9,
+      "meanOptimalRetentionOnValid": 0.9,
+      "meanShortfallFromCueOraclePpOnValid": 0
+    },
+    {
+      "signal": "safe",
+      "reliability": 0.6,
+      "protectedPiece": "N",
+      "assigned": 6,
+      "valid": 6,
+      "correct": 6,
+      "pieceChoices": {
+        "N": 6,
+        "R": 0,
+        "B": 0
+      },
+      "roleChoices": {
+        "protected": 6,
+        "ordinary": 0,
+        "bishop": 0
+      },
+      "meanRetentionOnValid": 0.75,
+      "meanOptimalRetentionOnValid": 0.75,
+      "meanShortfallFromCueOraclePpOnValid": 0
+    },
+    {
+      "signal": "safe",
+      "reliability": 0.6,
+      "protectedPiece": "R",
+      "assigned": 6,
+      "valid": 6,
+      "correct": 6,
+      "pieceChoices": {
+        "N": 0,
+        "R": 6,
+        "B": 0
+      },
+      "roleChoices": {
+        "protected": 6,
+        "ordinary": 0,
+        "bishop": 0
+      },
+      "meanRetentionOnValid": 0.75,
+      "meanOptimalRetentionOnValid": 0.75,
+      "meanShortfallFromCueOraclePpOnValid": 0
+    },
+    {
+      "signal": "unsafe",
+      "reliability": 0.9,
+      "protectedPiece": "N",
+      "assigned": 6,
+      "valid": 6,
+      "correct": 6,
+      "pieceChoices": {
+        "N": 6,
+        "R": 0,
+        "B": 0
+      },
+      "roleChoices": {
+        "protected": 6,
+        "ordinary": 0,
+        "bishop": 0
+      },
+      "meanRetentionOnValid": 0.75,
+      "meanOptimalRetentionOnValid": 0.75,
+      "meanShortfallFromCueOraclePpOnValid": 0
+    },
+    {
+      "signal": "unsafe",
+      "reliability": 0.9,
+      "protectedPiece": "R",
+      "assigned": 6,
+      "valid": 6,
+      "correct": 6,
+      "pieceChoices": {
+        "N": 0,
+        "R": 6,
+        "B": 0
+      },
+      "roleChoices": {
+        "protected": 6,
+        "ordinary": 0,
+        "bishop": 0
+      },
+      "meanRetentionOnValid": 0.75,
+      "meanOptimalRetentionOnValid": 0.75,
+      "meanShortfallFromCueOraclePpOnValid": 0
+    },
+    {
+      "signal": "unsafe",
+      "reliability": 0.6,
+      "protectedPiece": "N",
+      "assigned": 6,
+      "valid": 6,
+      "correct": 6,
+      "pieceChoices": {
+        "N": 6,
+        "R": 0,
+        "B": 0
+      },
+      "roleChoices": {
+        "protected": 6,
+        "ordinary": 0,
+        "bishop": 0
+      },
+      "meanRetentionOnValid": 0.75,
+      "meanOptimalRetentionOnValid": 0.75,
+      "meanShortfallFromCueOraclePpOnValid": 0
+    },
+    {
+      "signal": "unsafe",
+      "reliability": 0.6,
+      "protectedPiece": "R",
+      "assigned": 6,
+      "valid": 6,
+      "correct": 6,
+      "pieceChoices": {
+        "N": 0,
+        "R": 6,
+        "B": 0
+      },
+      "roleChoices": {
+        "protected": 6,
+        "ordinary": 0,
+        "bishop": 0
+      },
+      "meanRetentionOnValid": 0.75,
+      "meanOptimalRetentionOnValid": 0.75,
+      "meanShortfallFromCueOraclePpOnValid": 0
+    }
+  ],
+  "roleSwapChecks": [
+    {
+      "signal": "safe",
+      "reliability": 0.9,
+      "assigned": 6,
+      "bothValid": 6,
+      "bothCorrectAcrossSwap": 6,
+      "knightAcrossSwap": 0,
+      "rookAcrossSwap": 0
+    },
+    {
+      "signal": "safe",
+      "reliability": 0.6,
+      "assigned": 6,
+      "bothValid": 6,
+      "bothCorrectAcrossSwap": 6,
+      "knightAcrossSwap": 0,
+      "rookAcrossSwap": 0
+    },
+    {
+      "signal": "unsafe",
+      "reliability": 0.9,
+      "assigned": 6,
+      "bothValid": 6,
+      "bothCorrectAcrossSwap": 6,
+      "knightAcrossSwap": 0,
+      "rookAcrossSwap": 0
+    },
+    {
+      "signal": "unsafe",
+      "reliability": 0.6,
+      "assigned": 6,
+      "bothValid": 6,
+      "bothCorrectAcrossSwap": 6,
+      "knightAcrossSwap": 0,
+      "rookAcrossSwap": 0
+    }
+  ],
+  "favorableChoicePatternsAcrossBothRoles": [
+    {
+      "layoutId": "board-1",
+      "pattern": "evidenceSensitive"
+    },
+    {
+      "layoutId": "board-2",
+      "pattern": "evidenceSensitive"
+    },
+    {
+      "layoutId": "board-3",
+      "pattern": "evidenceSensitive"
+    },
+    {
+      "layoutId": "board-4",
+      "pattern": "evidenceSensitive"
+    },
+    {
+      "layoutId": "board-5",
+      "pattern": "evidenceSensitive"
+    },
+    {
+      "layoutId": "board-6",
+      "pattern": "evidenceSensitive"
+    }
+  ],
+  "favorableReversalsByLayoutAndRole": [
+    {
+      "layoutId": "board-1",
+      "protectedPiece": "N",
+      "pattern": "correctReversal"
+    },
+    {
+      "layoutId": "board-1",
+      "protectedPiece": "R",
+      "pattern": "correctReversal"
+    },
+    {
+      "layoutId": "board-2",
+      "protectedPiece": "N",
+      "pattern": "correctReversal"
+    },
+    {
+      "layoutId": "board-2",
+      "protectedPiece": "R",
+      "pattern": "correctReversal"
+    },
+    {
+      "layoutId": "board-3",
+      "protectedPiece": "N",
+      "pattern": "correctReversal"
+    },
+    {
+      "layoutId": "board-3",
+      "protectedPiece": "R",
+      "pattern": "correctReversal"
+    },
+    {
+      "layoutId": "board-4",
+      "protectedPiece": "N",
+      "pattern": "correctReversal"
+    },
+    {
+      "layoutId": "board-4",
+      "protectedPiece": "R",
+      "pattern": "correctReversal"
+    },
+    {
+      "layoutId": "board-5",
+      "protectedPiece": "N",
+      "pattern": "correctReversal"
+    },
+    {
+      "layoutId": "board-5",
+      "protectedPiece": "R",
+      "pattern": "correctReversal"
+    },
+    {
+      "layoutId": "board-6",
+      "protectedPiece": "N",
+      "pattern": "correctReversal"
+    },
+    {
+      "layoutId": "board-6",
+      "protectedPiece": "R",
+      "pattern": "correctReversal"
+    }
+  ]
+}

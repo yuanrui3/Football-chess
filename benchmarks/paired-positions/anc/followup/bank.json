@@ -1,0 +1,2029 @@
+{
+  "version": 1,
+  "seed": 274196013,
+  "engineSha256": "8c4e1d5fe428878d4d8a0aace338b2f12d1c50d1839e076b3990f1b7d99163c6",
+  "proposals": 80,
+  "slotCounts": [
+    6,
+    6,
+    4
+  ],
+  "pairs": [
+    {
+      "pairId": "m01",
+      "condition": "switch",
+      "stratum": "blocker",
+      "attack": "white",
+      "items": [
+        "35b09a8be3315c62",
+        "0d757418b4036bf3"
+      ],
+      "edit": {
+        "pieceId": "black-P2",
+        "from": "f11",
+        "to": "f10"
+      }
+    },
+    {
+      "pairId": "m02",
+      "condition": "switch",
+      "stratum": "blocker",
+      "attack": "black",
+      "items": [
+        "465de17ca7f5327c",
+        "6b6e593b15f55e97"
+      ],
+      "edit": {
+        "pieceId": "white-P2",
+        "from": "g11",
+        "to": "g10"
+      }
+    },
+    {
+      "pairId": "m03",
+      "condition": "stay",
+      "stratum": "blocker",
+      "attack": "white",
+      "items": [
+        "7e2513fecc10ea19",
+        "6cfdf8840ebcb2a0"
+      ],
+      "edit": {
+        "pieceId": "black-P2",
+        "from": "l7",
+        "to": "m7"
+      }
+    },
+    {
+      "pairId": "m04",
+      "condition": "stay",
+      "stratum": "blocker",
+      "attack": "black",
+      "items": [
+        "da62c2d483eb2882",
+        "c33908a93f966086"
+      ],
+      "edit": {
+        "pieceId": "white-P2",
+        "from": "k16",
+        "to": "l16"
+      }
+    },
+    {
+      "pairId": "m05",
+      "condition": "switch",
+      "stratum": "control",
+      "attack": "white",
+      "items": [
+        "d9aa2b4ae90f138a",
+        "8ee4fb14bce42198"
+      ],
+      "edit": {
+        "pieceId": "black-P2",
+        "from": "f4",
+        "to": "g4"
+      }
+    },
+    {
+      "pairId": "m06",
+      "condition": "switch",
+      "stratum": "control",
+      "attack": "black",
+      "items": [
+        "4fd64d0610c8ae1d",
+        "a8f01e08e17993da"
+      ],
+      "edit": {
+        "pieceId": "white-P2",
+        "from": "i9",
+        "to": "i8"
+      }
+    },
+    {
+      "pairId": "m07",
+      "condition": "stay",
+      "stratum": "control",
+      "attack": "white",
+      "items": [
+        "673e3f66653c5d1d",
+        "5d43ff1367c32bcc"
+      ],
+      "edit": {
+        "pieceId": "black-P2",
+        "from": "c6",
+        "to": "c5"
+      }
+    },
+    {
+      "pairId": "m08",
+      "condition": "stay",
+      "stratum": "control",
+      "attack": "black",
+      "items": [
+        "dc4f3134d9265d9f",
+        "4893692fe5293c15"
+      ],
+      "edit": {
+        "pieceId": "white-P2",
+        "from": "k16",
+        "to": "j16"
+      }
+    }
+  ],
+  "positions": [
+    {
+      "itemId": "35b09a8be3315c62",
+      "attack": "white",
+      "carrier": "white-Q",
+      "pieces": [
+        {
+          "id": "black-B2",
+          "team": "black",
+          "type": "B",
+          "square": "i8"
+        },
+        {
+          "id": "black-K",
+          "team": "black",
+          "type": "K",
+          "square": "i17"
+        },
+        {
+          "id": "black-P2",
+          "team": "black",
+          "type": "P",
+          "square": "f11"
+        },
+        {
+          "id": "black-P3",
+          "team": "black",
+          "type": "P",
+          "square": "g15"
+        },
+        {
+          "id": "black-Q",
+          "team": "black",
+          "type": "Q",
+          "square": "d11"
+        },
+        {
+          "id": "black-R2",
+          "team": "black",
+          "type": "R",
+          "square": "j1"
+        },
+        {
+          "id": "white-B1",
+          "team": "white",
+          "type": "B",
+          "square": "g11"
+        },
+        {
+          "id": "white-K",
+          "team": "white",
+          "type": "K",
+          "square": "h1"
+        },
+        {
+          "id": "white-N1",
+          "team": "white",
+          "type": "N",
+          "square": "l11"
+        },
+        {
+          "id": "white-Q",
+          "team": "white",
+          "type": "Q",
+          "square": "j11"
+        },
+        {
+          "id": "white-R1",
+          "team": "white",
+          "type": "R",
+          "square": "j6"
+        }
+      ],
+      "options": [
+        "white-N1",
+        "white-R1",
+        "white-B1"
+      ],
+      "answer": 3,
+      "oracle": [
+        {
+          "receiverId": "white-N1",
+          "passAccuracy": 1,
+          "retention": 0.5,
+          "tacklers": [
+            {
+              "pieceId": "black-B2",
+              "takeaway": 0.5,
+              "landings": 8
+            }
+          ],
+          "geometryRetention": 0.5
+        },
+        {
+          "receiverId": "white-R1",
+          "passAccuracy": 1,
+          "retention": 0,
+          "tacklers": [
+            {
+              "pieceId": "black-R2",
+              "takeaway": 1,
+              "landings": 8
+            }
+          ],
+          "geometryRetention": 0
+        },
+        {
+          "receiverId": "white-B1",
+          "passAccuracy": 1,
+          "retention": 1,
+          "tacklers": [],
+          "geometryRetention": 0
+        }
+      ],
+      "geometryChoice": 1
+    },
+    {
+      "itemId": "0d757418b4036bf3",
+      "attack": "white",
+      "carrier": "white-Q",
+      "pieces": [
+        {
+          "id": "black-B2",
+          "team": "black",
+          "type": "B",
+          "square": "i8"
+        },
+        {
+          "id": "black-K",
+          "team": "black",
+          "type": "K",
+          "square": "i17"
+        },
+        {
+          "id": "black-P2",
+          "team": "black",
+          "type": "P",
+          "square": "f10"
+        },
+        {
+          "id": "black-P3",
+          "team": "black",
+          "type": "P",
+          "square": "g15"
+        },
+        {
+          "id": "black-Q",
+          "team": "black",
+          "type": "Q",
+          "square": "d11"
+        },
+        {
+          "id": "black-R2",
+          "team": "black",
+          "type": "R",
+          "square": "j1"
+        },
+        {
+          "id": "white-B1",
+          "team": "white",
+          "type": "B",
+          "square": "g11"
+        },
+        {
+          "id": "white-K",
+          "team": "white",
+          "type": "K",
+          "square": "h1"
+        },
+        {
+          "id": "white-N1",
+          "team": "white",
+          "type": "N",
+          "square": "l11"
+        },
+        {
+          "id": "white-Q",
+          "team": "white",
+          "type": "Q",
+          "square": "j11"
+        },
+        {
+          "id": "white-R1",
+          "team": "white",
+          "type": "R",
+          "square": "j6"
+        }
+      ],
+      "options": [
+        "white-N1",
+        "white-R1",
+        "white-B1"
+      ],
+      "answer": 1,
+      "oracle": [
+        {
+          "receiverId": "white-N1",
+          "passAccuracy": 1,
+          "retention": 0.5,
+          "tacklers": [
+            {
+              "pieceId": "black-B2",
+              "takeaway": 0.5,
+              "landings": 8
+            }
+          ],
+          "geometryRetention": 0.5
+        },
+        {
+          "receiverId": "white-R1",
+          "passAccuracy": 1,
+          "retention": 0,
+          "tacklers": [
+            {
+              "pieceId": "black-R2",
+              "takeaway": 1,
+              "landings": 8
+            }
+          ],
+          "geometryRetention": 0
+        },
+        {
+          "receiverId": "white-B1",
+          "passAccuracy": 1,
+          "retention": 0,
+          "tacklers": [
+            {
+              "pieceId": "black-Q",
+              "takeaway": 1,
+              "landings": 7
+            },
+            {
+              "pieceId": "black-P2",
+              "takeaway": 1,
+              "landings": 8
+            }
+          ],
+          "geometryRetention": 0
+        }
+      ],
+      "geometryChoice": 1
+    },
+    {
+      "itemId": "465de17ca7f5327c",
+      "attack": "black",
+      "carrier": "black-Q",
+      "pieces": [
+        {
+          "id": "black-B1",
+          "team": "black",
+          "type": "B",
+          "square": "f7"
+        },
+        {
+          "id": "black-K",
+          "team": "black",
+          "type": "K",
+          "square": "i17"
+        },
+        {
+          "id": "black-N1",
+          "team": "black",
+          "type": "N",
+          "square": "l10"
+        },
+        {
+          "id": "black-Q",
+          "team": "black",
+          "type": "Q",
+          "square": "i7"
+        },
+        {
+          "id": "black-R1",
+          "team": "black",
+          "type": "R",
+          "square": "e11"
+        },
+        {
+          "id": "white-B2",
+          "team": "white",
+          "type": "B",
+          "square": "k11"
+        },
+        {
+          "id": "white-K",
+          "team": "white",
+          "type": "K",
+          "square": "i1"
+        },
+        {
+          "id": "white-P2",
+          "team": "white",
+          "type": "P",
+          "square": "g11"
+        },
+        {
+          "id": "white-P3",
+          "team": "white",
+          "type": "P",
+          "square": "k2"
+        },
+        {
+          "id": "white-Q",
+          "team": "white",
+          "type": "Q",
+          "square": "i11"
+        },
+        {
+          "id": "white-R2",
+          "team": "white",
+          "type": "R",
+          "square": "f9"
+        }
+      ],
+      "options": [
+        "black-B1",
+        "black-R1",
+        "black-N1"
+      ],
+      "answer": 2,
+      "oracle": [
+        {
+          "receiverId": "black-B1",
+          "passAccuracy": 1,
+          "retention": 0,
+          "tacklers": [
+            {
+              "pieceId": "white-R2",
+              "takeaway": 1,
+              "landings": 8
+            }
+          ],
+          "geometryRetention": 0
+        },
+        {
+          "receiverId": "black-R1",
+          "passAccuracy": 1,
+          "retention": 1,
+          "tacklers": [],
+          "geometryRetention": 0
+        },
+        {
+          "receiverId": "black-N1",
+          "passAccuracy": 1,
+          "retention": 0.5,
+          "tacklers": [
+            {
+              "pieceId": "white-B2",
+              "takeaway": 0.5,
+              "landings": 8
+            }
+          ],
+          "geometryRetention": 0.5
+        }
+      ],
+      "geometryChoice": 3
+    },
+    {
+      "itemId": "6b6e593b15f55e97",
+      "attack": "black",
+      "carrier": "black-Q",
+      "pieces": [
+        {
+          "id": "black-B1",
+          "team": "black",
+          "type": "B",
+          "square": "f7"
+        },
+        {
+          "id": "black-K",
+          "team": "black",
+          "type": "K",
+          "square": "i17"
+        },
+        {
+          "id": "black-N1",
+          "team": "black",
+          "type": "N",
+          "square": "l10"
+        },
+        {
+          "id": "black-Q",
+          "team": "black",
+          "type": "Q",
+          "square": "i7"
+        },
+        {
+          "id": "black-R1",
+          "team": "black",
+          "type": "R",
+          "square": "e11"
+        },
+        {
+          "id": "white-B2",
+          "team": "white",
+          "type": "B",
+          "square": "k11"
+        },
+        {
+          "id": "white-K",
+          "team": "white",
+          "type": "K",
+          "square": "i1"
+        },
+        {
+          "id": "white-P2",
+          "team": "white",
+          "type": "P",
+          "square": "g10"
+        },
+        {
+          "id": "white-P3",
+          "team": "white",
+          "type": "P",
+          "square": "k2"
+        },
+        {
+          "id": "white-Q",
+          "team": "white",
+          "type": "Q",
+          "square": "i11"
+        },
+        {
+          "id": "white-R2",
+          "team": "white",
+          "type": "R",
+          "square": "f9"
+        }
+      ],
+      "options": [
+        "black-B1",
+        "black-R1",
+        "black-N1"
+      ],
+      "answer": 3,
+      "oracle": [
+        {
+          "receiverId": "black-B1",
+          "passAccuracy": 1,
+          "retention": 0,
+          "tacklers": [
+            {
+              "pieceId": "white-R2",
+              "takeaway": 1,
+              "landings": 8
+            }
+          ],
+          "geometryRetention": 0
+        },
+        {
+          "receiverId": "black-R1",
+          "passAccuracy": 1,
+          "retention": 0,
+          "tacklers": [
+            {
+              "pieceId": "white-Q",
+              "takeaway": 1,
+              "landings": 8
+            }
+          ],
+          "geometryRetention": 0
+        },
+        {
+          "receiverId": "black-N1",
+          "passAccuracy": 1,
+          "retention": 0.5,
+          "tacklers": [
+            {
+              "pieceId": "white-B2",
+              "takeaway": 0.5,
+              "landings": 8
+            }
+          ],
+          "geometryRetention": 0.5
+        }
+      ],
+      "geometryChoice": 3
+    },
+    {
+      "itemId": "7e2513fecc10ea19",
+      "attack": "white",
+      "carrier": "white-Q",
+      "pieces": [
+        {
+          "id": "black-B2",
+          "team": "black",
+          "type": "B",
+          "square": "b8"
+        },
+        {
+          "id": "black-K",
+          "team": "black",
+          "type": "K",
+          "square": "g17"
+        },
+        {
+          "id": "black-P2",
+          "team": "black",
+          "type": "P",
+          "square": "l7"
+        },
+        {
+          "id": "black-P3",
+          "team": "black",
+          "type": "P",
+          "square": "i16"
+        },
+        {
+          "id": "black-Q",
+          "team": "black",
+          "type": "Q",
+          "square": "n7"
+        },
+        {
+          "id": "black-R2",
+          "team": "black",
+          "type": "R",
+          "square": "c10"
+        },
+        {
+          "id": "white-B1",
+          "team": "white",
+          "type": "B",
+          "square": "c7"
+        },
+        {
+          "id": "white-K",
+          "team": "white",
+          "type": "K",
+          "square": "i1"
+        },
+        {
+          "id": "white-N1",
+          "team": "white",
+          "type": "N",
+          "square": "f12"
+        },
+        {
+          "id": "white-Q",
+          "team": "white",
+          "type": "Q",
+          "square": "f10"
+        },
+        {
+          "id": "white-R1",
+          "team": "white",
+          "type": "R",
+          "square": "i7"
+        }
+      ],
+      "options": [
+        "white-B1",
+        "white-R1",
+        "white-N1"
+      ],
+      "answer": 2,
+      "oracle": [
+        {
+          "receiverId": "white-B1",
+          "passAccuracy": 1,
+          "retention": 0,
+          "tacklers": [
+            {
+              "pieceId": "black-R2",
+              "takeaway": 1,
+              "landings": 7
+            },
+            {
+              "pieceId": "black-B2",
+              "takeaway": 1,
+              "landings": 8
+            }
+          ],
+          "geometryRetention": 0
+        },
+        {
+          "receiverId": "white-R1",
+          "passAccuracy": 1,
+          "retention": 1,
+          "tacklers": [],
+          "geometryRetention": 0
+        },
+        {
+          "receiverId": "white-N1",
+          "passAccuracy": 1,
+          "retention": 0.5,
+          "tacklers": [
+            {
+              "pieceId": "black-B2",
+              "takeaway": 0.5,
+              "landings": 8
+            }
+          ],
+          "geometryRetention": 0.5
+        }
+      ],
+      "geometryChoice": 3
+    },
+    {
+      "itemId": "6cfdf8840ebcb2a0",
+      "attack": "white",
+      "carrier": "white-Q",
+      "pieces": [
+        {
+          "id": "black-B2",
+          "team": "black",
+          "type": "B",
+          "square": "b8"
+        },
+        {
+          "id": "black-K",
+          "team": "black",
+          "type": "K",
+          "square": "g17"
+        },
+        {
+          "id": "black-P2",
+          "team": "black",
+          "type": "P",
+          "square": "m7"
+        },
+        {
+          "id": "black-P3",
+          "team": "black",
+          "type": "P",
+          "square": "i16"
+        },
+        {
+          "id": "black-Q",
+          "team": "black",
+          "type": "Q",
+          "square": "n7"
+        },
+        {
+          "id": "black-R2",
+          "team": "black",
+          "type": "R",
+          "square": "c10"
+        },
+        {
+          "id": "white-B1",
+          "team": "white",
+          "type": "B",
+          "square": "c7"
+        },
+        {
+          "id": "white-K",
+          "team": "white",
+          "type": "K",
+          "square": "i1"
+        },
+        {
+          "id": "white-N1",
+          "team": "white",
+          "type": "N",
+          "square": "f12"
+        },
+        {
+          "id": "white-Q",
+          "team": "white",
+          "type": "Q",
+          "square": "f10"
+        },
+        {
+          "id": "white-R1",
+          "team": "white",
+          "type": "R",
+          "square": "i7"
+        }
+      ],
+      "options": [
+        "white-B1",
+        "white-R1",
+        "white-N1"
+      ],
+      "answer": 2,
+      "oracle": [
+        {
+          "receiverId": "white-B1",
+          "passAccuracy": 1,
+          "retention": 0,
+          "tacklers": [
+            {
+              "pieceId": "black-R2",
+              "takeaway": 1,
+              "landings": 7
+            },
+            {
+              "pieceId": "black-B2",
+              "takeaway": 1,
+              "landings": 8
+            }
+          ],
+          "geometryRetention": 0
+        },
+        {
+          "receiverId": "white-R1",
+          "passAccuracy": 1,
+          "retention": 1,
+          "tacklers": [],
+          "geometryRetention": 0
+        },
+        {
+          "receiverId": "white-N1",
+          "passAccuracy": 1,
+          "retention": 0.5,
+          "tacklers": [
+            {
+              "pieceId": "black-B2",
+              "takeaway": 0.5,
+              "landings": 8
+            }
+          ],
+          "geometryRetention": 0.5
+        }
+      ],
+      "geometryChoice": 3
+    },
+    {
+      "itemId": "da62c2d483eb2882",
+      "attack": "black",
+      "carrier": "black-Q",
+      "pieces": [
+        {
+          "id": "black-B1",
+          "team": "black",
+          "type": "B",
+          "square": "h16"
+        },
+        {
+          "id": "black-K",
+          "team": "black",
+          "type": "K",
+          "square": "h17"
+        },
+        {
+          "id": "black-N1",
+          "team": "black",
+          "type": "N",
+          "square": "h8"
+        },
+        {
+          "id": "black-Q",
+          "team": "black",
+          "type": "Q",
+          "square": "h11"
+        },
+        {
+          "id": "black-R1",
+          "team": "black",
+          "type": "R",
+          "square": "e8"
+        },
+        {
+          "id": "white-B2",
+          "team": "white",
+          "type": "B",
+          "square": "g9"
+        },
+        {
+          "id": "white-K",
+          "team": "white",
+          "type": "K",
+          "square": "i1"
+        },
+        {
+          "id": "white-P2",
+          "team": "white",
+          "type": "P",
+          "square": "k16"
+        },
+        {
+          "id": "white-P3",
+          "team": "white",
+          "type": "P",
+          "square": "e3"
+        },
+        {
+          "id": "white-Q",
+          "team": "white",
+          "type": "Q",
+          "square": "m16"
+        },
+        {
+          "id": "white-R2",
+          "team": "white",
+          "type": "R",
+          "square": "e6"
+        }
+      ],
+      "options": [
+        "black-B1",
+        "black-N1",
+        "black-R1"
+      ],
+      "answer": 1,
+      "oracle": [
+        {
+          "receiverId": "black-B1",
+          "passAccuracy": 1,
+          "retention": 1,
+          "tacklers": [],
+          "geometryRetention": 0
+        },
+        {
+          "receiverId": "black-N1",
+          "passAccuracy": 1,
+          "retention": 0.5,
+          "tacklers": [
+            {
+              "pieceId": "white-B2",
+              "takeaway": 0.5,
+              "landings": 8
+            }
+          ],
+          "geometryRetention": 0.5
+        },
+        {
+          "receiverId": "black-R1",
+          "passAccuracy": 1,
+          "retention": 0,
+          "tacklers": [
+            {
+              "pieceId": "white-R2",
+              "takeaway": 1,
+              "landings": 8
+            }
+          ],
+          "geometryRetention": 0
+        }
+      ],
+      "geometryChoice": 2
+    },
+    {
+      "itemId": "c33908a93f966086",
+      "attack": "black",
+      "carrier": "black-Q",
+      "pieces": [
+        {
+          "id": "black-B1",
+          "team": "black",
+          "type": "B",
+          "square": "h16"
+        },
+        {
+          "id": "black-K",
+          "team": "black",
+          "type": "K",
+          "square": "h17"
+        },
+        {
+          "id": "black-N1",
+          "team": "black",
+          "type": "N",
+          "square": "h8"
+        },
+        {
+          "id": "black-Q",
+          "team": "black",
+          "type": "Q",
+          "square": "h11"
+        },
+        {
+          "id": "black-R1",
+          "team": "black",
+          "type": "R",
+          "square": "e8"
+        },
+        {
+          "id": "white-B2",
+          "team": "white",
+          "type": "B",
+          "square": "g9"
+        },
+        {
+          "id": "white-K",
+          "team": "white",
+          "type": "K",
+          "square": "i1"
+        },
+        {
+          "id": "white-P2",
+          "team": "white",
+          "type": "P",
+          "square": "l16"
+        },
+        {
+          "id": "white-P3",
+          "team": "white",
+          "type": "P",
+          "square": "e3"
+        },
+        {
+          "id": "white-Q",
+          "team": "white",
+          "type": "Q",
+          "square": "m16"
+        },
+        {
+          "id": "white-R2",
+          "team": "white",
+          "type": "R",
+          "square": "e6"
+        }
+      ],
+      "options": [
+        "black-B1",
+        "black-N1",
+        "black-R1"
+      ],
+      "answer": 1,
+      "oracle": [
+        {
+          "receiverId": "black-B1",
+          "passAccuracy": 1,
+          "retention": 1,
+          "tacklers": [],
+          "geometryRetention": 0
+        },
+        {
+          "receiverId": "black-N1",
+          "passAccuracy": 1,
+          "retention": 0.5,
+          "tacklers": [
+            {
+              "pieceId": "white-B2",
+              "takeaway": 0.5,
+              "landings": 8
+            }
+          ],
+          "geometryRetention": 0.5
+        },
+        {
+          "receiverId": "black-R1",
+          "passAccuracy": 1,
+          "retention": 0,
+          "tacklers": [
+            {
+              "pieceId": "white-R2",
+              "takeaway": 1,
+              "landings": 8
+            }
+          ],
+          "geometryRetention": 0
+        }
+      ],
+      "geometryChoice": 2
+    },
+    {
+      "itemId": "d9aa2b4ae90f138a",
+      "attack": "white",
+      "carrier": "white-Q",
+      "pieces": [
+        {
+          "id": "black-B2",
+          "team": "black",
+          "type": "B",
+          "square": "l7"
+        },
+        {
+          "id": "black-K",
+          "team": "black",
+          "type": "K",
+          "square": "h17"
+        },
+        {
+          "id": "black-P2",
+          "team": "black",
+          "type": "P",
+          "square": "f4"
+        },
+        {
+          "id": "black-P3",
+          "team": "black",
+          "type": "P",
+          "square": "c15"
+        },
+        {
+          "id": "black-Q",
+          "team": "black",
+          "type": "Q",
+          "square": "j1"
+        },
+        {
+          "id": "black-R2",
+          "team": "black",
+          "type": "R",
+          "square": "g11"
+        },
+        {
+          "id": "white-B1",
+          "team": "white",
+          "type": "B",
+          "square": "e5"
+        },
+        {
+          "id": "white-K",
+          "team": "white",
+          "type": "K",
+          "square": "h1"
+        },
+        {
+          "id": "white-N1",
+          "team": "white",
+          "type": "N",
+          "square": "h11"
+        },
+        {
+          "id": "white-Q",
+          "team": "white",
+          "type": "Q",
+          "square": "e8"
+        },
+        {
+          "id": "white-R1",
+          "team": "white",
+          "type": "R",
+          "square": "g6"
+        }
+      ],
+      "options": [
+        "white-R1",
+        "white-N1",
+        "white-B1"
+      ],
+      "answer": 2,
+      "oracle": [
+        {
+          "receiverId": "white-R1",
+          "passAccuracy": 1,
+          "retention": 0,
+          "tacklers": [
+            {
+              "pieceId": "black-R2",
+              "takeaway": 1,
+              "landings": 8
+            }
+          ],
+          "geometryRetention": 0
+        },
+        {
+          "receiverId": "white-N1",
+          "passAccuracy": 1,
+          "retention": 0.5,
+          "tacklers": [
+            {
+              "pieceId": "black-R2",
+              "takeaway": 0.5,
+              "landings": 8
+            },
+            {
+              "pieceId": "black-B2",
+              "takeaway": 0.5,
+              "landings": 7
+            }
+          ],
+          "geometryRetention": 0.5
+        },
+        {
+          "receiverId": "white-B1",
+          "passAccuracy": 1,
+          "retention": 0,
+          "tacklers": [
+            {
+              "pieceId": "black-P2",
+              "takeaway": 1,
+              "landings": 8
+            }
+          ],
+          "geometryRetention": 0
+        }
+      ],
+      "geometryChoice": 2
+    },
+    {
+      "itemId": "8ee4fb14bce42198",
+      "attack": "white",
+      "carrier": "white-Q",
+      "pieces": [
+        {
+          "id": "black-B2",
+          "team": "black",
+          "type": "B",
+          "square": "l7"
+        },
+        {
+          "id": "black-K",
+          "team": "black",
+          "type": "K",
+          "square": "h17"
+        },
+        {
+          "id": "black-P2",
+          "team": "black",
+          "type": "P",
+          "square": "g4"
+        },
+        {
+          "id": "black-P3",
+          "team": "black",
+          "type": "P",
+          "square": "c15"
+        },
+        {
+          "id": "black-Q",
+          "team": "black",
+          "type": "Q",
+          "square": "j1"
+        },
+        {
+          "id": "black-R2",
+          "team": "black",
+          "type": "R",
+          "square": "g11"
+        },
+        {
+          "id": "white-B1",
+          "team": "white",
+          "type": "B",
+          "square": "e5"
+        },
+        {
+          "id": "white-K",
+          "team": "white",
+          "type": "K",
+          "square": "h1"
+        },
+        {
+          "id": "white-N1",
+          "team": "white",
+          "type": "N",
+          "square": "h11"
+        },
+        {
+          "id": "white-Q",
+          "team": "white",
+          "type": "Q",
+          "square": "e8"
+        },
+        {
+          "id": "white-R1",
+          "team": "white",
+          "type": "R",
+          "square": "g6"
+        }
+      ],
+      "options": [
+        "white-R1",
+        "white-N1",
+        "white-B1"
+      ],
+      "answer": 3,
+      "oracle": [
+        {
+          "receiverId": "white-R1",
+          "passAccuracy": 1,
+          "retention": 0,
+          "tacklers": [
+            {
+              "pieceId": "black-R2",
+              "takeaway": 1,
+              "landings": 8
+            }
+          ],
+          "geometryRetention": 0
+        },
+        {
+          "receiverId": "white-N1",
+          "passAccuracy": 1,
+          "retention": 0.5,
+          "tacklers": [
+            {
+              "pieceId": "black-R2",
+              "takeaway": 0.5,
+              "landings": 8
+            },
+            {
+              "pieceId": "black-B2",
+              "takeaway": 0.5,
+              "landings": 7
+            }
+          ],
+          "geometryRetention": 0.5
+        },
+        {
+          "receiverId": "white-B1",
+          "passAccuracy": 1,
+          "retention": 1,
+          "tacklers": [],
+          "geometryRetention": 1
+        }
+      ],
+      "geometryChoice": 3
+    },
+    {
+      "itemId": "4fd64d0610c8ae1d",
+      "attack": "black",
+      "carrier": "black-Q",
+      "pieces": [
+        {
+          "id": "black-B1",
+          "team": "black",
+          "type": "B",
+          "square": "f11"
+        },
+        {
+          "id": "black-K",
+          "team": "black",
+          "type": "K",
+          "square": "f17"
+        },
+        {
+          "id": "black-N1",
+          "team": "black",
+          "type": "N",
+          "square": "i3"
+        },
+        {
+          "id": "black-Q",
+          "team": "black",
+          "type": "Q",
+          "square": "f6"
+        },
+        {
+          "id": "black-R1",
+          "team": "black",
+          "type": "R",
+          "square": "h8"
+        },
+        {
+          "id": "white-B2",
+          "team": "white",
+          "type": "B",
+          "square": "l6"
+        },
+        {
+          "id": "white-K",
+          "team": "white",
+          "type": "K",
+          "square": "g1"
+        },
+        {
+          "id": "white-P2",
+          "team": "white",
+          "type": "P",
+          "square": "i9"
+        },
+        {
+          "id": "white-P3",
+          "team": "white",
+          "type": "P",
+          "square": "i2"
+        },
+        {
+          "id": "white-Q",
+          "team": "white",
+          "type": "Q",
+          "square": "m9"
+        },
+        {
+          "id": "white-R2",
+          "team": "white",
+          "type": "R",
+          "square": "j11"
+        }
+      ],
+      "options": [
+        "black-N1",
+        "black-B1",
+        "black-R1"
+      ],
+      "answer": 1,
+      "oracle": [
+        {
+          "receiverId": "black-N1",
+          "passAccuracy": 1,
+          "retention": 0.5,
+          "tacklers": [
+            {
+              "pieceId": "white-B2",
+              "takeaway": 0.5,
+              "landings": 7
+            }
+          ],
+          "geometryRetention": 0.5
+        },
+        {
+          "receiverId": "black-B1",
+          "passAccuracy": 1,
+          "retention": 0,
+          "tacklers": [
+            {
+              "pieceId": "white-R2",
+              "takeaway": 1,
+              "landings": 8
+            }
+          ],
+          "geometryRetention": 0
+        },
+        {
+          "receiverId": "black-R1",
+          "passAccuracy": 1,
+          "retention": 0,
+          "tacklers": [
+            {
+              "pieceId": "white-P2",
+              "takeaway": 1,
+              "landings": 8
+            }
+          ],
+          "geometryRetention": 0
+        }
+      ],
+      "geometryChoice": 1
+    },
+    {
+      "itemId": "a8f01e08e17993da",
+      "attack": "black",
+      "carrier": "black-Q",
+      "pieces": [
+        {
+          "id": "black-B1",
+          "team": "black",
+          "type": "B",
+          "square": "f11"
+        },
+        {
+          "id": "black-K",
+          "team": "black",
+          "type": "K",
+          "square": "f17"
+        },
+        {
+          "id": "black-N1",
+          "team": "black",
+          "type": "N",
+          "square": "i3"
+        },
+        {
+          "id": "black-Q",
+          "team": "black",
+          "type": "Q",
+          "square": "f6"
+        },
+        {
+          "id": "black-R1",
+          "team": "black",
+          "type": "R",
+          "square": "h8"
+        },
+        {
+          "id": "white-B2",
+          "team": "white",
+          "type": "B",
+          "square": "l6"
+        },
+        {
+          "id": "white-K",
+          "team": "white",
+          "type": "K",
+          "square": "g1"
+        },
+        {
+          "id": "white-P2",
+          "team": "white",
+          "type": "P",
+          "square": "i8"
+        },
+        {
+          "id": "white-P3",
+          "team": "white",
+          "type": "P",
+          "square": "i2"
+        },
+        {
+          "id": "white-Q",
+          "team": "white",
+          "type": "Q",
+          "square": "m9"
+        },
+        {
+          "id": "white-R2",
+          "team": "white",
+          "type": "R",
+          "square": "j11"
+        }
+      ],
+      "options": [
+        "black-N1",
+        "black-B1",
+        "black-R1"
+      ],
+      "answer": 3,
+      "oracle": [
+        {
+          "receiverId": "black-N1",
+          "passAccuracy": 1,
+          "retention": 0.5,
+          "tacklers": [
+            {
+              "pieceId": "white-B2",
+              "takeaway": 0.5,
+              "landings": 7
+            }
+          ],
+          "geometryRetention": 0.5
+        },
+        {
+          "receiverId": "black-B1",
+          "passAccuracy": 1,
+          "retention": 0,
+          "tacklers": [
+            {
+              "pieceId": "white-R2",
+              "takeaway": 1,
+              "landings": 8
+            }
+          ],
+          "geometryRetention": 0
+        },
+        {
+          "receiverId": "black-R1",
+          "passAccuracy": 1,
+          "retention": 1,
+          "tacklers": [],
+          "geometryRetention": 1
+        }
+      ],
+      "geometryChoice": 3
+    },
+    {
+      "itemId": "673e3f66653c5d1d",
+      "attack": "white",
+      "carrier": "white-Q",
+      "pieces": [
+        {
+          "id": "black-B2",
+          "team": "black",
+          "type": "B",
+          "square": "h11"
+        },
+        {
+          "id": "black-K",
+          "team": "black",
+          "type": "K",
+          "square": "i17"
+        },
+        {
+          "id": "black-P2",
+          "team": "black",
+          "type": "P",
+          "square": "c6"
+        },
+        {
+          "id": "black-P3",
+          "team": "black",
+          "type": "P",
+          "square": "i15"
+        },
+        {
+          "id": "black-Q",
+          "team": "black",
+          "type": "Q",
+          "square": "m1"
+        },
+        {
+          "id": "black-R2",
+          "team": "black",
+          "type": "R",
+          "square": "n11"
+        },
+        {
+          "id": "white-B1",
+          "team": "white",
+          "type": "B",
+          "square": "l11"
+        },
+        {
+          "id": "white-K",
+          "team": "white",
+          "type": "K",
+          "square": "h1"
+        },
+        {
+          "id": "white-N1",
+          "team": "white",
+          "type": "N",
+          "square": "d7"
+        },
+        {
+          "id": "white-Q",
+          "team": "white",
+          "type": "Q",
+          "square": "h7"
+        },
+        {
+          "id": "white-R1",
+          "team": "white",
+          "type": "R",
+          "square": "j5"
+        }
+      ],
+      "options": [
+        "white-R1",
+        "white-N1",
+        "white-B1"
+      ],
+      "answer": 1,
+      "oracle": [
+        {
+          "receiverId": "white-R1",
+          "passAccuracy": 1,
+          "retention": 1,
+          "tacklers": [],
+          "geometryRetention": 1
+        },
+        {
+          "receiverId": "white-N1",
+          "passAccuracy": 1,
+          "retention": 0.5,
+          "tacklers": [
+            {
+              "pieceId": "black-B2",
+              "takeaway": 0.5,
+              "landings": 7
+            },
+            {
+              "pieceId": "black-P2",
+              "takeaway": 0.5,
+              "landings": 8
+            }
+          ],
+          "geometryRetention": 0.5
+        },
+        {
+          "receiverId": "white-B1",
+          "passAccuracy": 1,
+          "retention": 0,
+          "tacklers": [
+            {
+              "pieceId": "black-R2",
+              "takeaway": 1,
+              "landings": 8
+            }
+          ],
+          "geometryRetention": 0
+        }
+      ],
+      "geometryChoice": 1
+    },
+    {
+      "itemId": "5d43ff1367c32bcc",
+      "attack": "white",
+      "carrier": "white-Q",
+      "pieces": [
+        {
+          "id": "black-B2",
+          "team": "black",
+          "type": "B",
+          "square": "h11"
+        },
+        {
+          "id": "black-K",
+          "team": "black",
+          "type": "K",
+          "square": "i17"
+        },
+        {
+          "id": "black-P2",
+          "team": "black",
+          "type": "P",
+          "square": "c5"
+        },
+        {
+          "id": "black-P3",
+          "team": "black",
+          "type": "P",
+          "square": "i15"
+        },
+        {
+          "id": "black-Q",
+          "team": "black",
+          "type": "Q",
+          "square": "m1"
+        },
+        {
+          "id": "black-R2",
+          "team": "black",
+          "type": "R",
+          "square": "n11"
+        },
+        {
+          "id": "white-B1",
+          "team": "white",
+          "type": "B",
+          "square": "l11"
+        },
+        {
+          "id": "white-K",
+          "team": "white",
+          "type": "K",
+          "square": "h1"
+        },
+        {
+          "id": "white-N1",
+          "team": "white",
+          "type": "N",
+          "square": "d7"
+        },
+        {
+          "id": "white-Q",
+          "team": "white",
+          "type": "Q",
+          "square": "h7"
+        },
+        {
+          "id": "white-R1",
+          "team": "white",
+          "type": "R",
+          "square": "j5"
+        }
+      ],
+      "options": [
+        "white-R1",
+        "white-N1",
+        "white-B1"
+      ],
+      "answer": 1,
+      "oracle": [
+        {
+          "receiverId": "white-R1",
+          "passAccuracy": 1,
+          "retention": 1,
+          "tacklers": [],
+          "geometryRetention": 1
+        },
+        {
+          "receiverId": "white-N1",
+          "passAccuracy": 1,
+          "retention": 0.5,
+          "tacklers": [
+            {
+              "pieceId": "black-B2",
+              "takeaway": 0.5,
+              "landings": 8
+            }
+          ],
+          "geometryRetention": 0.5
+        },
+        {
+          "receiverId": "white-B1",
+          "passAccuracy": 1,
+          "retention": 0,
+          "tacklers": [
+            {
+              "pieceId": "black-R2",
+              "takeaway": 1,
+              "landings": 8
+            }
+          ],
+          "geometryRetention": 0
+        }
+      ],
+      "geometryChoice": 1
+    },
+    {
+      "itemId": "dc4f3134d9265d9f",
+      "attack": "black",
+      "carrier": "black-Q",
+      "pieces": [
+        {
+          "id": "black-B1",
+          "team": "black",
+          "type": "B",
+          "square": "g12"
+        },
+        {
+          "id": "black-K",
+          "team": "black",
+          "type": "K",
+          "square": "h17"
+        },
+        {
+          "id": "black-N1",
+          "team": "black",
+          "type": "N",
+          "square": "l15"
+        },
+        {
+          "id": "black-Q",
+          "team": "black",
+          "type": "Q",
+          "square": "g10"
+        },
+        {
+          "id": "black-R1",
+          "team": "black",
+          "type": "R",
+          "square": "j7"
+        },
+        {
+          "id": "white-B2",
+          "team": "white",
+          "type": "B",
+          "square": "j17"
+        },
+        {
+          "id": "white-K",
+          "team": "white",
+          "type": "K",
+          "square": "i1"
+        },
+        {
+          "id": "white-P2",
+          "team": "white",
+          "type": "P",
+          "square": "k16"
+        },
+        {
+          "id": "white-P3",
+          "team": "white",
+          "type": "P",
+          "square": "l2"
+        },
+        {
+          "id": "white-Q",
+          "team": "white",
+          "type": "Q",
+          "square": "k9"
+        },
+        {
+          "id": "white-R2",
+          "team": "white",
+          "type": "R",
+          "square": "i7"
+        }
+      ],
+      "options": [
+        "black-N1",
+        "black-B1",
+        "black-R1"
+      ],
+      "answer": 2,
+      "oracle": [
+        {
+          "receiverId": "black-N1",
+          "passAccuracy": 1,
+          "retention": 0.5,
+          "tacklers": [
+            {
+              "pieceId": "white-P2",
+              "takeaway": 0.5,
+              "landings": 8
+            }
+          ],
+          "geometryRetention": 0.5
+        },
+        {
+          "receiverId": "black-B1",
+          "passAccuracy": 1,
+          "retention": 1,
+          "tacklers": [],
+          "geometryRetention": 1
+        },
+        {
+          "receiverId": "black-R1",
+          "passAccuracy": 1,
+          "retention": 0,
+          "tacklers": [
+            {
+              "pieceId": "white-R2",
+              "takeaway": 1,
+              "landings": 8
+            }
+          ],
+          "geometryRetention": 0
+        }
+      ],
+      "geometryChoice": 2
+    },
+    {
+      "itemId": "4893692fe5293c15",
+      "attack": "black",
+      "carrier": "black-Q",
+      "pieces": [
+        {
+          "id": "black-B1",
+          "team": "black",
+          "type": "B",
+          "square": "g12"
+        },
+        {
+          "id": "black-K",
+          "team": "black",
+          "type": "K",
+          "square": "h17"
+        },
+        {
+          "id": "black-N1",
+          "team": "black",
+          "type": "N",
+          "square": "l15"
+        },
+        {
+          "id": "black-Q",
+          "team": "black",
+          "type": "Q",
+          "square": "g10"
+        },
+        {
+          "id": "black-R1",
+          "team": "black",
+          "type": "R",
+          "square": "j7"
+        },
+        {
+          "id": "white-B2",
+          "team": "white",
+          "type": "B",
+          "square": "j17"
+        },
+        {
+          "id": "white-K",
+          "team": "white",
+          "type": "K",
+          "square": "i1"
+        },
+        {
+          "id": "white-P2",
+          "team": "white",
+          "type": "P",
+          "square": "j16"
+        },
+        {
+          "id": "white-P3",
+          "team": "white",
+          "type": "P",
+          "square": "l2"
+        },
+        {
+          "id": "white-Q",
+          "team": "white",
+          "type": "Q",
+          "square": "k9"
+        },
+        {
+          "id": "white-R2",
+          "team": "white",
+          "type": "R",
+          "square": "i7"
+        }
+      ],
+      "options": [
+        "black-N1",
+        "black-B1",
+        "black-R1"
+      ],
+      "answer": 2,
+      "oracle": [
+        {
+          "receiverId": "black-N1",
+          "passAccuracy": 1,
+          "retention": 0.5,
+          "tacklers": [
+            {
+              "pieceId": "white-B2",
+              "takeaway": 0.5,
+              "landings": 8
+            }
+          ],
+          "geometryRetention": 0.5
+        },
+        {
+          "receiverId": "black-B1",
+          "passAccuracy": 1,
+          "retention": 1,
+          "tacklers": [],
+          "geometryRetention": 1
+        },
+        {
+          "receiverId": "black-R1",
+          "passAccuracy": 1,
+          "retention": 0,
+          "tacklers": [
+            {
+              "pieceId": "white-R2",
+              "takeaway": 1,
+              "landings": 8
+            }
+          ],
+          "geometryRetention": 0
+        }
+      ],
+      "geometryChoice": 2
+    }
+  ]
+}

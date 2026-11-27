@@ -1,0 +1,197 @@
+{
+  "quizId": "PFC-PASS-X1",
+  "items": [
+    {
+      "itemId": "465de17ca7f5327c",
+      "image": "images/position-01.png",
+      "imageSha256": "6b90da0f873630a57578854ebeabd9faccfe7ef1c0f43f38985632b343c9cbc1",
+      "prompt": "Which receiver maximizes the probability that your team keeps possession after one defensive challenge?\n\nAll three passes are legal, onside, unobstructed and reach their receivers with certainty. Every piece stays on its square after the pass. The attack holds. The defense can hold or make one ordinary move, and will choose a legal tackle with the highest chance of winning the ball. Fouls are off.\n\nBlack's queen on i7 has the ball.\n\n1. bishop on f7\n2. rook on e11\n3. knight on l10\n\nAnswer with one option number (1, 2 or 3).\n\nLight pieces are White and dark pieces are Black. The square token carries the ball. Numbers identify receivers. K king, Q queen, R rook, B bishop, N knight, P pawn.\n\nWhite pieces: bishop on k11, king on i1, pawn on g11, pawn on k2, queen on i11, rook on f9.\nBlack pieces: bishop on f7, king on i17, knight on l10, queen on i7, rook on e11.\n\nRooks tackle on a rank or file, bishops on a diagonal, and queens along either. Their reach is at most five squares. Intervening pieces block these lines.\nKnights jump one file and two ranks or two files and one rank. Pawns tackle one diagonal step in any direction. Kings tackle one adjacent square in any direction.\nA tackle needs a legal landing next to the receiver, within ten squares of the defender's starting square using the larger of the file and rank differences. The landing must be empty or the defender's own starting square.\nOutfield pieces cannot occupy f1–i1 or f17–i17. A king may enter only its own end's penalty box (files e–j and ranks 1–3 for White or 15–17 for Black). White attacks rank 17 and Black attacks rank 1.\nA legal tackle wins the ball with probability 1 against a non-knight receiver or 0.5 against a knight receiver. A failed tackle, another move, or holding leaves possession with the attacking team.",
+      "promptSha256": "f3232c607f4aee63a482c42ddc6b6932d4524a5651fff75a19a9a388c1a1d333",
+      "options": [
+        "black-B1",
+        "black-R1",
+        "black-N1"
+      ]
+    },
+    {
+      "itemId": "d9aa2b4ae90f138a",
+      "image": "images/position-02.png",
+      "imageSha256": "e3c374403059b763cc7ccee9d2916465b18f34c9d3b3dce5905bb8607370e244",
+      "prompt": "Which receiver maximizes the probability that your team keeps possession after one defensive challenge?\n\nAll three passes are legal, onside, unobstructed and reach their receivers with certainty. Every piece stays on its square after the pass. The attack holds. The defense can hold or make one ordinary move, and will choose a legal tackle with the highest chance of winning the ball. Fouls are off.\n\nWhite's queen on e8 has the ball.\n\n1. rook on g6\n2. knight on h11\n3. bishop on e5\n\nAnswer with one option number (1, 2 or 3).\n\nLight pieces are White and dark pieces are Black. The square token carries the ball. Numbers identify receivers. K king, Q queen, R rook, B bishop, N knight, P pawn.\n\nWhite pieces: bishop on e5, king on h1, knight on h11, queen on e8, rook on g6.\nBlack pieces: bishop on l7, king on h17, pawn on c15, pawn on f4, queen on j1, rook on g11.\n\nRooks tackle on a rank or file, bishops on a diagonal, and queens along either. Their reach is at most five squares. Intervening pieces block these lines.\nKnights jump one file and two ranks or two files and one rank. Pawns tackle one diagonal step in any direction. Kings tackle one adjacent square in any direction.\nA tackle needs a legal landing next to the receiver, within ten squares of the defender's starting square using the larger of the file and rank differences. The landing must be empty or the defender's own starting square.\nOutfield pieces cannot occupy f1–i1 or f17–i17. A king may enter only its own end's penalty box (files e–j and ranks 1–3 for White or 15–17 for Black). White attacks rank 17 and Black attacks rank 1.\nA legal tackle wins the ball with probability 1 against a non-knight receiver or 0.5 against a knight receiver. A failed tackle, another move, or holding leaves possession with the attacking team.",
+      "promptSha256": "9ddc4d25902595907bc3f97f48ffd67c45b6fa8e87e9a0ed463275a1bf91a870",
+      "options": [
+        "white-R1",
+        "white-N1",
+        "white-B1"
+      ]
+    },
+    {
+      "itemId": "c33908a93f966086",
+      "image": "images/position-03.png",
+      "imageSha256": "0bc65aae30fc05542c3f89a2aef96f7530dd4963ee34dddc4b622447b80852cc",
+      "prompt": "Which receiver maximizes the probability that your team keeps possession after one defensive challenge?\n\nAll three passes are legal, onside, unobstructed and reach their receivers with certainty. Every piece stays on its square after the pass. The attack holds. The defense can hold or make one ordinary move, and will choose a legal tackle with the highest chance of winning the ball. Fouls are off.\n\nBlack's queen on h11 has the ball.\n\n1. bishop on h16\n2. knight on h8\n3. rook on e8\n\nAnswer with one option number (1, 2 or 3).\n\nLight pieces are White and dark pieces are Black. The square token carries the ball. Numbers identify receivers. K king, Q queen, R rook, B bishop, N knight, P pawn.\n\nWhite pieces: bishop on g9, king on i1, pawn on e3, pawn on l16, queen on m16, rook on e6.\nBlack pieces: bishop on h16, king on h17, knight on h8, queen on h11, rook on e8.\n\nRooks tackle on a rank or file, bishops on a diagonal, and queens along either. Their reach is at most five squares. Intervening pieces block these lines.\nKnights jump one file and two ranks or two files and one rank. Pawns tackle one diagonal step in any direction. Kings tackle one adjacent square in any direction.\nA tackle needs a legal landing next to the receiver, within ten squares of the defender's starting square using the larger of the file and rank differences. The landing must be empty or the defender's own starting square.\nOutfield pieces cannot occupy f1–i1 or f17–i17. A king may enter only its own end's penalty box (files e–j and ranks 1–3 for White or 15–17 for Black). White attacks rank 17 and Black attacks rank 1.\nA legal tackle wins the ball with probability 1 against a non-knight receiver or 0.5 against a knight receiver. A failed tackle, another move, or holding leaves possession with the attacking team.",
+      "promptSha256": "f653bb4a1be939df27342656d049c6f2393b3645e2b845bb8858f6aab33f5d59",
+      "options": [
+        "black-B1",
+        "black-N1",
+        "black-R1"
+      ]
+    },
+    {
+      "itemId": "a8f01e08e17993da",
+      "image": "images/position-04.png",
+      "imageSha256": "009d64407451f723dae39d010ca738d35eb8e68cbd5b361932438d50c49cd6dc",
+      "prompt": "Which receiver maximizes the probability that your team keeps possession after one defensive challenge?\n\nAll three passes are legal, onside, unobstructed and reach their receivers with certainty. Every piece stays on its square after the pass. The attack holds. The defense can hold or make one ordinary move, and will choose a legal tackle with the highest chance of winning the ball. Fouls are off.\n\nBlack's queen on f6 has the ball.\n\n1. knight on i3\n2. bishop on f11\n3. rook on h8\n\nAnswer with one option number (1, 2 or 3).\n\nLight pieces are White and dark pieces are Black. The square token carries the ball. Numbers identify receivers. K king, Q queen, R rook, B bishop, N knight, P pawn.\n\nWhite pieces: bishop on l6, king on g1, pawn on i2, pawn on i8, queen on m9, rook on j11.\nBlack pieces: bishop on f11, king on f17, knight on i3, queen on f6, rook on h8.\n\nRooks tackle on a rank or file, bishops on a diagonal, and queens along either. Their reach is at most five squares. Intervening pieces block these lines.\nKnights jump one file and two ranks or two files and one rank. Pawns tackle one diagonal step in any direction. Kings tackle one adjacent square in any direction.\nA tackle needs a legal landing next to the receiver, within ten squares of the defender's starting square using the larger of the file and rank differences. The landing must be empty or the defender's own starting square.\nOutfield pieces cannot occupy f1–i1 or f17–i17. A king may enter only its own end's penalty box (files e–j and ranks 1–3 for White or 15–17 for Black). White attacks rank 17 and Black attacks rank 1.\nA legal tackle wins the ball with probability 1 against a non-knight receiver or 0.5 against a knight receiver. A failed tackle, another move, or holding leaves possession with the attacking team.",
+      "promptSha256": "0a3d5f5a518f00c72fc1c98777d2e75d880f006b014b1d01ab03505ee27e540b",
+      "options": [
+        "black-N1",
+        "black-B1",
+        "black-R1"
+      ]
+    },
+    {
+      "itemId": "673e3f66653c5d1d",
+      "image": "images/position-05.png",
+      "imageSha256": "31e077e9bdccebee9ebc5ab54440d20a866cc62831b59c194364b46fff9f9136",
+      "prompt": "Which receiver maximizes the probability that your team keeps possession after one defensive challenge?\n\nAll three passes are legal, onside, unobstructed and reach their receivers with certainty. Every piece stays on its square after the pass. The attack holds. The defense can hold or make one ordinary move, and will choose a legal tackle with the highest chance of winning the ball. Fouls are off.\n\nWhite's queen on h7 has the ball.\n\n1. rook on j5\n2. knight on d7\n3. bishop on l11\n\nAnswer with one option number (1, 2 or 3).\n\nLight pieces are White and dark pieces are Black. The square token carries the ball. Numbers identify receivers. K king, Q queen, R rook, B bishop, N knight, P pawn.\n\nWhite pieces: bishop on l11, king on h1, knight on d7, queen on h7, rook on j5.\nBlack pieces: bishop on h11, king on i17, pawn on c6, pawn on i15, queen on m1, rook on n11.\n\nRooks tackle on a rank or file, bishops on a diagonal, and queens along either. Their reach is at most five squares. Intervening pieces block these lines.\nKnights jump one file and two ranks or two files and one rank. Pawns tackle one diagonal step in any direction. Kings tackle one adjacent square in any direction.\nA tackle needs a legal landing next to the receiver, within ten squares of the defender's starting square using the larger of the file and rank differences. The landing must be empty or the defender's own starting square.\nOutfield pieces cannot occupy f1–i1 or f17–i17. A king may enter only its own end's penalty box (files e–j and ranks 1–3 for White or 15–17 for Black). White attacks rank 17 and Black attacks rank 1.\nA legal tackle wins the ball with probability 1 against a non-knight receiver or 0.5 against a knight receiver. A failed tackle, another move, or holding leaves possession with the attacking team.",
+      "promptSha256": "19f96ff3dc9696fd593176a6b98832ade331777ea5aefa0779235aa7070954b0",
+      "options": [
+        "white-R1",
+        "white-N1",
+        "white-B1"
+      ]
+    },
+    {
+      "itemId": "0d757418b4036bf3",
+      "image": "images/position-06.png",
+      "imageSha256": "cb60409bb809d66a1620b9cc98dbf7eceb5983cbc6b5b8fac5cddf02ac5d6b7e",
+      "prompt": "Which receiver maximizes the probability that your team keeps possession after one defensive challenge?\n\nAll three passes are legal, onside, unobstructed and reach their receivers with certainty. Every piece stays on its square after the pass. The attack holds. The defense can hold or make one ordinary move, and will choose a legal tackle with the highest chance of winning the ball. Fouls are off.\n\nWhite's queen on j11 has the ball.\n\n1. knight on l11\n2. rook on j6\n3. bishop on g11\n\nAnswer with one option number (1, 2 or 3).\n\nLight pieces are White and dark pieces are Black. The square token carries the ball. Numbers identify receivers. K king, Q queen, R rook, B bishop, N knight, P pawn.\n\nWhite pieces: bishop on g11, king on h1, knight on l11, queen on j11, rook on j6.\nBlack pieces: bishop on i8, king on i17, pawn on f10, pawn on g15, queen on d11, rook on j1.\n\nRooks tackle on a rank or file, bishops on a diagonal, and queens along either. Their reach is at most five squares. Intervening pieces block these lines.\nKnights jump one file and two ranks or two files and one rank. Pawns tackle one diagonal step in any direction. Kings tackle one adjacent square in any direction.\nA tackle needs a legal landing next to the receiver, within ten squares of the defender's starting square using the larger of the file and rank differences. The landing must be empty or the defender's own starting square.\nOutfield pieces cannot occupy f1–i1 or f17–i17. A king may enter only its own end's penalty box (files e–j and ranks 1–3 for White or 15–17 for Black). White attacks rank 17 and Black attacks rank 1.\nA legal tackle wins the ball with probability 1 against a non-knight receiver or 0.5 against a knight receiver. A failed tackle, another move, or holding leaves possession with the attacking team.",
+      "promptSha256": "5098e1289d43135024df5f055699ab5eb6781fbc076f1b4d5957b55e5d5e48e7",
+      "options": [
+        "white-N1",
+        "white-R1",
+        "white-B1"
+      ]
+    },
+    {
+      "itemId": "7e2513fecc10ea19",
+      "image": "images/position-07.png",
+      "imageSha256": "b5f4da6cba90fab0a0020d33ac0db4872f14c5029c2bc495f5ea96aae19c0074",
+      "prompt": "Which receiver maximizes the probability that your team keeps possession after one defensive challenge?\n\nAll three passes are legal, onside, unobstructed and reach their receivers with certainty. Every piece stays on its square after the pass. The attack holds. The defense can hold or make one ordinary move, and will choose a legal tackle with the highest chance of winning the ball. Fouls are off.\n\nWhite's queen on f10 has the ball.\n\n1. bishop on c7\n2. rook on i7\n3. knight on f12\n\nAnswer with one option number (1, 2 or 3).\n\nLight pieces are White and dark pieces are Black. The square token carries the ball. Numbers identify receivers. K king, Q queen, R rook, B bishop, N knight, P pawn.\n\nWhite pieces: bishop on c7, king on i1, knight on f12, queen on f10, rook on i7.\nBlack pieces: bishop on b8, king on g17, pawn on i16, pawn on l7, queen on n7, rook on c10.\n\nRooks tackle on a rank or file, bishops on a diagonal, and queens along either. Their reach is at most five squares. Intervening pieces block these lines.\nKnights jump one file and two ranks or two files and one rank. Pawns tackle one diagonal step in any direction. Kings tackle one adjacent square in any direction.\nA tackle needs a legal landing next to the receiver, within ten squares of the defender's starting square using the larger of the file and rank differences. The landing must be empty or the defender's own starting square.\nOutfield pieces cannot occupy f1–i1 or f17–i17. A king may enter only its own end's penalty box (files e–j and ranks 1–3 for White or 15–17 for Black). White attacks rank 17 and Black attacks rank 1.\nA legal tackle wins the ball with probability 1 against a non-knight receiver or 0.5 against a knight receiver. A failed tackle, another move, or holding leaves possession with the attacking team.",
+      "promptSha256": "9f09504b105391498f8648c384c87e412803ed0438e8dfa85945fedae509c12d",
+      "options": [
+        "white-B1",
+        "white-R1",
+        "white-N1"
+      ]
+    },
+    {
+      "itemId": "dc4f3134d9265d9f",
+      "image": "images/position-08.png",
+      "imageSha256": "89986593bcac8719ee79557628124a630348f5c7f186aea090c0b7f8f2e512db",
+      "prompt": "Which receiver maximizes the probability that your team keeps possession after one defensive challenge?\n\nAll three passes are legal, onside, unobstructed and reach their receivers with certainty. Every piece stays on its square after the pass. The attack holds. The defense can hold or make one ordinary move, and will choose a legal tackle with the highest chance of winning the ball. Fouls are off.\n\nBlack's queen on g10 has the ball.\n\n1. knight on l15\n2. bishop on g12\n3. rook on j7\n\nAnswer with one option number (1, 2 or 3).\n\nLight pieces are White and dark pieces are Black. The square token carries the ball. Numbers identify receivers. K king, Q queen, R rook, B bishop, N knight, P pawn.\n\nWhite pieces: bishop on j17, king on i1, pawn on k16, pawn on l2, queen on k9, rook on i7.\nBlack pieces: bishop on g12, king on h17, knight on l15, queen on g10, rook on j7.\n\nRooks tackle on a rank or file, bishops on a diagonal, and queens along either. Their reach is at most five squares. Intervening pieces block these lines.\nKnights jump one file and two ranks or two files and one rank. Pawns tackle one diagonal step in any direction. Kings tackle one adjacent square in any direction.\nA tackle needs a legal landing next to the receiver, within ten squares of the defender's starting square using the larger of the file and rank differences. The landing must be empty or the defender's own starting square.\nOutfield pieces cannot occupy f1–i1 or f17–i17. A king may enter only its own end's penalty box (files e–j and ranks 1–3 for White or 15–17 for Black). White attacks rank 17 and Black attacks rank 1.\nA legal tackle wins the ball with probability 1 against a non-knight receiver or 0.5 against a knight receiver. A failed tackle, another move, or holding leaves possession with the attacking team.",
+      "promptSha256": "a7b83752bf34f7bb8a2d6ad2e3d4e23854c8df23d0441f29ed56365f8aa2e93c",
+      "options": [
+        "black-N1",
+        "black-B1",
+        "black-R1"
+      ]
+    },
+    {
+      "itemId": "6b6e593b15f55e97",
+      "image": "images/position-09.png",
+      "imageSha256": "3c5a73c9296dedae45eb1a6303b084af27113460f83c4111ce1a90781afc5af4",
+      "prompt": "Which receiver maximizes the probability that your team keeps possession after one defensive challenge?\n\nAll three passes are legal, onside, unobstructed and reach their receivers with certainty. Every piece stays on its square after the pass. The attack holds. The defense can hold or make one ordinary move, and will choose a legal tackle with the highest chance of winning the ball. Fouls are off.\n\nBlack's queen on i7 has the ball.\n\n1. bishop on f7\n2. rook on e11\n3. knight on l10\n\nAnswer with one option number (1, 2 or 3).\n\nLight pieces are White and dark pieces are Black. The square token carries the ball. Numbers identify receivers. K king, Q queen, R rook, B bishop, N knight, P pawn.\n\nWhite pieces: bishop on k11, king on i1, pawn on g10, pawn on k2, queen on i11, rook on f9.\nBlack pieces: bishop on f7, king on i17, knight on l10, queen on i7, rook on e11.\n\nRooks tackle on a rank or file, bishops on a diagonal, and queens along either. Their reach is at most five squares. Intervening pieces block these lines.\nKnights jump one file and two ranks or two files and one rank. Pawns tackle one diagonal step in any direction. Kings tackle one adjacent square in any direction.\nA tackle needs a legal landing next to the receiver, within ten squares of the defender's starting square using the larger of the file and rank differences. The landing must be empty or the defender's own starting square.\nOutfield pieces cannot occupy f1–i1 or f17–i17. A king may enter only its own end's penalty box (files e–j and ranks 1–3 for White or 15–17 for Black). White attacks rank 17 and Black attacks rank 1.\nA legal tackle wins the ball with probability 1 against a non-knight receiver or 0.5 against a knight receiver. A failed tackle, another move, or holding leaves possession with the attacking team.",
+      "promptSha256": "6e32793860c65511a49f556e469f5e14fed94ffad8c5f15b3be25526aa9f7b8c",
+      "options": [
+        "black-B1",
+        "black-R1",
+        "black-N1"
+      ]
+    },
+    {
+      "itemId": "4fd64d0610c8ae1d",
+      "image": "images/position-10.png",
+      "imageSha256": "00257e513b7b66c180746e223a3b85200cbc435087d7061be9ed5c4b374db9f1",
+      "prompt": "Which receiver maximizes the probability that your team keeps possession after one defensive challenge?\n\nAll three passes are legal, onside, unobstructed and reach their receivers with certainty. Every piece stays on its square after the pass. The attack holds. The defense can hold or make one ordinary move, and will choose a legal tackle with the highest chance of winning the ball. Fouls are off.\n\nBlack's queen on f6 has the ball.\n\n1. knight on i3\n2. bishop on f11\n3. rook on h8\n\nAnswer with one option number (1, 2 or 3).\n\nLight pieces are White and dark pieces are Black. The square token carries the ball. Numbers identify receivers. K king, Q queen, R rook, B bishop, N knight, P pawn.\n\nWhite pieces: bishop on l6, king on g1, pawn on i2, pawn on i9, queen on m9, rook on j11.\nBlack pieces: bishop on f11, king on f17, knight on i3, queen on f6, rook on h8.\n\nRooks tackle on a rank or file, bishops on a diagonal, and queens along either. Their reach is at most five squares. Intervening pieces block these lines.\nKnights jump one file and two ranks or two files and one rank. Pawns tackle one diagonal step in any direction. Kings tackle one adjacent square in any direction.\nA tackle needs a legal landing next to the receiver, within ten squares of the defender's starting square using the larger of the file and rank differences. The landing must be empty or the defender's own starting square.\nOutfield pieces cannot occupy f1–i1 or f17–i17. A king may enter only its own end's penalty box (files e–j and ranks 1–3 for White or 15–17 for Black). White attacks rank 17 and Black attacks rank 1.\nA legal tackle wins the ball with probability 1 against a non-knight receiver or 0.5 against a knight receiver. A failed tackle, another move, or holding leaves possession with the attacking team.",
+      "promptSha256": "112907943e43e288e403fa12316758109d66aac718df17667788d61fdb559daa",
+      "options": [
+        "black-N1",
+        "black-B1",
+        "black-R1"
+      ]
+    },
+    {
+      "itemId": "5d43ff1367c32bcc",
+      "image": "images/position-11.png",
+      "imageSha256": "e5bd79b01a2c9c7e5ff4f7193059c29023e7e778412613cb7dc219b41143cb23",
+      "prompt": "Which receiver maximizes the probability that your team keeps possession after one defensive challenge?\n\nAll three passes are legal, onside, unobstructed and reach their receivers with certainty. Every piece stays on its square after the pass. The attack holds. The defense can hold or make one ordinary move, and will choose a legal tackle with the highest chance of winning the ball. Fouls are off.\n\nWhite's queen on h7 has the ball.\n\n1. rook on j5\n2. knight on d7\n3. bishop on l11\n\nAnswer with one option number (1, 2 or 3).\n\nLight pieces are White and dark pieces are Black. The square token carries the ball. Numbers identify receivers. K king, Q queen, R rook, B bishop, N knight, P pawn.\n\nWhite pieces: bishop on l11, king on h1, knight on d7, queen on h7, rook on j5.\nBlack pieces: bishop on h11, king on i17, pawn on c5, pawn on i15, queen on m1, rook on n11.\n\nRooks tackle on a rank or file, bishops on a diagonal, and queens along either. Their reach is at most five squares. Intervening pieces block these lines.\nKnights jump one file and two ranks or two files and one rank. Pawns tackle one diagonal step in any direction. Kings tackle one adjacent square in any direction.\nA tackle needs a legal landing next to the receiver, within ten squares of the defender's starting square using the larger of the file and rank differences. The landing must be empty or the defender's own starting square.\nOutfield pieces cannot occupy f1–i1 or f17–i17. A king may enter only its own end's penalty box (files e–j and ranks 1–3 for White or 15–17 for Black). White attacks rank 17 and Black attacks rank 1.\nA legal tackle wins the ball with probability 1 against a non-knight receiver or 0.5 against a knight receiver. A failed tackle, another move, or holding leaves possession with the attacking team.",
+      "promptSha256": "613378141a9f4e6176169805e2a4e86650b477ad175eda82b5d405eb006a7538",
+      "options": [
+        "white-R1",
+        "white-N1",
+        "white-B1"
+      ]
+    },
+    {
+      "itemId": "8ee4fb14bce42198",
+      "image": "images/position-12.png",
+      "imageSha256": "b9aa035ee597694aac1d1b78ccf744bc0ac47599453d1c99dcfd47d28914cabc",
+      "prompt": "Which receiver maximizes the probability that your team keeps possession after one defensive challenge?\n\nAll three passes are legal, onside, unobstructed and reach their receivers with certainty. Every piece stays on its square after the pass. The attack holds. The defense can hold or make one ordinary move, and will choose a legal tackle with the highest chance of winning the ball. Fouls are off.\n\nWhite's queen on e8 has the ball.\n\n1. rook on g6\n2. knight on h11\n3. bishop on e5\n\nAnswer with one option number (1, 2 or 3).\n\nLight pieces are White and dark pieces are Black. The square token carries the ball. Numbers identify receivers. K king, Q queen, R rook, B bishop, N knight, P pawn.\n\nWhite pieces: bishop on e5, king on h1, knight on h11, queen on e8, rook on g6.\nBlack pieces: bishop on l7, king on h17, pawn on c15, pawn on g4, queen on j1, rook on g11.\n\nRooks tackle on a rank or file, bishops on a diagonal, and queens along either. Their reach is at most five squares. Intervening pieces block these lines.\nKnights jump one file and two ranks or two files and one rank. Pawns tackle one diagonal step in any direction. Kings tackle one adjacent square in any direction.\nA tackle needs a legal landing next to the receiver, within ten squares of the defender's starting square using the larger of the file and rank differences. The landing must be empty or the defender's own starting square.\nOutfield pieces cannot occupy f1–i1 or f17–i17. A king may enter only its own end's penalty box (files e–j and ranks 1–3 for White or 15–17 for Black). White attacks rank 17 and Black attacks rank 1.\nA legal tackle wins the ball with probability 1 against a non-knight receiver or 0.5 against a knight receiver. A failed tackle, another move, or holding leaves possession with the attacking team.",
+      "promptSha256": "09f83a614698aa6366121f868a9bd3cba70e1963d5636e13996e7da0cc357ed9",
+      "options": [
+        "white-R1",
+        "white-N1",
+        "white-B1"
+      ]
+    },
+    {
+      "itemId": "6cfdf8840ebcb2a0",
+      "image": "images/position-13.png",
+      "imageSha256": "aeb375462c9cda57224f2c3b804b75f4dfab80225ada3c1da4db6dd3d5d579b5",
+      "prompt": "Which receiver maximizes the probability that your team keeps possession after one defensive challenge?\n\nAll three passes are legal, onside, unobstructed and reach their receivers with certainty. Every piece stays on its square after the pass. The attack holds. The defense can hold or make one ordinary move, and will choose a legal tackle with the highest chance of winning the ball. Fouls are off.\n\nWhite's queen on f10 has the ball.\n\n1. bishop on c7\n2. rook on i7\n3. knight on f12\n\nAnswer with one option number (1, 2 or 3).\n\nLight pieces are White and dark pieces are Black. The square token carries the ball. Numbers identify receivers. K king, Q queen, R rook, B bishop, N knight, P pawn.\n\nWhite pieces: bishop on c7, king on i1, knight on f12, queen on f10, rook on i7.\nBlack pieces: bishop on b8, king on g17, pawn on i16, pawn on m7, queen on n7, rook on c10.\n\nRooks tackle on a rank or file, bishops on a diagonal, and queens along either. Their reach is at most five squares. Intervening pieces block these lines.\nKnights jump one file and two ranks or two files and one rank. Pawns tackle one diagonal step in any direction. Kings tackle one adjacent square in any direction.\nA tackle needs a legal landing next to the receiver, within ten squares of the defender's starting square using the larger of the file and rank differences. The landing must be empty or the defender's own starting square.\nOutfield pieces cannot occupy f1–i1 or f17–i17. A king may enter only its own end's penalty box (files e–j and ranks 1–3 for White or 15–17 for Black). White attacks rank 17 and Black attacks rank 1.\nA legal tackle wins the ball with probability 1 against a non-knight receiver or 0.5 against a knight receiver. A failed tackle, another move, or holding leaves possession with the attacking team.",
+      "promptSha256": "8b718c3d8e0f8b200526b1760a061a649795adf3a4dce764f0a73d8ae916f84c",
+      "options": [
+        "white-B1",
+        "white-R1",
+        "white-N1"
+      ]
+    },
+    {
+      "itemId": "4893692fe5293c15",
+      "image": "images/position-14.png",
+      "imageSha256": "363d725ebb3eae105c8cd4f049aeea0821fd1c90e3183f5f46049c82c8f1c74b",
+      "prompt": "Which receiver maximizes the probability that your team keeps possession after one defensive challenge?\n\nAll three passes are legal, onside, unobstructed and reach their receivers with certainty. Every piece stays on its square after the pass. The attack holds. The defense can hold or make one ordinary move, and will choose a legal tackle with the highest chance of winning the ball. Fouls are off.\n\nBlack's queen on g10 has the ball.\n\n1. knight on l15\n2. bishop on g12\n3. rook on j7\n\nAnswer with one option number (1, 2 or 3).\n\nLight pieces are White and dark pieces are Black. The square token carries the ball. Numbers identify receivers. K king, Q queen, R rook, B bishop, N knight, P pawn.\n\nWhite pieces: bishop on j17, king on i1, pawn on j16, pawn on l2, queen on k9, rook on i7.\nBlack pieces: bishop on g12, king on h17, knight on l15, queen on g10, rook on j7.\n\nRooks tackle on a rank or file, bishops on a diagonal, and queens along either. Their reach is at most five squares. Intervening pieces block these lines.\nKnights jump one file and two ranks or two files and one rank. Pawns tackle one diagonal step in any direction. Kings tackle one adjacent square in any direction.\nA tackle needs a legal landing next to the receiver, within ten squares of the defender's starting square using the larger of the file and rank differences. The landing must be empty or the defender's own starting square.\nOutfield pieces cannot occupy f1–i1 or f17–i17. A king may enter only its own end's penalty box (files e–j and ranks 1–3 for White or 15–17 for Black). White attacks rank 17 and Black attacks rank 1.\nA legal tackle wins the ball with probability 1 against a non-knight receiver or 0.5 against a knight receiver. A failed tackle, another move, or holding leaves possession with the attacking team.",
+      "promptSha256": "1d34f9aab89eb627182657283d135e9e3fb477760e9635ed3871661d4ff755de",
+      "options": [
+        "black-N1",
+        "black-B1",
+        "black-R1"
+      ]
+    },
+    {
+      "itemId": "35b09a8be3315c62",
+      "image": "images/position-15.png",
+      "imageSha256": "05375d92c03e267e3825bfa55d7ac070842c6ae08171186ab4024c0771398188",
+      "prompt": "Which receiver maximizes the probability that your team keeps possession after one defensive challenge?\n\nAll three passes are legal, onside, unobstructed and reach their receivers with certainty. Every piece stays on its square after the pass. The attack holds. The defense can hold or make one ordinary move, and will choose a legal tackle with the highest chance of winning the ball. Fouls are off.\n\nWhite's queen on j11 has the ball.\n\n1. knight on l11\n2. rook on j6\n3. bishop on g11\n\nAnswer with one option number (1, 2 or 3).\n\nLight pieces are White and dark pieces are Black. The square token carries the ball. Numbers identify receivers. K king, Q queen, R rook, B bishop, N knight, P pawn.\n\nWhite pieces: bishop on g11, king on h1, knight on l11, queen on j11, rook on j6.\nBlack pieces: bishop on i8, king on i17, pawn on f11, pawn on g15, queen on d11, rook on j1.\n\nRooks tackle on a rank or file, bishops on a diagonal, and queens along either. Their reach is at most five squares. Intervening pieces block these lines.\nKnights jump one file and two ranks or two files and one rank. Pawns tackle one diagonal step in any direction. Kings tackle one adjacent square in any direction.\nA tackle needs a legal landing next to the receiver, within ten squares of the defender's starting square using the larger of the file and rank differences. The landing must be empty or the defender's own starting square.\nOutfield pieces cannot occupy f1–i1 or f17–i17. A king may enter only its own end's penalty box (files e–j and ranks 1–3 for White or 15–17 for Black). White attacks rank 17 and Black attacks rank 1.\nA legal tackle wins the ball with probability 1 against a non-knight receiver or 0.5 against a knight receiver. A failed tackle, another move, or holding leaves possession with the attacking team.",
+      "promptSha256": "d8bef35651118d14168da840bfd72563cf5094ea2326bfc9a3e98c362af3bdcd",
+      "options": [
+        "white-N1",
+        "white-R1",
+        "white-B1"
+      ]
+    },
+    {
+      "itemId": "da62c2d483eb2882",
+      "image": "images/position-16.png",
+      "imageSha256": "6931400f2e22ad51911287bcc03fe965451ad33140ef7c303b9ead3321063fe2",
+      "prompt": "Which receiver maximizes the probability that your team keeps possession after one defensive challenge?\n\nAll three passes are legal, onside, unobstructed and reach their receivers with certainty. Every piece stays on its square after the pass. The attack holds. The defense can hold or make one ordinary move, and will choose a legal tackle with the highest chance of winning the ball. Fouls are off.\n\nBlack's queen on h11 has the ball.\n\n1. bishop on h16\n2. knight on h8\n3. rook on e8\n\nAnswer with one option number (1, 2 or 3).\n\nLight pieces are White and dark pieces are Black. The square token carries the ball. Numbers identify receivers. K king, Q queen, R rook, B bishop, N knight, P pawn.\n\nWhite pieces: bishop on g9, king on i1, pawn on e3, pawn on k16, queen on m16, rook on e6.\nBlack pieces: bishop on h16, king on h17, knight on h8, queen on h11, rook on e8.\n\nRooks tackle on a rank or file, bishops on a diagonal, and queens along either. Their reach is at most five squares. Intervening pieces block these lines.\nKnights jump one file and two ranks or two files and one rank. Pawns tackle one diagonal step in any direction. Kings tackle one adjacent square in any direction.\nA tackle needs a legal landing next to the receiver, within ten squares of the defender's starting square using the larger of the file and rank differences. The landing must be empty or the defender's own starting square.\nOutfield pieces cannot occupy f1–i1 or f17–i17. A king may enter only its own end's penalty box (files e–j and ranks 1–3 for White or 15–17 for Black). White attacks rank 17 and Black attacks rank 1.\nA legal tackle wins the ball with probability 1 against a non-knight receiver or 0.5 against a knight receiver. A failed tackle, another move, or holding leaves possession with the attacking team.",
+      "promptSha256": "007f73976039897c435e41d545046cad4753a02c8a67dfb53576744d40fd5ca7",
+      "options": [
+        "black-B1",
+        "black-N1",
+        "black-R1"
+      ]
+    }
+  ]
+}

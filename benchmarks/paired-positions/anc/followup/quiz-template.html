@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pass selection · Purdue Football Chess</title>
+<style>
+:root{color-scheme:light;--paper:#f8f8f2;--ink:#1f3933;--muted:#4b615a;--rule:#b9c7bb;--green:#185e49}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.48 "Segoe UI",Arial,sans-serif}
+main{max-width:1120px;margin:auto;padding:clamp(12px,2.5vw,34px)}
+header{border-bottom:2px solid var(--ink);display:flex;align-items:baseline;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:1rem;padding-bottom:.6rem}
+h1,h2,p{margin:0 0 .6rem}h1{font-size:clamp(1.75rem,4vw,2.6rem);line-height:1.1;letter-spacing:-.035em}header h1{margin:0}
+h2{font-size:1.22rem;line-height:1.25}.muted,small{color:var(--muted)}
+#quiz{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(285px,1fr);gap:clamp(1rem,4vw,3.7rem);align-items:start}
+figure{margin:0;min-width:0}img{display:block;width:100%;height:auto;max-height:74vh;object-fit:contain}
+figcaption{color:var(--muted);font-size:.88rem;margin:.5rem auto;max-width:40rem}
+#progress{font-weight:650;font-size:.91rem;color:var(--muted);margin:0 0 .6rem}
+.bar{height:4px;background:#d8e2da;margin-bottom:1rem}.bar div{height:100%;background:var(--green)}
+.context{font-size:.95rem}fieldset{margin:.9rem 0 .55rem;padding:0;border:none}
+.option{display:flex;align-items:center;gap:.65rem;padding:.55rem .8rem;margin-bottom:.44rem;border:1px solid var(--rule);border-radius:6px;background:#fff;cursor:pointer;font-weight:600}
+.option:has(:checked){background:#e1efe4;border-color:var(--green);box-shadow:inset 0 0 0 1px var(--green)}
+input[type=radio]{accent-color:var(--green);width:1.15rem;height:1.15rem;margin:0}
+button{border:1px solid var(--green);border-radius:5px;background:var(--green);padding:.56rem 1rem;font:600 1rem "Segoe UI",Arial,sans-serif;color:white;cursor:pointer}
+button:disabled{opacity:.55;cursor:default}button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid #006aa1;outline-offset:3px}
+details{border-top:1px solid var(--rule);margin-top:.65rem;padding:.42rem 0 0}summary{font-weight:650;cursor:pointer;padding:.2rem 0}
+details p{margin:.4rem 0 .2rem;font-size:.94rem}#response{margin:0 0 .6rem;font-size:.91rem;color:var(--muted)}
+.note{font-size:.86rem;margin:.65rem 0;color:var(--muted)}#result{max-width:640px}
+#code{display:block;width:min(100%,30rem);padding:.6rem;border:1px solid var(--rule);background:#fff;border-radius:3px;font:1rem Consolas,monospace;margin:.3rem 0 .6rem;color:var(--ink)}
+[hidden]{display:none!important}.sr{position:absolute;clip-path:inset(50%);width:1px;height:1px;overflow:hidden;white-space:nowrap}
+@media(max-width:740px){#quiz{display:flex;flex-direction:column;gap:.6rem}figure{align-self:center;width:min(100%,450px)}img{max-height:none}header{gap:.3rem}#tasks{width:100%}main{padding:12px}figcaption{font-size:.84rem}}
+</style>
+</head>
+<body><main>
+<header><h1>Pass selection</h1><span class="muted">Purdue Football Chess</span></header>
+<section id="quiz" aria-label="Pass selection quiz" hidden>
+  <figure><img id="pitch" width="802" height="958" alt="Pitch diagram; the coordinate list gives every piece and its square."><figcaption id="legend"></figcaption></figure>
+  <section id="tasks" aria-label="Current decision">
+    <p id="progress" aria-live="polite"></p><div class="bar" aria-hidden="true"><div id="fill"></div></div>
+    <h2 id="team" tabindex="-1"></h2>
+    <p id="objective"></p><p class="context" id="horizon"></p>
+    <form id="form"><fieldset id="options"><legend class="sr">Receivers</legend></fieldset>
+      <p id="response"></p>
+      <button id="confirm" type="submit" disabled>Confirm pass</button>
+      <p class="note" id="state-note">Each confirmed choice is final. Progress is saved in this browser.</p>
+    </form>
+    <details id="rules"><summary>Tackle rules</summary><div id="rule-text"></div></details>
+    <details id="roster"><summary>Piece coordinates</summary><div id="roster-text"></div></details>
+  </section>
+</section>
+<section id="result" hidden>
+  <h2 tabindex="-1" id="done">Sixteen passes completed</h2>
+  <p>Paste your code into the chat to score your choices.</p>
+  <label for="code">Your response code</label>
+  <input id="code" readonly autocomplete="off" spellcheck="false"><button id="copy" type="button">Copy code</button>
+  <p id="copy-note" role="status"></p>
+</section>
+<noscript>Enable JavaScript to record the sixteen pass choices.</noscript>
+<script type="application/json" id="item-manifest">{{QUIZ_JSON}}</script>
+<script>
+"use strict";
+const get = id => document.getElementById(id);
+const manifest = JSON.parse(get("item-manifest").textContent);
+const items = manifest.items;
+const storageKey = manifest.quizId + ":" + items[0].imageSha256 + ":confirmed";
+let confirmed = "";
+let storageAvailable = true;
+function readProgress() {
+  try {
+    const stored = localStorage.getItem(storageKey) || "";
+    return /^[1-3]{0,16}$/.test(stored) ? stored : "";
+  } catch {
+    storageAvailable = false;
+    return confirmed;
+  }
+}
+function paragraphs(container, lines) {
+  container.replaceChildren(...lines.split("\n").map(line => {
+    const p = document.createElement("p"); p.textContent = line; return p;
+  }));
+}
+function render(advance) {
+  const index = confirmed.length;
+  if (index === items.length) {
+    get("quiz").hidden = true; get("result").hidden = false;
+    get("code").value = manifest.quizId + "|" + confirmed;
+    if (advance) get("done").focus();
+    return;
+  }
+  get("quiz").hidden = false; get("result").hidden = true;
+  const item = items[index];
+  const [objective,horizon,team,choices,response,legend,roster,rules] = item.prompt.split("\n\n");
+  get("progress").textContent = "Position " + (index + 1) + " of " + items.length;
+  get("fill").style.width = (100 * index / items.length) + "%";
+  get("team").textContent = team; get("objective").textContent = objective;
+  get("horizon").textContent = horizon; get("response").textContent = response;
+  get("pitch").src = item.image; get("legend").textContent = legend;
+  paragraphs(get("roster-text"),roster); paragraphs(get("rule-text"),rules);
+  const options = get("options");
+  options.querySelectorAll(".option").forEach(option => option.remove());
+  choices.split("\n").forEach((choice, i) => {
+    const label = document.createElement("label"); label.className = "option";
+    const radio = document.createElement("input");
+    radio.name = "choice"; radio.type = "radio"; radio.value = String(i+1);
+    label.append(radio,document.createTextNode(choice)); options.append(label);
+  });
+  get("confirm").textContent = index + 1 === items.length ? "Finish quiz" : "Confirm pass";
+  get("confirm").disabled = true;
+  if (!storageAvailable) get("state-note").textContent = "Each confirmed choice is final. Keep this tab open until you copy the code.";
+  if (advance) {
+    get("team").focus({preventScroll:true});
+    window.scrollTo(0,0);
+  }
+}
+get("form").addEventListener("change", () => { get("confirm").disabled = false; });
+get("form").addEventListener("submit", event => {
+  event.preventDefault();
+  const selected = get("options").querySelector("input:checked");
+  if (!selected || confirmed.length >= items.length) return;
+  const stored = readProgress();
+  if (storageAvailable && stored.length > confirmed.length) {
+    confirmed = stored; render(true); return;
+  }
+  confirmed += selected.value;
+  try {localStorage.setItem(storageKey,confirmed);} catch {storageAvailable = false;}
+  render(true);
+});
+window.addEventListener("storage", event => {
+  if (event.key === storageKey && event.newValue && /^[1-3]{1,16}$/.test(event.newValue) && event.newValue.length > confirmed.length) {
+    confirmed = event.newValue; render(true);
+  }
+});
+get("copy").addEventListener("click", async () => {
+  const input = get("code");
+  try {await navigator.clipboard.writeText(input.value); get("copy-note").textContent = "Copied.";}
+  catch {input.focus(); input.select(); get("copy-note").textContent = "Your code is selected. Use your device's Copy command.";}
+});
+confirmed = readProgress();
+render(false);
+</script>
+</main></body></html>

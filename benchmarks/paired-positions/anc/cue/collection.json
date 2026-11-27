@@ -1,0 +1,14 @@
+{
+  "study": "PFC-CUE-R1",
+  "freezeSha256": "716f43c7ebd4fd7fb550abd9d93fed0227064e90863b036e21a328f35ab6df0b",
+  "requestedModel": "gemini-3.1-flash-lite",
+  "returnedModelVersions": [
+    "gemini-3.1-flash-lite"
+  ],
+  "firstCompletionUTC": "2026-11-27T19:57:02.209Z",
+  "lastCompletionUTC": "2026-11-27T20:06:11.802Z",
+  "completed": 48,
+  "valid": 48,
+  "savedRetries": 2,
+  "choicesSha256": "69ea47345a88bbbcfb58cb3ebd4eefdec5c49bc201a1201acade72a98a5d7b08"
+}

@@ -1,0 +1,208 @@
+{
+  "authorResponse": "PFC-PASS-X1|2223112231132231",
+  "runReceiptSha256": "3d9c2f1587a0b4cb0204eb11cc58133f586453fcda02c91db1a6c03b7ddd1d43",
+  "scores": {
+    "quizId": "PFC-PASS-X1",
+    "returnedModelVersions": [
+      "gemini-3.1-flash-lite"
+    ],
+    "primary": {
+      "both": 2,
+      "humanOnly": 5,
+      "geminiOnly": 0,
+      "neither": 1,
+      "humanMinusGeminiPairs": 5
+    },
+    "human": {
+      "validBoards": 16,
+      "correctBoards": 15,
+      "solvedPairs": 7,
+      "switch": {
+        "total": 4,
+        "bothValid": 4,
+        "changedReceiver": 4,
+        "solved": 4
+      },
+      "stay": {
+        "total": 4,
+        "bothValid": 4,
+        "changedReceiver": 1,
+        "solved": 3
+      },
+      "byStratum": {
+        "blocker": {
+          "pairs": 4,
+          "solved": 3
+        },
+        "control": {
+          "pairs": 4,
+          "solved": 4
+        }
+      },
+      "meanRetentionLossPercentagePointsOnValidChoices": 3.125
+    },
+    "gemini": {
+      "validBoards": 16,
+      "correctBoards": 7,
+      "solvedPairs": 2,
+      "switch": {
+        "total": 4,
+        "bothValid": 4,
+        "changedReceiver": 2,
+        "solved": 2
+      },
+      "stay": {
+        "total": 4,
+        "bothValid": 4,
+        "changedReceiver": 1,
+        "solved": 0
+      },
+      "byStratum": {
+        "blocker": {
+          "pairs": 4,
+          "solved": 1
+        },
+        "control": {
+          "pairs": 4,
+          "solved": 1
+        }
+      },
+      "meanRetentionLossPercentagePointsOnValidChoices": 28.125
+    }
+  },
+  "descriptiveKnightChoiceCounts": {
+    "author": 5,
+    "gemini": 13,
+    "optimal": 4
+  },
+  "decisions": [
+    {
+      "question": 1,
+      "itemId": "465de17ca7f5327c",
+      "pairId": "m02",
+      "author": 2,
+      "gemini": 3,
+      "optimal": 2
+    },
+    {
+      "question": 2,
+      "itemId": "d9aa2b4ae90f138a",
+      "pairId": "m05",
+      "author": 2,
+      "gemini": 2,
+      "optimal": 2
+    },
+    {
+      "question": 3,
+      "itemId": "c33908a93f966086",
+      "pairId": "m04",
+      "author": 2,
+      "gemini": 1,
+      "optimal": 1
+    },
+    {
+      "question": 4,
+      "itemId": "a8f01e08e17993da",
+      "pairId": "m06",
+      "author": 3,
+      "gemini": 1,
+      "optimal": 3
+    },
+    {
+      "question": 5,
+      "itemId": "673e3f66653c5d1d",
+      "pairId": "m07",
+      "author": 1,
+      "gemini": 2,
+      "optimal": 1
+    },
+    {
+      "question": 6,
+      "itemId": "0d757418b4036bf3",
+      "pairId": "m01",
+      "author": 1,
+      "gemini": 1,
+      "optimal": 1
+    },
+    {
+      "question": 7,
+      "itemId": "7e2513fecc10ea19",
+      "pairId": "m03",
+      "author": 2,
+      "gemini": 3,
+      "optimal": 2
+    },
+    {
+      "question": 8,
+      "itemId": "dc4f3134d9265d9f",
+      "pairId": "m08",
+      "author": 2,
+      "gemini": 1,
+      "optimal": 2
+    },
+    {
+      "question": 9,
+      "itemId": "6b6e593b15f55e97",
+      "pairId": "m02",
+      "author": 3,
+      "gemini": 3,
+      "optimal": 3
+    },
+    {
+      "question": 10,
+      "itemId": "4fd64d0610c8ae1d",
+      "pairId": "m06",
+      "author": 1,
+      "gemini": 1,
+      "optimal": 1
+    },
+    {
+      "question": 11,
+      "itemId": "5d43ff1367c32bcc",
+      "pairId": "m07",
+      "author": 1,
+      "gemini": 2,
+      "optimal": 1
+    },
+    {
+      "question": 12,
+      "itemId": "8ee4fb14bce42198",
+      "pairId": "m05",
+      "author": 3,
+      "gemini": 3,
+      "optimal": 3
+    },
+    {
+      "question": 13,
+      "itemId": "6cfdf8840ebcb2a0",
+      "pairId": "m03",
+      "author": 2,
+      "gemini": 3,
+      "optimal": 2
+    },
+    {
+      "question": 14,
+      "itemId": "4893692fe5293c15",
+      "pairId": "m08",
+      "author": 2,
+      "gemini": 1,
+      "optimal": 2
+    },
+    {
+      "question": 15,
+      "itemId": "35b09a8be3315c62",
+      "pairId": "m01",
+      "author": 3,
+      "gemini": 3,
+      "optimal": 3
+    },
+    {
+      "question": 16,
+      "itemId": "da62c2d483eb2882",
+      "pairId": "m04",
+      "author": 1,
+      "gemini": 2,
+      "optimal": 1
+    }
+  ]
+}
