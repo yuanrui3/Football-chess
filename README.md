@@ -4,6 +4,8 @@
 
 A playable custom variation inspired by Football Chess by Serrano Saunders. Original handbook: https://pdfhost.io/v/bWV1pmicf_Football_Chess_Handbook.pdf
 
+The [paired shot and pass benchmark](benchmarks/paired-positions/) includes 100 position pairs, model choices and offline reproduction scripts.
+
 ## Play
 https://yuanrui3.github.io/Football-chess/dist/
 Choose a computer opponent, two players on one device, or **Watch · computer vs computer**. The pitch is **14×17**, with four-file goals **f–i** and **6×3 boxes in files e–j**. Each side has K, Q, R1/R2, B1/B2, N1/N2 and P1/P2/P3. Ivory attacks the upper goal; Obsidian attacks the lower goal. Both teams use the same rules and a formation rotated 180°.
